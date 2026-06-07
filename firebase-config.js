@@ -1,0 +1,6 @@
+window.POPE_KYRILLOS_FIREBASE_CONFIG = {
+  apiKey: "AIzaSyDpHu0RQFrSQFd2QG0RDqW79rDVx39B39Q",
+  authDomain: "pope-kyrillos-store.firebaseapp.com",
+  projectId: "pope-kyrillos-store",
+  appId: "1:467456142994:web:8bf9075bd67463a889004b"
+};
