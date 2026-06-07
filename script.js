@@ -330,6 +330,7 @@ function cleanDescription(description = "") {
 function getFilteredProducts() {
   const query = state.search.trim().toLowerCase();
   return products.filter((product) => {
+    if (!hasAvailableVariant(product)) return false;
     const matchesCategory = state.filter === "all" || product.category === state.filter;
     const tags = Array.isArray(product.tags) ? product.tags.join(" ") : "";
     const text = `${product.name} ${product.label} ${product.description} ${tags}`.toLowerCase();
