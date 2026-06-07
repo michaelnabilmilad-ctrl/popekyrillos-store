@@ -1802,7 +1802,7 @@
     "priceNote": "يبدأ من ١٨٨ ج.م حتى ١٬٥٠٠ ج.م",
     "stock": "متاح",
     "badge": "بخور",
-    "image": "assets/products/incense-chat.png",
+    "image": "assets/products/incense-chat-v2.png",
     "url": "",
     "tags": [
       "شموع وبخور",
@@ -1810,7 +1810,7 @@
       "الوزن"
     ],
     "images": [
-      "assets/products/incense-chat.png"
+      "assets/products/incense-chat-v2.png"
     ],
     "options": [
       {
@@ -1834,7 +1834,7 @@
         "price": 188,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/products/incense-chat.png",
+        "image": "assets/products/incense-chat-v2.png",
         "sku": ""
       },
       {
@@ -1846,7 +1846,7 @@
         "price": 375,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/products/incense-chat.png",
+        "image": "assets/products/incense-chat-v2.png",
         "sku": ""
       },
       {
@@ -1858,7 +1858,7 @@
         "price": 750,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/products/incense-chat.png",
+        "image": "assets/products/incense-chat-v2.png",
         "sku": ""
       },
       {
@@ -1870,7 +1870,7 @@
         "price": 1125,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/products/incense-chat.png",
+        "image": "assets/products/incense-chat-v2.png",
         "sku": ""
       },
       {
@@ -1882,7 +1882,7 @@
         "price": 1500,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/products/incense-chat.png",
+        "image": "assets/products/incense-chat-v2.png",
         "sku": ""
       }
     ]
