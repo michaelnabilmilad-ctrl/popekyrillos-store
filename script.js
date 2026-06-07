@@ -56,7 +56,8 @@ const state = {
   modal: {
     productId: "",
     selectedOptions: {},
-    image: ""
+    image: "",
+    quantity: 1
   }
 };
 
@@ -175,6 +176,18 @@ function variantStockText(variant) {
   if (!isVariantAvailable(variant)) return "غير متاح حاليا";
   const quantity = variantQuantity(variant);
   return quantity === null ? "متاح" : `متاح - ${formatter.format(quantity)} قطعة`;
+}
+
+function clampModalQuantity(variant) {
+  const requested = Math.max(1, Number(state.modal.quantity) || 1);
+  const stock = variantQuantity(variant);
+  if (stock === null) return requested;
+
+  const key = cartKey(state.modal.productId, variant?.id || "default");
+  const inCart = state.cart.get(key) || 0;
+  const remaining = Math.max(0, stock - inCart);
+  if (remaining <= 0) return 0;
+  return Math.max(1, Math.min(requested, remaining));
 }
 
 function productStockText(product) {
@@ -472,6 +485,13 @@ function renderProductModal() {
   const optionText = variantOptionText(variant);
   const price = variantPrice(variant, product);
   const isAvailable = isVariantAvailable(variant);
+  const stockQuantity = variantQuantity(variant);
+  const cartQuantity = state.cart.get(cartKey(product.id, variant?.id || "default")) || 0;
+  const remainingQuantity = stockQuantity === null ? null : Math.max(0, stockQuantity - cartQuantity);
+  state.modal.quantity = clampModalQuantity(variant);
+  const modalQuantity = state.modal.quantity;
+  const canAddQuantity = isAvailable && (remainingQuantity === null || remainingQuantity > 0);
+  const canIncreaseQuantity = canAddQuantity && (remainingQuantity === null || modalQuantity < remainingQuantity);
   const description = cleanDescription(product.description || "");
   const productName = escapeHtml(product.name);
 
@@ -562,17 +582,45 @@ function renderProductModal() {
         <strong>${money(price)}</strong>
         <p>${optionText ? escapeHtml(optionText) : "الاختيار الأساسي"} · ${escapeHtml(variantStockText(variant))}</p>
       </div>
+      <div class="modal-quantity" aria-label="اختيار عدد القطع">
+        <div>
+          <span>العدد اللي هيتحط في السلة</span>
+          <strong>${formatter.format(modalQuantity)} قطعة</strong>
+        </div>
+        <div class="quantity-stepper">
+          <button
+            class="quantity-step"
+            type="button"
+            data-modal-qty-action="decrease"
+            aria-label="تقليل العدد"
+            ${modalQuantity <= 1 ? "disabled" : ""}
+          >
+            -
+          </button>
+          <output>${formatter.format(modalQuantity)}</output>
+          <button
+            class="quantity-step"
+            type="button"
+            data-modal-qty-action="increase"
+            aria-label="زيادة العدد"
+            ${canIncreaseQuantity ? "" : "disabled"}
+          >
+            +
+          </button>
+        </div>
+      </div>
       <button
         class="button primary full modal-add"
         type="button"
         data-modal-add="${escapeHtml(product.id)}"
         data-modal-variant="${escapeHtml(variant?.id || "default")}"
-        ${isAvailable ? "" : "disabled aria-disabled=\"true\""}
+        data-modal-quantity="${modalQuantity}"
+        ${canAddQuantity ? "" : "disabled aria-disabled=\"true\""}
       >
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <path d="M12 5v14M5 12h14" />
         </svg>
-        أضف الاختيار للسلة
+        أضف ${formatter.format(modalQuantity)} للسلة
       </button>
     </div>
   `;
@@ -586,6 +634,7 @@ function openProductModal(productId) {
   state.modal.productId = product.id;
   state.modal.selectedOptions = { ...(variant?.options || {}) };
   state.modal.image = variant?.image || getProductImages(product)[0] || "";
+  state.modal.quantity = 1;
   renderProductModal();
   productModal.setAttribute("aria-hidden", "false");
   document.body.classList.add("product-open");
@@ -615,6 +664,7 @@ function closeProductModal() {
   state.modal.productId = "";
   state.modal.selectedOptions = {};
   state.modal.image = "";
+  state.modal.quantity = 1;
 }
 
 function cartEntries() {
@@ -1054,7 +1104,7 @@ async function signOutCustomer() {
   showToast("تم تسجيل الخروج");
 }
 
-function addToCart(productId, variantId = "") {
+function addToCart(productId, variantId = "", amount = 1) {
   const product = getProduct(productId);
   if (!product) return;
 
@@ -1067,16 +1117,18 @@ function addToCart(productId, variantId = "") {
   const key = cartKey(product.id, variant?.id || "default");
   const currentQty = state.cart.get(key) || 0;
   const quantity = variantQuantity(variant);
-  if (quantity !== null && currentQty >= quantity) {
+  const requestedAmount = Math.max(1, Number(amount) || 1);
+  const nextQty = currentQty + requestedAmount;
+  if (quantity !== null && nextQty > quantity) {
     showToast("وصلت للكمية المتاحة من الاختيار ده");
     return;
   }
 
-  state.cart.set(key, currentQty + 1);
+  state.cart.set(key, nextQty);
   renderCart();
   saveCartNow();
   const selected = variantOptionText(variant);
-  showToast(`تمت إضافة ${product.name}${selected ? ` - ${selected}` : ""} إلى السلة`);
+  showToast(`تمت إضافة ${formatter.format(requestedAmount)} من ${product.name}${selected ? ` - ${selected}` : ""} إلى السلة`);
 }
 
 function changeQty(key, delta) {
@@ -1207,13 +1259,29 @@ productModal.addEventListener("click", (event) => {
     };
     const variant = normalizeModalSelection(product, optionButton.dataset.optionName);
     state.modal.image = variant?.image || state.modal.image;
+    state.modal.quantity = 1;
+    renderProductModal();
+    return;
+  }
+
+  const quantityButton = event.target.closest("[data-modal-qty-action]");
+  if (quantityButton) {
+    const product = getProduct(state.modal.productId);
+    if (!product) return;
+    const variant = selectedModalVariant(product);
+    const delta = quantityButton.dataset.modalQtyAction === "increase" ? 1 : -1;
+    state.modal.quantity = clampModalQuantity(variant);
+    state.modal.quantity = Math.max(1, state.modal.quantity + delta);
+    state.modal.quantity = clampModalQuantity(variant);
     renderProductModal();
     return;
   }
 
   const addButton = event.target.closest("[data-modal-add]");
   if (addButton) {
-    addToCart(addButton.dataset.modalAdd, addButton.dataset.modalVariant);
+    addToCart(addButton.dataset.modalAdd, addButton.dataset.modalVariant, addButton.dataset.modalQuantity);
+    state.modal.quantity = 1;
+    renderProductModal();
   }
 });
 

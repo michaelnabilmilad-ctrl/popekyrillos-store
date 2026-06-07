@@ -1346,6 +1346,72 @@ svg {
   font-size: 28px;
 }
 
+.modal-quantity {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 12px 14px;
+  border: 1px solid rgba(0, 122, 116, 0.18);
+  border-radius: var(--radius);
+  background: rgba(0, 122, 116, 0.08);
+}
+
+.modal-quantity span {
+  display: block;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.modal-quantity strong {
+  display: block;
+  margin-top: 3px;
+  color: var(--ink);
+  font-size: 19px;
+}
+
+.quantity-stepper {
+  display: grid;
+  grid-template-columns: 42px minmax(54px, auto) 42px;
+  align-items: center;
+  overflow: hidden;
+  min-height: 42px;
+  border: 1px solid rgba(0, 122, 116, 0.26);
+  border-radius: 999px;
+  background: var(--surface);
+}
+
+.quantity-stepper output {
+  min-width: 54px;
+  padding: 0 10px;
+  color: var(--ink);
+  font-weight: 900;
+  text-align: center;
+}
+
+.quantity-step {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border: 0;
+  background: transparent;
+  color: var(--teal);
+  cursor: pointer;
+  font-size: 23px;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.quantity-step:hover {
+  background: rgba(0, 122, 116, 0.1);
+}
+
+.quantity-step:disabled {
+  cursor: not-allowed;
+  color: rgba(17, 35, 49, 0.28);
+}
+
 .modal-add {
   margin-top: auto;
 }
@@ -2157,6 +2223,20 @@ body.account-open .scrim {
 
   .variant-summary strong {
     font-size: 24px;
+  }
+
+  .modal-quantity {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .quantity-stepper {
+    grid-template-columns: 52px 1fr 52px;
+    width: 100%;
+  }
+
+  .quantity-step {
+    width: 52px;
   }
 
   .cart-panel {
