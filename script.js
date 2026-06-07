@@ -1113,7 +1113,7 @@ function closeCart() {
 
 async function loadProducts() {
   try {
-    const response = await fetch("products.json?v=admin-qty-20260605", { cache: "no-store" });
+    const response = await fetch("products.json?v=incense-chat-20260607", { cache: "no-store" });
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     products = await response.json();
   } catch (error) {
