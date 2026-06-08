@@ -345,21 +345,36 @@
               <h2 id="account-modal-title">أهلا بيك في مكتبة البابا كيرلس</h2>
             </div>
           </div>
-          <p data-account-status>السلة محفوظة تلقائيا على هذا الجهاز. تسجيل الدخول يحفظها على حسابك بعد تفعيل Firebase.</p>
+          <p data-account-status>ادخل بحسابك عشان السلة تفضل محفوظة وتقدر تكمل طلبك بسهولة في أي وقت.</p>
           <div class="account-benefits" aria-label="مزايا الحساب">
-            <span>حفظ السلة</span>
-            <span>دخول سريع</span>
-            <span>متابعة الطلبات</span>
+            <span>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6h15l-2 8H8L6 3H3" /><path d="M9 20h.01M18 20h.01" /></svg>
+              حفظ السلة
+            </span>
+            <span>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v18M5 12h14" /></svg>
+              دخول سريع
+            </span>
+            <span>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5h14v14H5z" /><path d="M8 9h8M8 13h5" /></svg>
+              متابعة الطلبات
+            </span>
           </div>
           <div class="account-user" data-account-user hidden></div>
           <div class="auth-provider-list" data-auth-provider-list>
             <button class="auth-provider google" type="button" data-auth-provider="google">
               <span class="auth-icon">G</span>
-              <span class="auth-text">الدخول بجوجل</span>
+              <span class="auth-text">
+                <strong>الدخول بجوجل</strong>
+                <small>الأسرع لحفظ السلة على حسابك</small>
+              </span>
             </button>
             <button class="auth-provider facebook" type="button" data-auth-provider="facebook">
               <span class="auth-icon">f</span>
-              <span class="auth-text">الدخول بفيسبوك</span>
+              <span class="auth-text">
+                <strong>الدخول بفيسبوك</strong>
+                <small>استخدم حساب فيسبوك للمتابعة</small>
+              </span>
             </button>
           </div>
           <button class="button secondary full" type="button" data-auth-signout hidden>تسجيل الخروج</button>

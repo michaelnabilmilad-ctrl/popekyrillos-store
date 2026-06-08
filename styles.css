@@ -1478,57 +1478,66 @@ svg {
 
 .account-dialog {
   position: relative;
-  width: min(450px, 100%);
+  width: min(500px, 100%);
   border: 1px solid rgba(198, 146, 69, 0.24);
-  border-radius: 14px;
+  border-radius: 18px;
   background:
-    linear-gradient(145deg, rgba(255, 253, 247, 0.98), rgba(248, 242, 229, 0.98)),
+    radial-gradient(circle at 85% 12%, rgba(198, 146, 69, 0.18), transparent 28%),
+    linear-gradient(145deg, rgba(255, 253, 247, 0.99), rgba(246, 238, 220, 0.99)),
     var(--surface);
-  box-shadow: 0 28px 90px rgba(9, 21, 26, 0.26);
+  box-shadow: 0 30px 90px rgba(9, 21, 26, 0.32);
   overflow: hidden;
 }
 
 .account-dialog::before {
   content: "";
   position: absolute;
-  inset: 0 0 auto 0;
-  height: 7px;
-  background: linear-gradient(90deg, var(--teal), var(--gold), var(--burgundy));
+  inset: 0;
+  pointer-events: none;
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  border-radius: inherit;
 }
 
 .account-close {
   position: absolute;
-  top: 16px;
-  left: 16px;
+  top: 18px;
+  left: 18px;
   z-index: 2;
-  border-color: rgba(222, 216, 203, 0.92);
-  box-shadow: 0 8px 24px rgba(14, 32, 39, 0.1);
+  background: rgba(255, 255, 255, 0.72);
+  border-color: rgba(222, 216, 203, 0.86);
+  box-shadow: 0 10px 26px rgba(14, 32, 39, 0.12);
 }
 
 .account-body {
   display: grid;
-  gap: 15px;
-  padding: 30px 26px 24px;
+  gap: 16px;
+  padding: 30px;
 }
 
 .account-hero {
   display: grid;
-  grid-template-columns: auto 1fr;
+  grid-template-columns: 74px 1fr;
   align-items: center;
-  gap: 14px;
-  padding-inline-start: 54px;
+  gap: 16px;
+  min-height: 92px;
+  padding: 16px 18px 16px 60px;
+  border: 1px solid rgba(12, 107, 104, 0.12);
+  border-radius: 16px;
+  background:
+    linear-gradient(135deg, rgba(12, 107, 104, 0.1), rgba(198, 146, 69, 0.12)),
+    rgba(255, 255, 255, 0.62);
 }
 
 .account-logo {
   display: grid;
   place-items: center;
-  width: 62px;
-  height: 62px;
+  width: 74px;
+  height: 74px;
   border: 2px solid rgba(198, 146, 69, 0.42);
   border-radius: 50%;
   background: #1a2751;
   overflow: hidden;
-  box-shadow: 0 14px 32px rgba(14, 32, 39, 0.18);
+  box-shadow: 0 16px 34px rgba(14, 32, 39, 0.2);
 }
 
 .account-logo img {
@@ -1540,31 +1549,42 @@ svg {
 .account-body h2 {
   margin: 0;
   color: var(--ink);
-  font-size: 24px;
+  font-size: 25px;
   line-height: 1.25;
 }
 
 .account-body p:not(.eyebrow) {
   margin: 0;
   color: var(--muted);
-  font-size: 14px;
+  font-size: 15px;
   line-height: 1.85;
 }
 
 .account-benefits {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 7px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
 }
 
 .account-benefits span {
-  padding: 5px 11px;
+  display: grid;
+  justify-items: center;
+  gap: 5px;
+  min-height: 70px;
+  padding: 10px 8px;
   border: 1px solid rgba(12, 107, 104, 0.16);
-  border-radius: 999px;
-  background: rgba(12, 107, 104, 0.07);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.68);
   color: var(--teal-dark);
   font-size: 12px;
   font-weight: 900;
+  text-align: center;
+}
+
+.account-benefits svg {
+  width: 22px;
+  height: 22px;
+  color: var(--gold-dark);
 }
 
 .account-user {
@@ -1578,20 +1598,20 @@ svg {
 
 .auth-provider-list {
   display: grid;
-  gap: 10px;
+  gap: 11px;
 }
 
 .auth-provider {
   display: grid;
-  grid-template-columns: 40px 1fr;
+  grid-template-columns: 48px 1fr;
   align-items: center;
-  gap: 12px;
-  min-height: 54px;
+  gap: 14px;
+  min-height: 68px;
   width: 100%;
-  padding: 6px 8px;
+  padding: 8px 10px;
   border: 1px solid rgba(222, 216, 203, 0.95);
-  border-radius: 12px;
-  background: #fff;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.9);
   color: var(--ink);
   font-weight: 900;
   text-align: start;
@@ -1610,18 +1630,31 @@ svg {
 .auth-provider .auth-icon {
   display: grid;
   place-items: center;
-  width: 40px;
-  height: 40px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
   background: #f3efe6;
+  font-size: 19px;
   font-weight: 900;
 }
 
 .auth-provider .auth-text {
+  display: grid;
+  gap: 3px;
   min-width: 0;
+}
+
+.auth-provider .auth-text strong,
+.auth-provider .auth-text small {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.auth-provider .auth-text small {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
 }
 
 .auth-provider.google .auth-icon {
@@ -2195,26 +2228,50 @@ body.account-open .scrim {
   }
 
   .account-body {
-    padding: 24px 18px 20px;
+    gap: 13px;
+    padding: 22px 16px 18px;
   }
 
   .account-hero {
-    grid-template-columns: 50px 1fr;
+    grid-template-columns: 54px 1fr;
     gap: 11px;
-    padding-inline-start: 46px;
+    min-height: 74px;
+    padding: 12px 12px 12px 46px;
   }
 
   .account-logo {
-    width: 50px;
-    height: 50px;
+    width: 54px;
+    height: 54px;
   }
 
   .account-body h2 {
-    font-size: 21px;
+    font-size: 20px;
+  }
+
+  .account-benefits {
+    grid-template-columns: 1fr;
+  }
+
+  .account-benefits span {
+    grid-template-columns: 22px 1fr;
+    justify-items: start;
+    align-items: center;
+    min-height: 44px;
+    text-align: start;
   }
 
   .auth-provider {
-    min-height: 52px;
+    grid-template-columns: 42px 1fr;
+    min-height: 58px;
+  }
+
+  .auth-provider .auth-icon {
+    width: 42px;
+    height: 42px;
+  }
+
+  .auth-provider .auth-text small {
+    white-space: normal;
   }
 
   .option-button {

@@ -931,7 +931,7 @@ function renderAuthState() {
   } else if (user) {
     accountStatus.textContent = "سلتك محفوظة على حسابك، ولو فتحت الموقع مرة تانية بنفس الحساب هتلاقيها موجودة.";
   } else {
-    accountStatus.textContent = "ادخل بجوجل أو فيسبوك عشان السلة تفضل محفوظة على حسابك.";
+    accountStatus.textContent = "ادخل بحسابك عشان السلة تفضل محفوظة وتقدر تكمل طلبك بسهولة في أي وقت.";
   }
 }
 
