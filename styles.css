@@ -2042,14 +2042,18 @@ body.account-open .scrim {
   }
 
   .hero {
-    min-height: 88vh;
-    padding: 94px 34px 64px 18px;
+    min-height: 82vh;
+    align-items: end;
+    padding: 104px 22px 52px;
+    direction: rtl;
+    text-align: right;
   }
 
   .hero-copy {
-    width: calc(100% - 76px);
+    justify-self: end;
+    width: min(100%, 380px);
     overflow: hidden;
-    transform: translateX(-76px);
+    transform: none;
   }
 
   .hero .eyebrow {
@@ -2059,24 +2063,37 @@ body.account-open .scrim {
 
   .hero-media {
     background:
-      linear-gradient(180deg, rgba(5, 18, 23, 0.88) 0%, rgba(5, 18, 23, 0.7) 54%, rgba(5, 18, 23, 0.34) 100%),
-      linear-gradient(90deg, rgba(5, 18, 23, 0.14), rgba(5, 18, 23, 0.7)),
-      url("assets/hero-papa-kyrillos-products.png") center / cover no-repeat;
+      linear-gradient(180deg, rgba(5, 18, 23, 0.24) 0%, rgba(5, 18, 23, 0.42) 42%, rgba(5, 18, 23, 0.78) 100%),
+      linear-gradient(90deg, rgba(5, 18, 23, 0.04) 0%, rgba(5, 18, 23, 0.26) 42%, rgba(5, 18, 23, 0.82) 100%),
+      url("assets/hero-papa-kyrillos-products.png") 35% center / cover no-repeat;
   }
 
   .hero h1 {
-    max-width: 100%;
+    max-width: 330px;
+    margin-inline-start: 0;
+    margin-inline-end: auto;
     font-size: 38px;
     line-height: 1.12;
     overflow-wrap: break-word;
+    text-align: right;
   }
 
   .hero-lead {
-    max-width: 100%;
+    max-width: 340px;
+    margin-inline-start: 0;
+    margin-inline-end: auto;
     font-size: 16px;
+    text-align: right;
   }
 
-  .hero-actions,
+  .hero-actions {
+    align-items: stretch;
+    flex-direction: column;
+    margin-inline-start: 0;
+    margin-inline-end: auto;
+    width: min(100%, 220px);
+  }
+
   .catalog-head {
     align-items: stretch;
     flex-direction: column;
@@ -2086,11 +2103,16 @@ body.account-open .scrim {
     width: 100%;
   }
 
-  .hero-metrics,
   .trust-strip,
   .category-grid,
   .product-grid {
     grid-template-columns: 1fr;
+  }
+
+  .hero-metrics {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+    margin-top: 26px;
   }
 
   .hero-metrics div,
@@ -2099,7 +2121,11 @@ body.account-open .scrim {
   }
 
   .hero-metrics strong {
-    font-size: 22px;
+    font-size: 18px;
+  }
+
+  .hero-metrics span {
+    font-size: 11px;
   }
 
   .trust-strip div {
