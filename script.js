@@ -204,6 +204,12 @@ const translations = {
     showImageLabel: "عرض صورة {index} من {name}",
     zoomImageLabel: "تكبير صورة {name}",
     zoomHint: "اضغط للتكبير",
+    shareProduct: "مشاركة المنتج",
+    copyProductLink: "نسخ لينك المنتج",
+    shareOnWhatsApp: "مشاركة واتساب",
+    productShareMessage: "شوف المنتج ده من مكتبة البابا كيرلس: {name}\n{url}",
+    productLinkCopied: "تم نسخ لينك المنتج",
+    productLinkCopyFallback: "انسخ لينك المنتج من شريط العنوان",
     accountEyebrow: "حساب العميل",
     accountTitle: "أهلا بيك في مكتبة البابا كيرلس",
     accountStatus: "ادخل بحسابك عشان السلة تفضل محفوظة وتقدر تكمل طلبك بسهولة في أي وقت.",
@@ -348,6 +354,12 @@ const translations = {
     showImageLabel: "Show image {index} of {name}",
     zoomImageLabel: "Zoom image of {name}",
     zoomHint: "Tap to zoom",
+    shareProduct: "Share product",
+    copyProductLink: "Copy product link",
+    shareOnWhatsApp: "Share on WhatsApp",
+    productShareMessage: "See this product from Pope Kyrillos Store: {name}\n{url}",
+    productLinkCopied: "Product link copied",
+    productLinkCopyFallback: "Copy the product link from the address bar",
     accountEyebrow: "Customer account",
     accountTitle: "Welcome to Pope Kyrillos Store",
     accountStatus: "Sign in so your cart stays saved and you can continue your order anytime.",
@@ -674,6 +686,35 @@ function applyLanguage({ render = true } = {}) {
 function money(amount) {
   if (amount === null || amount === undefined || amount === "") return t("askPrice");
   return isEnglish() ? `EGP ${formatter.format(Number(amount))}` : `${formatter.format(Number(amount))} ج.م`;
+}
+
+function productShareUrl(productId) {
+  const url = new URL(window.location.href);
+  url.searchParams.set("product", productId);
+  url.hash = "";
+  return url.toString();
+}
+
+function productIdFromUrl() {
+  const url = new URL(window.location.href);
+  const queryProduct = url.searchParams.get("product");
+  if (queryProduct) return queryProduct;
+  const hashMatch = decodeURIComponent(url.hash || "").match(/^#product=(.+)$/);
+  return hashMatch ? hashMatch[1] : "";
+}
+
+function setProductUrl(productId) {
+  const url = productShareUrl(productId);
+  if (url !== window.location.href) window.history.pushState({ productId }, "", url);
+}
+
+function clearProductUrl() {
+  const url = new URL(window.location.href);
+  const hadProductUrl = url.searchParams.has("product") || decodeURIComponent(url.hash || "").startsWith("#product=");
+  if (!hadProductUrl) return;
+  url.searchParams.delete("product");
+  url.hash = "catalog";
+  window.history.replaceState({}, "", url);
 }
 
 function escapeHtml(value = "") {
@@ -1114,6 +1155,8 @@ function renderProductModal() {
   const description = cleanDescription(localized(product.description || ""));
   const productDisplayName = localized(product.name);
   const productName = escapeHtml(productDisplayName);
+  const shareUrl = productShareUrl(product.id);
+  const whatsappShareUrl = `https://wa.me/?text=${encodeURIComponent(t("productShareMessage", { name: productDisplayName, url: shareUrl }))}`;
 
   const media = activeImage
     ? `
@@ -1195,6 +1238,22 @@ function renderProductModal() {
     <div class="product-modal-copy">
       <p class="eyebrow">${escapeHtml(localized(product.label || "منتج"))}</p>
       <h2 id="product-modal-title">${productName}</h2>
+      <div class="product-share-actions" aria-label="${t("shareProduct")}">
+        <button class="product-share-button" type="button" data-copy-product-link="${escapeHtml(product.id)}">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M10 13a5 5 0 0 0 7.1 0l2-2a5 5 0 0 0-7.1-7.1l-1.1 1.1" />
+            <path d="M14 11a5 5 0 0 0-7.1 0l-2 2A5 5 0 0 0 12 20.1l1.1-1.1" />
+          </svg>
+          ${t("copyProductLink")}
+        </button>
+        <a class="product-share-button whatsapp" href="${escapeHtml(whatsappShareUrl)}" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M20 11.5a8 8 0 0 1-11.8 7L4 20l1.4-4.1A8 8 0 1 1 20 11.5Z" />
+            <path d="M9.5 8.5c.4 2 2 3.6 4 4" />
+          </svg>
+          ${t("shareOnWhatsApp")}
+        </a>
+      </div>
       <p class="modal-description">${escapeHtml(description)}</p>
       ${optionGroups ? `<div class="variant-options">${optionGroups}</div>` : ""}
       <div class="variant-summary">
@@ -1246,7 +1305,7 @@ function renderProductModal() {
   `;
 }
 
-function openProductModal(productId) {
+function openProductModal(productId, { updateUrl = true } = {}) {
   const product = getProduct(productId);
   if (!product) return;
 
@@ -1258,6 +1317,7 @@ function openProductModal(productId) {
   renderProductModal();
   productModal.setAttribute("aria-hidden", "false");
   document.body.classList.add("product-open");
+  if (updateUrl) setProductUrl(product.id);
   productModalClose.focus();
 }
 
@@ -1277,7 +1337,7 @@ function closeImageLightbox() {
   imageLightboxImage.alt = "";
 }
 
-function closeProductModal() {
+function closeProductModal({ updateUrl = true } = {}) {
   closeImageLightbox();
   document.body.classList.remove("product-open");
   productModal.setAttribute("aria-hidden", "true");
@@ -1285,6 +1345,7 @@ function closeProductModal() {
   state.modal.selectedOptions = {};
   state.modal.image = "";
   state.modal.quantity = 1;
+  if (updateUrl) clearProductUrl();
 }
 
 function cartEntries() {
@@ -1415,6 +1476,37 @@ function copyPaymentDetails() {
   }
 
   showToast(fallbackCopy() ? t("copiedPayment") : t("copyPaymentFallback"));
+}
+
+function copyProductLink(productId) {
+  const text = productShareUrl(productId);
+
+  const fallbackCopy = () => {
+    const textarea = document.createElement("textarea");
+    textarea.value = text;
+    textarea.setAttribute("readonly", "");
+    textarea.style.position = "fixed";
+    textarea.style.top = "0";
+    textarea.style.left = "0";
+    textarea.style.opacity = "0";
+    document.body.append(textarea);
+    textarea.focus({ preventScroll: true });
+    textarea.select();
+    textarea.setSelectionRange(0, text.length);
+    const copied = document.execCommand("copy");
+    textarea.remove();
+    return copied;
+  };
+
+  if (navigator.clipboard?.writeText) {
+    navigator.clipboard
+      .writeText(text)
+      .then(() => showToast(t("productLinkCopied")))
+      .catch(() => showToast(fallbackCopy() ? t("productLinkCopied") : t("productLinkCopyFallback")));
+    return;
+  }
+
+  showToast(fallbackCopy() ? t("productLinkCopied") : t("productLinkCopyFallback"));
 }
 
 async function startPaymobCheckout() {
@@ -1794,6 +1886,15 @@ function closeCart() {
   cartPanel.setAttribute("aria-hidden", "true");
 }
 
+function openProductFromUrl() {
+  const productId = productIdFromUrl();
+  if (!productId) return false;
+  const product = getProduct(productId);
+  if (!product || !hasAvailableVariant(product)) return false;
+  openProductModal(productId, { updateUrl: false });
+  return true;
+}
+
 async function loadProducts() {
   try {
     const response = await fetch("products.json?v=incense-chat-20260607", { cache: "no-store" });
@@ -1807,6 +1908,7 @@ async function loadProducts() {
   saveCartToLocal(currentCartStorageKey(), state.cart);
   renderProducts();
   renderCart();
+  openProductFromUrl();
 }
 
 filterButtons.forEach((button) => {
@@ -1859,6 +1961,12 @@ productModal.addEventListener("click", (event) => {
   const closeButton = event.target.closest("[data-product-modal-close]");
   if (closeButton) {
     closeProductModal();
+    return;
+  }
+
+  const copyProductButton = event.target.closest("[data-copy-product-link]");
+  if (copyProductButton) {
+    copyProductLink(copyProductButton.dataset.copyProductLink);
     return;
   }
 
@@ -1990,6 +2098,17 @@ document.querySelector("[data-contact-form]").addEventListener("submit", (event)
 
 window.addEventListener("scroll", () => {
   header.dataset.elevated = window.scrollY > 24 ? "true" : "false";
+});
+
+window.addEventListener("popstate", () => {
+  const productId = productIdFromUrl();
+  if (productId) {
+    openProductFromUrl();
+    return;
+  }
+  if (document.body.classList.contains("product-open")) {
+    closeProductModal({ updateUrl: false });
+  }
 });
 
 loadGuestCart();
