@@ -172,6 +172,8 @@ const translations = {
     instapayLabel: "إنستاباي / تحويل بنكي",
     instapaySmall: "01223515989 - مايكل نبيل ميلاد",
     paymobSmall: "دفع أونلاين مباشر",
+    pickupCashLabel: "استلام من الفرع",
+    pickupCashSmall: "دفع كاش بعد تجهيز الأوردر",
     checkoutName: "الاسم",
     checkoutNamePlaceholder: "اسم العميل",
     checkoutPhone: "رقم الموبايل",
@@ -227,6 +229,9 @@ const translations = {
     instapayCopy: "إنستاباي / تحويل بنكي\nرقم التحويل: 01223515989\nاسم الحساب: مايكل نبيل ميلاد",
     paymobNote: "سيتم فتح صفحة Paymob الرسمية لإتمام الدفع ببطاقة بنكية.",
     paymobCopy: "Paymob Checkout\nلينك الدفع: https://accept.paymob.com/payme/popekyrillosstore",
+    pickupCashNote: "سيتم تجهيز الأوردر أولا، وبعد التأكيد يمكنك الاستلام من الفرع والدفع كاش.",
+    pickupCashMessage: "طريقة الاستلام والدفع: استلام من الفرع، والدفع كاش بعد تجهيز الأوردر والتأكيد.",
+    pickupCashCopy: "استلام من الفرع\nالدفع: كاش بعد تجهيز الأوردر والتأكيد",
     copiedPayment: "تم نسخ بيانات الدفع",
     copyPaymentFallback: "انسخ بيانات الدفع من السلة",
     cartEmptyToast: "السلة فارغة حاليا",
@@ -311,6 +316,8 @@ const translations = {
     instapayLabel: "Instapay / bank transfer",
     instapaySmall: "01223515989 - Michael Nabil Milad",
     paymobSmall: "Direct online payment",
+    pickupCashLabel: "Pickup from branch",
+    pickupCashSmall: "Cash after order preparation",
     checkoutName: "Name",
     checkoutNamePlaceholder: "Customer name",
     checkoutPhone: "Mobile number",
@@ -366,6 +373,9 @@ const translations = {
     instapayCopy: "Instapay / bank transfer\nTransfer number: 01223515989\nAccount name: Michael Nabil Milad",
     paymobNote: "The official Paymob page will open to complete card payment.",
     paymobCopy: "Paymob Checkout\nPayment link: https://accept.paymob.com/payme/popekyrillosstore",
+    pickupCashNote: "Your order will be prepared first. After confirmation, you can pick it up from the branch and pay cash.",
+    pickupCashMessage: "Pickup and payment method: pickup from branch and cash payment after the order is prepared and confirmed.",
+    pickupCashCopy: "Pickup from branch\nPayment: cash after the order is prepared and confirmed",
     copiedPayment: "Payment details copied",
     copyPaymentFallback: "Copy payment details from the cart",
     cartEmptyToast: "Your cart is empty",
@@ -600,6 +610,10 @@ function applyLanguage({ render = true } = {}) {
   if (paymentOptions[1]) {
     paymentOptions[1].querySelector("strong").textContent = "Paymob";
     paymentOptions[1].querySelector("small").textContent = t("paymobSmall");
+  }
+  if (paymentOptions[2]) {
+    paymentOptions[2].querySelector("strong").textContent = t("pickupCashLabel");
+    paymentOptions[2].querySelector("small").textContent = t("pickupCashSmall");
   }
   const paymobLabels = document.querySelectorAll(".paymob-fields label");
   setLabelText(paymobLabels[0], t("checkoutName"));
@@ -1283,7 +1297,8 @@ function validatePaymobCustomer() {
 
 function renderPaymentDetails() {
   const isPaymob = state.paymentMethod === "paymob";
-  const label = isPaymob ? "Paymob" : t("instapayLabel");
+  const isPickupCash = state.paymentMethod === "pickupCash";
+  const label = isPaymob ? "Paymob" : isPickupCash ? t("pickupCashLabel") : t("instapayLabel");
 
   if (paymentSummary) paymentSummary.textContent = label;
   if (paymobFields) {
@@ -1293,6 +1308,8 @@ function renderPaymentDetails() {
   if (paymentNote) {
     if (isPaymob) {
       paymentNote.innerHTML = `${escapeHtml(t("paymobNote"))} <a href="${escapeHtml(paymobPaymentLink)}" target="_blank" rel="noopener">${escapeHtml(t("fallbackLink"))}</a>`;
+    } else if (isPickupCash) {
+      paymentNote.textContent = t("pickupCashNote");
     } else {
       paymentNote.textContent = t("instapayNote");
     }
@@ -1309,6 +1326,7 @@ function paymentMessageLine() {
   if (state.paymentMethod === "paymob" && paymobPaymentLink) {
     return isEnglish() ? `Payment method: Paymob\nPayment link: ${paymobPaymentLink}` : `طريقة الدفع: Paymob\nلينك الدفع: ${paymobPaymentLink}`;
   }
+  if (state.paymentMethod === "pickupCash") return t("pickupCashMessage");
 
   return t("instapayMessage");
 }
@@ -1316,6 +1334,8 @@ function paymentMessageLine() {
 function copyPaymentDetails() {
   const text = state.paymentMethod === "paymob" && paymobPaymentLink
     ? t("paymobCopy")
+    : state.paymentMethod === "pickupCash"
+    ? t("pickupCashCopy")
     : t("instapayCopy");
 
   const fallbackCopy = () => {
