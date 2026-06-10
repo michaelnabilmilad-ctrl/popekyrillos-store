@@ -190,6 +190,73 @@ svg {
   direction: rtl;
 }
 
+body[data-lang="en"] {
+  direction: ltr;
+}
+
+body[data-lang="en"] .site-header {
+  flex-direction: row;
+}
+
+body[data-lang="en"] .brand {
+  flex-direction: row;
+  text-align: left;
+}
+
+body[data-lang="en"] .main-nav,
+body[data-lang="en"] .header-actions {
+  direction: ltr;
+}
+
+body[data-lang="en"] .hero-media {
+  background:
+    linear-gradient(270deg, rgba(5, 18, 23, 0.08) 0%, rgba(5, 18, 23, 0.42) 48%, rgba(5, 18, 23, 0.9) 100%),
+    url("assets/hero-papa-kyrillos-products.png") center / cover no-repeat;
+}
+
+body[data-lang="en"] .hero-copy,
+body[data-lang="en"] .hero h1,
+body[data-lang="en"] .hero-lead,
+body[data-lang="en"] .section-head,
+body[data-lang="en"] .services-copy,
+body[data-lang="en"] .product-card,
+body[data-lang="en"] .cart-panel,
+body[data-lang="en"] .account-dialog,
+body[data-lang="en"] .product-modal-dialog {
+  text-align: left;
+}
+
+body[data-lang="en"] .hero-copy {
+  justify-self: start;
+}
+
+body[data-lang="en"] .hero-lead,
+body[data-lang="en"] .hero h1 {
+  margin-inline-start: 0;
+  margin-inline-end: auto;
+}
+
+.language-toggle {
+  display: inline-grid;
+  place-items: center;
+  min-width: 46px;
+  height: 46px;
+  padding: 0 12px;
+  border: 1px solid rgba(255, 255, 255, 0.38);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  color: currentColor;
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: 0;
+}
+
+.language-toggle:hover,
+.language-toggle:focus-visible {
+  background: rgba(255, 255, 255, 0.2);
+  outline: 0;
+}
+
 .icon-button {
   position: relative;
   display: grid;
@@ -230,6 +297,7 @@ svg {
 
 .site-header[data-elevated="true"] .icon-button,
 .site-header[data-elevated="true"] .account-toggle,
+.site-header[data-elevated="true"] .language-toggle,
 .cart-panel .icon-button,
 .account-modal .icon-button {
   border-color: var(--line);
@@ -1126,6 +1194,82 @@ svg {
   box-shadow: 0 0 0 3px rgba(12, 107, 104, 0.12);
 }
 
+.section-intro {
+  margin: 12px 0 0;
+  color: var(--muted);
+  font-size: 17px;
+}
+
+.policies {
+  background:
+    linear-gradient(180deg, #f7f3ea, #fffdf7),
+    repeating-linear-gradient(90deg, rgba(198, 146, 69, 0.06) 0 1px, transparent 1px 92px);
+}
+
+.policy-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.policy-card {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--line);
+  overflow: hidden;
+  box-shadow: var(--soft-shadow);
+}
+
+.policy-lang {
+  min-height: 100%;
+  padding: 22px;
+  background: rgba(255, 253, 247, 0.98);
+}
+
+.policy-lang span {
+  display: inline-flex;
+  margin-bottom: 8px;
+  padding: 4px 9px;
+  border-radius: 999px;
+  background: rgba(12, 107, 104, 0.1);
+  color: var(--teal-dark);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.policy-lang h3 {
+  margin: 0 0 10px;
+  color: var(--ink);
+  font-size: 22px;
+  line-height: 1.25;
+}
+
+.policy-lang p,
+.policy-contact {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.85;
+}
+
+.policy-lang p + p {
+  margin-top: 10px;
+}
+
+.policy-contact {
+  display: grid;
+  gap: 7px;
+  padding: 0;
+  list-style: none;
+}
+
+.policy-contact strong {
+  color: var(--ink);
+}
+
 .product-modal {
   position: fixed;
   inset: 0;
@@ -1979,6 +2123,10 @@ body.account-open .scrim {
   .contact-form {
     grid-template-columns: 1fr;
   }
+
+  .policy-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 680px) {
@@ -2025,6 +2173,12 @@ body.account-open .scrim {
     gap: 7px;
   }
 
+  .language-toggle {
+    min-width: 42px;
+    height: 46px;
+    padding: 0 10px;
+  }
+
   .account-toggle {
     width: 46px;
     min-width: 46px;
@@ -2047,6 +2201,34 @@ body.account-open .scrim {
     padding: 104px 22px 52px;
     direction: rtl;
     text-align: right;
+  }
+
+  body[data-lang="en"] .brand {
+    flex-direction: row;
+    transform: none;
+  }
+
+  body[data-lang="en"] .hero {
+    text-align: left;
+  }
+
+  body[data-lang="en"] .hero-media {
+    background:
+      linear-gradient(180deg, rgba(5, 18, 23, 0.24) 0%, rgba(5, 18, 23, 0.42) 42%, rgba(5, 18, 23, 0.78) 100%),
+      linear-gradient(270deg, rgba(5, 18, 23, 0.04) 0%, rgba(5, 18, 23, 0.26) 42%, rgba(5, 18, 23, 0.82) 100%),
+      url("assets/hero-papa-kyrillos-products.png") 35% center / cover no-repeat;
+  }
+
+  body[data-lang="en"] .hero-copy {
+    justify-self: start;
+  }
+
+  body[data-lang="en"] .hero h1,
+  body[data-lang="en"] .hero-lead,
+  body[data-lang="en"] .hero-actions {
+    margin-inline-start: 0;
+    margin-inline-end: auto;
+    text-align: left;
   }
 
   .hero-copy {
@@ -2107,6 +2289,14 @@ body.account-open .scrim {
   .category-grid,
   .product-grid {
     grid-template-columns: 1fr;
+  }
+
+  .policy-card {
+    grid-template-columns: 1fr;
+  }
+
+  .policy-lang {
+    padding: 18px;
   }
 
   .hero-metrics {

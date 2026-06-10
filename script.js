@@ -4,6 +4,7 @@ const paymobCheckoutEndpoint = "/api/create-paymob-checkout";
 const firebaseSdkVersion = "10.14.1";
 const guestCartStorageKey = "pope-kyrillos-cart:guest";
 const userCartStoragePrefix = "pope-kyrillos-cart:user:";
+const languageStorageKey = "pope-kyrillos-language";
 const paymentMethods = {
   instapay: {
     label: "إنستاباي / تحويل بنكي",
@@ -42,6 +43,7 @@ let products = [];
 const state = {
   filter: "all",
   search: "",
+  language: localStorage.getItem(languageStorageKey) === "en" ? "en" : "ar",
   cart: new Map(),
   paymentMethod: "instapay",
   checkoutBusy: false,
@@ -61,11 +63,13 @@ const state = {
   }
 };
 
-const formatter = new Intl.NumberFormat("ar-EG");
+let formatter = new Intl.NumberFormat("ar-EG");
 const productGrid = document.querySelector("[data-products]");
 const filterButtons = document.querySelectorAll("[data-filter]");
 const searchInput = document.querySelector("#product-search");
 const header = document.querySelector(".site-header");
+const languageToggle = document.querySelector("[data-language-toggle]");
+const languageLabel = document.querySelector("[data-language-label]");
 const accountToggle = document.querySelector("[data-account-toggle]");
 const accountLabel = document.querySelector("[data-account-label]");
 const accountModal = document.querySelector("[data-account-modal]");
@@ -99,9 +103,541 @@ const imageLightboxClose = document.querySelector("[data-image-lightbox-close]")
 const scrim = document.querySelector("[data-scrim]");
 const cartSeparator = "::";
 
+const translations = {
+  ar: {
+    htmlLang: "ar",
+    dir: "rtl",
+    languageButton: "EN",
+    documentTitle: "مكتبة البابا كيرلس | مستلزمات الكنائس",
+    metaDescription: "مكتبة البابا كيرلس: مكتبة مسيحية متخصصة في مستلزمات الكنائس، الكتب الطقسية، الشموع، البخور، الأيقونات، والأقمشة الكنسية.",
+    brandName: "مكتبة البابا كيرلس",
+    brandTagline: "مستلزمات الكنائس والخدمة",
+    navCategories: "الأقسام",
+    navProducts: "المنتجات",
+    navServices: "خدمات الكنائس",
+    navContact: "تواصل",
+    navPolicies: "الشروط",
+    login: "دخول",
+    languageToggleAria: "Switch language to English",
+    accountAria: "تسجيل الدخول",
+    cartAria: "فتح السلة",
+    heroEyebrow: "كتب كنسية، شموع، بخور، أيقونات، وأدوات خدمة",
+    heroTitle: "مكتبة البابا كيرلس",
+    heroLead: "أسسها الشماس الدياكون بولس ملاك عام 2001 م\nاطلب منتجاتك الكنسية أونلاين والدفع عند الاستلام متاح",
+    shopNow: "تسوق الآن",
+    metricProducts: "منتج للخدمة",
+    metricTime: "تجهيز شائع",
+    metricChurch: "كميات ومقاسات",
+    trustPaymentTitle: "طرق دفع مرنة",
+    trustPaymentText: "دفع عند الاستلام أو أونلاين",
+    trustChosenTitle: "منتجات مختارة",
+    trustChosenText: "كتب وأدوات بجودة ثابتة",
+    trustGiftTitle: "تغليف محترم",
+    trustGiftText: "جاهز للهدايا والخدمة",
+    trustShippingTitle: "استلام أو شحن",
+    trustShippingText: "حسب المدينة والكمية",
+    categoriesEyebrow: "الأقسام",
+    categoriesTitle: "اختار احتياج الخدمة بسرعة",
+    catalogEyebrow: "الكتالوج",
+    catalogTitle: "منتجات مختارة للطلب",
+    searchPlaceholder: "ابحث عن منتج",
+    servicesEyebrow: "خدمات الكنائس",
+    servicesTitle: "نجهز طلبك بنفس ترتيب الخدمة",
+    servicesText: "سواء طلب موسمي، مقاس خاص، أو كميات لمدارس الأحد، نرتب لك المنتجات في قائمة واضحة ونجهزها حسب الميعاد.",
+    service1Title: "قوائم توريد",
+    service1Text: "قائمة بالكميات والأسعار حسب احتياج الكنيسة أو الاجتماع.",
+    service2Title: "تطريز وتخصيص",
+    service2Text: "ألوان ومقاسات وأسماء كنائس على الأقمشة والمفارش.",
+    service3Title: "هدايا خدمة",
+    service3Text: "تجميعات كتب وأيقونات وتذكارات للمؤتمرات والفصول.",
+    contactEyebrow: "تواصل",
+    contactTitle: "اطلب عرض سعر أو منتج غير موجود",
+    nameLabel: "الاسم",
+    namePlaceholder: "اسمك",
+    phoneLabel: "رقم الهاتف",
+    requestTypeLabel: "نوع الطلب",
+    requestProducts: "طلب منتجات",
+    requestChurch: "توريد كنيسة",
+    requestCustom: "تطريز أو مقاس خاص",
+    requestGeneral: "استفسار عام",
+    detailsLabel: "التفاصيل",
+    detailsPlaceholder: "اكتب المنتجات أو الكمية أو ميعاد المناسبة",
+    prepareMessage: "تجهيز رسالة الطلب",
+    policiesEyebrow: "الشروط والأحكام",
+    policiesTitle: "سياسات الدفع والخصوصية",
+    policiesIntro: "هذه السياسات متاحة بالعربية والإنجليزية لتوضيح شروط الدفع، الخصوصية، التواصل، والشحن.",
+    cartEyebrow: "طلبك",
+    cartTitle: "سلة المنتجات",
+    paymentMethod: "طريقة الدفع",
+    instapayLabel: "إنستاباي / تحويل بنكي",
+    instapaySmall: "01223515989 - مايكل نبيل ميلاد",
+    paymobSmall: "دفع أونلاين مباشر",
+    checkoutName: "الاسم",
+    checkoutNamePlaceholder: "اسم العميل",
+    checkoutPhone: "رقم الموبايل",
+    checkoutEmail: "البريد الإلكتروني",
+    checkoutEmailPlaceholder: "اختياري",
+    copyPayment: "نسخ بيانات الدفع",
+    totalApprox: "الإجمالي التقريبي",
+    sendOrder: "إرسال الطلب",
+    emptyProducts: "لا توجد منتجات مطابقة للبحث الحالي.",
+    emptyCart: "السلة فارغة حاليا.",
+    detailsAndPrices: "التفاصيل والأسعار",
+    choices: "اختيارات",
+    choose: "اختار",
+    add: "أضف",
+    unavailable: "غير متاح",
+    available: "متاح",
+    askPrice: "اسأل عن السعر",
+    currentPrice: "السعر الحالي",
+    basicChoice: "الاختيار الأساسي",
+    modalQuantityLabel: "العدد اللي هيتحط في السلة",
+    addToCart: "أضف {count} للسلة",
+    pieces: "{count} قطعة",
+    modalQuantityAria: "اختيار عدد القطع",
+    quantityAdjustAria: "تعديل كمية {name}",
+    decreaseQuantity: "تقليل الكمية",
+    increaseQuantity: "زيادة الكمية",
+    galleryLabel: "صور {name}",
+    showImageLabel: "عرض صورة {index} من {name}",
+    zoomImageLabel: "تكبير صورة {name}",
+    zoomHint: "اضغط للتكبير",
+    accountEyebrow: "حساب العميل",
+    accountTitle: "أهلا بيك في مكتبة البابا كيرلس",
+    accountStatus: "ادخل بحسابك عشان السلة تفضل محفوظة وتقدر تكمل طلبك بسهولة في أي وقت.",
+    accountSaved: "سلتك محفوظة على حسابك، ولو فتحت الموقع مرة تانية بنفس الحساب هتلاقيها موجودة.",
+    accountLocalOnly: "السلة محفوظة تلقائيا على هذا الجهاز. تسجيل الدخول بجوجل أو فيسبوك يحتاج إضافة بيانات Firebase في الموقع.",
+    accountLoading: "جاري تجهيز تسجيل الدخول...",
+    accountUser: "مسجل الدخول: {name}",
+    benefitCart: "حفظ السلة",
+    benefitFast: "دخول سريع",
+    benefitOrders: "متابعة الطلبات",
+    googleLogin: "الدخول بجوجل",
+    googleSmall: "الأسرع لحفظ السلة على حسابك",
+    facebookLogin: "الدخول بفيسبوك",
+    facebookSmall: "استخدم حساب فيسبوك للمتابعة",
+    signOut: "تسجيل الخروج",
+    paymentFallback: "سيتم فتح صفحة Paymob الرسمية لإتمام الدفع ببطاقة بنكية.",
+    fallbackLink: "لينك دفع احتياطي",
+    checkoutBusy: "جاري فتح Paymob...",
+    paymobNow: "ادفع Paymob الآن",
+    unpricedSuffix: " + منتجات بسعر عند التواصل",
+    instapayNote: "حوّل على رقم 01223515989 باسم مايكل نبيل ميلاد، وبعد التحويل ابعت صورة الإيصال على الواتساب.",
+    instapayMessage: "طريقة الدفع: إنستاباي / تحويل بنكي على رقم 01223515989 باسم مايكل نبيل ميلاد. بعد التحويل سأرسل صورة الإيصال.",
+    instapayCopy: "إنستاباي / تحويل بنكي\nرقم التحويل: 01223515989\nاسم الحساب: مايكل نبيل ميلاد",
+    paymobNote: "سيتم فتح صفحة Paymob الرسمية لإتمام الدفع ببطاقة بنكية.",
+    paymobCopy: "Paymob Checkout\nلينك الدفع: https://accept.paymob.com/payme/popekyrillosstore",
+    copiedPayment: "تم نسخ بيانات الدفع",
+    copyPaymentFallback: "انسخ بيانات الدفع من السلة",
+    cartEmptyToast: "السلة فارغة حاليا",
+    checkoutNameRequired: "اكتب اسم العميل قبل الدفع",
+    checkoutPhoneRequired: "اكتب رقم موبايل صحيح قبل الدفع",
+    checkoutEmailInvalid: "اكتب بريد إلكتروني صحيح أو سيبه فاضي",
+    paymobCheckoutFailed: "تعذر فتح checkout، هفتح لينك Paymob الاحتياطي",
+    firebaseRequired: "تسجيل الدخول يحتاج إعداد Firebase أولا",
+    signinFailed: "تعذر تسجيل الدخول، راجع إعدادات Firebase",
+    signoutToast: "تم تسجيل الخروج",
+    unavailableChoiceToast: "الاختيار ده غير متاح حاليا",
+    quantityLimitToast: "وصلت للكمية المتاحة من الاختيار ده",
+    addedToast: "تمت إضافة {count} من {name}{option} إلى السلة",
+    contactEmpty: "لا توجد تفاصيل إضافية",
+    contactMessage: "مرحباً، أنا {name}\nرقمي: {phone}\nنوع الطلب: {requestType}\nالتفاصيل: {message}"
+  },
+  en: {
+    htmlLang: "en",
+    dir: "ltr",
+    languageButton: "AR",
+    documentTitle: "Pope Kyrillos Store | Church Supplies",
+    metaDescription: "Pope Kyrillos Store: a Christian bookstore specializing in church supplies, liturgical books, candles, incense, icons, and church fabrics.",
+    brandName: "Pope Kyrillos Store",
+    brandTagline: "Church and ministry supplies",
+    navCategories: "Categories",
+    navProducts: "Products",
+    navServices: "Church services",
+    navContact: "Contact",
+    navPolicies: "Policies",
+    login: "Login",
+    languageToggleAria: "تغيير اللغة إلى العربية",
+    accountAria: "Login",
+    cartAria: "Open cart",
+    heroEyebrow: "Church books, candles, incense, icons, and ministry tools",
+    heroTitle: "Pope Kyrillos Store",
+    heroLead: "Founded by Deacon Boulos Malak in 2001\nOrder your church supplies online with cash on delivery available",
+    shopNow: "Shop now",
+    metricProducts: "service items",
+    metricTime: "common prep time",
+    metricChurch: "church orders",
+    trustPaymentTitle: "Flexible payment",
+    trustPaymentText: "Cash on delivery or online",
+    trustChosenTitle: "Curated products",
+    trustChosenText: "Books and tools with steady quality",
+    trustGiftTitle: "Careful packing",
+    trustGiftText: "Ready for gifts and ministry",
+    trustShippingTitle: "Pickup or delivery",
+    trustShippingText: "Based on city and quantity",
+    categoriesEyebrow: "Categories",
+    categoriesTitle: "Find what your ministry needs",
+    catalogEyebrow: "Catalog",
+    catalogTitle: "Selected products to order",
+    searchPlaceholder: "Search products",
+    servicesEyebrow: "Church services",
+    servicesTitle: "We prepare your order around your service needs",
+    servicesText: "Seasonal orders, custom sizes, or Sunday School quantities can be arranged in a clear list and prepared on time.",
+    service1Title: "Supply lists",
+    service1Text: "Quantities and prices based on church or meeting needs.",
+    service2Title: "Embroidery and custom work",
+    service2Text: "Colors, sizes, and church names on fabrics and altar cloths.",
+    service3Title: "Ministry gifts",
+    service3Text: "Bundles of books, icons, and keepsakes for conferences and classes.",
+    contactEyebrow: "Contact",
+    contactTitle: "Request a quote or a product not listed",
+    nameLabel: "Name",
+    namePlaceholder: "Your name",
+    phoneLabel: "Phone",
+    requestTypeLabel: "Request type",
+    requestProducts: "Product order",
+    requestChurch: "Church supply",
+    requestCustom: "Custom size or embroidery",
+    requestGeneral: "General question",
+    detailsLabel: "Details",
+    detailsPlaceholder: "Write the products, quantity, or event date",
+    prepareMessage: "Prepare request message",
+    policiesEyebrow: "Terms & Policies",
+    policiesTitle: "Payment and privacy policies",
+    policiesIntro: "These policies are available in Arabic and English for payment terms, privacy, contact, and shipping information.",
+    cartEyebrow: "Your order",
+    cartTitle: "Product cart",
+    paymentMethod: "Payment method",
+    instapayLabel: "Instapay / bank transfer",
+    instapaySmall: "01223515989 - Michael Nabil Milad",
+    paymobSmall: "Direct online payment",
+    checkoutName: "Name",
+    checkoutNamePlaceholder: "Customer name",
+    checkoutPhone: "Mobile number",
+    checkoutEmail: "Email",
+    checkoutEmailPlaceholder: "Optional",
+    copyPayment: "Copy payment details",
+    totalApprox: "Estimated total",
+    sendOrder: "Send order",
+    emptyProducts: "No products match your current search.",
+    emptyCart: "Your cart is empty.",
+    detailsAndPrices: "Details and prices",
+    choices: "Options",
+    choose: "Choose",
+    add: "Add",
+    unavailable: "Unavailable",
+    available: "Available",
+    askPrice: "Ask for price",
+    currentPrice: "Current price",
+    basicChoice: "Default option",
+    modalQuantityLabel: "Quantity to add to cart",
+    addToCart: "Add {count} to cart",
+    pieces: "{count} piece(s)",
+    modalQuantityAria: "Select quantity",
+    quantityAdjustAria: "Adjust quantity for {name}",
+    decreaseQuantity: "Decrease quantity",
+    increaseQuantity: "Increase quantity",
+    galleryLabel: "Images of {name}",
+    showImageLabel: "Show image {index} of {name}",
+    zoomImageLabel: "Zoom image of {name}",
+    zoomHint: "Tap to zoom",
+    accountEyebrow: "Customer account",
+    accountTitle: "Welcome to Pope Kyrillos Store",
+    accountStatus: "Sign in so your cart stays saved and you can continue your order anytime.",
+    accountSaved: "Your cart is saved to your account and will be available next time you sign in.",
+    accountLocalOnly: "Your cart is saved on this device. Google or Facebook login needs Firebase setup.",
+    accountLoading: "Preparing login...",
+    accountUser: "Signed in: {name}",
+    benefitCart: "Save cart",
+    benefitFast: "Fast login",
+    benefitOrders: "Track orders",
+    googleLogin: "Continue with Google",
+    googleSmall: "Fastest way to save your cart",
+    facebookLogin: "Continue with Facebook",
+    facebookSmall: "Use Facebook to continue",
+    signOut: "Sign out",
+    paymentFallback: "The official Paymob page will open to complete card payment.",
+    fallbackLink: "Backup payment link",
+    checkoutBusy: "Opening Paymob...",
+    paymobNow: "Pay with Paymob",
+    unpricedSuffix: " + products priced on request",
+    instapayNote: "Transfer to 01223515989 under the name Michael Nabil Milad, then send the receipt photo on WhatsApp.",
+    instapayMessage: "Payment method: Instapay / bank transfer to 01223515989 under the name Michael Nabil Milad. I will send the receipt photo after transfer.",
+    instapayCopy: "Instapay / bank transfer\nTransfer number: 01223515989\nAccount name: Michael Nabil Milad",
+    paymobNote: "The official Paymob page will open to complete card payment.",
+    paymobCopy: "Paymob Checkout\nPayment link: https://accept.paymob.com/payme/popekyrillosstore",
+    copiedPayment: "Payment details copied",
+    copyPaymentFallback: "Copy payment details from the cart",
+    cartEmptyToast: "Your cart is empty",
+    checkoutNameRequired: "Enter the customer name before payment",
+    checkoutPhoneRequired: "Enter a valid mobile number before payment",
+    checkoutEmailInvalid: "Enter a valid email or leave it empty",
+    paymobCheckoutFailed: "Checkout could not open. Opening the backup Paymob link",
+    firebaseRequired: "Login needs Firebase setup first",
+    signinFailed: "Sign-in failed. Check Firebase settings",
+    signoutToast: "Signed out",
+    unavailableChoiceToast: "This option is currently unavailable",
+    quantityLimitToast: "You reached the available quantity for this option",
+    addedToast: "Added {count} of {name}{option} to the cart",
+    contactEmpty: "No additional details",
+    contactMessage: "Hello, I am {name}\nMy phone: {phone}\nRequest type: {requestType}\nDetails: {message}"
+  }
+};
+
+const categoryCopy = {
+  all: { ar: ["الكل", "كل المنتجات"], en: ["All", "All products"] },
+  books: { ar: ["كتب وطقوس", "أجبية، قطمارس، ألحان"], en: ["Books & rites", "Agpeya, katameros, hymns"] },
+  candles: { ar: ["شموع وبخور", "شموع، فحم، شورية"], en: ["Candles & incense", "Candles, charcoal, censers"] },
+  vestments: { ar: ["أقمشة ومفارش", "مذبح، شماسات، تطريز"], en: ["Fabrics & altar cloths", "Altar, deacon, embroidery"] },
+  icons: { ar: ["أيقونات وهدايا", "براويز، صلبان، تذكارات"], en: ["Icons & gifts", "Frames, crosses, keepsakes"] },
+  brass: { ar: ["نحاسيات", "صلبان، شمعدانات، ذخائر"], en: ["Brassware", "Crosses, candlesticks, reliquaries"] }
+};
+
+const textMapEn = {
+  "دفوف وتريانتو": "Cymbals & triangle",
+  "كتب وطقوس": "Books & rites",
+  "شموع وبخور": "Candles & incense",
+  "أيقونات وهدايا": "Icons & gifts",
+  "نحاسيات": "Brassware",
+  "الحجم": "Size",
+  "المقاس": "Size",
+  "اللون": "Color",
+  "الوزن": "Weight",
+  "علب بخور": "Incense boxes",
+  "صلبان زفة": "Processional crosses",
+  "خرابات كتاب مقدس": "Bible cases",
+  "منتج": "Product",
+  "صغير": "Small",
+  "وسط": "Medium",
+  "كبير": "Large",
+  "125 جرام": "125 g",
+  "250 جرام": "250 g",
+  "500 جرام": "500 g",
+  "750 جرام": "750 g",
+  "1 كيلو": "1 kg",
+  "متاح": "Available",
+  "غير متاح حاليا": "Currently unavailable"
+};
+
+function t(key, replacements = {}) {
+  const value = translations[state.language]?.[key] ?? translations.ar[key] ?? key;
+  return Object.entries(replacements).reduce((text, [name, replacement]) => text.replaceAll(`{${name}}`, replacement), value);
+}
+
+function isEnglish() {
+  return state.language === "en";
+}
+
+function localized(value = "") {
+  if (!isEnglish()) return value;
+  return textMapEn[value] || value;
+}
+
+function lineBreakText(element, text) {
+  if (!element) return;
+  element.textContent = "";
+  String(text).split("\n").forEach((line, index) => {
+    if (index) element.appendChild(document.createElement("br"));
+    element.appendChild(document.createTextNode(line));
+  });
+}
+
+function setText(selector, text) {
+  const element = document.querySelector(selector);
+  if (element) element.textContent = text;
+}
+
+function setControlText(element, text) {
+  if (!element) return;
+  const icon = element.querySelector("svg");
+  element.textContent = "";
+  if (icon) element.append(icon);
+  element.append(document.createTextNode(text));
+}
+
+function setLabelText(label, text) {
+  if (!label) return;
+  const textNode = [...label.childNodes].find((node) => node.nodeType === Node.TEXT_NODE && node.textContent.trim());
+  if (textNode) {
+    textNode.textContent = `\n            ${text}\n            `;
+  } else {
+    label.prepend(document.createTextNode(`${text} `));
+  }
+}
+
+function applyCategoryLanguage() {
+  filterButtons.forEach((button) => {
+    const copy = categoryCopy[button.dataset.filter]?.[state.language];
+    if (!copy) return;
+    const [title, subtitle] = copy;
+    const strong = button.querySelector("strong");
+    const small = button.querySelector("small");
+    if (strong) strong.textContent = title;
+    if (small) small.textContent = subtitle;
+  });
+}
+
+function applyLanguage({ render = true } = {}) {
+  document.documentElement.lang = t("htmlLang");
+  document.documentElement.dir = t("dir");
+  document.body.dir = t("dir");
+  document.body.dataset.lang = state.language;
+  formatter = new Intl.NumberFormat(isEnglish() ? "en-US" : "ar-EG");
+  document.title = t("documentTitle");
+
+  const metaDescription = document.querySelector('meta[name="description"]');
+  if (metaDescription) metaDescription.setAttribute("content", t("metaDescription"));
+  if (languageLabel) languageLabel.textContent = t("languageButton");
+  if (languageToggle) languageToggle.setAttribute("aria-label", t("languageToggleAria"));
+
+  const brand = document.querySelector(".brand");
+  if (brand) {
+    brand.setAttribute("aria-label", t("brandName"));
+    const brandName = brand.querySelector("strong");
+    const brandTagline = brand.querySelector("small");
+    if (brandName) brandName.textContent = t("brandName");
+    if (brandTagline) brandTagline.textContent = t("brandTagline");
+  }
+
+  const navLabels = {
+    "#categories": "navCategories",
+    "#catalog": "navProducts",
+    "#services": "navServices",
+    "#contact": "navContact",
+    "#policies": "navPolicies"
+  };
+  Object.entries(navLabels).forEach(([href, key]) => {
+    setText(`.main-nav a[href="${href}"]`, t(key));
+  });
+
+  setText(".hero .eyebrow", t("heroEyebrow"));
+  setText("#hero-title", t("heroTitle"));
+  lineBreakText(document.querySelector(".hero-lead"), t("heroLead"));
+  setControlText(document.querySelector(".hero-actions .button"), t("shopNow"));
+  const metricBlocks = document.querySelectorAll(".hero-metrics > div");
+  if (metricBlocks[0]) {
+    metricBlocks[0].querySelector("strong").textContent = isEnglish() ? "120+" : "+120";
+    metricBlocks[0].querySelector("span").textContent = t("metricProducts");
+  }
+  if (metricBlocks[1]) {
+    metricBlocks[1].querySelector("strong").textContent = isEnglish() ? "48 hours" : "48 ساعة";
+    metricBlocks[1].querySelector("span").textContent = t("metricTime");
+  }
+  if (metricBlocks[2]) {
+    metricBlocks[2].querySelector("strong").textContent = isEnglish() ? "Church orders" : "طلبات كنائس";
+    metricBlocks[2].querySelector("span").textContent = t("metricChurch");
+  }
+
+  const trustKeys = [
+    ["trustPaymentTitle", "trustPaymentText"],
+    ["trustChosenTitle", "trustChosenText"],
+    ["trustGiftTitle", "trustGiftText"],
+    ["trustShippingTitle", "trustShippingText"]
+  ];
+  document.querySelectorAll(".trust-strip > div").forEach((item, index) => {
+    const [titleKey, textKey] = trustKeys[index] || [];
+    if (!titleKey) return;
+    const title = item.querySelector("strong");
+    const text = item.querySelector("span:not(.trust-icon)");
+    if (title) title.textContent = t(titleKey);
+    if (text) text.textContent = t(textKey);
+  });
+
+  setText("#categories .eyebrow", t("categoriesEyebrow"));
+  setText("#categories-title", t("categoriesTitle"));
+  applyCategoryLanguage();
+
+  setText("#catalog .eyebrow", t("catalogEyebrow"));
+  setText("#catalog-title", t("catalogTitle"));
+  if (searchInput) searchInput.placeholder = t("searchPlaceholder");
+
+  setText("#services .eyebrow", t("servicesEyebrow"));
+  setText("#services-title", t("servicesTitle"));
+  setText(".services-copy p:not(.eyebrow)", t("servicesText"));
+  const serviceArticles = document.querySelectorAll(".service-list article");
+  [
+    ["service1Title", "service1Text"],
+    ["service2Title", "service2Text"],
+    ["service3Title", "service3Text"]
+  ].forEach(([titleKey, textKey], index) => {
+    const article = serviceArticles[index];
+    if (!article) return;
+    const title = article.querySelector("h3");
+    const text = article.querySelector("p");
+    if (title) title.textContent = t(titleKey);
+    if (text) text.textContent = t(textKey);
+  });
+
+  setText("#contact .eyebrow", t("contactEyebrow"));
+  setText("#contact-title", t("contactTitle"));
+  const contactLabels = document.querySelectorAll(".contact-form label");
+  setLabelText(contactLabels[0], t("nameLabel"));
+  setLabelText(contactLabels[1], t("phoneLabel"));
+  setLabelText(contactLabels[2], t("requestTypeLabel"));
+  setLabelText(contactLabels[3], t("detailsLabel"));
+  const contactOptions = document.querySelectorAll(".contact-form select option");
+  [t("requestProducts"), t("requestChurch"), t("requestCustom"), t("requestGeneral")].forEach((text, index) => {
+    if (contactOptions[index]) contactOptions[index].textContent = text;
+  });
+  const nameInput = document.querySelector('.contact-form input[name="name"]');
+  const detailsInput = document.querySelector('.contact-form textarea[name="message"]');
+  if (nameInput) nameInput.placeholder = t("namePlaceholder");
+  if (detailsInput) detailsInput.placeholder = t("detailsPlaceholder");
+  setControlText(document.querySelector(".contact-form button"), t("prepareMessage"));
+
+  setText("[data-policies-eyebrow]", t("policiesEyebrow"));
+  setText("[data-policies-title]", t("policiesTitle"));
+  setText("[data-policies-intro]", t("policiesIntro"));
+
+  setText(".cart-panel-head .eyebrow", t("cartEyebrow"));
+  setText(".cart-panel-head h2", t("cartTitle"));
+  setText(".payment-box-head span", t("paymentMethod"));
+  const paymentOptions = document.querySelectorAll(".payment-option");
+  if (paymentOptions[0]) {
+    paymentOptions[0].querySelector("strong").textContent = t("instapayLabel");
+    paymentOptions[0].querySelector("small").textContent = t("instapaySmall");
+  }
+  if (paymentOptions[1]) {
+    paymentOptions[1].querySelector("strong").textContent = "Paymob";
+    paymentOptions[1].querySelector("small").textContent = t("paymobSmall");
+  }
+  const paymobLabels = document.querySelectorAll(".paymob-fields label");
+  setLabelText(paymobLabels[0], t("checkoutName"));
+  setLabelText(paymobLabels[1], t("checkoutPhone"));
+  setLabelText(paymobLabels[2], t("checkoutEmail"));
+  if (checkoutNameInput) checkoutNameInput.placeholder = t("checkoutNamePlaceholder");
+  if (checkoutEmailInput) checkoutEmailInput.placeholder = t("checkoutEmailPlaceholder");
+  if (copyPaymentButton) copyPaymentButton.textContent = t("copyPayment");
+  setText(".cart-total span", t("totalApprox"));
+
+  setText(".account-hero .eyebrow", t("accountEyebrow"));
+  setText("#account-modal-title", t("accountTitle"));
+  document.querySelectorAll(".account-benefits span").forEach((item, index) => {
+    setControlText(item, [t("benefitCart"), t("benefitFast"), t("benefitOrders")][index]);
+  });
+  const googleProvider = document.querySelector('[data-auth-provider="google"]');
+  const facebookProvider = document.querySelector('[data-auth-provider="facebook"]');
+  if (googleProvider) {
+    googleProvider.querySelector("strong").textContent = t("googleLogin");
+    googleProvider.querySelector("small").textContent = t("googleSmall");
+  }
+  if (facebookProvider) {
+    facebookProvider.querySelector("strong").textContent = t("facebookLogin");
+    facebookProvider.querySelector("small").textContent = t("facebookSmall");
+  }
+  if (authSignoutButton) authSignoutButton.textContent = t("signOut");
+
+  if (render) {
+    renderAuthState();
+    renderProducts();
+    renderCart();
+    if (document.body.classList.contains("product-open")) renderProductModal();
+  }
+}
+
 function money(amount) {
-  if (amount === null || amount === undefined || amount === "") return "اسأل عن السعر";
-  return `${formatter.format(Number(amount))} ج.م`;
+  if (amount === null || amount === undefined || amount === "") return t("askPrice");
+  return isEnglish() ? `EGP ${formatter.format(Number(amount))}` : `${formatter.format(Number(amount))} ج.م`;
 }
 
 function escapeHtml(value = "") {
@@ -126,6 +662,17 @@ function productPrice(product) {
 function variantPrice(variant, product) {
   const value = Number(variant?.price ?? product?.price);
   return Number.isFinite(value) && value > 0 ? value : null;
+}
+
+function productPriceText(product) {
+  if (!isEnglish() && product.priceNote) return product.priceNote;
+  const prices = getProductVariants(product).map((variant) => variantPrice(variant, product)).filter((price) => price !== null);
+  if (!prices.length) return money(productPrice(product));
+
+  const min = Math.min(...prices);
+  const max = Math.max(...prices);
+  if (min === max) return money(min);
+  return isEnglish() ? `From ${money(min)} to ${money(max)}` : `يبدأ من ${money(min)} حتى ${money(max)}`;
 }
 
 function variantQuantity(variant) {
@@ -173,9 +720,10 @@ function hasAvailableVariant(product) {
 }
 
 function variantStockText(variant) {
-  if (!isVariantAvailable(variant)) return "غير متاح حاليا";
+  if (!isVariantAvailable(variant)) return isEnglish() ? "Currently unavailable" : "غير متاح حاليا";
   const quantity = variantQuantity(variant);
-  return quantity === null ? "متاح" : `متاح - ${formatter.format(quantity)} قطعة`;
+  if (quantity === null) return t("available");
+  return isEnglish() ? `Available - ${formatter.format(quantity)} pcs` : `متاح - ${formatter.format(quantity)} قطعة`;
 }
 
 function clampModalQuantity(variant) {
@@ -192,20 +740,20 @@ function clampModalQuantity(variant) {
 
 function productStockText(product) {
   const availableVariants = getProductVariants(product).filter(isVariantAvailable);
-  if (!availableVariants.length) return "غير متاح حاليا";
+  if (!availableVariants.length) return isEnglish() ? "Currently unavailable" : "غير متاح حاليا";
 
   const quantities = availableVariants.map(variantQuantity).filter((quantity) => quantity !== null);
   if (quantities.length === availableVariants.length && quantities.length) {
     const total = quantities.reduce((sum, quantity) => sum + quantity, 0);
-    return `متاح - ${formatter.format(total)} قطعة`;
+    return isEnglish() ? `Available - ${formatter.format(total)} pcs` : `متاح - ${formatter.format(total)} قطعة`;
   }
 
-  return "متاح";
+  return t("available");
 }
 
 function variantOptionText(variant) {
   const options = Object.entries(variant?.options || {});
-  return options.map(([name, value]) => `${name}: ${value}`).join("، ");
+  return options.map(([name, value]) => `${localized(name)}: ${localized(value)}`).join(isEnglish() ? ", " : "، ");
 }
 
 function cartKey(productId, variantId = "default") {
@@ -333,7 +881,7 @@ function getFilteredProducts() {
     if (!hasAvailableVariant(product)) return false;
     const matchesCategory = state.filter === "all" || product.category === state.filter;
     const tags = Array.isArray(product.tags) ? product.tags.join(" ") : "";
-    const text = `${product.name} ${product.label} ${product.description} ${tags}`.toLowerCase();
+    const text = `${product.name} ${product.label} ${localized(product.label)} ${product.description} ${tags} ${localized(tags)}`.toLowerCase();
     return matchesCategory && (!query || text.includes(query));
   });
 }
@@ -342,7 +890,7 @@ function renderProducts() {
   const items = getFilteredProducts();
 
   if (!items.length) {
-    productGrid.innerHTML = '<div class="empty-state">لا توجد منتجات مطابقة للبحث الحالي.</div>';
+    productGrid.innerHTML = `<div class="empty-state">${t("emptyProducts")}</div>`;
     return;
   }
 
@@ -353,18 +901,19 @@ function renderProducts() {
       const hasImage = galleryImages.length > 0;
       const hasChoices = hasProductChoices(product);
       const isAvailable = hasAvailableVariant(product);
-      const fullDescription = escapeHtml(product.description || "");
-      const shortDescription = escapeHtml(compactText(product.description || ""));
-      const priceText = product.priceNote || money(product.price);
+      const fullDescription = escapeHtml(localized(product.description || ""));
+      const shortDescription = escapeHtml(compactText(localized(product.description || "")));
+      const priceText = productPriceText(product);
       const stockText = productStockText(product);
-      const productName = escapeHtml(product.name);
+      const productDisplayName = localized(product.name);
+      const productName = escapeHtml(productDisplayName);
       const productId = escapeHtml(product.id);
-      const actionLabel = !isAvailable ? "غير متاح" : hasChoices ? "اختار" : "أضف";
+      const actionLabel = !isAvailable ? t("unavailable") : hasChoices ? t("choose") : t("add");
       const actionAttribute = hasChoices ? `data-view-product="${productId}"` : `data-add="${productId}"`;
       const disabledAttribute = isAvailable ? "" : "disabled aria-disabled=\"true\"";
       const thumbnails = galleryImages.length > 1
         ? `
-          <div class="product-thumbs" aria-label="صور ${productName}">
+          <div class="product-thumbs" aria-label="${escapeHtml(t("galleryLabel", { name: productDisplayName }))}">
             ${galleryImages
               .map(
                 (image, index) => `
@@ -373,7 +922,7 @@ function renderProducts() {
                     type="button"
                     data-gallery="${productId}"
                     data-gallery-image="${escapeHtml(image)}"
-                    aria-label="عرض صورة ${formatter.format(index + 1)} من ${productName}"
+                    aria-label="${escapeHtml(t("showImageLabel", { index: formatter.format(index + 1), name: productDisplayName }))}"
                     aria-pressed="${index === 0 ? "true" : "false"}"
                   >
                     <img src="${escapeHtml(image)}" alt="" loading="lazy" />
@@ -398,23 +947,23 @@ function renderProducts() {
       return `
         <article class="product-card" data-card-product="${productId}">
           <div class="product-visual ${hasImage ? "has-image" : ""}" style="--visual-bg: ${product.bg || "#efe6d6"}; --visual-bg-2: ${product.bg2 || "#d6e5dc"}; --visual-fg: ${product.fg || "#0c6b68"}">
-            <span class="product-badge">${escapeHtml(product.badge || product.stock || "متاح")}</span>
+            <span class="product-badge">${escapeHtml(localized(product.badge || product.stock || t("available")))}</span>
             ${visual}
           </div>
           <div class="product-info">
             <div class="product-meta">
-              <span>${escapeHtml(product.label || "منتج")}</span>
+              <span>${escapeHtml(localized(product.label || "منتج"))}</span>
               <span class="stock">${escapeHtml(stockText)}</span>
             </div>
             <h3>${productName}</h3>
             <p class="product-summary">${shortDescription}</p>
             <details class="product-details">
-              <summary>التفاصيل والأسعار</summary>
+              <summary>${t("detailsAndPrices")}</summary>
               <p>${fullDescription}</p>
             </details>
             <div class="product-tags">
-              ${tags.map((tag) => `<span>${escapeHtml(tag)}</span>`).join("")}
-              ${hasChoices ? "<span>اختيارات</span>" : ""}
+              ${tags.map((tag) => `<span>${escapeHtml(localized(tag))}</span>`).join("")}
+              ${hasChoices ? `<span>${t("choices")}</span>` : ""}
             </div>
             <div class="product-bottom">
               <span class="price">${escapeHtml(priceText)}</span>
@@ -493,8 +1042,9 @@ function renderProductModal() {
   const modalQuantity = state.modal.quantity;
   const canAddQuantity = isAvailable && (remainingQuantity === null || remainingQuantity > 0);
   const canIncreaseQuantity = canAddQuantity && (remainingQuantity === null || modalQuantity < remainingQuantity);
-  const description = cleanDescription(product.description || "");
-  const productName = escapeHtml(product.name);
+  const description = cleanDescription(localized(product.description || ""));
+  const productDisplayName = localized(product.name);
+  const productName = escapeHtml(productDisplayName);
 
   const media = activeImage
     ? `
@@ -503,15 +1053,15 @@ function renderProductModal() {
         type="button"
         data-zoom-image="${escapeHtml(activeImage)}"
         data-zoom-alt="${productName}"
-        aria-label="تكبير صورة ${productName}"
+        aria-label="${escapeHtml(t("zoomImageLabel", { name: productDisplayName }))}"
       >
         <img class="modal-product-photo" src="${escapeHtml(activeImage)}" alt="${productName}" />
-        <span class="zoom-hint">اضغط للتكبير</span>
+        <span class="zoom-hint">${t("zoomHint")}</span>
       </button>
       ${
         modalImages.length > 1
           ? `
-            <div class="modal-thumbs" aria-label="صور ${productName}">
+            <div class="modal-thumbs" aria-label="${escapeHtml(t("galleryLabel", { name: productDisplayName }))}">
               ${modalImages
                 .map((image, index) => {
                   const isActive = image === activeImage;
@@ -522,7 +1072,7 @@ function renderProductModal() {
                       data-modal-image="${escapeHtml(image)}"
                       data-zoom-image="${escapeHtml(image)}"
                       data-zoom-alt="${productName}"
-                      aria-label="عرض صورة ${formatter.format(index + 1)} من ${productName}"
+                      aria-label="${escapeHtml(t("showImageLabel", { index: formatter.format(index + 1), name: productDisplayName }))}"
                       aria-pressed="${isActive ? "true" : "false"}"
                     >
                       <img src="${escapeHtml(image)}" alt="" loading="lazy" />
@@ -542,7 +1092,7 @@ function renderProductModal() {
         .map(
           (option) => `
             <div class="option-group">
-              <h3>${escapeHtml(option.name)}</h3>
+              <h3>${escapeHtml(localized(option.name))}</h3>
               <div class="option-values">
                 ${option.values
                   .map((value) => {
@@ -557,7 +1107,7 @@ function renderProductModal() {
                         aria-pressed="${active ? "true" : "false"}"
                         ${enabled ? "" : "disabled"}
                       >
-                        ${escapeHtml(value)}
+                        ${escapeHtml(localized(value))}
                       </button>
                     `;
                   })
@@ -574,26 +1124,26 @@ function renderProductModal() {
       ${media}
     </div>
     <div class="product-modal-copy">
-      <p class="eyebrow">${escapeHtml(product.label || "منتج")}</p>
+      <p class="eyebrow">${escapeHtml(localized(product.label || "منتج"))}</p>
       <h2 id="product-modal-title">${productName}</h2>
       <p class="modal-description">${escapeHtml(description)}</p>
       ${optionGroups ? `<div class="variant-options">${optionGroups}</div>` : ""}
       <div class="variant-summary">
-        <span>السعر الحالي</span>
+        <span>${t("currentPrice")}</span>
         <strong>${money(price)}</strong>
-        <p>${optionText ? escapeHtml(optionText) : "الاختيار الأساسي"} · ${escapeHtml(variantStockText(variant))}</p>
+        <p>${optionText ? escapeHtml(localized(optionText)) : t("basicChoice")} · ${escapeHtml(variantStockText(variant))}</p>
       </div>
-      <div class="modal-quantity" aria-label="اختيار عدد القطع">
+      <div class="modal-quantity" aria-label="${t("modalQuantityAria")}">
         <div>
-          <span>العدد اللي هيتحط في السلة</span>
-          <strong>${formatter.format(modalQuantity)} قطعة</strong>
+          <span>${t("modalQuantityLabel")}</span>
+          <strong>${t("pieces", { count: formatter.format(modalQuantity) })}</strong>
         </div>
         <div class="quantity-stepper">
           <button
             class="quantity-step"
             type="button"
             data-modal-qty-action="decrease"
-            aria-label="تقليل العدد"
+            aria-label="${t("decreaseQuantity")}"
             ${modalQuantity <= 1 ? "disabled" : ""}
           >
             -
@@ -603,7 +1153,7 @@ function renderProductModal() {
             class="quantity-step"
             type="button"
             data-modal-qty-action="increase"
-            aria-label="زيادة العدد"
+            aria-label="${t("increaseQuantity")}"
             ${canIncreaseQuantity ? "" : "disabled"}
           >
             +
@@ -621,7 +1171,7 @@ function renderProductModal() {
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <path d="M12 5v14M5 12h14" />
         </svg>
-        أضف ${formatter.format(modalQuantity)} للسلة
+        ${t("addToCart", { count: formatter.format(modalQuantity) })}
       </button>
     </div>
   `;
@@ -715,39 +1265,36 @@ function validatePaymobCustomer() {
   const customer = checkoutCustomer();
   if (!customer.name) {
     checkoutNameInput?.focus();
-    showToast("اكتب اسم العميل قبل الدفع");
+    showToast(t("checkoutNameRequired"));
     return null;
   }
   if (!customer.phone || customer.phone.length < 10) {
     checkoutPhoneInput?.focus();
-    showToast("اكتب رقم موبايل صحيح قبل الدفع");
+    showToast(t("checkoutPhoneRequired"));
     return null;
   }
   if (customer.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(customer.email)) {
     checkoutEmailInput?.focus();
-    showToast("اكتب بريد إلكتروني صحيح أو سيبه فاضي");
+    showToast(t("checkoutEmailInvalid"));
     return null;
   }
   return customer;
 }
 
 function renderPaymentDetails() {
-  const payment = selectedPayment();
   const isPaymob = state.paymentMethod === "paymob";
-  const note = isPaymob && paymobPaymentLink
-    ? `ادفع عن طريق Paymob من هنا: ${paymobPaymentLink}`
-    : payment.note;
+  const label = isPaymob ? "Paymob" : t("instapayLabel");
 
-  if (paymentSummary) paymentSummary.textContent = payment.label;
+  if (paymentSummary) paymentSummary.textContent = label;
   if (paymobFields) {
     paymobFields.hidden = !isPaymob;
     paymobFields.setAttribute("aria-hidden", isPaymob ? "false" : "true");
   }
   if (paymentNote) {
     if (isPaymob) {
-      paymentNote.innerHTML = `سيتم فتح صفحة Paymob الرسمية لإتمام الدفع ببطاقة بنكية. <a href="${escapeHtml(paymobPaymentLink)}" target="_blank" rel="noopener">لينك دفع احتياطي</a>`;
+      paymentNote.innerHTML = `${escapeHtml(t("paymobNote"))} <a href="${escapeHtml(paymobPaymentLink)}" target="_blank" rel="noopener">${escapeHtml(t("fallbackLink"))}</a>`;
     } else {
-      paymentNote.textContent = note;
+      paymentNote.textContent = t("instapayNote");
     }
   }
 
@@ -760,16 +1307,16 @@ function renderPaymentDetails() {
 
 function paymentMessageLine() {
   if (state.paymentMethod === "paymob" && paymobPaymentLink) {
-    return `طريقة الدفع: Paymob\nلينك الدفع: ${paymobPaymentLink}`;
+    return isEnglish() ? `Payment method: Paymob\nPayment link: ${paymobPaymentLink}` : `طريقة الدفع: Paymob\nلينك الدفع: ${paymobPaymentLink}`;
   }
 
-  return selectedPayment().message;
+  return t("instapayMessage");
 }
 
 function copyPaymentDetails() {
   const text = state.paymentMethod === "paymob" && paymobPaymentLink
-    ? `Paymob\nلينك الدفع: ${paymobPaymentLink}`
-    : selectedPayment().copyText;
+    ? t("paymobCopy")
+    : t("instapayCopy");
 
   const fallbackCopy = () => {
     const textarea = document.createElement("textarea");
@@ -787,18 +1334,18 @@ function copyPaymentDetails() {
   if (navigator.clipboard?.writeText) {
     navigator.clipboard
       .writeText(text)
-      .then(() => showToast("تم نسخ بيانات الدفع"))
-      .catch(() => showToast(fallbackCopy() ? "تم نسخ بيانات الدفع" : "انسخ بيانات الدفع من السلة"));
+      .then(() => showToast(t("copiedPayment")))
+      .catch(() => showToast(fallbackCopy() ? t("copiedPayment") : t("copyPaymentFallback")));
     return;
   }
 
-  showToast(fallbackCopy() ? "تم نسخ بيانات الدفع" : "انسخ بيانات الدفع من السلة");
+  showToast(fallbackCopy() ? t("copiedPayment") : t("copyPaymentFallback"));
 }
 
 async function startPaymobCheckout() {
   const items = checkoutCartPayload();
   if (!items.length) {
-    showToast("السلة فارغة حاليا");
+    showToast(t("cartEmptyToast"));
     return;
   }
 
@@ -818,13 +1365,13 @@ async function startPaymobCheckout() {
     const data = await response.json().catch(() => ({}));
 
     if (!response.ok || !data.checkoutUrl) {
-      throw new Error(data.message || "تعذر فتح Paymob checkout");
+      throw new Error(data.message || "Could not open Paymob checkout");
     }
 
     window.location.href = data.checkoutUrl;
   } catch (error) {
     console.warn("Paymob checkout failed, opening fallback payment link.", error);
-    showToast("تعذر فتح checkout، هفتح لينك Paymob الاحتياطي");
+    showToast(t("paymobCheckoutFailed"));
     window.location.href = paymobPaymentLink;
   } finally {
     state.checkoutBusy = false;
@@ -840,48 +1387,52 @@ function renderCart() {
   const hasUnpriced = entries.some((item) => item.price === null);
 
   cartCount.textContent = count;
-  cartTotal.textContent = hasUnpriced ? `${money(total)} + منتجات بسعر عند التواصل` : money(total);
+  cartTotal.textContent = hasUnpriced ? `${money(total)}${t("unpricedSuffix")}` : money(total);
 
   if (!entries.length) {
-    cartItems.innerHTML = '<div class="empty-state">السلة فارغة حاليا.</div>';
+    cartItems.innerHTML = `<div class="empty-state">${t("emptyCart")}</div>`;
     whatsappLink.setAttribute("href", "#");
-    if (checkoutLabel) checkoutLabel.textContent = "إرسال الطلب";
+    if (checkoutLabel) checkoutLabel.textContent = t("sendOrder");
     return;
   }
 
   cartItems.innerHTML = entries
-    .map(
-      (item) => `
+    .map((item) => {
+      const productName = localized(item.product.name);
+      return `
         <article class="cart-item">
           <div>
-            <h3>${escapeHtml(item.product.name)}</h3>
+            <h3>${escapeHtml(productName)}</h3>
             ${item.optionText ? `<p class="cart-variant">${escapeHtml(item.optionText)}</p>` : ""}
             <p>${money(item.price)} × ${formatter.format(item.qty)}</p>
           </div>
-          <div class="qty-control" aria-label="تعديل كمية ${escapeHtml(item.product.name)}">
-            <button type="button" data-qty="${escapeHtml(item.key)}" data-delta="-1" aria-label="تقليل الكمية">−</button>
+          <div class="qty-control" aria-label="${escapeHtml(t("quantityAdjustAria", { name: productName }))}">
+            <button type="button" data-qty="${escapeHtml(item.key)}" data-delta="-1" aria-label="${t("decreaseQuantity")}">−</button>
             <span>${formatter.format(item.qty)}</span>
-            <button type="button" data-qty="${escapeHtml(item.key)}" data-delta="1" aria-label="زيادة الكمية">+</button>
+            <button type="button" data-qty="${escapeHtml(item.key)}" data-delta="1" aria-label="${t("increaseQuantity")}">+</button>
           </div>
         </article>
-      `
-    )
+      `;
+    })
     .join("");
 
   const orderLines = entries
     .map((item) => {
-      const priceText = item.price === null ? "السعر عند التواصل" : `${formatter.format(item.price)} ج.م`;
+      const productName = localized(item.product.name);
+      const priceText = item.price === null ? t("askPrice") : money(item.price);
       const selected = item.optionText ? ` (${item.optionText})` : "";
-      return `- ${item.product.name}${selected}: ${formatter.format(item.qty)} × ${priceText}`;
+      return `- ${productName}${selected}: ${formatter.format(item.qty)} × ${priceText}`;
     })
     .join("\n");
-  const message = `مرحباً، أريد طلب المنتجات التالية من مكتبة البابا كيرلس:\n${orderLines}\nالإجمالي التقريبي للمنتجات المسعرة: ${formatter.format(total)} ج.م\n${paymentMessageLine()}`;
+  const message = isEnglish()
+    ? `Hello, I would like to order the following products from Pope Kyrillos Store:\n${orderLines}\nEstimated total for priced products: ${money(total)}\n${paymentMessageLine()}`
+    : `مرحباً، أريد طلب المنتجات التالية من مكتبة البابا كيرلس:\n${orderLines}\nالإجمالي التقريبي للمنتجات المسعرة: ${money(total)}\n${paymentMessageLine()}`;
   if (state.paymentMethod === "paymob") {
     whatsappLink.href = paymobPaymentLink;
-    if (checkoutLabel) checkoutLabel.textContent = state.checkoutBusy ? "جاري فتح Paymob..." : "ادفع Paymob الآن";
+    if (checkoutLabel) checkoutLabel.textContent = state.checkoutBusy ? t("checkoutBusy") : t("paymobNow");
   } else {
     whatsappLink.href = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
-    if (checkoutLabel) checkoutLabel.textContent = "إرسال الطلب";
+    if (checkoutLabel) checkoutLabel.textContent = t("sendOrder");
   }
 }
 
@@ -904,16 +1455,16 @@ function hasFirebaseConfig() {
 function renderAuthState() {
   const user = state.auth.user;
   const configured = state.auth.configured;
-  const displayName = user?.displayName || user?.email || "عميل";
+  const displayName = user?.displayName || user?.email || (isEnglish() ? "Customer" : "عميل");
 
-  if (accountLabel) accountLabel.textContent = user ? displayName.split(/\s+/)[0] : "دخول";
+  if (accountLabel) accountLabel.textContent = user ? displayName.split(/\s+/)[0] : t("login");
   if (accountToggle) {
-    accountToggle.setAttribute("aria-label", user ? `حساب ${displayName}` : "تسجيل الدخول");
+    accountToggle.setAttribute("aria-label", user ? (isEnglish() ? `Account ${displayName}` : `حساب ${displayName}`) : t("accountAria"));
   }
 
   if (accountUser) {
     accountUser.hidden = !user;
-    accountUser.textContent = user ? `مسجل الدخول: ${displayName}` : "";
+    accountUser.textContent = user ? t("accountUser", { name: displayName }) : "";
   }
 
   if (authProviderList) authProviderList.hidden = Boolean(user);
@@ -925,13 +1476,13 @@ function renderAuthState() {
 
   if (!accountStatus) return;
   if (!configured) {
-    accountStatus.textContent = "السلة محفوظة تلقائيا على هذا الجهاز. تسجيل الدخول بجوجل أو فيسبوك يحتاج إضافة بيانات Firebase في الموقع.";
+    accountStatus.textContent = t("accountLocalOnly");
   } else if (state.auth.loading) {
-    accountStatus.textContent = "جاري تجهيز تسجيل الدخول...";
+    accountStatus.textContent = t("accountLoading");
   } else if (user) {
-    accountStatus.textContent = "سلتك محفوظة على حسابك، ولو فتحت الموقع مرة تانية بنفس الحساب هتلاقيها موجودة.";
+    accountStatus.textContent = t("accountSaved");
   } else {
-    accountStatus.textContent = "ادخل بحسابك عشان السلة تفضل محفوظة وتقدر تكمل طلبك بسهولة في أي وقت.";
+    accountStatus.textContent = t("accountStatus");
   }
 }
 
@@ -1074,7 +1625,7 @@ async function signInWithProvider(providerName) {
   const services = state.auth.services;
   const provider = authProvider(providerName);
   if (!services || !provider) {
-    showToast("تسجيل الدخول يحتاج إعداد Firebase أولا");
+    showToast(t("firebaseRequired"));
     return;
   }
 
@@ -1091,7 +1642,7 @@ async function signInWithProvider(providerName) {
     state.auth.loading = false;
     renderAuthState();
     console.warn("Sign in failed.", error);
-    showToast("تعذر تسجيل الدخول، راجع إعدادات Firebase");
+    showToast(t("signinFailed"));
   }
 }
 
@@ -1102,7 +1653,7 @@ async function signOutCustomer() {
   await saveRemoteCart();
   await services.signOut(services.auth);
   closeAccountModal();
-  showToast("تم تسجيل الخروج");
+  showToast(t("signoutToast"));
 }
 
 function addToCart(productId, variantId = "", amount = 1) {
@@ -1111,7 +1662,7 @@ function addToCart(productId, variantId = "", amount = 1) {
 
   const variant = variantId ? findVariant(product, variantId) : defaultVariant(product);
   if (!isVariantAvailable(variant)) {
-    showToast("الاختيار ده غير متاح حاليا");
+    showToast(t("unavailableChoiceToast"));
     return;
   }
 
@@ -1121,7 +1672,7 @@ function addToCart(productId, variantId = "", amount = 1) {
   const requestedAmount = Math.max(1, Number(amount) || 1);
   const nextQty = currentQty + requestedAmount;
   if (quantity !== null && nextQty > quantity) {
-    showToast("وصلت للكمية المتاحة من الاختيار ده");
+    showToast(t("quantityLimitToast"));
     return;
   }
 
@@ -1129,7 +1680,11 @@ function addToCart(productId, variantId = "", amount = 1) {
   renderCart();
   saveCartNow();
   const selected = variantOptionText(variant);
-  showToast(`تمت إضافة ${formatter.format(requestedAmount)} من ${product.name}${selected ? ` - ${selected}` : ""} إلى السلة`);
+  showToast(t("addedToast", {
+    count: formatter.format(requestedAmount),
+    name: localized(product.name),
+    option: selected ? ` - ${selected}` : ""
+  }));
 }
 
 function changeQty(key, delta) {
@@ -1139,7 +1694,7 @@ function changeQty(key, delta) {
     const variant = product ? findVariant(product, variantId) : null;
     const quantity = variantQuantity(variant);
     if (quantity !== null && (state.cart.get(key) || 0) >= quantity) {
-      showToast("وصلت للكمية المتاحة من الاختيار ده");
+      showToast(t("quantityLimitToast"));
       return;
     }
   }
@@ -1308,6 +1863,12 @@ paymentInputs.forEach((input) => {
 
 copyPaymentButton?.addEventListener("click", copyPaymentDetails);
 
+languageToggle?.addEventListener("click", () => {
+  state.language = isEnglish() ? "ar" : "en";
+  localStorage.setItem(languageStorageKey, state.language);
+  applyLanguage();
+});
+
 accountToggle?.addEventListener("click", openAccountModal);
 accountClose?.addEventListener("click", closeAccountModal);
 authProviderButtons.forEach((button) => {
@@ -1347,9 +1908,9 @@ document.querySelector("[data-contact-form]").addEventListener("submit", (event)
   const name = form.get("name");
   const phone = form.get("phone");
   const requestType = form.get("requestType");
-  const message = form.get("message") || "لا توجد تفاصيل إضافية";
-  const body = `مرحباً، أنا ${name}%0Aرقمي: ${phone}%0Aنوع الطلب: ${requestType}%0Aالتفاصيل: ${message}`;
-  window.open(`https://wa.me/${whatsappNumber}?text=${body}`, "_blank", "noopener");
+  const message = form.get("message") || t("contactEmpty");
+  const body = t("contactMessage", { name, phone, requestType, message });
+  window.open(`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(body)}`, "_blank", "noopener");
 });
 
 window.addEventListener("scroll", () => {
@@ -1357,6 +1918,6 @@ window.addEventListener("scroll", () => {
 });
 
 loadGuestCart();
-renderAuthState();
+applyLanguage();
 initCustomerAuth();
 loadProducts();
