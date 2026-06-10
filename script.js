@@ -403,6 +403,28 @@ const categoryCopy = {
   brass: { ar: ["نحاسيات", "صلبان، شمعدانات، ذخائر"], en: ["Brassware", "Crosses, candlesticks, reliquaries"] }
 };
 
+const catalogCategoryOrder = ["brass", "candles", "vestments", "icons", "books"];
+const catalogLabelOrder = {
+  brass: ["صلبان زفة", "إبريق نحاس", "حُق ذخيرة", "نحاسيات", "دفوف وتريانتو", "شغل شحن"],
+  candles: ["شموع وبخور"],
+  vestments: ["أقمشة ومفارش"],
+  icons: ["أيقونات وهدايا"],
+  books: ["كتب وطقوس"]
+};
+const featuredProductOrder = [
+  "صليب زفة نحاس طبقتين بفصوص ملونة",
+  "صليب زفة نحاس طبقتين",
+  "صليب زفة نحاس رفيع بفص ألوان",
+  "طقم أواني مذبح ذهبي يوناني",
+  "إبريق نحاس ذهبي",
+  "دف 18 سم نحاس ذهبي تقيل",
+  "تريانتو ستانلس",
+  "بخور كنسي فاخر",
+  "شورية نحاس ذهبي يوناني",
+  "جراب للكتاب المقدس",
+  "أيقونة صليب صدر يوناني ذهبي"
+];
+
 const textMapEn = {
   "دفوف وتريانتو": "Cymbals & triangle",
   "كتب وطقوس": "Books & rites",
@@ -668,6 +690,35 @@ function compactText(value = "", maxLength = 150) {
   return `${text.slice(0, maxLength).trim()}...`;
 }
 
+function rankFromList(list, value) {
+  const index = list.indexOf(value);
+  return index === -1 ? 999 : index;
+}
+
+function compareCatalogProducts(first, second) {
+  const firstFeatured = state.filter === "all" && !state.search.trim() ? rankFromList(featuredProductOrder, first.product.name) : 999;
+  const secondFeatured = state.filter === "all" && !state.search.trim() ? rankFromList(featuredProductOrder, second.product.name) : 999;
+  if (firstFeatured !== secondFeatured) return firstFeatured - secondFeatured;
+
+  const firstCategory = rankFromList(catalogCategoryOrder, first.product.category);
+  const secondCategory = rankFromList(catalogCategoryOrder, second.product.category);
+  if (firstCategory !== secondCategory) return firstCategory - secondCategory;
+
+  const firstLabel = rankFromList(catalogLabelOrder[first.product.category] || [], first.product.label);
+  const secondLabel = rankFromList(catalogLabelOrder[second.product.category] || [], second.product.label);
+  if (firstLabel !== secondLabel) return firstLabel - secondLabel;
+
+  const firstProductRank = rankFromList(featuredProductOrder, first.product.name);
+  const secondProductRank = rankFromList(featuredProductOrder, second.product.name);
+  if (firstProductRank !== secondProductRank) return firstProductRank - secondProductRank;
+
+  const firstPrice = productPrice(first.product) ?? 999999999;
+  const secondPrice = productPrice(second.product) ?? 999999999;
+  if (firstPrice !== secondPrice) return firstPrice - secondPrice;
+
+  return first.index - second.index;
+}
+
 function productPrice(product) {
   const value = Number(product.price);
   return Number.isFinite(value) && value > 0 ? value : null;
@@ -891,13 +942,17 @@ function cleanDescription(description = "") {
 
 function getFilteredProducts() {
   const query = state.search.trim().toLowerCase();
-  return products.filter((product) => {
-    if (!hasAvailableVariant(product)) return false;
-    const matchesCategory = state.filter === "all" || product.category === state.filter;
-    const tags = Array.isArray(product.tags) ? product.tags.join(" ") : "";
-    const text = `${product.name} ${product.label} ${localized(product.label)} ${product.description} ${tags} ${localized(tags)}`.toLowerCase();
-    return matchesCategory && (!query || text.includes(query));
-  });
+  return products
+    .map((product, index) => ({ product, index }))
+    .filter(({ product }) => {
+      if (!hasAvailableVariant(product)) return false;
+      const matchesCategory = state.filter === "all" || product.category === state.filter;
+      const tags = Array.isArray(product.tags) ? product.tags.join(" ") : "";
+      const text = `${product.name} ${product.label} ${localized(product.label)} ${product.description} ${tags} ${localized(tags)}`.toLowerCase();
+      return matchesCategory && (!query || text.includes(query));
+    })
+    .sort(compareCatalogProducts)
+    .map(({ product }) => product);
 }
 
 function renderProducts() {
