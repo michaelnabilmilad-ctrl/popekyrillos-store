@@ -1214,7 +1214,7 @@ body[data-lang="en"] .hero h1 {
 
 .policy-card {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: 1fr;
   gap: 1px;
   border: 1px solid var(--line);
   border-radius: var(--radius);
@@ -1227,6 +1227,18 @@ body[data-lang="en"] .hero h1 {
   min-height: 100%;
   padding: 22px;
   background: rgba(255, 253, 247, 0.98);
+}
+
+.policy-lang[lang="en"] {
+  display: none;
+}
+
+body[data-lang="en"] .policy-lang[lang="ar"] {
+  display: none;
+}
+
+body[data-lang="en"] .policy-lang[lang="en"] {
+  display: block;
 }
 
 .policy-lang span {
