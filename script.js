@@ -46,6 +46,9 @@ const state = {
   language: localStorage.getItem(languageStorageKey) === "en" ? "en" : "ar",
   cart: new Map(),
   paymentMethod: "instapay",
+  deliveryMethod: "bosta",
+  shippingConfirmed: false,
+  shipping: null,
   checkoutBusy: false,
   auth: {
     configured: false,
@@ -89,10 +92,22 @@ const paymentInputs = document.querySelectorAll("[data-payment-method]");
 const paymentSummary = document.querySelector("[data-payment-summary]");
 const paymentNote = document.querySelector("[data-payment-note]");
 const copyPaymentButton = document.querySelector("[data-copy-payment]");
-const paymobFields = document.querySelector("[data-paymob-fields]");
+const deliveryInputs = document.querySelectorAll("[data-delivery-method]");
+const checkoutFields = document.querySelector("[data-checkout-fields]");
+const shippingFields = document.querySelector("[data-shipping-fields]");
+const shippingSummary = document.querySelector("[data-shipping-summary]");
+const shippingStatus = document.querySelector("[data-shipping-status]");
+const confirmShippingButton = document.querySelector("[data-confirm-shipping]");
 const checkoutNameInput = document.querySelector("[data-checkout-name]");
 const checkoutPhoneInput = document.querySelector("[data-checkout-phone]");
 const checkoutEmailInput = document.querySelector("[data-checkout-email]");
+const checkoutGovernorateInput = document.querySelector("[data-checkout-governorate]");
+const checkoutCityInput = document.querySelector("[data-checkout-city]");
+const checkoutAddressInput = document.querySelector("[data-checkout-address]");
+const checkoutNotesInput = document.querySelector("[data-checkout-notes]");
+const cartTotalBox = document.querySelector("[data-cart-total-box]");
+const cartTotalLabel = document.querySelector("[data-cart-total-label]");
+const cartTotalNote = document.querySelector("[data-cart-total-note]");
 const toast = document.querySelector("[data-toast]");
 const productModal = document.querySelector("[data-product-modal]");
 const productModalBody = document.querySelector("[data-product-modal-body]");
@@ -174,6 +189,38 @@ const translations = {
     paymobSmall: "دفع أونلاين مباشر",
     pickupCashLabel: "استلام من الفرع",
     pickupCashSmall: "دفع كاش بعد تجهيز الأوردر",
+    deliveryStep: "بيانات الاستلام والشحن",
+    deliverySummaryPending: "اكتب البيانات قبل الإجمالي",
+    deliverySummaryReady: "تم تأكيد بيانات الطلب",
+    deliveryBostaLabel: "شحن مع بوسطا",
+    deliveryBostaSmall: "للبيت أو الكنيسة حسب العنوان",
+    deliveryPickupLabel: "استلام من الفرع",
+    deliveryPickupSmall: "بدون شحن",
+    checkoutGovernorate: "المحافظة",
+    checkoutGovernoratePlaceholder: "اختار المحافظة",
+    checkoutCity: "المدينة / المنطقة",
+    checkoutCityPlaceholder: "مثال: شبرا، مدينة نصر...",
+    checkoutAddress: "العنوان بالتفصيل",
+    checkoutAddressPlaceholder: "اسم الشارع، رقم العمارة، الدور، الشقة، علامة مميزة",
+    checkoutNotes: "ملاحظات للطلب",
+    checkoutNotesPlaceholder: "اختياري: ميعاد مناسب، اسم كنيسة، ملاحظة للتغليف",
+    confirmShipping: "تأكيد بيانات الطلب",
+    editShipping: "تأكيد التعديل",
+    shippingPendingStatus: "الإجمالي هيظهر بعد تأكيد بيانات الاستلام.",
+    shippingReadyStatus: "بيانات الاستلام محفوظة، وتكلفة شحن بوسطا يتم تأكيدها حسب العنوان.",
+    pickupReadyStatus: "تم اختيار الاستلام من الفرع، بدون تكلفة شحن.",
+    totalLockedLabel: "اكتب بيانات الشحن عشان يظهر الإجمالي",
+    totalReadyLabel: "إجمالي المنتجات",
+    shippingPendingNote: "الشحن مع بوسطا يتم تأكيده حسب العنوان.",
+    pickupNoShippingNote: "استلام من الفرع بدون شحن.",
+    checkoutDetailsFirst: "أكد بيانات الاستلام الأول",
+    checkoutGovernorateRequired: "اختار المحافظة قبل تأكيد الطلب",
+    checkoutCityRequired: "اكتب المدينة أو المنطقة قبل تأكيد الطلب",
+    checkoutAddressRequired: "اكتب العنوان بالتفصيل قبل تأكيد الطلب",
+    deliveryBostaMessage: "طريقة الاستلام: شحن مع بوسطا",
+    deliveryPickupMessage: "طريقة الاستلام: استلام من الفرع",
+    shippingAddressMessage: "بيانات الشحن:\nالاسم: {name}\nالموبايل: {phone}\nالمحافظة: {governorate}\nالمدينة/المنطقة: {city}\nالعنوان: {address}{email}{notes}",
+    pickupAddressMessage: "بيانات الاستلام:\nالاسم: {name}\nالموبايل: {phone}{email}{notes}",
     checkoutName: "الاسم",
     checkoutNamePlaceholder: "اسم العميل",
     checkoutPhone: "رقم الموبايل",
@@ -324,6 +371,38 @@ const translations = {
     paymobSmall: "Direct online payment",
     pickupCashLabel: "Pickup from branch",
     pickupCashSmall: "Cash after order preparation",
+    deliveryStep: "Delivery details",
+    deliverySummaryPending: "Enter details before the total",
+    deliverySummaryReady: "Order details confirmed",
+    deliveryBostaLabel: "Bosta delivery",
+    deliveryBostaSmall: "Home or church delivery by address",
+    deliveryPickupLabel: "Pickup from branch",
+    deliveryPickupSmall: "No shipping",
+    checkoutGovernorate: "Governorate",
+    checkoutGovernoratePlaceholder: "Choose governorate",
+    checkoutCity: "City / area",
+    checkoutCityPlaceholder: "Example: Shubra, Nasr City...",
+    checkoutAddress: "Full address",
+    checkoutAddressPlaceholder: "Street name, building, floor, apartment, landmark",
+    checkoutNotes: "Order notes",
+    checkoutNotesPlaceholder: "Optional: preferred time, church name, gift note",
+    confirmShipping: "Confirm order details",
+    editShipping: "Confirm changes",
+    shippingPendingStatus: "The total will appear after delivery details are confirmed.",
+    shippingReadyStatus: "Delivery details are saved. Bosta shipping cost will be confirmed by address.",
+    pickupReadyStatus: "Branch pickup selected. No shipping cost.",
+    totalLockedLabel: "Enter delivery details to show the total",
+    totalReadyLabel: "Products total",
+    shippingPendingNote: "Bosta shipping cost will be confirmed by address.",
+    pickupNoShippingNote: "Branch pickup with no shipping.",
+    checkoutDetailsFirst: "Confirm delivery details first",
+    checkoutGovernorateRequired: "Choose the governorate before confirming",
+    checkoutCityRequired: "Enter the city or area before confirming",
+    checkoutAddressRequired: "Enter the full address before confirming",
+    deliveryBostaMessage: "Delivery method: Bosta shipping",
+    deliveryPickupMessage: "Delivery method: branch pickup",
+    shippingAddressMessage: "Shipping details:\nName: {name}\nMobile: {phone}\nGovernorate: {governorate}\nCity/area: {city}\nAddress: {address}{email}{notes}",
+    pickupAddressMessage: "Pickup details:\nName: {name}\nMobile: {phone}{email}{notes}",
     checkoutName: "Name",
     checkoutNamePlaceholder: "Customer name",
     checkoutPhone: "Mobile number",
@@ -649,14 +728,26 @@ function applyLanguage({ render = true } = {}) {
     paymentOptions[2].querySelector("strong").textContent = t("pickupCashLabel");
     paymentOptions[2].querySelector("small").textContent = t("pickupCashSmall");
   }
-  const paymobLabels = document.querySelectorAll(".paymob-fields label");
-  setLabelText(paymobLabels[0], t("checkoutName"));
-  setLabelText(paymobLabels[1], t("checkoutPhone"));
-  setLabelText(paymobLabels[2], t("checkoutEmail"));
+  setText("[data-checkout-step-label]", t("deliveryStep"));
+  setText("[data-delivery-bosta-label]", t("deliveryBostaLabel"));
+  setText("[data-delivery-bosta-small]", t("deliveryBostaSmall"));
+  setText("[data-delivery-pickup-label]", t("deliveryPickupLabel"));
+  setText("[data-delivery-pickup-small]", t("deliveryPickupSmall"));
+  setText("[data-checkout-name-label]", t("checkoutName"));
+  setText("[data-checkout-phone-label]", t("checkoutPhone"));
+  setText("[data-checkout-email-label]", t("checkoutEmail"));
+  setText("[data-checkout-governorate-label]", t("checkoutGovernorate"));
+  setText("[data-checkout-city-label]", t("checkoutCity"));
+  setText("[data-checkout-address-label]", t("checkoutAddress"));
+  setText("[data-checkout-notes-label]", t("checkoutNotes"));
+  setText("[data-governorate-placeholder]", t("checkoutGovernoratePlaceholder"));
   if (checkoutNameInput) checkoutNameInput.placeholder = t("checkoutNamePlaceholder");
   if (checkoutEmailInput) checkoutEmailInput.placeholder = t("checkoutEmailPlaceholder");
+  if (checkoutCityInput) checkoutCityInput.placeholder = t("checkoutCityPlaceholder");
+  if (checkoutAddressInput) checkoutAddressInput.placeholder = t("checkoutAddressPlaceholder");
+  if (checkoutNotesInput) checkoutNotesInput.placeholder = t("checkoutNotesPlaceholder");
   if (copyPaymentButton) copyPaymentButton.textContent = t("copyPayment");
-  setText(".cart-total span", t("totalApprox"));
+  if (confirmShippingButton) confirmShippingButton.textContent = state.shippingConfirmed ? t("editShipping") : t("confirmShipping");
 
   setText(".account-hero .eyebrow", t("accountEyebrow"));
   setText("#account-modal-title", t("accountTitle"));
@@ -1388,11 +1479,31 @@ function checkoutCustomer() {
   const name = checkoutNameInput?.value.trim() || "";
   const phone = normalizedPhone(checkoutPhoneInput?.value || "");
   const email = checkoutEmailInput?.value.trim() || "";
-  return { name, phone, email };
+  const governorate = checkoutGovernorateInput?.value.trim() || "";
+  const city = checkoutCityInput?.value.trim() || "";
+  const address = checkoutAddressInput?.value.trim() || "";
+  const notes = checkoutNotesInput?.value.trim() || "";
+  return {
+    deliveryMethod: state.deliveryMethod,
+    name,
+    phone,
+    email,
+    governorate,
+    city,
+    address,
+    notes
+  };
 }
 
-function validatePaymobCustomer() {
+function validateCheckoutCustomer({ requireConfirmed = false } = {}) {
   const customer = checkoutCustomer();
+  const needsAddress = customer.deliveryMethod === "bosta";
+
+  if (requireConfirmed && !state.shippingConfirmed) {
+    confirmShippingButton?.focus();
+    showToast(t("checkoutDetailsFirst"));
+    return null;
+  }
   if (!customer.name) {
     checkoutNameInput?.focus();
     showToast(t("checkoutNameRequired"));
@@ -1408,19 +1519,59 @@ function validatePaymobCustomer() {
     showToast(t("checkoutEmailInvalid"));
     return null;
   }
+  if (needsAddress && !customer.governorate) {
+    checkoutGovernorateInput?.focus();
+    showToast(t("checkoutGovernorateRequired"));
+    return null;
+  }
+  if (needsAddress && !customer.city) {
+    checkoutCityInput?.focus();
+    showToast(t("checkoutCityRequired"));
+    return null;
+  }
+  if (needsAddress && !customer.address) {
+    checkoutAddressInput?.focus();
+    showToast(t("checkoutAddressRequired"));
+    return null;
+  }
   return customer;
 }
 
+function confirmShippingDetails() {
+  const customer = validateCheckoutCustomer();
+  if (!customer) return false;
+  state.shipping = customer;
+  state.shippingConfirmed = true;
+  renderCart();
+  showToast(customer.deliveryMethod === "pickup" ? t("pickupReadyStatus") : t("shippingReadyStatus"));
+  return true;
+}
+
+function resetShippingConfirmation() {
+  state.shippingConfirmed = false;
+  state.shipping = null;
+  renderCart();
+}
+
+function shippingMessageLine(customer = state.shipping) {
+  if (!customer) return "";
+  const emailLine = customer.email ? `\n${isEnglish() ? "Email" : "البريد الإلكتروني"}: ${customer.email}` : "";
+  const notesLine = customer.notes ? `\n${isEnglish() ? "Notes" : "ملاحظات"}: ${customer.notes}` : "";
+  if (customer.deliveryMethod === "pickup") {
+    return `${t("deliveryPickupMessage")}\n${t("pickupAddressMessage", { ...customer, email: emailLine, notes: notesLine })}`;
+  }
+  return `${t("deliveryBostaMessage")}\n${t("shippingAddressMessage", { ...customer, email: emailLine, notes: notesLine })}`;
+}
+
 function renderPaymentDetails() {
+  if (state.deliveryMethod !== "pickup" && state.paymentMethod === "pickupCash") {
+    state.paymentMethod = "instapay";
+  }
   const isPaymob = state.paymentMethod === "paymob";
   const isPickupCash = state.paymentMethod === "pickupCash";
   const label = isPaymob ? "Paymob" : isPickupCash ? t("pickupCashLabel") : t("instapayLabel");
 
   if (paymentSummary) paymentSummary.textContent = label;
-  if (paymobFields) {
-    paymobFields.hidden = !isPaymob;
-    paymobFields.setAttribute("aria-hidden", isPaymob ? "false" : "true");
-  }
   if (paymentNote) {
     if (isPaymob) {
       paymentNote.innerHTML = `${escapeHtml(t("paymobNote"))} <a href="${escapeHtml(paymobPaymentLink)}" target="_blank" rel="noopener">${escapeHtml(t("fallbackLink"))}</a>`;
@@ -1432,9 +1583,39 @@ function renderPaymentDetails() {
   }
 
   paymentInputs.forEach((input) => {
+    const disabled = input.value === "pickupCash" && state.deliveryMethod !== "pickup";
     const active = input.value === state.paymentMethod;
+    input.disabled = disabled;
     input.checked = active;
     input.closest(".payment-option")?.classList.toggle("active", active);
+    input.closest(".payment-option")?.classList.toggle("disabled", disabled);
+  });
+}
+
+function renderDeliveryDetails() {
+  const needsAddress = state.deliveryMethod === "bosta";
+  if (shippingFields) {
+    shippingFields.hidden = !needsAddress;
+    shippingFields.setAttribute("aria-hidden", needsAddress ? "false" : "true");
+  }
+  if (shippingSummary) {
+    shippingSummary.textContent = state.shippingConfirmed ? t("deliverySummaryReady") : t("deliverySummaryPending");
+  }
+  if (shippingStatus) {
+    shippingStatus.textContent = state.shippingConfirmed
+      ? needsAddress
+        ? t("shippingReadyStatus")
+        : t("pickupReadyStatus")
+      : t("shippingPendingStatus");
+  }
+  if (confirmShippingButton) {
+    confirmShippingButton.textContent = state.shippingConfirmed ? t("editShipping") : t("confirmShipping");
+  }
+
+  deliveryInputs.forEach((input) => {
+    const active = input.value === state.deliveryMethod;
+    input.checked = active;
+    input.closest(".delivery-option")?.classList.toggle("active", active);
   });
 }
 
@@ -1516,7 +1697,7 @@ async function startPaymobCheckout() {
     return;
   }
 
-  const customer = validatePaymobCustomer();
+  const customer = validateCheckoutCustomer({ requireConfirmed: true });
   if (!customer) return;
   if (state.checkoutBusy) return;
 
@@ -1548,13 +1729,25 @@ async function startPaymobCheckout() {
 
 function renderCart() {
   renderPaymentDetails();
+  renderDeliveryDetails();
   const entries = cartEntries();
   const count = entries.reduce((sum, item) => sum + item.qty, 0);
   const total = entries.reduce((sum, item) => sum + (item.price || 0) * item.qty, 0);
   const hasUnpriced = entries.some((item) => item.price === null);
+  const detailsReady = state.shippingConfirmed && state.shipping;
+  const needsBostaShipping = detailsReady && state.shipping.deliveryMethod === "bosta";
 
   cartCount.textContent = count;
-  cartTotal.textContent = hasUnpriced ? `${money(total)}${t("unpricedSuffix")}` : money(total);
+  if (cartTotalBox) cartTotalBox.classList.toggle("locked", !detailsReady);
+  if (cartTotalLabel) cartTotalLabel.textContent = detailsReady ? t("totalReadyLabel") : t("totalLockedLabel");
+  if (cartTotal) cartTotal.textContent = detailsReady ? (hasUnpriced ? `${money(total)}${t("unpricedSuffix")}` : money(total)) : "—";
+  if (cartTotalNote) {
+    cartTotalNote.textContent = detailsReady
+      ? needsBostaShipping
+        ? t("shippingPendingNote")
+        : t("pickupNoShippingNote")
+      : t("shippingPendingStatus");
+  }
 
   if (!entries.length) {
     cartItems.innerHTML = `<div class="empty-state">${t("emptyCart")}</div>`;
@@ -1592,8 +1785,13 @@ function renderCart() {
     })
     .join("\n");
   const message = isEnglish()
-    ? `Hello, I would like to order the following products from Pope Kyrillos Store:\n${orderLines}\nEstimated total for priced products: ${money(total)}\n${paymentMessageLine()}`
-    : `مرحباً، أريد طلب المنتجات التالية من مكتبة البابا كيرلس:\n${orderLines}\nالإجمالي التقريبي للمنتجات المسعرة: ${money(total)}\n${paymentMessageLine()}`;
+    ? `Hello, I would like to order the following products from Pope Kyrillos Store:\n${orderLines}\nProducts total: ${money(total)}\n${cartTotalNote?.textContent || ""}\n${shippingMessageLine()}\n${paymentMessageLine()}`
+    : `مرحباً، أريد طلب المنتجات التالية من مكتبة البابا كيرلس:\n${orderLines}\nإجمالي المنتجات المسعرة: ${money(total)}\n${cartTotalNote?.textContent || ""}\n${shippingMessageLine()}\n${paymentMessageLine()}`;
+  if (!detailsReady) {
+    whatsappLink.href = "#";
+    if (checkoutLabel) checkoutLabel.textContent = t("checkoutDetailsFirst");
+    return;
+  }
   if (state.paymentMethod === "paymob") {
     whatsappLink.href = paymobPaymentLink;
     if (checkoutLabel) checkoutLabel.textContent = state.checkoutBusy ? t("checkoutBusy") : t("paymobNow");
@@ -2044,6 +2242,25 @@ paymentInputs.forEach((input) => {
   });
 });
 
+deliveryInputs.forEach((input) => {
+  input.addEventListener("change", () => {
+    state.deliveryMethod = input.value;
+    resetShippingConfirmation();
+  });
+});
+
+checkoutFields?.addEventListener("input", (event) => {
+  if (!event.target.matches("input, textarea, select")) return;
+  if (state.shippingConfirmed) resetShippingConfirmation();
+});
+
+checkoutFields?.addEventListener("change", (event) => {
+  if (!event.target.matches("input, textarea, select")) return;
+  if (state.shippingConfirmed) resetShippingConfirmation();
+});
+
+confirmShippingButton?.addEventListener("click", confirmShippingDetails);
+
 copyPaymentButton?.addEventListener("click", copyPaymentDetails);
 
 languageToggle?.addEventListener("click", () => {
@@ -2060,6 +2277,11 @@ authProviderButtons.forEach((button) => {
 authSignoutButton?.addEventListener("click", signOutCustomer);
 
 whatsappLink.addEventListener("click", (event) => {
+  if (!state.shippingConfirmed) {
+    event.preventDefault();
+    validateCheckoutCustomer({ requireConfirmed: true });
+    return;
+  }
   if (state.paymentMethod !== "paymob") return;
   event.preventDefault();
   startPaymobCheckout();

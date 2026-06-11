@@ -8,7 +8,7 @@
       name="description"
       content="مكتبة البابا كيرلس: مكتبة مسيحية متخصصة في مستلزمات الكنائس، الكتب الطقسية، الشموع، البخور، الأيقونات، والأقمشة الكنسية."
     />
-    <link rel="stylesheet" href="styles.css?v=pickup-cash-20260610" />
+    <link rel="stylesheet" href="styles.css?v=shipping-checkout-20260611" />
   </head>
   <body dir="rtl">
     <header class="site-header" data-elevated="false">
@@ -368,6 +368,91 @@
       </div>
       <div class="cart-items" data-cart-items></div>
       <div class="cart-footer">
+        <section class="checkout-box" aria-label="بيانات الاستلام والشحن">
+          <div class="checkout-box-head">
+            <span data-checkout-step-label>بيانات الاستلام والشحن</span>
+            <strong data-shipping-summary>اكتب البيانات قبل الإجمالي</strong>
+          </div>
+          <div class="delivery-options">
+            <label class="delivery-option">
+              <input type="radio" name="deliveryMethod" value="bosta" data-delivery-method checked />
+              <span>
+                <strong data-delivery-bosta-label>شحن مع بوسطا</strong>
+                <small data-delivery-bosta-small>للبيت أو الكنيسة حسب العنوان</small>
+              </span>
+            </label>
+            <label class="delivery-option">
+              <input type="radio" name="deliveryMethod" value="pickup" data-delivery-method />
+              <span>
+                <strong data-delivery-pickup-label>استلام من الفرع</strong>
+                <small data-delivery-pickup-small>بدون شحن</small>
+              </span>
+            </label>
+          </div>
+          <div class="checkout-fields" data-checkout-fields>
+            <label>
+              <span data-checkout-name-label>الاسم</span>
+              <input type="text" data-checkout-name placeholder="اسم العميل" autocomplete="name" />
+            </label>
+            <label>
+              <span data-checkout-phone-label>رقم الموبايل</span>
+              <input type="tel" data-checkout-phone placeholder="01xxxxxxxxx" autocomplete="tel" />
+            </label>
+            <label>
+              <span data-checkout-email-label>البريد الإلكتروني</span>
+              <input type="email" data-checkout-email placeholder="اختياري" autocomplete="email" />
+            </label>
+            <div class="shipping-fields" data-shipping-fields>
+              <label>
+                <span data-checkout-governorate-label>المحافظة</span>
+                <select data-checkout-governorate autocomplete="address-level1">
+                  <option value="" data-governorate-placeholder>اختار المحافظة</option>
+                  <option value="القاهرة">القاهرة</option>
+                  <option value="الجيزة">الجيزة</option>
+                  <option value="القليوبية">القليوبية</option>
+                  <option value="الإسكندرية">الإسكندرية</option>
+                  <option value="البحيرة">البحيرة</option>
+                  <option value="الدقهلية">الدقهلية</option>
+                  <option value="الشرقية">الشرقية</option>
+                  <option value="الغربية">الغربية</option>
+                  <option value="المنوفية">المنوفية</option>
+                  <option value="كفر الشيخ">كفر الشيخ</option>
+                  <option value="دمياط">دمياط</option>
+                  <option value="بورسعيد">بورسعيد</option>
+                  <option value="الإسماعيلية">الإسماعيلية</option>
+                  <option value="السويس">السويس</option>
+                  <option value="الفيوم">الفيوم</option>
+                  <option value="بني سويف">بني سويف</option>
+                  <option value="المنيا">المنيا</option>
+                  <option value="أسيوط">أسيوط</option>
+                  <option value="سوهاج">سوهاج</option>
+                  <option value="قنا">قنا</option>
+                  <option value="الأقصر">الأقصر</option>
+                  <option value="أسوان">أسوان</option>
+                  <option value="البحر الأحمر">البحر الأحمر</option>
+                  <option value="الوادي الجديد">الوادي الجديد</option>
+                  <option value="مطروح">مطروح</option>
+                  <option value="شمال سيناء">شمال سيناء</option>
+                  <option value="جنوب سيناء">جنوب سيناء</option>
+                </select>
+              </label>
+              <label>
+                <span data-checkout-city-label>المدينة / المنطقة</span>
+                <input type="text" data-checkout-city placeholder="مثال: شبرا، مدينة نصر..." autocomplete="address-level2" />
+              </label>
+              <label class="wide">
+                <span data-checkout-address-label>العنوان بالتفصيل</span>
+                <textarea data-checkout-address rows="2" placeholder="اسم الشارع، رقم العمارة، الدور، الشقة، علامة مميزة" autocomplete="street-address"></textarea>
+              </label>
+            </div>
+            <label class="wide">
+              <span data-checkout-notes-label>ملاحظات للطلب</span>
+              <textarea data-checkout-notes rows="2" placeholder="اختياري: ميعاد مناسب، اسم كنيسة، ملاحظة للتغليف"></textarea>
+            </label>
+          </div>
+          <button class="confirm-shipping" type="button" data-confirm-shipping>تأكيد بيانات الطلب</button>
+          <p class="shipping-status" data-shipping-status>الإجمالي هيظهر بعد تأكيد بيانات الاستلام.</p>
+        </section>
         <section class="payment-box" aria-label="طريقة الدفع">
           <div class="payment-box-head">
             <span>طريقة الدفع</span>
@@ -396,28 +481,15 @@
               </span>
             </label>
           </div>
-          <div class="paymob-fields" data-paymob-fields hidden>
-            <label>
-              الاسم
-              <input type="text" data-checkout-name placeholder="اسم العميل" autocomplete="name" />
-            </label>
-            <label>
-              رقم الموبايل
-              <input type="tel" data-checkout-phone placeholder="01xxxxxxxxx" autocomplete="tel" />
-            </label>
-            <label>
-              البريد الإلكتروني
-              <input type="email" data-checkout-email placeholder="اختياري" autocomplete="email" />
-            </label>
-          </div>
           <div class="payment-note" data-payment-note>
             حوّل على رقم 01223515989 باسم مايكل نبيل ميلاد، وبعد التحويل ابعت صورة الإيصال على الواتساب.
           </div>
           <button class="copy-payment" type="button" data-copy-payment>نسخ بيانات الدفع</button>
         </section>
-        <div class="cart-total">
-          <span>الإجمالي التقريبي</span>
+        <div class="cart-total locked" data-cart-total-box>
+          <span data-cart-total-label>اكتب بيانات الشحن عشان يظهر الإجمالي</span>
           <strong data-cart-total>0 ج.م</strong>
+          <small data-cart-total-note>الشحن مع بوسطا يتم تأكيده حسب العنوان.</small>
         </div>
         <a class="button primary full" data-whatsapp-link href="#" target="_blank" rel="noopener">
           <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -505,6 +577,6 @@
 
     <div class="toast" data-toast role="status" aria-live="polite"></div>
     <script src="firebase-config.js?v=pickup-cash-20260610"></script>
-    <script src="script.js?v=product-share-20260611"></script>
+    <script src="script.js?v=shipping-checkout-20260611"></script>
   </body>
 </html>
