@@ -135,7 +135,6 @@ const translations = {
     navProducts: "المنتجات",
     navServices: "خدمات الكنائس",
     navContact: "تواصل",
-    navPolicies: "الشروط",
     login: "دخول",
     languageToggleAria: "Switch language to English",
     accountAria: "تسجيل الدخول",
@@ -321,7 +320,6 @@ const translations = {
     navProducts: "Products",
     navServices: "Church services",
     navContact: "Contact",
-    navPolicies: "Policies",
     login: "Login",
     languageToggleAria: "تغيير اللغة إلى العربية",
     accountAria: "Login",
@@ -638,8 +636,7 @@ function applyLanguage({ render = true } = {}) {
     "#categories": "navCategories",
     "#catalog": "navProducts",
     "#services": "navServices",
-    "#contact": "navContact",
-    "#policies": "navPolicies"
+    "#contact": "navContact"
   };
   Object.entries(navLabels).forEach(([href, key]) => {
     setText(`.main-nav a[href="${href}"]`, t(key));
