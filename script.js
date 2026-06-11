@@ -209,10 +209,10 @@ const translations = {
     checkoutNotesPlaceholder: "اختياري: ميعاد مناسب، اسم كنيسة، ملاحظة للتغليف",
     confirmShipping: "تأكيد بيانات الطلب",
     editShipping: "تأكيد التعديل",
-    shippingPendingStatus: "الإجمالي هيظهر بعد تأكيد بيانات الاستلام.",
+    shippingPendingStatus: "إجمالي المنتجات ظاهر، وبيانات الاستلام مطلوبة قبل إرسال الطلب.",
     shippingReadyStatus: "بيانات الاستلام محفوظة، وتكلفة شحن بوسطا يتم تأكيدها حسب العنوان.",
     pickupReadyStatus: "تم اختيار الاستلام من الفرع، بدون تكلفة شحن.",
-    totalLockedLabel: "اكتب بيانات الشحن عشان يظهر الإجمالي",
+    totalLockedLabel: "إجمالي المنتجات",
     totalReadyLabel: "إجمالي المنتجات",
     shippingPendingNote: "الشحن مع بوسطا يتم تأكيده حسب العنوان.",
     pickupNoShippingNote: "استلام من الفرع بدون شحن.",
@@ -394,10 +394,10 @@ const translations = {
     checkoutNotesPlaceholder: "Optional: preferred time, church name, gift note",
     confirmShipping: "Confirm order details",
     editShipping: "Confirm changes",
-    shippingPendingStatus: "The total will appear after delivery details are confirmed.",
+    shippingPendingStatus: "Products total is visible. Delivery details are required before sending the order.",
     shippingReadyStatus: "Delivery details are saved. Bosta shipping cost will be confirmed by address.",
     pickupReadyStatus: "Branch pickup selected. No shipping cost.",
-    totalLockedLabel: "Enter delivery details to show the total",
+    totalLockedLabel: "Products total",
     totalReadyLabel: "Products total",
     shippingPendingNote: "Bosta shipping cost will be confirmed by address.",
     pickupNoShippingNote: "Branch pickup with no shipping.",
@@ -1826,15 +1826,17 @@ function renderCart() {
   const needsBostaShipping = detailsReady && state.shipping.deliveryMethod === "bosta";
 
   cartCount.textContent = count;
-  if (cartTotalBox) cartTotalBox.classList.toggle("locked", !detailsReady);
-  if (cartTotalLabel) cartTotalLabel.textContent = detailsReady ? t("totalReadyLabel") : t("totalLockedLabel");
-  if (cartTotal) cartTotal.textContent = detailsReady ? (hasUnpriced ? `${money(total)}${t("unpricedSuffix")}` : money(total)) : "—";
+  if (cartTotalBox) cartTotalBox.classList.remove("locked");
+  if (cartTotalLabel) cartTotalLabel.textContent = t("totalReadyLabel");
+  if (cartTotal) cartTotal.textContent = hasUnpriced ? `${money(total)}${t("unpricedSuffix")}` : money(total);
   if (cartTotalNote) {
     cartTotalNote.textContent = detailsReady
       ? needsBostaShipping
         ? t("shippingPendingNote")
         : t("pickupNoShippingNote")
-      : t("shippingPendingStatus");
+      : state.deliveryMethod === "bosta"
+      ? t("shippingPendingNote")
+      : t("pickupNoShippingNote");
   }
 
   if (!entries.length) {
