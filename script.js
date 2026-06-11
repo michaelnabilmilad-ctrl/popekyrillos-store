@@ -238,6 +238,7 @@ const translations = {
     sendOrder: "إرسال الطلب",
     emptyProducts: "لا توجد منتجات مطابقة للبحث الحالي.",
     emptyCart: "السلة فارغة حاليا.",
+    cartLoading: "جاري تحميل بيانات السلة...",
     detailsAndPrices: "التفاصيل والأسعار",
     choices: "اختيارات",
     choose: "اختار",
@@ -423,6 +424,7 @@ const translations = {
     sendOrder: "Send order",
     emptyProducts: "No products match your current search.",
     emptyCart: "Your cart is empty.",
+    cartLoading: "Loading cart details...",
     detailsAndPrices: "Details and prices",
     choices: "Options",
     choose: "Choose",
@@ -1468,6 +1470,10 @@ function cartEntries() {
     .filter(Boolean);
 }
 
+function cartQuantityCount(map = state.cart) {
+  return [...map.values()].reduce((sum, qty) => sum + Math.max(0, Math.floor(Number(qty) || 0)), 0);
+}
+
 function selectedPayment() {
   return paymentMethods[state.paymentMethod] || paymentMethods.instapay;
 }
@@ -1819,7 +1825,8 @@ function renderCart() {
   renderPaymentDetails();
   renderDeliveryDetails();
   const entries = cartEntries();
-  const count = entries.reduce((sum, item) => sum + item.qty, 0);
+  const rawCount = cartQuantityCount();
+  const count = entries.length ? entries.reduce((sum, item) => sum + item.qty, 0) : !products.length ? rawCount : 0;
   const total = entries.reduce((sum, item) => sum + (item.price || 0) * item.qty, 0);
   const hasUnpriced = entries.some((item) => item.price === null);
   const detailsReady = state.shippingConfirmed && state.shipping;
@@ -1840,7 +1847,7 @@ function renderCart() {
   }
 
   if (!entries.length) {
-    cartItems.innerHTML = `<div class="empty-state">${t("emptyCart")}</div>`;
+    cartItems.innerHTML = `<div class="empty-state">${rawCount && !products.length ? t("cartLoading") : t("emptyCart")}</div>`;
     whatsappLink.setAttribute("href", "#");
     if (checkoutLabel) checkoutLabel.textContent = t("sendOrder");
     return;
@@ -2000,17 +2007,21 @@ async function loadRemoteCart(user) {
 
 async function applySignedInCart(user) {
   const guestCart = loadCartFromLocal(guestCartStorageKey);
-  const userLocalCart = loadCartFromLocal(`${userCartStoragePrefix}${user.uid}`);
-  const remoteCart = await loadRemoteCart(user);
-  const merged = mergeCartMaps(mergeCartMaps(remoteCart, userLocalCart), guestCart);
+  const userCartKey = `${userCartStoragePrefix}${user.uid}`;
+  const userLocalCart = loadCartFromLocal(userCartKey);
 
-  state.cart = merged;
-  saveCartToLocal(`${userCartStoragePrefix}${user.uid}`, state.cart);
+  state.cart = mergeCartMaps(userLocalCart, guestCart);
+  saveCartToLocal(userCartKey, state.cart);
   try {
     localStorage.removeItem(guestCartStorageKey);
   } catch {
     // Local storage cleanup is best-effort.
   }
+  renderCart();
+
+  const remoteCart = await loadRemoteCart(user);
+  state.cart = mergeCartMaps(remoteCart, state.cart);
+  saveCartToLocal(userCartKey, state.cart);
   renderCart();
   queueRemoteCartSave();
 }
