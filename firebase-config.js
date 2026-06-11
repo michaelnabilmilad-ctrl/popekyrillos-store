@@ -4,3 +4,7 @@ window.POPE_KYRILLOS_FIREBASE_CONFIG = {
   projectId: "pope-kyrillos-store",
   appId: "1:467456142994:web:8bf9075bd67463a889004b"
 };
+
+window.POPE_KYRILLOS_API_CONFIG = {
+  bostaDeliveryEndpoint: ""
+};

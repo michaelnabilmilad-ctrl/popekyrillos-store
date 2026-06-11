@@ -49,6 +49,10 @@ const state = {
   deliveryMethod: "bosta",
   shippingConfirmed: false,
   shipping: null,
+  bosta: {
+    busy: false,
+    shipment: null
+  },
   checkoutBusy: false,
   auth: {
     configured: false,
@@ -221,6 +225,10 @@ const translations = {
     deliveryPickupMessage: "طريقة الاستلام: استلام من الفرع",
     shippingAddressMessage: "بيانات الشحن:\nالاسم: {name}\nالموبايل: {phone}\nالمحافظة: {governorate}\nالمدينة/المنطقة: {city}\nالعنوان: {address}{email}{notes}",
     pickupAddressMessage: "بيانات الاستلام:\nالاسم: {name}\nالموبايل: {phone}{email}{notes}",
+    bostaCreating: "جاري إنشاء شحنة بوسطا...",
+    bostaCreated: "تم إنشاء طلب الشحن في بوسطا",
+    bostaFallback: "تعذر إنشاء شحنة بوسطا الآن، سيتم إرسال الطلب على واتساب للمتابعة اليدوية.",
+    bostaReferenceLine: "بيانات بوسطا: رقم الشحنة/المرجع {reference}",
     checkoutName: "الاسم",
     checkoutNamePlaceholder: "اسم العميل",
     checkoutPhone: "رقم الموبايل",
@@ -403,6 +411,10 @@ const translations = {
     deliveryPickupMessage: "Delivery method: branch pickup",
     shippingAddressMessage: "Shipping details:\nName: {name}\nMobile: {phone}\nGovernorate: {governorate}\nCity/area: {city}\nAddress: {address}{email}{notes}",
     pickupAddressMessage: "Pickup details:\nName: {name}\nMobile: {phone}{email}{notes}",
+    bostaCreating: "Creating Bosta shipment...",
+    bostaCreated: "Bosta shipment request created",
+    bostaFallback: "Bosta shipment could not be created now. The order will be sent on WhatsApp for manual follow-up.",
+    bostaReferenceLine: "Bosta details: shipment/reference {reference}",
     checkoutName: "Name",
     checkoutNamePlaceholder: "Customer name",
     checkoutPhone: "Mobile number",
@@ -1550,6 +1562,7 @@ function confirmShippingDetails() {
 function resetShippingConfirmation() {
   state.shippingConfirmed = false;
   state.shipping = null;
+  state.bosta.shipment = null;
   renderCart();
 }
 
@@ -1561,6 +1574,84 @@ function shippingMessageLine(customer = state.shipping) {
     return `${t("deliveryPickupMessage")}\n${t("pickupAddressMessage", { ...customer, email: emailLine, notes: notesLine })}`;
   }
   return `${t("deliveryBostaMessage")}\n${t("shippingAddressMessage", { ...customer, email: emailLine, notes: notesLine })}`;
+}
+
+function bostaEndpoint() {
+  const configuredEndpoint = window.POPE_KYRILLOS_API_CONFIG?.bostaDeliveryEndpoint || "";
+  if (configuredEndpoint) return configuredEndpoint;
+  const projectId = firebaseConfig().projectId;
+  return projectId ? `https://us-central1-${projectId}.cloudfunctions.net/createBostaDelivery` : "";
+}
+
+function cartTotalAmount() {
+  return cartEntries().reduce((sum, item) => sum + (item.price || 0) * item.qty, 0);
+}
+
+function orderLinesFromCart() {
+  return cartEntries()
+    .map((item) => {
+      const productName = localized(item.product.name);
+      const priceText = item.price === null ? t("askPrice") : money(item.price);
+      const selected = item.optionText ? ` (${item.optionText})` : "";
+      return `- ${productName}${selected}: ${formatter.format(item.qty)} × ${priceText}`;
+    })
+    .join("\n");
+}
+
+function bostaReferenceLine(shipment) {
+  const reference = shipment?.trackingNumber || shipment?.awbNumber || shipment?.trackingCode || shipment?._id || shipment?.id || shipment?.businessReference;
+  return reference ? t("bostaReferenceLine", { reference }) : "";
+}
+
+function orderMessage(extraLine = "") {
+  const total = cartTotalAmount();
+  const shippingNote = state.shipping?.deliveryMethod === "bosta" ? t("shippingPendingNote") : t("pickupNoShippingNote");
+  const extra = extraLine ? `\n${extraLine}` : "";
+  return isEnglish()
+    ? `Hello, I would like to order the following products from Pope Kyrillos Store:\n${orderLinesFromCart()}\nProducts total: ${money(total)}\n${shippingNote}\n${shippingMessageLine()}${extra}\n${paymentMessageLine()}`
+    : `مرحباً، أريد طلب المنتجات التالية من مكتبة البابا كيرلس:\n${orderLinesFromCart()}\nإجمالي المنتجات المسعرة: ${money(total)}\n${shippingNote}\n${shippingMessageLine()}${extra}\n${paymentMessageLine()}`;
+}
+
+function orderWhatsappUrl(extraLine = "") {
+  return `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(orderMessage(extraLine))}`;
+}
+
+function bostaDeliveryPayload() {
+  const entries = cartEntries();
+  return {
+    customer: state.shipping,
+    paymentMethod: state.paymentMethod,
+    order: {
+      currency: "EGP",
+      total: cartTotalAmount(),
+      itemsCount: entries.reduce((sum, item) => sum + item.qty, 0),
+      items: entries.map((item) => ({
+        productId: item.product.id,
+        variantId: item.variant?.id || "default",
+        name: localized(item.product.name),
+        option: item.optionText || "",
+        quantity: item.qty,
+        price: item.price
+      }))
+    }
+  };
+}
+
+async function createBostaShipment() {
+  if (state.shipping?.deliveryMethod !== "bosta") return null;
+  const endpoint = bostaEndpoint();
+  if (!endpoint) return null;
+
+  const response = await fetch(endpoint, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(bostaDeliveryPayload())
+  });
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok || data.error) {
+    throw new Error(data.message || data.error || "Bosta shipment failed");
+  }
+  return data.delivery || data.result || data;
 }
 
 function renderPaymentDetails() {
@@ -1796,8 +1887,8 @@ function renderCart() {
     whatsappLink.href = paymobPaymentLink;
     if (checkoutLabel) checkoutLabel.textContent = state.checkoutBusy ? t("checkoutBusy") : t("paymobNow");
   } else {
-    whatsappLink.href = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
-    if (checkoutLabel) checkoutLabel.textContent = t("sendOrder");
+    whatsappLink.href = orderWhatsappUrl(bostaReferenceLine(state.bosta.shipment));
+    if (checkoutLabel) checkoutLabel.textContent = state.bosta.busy ? t("bostaCreating") : t("sendOrder");
   }
 }
 
@@ -2042,6 +2133,7 @@ function addToCart(productId, variantId = "", amount = 1) {
   }
 
   state.cart.set(key, nextQty);
+  state.bosta.shipment = null;
   renderCart();
   saveCartNow();
   const selected = variantOptionText(variant);
@@ -2070,6 +2162,7 @@ function changeQty(key, delta) {
   } else {
     state.cart.set(key, nextQty);
   }
+  state.bosta.shipment = null;
   renderCart();
   saveCartNow();
 }
@@ -2276,15 +2369,36 @@ authProviderButtons.forEach((button) => {
 });
 authSignoutButton?.addEventListener("click", signOutCustomer);
 
-whatsappLink.addEventListener("click", (event) => {
+whatsappLink.addEventListener("click", async (event) => {
+  event.preventDefault();
   if (!state.shippingConfirmed) {
-    event.preventDefault();
     validateCheckoutCustomer({ requireConfirmed: true });
     return;
   }
-  if (state.paymentMethod !== "paymob") return;
-  event.preventDefault();
-  startPaymobCheckout();
+  if (state.paymentMethod === "paymob") {
+    startPaymobCheckout();
+    return;
+  }
+
+  let bostaLine = bostaReferenceLine(state.bosta.shipment);
+  if (state.shipping?.deliveryMethod === "bosta" && !state.bosta.shipment && !state.bosta.busy) {
+    state.bosta.busy = true;
+    renderCart();
+    showToast(t("bostaCreating"));
+    try {
+      state.bosta.shipment = await createBostaShipment();
+      bostaLine = bostaReferenceLine(state.bosta.shipment);
+      showToast(t("bostaCreated"));
+    } catch (error) {
+      console.warn("Bosta shipment creation failed.", error);
+      showToast(t("bostaFallback"));
+    } finally {
+      state.bosta.busy = false;
+      renderCart();
+    }
+  }
+
+  window.open(orderWhatsappUrl(bostaLine), "_blank", "noopener");
 });
 
 document.querySelector(".cart-toggle").addEventListener("click", openCart);
