@@ -1765,18 +1765,20 @@ body[data-lang="en"] .policy-lang[lang="en"] {
 .account-benefits {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
+  gap: 10px;
+  padding: 4px 0 2px;
 }
 
 .account-benefits span {
-  display: grid;
-  justify-items: center;
-  gap: 5px;
-  min-height: 70px;
-  padding: 10px 8px;
-  border: 1px solid rgba(12, 107, 104, 0.16);
-  border-radius: 14px;
-  background: rgba(255, 255, 255, 0.68);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
   color: var(--teal-dark);
   font-size: 12px;
   font-weight: 900;
@@ -1784,8 +1786,11 @@ body[data-lang="en"] .policy-lang[lang="en"] {
 }
 
 .account-benefits svg {
-  width: 22px;
-  height: 22px;
+  width: 27px;
+  height: 27px;
+  padding: 6px;
+  border-radius: 50%;
+  background: rgba(12, 107, 104, 0.09);
   color: var(--gold-dark);
 }
 
@@ -2645,10 +2650,8 @@ body.account-open .scrim {
   }
 
   .account-benefits span {
-    grid-template-columns: 22px 1fr;
-    justify-items: start;
+    justify-content: flex-start;
     align-items: center;
-    min-height: 44px;
     text-align: start;
   }
 
