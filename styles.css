@@ -389,6 +389,10 @@ body[data-lang="en"] .hero h1 {
   margin-top: 34px;
 }
 
+[hidden] {
+  display: none !important;
+}
+
 .button {
   display: inline-flex;
   align-items: center;
