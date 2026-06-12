@@ -6,5 +6,6 @@ window.POPE_KYRILLOS_FIREBASE_CONFIG = {
 };
 
 window.POPE_KYRILLOS_API_CONFIG = {
-  bostaDeliveryEndpoint: ""
+  bostaDeliveryEndpoint: "",
+  orderEndpoint: ""
 };

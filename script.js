@@ -1,6 +1,5 @@
 const whatsappNumber = "201016125589";
 const paymobPaymentLink = "https://accept.paymob.com/payme/popekyrillosstore";
-const paymobCheckoutEndpoint = "/api/create-paymob-checkout";
 const firebaseSdkVersion = "10.14.1";
 const guestCartStorageKey = "pope-kyrillos-cart:guest";
 const userCartStoragePrefix = "pope-kyrillos-cart:user:";
@@ -228,6 +227,8 @@ const translations = {
     bostaCreated: "تم إنشاء طلب الشحن في بوسطا",
     bostaFallback: "تعذر إنشاء شحنة بوسطا الآن، سيتم إرسال الطلب على واتساب للمتابعة اليدوية.",
     bostaReferenceLine: "بيانات بوسطا: رقم الشحنة/المرجع {reference}",
+    orderReferenceLine: "رقم الطلب: {reference}",
+    orderSaveFallback: "تعذر حفظ الطلب على السيرفر الآن، سيتم فتح واتساب للمتابعة.",
     checkoutName: "الاسم",
     checkoutNamePlaceholder: "اسم العميل",
     checkoutPhone: "رقم الموبايل",
@@ -414,6 +415,8 @@ const translations = {
     bostaCreated: "Bosta shipment request created",
     bostaFallback: "Bosta shipment could not be created now. The order will be sent on WhatsApp for manual follow-up.",
     bostaReferenceLine: "Bosta details: shipment/reference {reference}",
+    orderReferenceLine: "Order reference: {reference}",
+    orderSaveFallback: "The order could not be saved on the server now. WhatsApp will open for follow-up.",
     checkoutName: "Name",
     checkoutNamePlaceholder: "Customer name",
     checkoutPhone: "Mobile number",
@@ -1586,6 +1589,23 @@ function bostaEndpoint() {
   return projectId ? `https://us-central1-${projectId}.cloudfunctions.net/createBostaDelivery` : "";
 }
 
+function orderEndpoint() {
+  const configuredEndpoint = window.POPE_KYRILLOS_API_CONFIG?.orderEndpoint || "";
+  if (configuredEndpoint) return configuredEndpoint;
+  const projectId = firebaseConfig().projectId;
+  return projectId ? `https://us-central1-${projectId}.cloudfunctions.net/createOrder` : "";
+}
+
+async function authHeaders() {
+  const user = state.auth.services?.auth?.currentUser || state.auth.user;
+  if (!user?.getIdToken) return {};
+  try {
+    return { Authorization: `Bearer ${await user.getIdToken()}` };
+  } catch {
+    return {};
+  }
+}
+
 function cartTotalAmount() {
   return cartEntries().reduce((sum, item) => sum + (item.price || 0) * item.qty, 0);
 }
@@ -1604,6 +1624,11 @@ function orderLinesFromCart() {
 function bostaReferenceLine(shipment) {
   const reference = shipment?.trackingNumber || shipment?.awbNumber || shipment?.trackingCode || shipment?._id || shipment?.id || shipment?.businessReference;
   return reference ? t("bostaReferenceLine", { reference }) : "";
+}
+
+function orderReferenceLine(orderResult) {
+  const reference = orderResult?.orderId || orderResult?.id;
+  return reference ? t("orderReferenceLine", { reference }) : "";
 }
 
 function orderMessage(extraLine = "") {
@@ -1640,6 +1665,29 @@ function bostaDeliveryPayload() {
   };
 }
 
+async function createSecureOrder() {
+  const endpoint = orderEndpoint();
+  if (!endpoint) return null;
+
+  const response = await fetch(endpoint, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      ...(await authHeaders())
+    },
+    body: JSON.stringify({
+      items: checkoutCartPayload(),
+      customer: state.shipping,
+      paymentMethod: state.paymentMethod
+    })
+  });
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok || data.error) {
+    throw new Error(data.message || data.error || "Order save failed");
+  }
+  return data;
+}
+
 async function createBostaShipment() {
   if (state.shipping?.deliveryMethod !== "bosta") return null;
   const endpoint = bostaEndpoint();
@@ -1647,7 +1695,10 @@ async function createBostaShipment() {
 
   const response = await fetch(endpoint, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      ...(await authHeaders())
+    },
     body: JSON.stringify(bostaDeliveryPayload())
   });
   const data = await response.json().catch(() => ({}));
@@ -1799,18 +1850,9 @@ async function startPaymobCheckout() {
   renderCart();
 
   try {
-    const response = await fetch(paymobCheckoutEndpoint, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ items, customer })
-    });
-    const data = await response.json().catch(() => ({}));
-
-    if (!response.ok || !data.checkoutUrl) {
-      throw new Error(data.message || "Could not open Paymob checkout");
-    }
-
-    window.location.href = data.checkoutUrl;
+    state.shipping = customer;
+    const data = await createSecureOrder();
+    window.location.href = data?.checkoutUrl || data?.paymentUrl || paymobPaymentLink;
   } catch (error) {
     console.warn("Paymob checkout failed, opening fallback payment link.", error);
     showToast(t("paymobCheckoutFailed"));
@@ -2390,6 +2432,14 @@ whatsappLink.addEventListener("click", async (event) => {
     return;
   }
 
+  let orderLine = "";
+  try {
+    orderLine = orderReferenceLine(await createSecureOrder());
+  } catch (error) {
+    console.warn("Order save failed.", error);
+    showToast(t("orderSaveFallback"));
+  }
+
   let bostaLine = bostaReferenceLine(state.bosta.shipment);
   if (state.shipping?.deliveryMethod === "bosta" && !state.bosta.shipment && !state.bosta.busy) {
     state.bosta.busy = true;
@@ -2408,7 +2458,7 @@ whatsappLink.addEventListener("click", async (event) => {
     }
   }
 
-  window.open(orderWhatsappUrl(bostaLine), "_blank", "noopener");
+  window.open(orderWhatsappUrl([orderLine, bostaLine].filter(Boolean).join("\n")), "_blank", "noopener");
 });
 
 document.querySelector(".cart-toggle").addEventListener("click", openCart);
