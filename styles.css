@@ -1068,16 +1068,22 @@ body[data-lang="en"] .hero h1 {
   justify-content: space-between;
   gap: 12px;
   margin-top: auto;
+  flex-wrap: wrap;
 }
 
 .price {
+  flex: 1 1 150px;
+  min-width: 0;
   color: var(--burgundy);
   font-size: 20px;
   font-weight: 900;
-  white-space: nowrap;
+  line-height: 1.35;
+  white-space: normal;
+  text-align: end;
 }
 
 .add-button {
+  flex: 0 0 auto;
   min-width: 112px;
   min-height: 42px;
   padding: 8px 12px;
