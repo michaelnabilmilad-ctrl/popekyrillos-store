@@ -314,6 +314,12 @@ const translations = {
     signinFailed: "تعذر تسجيل الدخول، راجع إعدادات Firebase",
     signupFailed: "تعذر إنشاء الحساب، تأكد من تفعيل Email/Password في Firebase",
     emailAuthInvalid: "اكتب بريد إلكتروني صحيح وكلمة مرور 6 أحرف على الأقل",
+    authUserNotFound: "الحساب ده مش موجود. اضغط إنشاء حساب أول مرة.",
+    authWrongPassword: "كلمة المرور غير صحيحة.",
+    authEmailInUse: "الإيميل ده عليه حساب بالفعل. اضغط دخول بدل إنشاء حساب.",
+    authWeakPassword: "كلمة المرور ضعيفة. اكتب 6 أحرف على الأقل.",
+    authUnauthorizedDomain: "دومين الموقع غير مضاف في Firebase Authorized domains.",
+    authProviderDisabled: "فعّل Email/Password من Firebase Authentication.",
     emailSigninSuccess: "تم تسجيل الدخول",
     emailSignupSuccess: "تم إنشاء الحساب وتسجيل الدخول",
     signoutToast: "تم تسجيل الخروج",
@@ -510,6 +516,12 @@ const translations = {
     signinFailed: "Sign-in failed. Check Firebase settings",
     signupFailed: "Could not create the account. Make sure Email/Password is enabled in Firebase",
     emailAuthInvalid: "Enter a valid email and a password of at least 6 characters",
+    authUserNotFound: "This account does not exist. Create an account first.",
+    authWrongPassword: "Incorrect password.",
+    authEmailInUse: "This email already has an account. Sign in instead.",
+    authWeakPassword: "Password is too weak. Use at least 6 characters.",
+    authUnauthorizedDomain: "This domain is not added to Firebase Authorized domains.",
+    authProviderDisabled: "Enable Email/Password in Firebase Authentication.",
     emailSigninSuccess: "Signed in",
     emailSignupSuccess: "Account created and signed in",
     signoutToast: "Signed out",
@@ -2210,6 +2222,20 @@ function emailAuthValues() {
   return { email, password };
 }
 
+function authErrorMessage(error, fallbackKey = "signinFailed") {
+  const code = error?.code || "";
+  const messages = {
+    "auth/user-not-found": "authUserNotFound",
+    "auth/invalid-credential": "authUserNotFound",
+    "auth/wrong-password": "authWrongPassword",
+    "auth/email-already-in-use": "authEmailInUse",
+    "auth/weak-password": "authWeakPassword",
+    "auth/unauthorized-domain": "authUnauthorizedDomain",
+    "auth/operation-not-allowed": "authProviderDisabled"
+  };
+  return t(messages[code] || fallbackKey);
+}
+
 async function signInWithEmail() {
   const ready = await ensureAuthServices();
   const services = state.auth.services;
@@ -2229,7 +2255,7 @@ async function signInWithEmail() {
     state.auth.loading = false;
     renderAuthState();
     console.warn("Email sign in failed.", error);
-    showToast(t("signinFailed"));
+    showToast(authErrorMessage(error, "signinFailed"));
   }
 }
 
@@ -2252,7 +2278,7 @@ async function signUpWithEmail() {
     state.auth.loading = false;
     renderAuthState();
     console.warn("Email sign up failed.", error);
-    showToast(t("signupFailed"));
+    showToast(authErrorMessage(error, "signupFailed"));
   }
 }
 
