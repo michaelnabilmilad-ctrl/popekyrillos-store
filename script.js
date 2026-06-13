@@ -2424,7 +2424,7 @@ function openProductFromUrl() {
 
 async function loadProducts() {
   try {
-    const response = await fetch("products.json?v=stole-products-20260613", { cache: "no-store" });
+    const response = await fetch("products.json?v=stole-finish-order-20260613", { cache: "no-store" });
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     products = await response.json();
   } catch (error) {

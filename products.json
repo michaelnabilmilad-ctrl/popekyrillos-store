@@ -2287,44 +2287,18 @@
       {
         "name": "التفصيل",
         "values": [
-          "بزاوية",
-          "بدون زاوية"
+          "بدون زاوية",
+          "بزاوية"
         ]
       }
     ],
     "variants": [
-      {
-        "id": "stole-red-gold-01-1-1",
-        "title": "3.5 متر / بزاوية",
-        "options": {
-          "الطول": "3.5 متر",
-          "التفصيل": "بزاوية"
-        },
-        "price": 650,
-        "compareAtPrice": null,
-        "available": true,
-        "image": "assets/products/gallery/stole-01.jpg",
-        "sku": ""
-      },
       {
         "id": "stole-red-gold-01-1-2",
         "title": "3.5 متر / بدون زاوية",
         "options": {
           "الطول": "3.5 متر",
           "التفصيل": "بدون زاوية"
-        },
-        "price": 650,
-        "compareAtPrice": null,
-        "available": true,
-        "image": "assets/products/gallery/stole-01.jpg",
-        "sku": ""
-      },
-      {
-        "id": "stole-red-gold-01-2-1",
-        "title": "3.75 متر / بزاوية",
-        "options": {
-          "الطول": "3.75 متر",
-          "التفصيل": "بزاوية"
         },
         "price": 650,
         "compareAtPrice": null,
@@ -2346,37 +2320,11 @@
         "sku": ""
       },
       {
-        "id": "stole-red-gold-01-3-1",
-        "title": "4 متر / بزاوية",
-        "options": {
-          "الطول": "4 متر",
-          "التفصيل": "بزاوية"
-        },
-        "price": 650,
-        "compareAtPrice": null,
-        "available": true,
-        "image": "assets/products/gallery/stole-01.jpg",
-        "sku": ""
-      },
-      {
         "id": "stole-red-gold-01-3-2",
         "title": "4 متر / بدون زاوية",
         "options": {
           "الطول": "4 متر",
           "التفصيل": "بدون زاوية"
-        },
-        "price": 650,
-        "compareAtPrice": null,
-        "available": true,
-        "image": "assets/products/gallery/stole-01.jpg",
-        "sku": ""
-      },
-      {
-        "id": "stole-red-gold-01-4-1",
-        "title": "4.25 متر / بزاوية",
-        "options": {
-          "الطول": "4.25 متر",
-          "التفصيل": "بزاوية"
         },
         "price": 650,
         "compareAtPrice": null,
@@ -2398,37 +2346,11 @@
         "sku": ""
       },
       {
-        "id": "stole-red-gold-01-5-1",
-        "title": "4.5 متر / بزاوية",
-        "options": {
-          "الطول": "4.5 متر",
-          "التفصيل": "بزاوية"
-        },
-        "price": 650,
-        "compareAtPrice": null,
-        "available": true,
-        "image": "assets/products/gallery/stole-01.jpg",
-        "sku": ""
-      },
-      {
         "id": "stole-red-gold-01-5-2",
         "title": "4.5 متر / بدون زاوية",
         "options": {
           "الطول": "4.5 متر",
           "التفصيل": "بدون زاوية"
-        },
-        "price": 650,
-        "compareAtPrice": null,
-        "available": true,
-        "image": "assets/products/gallery/stole-01.jpg",
-        "sku": ""
-      },
-      {
-        "id": "stole-red-gold-01-6-1",
-        "title": "4.75 متر / بزاوية",
-        "options": {
-          "الطول": "4.75 متر",
-          "التفصيل": "بزاوية"
         },
         "price": 650,
         "compareAtPrice": null,
@@ -2450,10 +2372,23 @@
         "sku": ""
       },
       {
-        "id": "stole-red-gold-01-7-1",
-        "title": "5 متر / بزاوية",
+        "id": "stole-red-gold-01-7-2",
+        "title": "5 متر / بدون زاوية",
         "options": {
           "الطول": "5 متر",
+          "التفصيل": "بدون زاوية"
+        },
+        "price": 650,
+        "compareAtPrice": null,
+        "available": true,
+        "image": "assets/products/gallery/stole-01.jpg",
+        "sku": ""
+      },
+      {
+        "id": "stole-red-gold-01-1-1",
+        "title": "3.5 متر / بزاوية",
+        "options": {
+          "الطول": "3.5 متر",
           "التفصيل": "بزاوية"
         },
         "price": 650,
@@ -2463,11 +2398,76 @@
         "sku": ""
       },
       {
-        "id": "stole-red-gold-01-7-2",
-        "title": "5 متر / بدون زاوية",
+        "id": "stole-red-gold-01-2-1",
+        "title": "3.75 متر / بزاوية",
+        "options": {
+          "الطول": "3.75 متر",
+          "التفصيل": "بزاوية"
+        },
+        "price": 650,
+        "compareAtPrice": null,
+        "available": true,
+        "image": "assets/products/gallery/stole-01.jpg",
+        "sku": ""
+      },
+      {
+        "id": "stole-red-gold-01-3-1",
+        "title": "4 متر / بزاوية",
+        "options": {
+          "الطول": "4 متر",
+          "التفصيل": "بزاوية"
+        },
+        "price": 650,
+        "compareAtPrice": null,
+        "available": true,
+        "image": "assets/products/gallery/stole-01.jpg",
+        "sku": ""
+      },
+      {
+        "id": "stole-red-gold-01-4-1",
+        "title": "4.25 متر / بزاوية",
+        "options": {
+          "الطول": "4.25 متر",
+          "التفصيل": "بزاوية"
+        },
+        "price": 650,
+        "compareAtPrice": null,
+        "available": true,
+        "image": "assets/products/gallery/stole-01.jpg",
+        "sku": ""
+      },
+      {
+        "id": "stole-red-gold-01-5-1",
+        "title": "4.5 متر / بزاوية",
+        "options": {
+          "الطول": "4.5 متر",
+          "التفصيل": "بزاوية"
+        },
+        "price": 650,
+        "compareAtPrice": null,
+        "available": true,
+        "image": "assets/products/gallery/stole-01.jpg",
+        "sku": ""
+      },
+      {
+        "id": "stole-red-gold-01-6-1",
+        "title": "4.75 متر / بزاوية",
+        "options": {
+          "الطول": "4.75 متر",
+          "التفصيل": "بزاوية"
+        },
+        "price": 650,
+        "compareAtPrice": null,
+        "available": true,
+        "image": "assets/products/gallery/stole-01.jpg",
+        "sku": ""
+      },
+      {
+        "id": "stole-red-gold-01-7-1",
+        "title": "5 متر / بزاوية",
         "options": {
           "الطول": "5 متر",
-          "التفصيل": "بدون زاوية"
+          "التفصيل": "بزاوية"
         },
         "price": 650,
         "compareAtPrice": null,
@@ -2514,44 +2514,18 @@
       {
         "name": "التفصيل",
         "values": [
-          "بزاوية",
-          "بدون زاوية"
+          "بدون زاوية",
+          "بزاوية"
         ]
       }
     ],
     "variants": [
-      {
-        "id": "stole-red-gold-02-1-1",
-        "title": "3.5 متر / بزاوية",
-        "options": {
-          "الطول": "3.5 متر",
-          "التفصيل": "بزاوية"
-        },
-        "price": 650,
-        "compareAtPrice": null,
-        "available": true,
-        "image": "assets/products/gallery/stole-02.jpg",
-        "sku": ""
-      },
       {
         "id": "stole-red-gold-02-1-2",
         "title": "3.5 متر / بدون زاوية",
         "options": {
           "الطول": "3.5 متر",
           "التفصيل": "بدون زاوية"
-        },
-        "price": 650,
-        "compareAtPrice": null,
-        "available": true,
-        "image": "assets/products/gallery/stole-02.jpg",
-        "sku": ""
-      },
-      {
-        "id": "stole-red-gold-02-2-1",
-        "title": "3.75 متر / بزاوية",
-        "options": {
-          "الطول": "3.75 متر",
-          "التفصيل": "بزاوية"
         },
         "price": 650,
         "compareAtPrice": null,
@@ -2573,37 +2547,11 @@
         "sku": ""
       },
       {
-        "id": "stole-red-gold-02-3-1",
-        "title": "4 متر / بزاوية",
-        "options": {
-          "الطول": "4 متر",
-          "التفصيل": "بزاوية"
-        },
-        "price": 650,
-        "compareAtPrice": null,
-        "available": true,
-        "image": "assets/products/gallery/stole-02.jpg",
-        "sku": ""
-      },
-      {
         "id": "stole-red-gold-02-3-2",
         "title": "4 متر / بدون زاوية",
         "options": {
           "الطول": "4 متر",
           "التفصيل": "بدون زاوية"
-        },
-        "price": 650,
-        "compareAtPrice": null,
-        "available": true,
-        "image": "assets/products/gallery/stole-02.jpg",
-        "sku": ""
-      },
-      {
-        "id": "stole-red-gold-02-4-1",
-        "title": "4.25 متر / بزاوية",
-        "options": {
-          "الطول": "4.25 متر",
-          "التفصيل": "بزاوية"
         },
         "price": 650,
         "compareAtPrice": null,
@@ -2625,37 +2573,11 @@
         "sku": ""
       },
       {
-        "id": "stole-red-gold-02-5-1",
-        "title": "4.5 متر / بزاوية",
-        "options": {
-          "الطول": "4.5 متر",
-          "التفصيل": "بزاوية"
-        },
-        "price": 650,
-        "compareAtPrice": null,
-        "available": true,
-        "image": "assets/products/gallery/stole-02.jpg",
-        "sku": ""
-      },
-      {
         "id": "stole-red-gold-02-5-2",
         "title": "4.5 متر / بدون زاوية",
         "options": {
           "الطول": "4.5 متر",
           "التفصيل": "بدون زاوية"
-        },
-        "price": 650,
-        "compareAtPrice": null,
-        "available": true,
-        "image": "assets/products/gallery/stole-02.jpg",
-        "sku": ""
-      },
-      {
-        "id": "stole-red-gold-02-6-1",
-        "title": "4.75 متر / بزاوية",
-        "options": {
-          "الطول": "4.75 متر",
-          "التفصيل": "بزاوية"
         },
         "price": 650,
         "compareAtPrice": null,
@@ -2677,10 +2599,23 @@
         "sku": ""
       },
       {
-        "id": "stole-red-gold-02-7-1",
-        "title": "5 متر / بزاوية",
+        "id": "stole-red-gold-02-7-2",
+        "title": "5 متر / بدون زاوية",
         "options": {
           "الطول": "5 متر",
+          "التفصيل": "بدون زاوية"
+        },
+        "price": 650,
+        "compareAtPrice": null,
+        "available": true,
+        "image": "assets/products/gallery/stole-02.jpg",
+        "sku": ""
+      },
+      {
+        "id": "stole-red-gold-02-1-1",
+        "title": "3.5 متر / بزاوية",
+        "options": {
+          "الطول": "3.5 متر",
           "التفصيل": "بزاوية"
         },
         "price": 650,
@@ -2690,11 +2625,76 @@
         "sku": ""
       },
       {
-        "id": "stole-red-gold-02-7-2",
-        "title": "5 متر / بدون زاوية",
+        "id": "stole-red-gold-02-2-1",
+        "title": "3.75 متر / بزاوية",
+        "options": {
+          "الطول": "3.75 متر",
+          "التفصيل": "بزاوية"
+        },
+        "price": 650,
+        "compareAtPrice": null,
+        "available": true,
+        "image": "assets/products/gallery/stole-02.jpg",
+        "sku": ""
+      },
+      {
+        "id": "stole-red-gold-02-3-1",
+        "title": "4 متر / بزاوية",
+        "options": {
+          "الطول": "4 متر",
+          "التفصيل": "بزاوية"
+        },
+        "price": 650,
+        "compareAtPrice": null,
+        "available": true,
+        "image": "assets/products/gallery/stole-02.jpg",
+        "sku": ""
+      },
+      {
+        "id": "stole-red-gold-02-4-1",
+        "title": "4.25 متر / بزاوية",
+        "options": {
+          "الطول": "4.25 متر",
+          "التفصيل": "بزاوية"
+        },
+        "price": 650,
+        "compareAtPrice": null,
+        "available": true,
+        "image": "assets/products/gallery/stole-02.jpg",
+        "sku": ""
+      },
+      {
+        "id": "stole-red-gold-02-5-1",
+        "title": "4.5 متر / بزاوية",
+        "options": {
+          "الطول": "4.5 متر",
+          "التفصيل": "بزاوية"
+        },
+        "price": 650,
+        "compareAtPrice": null,
+        "available": true,
+        "image": "assets/products/gallery/stole-02.jpg",
+        "sku": ""
+      },
+      {
+        "id": "stole-red-gold-02-6-1",
+        "title": "4.75 متر / بزاوية",
+        "options": {
+          "الطول": "4.75 متر",
+          "التفصيل": "بزاوية"
+        },
+        "price": 650,
+        "compareAtPrice": null,
+        "available": true,
+        "image": "assets/products/gallery/stole-02.jpg",
+        "sku": ""
+      },
+      {
+        "id": "stole-red-gold-02-7-1",
+        "title": "5 متر / بزاوية",
         "options": {
           "الطول": "5 متر",
-          "التفصيل": "بدون زاوية"
+          "التفصيل": "بزاوية"
         },
         "price": 650,
         "compareAtPrice": null,
@@ -2741,44 +2741,18 @@
       {
         "name": "التفصيل",
         "values": [
-          "بزاوية",
-          "بدون زاوية"
+          "بدون زاوية",
+          "بزاوية"
         ]
       }
     ],
     "variants": [
-      {
-        "id": "stole-red-gold-03-1-1",
-        "title": "3.5 متر / بزاوية",
-        "options": {
-          "الطول": "3.5 متر",
-          "التفصيل": "بزاوية"
-        },
-        "price": 650,
-        "compareAtPrice": null,
-        "available": true,
-        "image": "assets/products/gallery/stole-03.jpg",
-        "sku": ""
-      },
       {
         "id": "stole-red-gold-03-1-2",
         "title": "3.5 متر / بدون زاوية",
         "options": {
           "الطول": "3.5 متر",
           "التفصيل": "بدون زاوية"
-        },
-        "price": 650,
-        "compareAtPrice": null,
-        "available": true,
-        "image": "assets/products/gallery/stole-03.jpg",
-        "sku": ""
-      },
-      {
-        "id": "stole-red-gold-03-2-1",
-        "title": "3.75 متر / بزاوية",
-        "options": {
-          "الطول": "3.75 متر",
-          "التفصيل": "بزاوية"
         },
         "price": 650,
         "compareAtPrice": null,
@@ -2800,37 +2774,11 @@
         "sku": ""
       },
       {
-        "id": "stole-red-gold-03-3-1",
-        "title": "4 متر / بزاوية",
-        "options": {
-          "الطول": "4 متر",
-          "التفصيل": "بزاوية"
-        },
-        "price": 650,
-        "compareAtPrice": null,
-        "available": true,
-        "image": "assets/products/gallery/stole-03.jpg",
-        "sku": ""
-      },
-      {
         "id": "stole-red-gold-03-3-2",
         "title": "4 متر / بدون زاوية",
         "options": {
           "الطول": "4 متر",
           "التفصيل": "بدون زاوية"
-        },
-        "price": 650,
-        "compareAtPrice": null,
-        "available": true,
-        "image": "assets/products/gallery/stole-03.jpg",
-        "sku": ""
-      },
-      {
-        "id": "stole-red-gold-03-4-1",
-        "title": "4.25 متر / بزاوية",
-        "options": {
-          "الطول": "4.25 متر",
-          "التفصيل": "بزاوية"
         },
         "price": 650,
         "compareAtPrice": null,
@@ -2852,37 +2800,11 @@
         "sku": ""
       },
       {
-        "id": "stole-red-gold-03-5-1",
-        "title": "4.5 متر / بزاوية",
-        "options": {
-          "الطول": "4.5 متر",
-          "التفصيل": "بزاوية"
-        },
-        "price": 650,
-        "compareAtPrice": null,
-        "available": true,
-        "image": "assets/products/gallery/stole-03.jpg",
-        "sku": ""
-      },
-      {
         "id": "stole-red-gold-03-5-2",
         "title": "4.5 متر / بدون زاوية",
         "options": {
           "الطول": "4.5 متر",
           "التفصيل": "بدون زاوية"
-        },
-        "price": 650,
-        "compareAtPrice": null,
-        "available": true,
-        "image": "assets/products/gallery/stole-03.jpg",
-        "sku": ""
-      },
-      {
-        "id": "stole-red-gold-03-6-1",
-        "title": "4.75 متر / بزاوية",
-        "options": {
-          "الطول": "4.75 متر",
-          "التفصيل": "بزاوية"
         },
         "price": 650,
         "compareAtPrice": null,
@@ -2904,10 +2826,23 @@
         "sku": ""
       },
       {
-        "id": "stole-red-gold-03-7-1",
-        "title": "5 متر / بزاوية",
+        "id": "stole-red-gold-03-7-2",
+        "title": "5 متر / بدون زاوية",
         "options": {
           "الطول": "5 متر",
+          "التفصيل": "بدون زاوية"
+        },
+        "price": 650,
+        "compareAtPrice": null,
+        "available": true,
+        "image": "assets/products/gallery/stole-03.jpg",
+        "sku": ""
+      },
+      {
+        "id": "stole-red-gold-03-1-1",
+        "title": "3.5 متر / بزاوية",
+        "options": {
+          "الطول": "3.5 متر",
           "التفصيل": "بزاوية"
         },
         "price": 650,
@@ -2917,11 +2852,76 @@
         "sku": ""
       },
       {
-        "id": "stole-red-gold-03-7-2",
-        "title": "5 متر / بدون زاوية",
+        "id": "stole-red-gold-03-2-1",
+        "title": "3.75 متر / بزاوية",
+        "options": {
+          "الطول": "3.75 متر",
+          "التفصيل": "بزاوية"
+        },
+        "price": 650,
+        "compareAtPrice": null,
+        "available": true,
+        "image": "assets/products/gallery/stole-03.jpg",
+        "sku": ""
+      },
+      {
+        "id": "stole-red-gold-03-3-1",
+        "title": "4 متر / بزاوية",
+        "options": {
+          "الطول": "4 متر",
+          "التفصيل": "بزاوية"
+        },
+        "price": 650,
+        "compareAtPrice": null,
+        "available": true,
+        "image": "assets/products/gallery/stole-03.jpg",
+        "sku": ""
+      },
+      {
+        "id": "stole-red-gold-03-4-1",
+        "title": "4.25 متر / بزاوية",
+        "options": {
+          "الطول": "4.25 متر",
+          "التفصيل": "بزاوية"
+        },
+        "price": 650,
+        "compareAtPrice": null,
+        "available": true,
+        "image": "assets/products/gallery/stole-03.jpg",
+        "sku": ""
+      },
+      {
+        "id": "stole-red-gold-03-5-1",
+        "title": "4.5 متر / بزاوية",
+        "options": {
+          "الطول": "4.5 متر",
+          "التفصيل": "بزاوية"
+        },
+        "price": 650,
+        "compareAtPrice": null,
+        "available": true,
+        "image": "assets/products/gallery/stole-03.jpg",
+        "sku": ""
+      },
+      {
+        "id": "stole-red-gold-03-6-1",
+        "title": "4.75 متر / بزاوية",
+        "options": {
+          "الطول": "4.75 متر",
+          "التفصيل": "بزاوية"
+        },
+        "price": 650,
+        "compareAtPrice": null,
+        "available": true,
+        "image": "assets/products/gallery/stole-03.jpg",
+        "sku": ""
+      },
+      {
+        "id": "stole-red-gold-03-7-1",
+        "title": "5 متر / بزاوية",
         "options": {
           "الطول": "5 متر",
-          "التفصيل": "بدون زاوية"
+          "التفصيل": "بزاوية"
         },
         "price": 650,
         "compareAtPrice": null,
@@ -2968,44 +2968,18 @@
       {
         "name": "التفصيل",
         "values": [
-          "بزاوية",
-          "بدون زاوية"
+          "بدون زاوية",
+          "بزاوية"
         ]
       }
     ],
     "variants": [
-      {
-        "id": "stole-red-gold-04-1-1",
-        "title": "3.5 متر / بزاوية",
-        "options": {
-          "الطول": "3.5 متر",
-          "التفصيل": "بزاوية"
-        },
-        "price": 650,
-        "compareAtPrice": null,
-        "available": true,
-        "image": "assets/products/gallery/stole-04.jpg",
-        "sku": ""
-      },
       {
         "id": "stole-red-gold-04-1-2",
         "title": "3.5 متر / بدون زاوية",
         "options": {
           "الطول": "3.5 متر",
           "التفصيل": "بدون زاوية"
-        },
-        "price": 650,
-        "compareAtPrice": null,
-        "available": true,
-        "image": "assets/products/gallery/stole-04.jpg",
-        "sku": ""
-      },
-      {
-        "id": "stole-red-gold-04-2-1",
-        "title": "3.75 متر / بزاوية",
-        "options": {
-          "الطول": "3.75 متر",
-          "التفصيل": "بزاوية"
         },
         "price": 650,
         "compareAtPrice": null,
@@ -3027,37 +3001,11 @@
         "sku": ""
       },
       {
-        "id": "stole-red-gold-04-3-1",
-        "title": "4 متر / بزاوية",
-        "options": {
-          "الطول": "4 متر",
-          "التفصيل": "بزاوية"
-        },
-        "price": 650,
-        "compareAtPrice": null,
-        "available": true,
-        "image": "assets/products/gallery/stole-04.jpg",
-        "sku": ""
-      },
-      {
         "id": "stole-red-gold-04-3-2",
         "title": "4 متر / بدون زاوية",
         "options": {
           "الطول": "4 متر",
           "التفصيل": "بدون زاوية"
-        },
-        "price": 650,
-        "compareAtPrice": null,
-        "available": true,
-        "image": "assets/products/gallery/stole-04.jpg",
-        "sku": ""
-      },
-      {
-        "id": "stole-red-gold-04-4-1",
-        "title": "4.25 متر / بزاوية",
-        "options": {
-          "الطول": "4.25 متر",
-          "التفصيل": "بزاوية"
         },
         "price": 650,
         "compareAtPrice": null,
@@ -3079,37 +3027,11 @@
         "sku": ""
       },
       {
-        "id": "stole-red-gold-04-5-1",
-        "title": "4.5 متر / بزاوية",
-        "options": {
-          "الطول": "4.5 متر",
-          "التفصيل": "بزاوية"
-        },
-        "price": 650,
-        "compareAtPrice": null,
-        "available": true,
-        "image": "assets/products/gallery/stole-04.jpg",
-        "sku": ""
-      },
-      {
         "id": "stole-red-gold-04-5-2",
         "title": "4.5 متر / بدون زاوية",
         "options": {
           "الطول": "4.5 متر",
           "التفصيل": "بدون زاوية"
-        },
-        "price": 650,
-        "compareAtPrice": null,
-        "available": true,
-        "image": "assets/products/gallery/stole-04.jpg",
-        "sku": ""
-      },
-      {
-        "id": "stole-red-gold-04-6-1",
-        "title": "4.75 متر / بزاوية",
-        "options": {
-          "الطول": "4.75 متر",
-          "التفصيل": "بزاوية"
         },
         "price": 650,
         "compareAtPrice": null,
@@ -3131,10 +3053,23 @@
         "sku": ""
       },
       {
-        "id": "stole-red-gold-04-7-1",
-        "title": "5 متر / بزاوية",
+        "id": "stole-red-gold-04-7-2",
+        "title": "5 متر / بدون زاوية",
         "options": {
           "الطول": "5 متر",
+          "التفصيل": "بدون زاوية"
+        },
+        "price": 650,
+        "compareAtPrice": null,
+        "available": true,
+        "image": "assets/products/gallery/stole-04.jpg",
+        "sku": ""
+      },
+      {
+        "id": "stole-red-gold-04-1-1",
+        "title": "3.5 متر / بزاوية",
+        "options": {
+          "الطول": "3.5 متر",
           "التفصيل": "بزاوية"
         },
         "price": 650,
@@ -3144,11 +3079,76 @@
         "sku": ""
       },
       {
-        "id": "stole-red-gold-04-7-2",
-        "title": "5 متر / بدون زاوية",
+        "id": "stole-red-gold-04-2-1",
+        "title": "3.75 متر / بزاوية",
+        "options": {
+          "الطول": "3.75 متر",
+          "التفصيل": "بزاوية"
+        },
+        "price": 650,
+        "compareAtPrice": null,
+        "available": true,
+        "image": "assets/products/gallery/stole-04.jpg",
+        "sku": ""
+      },
+      {
+        "id": "stole-red-gold-04-3-1",
+        "title": "4 متر / بزاوية",
+        "options": {
+          "الطول": "4 متر",
+          "التفصيل": "بزاوية"
+        },
+        "price": 650,
+        "compareAtPrice": null,
+        "available": true,
+        "image": "assets/products/gallery/stole-04.jpg",
+        "sku": ""
+      },
+      {
+        "id": "stole-red-gold-04-4-1",
+        "title": "4.25 متر / بزاوية",
+        "options": {
+          "الطول": "4.25 متر",
+          "التفصيل": "بزاوية"
+        },
+        "price": 650,
+        "compareAtPrice": null,
+        "available": true,
+        "image": "assets/products/gallery/stole-04.jpg",
+        "sku": ""
+      },
+      {
+        "id": "stole-red-gold-04-5-1",
+        "title": "4.5 متر / بزاوية",
+        "options": {
+          "الطول": "4.5 متر",
+          "التفصيل": "بزاوية"
+        },
+        "price": 650,
+        "compareAtPrice": null,
+        "available": true,
+        "image": "assets/products/gallery/stole-04.jpg",
+        "sku": ""
+      },
+      {
+        "id": "stole-red-gold-04-6-1",
+        "title": "4.75 متر / بزاوية",
+        "options": {
+          "الطول": "4.75 متر",
+          "التفصيل": "بزاوية"
+        },
+        "price": 650,
+        "compareAtPrice": null,
+        "available": true,
+        "image": "assets/products/gallery/stole-04.jpg",
+        "sku": ""
+      },
+      {
+        "id": "stole-red-gold-04-7-1",
+        "title": "5 متر / بزاوية",
         "options": {
           "الطول": "5 متر",
-          "التفصيل": "بدون زاوية"
+          "التفصيل": "بزاوية"
         },
         "price": 650,
         "compareAtPrice": null,
