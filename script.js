@@ -270,7 +270,7 @@ const translations = {
     accountTitle: "أهلا بيك في مكتبة البابا كيرلس",
     accountStatus: "ادخل بحسابك عشان السلة تفضل محفوظة وتقدر تكمل طلبك بسهولة في أي وقت.",
     accountSaved: "سلتك محفوظة على حسابك، ولو فتحت الموقع مرة تانية بنفس الحساب هتلاقيها موجودة.",
-    accountLocalOnly: "السلة محفوظة تلقائيا على هذا الجهاز. تسجيل الدخول بجوجل أو فيسبوك يحتاج إضافة بيانات Firebase في الموقع.",
+    accountLocalOnly: "السلة محفوظة تلقائيا على هذا الجهاز. تسجيل الدخول بجوجل يحتاج إضافة بيانات Firebase في الموقع.",
     accountLoading: "جاري تجهيز تسجيل الدخول...",
     accountUser: "مسجل الدخول: {name}",
     benefitCart: "حفظ السلة",
@@ -278,8 +278,6 @@ const translations = {
     benefitOrders: "متابعة الطلبات",
     googleLogin: "الدخول بجوجل",
     googleSmall: "الأسرع لحفظ السلة على حسابك",
-    facebookLogin: "الدخول بفيسبوك",
-    facebookSmall: "استخدم حساب فيسبوك للمتابعة",
     signOut: "تسجيل الخروج",
     paymentFallback: "سيتم فتح صفحة Paymob الرسمية لإتمام الدفع ببطاقة بنكية.",
     fallbackLink: "لينك دفع احتياطي",
@@ -458,7 +456,7 @@ const translations = {
     accountTitle: "Welcome to Pope Kyrillos Store",
     accountStatus: "Sign in so your cart stays saved and you can continue your order anytime.",
     accountSaved: "Your cart is saved to your account and will be available next time you sign in.",
-    accountLocalOnly: "Your cart is saved on this device. Google or Facebook login needs Firebase setup.",
+    accountLocalOnly: "Your cart is saved on this device. Google login needs Firebase setup.",
     accountLoading: "Preparing login...",
     accountUser: "Signed in: {name}",
     benefitCart: "Save cart",
@@ -466,8 +464,6 @@ const translations = {
     benefitOrders: "Track orders",
     googleLogin: "Continue with Google",
     googleSmall: "Fastest way to save your cart",
-    facebookLogin: "Continue with Facebook",
-    facebookSmall: "Use Facebook to continue",
     signOut: "Sign out",
     paymentFallback: "The official Paymob page will open to complete card payment.",
     fallbackLink: "Backup payment link",
@@ -769,14 +765,9 @@ function applyLanguage({ render = true } = {}) {
     setControlText(item, [t("benefitCart"), t("benefitFast"), t("benefitOrders")][index]);
   });
   const googleProvider = document.querySelector('[data-auth-provider="google"]');
-  const facebookProvider = document.querySelector('[data-auth-provider="facebook"]');
   if (googleProvider) {
     googleProvider.querySelector("strong").textContent = t("googleLogin");
     googleProvider.querySelector("small").textContent = t("googleSmall");
-  }
-  if (facebookProvider) {
-    facebookProvider.querySelector("strong").textContent = t("facebookLogin");
-    facebookProvider.querySelector("small").textContent = t("facebookSmall");
   }
   if (authSignoutButton) authSignoutButton.textContent = t("signOut");
 
@@ -2091,7 +2082,6 @@ async function initCustomerAuth() {
       auth,
       db: firestoreModule.getFirestore(app),
       GoogleAuthProvider: authModule.GoogleAuthProvider,
-      FacebookAuthProvider: authModule.FacebookAuthProvider,
       signInWithPopup: authModule.signInWithPopup,
       signInWithRedirect: authModule.signInWithRedirect,
       signOut: authModule.signOut,
@@ -2125,7 +2115,6 @@ function authProvider(providerName) {
   const services = state.auth.services;
   if (!services) return null;
   if (providerName === "google") return new services.GoogleAuthProvider();
-  if (providerName === "facebook") return new services.FacebookAuthProvider();
   return null;
 }
 

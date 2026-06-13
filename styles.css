@@ -1872,11 +1872,6 @@ body[data-lang="en"] .policy-lang[lang="en"] {
   color: #1a73e8;
 }
 
-.auth-provider.facebook .auth-icon {
-  background: #1877f2;
-  color: #fff;
-}
-
 .auth-provider:disabled {
   cursor: not-allowed;
   opacity: 0.48;
