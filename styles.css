@@ -7,6 +7,7 @@
   --line: #ded8cb;
   --teal: #0c6b68;
   --teal-dark: #073d42;
+  --navy: #1a2751;
   --gold: #c69245;
   --gold-soft: #f5e2bc;
   --burgundy: #85243c;
@@ -47,7 +48,8 @@ main {
   overflow: hidden;
 }
 
-body.cart-open {
+body.cart-open,
+body.shop-menu-open {
   overflow: hidden;
 }
 
@@ -426,6 +428,18 @@ body[data-lang="en"] .hero h1 {
 
 .button.primary:hover {
   background: var(--teal-dark);
+}
+
+.button.primary.hero-shop-button {
+  border-color: rgba(255, 255, 255, 0.26);
+  background: var(--navy);
+  box-shadow: 0 16px 34px rgba(26, 39, 81, 0.34);
+}
+
+.button.primary.hero-shop-button:hover,
+.button.primary.hero-shop-button:focus-visible {
+  background: #111d42;
+  box-shadow: 0 18px 38px rgba(26, 39, 81, 0.42);
 }
 
 .button.light {
@@ -1940,6 +1954,167 @@ body[data-lang="en"] .policy-lang[lang="en"] {
   opacity: 0.48;
 }
 
+.shop-menu {
+  position: fixed;
+  inset: 0 0 0 auto;
+  z-index: 42;
+  display: flex;
+  flex-direction: column;
+  width: min(390px, 100vw);
+  overflow-y: auto;
+  background: #fffdf7;
+  box-shadow: var(--shadow);
+  transform: translateX(105%);
+  transition: transform 180ms ease;
+}
+
+.shop-menu[aria-hidden="false"] {
+  transform: translateX(0);
+}
+
+body[data-lang="en"] .shop-menu {
+  inset: 0 auto 0 0;
+  transform: translateX(-105%);
+}
+
+body[data-lang="en"] .shop-menu[aria-hidden="false"] {
+  transform: translateX(0);
+}
+
+.shop-menu-head {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 24px;
+  border-bottom: 1px solid var(--line);
+  background:
+    linear-gradient(135deg, rgba(26, 39, 81, 0.08), rgba(198, 146, 69, 0.1)),
+    var(--surface);
+}
+
+.shop-menu-head h2 {
+  margin: 0;
+  color: var(--ink);
+  font-size: 30px;
+  line-height: 1.15;
+}
+
+.shop-menu-head span {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.shop-menu-list {
+  display: grid;
+  gap: 14px;
+  padding: 18px;
+}
+
+.shop-menu-group {
+  display: grid;
+  gap: 8px;
+}
+
+.shop-category,
+.shop-subcategory {
+  width: 100%;
+  border: 1px solid var(--line);
+  background: #fff;
+  color: var(--ink);
+  text-align: start;
+  transition: border-color 160ms ease, background 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+}
+
+.shop-category {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 12px;
+  min-height: 76px;
+  padding: 14px;
+  border-radius: var(--radius);
+}
+
+.shop-category span,
+.shop-category strong,
+.shop-category small {
+  display: block;
+}
+
+.shop-category strong {
+  font-size: 17px;
+}
+
+.shop-category small,
+.shop-subcategory small {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.shop-category em {
+  min-width: 38px;
+  padding: 5px 9px;
+  border-radius: 999px;
+  background: rgba(26, 39, 81, 0.08);
+  color: var(--navy);
+  font-style: normal;
+  font-weight: 900;
+  text-align: center;
+}
+
+.shop-category:hover,
+.shop-category.active,
+.shop-subcategory:hover,
+.shop-subcategory.active {
+  border-color: rgba(26, 39, 81, 0.38);
+  background: rgba(26, 39, 81, 0.06);
+  box-shadow: 0 10px 24px rgba(26, 39, 81, 0.08);
+  transform: translateY(-1px);
+}
+
+.shop-category.active {
+  border-color: var(--navy);
+  background: var(--navy);
+  color: #fff;
+}
+
+.shop-category.active small,
+.shop-category.active em {
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.shop-category.active em {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.shop-subcategories {
+  display: grid;
+  gap: 7px;
+  padding-inline-start: 16px;
+}
+
+.shop-subcategory {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 9px 12px;
+  border-radius: 999px;
+}
+
+.shop-subcategory span {
+  font-weight: 800;
+}
+
+.shop-subcategory.active {
+  border-color: var(--teal);
+  background: rgba(12, 107, 104, 0.1);
+  color: var(--teal-dark);
+}
+
 .cart-panel {
   position: fixed;
   inset: 0 0 0 auto;
@@ -2301,6 +2476,7 @@ body[data-lang="en"] .policy-lang[lang="en"] {
 }
 
 body.cart-open .scrim,
+body.shop-menu-open .scrim,
 body.product-open .scrim,
 body.account-open .scrim {
   pointer-events: auto;
@@ -2754,6 +2930,10 @@ body.account-open .scrim {
   }
 
   .cart-panel {
+    width: 100vw;
+  }
+
+  .shop-menu {
     width: 100vw;
   }
 

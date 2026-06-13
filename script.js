@@ -42,6 +42,7 @@ let authInitPromise = null;
 
 const state = {
   filter: "all",
+  labelFilter: "",
   search: "",
   language: localStorage.getItem(languageStorageKey) === "en" ? "en" : "ar",
   cart: new Map(),
@@ -77,6 +78,10 @@ const searchInput = document.querySelector("#product-search");
 const header = document.querySelector(".site-header");
 const languageToggle = document.querySelector("[data-language-toggle]");
 const languageLabel = document.querySelector("[data-language-label]");
+const shopMenuToggle = document.querySelector("[data-shop-menu-toggle]");
+const shopMenu = document.querySelector("[data-shop-menu]");
+const shopMenuList = document.querySelector("[data-shop-menu-list]");
+const shopMenuClose = document.querySelector("[data-shop-menu-close]");
 const accountToggle = document.querySelector("[data-account-toggle]");
 const accountLabel = document.querySelector("[data-account-label]");
 const accountModal = document.querySelector("[data-account-modal]");
@@ -148,6 +153,9 @@ const translations = {
     heroTitle: "مكتبة البابا كيرلس",
     heroLead: "أسسها الشماس الدياكون بولس ملاك عام 2001 م\nاطلب منتجاتك الكنسية أونلاين والدفع عند الاستلام متاح",
     shopNow: "تسوق الآن",
+    shopMenuTitle: "اختار القسم",
+    shopMenuSubtitle: "الأقسام الرئيسية والفرعية",
+    shopMenuAll: "كل المنتجات",
     metricProducts: "منتج للخدمة",
     metricTime: "تجهيز شائع",
     metricChurch: "كميات ومقاسات",
@@ -353,6 +361,9 @@ const translations = {
     heroTitle: "Pope Kyrillos Store",
     heroLead: "Founded by Deacon Boulos Malak in 2001\nOrder your church supplies online with cash on delivery available",
     shopNow: "Shop now",
+    shopMenuTitle: "Choose a category",
+    shopMenuSubtitle: "Main and subcategories",
+    shopMenuAll: "All products",
     metricProducts: "service items",
     metricTime: "common prep time",
     metricChurch: "church orders",
@@ -673,6 +684,79 @@ function applyCategoryLanguage() {
   });
 }
 
+function availableProducts() {
+  return products.filter(hasAvailableVariant);
+}
+
+function orderedLabelsForCategory(category) {
+  const labels = [...new Set(availableProducts().filter((product) => product.category === category).map((product) => product.label).filter(Boolean))];
+  const preferred = catalogLabelOrder[category] || [];
+  return labels.sort((first, second) => {
+    const firstRank = rankFromList(preferred, first);
+    const secondRank = rankFromList(preferred, second);
+    if (firstRank !== secondRank) return firstRank - secondRank;
+    return localized(first).localeCompare(localized(second), isEnglish() ? "en" : "ar");
+  });
+}
+
+function updateFilterButtons() {
+  filterButtons.forEach((item) => {
+    const active = state.filter === "all"
+      ? item.dataset.filter === "all" && !state.labelFilter
+      : item.dataset.filter === state.filter;
+    item.classList.toggle("active", active);
+  });
+}
+
+function renderShopMenu() {
+  if (!shopMenuList) return;
+  const categories = catalogCategoryOrder.filter((category) => availableProducts().some((product) => product.category === category));
+  const allCount = availableProducts().length;
+  const groups = categories
+    .map((category) => {
+      const copy = categoryCopy[category]?.[state.language] || [category, ""];
+      const labels = orderedLabelsForCategory(category);
+      const categoryCount = availableProducts().filter((product) => product.category === category).length;
+      const labelButtons = labels
+        .map((label) => {
+          const labelCount = availableProducts().filter((product) => product.category === category && product.label === label).length;
+          const active = state.filter === category && state.labelFilter === label;
+          return `
+            <button class="shop-subcategory ${active ? "active" : ""}" type="button" data-shop-category="${escapeHtml(category)}" data-shop-label="${escapeHtml(label)}">
+              <span>${escapeHtml(localized(label))}</span>
+              <small>${formatter.format(labelCount)}</small>
+            </button>
+          `;
+        })
+        .join("");
+      const activeCategory = state.filter === category && !state.labelFilter;
+      return `
+        <section class="shop-menu-group">
+          <button class="shop-category ${activeCategory ? "active" : ""}" type="button" data-shop-category="${escapeHtml(category)}">
+            <span>
+              <strong>${escapeHtml(copy[0])}</strong>
+              <small>${escapeHtml(copy[1])}</small>
+            </span>
+            <em>${formatter.format(categoryCount)}</em>
+          </button>
+          ${labelButtons ? `<div class="shop-subcategories">${labelButtons}</div>` : ""}
+        </section>
+      `;
+    })
+    .join("");
+
+  shopMenuList.innerHTML = `
+    <button class="shop-category shop-category-all ${state.filter === "all" && !state.labelFilter ? "active" : ""}" type="button" data-shop-category="all">
+      <span>
+        <strong>${escapeHtml(t("shopMenuAll"))}</strong>
+        <small>${escapeHtml(categoryCopy.all[state.language][1])}</small>
+      </span>
+      <em>${formatter.format(allCount)}</em>
+    </button>
+    ${groups}
+  `;
+}
+
 function applyLanguage({ render = true } = {}) {
   document.documentElement.lang = t("htmlLang");
   document.documentElement.dir = t("dir");
@@ -709,6 +793,9 @@ function applyLanguage({ render = true } = {}) {
   setText("#hero-title", t("heroTitle"));
   lineBreakText(document.querySelector(".hero-lead"), t("heroLead"));
   setControlText(document.querySelector(".hero-actions .button"), t("shopNow"));
+  setText("[data-shop-menu-eyebrow]", t("navCategories"));
+  setText("[data-shop-menu-title]", t("shopMenuTitle"));
+  setText("[data-shop-menu-subtitle]", t("shopMenuSubtitle"));
   const metricBlocks = document.querySelectorAll(".hero-metrics > div");
   if (metricBlocks[0]) {
     metricBlocks[0].querySelector("strong").textContent = isEnglish() ? "120+" : "+120";
@@ -741,6 +828,7 @@ function applyLanguage({ render = true } = {}) {
   setText("#categories .eyebrow", t("categoriesEyebrow"));
   setText("#categories-title", t("categoriesTitle"));
   applyCategoryLanguage();
+  renderShopMenu();
 
   setText("#catalog .eyebrow", t("catalogEyebrow"));
   setText("#catalog-title", t("catalogTitle"));
@@ -1155,9 +1243,10 @@ function getFilteredProducts() {
     .filter(({ product }) => {
       if (!hasAvailableVariant(product)) return false;
       const matchesCategory = state.filter === "all" || product.category === state.filter;
+      const matchesLabel = !state.labelFilter || product.label === state.labelFilter;
       const tags = Array.isArray(product.tags) ? product.tags.join(" ") : "";
       const text = `${product.name} ${product.label} ${localized(product.label)} ${product.description} ${tags} ${localized(tags)}`.toLowerCase();
-      return matchesCategory && (!query || text.includes(query));
+      return matchesCategory && matchesLabel && (!query || text.includes(query));
     })
     .sort(compareCatalogProducts)
     .map(({ product }) => product);
@@ -2404,6 +2493,7 @@ function changeQty(key, delta) {
 }
 
 function openCart() {
+  closeShopMenu();
   document.body.classList.add("cart-open");
   cartPanel.setAttribute("aria-hidden", "false");
 }
@@ -2411,6 +2501,32 @@ function openCart() {
 function closeCart() {
   document.body.classList.remove("cart-open");
   cartPanel.setAttribute("aria-hidden", "true");
+}
+
+function openShopMenu() {
+  closeCart();
+  closeProductModal();
+  closeAccountModal();
+  renderShopMenu();
+  document.body.classList.add("shop-menu-open");
+  shopMenu?.setAttribute("aria-hidden", "false");
+  shopMenuToggle?.setAttribute("aria-expanded", "true");
+}
+
+function closeShopMenu() {
+  document.body.classList.remove("shop-menu-open");
+  shopMenu?.setAttribute("aria-hidden", "true");
+  shopMenuToggle?.setAttribute("aria-expanded", "false");
+}
+
+function applyCatalogFilter(category = "all", label = "") {
+  state.filter = category;
+  state.labelFilter = label;
+  updateFilterButtons();
+  renderProducts();
+  renderShopMenu();
+  closeShopMenu();
+  document.querySelector("#catalog")?.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
 function openProductFromUrl() {
@@ -2434,6 +2550,7 @@ async function loadProducts() {
   state.cart = clampCartMap(state.cart);
   saveCartToLocal(currentCartStorageKey(), state.cart);
   renderProducts();
+  renderShopMenu();
   renderCart();
   openProductFromUrl();
 }
@@ -2441,14 +2558,24 @@ async function loadProducts() {
 filterButtons.forEach((button) => {
   button.addEventListener("click", () => {
     state.filter = button.dataset.filter;
-    filterButtons.forEach((item) => item.classList.toggle("active", item === button));
+    state.labelFilter = "";
+    updateFilterButtons();
     renderProducts();
+    renderShopMenu();
   });
 });
 
 searchInput.addEventListener("input", (event) => {
   state.search = event.target.value;
   renderProducts();
+});
+
+shopMenuToggle?.addEventListener("click", openShopMenu);
+shopMenuClose?.addEventListener("click", closeShopMenu);
+shopMenuList?.addEventListener("click", (event) => {
+  const button = event.target.closest("[data-shop-category]");
+  if (!button) return;
+  applyCatalogFilter(button.dataset.shopCategory || "all", button.dataset.shopLabel || "");
 });
 
 productGrid.addEventListener("click", (event) => {
@@ -2654,6 +2781,7 @@ whatsappLink.addEventListener("click", async (event) => {
 document.querySelector(".cart-toggle").addEventListener("click", openCart);
 document.querySelector(".cart-close").addEventListener("click", closeCart);
 scrim.addEventListener("click", () => {
+  closeShopMenu();
   closeCart();
   closeProductModal();
   closeAccountModal();
@@ -2666,6 +2794,7 @@ document.addEventListener("keydown", (event) => {
       return;
     }
     closeCart();
+    closeShopMenu();
     closeProductModal();
     closeAccountModal();
   }

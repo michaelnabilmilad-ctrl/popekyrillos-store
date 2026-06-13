@@ -8,7 +8,7 @@
       name="description"
       content="مكتبة البابا كيرلس: مكتبة مسيحية متخصصة في مستلزمات الكنائس، الكتب الطقسية، الشموع، البخور، الأيقونات، والأقمشة الكنسية."
     />
-    <link rel="stylesheet" href="styles.css?v=stole-products-20260613" />
+    <link rel="stylesheet" href="styles.css?v=shop-menu-20260613" />
   </head>
   <body dir="rtl">
     <header class="site-header" data-elevated="false">
@@ -62,12 +62,12 @@
             اطلب منتجاتك الكنسية أونلاين والدفع عند الاستلام متاح
           </p>
           <div class="hero-actions">
-            <a class="button primary" href="#catalog">
+            <button class="button primary hero-shop-button" type="button" data-shop-menu-toggle aria-expanded="false" aria-controls="shop-menu">
               <svg viewBox="0 0 24 24" aria-hidden="true">
                 <path d="M4 7h16M4 12h16M4 17h10" />
               </svg>
               تسوق الآن
-            </a>
+            </button>
           </div>
 
           <div class="hero-metrics" aria-label="مميزات سريعة">
@@ -353,6 +353,22 @@
       </section>
     </main>
 
+    <aside class="shop-menu" id="shop-menu" data-shop-menu aria-label="قائمة الأقسام" aria-hidden="true">
+      <div class="shop-menu-head">
+        <div>
+          <p class="eyebrow" data-shop-menu-eyebrow>الأقسام</p>
+          <h2 data-shop-menu-title>اختار القسم</h2>
+          <span data-shop-menu-subtitle>الأقسام الرئيسية والفرعية</span>
+        </div>
+        <button class="icon-button shop-menu-close" type="button" data-shop-menu-close aria-label="إغلاق قائمة الأقسام">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M18 6 6 18M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      <div class="shop-menu-list" data-shop-menu-list></div>
+    </aside>
+
     <aside class="cart-panel" aria-label="سلة الطلب" data-cart-panel aria-hidden="true">
       <div class="cart-panel-head">
         <div>
@@ -584,6 +600,6 @@
 
     <div class="toast" data-toast role="status" aria-live="polite"></div>
     <script src="firebase-config.js?v=secure-orders-20260612"></script>
-    <script src="script.js?v=stole-finish-order-20260613"></script>
+    <script src="script.js?v=shop-menu-20260613"></script>
   </body>
 </html>
