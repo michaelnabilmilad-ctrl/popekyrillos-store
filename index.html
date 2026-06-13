@@ -8,7 +8,7 @@
       name="description"
       content="مكتبة البابا كيرلس: مكتبة مسيحية متخصصة في مستلزمات الكنائس، الكتب الطقسية، الشموع، البخور، الأيقونات، والأقمشة الكنسية."
     />
-    <link rel="stylesheet" href="styles.css?v=google-auth-only-20260613" />
+    <link rel="stylesheet" href="styles.css?v=email-auth-20260613" />
   </head>
   <body dir="rtl">
     <header class="site-header" data-elevated="false">
@@ -553,6 +553,20 @@
           </div>
           <div class="account-user" data-account-user hidden></div>
           <div class="auth-provider-list" data-auth-provider-list>
+            <form class="email-auth-form" data-email-auth-form>
+              <label>
+                <span data-auth-email-label>البريد الإلكتروني</span>
+                <input type="email" data-auth-email autocomplete="email" placeholder="name@example.com" />
+              </label>
+              <label>
+                <span data-auth-password-label>كلمة المرور</span>
+                <input type="password" data-auth-password autocomplete="current-password" placeholder="6 أحرف على الأقل" />
+              </label>
+              <div class="email-auth-actions">
+                <button class="button primary" type="submit" data-email-signin>دخول</button>
+                <button class="button secondary" type="button" data-email-signup>إنشاء حساب</button>
+              </div>
+            </form>
             <button class="auth-provider google" type="button" data-auth-provider="google">
               <span class="auth-icon">G</span>
               <span class="auth-text">
@@ -569,6 +583,6 @@
 
     <div class="toast" data-toast role="status" aria-live="polite"></div>
     <script src="firebase-config.js?v=secure-orders-20260612"></script>
-    <script src="script.js?v=google-auth-only-20260613"></script>
+    <script src="script.js?v=email-auth-20260613"></script>
   </body>
 </html>

@@ -85,6 +85,10 @@ const accountUser = document.querySelector("[data-account-user]");
 const authProviderList = document.querySelector("[data-auth-provider-list]");
 const authProviderButtons = document.querySelectorAll("[data-auth-provider]");
 const authSignoutButton = document.querySelector("[data-auth-signout]");
+const emailAuthForm = document.querySelector("[data-email-auth-form]");
+const authEmailInput = document.querySelector("[data-auth-email]");
+const authPasswordInput = document.querySelector("[data-auth-password]");
+const emailSignupButton = document.querySelector("[data-email-signup]");
 const cartPanel = document.querySelector("[data-cart-panel]");
 const cartItems = document.querySelector("[data-cart-items]");
 const cartCount = document.querySelector("[data-cart-count]");
@@ -270,7 +274,7 @@ const translations = {
     accountTitle: "أهلا بيك في مكتبة البابا كيرلس",
     accountStatus: "ادخل بحسابك عشان السلة تفضل محفوظة وتقدر تكمل طلبك بسهولة في أي وقت.",
     accountSaved: "سلتك محفوظة على حسابك، ولو فتحت الموقع مرة تانية بنفس الحساب هتلاقيها موجودة.",
-    accountLocalOnly: "السلة محفوظة تلقائيا على هذا الجهاز. تسجيل الدخول بجوجل يحتاج إضافة بيانات Firebase في الموقع.",
+    accountLocalOnly: "السلة محفوظة تلقائيا على هذا الجهاز. تسجيل الدخول بالإيميل أو جوجل يحتاج إعداد Firebase في الموقع.",
     accountLoading: "جاري تجهيز تسجيل الدخول...",
     accountUser: "مسجل الدخول: {name}",
     benefitCart: "حفظ السلة",
@@ -278,6 +282,11 @@ const translations = {
     benefitOrders: "متابعة الطلبات",
     googleLogin: "الدخول بجوجل",
     googleSmall: "الأسرع لحفظ السلة على حسابك",
+    authEmailLabel: "البريد الإلكتروني",
+    authPasswordLabel: "كلمة المرور",
+    authPasswordPlaceholder: "6 أحرف على الأقل",
+    emailSignin: "دخول",
+    emailSignup: "إنشاء حساب",
     signOut: "تسجيل الخروج",
     paymentFallback: "سيتم فتح صفحة Paymob الرسمية لإتمام الدفع ببطاقة بنكية.",
     fallbackLink: "لينك دفع احتياطي",
@@ -301,6 +310,10 @@ const translations = {
     paymobCheckoutFailed: "تعذر فتح checkout، هفتح لينك Paymob الاحتياطي",
     firebaseRequired: "تسجيل الدخول يحتاج إعداد Firebase أولا",
     signinFailed: "تعذر تسجيل الدخول، راجع إعدادات Firebase",
+    signupFailed: "تعذر إنشاء الحساب، تأكد من تفعيل Email/Password في Firebase",
+    emailAuthInvalid: "اكتب بريد إلكتروني صحيح وكلمة مرور 6 أحرف على الأقل",
+    emailSigninSuccess: "تم تسجيل الدخول",
+    emailSignupSuccess: "تم إنشاء الحساب وتسجيل الدخول",
     signoutToast: "تم تسجيل الخروج",
     unavailableChoiceToast: "الاختيار ده غير متاح حاليا",
     quantityLimitToast: "وصلت للكمية المتاحة من الاختيار ده",
@@ -456,7 +469,7 @@ const translations = {
     accountTitle: "Welcome to Pope Kyrillos Store",
     accountStatus: "Sign in so your cart stays saved and you can continue your order anytime.",
     accountSaved: "Your cart is saved to your account and will be available next time you sign in.",
-    accountLocalOnly: "Your cart is saved on this device. Google login needs Firebase setup.",
+    accountLocalOnly: "Your cart is saved on this device. Email or Google login needs Firebase setup.",
     accountLoading: "Preparing login...",
     accountUser: "Signed in: {name}",
     benefitCart: "Save cart",
@@ -464,6 +477,11 @@ const translations = {
     benefitOrders: "Track orders",
     googleLogin: "Continue with Google",
     googleSmall: "Fastest way to save your cart",
+    authEmailLabel: "Email",
+    authPasswordLabel: "Password",
+    authPasswordPlaceholder: "At least 6 characters",
+    emailSignin: "Sign in",
+    emailSignup: "Create account",
     signOut: "Sign out",
     paymentFallback: "The official Paymob page will open to complete card payment.",
     fallbackLink: "Backup payment link",
@@ -487,6 +505,10 @@ const translations = {
     paymobCheckoutFailed: "Checkout could not open. Opening the backup Paymob link",
     firebaseRequired: "Login needs Firebase setup first",
     signinFailed: "Sign-in failed. Check Firebase settings",
+    signupFailed: "Could not create the account. Make sure Email/Password is enabled in Firebase",
+    emailAuthInvalid: "Enter a valid email and a password of at least 6 characters",
+    emailSigninSuccess: "Signed in",
+    emailSignupSuccess: "Account created and signed in",
     signoutToast: "Signed out",
     unavailableChoiceToast: "This option is currently unavailable",
     quantityLimitToast: "You reached the available quantity for this option",
@@ -769,6 +791,14 @@ function applyLanguage({ render = true } = {}) {
     googleProvider.querySelector("strong").textContent = t("googleLogin");
     googleProvider.querySelector("small").textContent = t("googleSmall");
   }
+  setText("[data-auth-email-label]", t("authEmailLabel"));
+  setText("[data-auth-password-label]", t("authPasswordLabel"));
+  if (authEmailInput) authEmailInput.placeholder = "name@example.com";
+  if (authPasswordInput) authPasswordInput.placeholder = t("authPasswordPlaceholder");
+  if (emailAuthForm?.querySelector("[data-email-signin]")) {
+    emailAuthForm.querySelector("[data-email-signin]").textContent = t("emailSignin");
+  }
+  if (emailSignupButton) emailSignupButton.textContent = t("emailSignup");
   if (authSignoutButton) authSignoutButton.textContent = t("signOut");
 
   if (render) {
@@ -1968,6 +1998,9 @@ function renderAuthState() {
   authProviderButtons.forEach((button) => {
     button.disabled = !configured || state.auth.loading;
   });
+  emailAuthForm?.querySelectorAll("input, button").forEach((field) => {
+    field.disabled = !configured || state.auth.loading;
+  });
 
   if (!accountStatus) return;
   if (!configured) {
@@ -2082,6 +2115,8 @@ async function initCustomerAuth() {
       auth,
       db: firestoreModule.getFirestore(app),
       GoogleAuthProvider: authModule.GoogleAuthProvider,
+      createUserWithEmailAndPassword: authModule.createUserWithEmailAndPassword,
+      signInWithEmailAndPassword: authModule.signInWithEmailAndPassword,
       signInWithPopup: authModule.signInWithPopup,
       signInWithRedirect: authModule.signInWithRedirect,
       signOut: authModule.signOut,
@@ -2140,6 +2175,62 @@ async function signInWithProvider(providerName) {
     renderAuthState();
     console.warn("Sign in failed.", error);
     showToast(t("signinFailed"));
+  }
+}
+
+function emailAuthValues() {
+  const email = authEmailInput?.value.trim() || "";
+  const password = authPasswordInput?.value || "";
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || password.length < 6) {
+    showToast(t("emailAuthInvalid"));
+    if (!email) authEmailInput?.focus();
+    else authPasswordInput?.focus();
+    return null;
+  }
+  return { email, password };
+}
+
+async function signInWithEmail() {
+  const services = state.auth.services;
+  const credentials = emailAuthValues();
+  if (!services?.auth || !credentials) {
+    if (!services?.auth) showToast(t("firebaseRequired"));
+    return;
+  }
+
+  try {
+    state.auth.loading = true;
+    renderAuthState();
+    await services.signInWithEmailAndPassword(services.auth, credentials.email, credentials.password);
+    showToast(t("emailSigninSuccess"));
+    closeAccountModal();
+  } catch (error) {
+    state.auth.loading = false;
+    renderAuthState();
+    console.warn("Email sign in failed.", error);
+    showToast(t("signinFailed"));
+  }
+}
+
+async function signUpWithEmail() {
+  const services = state.auth.services;
+  const credentials = emailAuthValues();
+  if (!services?.auth || !credentials) {
+    if (!services?.auth) showToast(t("firebaseRequired"));
+    return;
+  }
+
+  try {
+    state.auth.loading = true;
+    renderAuthState();
+    await services.createUserWithEmailAndPassword(services.auth, credentials.email, credentials.password);
+    showToast(t("emailSignupSuccess"));
+    closeAccountModal();
+  } catch (error) {
+    state.auth.loading = false;
+    renderAuthState();
+    console.warn("Email sign up failed.", error);
+    showToast(t("signupFailed"));
   }
 }
 
@@ -2408,6 +2499,11 @@ accountClose?.addEventListener("click", closeAccountModal);
 authProviderButtons.forEach((button) => {
   button.addEventListener("click", () => signInWithProvider(button.dataset.authProvider));
 });
+emailAuthForm?.addEventListener("submit", (event) => {
+  event.preventDefault();
+  signInWithEmail();
+});
+emailSignupButton?.addEventListener("click", signUpWithEmail);
 authSignoutButton?.addEventListener("click", signOutCustomer);
 
 whatsappLink.addEventListener("click", async (event) => {

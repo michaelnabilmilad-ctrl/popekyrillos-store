@@ -1812,6 +1812,51 @@ body[data-lang="en"] .policy-lang[lang="en"] {
   gap: 11px;
 }
 
+.email-auth-form {
+  display: grid;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid rgba(222, 216, 203, 0.95);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow: 0 10px 26px rgba(14, 32, 39, 0.05);
+}
+
+.email-auth-form label {
+  display: grid;
+  gap: 6px;
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.email-auth-form input {
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 12px;
+  border: 1px solid rgba(222, 216, 203, 0.95);
+  border-radius: 12px;
+  background: #fff;
+  color: var(--ink);
+  font: inherit;
+}
+
+.email-auth-form input:focus {
+  border-color: var(--teal);
+  outline: 3px solid rgba(12, 107, 104, 0.12);
+}
+
+.email-auth-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.email-auth-actions .button {
+  min-height: 44px;
+  padding: 8px 12px;
+}
+
 .auth-provider {
   display: grid;
   grid-template-columns: 48px 1fr;
