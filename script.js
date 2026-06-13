@@ -579,10 +579,26 @@ const textMapEn = {
   "نحاسيات": "Brassware",
   "بطرشيلات": "Stoles",
   "أقمشة ومفارش": "Fabrics & altar cloths",
+  "بطرشيل كنسي أحمر ذهبي - موديل 1": "Red and gold church stole - Model 1",
+  "بطرشيل كنسي أحمر ذهبي - موديل 2": "Red and gold church stole - Model 2",
+  "بطرشيل كنسي أحمر ذهبي - موديل 3": "Red and gold church stole - Model 3",
+  "بطرشيل كنسي أحمر ذهبي - موديل 4": "Red and gold church stole - Model 4",
+  "بطرشيل كنسي أحمر ذهبي بتصميم مطرز أنيق مناسب للخدمة والشمامسة. متاح بأطوال من 3.5 متر حتى 5 متر، ويمكن اختياره بزاوية أو بدون زاوية بنفس السعر.": "A red and gold embroidered church stole suitable for service and deacons. Available from 3.5 m to 5 m, with or without an angled finish at the same price.",
   "الحجم": "Size",
   "المقاس": "Size",
   "اللون": "Color",
   "الوزن": "Weight",
+  "الطول": "Length",
+  "التفصيل": "Finish",
+  "3.5 متر": "3.5 m",
+  "3.75 متر": "3.75 m",
+  "4 متر": "4 m",
+  "4.25 متر": "4.25 m",
+  "4.5 متر": "4.5 m",
+  "4.75 متر": "4.75 m",
+  "5 متر": "5 m",
+  "بزاوية": "Angled",
+  "بدون زاوية": "Straight",
   "علب بخور": "Incense boxes",
   "صلبان زفة": "Processional crosses",
   "خرابات كتاب مقدس": "Bible cases",
@@ -2408,7 +2424,7 @@ function openProductFromUrl() {
 
 async function loadProducts() {
   try {
-    const response = await fetch("products.json?v=incense-chat-20260607", { cache: "no-store" });
+    const response = await fetch("products.json?v=stole-products-20260613", { cache: "no-store" });
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     products = await response.json();
   } catch (error) {
