@@ -38,6 +38,7 @@ const fallbackProducts = [
 ];
 
 let products = [];
+let authInitPromise = null;
 
 const state = {
   filter: "all",
@@ -309,6 +310,7 @@ const translations = {
     checkoutEmailInvalid: "اكتب بريد إلكتروني صحيح أو سيبه فاضي",
     paymobCheckoutFailed: "تعذر فتح checkout، هفتح لينك Paymob الاحتياطي",
     firebaseRequired: "تسجيل الدخول يحتاج إعداد Firebase أولا",
+    firebaseLoading: "جاري تجهيز تسجيل الدخول، حاول مرة أخرى بعد لحظة",
     signinFailed: "تعذر تسجيل الدخول، راجع إعدادات Firebase",
     signupFailed: "تعذر إنشاء الحساب، تأكد من تفعيل Email/Password في Firebase",
     emailAuthInvalid: "اكتب بريد إلكتروني صحيح وكلمة مرور 6 أحرف على الأقل",
@@ -504,6 +506,7 @@ const translations = {
     checkoutEmailInvalid: "Enter a valid email or leave it empty",
     paymobCheckoutFailed: "Checkout could not open. Opening the backup Paymob link",
     firebaseRequired: "Login needs Firebase setup first",
+    firebaseLoading: "Preparing login. Try again in a moment",
     signinFailed: "Sign-in failed. Check Firebase settings",
     signupFailed: "Could not create the account. Make sure Email/Password is enabled in Firebase",
     emailAuthInvalid: "Enter a valid email and a password of at least 6 characters",
@@ -1977,6 +1980,22 @@ function hasFirebaseConfig() {
   return Boolean(config.apiKey && config.authDomain && config.projectId && config.appId);
 }
 
+async function ensureAuthServices() {
+  if (state.auth.services?.auth) return true;
+  if (!hasFirebaseConfig()) return false;
+
+  if (!authInitPromise) {
+    authInitPromise = initCustomerAuth();
+  }
+
+  try {
+    await authInitPromise;
+  } catch {
+    return false;
+  }
+  return Boolean(state.auth.services?.auth);
+}
+
 function renderAuthState() {
   const user = state.auth.user;
   const configured = state.auth.configured;
@@ -2154,10 +2173,11 @@ function authProvider(providerName) {
 }
 
 async function signInWithProvider(providerName) {
+  const ready = await ensureAuthServices();
   const services = state.auth.services;
   const provider = authProvider(providerName);
-  if (!services || !provider) {
-    showToast(t("firebaseRequired"));
+  if (!ready || !services || !provider) {
+    showToast(hasFirebaseConfig() ? t("firebaseLoading") : t("firebaseRequired"));
     return;
   }
 
@@ -2191,10 +2211,11 @@ function emailAuthValues() {
 }
 
 async function signInWithEmail() {
+  const ready = await ensureAuthServices();
   const services = state.auth.services;
   const credentials = emailAuthValues();
-  if (!services?.auth || !credentials) {
-    if (!services?.auth) showToast(t("firebaseRequired"));
+  if (!ready || !services?.auth || !credentials) {
+    if (!ready || !services?.auth) showToast(hasFirebaseConfig() ? t("firebaseLoading") : t("firebaseRequired"));
     return;
   }
 
@@ -2213,10 +2234,11 @@ async function signInWithEmail() {
 }
 
 async function signUpWithEmail() {
+  const ready = await ensureAuthServices();
   const services = state.auth.services;
   const credentials = emailAuthValues();
-  if (!services?.auth || !credentials) {
-    if (!services?.auth) showToast(t("firebaseRequired"));
+  if (!ready || !services?.auth || !credentials) {
+    if (!ready || !services?.auth) showToast(hasFirebaseConfig() ? t("firebaseLoading") : t("firebaseRequired"));
     return;
   }
 
@@ -2594,5 +2616,5 @@ window.addEventListener("popstate", () => {
 
 loadGuestCart();
 applyLanguage();
-initCustomerAuth();
+authInitPromise = initCustomerAuth();
 loadProducts();
