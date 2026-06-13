@@ -90,6 +90,7 @@ const emailAuthForm = document.querySelector("[data-email-auth-form]");
 const authEmailInput = document.querySelector("[data-auth-email]");
 const authPasswordInput = document.querySelector("[data-auth-password]");
 const emailSignupButton = document.querySelector("[data-email-signup]");
+const emailResetButton = document.querySelector("[data-email-reset]");
 const cartPanel = document.querySelector("[data-cart-panel]");
 const cartItems = document.querySelector("[data-cart-items]");
 const cartCount = document.querySelector("[data-cart-count]");
@@ -288,6 +289,7 @@ const translations = {
     authPasswordPlaceholder: "6 أحرف على الأقل",
     emailSignin: "دخول",
     emailSignup: "إنشاء حساب",
+    emailReset: "تعيين أو استرجاع كلمة المرور",
     signOut: "تسجيل الخروج",
     paymentFallback: "سيتم فتح صفحة Paymob الرسمية لإتمام الدفع ببطاقة بنكية.",
     fallbackLink: "لينك دفع احتياطي",
@@ -314,7 +316,7 @@ const translations = {
     signinFailed: "تعذر تسجيل الدخول، راجع إعدادات Firebase",
     signupFailed: "تعذر إنشاء الحساب، تأكد من تفعيل Email/Password في Firebase",
     emailAuthInvalid: "اكتب بريد إلكتروني صحيح وكلمة مرور 6 أحرف على الأقل",
-    authUserNotFound: "الحساب ده مش موجود. اضغط إنشاء حساب أول مرة.",
+    authUserNotFound: "بيانات الدخول غير صحيحة. لو أول مرة اضغط إنشاء حساب، ولو الحساب موجود استخدم استرجاع كلمة المرور.",
     authWrongPassword: "كلمة المرور غير صحيحة.",
     authEmailInUse: "الإيميل ده عليه حساب بالفعل. اضغط دخول بدل إنشاء حساب.",
     authWeakPassword: "كلمة المرور ضعيفة. اكتب 6 أحرف على الأقل.",
@@ -322,6 +324,8 @@ const translations = {
     authProviderDisabled: "فعّل Email/Password من Firebase Authentication.",
     emailSigninSuccess: "تم تسجيل الدخول",
     emailSignupSuccess: "تم إنشاء الحساب وتسجيل الدخول",
+    emailResetSent: "تم إرسال رابط تعيين كلمة المرور على الإيميل",
+    emailResetFailed: "تعذر إرسال رابط كلمة المرور. تأكد من كتابة الإيميل صح.",
     signoutToast: "تم تسجيل الخروج",
     unavailableChoiceToast: "الاختيار ده غير متاح حاليا",
     quantityLimitToast: "وصلت للكمية المتاحة من الاختيار ده",
@@ -490,6 +494,7 @@ const translations = {
     authPasswordPlaceholder: "At least 6 characters",
     emailSignin: "Sign in",
     emailSignup: "Create account",
+    emailReset: "Set or reset password",
     signOut: "Sign out",
     paymentFallback: "The official Paymob page will open to complete card payment.",
     fallbackLink: "Backup payment link",
@@ -516,7 +521,7 @@ const translations = {
     signinFailed: "Sign-in failed. Check Firebase settings",
     signupFailed: "Could not create the account. Make sure Email/Password is enabled in Firebase",
     emailAuthInvalid: "Enter a valid email and a password of at least 6 characters",
-    authUserNotFound: "This account does not exist. Create an account first.",
+    authUserNotFound: "The sign-in details are not correct. Create an account first or reset the password.",
     authWrongPassword: "Incorrect password.",
     authEmailInUse: "This email already has an account. Sign in instead.",
     authWeakPassword: "Password is too weak. Use at least 6 characters.",
@@ -524,6 +529,8 @@ const translations = {
     authProviderDisabled: "Enable Email/Password in Firebase Authentication.",
     emailSigninSuccess: "Signed in",
     emailSignupSuccess: "Account created and signed in",
+    emailResetSent: "Password reset link sent to your email",
+    emailResetFailed: "Could not send the password reset link. Check the email address.",
     signoutToast: "Signed out",
     unavailableChoiceToast: "This option is currently unavailable",
     quantityLimitToast: "You reached the available quantity for this option",
@@ -814,6 +821,7 @@ function applyLanguage({ render = true } = {}) {
     emailAuthForm.querySelector("[data-email-signin]").textContent = t("emailSignin");
   }
   if (emailSignupButton) emailSignupButton.textContent = t("emailSignup");
+  if (emailResetButton) emailResetButton.textContent = t("emailReset");
   if (authSignoutButton) authSignoutButton.textContent = t("signOut");
 
   if (render) {
@@ -2148,6 +2156,7 @@ async function initCustomerAuth() {
       GoogleAuthProvider: authModule.GoogleAuthProvider,
       createUserWithEmailAndPassword: authModule.createUserWithEmailAndPassword,
       signInWithEmailAndPassword: authModule.signInWithEmailAndPassword,
+      sendPasswordResetEmail: authModule.sendPasswordResetEmail,
       signInWithPopup: authModule.signInWithPopup,
       signInWithRedirect: authModule.signInWithRedirect,
       signOut: authModule.signOut,
@@ -2279,6 +2288,35 @@ async function signUpWithEmail() {
     renderAuthState();
     console.warn("Email sign up failed.", error);
     showToast(authErrorMessage(error, "signupFailed"));
+  }
+}
+
+async function resetEmailPassword() {
+  const ready = await ensureAuthServices();
+  const services = state.auth.services;
+  const email = authEmailInput?.value.trim() || "";
+
+  if (!ready || !services?.auth) {
+    showToast(hasFirebaseConfig() ? t("firebaseLoading") : t("firebaseRequired"));
+    return;
+  }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    authEmailInput?.focus();
+    showToast(t("emailAuthInvalid"));
+    return;
+  }
+
+  try {
+    state.auth.loading = true;
+    renderAuthState();
+    await services.sendPasswordResetEmail(services.auth, email);
+    showToast(t("emailResetSent"));
+  } catch (error) {
+    console.warn("Password reset failed.", error);
+    showToast(authErrorMessage(error, "emailResetFailed"));
+  } finally {
+    state.auth.loading = false;
+    renderAuthState();
   }
 }
 
@@ -2552,6 +2590,7 @@ emailAuthForm?.addEventListener("submit", (event) => {
   signInWithEmail();
 });
 emailSignupButton?.addEventListener("click", signUpWithEmail);
+emailResetButton?.addEventListener("click", resetEmailPassword);
 authSignoutButton?.addEventListener("click", signOutCustomer);
 
 whatsappLink.addEventListener("click", async (event) => {

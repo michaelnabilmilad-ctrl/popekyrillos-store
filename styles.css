@@ -1857,6 +1857,24 @@ body[data-lang="en"] .policy-lang[lang="en"] {
   padding: 8px 12px;
 }
 
+.email-reset-link {
+  justify-self: center;
+  border: 0;
+  background: transparent;
+  color: var(--teal-dark);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 900;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  cursor: pointer;
+}
+
+.email-reset-link:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
 .auth-provider {
   display: grid;
   grid-template-columns: 48px 1fr;
