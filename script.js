@@ -544,7 +544,7 @@ const categoryCopy = {
   all: { ar: ["الكل", "كل المنتجات"], en: ["All", "All products"] },
   books: { ar: ["كتب وطقوس", "أجبية، قطمارس، ألحان"], en: ["Books & rites", "Agpeya, katameros, hymns"] },
   candles: { ar: ["شموع وبخور", "شموع، فحم، شورية"], en: ["Candles & incense", "Candles, charcoal, censers"] },
-  vestments: { ar: ["أقمشة ومفارش", "مذبح، شماسات، تطريز"], en: ["Fabrics & altar cloths", "Altar, deacon, embroidery"] },
+  vestments: { ar: ["أقمشة ومفارش", "بطرشيلات، مفارش، تطريز"], en: ["Fabrics & altar cloths", "Stoles, altar cloths, embroidery"] },
   icons: { ar: ["أيقونات وهدايا", "براويز، صلبان، تذكارات"], en: ["Icons & gifts", "Frames, crosses, keepsakes"] },
   brass: { ar: ["نحاسيات", "صلبان، شمعدانات، ذخائر"], en: ["Brassware", "Crosses, candlesticks, reliquaries"] }
 };
@@ -553,7 +553,7 @@ const catalogCategoryOrder = ["brass", "candles", "vestments", "icons", "books"]
 const catalogLabelOrder = {
   brass: ["صلبان زفة", "إبريق نحاس", "حُق ذخيرة", "نحاسيات", "دفوف وتريانتو", "شغل شحن"],
   candles: ["شموع وبخور"],
-  vestments: ["أقمشة ومفارش"],
+  vestments: ["بطرشيلات", "أقمشة ومفارش"],
   icons: ["أيقونات وهدايا"],
   books: ["كتب وطقوس"]
 };
@@ -577,6 +577,8 @@ const textMapEn = {
   "شموع وبخور": "Candles & incense",
   "أيقونات وهدايا": "Icons & gifts",
   "نحاسيات": "Brassware",
+  "بطرشيلات": "Stoles",
+  "أقمشة ومفارش": "Fabrics & altar cloths",
   "الحجم": "Size",
   "المقاس": "Size",
   "اللون": "Color",
