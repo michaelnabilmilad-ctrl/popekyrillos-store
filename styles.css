@@ -714,100 +714,75 @@ body.shop-toggle-floating .hero-shop-button svg {
 
 .category-art {
   position: relative;
-  display: block;
-  width: 72px;
-  height: 62px;
-  margin-bottom: 20px;
+  display: grid;
+  place-items: center;
+  width: min(100%, 118px);
+  height: 82px;
+  margin: 0 0 18px auto;
+  border: 1px solid rgba(216, 179, 108, 0.2);
+  border-radius: 10px;
+  background:
+    radial-gradient(circle at 76% 18%, rgba(255, 255, 255, 0.72), transparent 28%),
+    linear-gradient(135deg, rgba(249, 244, 233, 0.95), rgba(233, 242, 237, 0.72));
+  overflow: hidden;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.7);
+  transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
 }
 
-.category-art::before,
-.category-art::after {
-  content: "";
-  position: absolute;
+.category-art svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.category-tile:hover .category-art,
+.category-tile:focus-visible .category-art,
+.category-tile.active .category-art {
+  border-color: rgba(133, 36, 60, 0.48);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.72),
+    0 12px 22px rgba(16, 33, 42, 0.1);
+  transform: translateY(-2px);
 }
 
 .category-art--all {
-  border-radius: var(--radius);
-  background: linear-gradient(135deg, var(--teal), var(--gold));
+  background:
+    radial-gradient(circle at 74% 20%, rgba(255, 255, 255, 0.78), transparent 24%),
+    linear-gradient(135deg, rgba(11, 119, 114, 0.18), rgba(201, 146, 57, 0.22));
 }
 
-.category-art--all::before {
-  inset: 12px 26px;
-  border-radius: 999px;
-  background: #fff;
+.category-art--brass {
+  background:
+    radial-gradient(circle at 76% 18%, rgba(255, 255, 255, 0.75), transparent 25%),
+    linear-gradient(135deg, rgba(255, 240, 185, 0.92), rgba(194, 139, 42, 0.24));
 }
 
-.category-art--all::after {
-  inset: 24px 14px;
-  border-top: 4px solid #fff;
+.category-art--candles {
+  background:
+    radial-gradient(circle at 75% 18%, rgba(255, 255, 255, 0.78), transparent 25%),
+    linear-gradient(135deg, rgba(255, 243, 201, 0.92), rgba(238, 217, 154, 0.24));
 }
 
-.category-art--books::before {
-  inset: 7px 10px 9px 34px;
-  border-radius: 4px;
-  background: var(--burgundy);
-  box-shadow: -17px 4px 0 var(--teal), -34px 9px 0 var(--gold);
+.category-art--vestments {
+  background:
+    radial-gradient(circle at 77% 17%, rgba(255, 255, 255, 0.78), transparent 25%),
+    linear-gradient(135deg, rgba(255, 247, 236, 0.94), rgba(133, 36, 60, 0.14));
 }
 
-.category-art--books::after {
-  inset: 45px 8px auto;
-  height: 5px;
-  border-radius: 999px;
-  background: rgba(16, 33, 42, 0.16);
+.category-art--icons {
+  background:
+    radial-gradient(circle at 76% 18%, rgba(255, 255, 255, 0.78), transparent 25%),
+    linear-gradient(135deg, rgba(247, 234, 208, 0.94), rgba(11, 119, 114, 0.12));
 }
 
-.category-art--candles::before {
-  inset: 18px 11px 0 43px;
-  border-radius: 8px 8px 3px 3px;
-  background: #fff4cf;
-  box-shadow: -21px 8px 0 #f8dc8c;
+.category-art--books {
+  background:
+    radial-gradient(circle at 76% 18%, rgba(255, 255, 255, 0.78), transparent 25%),
+    linear-gradient(135deg, rgba(244, 229, 197, 0.92), rgba(7, 43, 82, 0.1));
 }
 
-.category-art--candles::after {
-  inset: 6px 48px auto auto;
-  width: 8px;
-  height: 14px;
-  border-radius: 70% 30% 60% 40%;
-  background: var(--gold);
-  box-shadow: -21px 8px 0 var(--gold);
-}
-
-.category-art--vestments::before {
-  inset: 9px 10px 6px;
-  border-radius: var(--radius);
-  background: linear-gradient(135deg, #fff, #efd8de);
-  border: 1px solid #e4c5cf;
-}
-
-.category-art--vestments::after {
-  inset: 14px 32px 11px;
-  border-inline: 3px solid var(--burgundy);
-}
-
-.category-art--icons::before {
-  inset: 5px 14px;
-  border: 4px solid #d8b36c;
-  border-radius: 7px;
-  background: #f7ead0;
-}
-
-.category-art--icons::after {
-  inset: 21px 34px 16px;
-  border-inline-start: 4px solid var(--teal);
-  border-block-start: 4px solid var(--teal);
-}
-
-.category-art--brass::before {
-  inset: 8px 18px 8px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 35% 30%, #fff6c6, #d49b28 48%, #7a4d12 100%);
-}
-
-.category-art--brass::after {
-  inset: 6px 34px 6px;
-  border-inline-start: 4px solid #f8dc8c;
-  border-block-start: 4px solid #f8dc8c;
-  transform: rotate(45deg);
+body[data-lang="en"] .category-art {
+  margin: 0 auto 18px 0;
 }
 
 .category-tile strong,
