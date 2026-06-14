@@ -661,9 +661,12 @@ function setText(selector, text) {
 function setControlText(element, text) {
   if (!element) return;
   const icon = element.querySelector("svg");
+  const label = document.createElement("span");
+  label.className = "button-label";
+  label.textContent = text;
   element.textContent = "";
   if (icon) element.append(icon);
-  element.append(document.createTextNode(text));
+  element.append(label);
 }
 
 function setLabelText(label, text) {
@@ -2525,6 +2528,11 @@ function closeShopMenu() {
   shopMenuToggle?.setAttribute("aria-expanded", "false");
 }
 
+function updateFloatingShopButton() {
+  const shouldFloat = window.scrollY > 140;
+  document.body.classList.toggle("shop-toggle-floating", shouldFloat);
+}
+
 function applyCatalogFilter(category = "all", label = "") {
   state.filter = category;
   state.labelFilter = label;
@@ -2819,6 +2827,7 @@ document.querySelector("[data-contact-form]").addEventListener("submit", (event)
 
 window.addEventListener("scroll", () => {
   header.dataset.elevated = window.scrollY > 24 ? "true" : "false";
+  updateFloatingShopButton();
 });
 
 window.addEventListener("popstate", () => {
@@ -2834,5 +2843,6 @@ window.addEventListener("popstate", () => {
 
 loadGuestCart();
 applyLanguage();
+updateFloatingShopButton();
 authInitPromise = initCustomerAuth();
 loadProducts();
