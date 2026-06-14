@@ -75,6 +75,8 @@ let formatter = new Intl.NumberFormat("ar-EG");
 const productGrid = document.querySelector("[data-products]");
 const filterButtons = document.querySelectorAll("[data-filter]");
 const searchInput = document.querySelector("#product-search");
+const headerSearch = document.querySelector("[data-header-search]");
+const searchToggle = document.querySelector("[data-search-toggle]");
 const header = document.querySelector(".site-header");
 const languageToggle = document.querySelector("[data-language-toggle]");
 const languageLabel = document.querySelector("[data-language-label]");
@@ -837,9 +839,8 @@ function applyLanguage({ render = true } = {}) {
   applyCategoryLanguage();
   renderShopMenu();
 
-  setText("#catalog .eyebrow", t("catalogEyebrow"));
-  setText("#catalog-title", t("catalogTitle"));
   if (searchInput) searchInput.placeholder = t("searchPlaceholder");
+  searchToggle?.setAttribute("aria-label", t("searchPlaceholder"));
 
   setText("#services .eyebrow", t("servicesEyebrow"));
   setText("#services-title", t("servicesTitle"));
@@ -2569,6 +2570,18 @@ async function loadProducts() {
   openProductFromUrl();
 }
 
+function openHeaderSearch(focusInput = true) {
+  headerSearch?.classList.add("is-open");
+  searchToggle?.setAttribute("aria-expanded", "true");
+  if (focusInput) searchInput?.focus();
+}
+
+function closeHeaderSearch(force = false) {
+  if (!force && (searchInput?.value.trim() || document.activeElement === searchInput || document.activeElement === searchToggle)) return;
+  headerSearch?.classList.remove("is-open");
+  searchToggle?.setAttribute("aria-expanded", "false");
+}
+
 filterButtons.forEach((button) => {
   button.addEventListener("click", () => {
     state.filter = button.dataset.filter;
@@ -2579,9 +2592,30 @@ filterButtons.forEach((button) => {
   });
 });
 
-searchInput.addEventListener("input", (event) => {
+searchToggle?.addEventListener("click", (event) => {
+  event.preventDefault();
+  openHeaderSearch(false);
+  window.setTimeout(() => searchInput?.focus(), 0);
+});
+
+searchInput?.addEventListener("focus", () => openHeaderSearch(false));
+
+searchInput?.addEventListener("input", (event) => {
   state.search = event.target.value;
   renderProducts();
+  if (state.search.trim()) openHeaderSearch(false);
+});
+
+document.addEventListener("click", (event) => {
+  if (!headerSearch?.classList.contains("is-open")) return;
+  if (headerSearch.contains(event.target)) return;
+  closeHeaderSearch();
+});
+
+document.addEventListener("keydown", (event) => {
+  if (event.key !== "Escape" || !headerSearch?.classList.contains("is-open")) return;
+  searchInput?.blur();
+  closeHeaderSearch(true);
 });
 
 shopMenuToggle?.addEventListener("click", openShopMenu);

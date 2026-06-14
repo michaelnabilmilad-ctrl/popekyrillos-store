@@ -8,7 +8,7 @@
       name="description"
       content="مكتبة البابا كيرلس: مكتبة مسيحية متخصصة في مستلزمات الكنائس، الكتب الطقسية، الشموع، البخور، الأيقونات، والأقمشة الكنسية."
     />
-    <link rel="stylesheet" href="styles.css?v=navy-services-20260614" />
+    <link rel="stylesheet" href="styles.css?v=header-search-20260614" />
   </head>
   <body dir="rtl">
     <header class="site-header" data-elevated="false">
@@ -40,6 +40,15 @@
           </svg>
           <span data-account-label>دخول</span>
         </button>
+        <div class="header-search" data-header-search>
+          <button class="icon-button search-toggle" type="button" data-search-toggle aria-label="بحث عن منتج" aria-expanded="false" aria-controls="product-search">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="11" cy="11" r="7" />
+              <path d="m20 20-3.5-3.5" />
+            </svg>
+          </button>
+          <input class="header-search-input" type="search" id="product-search" placeholder="ابحث عن منتج" autocomplete="off" />
+        </div>
         <button class="icon-button cart-toggle" type="button" aria-label="فتح السلة">
           <svg viewBox="0 0 24 24" aria-hidden="true">
             <path d="M6 6h15l-2 8H8L6 3H3" />
@@ -158,21 +167,7 @@
         </div>
       </section>
 
-      <section class="section catalog" id="catalog" aria-labelledby="catalog-title">
-        <div class="section-head catalog-head">
-          <div>
-            <p class="eyebrow">الكتالوج</p>
-            <h2 id="catalog-title">منتجات مختارة للطلب</h2>
-          </div>
-          <label class="search-box">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <circle cx="11" cy="11" r="7" />
-              <path d="m20 20-3.5-3.5" />
-            </svg>
-            <input type="search" id="product-search" placeholder="ابحث عن منتج" autocomplete="off" />
-          </label>
-        </div>
-
+      <section class="section catalog" id="catalog" aria-label="منتجات مختارة للطلب">
         <div class="product-grid" data-products></div>
       </section>
 
@@ -605,6 +600,6 @@
 
     <div class="toast" data-toast role="status" aria-live="polite"></div>
     <script src="firebase-config.js?v=secure-orders-20260612"></script>
-    <script src="script.js?v=categories-title-20260614"></script>
+    <script src="script.js?v=header-search-20260614"></script>
   </body>
 </html>
