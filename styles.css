@@ -513,8 +513,8 @@ body[data-lang="en"] .hero h1 {
 
 body.shop-toggle-floating .hero-shop-button {
   position: fixed;
-  top: 92px;
-  right: 22px;
+  top: 12px;
+  right: clamp(248px, 24vw, 340px);
   z-index: 44;
   width: 54px;
   min-width: 54px;
@@ -529,7 +529,7 @@ body.shop-toggle-floating .hero-shop-button {
 
 body[data-lang="en"].shop-toggle-floating .hero-shop-button {
   right: auto;
-  left: 22px;
+  left: clamp(248px, 24vw, 340px);
 }
 
 body.shop-toggle-floating .hero-shop-button .button-label {
@@ -921,6 +921,8 @@ body[data-lang="en"] .category-art {
   grid-template-rows: minmax(0, 1fr) auto;
   gap: 8px;
   padding: 16px 12px 10px;
+  -webkit-touch-callout: none;
+  user-select: none;
 }
 
 .product-gallery-main {
@@ -943,6 +945,8 @@ body[data-lang="en"] .category-art {
   max-height: 100%;
   object-fit: contain;
   filter: drop-shadow(0 16px 18px rgba(16, 33, 42, 0.18));
+  -webkit-user-drag: none;
+  user-select: none;
 }
 
 .product-thumbs {
@@ -981,6 +985,8 @@ body[data-lang="en"] .category-art {
   height: 100%;
   border-radius: 50%;
   object-fit: cover;
+  -webkit-user-drag: none;
+  user-select: none;
 }
 
 .product-visual::before {
@@ -1508,6 +1514,8 @@ body[data-lang="en"] .policy-lang[lang="en"] {
   height: 100%;
   padding: 12px;
   object-fit: contain;
+  -webkit-user-drag: none;
+  user-select: none;
 }
 
 .modal-thumbs {
@@ -1515,6 +1523,8 @@ body[data-lang="en"] .policy-lang[lang="en"] {
   gap: 8px;
   overflow-x: auto;
   padding: 10px 2px 2px;
+  -webkit-touch-callout: none;
+  user-select: none;
 }
 
 .modal-thumb {
@@ -1538,6 +1548,8 @@ body[data-lang="en"] .policy-lang[lang="en"] {
   height: 100%;
   border-radius: 5px;
   object-fit: cover;
+  -webkit-user-drag: none;
+  user-select: none;
 }
 
 .product-modal-copy {
@@ -1598,7 +1610,16 @@ body[data-lang="en"] .policy-lang[lang="en"] {
   margin: 0;
   color: var(--muted);
   font-size: 15px;
+  font-weight: 900;
   line-height: 1.8;
+}
+
+.modal-description span {
+  display: block;
+}
+
+.modal-description span + span {
+  margin-top: 8px;
 }
 
 .variant-options {
@@ -1770,6 +1791,8 @@ body[data-lang="en"] .policy-lang[lang="en"] {
   place-items: center;
   width: min(1120px, 100%);
   max-height: calc(100vh - 56px);
+  -webkit-touch-callout: none;
+  user-select: none;
 }
 
 .image-lightbox-stage img {
@@ -1780,6 +1803,8 @@ body[data-lang="en"] .policy-lang[lang="en"] {
   background: #fff;
   object-fit: contain;
   box-shadow: 0 28px 80px rgba(0, 0, 0, 0.42);
+  -webkit-user-drag: none;
+  user-select: none;
 }
 
 .account-modal {

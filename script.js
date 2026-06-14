@@ -284,6 +284,7 @@ const translations = {
     productShareMessage: "شوف المنتج ده من مكتبة البابا كيرلس: {name}\n{url}",
     productLinkCopied: "تم نسخ لينك المنتج",
     productLinkCopyFallback: "انسخ لينك المنتج من شريط العنوان",
+    imageProtected: "الصور محمية من التحميل المباشر",
     accountEyebrow: "حساب العميل",
     accountTitle: "أهلا بيك في مكتبة البابا كيرلس",
     accountStatus: "ادخل بحسابك عشان السلة تفضل محفوظة وتقدر تكمل طلبك بسهولة في أي وقت.",
@@ -494,6 +495,7 @@ const translations = {
     productShareMessage: "See this product from Pope Kyrillos Store: {name}\n{url}",
     productLinkCopied: "Product link copied",
     productLinkCopyFallback: "Copy the product link from the address bar",
+    imageProtected: "Images are protected from direct download",
     accountEyebrow: "Customer account",
     accountTitle: "Welcome to Pope Kyrillos Store",
     accountStatus: "Sign in so your cart stays saved and you can continue your order anytime.",
@@ -646,6 +648,80 @@ function localized(value = "") {
   return textMapEn[value] || value;
 }
 
+const arabicDigitMap = {
+  "٠": "0",
+  "١": "1",
+  "٢": "2",
+  "٣": "3",
+  "٤": "4",
+  "٥": "5",
+  "٦": "6",
+  "٧": "7",
+  "٨": "8",
+  "٩": "9",
+  "۰": "0",
+  "۱": "1",
+  "۲": "2",
+  "۳": "3",
+  "۴": "4",
+  "۵": "5",
+  "۶": "6",
+  "۷": "7",
+  "۸": "8",
+  "۹": "9"
+};
+
+function toLatinDigits(value = "") {
+  return String(value).replace(/[٠-٩۰-۹]/g, (digit) => arabicDigitMap[digit] || digit);
+}
+
+function displayText(value = "") {
+  const text = String(value);
+  return isEnglish() ? toLatinDigits(text) : text;
+}
+
+function descriptionLines(description = "") {
+  const normalized = displayText(description).replace(/\s+/g, " ").trim();
+  if (!normalized) return [];
+
+  const dimensionPattern = /(متاح\s+بأطوال|بأطوال|الأطوال|اطوال|أطوال|الطول|طول|المقاس|مقاس|الحجم|حجم|الأبعاد|ابعاد|عرض|ارتفاع|قطر|سم|متر|length|size|dimensions?|height|width|diameter|cm|meter|metre)/i;
+  const sentences = normalized.match(/[^.!؟]+[.!؟]?/g) || [normalized];
+  const lines = [];
+
+  sentences.forEach((sentence) => {
+    const clean = sentence.trim();
+    if (!clean) return;
+
+    const dimensionMatch = clean.match(dimensionPattern);
+    if (dimensionMatch && dimensionMatch.index > 20) {
+      const before = clean.slice(0, dimensionMatch.index).trim().replace(/[،,;:]+$/, "");
+      const after = clean.slice(dimensionMatch.index).trim();
+      if (before) {
+        if (lines.length) lines[lines.length - 1] = `${lines[lines.length - 1]} ${before}`.trim();
+        else lines.push(before);
+      }
+      if (after) lines.push(after);
+      return;
+    }
+
+    if (lines.length && dimensionPattern.test(clean)) {
+      lines.push(clean);
+    } else if (lines.length) {
+      lines[lines.length - 1] = `${lines[lines.length - 1]} ${clean}`.trim();
+    } else {
+      lines.push(clean);
+    }
+  });
+
+  return lines;
+}
+
+function formatDescriptionHtml(description = "") {
+  return descriptionLines(description)
+    .map((line) => `<span>${escapeHtml(line)}</span>`)
+    .join("");
+}
+
 function lineBreakText(element, text) {
   if (!element) return;
   element.textContent = "";
@@ -733,7 +809,7 @@ function renderShopMenu() {
           return `
             <button class="shop-subcategory ${active ? "active" : ""}" type="button" data-shop-category="${escapeHtml(category)}" data-shop-label="${escapeHtml(label)}">
               <span>${escapeHtml(localized(label))}</span>
-              <small>${formatter.format(labelCount)}</small>
+              <small>${displayText(formatter.format(labelCount))}</small>
             </button>
           `;
         })
@@ -746,7 +822,7 @@ function renderShopMenu() {
               <strong>${escapeHtml(copy[0])}</strong>
               <small>${escapeHtml(copy[1])}</small>
             </span>
-            <em>${formatter.format(categoryCount)}</em>
+            <em>${displayText(formatter.format(categoryCount))}</em>
           </button>
           ${labelButtons ? `<div class="shop-subcategories">${labelButtons}</div>` : ""}
         </section>
@@ -760,7 +836,7 @@ function renderShopMenu() {
         <strong>${escapeHtml(t("shopMenuAll"))}</strong>
         <small>${escapeHtml(categoryCopy.all[state.language][1])}</small>
       </span>
-      <em>${formatter.format(allCount)}</em>
+      <em>${displayText(formatter.format(allCount))}</em>
     </button>
     ${groups}
   `;
@@ -771,7 +847,7 @@ function applyLanguage({ render = true } = {}) {
   document.documentElement.dir = t("dir");
   document.body.dir = t("dir");
   document.body.dataset.lang = state.language;
-  formatter = new Intl.NumberFormat(isEnglish() ? "en-US" : "ar-EG");
+  formatter = new Intl.NumberFormat(isEnglish() ? "en-US-u-nu-latn" : "ar-EG");
   document.title = t("documentTitle");
 
   const metaDescription = document.querySelector('meta[name="description"]');
@@ -950,7 +1026,8 @@ function applyLanguage({ render = true } = {}) {
 
 function money(amount) {
   if (amount === null || amount === undefined || amount === "") return t("askPrice");
-  return isEnglish() ? `EGP ${formatter.format(Number(amount))}` : `${formatter.format(Number(amount))} ج.م`;
+  const formattedAmount = displayText(formatter.format(Number(amount)));
+  return isEnglish() ? `EGP ${formattedAmount}` : `${formattedAmount} ج.م`;
 }
 
 function productShareUrl(productId) {
@@ -1122,7 +1199,7 @@ function variantStockText(variant) {
   if (!isVariantAvailable(variant)) return isEnglish() ? "Currently unavailable" : "غير متاح حاليا";
   const quantity = variantQuantity(variant);
   if (quantity === null) return t("available");
-  return isEnglish() ? `Available - ${formatter.format(quantity)} pcs` : `متاح - ${formatter.format(quantity)} قطعة`;
+  return isEnglish() ? `Available - ${displayText(formatter.format(quantity))} pcs` : `متاح - ${formatter.format(quantity)} قطعة`;
 }
 
 function clampModalQuantity(variant) {
@@ -1144,7 +1221,7 @@ function productStockText(product) {
   const quantities = availableVariants.map(variantQuantity).filter((quantity) => quantity !== null);
   if (quantities.length === availableVariants.length && quantities.length) {
     const total = quantities.reduce((sum, quantity) => sum + quantity, 0);
-    return isEnglish() ? `Available - ${formatter.format(total)} pcs` : `متاح - ${formatter.format(total)} قطعة`;
+    return isEnglish() ? `Available - ${displayText(formatter.format(total))} pcs` : `متاح - ${formatter.format(total)} قطعة`;
   }
 
   return t("available");
@@ -1152,7 +1229,7 @@ function productStockText(product) {
 
 function variantOptionText(variant) {
   const options = Object.entries(variant?.options || {});
-  return options.map(([name, value]) => `${localized(name)}: ${localized(value)}`).join(isEnglish() ? ", " : "، ");
+  return displayText(options.map(([name, value]) => `${localized(name)}: ${localized(value)}`).join(isEnglish() ? ", " : "، "));
 }
 
 function cartKey(productId, variantId = "default") {
@@ -1305,11 +1382,12 @@ function renderProducts() {
       const hasImage = galleryImages.length > 0;
       const hasChoices = hasProductChoices(product);
       const isAvailable = hasAvailableVariant(product);
-      const fullDescription = escapeHtml(localized(product.description || ""));
-      const shortDescription = escapeHtml(compactText(localized(product.description || "")));
+      const localizedDescription = displayText(localized(product.description || ""));
+      const fullDescription = escapeHtml(localizedDescription);
+      const shortDescription = escapeHtml(compactText(localizedDescription));
       const priceText = productPriceText(product);
       const stockText = productStockText(product);
-      const productDisplayName = localized(product.name);
+      const productDisplayName = displayText(localized(product.name));
       const productName = escapeHtml(productDisplayName);
       const productId = escapeHtml(product.id);
       const actionLabel = !isAvailable ? t("unavailable") : hasChoices ? t("choose") : t("add");
@@ -1326,10 +1404,10 @@ function renderProducts() {
                     type="button"
                     data-gallery="${productId}"
                     data-gallery-image="${escapeHtml(image)}"
-                    aria-label="${escapeHtml(t("showImageLabel", { index: formatter.format(index + 1), name: productDisplayName }))}"
+                    aria-label="${escapeHtml(t("showImageLabel", { index: displayText(formatter.format(index + 1)), name: productDisplayName }))}"
                     aria-pressed="${index === 0 ? "true" : "false"}"
                   >
-                    <img src="${escapeHtml(image)}" alt="" loading="lazy" />
+                    <img src="${escapeHtml(image)}" alt="" loading="lazy" draggable="false" />
                   </button>
                 `
               )
@@ -1341,7 +1419,7 @@ function renderProducts() {
         ? `
           <div class="product-gallery ${galleryImages.length > 1 ? "has-thumbs" : ""}">
             <div class="product-gallery-main">
-              <img class="product-photo" data-main-image="${productId}" src="${escapeHtml(galleryImages[0])}" alt="${productName}" loading="lazy" />
+              <img class="product-photo" data-main-image="${productId}" src="${escapeHtml(galleryImages[0])}" alt="${productName}" loading="lazy" draggable="false" />
             </div>
             ${thumbnails}
           </div>
@@ -1446,8 +1524,8 @@ function renderProductModal() {
   const modalQuantity = state.modal.quantity;
   const canAddQuantity = isAvailable && (remainingQuantity === null || remainingQuantity > 0);
   const canIncreaseQuantity = canAddQuantity && (remainingQuantity === null || modalQuantity < remainingQuantity);
-  const description = cleanDescription(localized(product.description || ""));
-  const productDisplayName = localized(product.name);
+  const description = cleanDescription(displayText(localized(product.description || "")));
+  const productDisplayName = displayText(localized(product.name));
   const productName = escapeHtml(productDisplayName);
   const shareUrl = productShareUrl(product.id);
   const whatsappShareUrl = `https://wa.me/?text=${encodeURIComponent(t("productShareMessage", { name: productDisplayName, url: shareUrl }))}`;
@@ -1461,7 +1539,7 @@ function renderProductModal() {
         data-zoom-alt="${productName}"
         aria-label="${escapeHtml(t("zoomImageLabel", { name: productDisplayName }))}"
       >
-        <img class="modal-product-photo" src="${escapeHtml(activeImage)}" alt="${productName}" />
+        <img class="modal-product-photo" src="${escapeHtml(activeImage)}" alt="${productName}" draggable="false" />
         <span class="zoom-hint">${t("zoomHint")}</span>
       </button>
       ${
@@ -1478,10 +1556,10 @@ function renderProductModal() {
                       data-modal-image="${escapeHtml(image)}"
                       data-zoom-image="${escapeHtml(image)}"
                       data-zoom-alt="${productName}"
-                      aria-label="${escapeHtml(t("showImageLabel", { index: formatter.format(index + 1), name: productDisplayName }))}"
+                      aria-label="${escapeHtml(t("showImageLabel", { index: displayText(formatter.format(index + 1)), name: productDisplayName }))}"
                       aria-pressed="${isActive ? "true" : "false"}"
                     >
-                      <img src="${escapeHtml(image)}" alt="" loading="lazy" />
+                      <img src="${escapeHtml(image)}" alt="" loading="lazy" draggable="false" />
                     </button>
                   `;
                 })
@@ -1548,17 +1626,17 @@ function renderProductModal() {
           ${t("shareOnWhatsApp")}
         </a>
       </div>
-      <p class="modal-description">${escapeHtml(description)}</p>
+      <p class="modal-description">${formatDescriptionHtml(description)}</p>
       ${optionGroups ? `<div class="variant-options">${optionGroups}</div>` : ""}
       <div class="variant-summary">
         <span>${t("currentPrice")}</span>
         <strong>${money(price)}</strong>
-        <p>${optionText ? escapeHtml(localized(optionText)) : t("basicChoice")} · ${escapeHtml(variantStockText(variant))}</p>
+        <p>${optionText ? escapeHtml(displayText(localized(optionText))) : t("basicChoice")} · ${escapeHtml(displayText(variantStockText(variant)))}</p>
       </div>
       <div class="modal-quantity" aria-label="${t("modalQuantityAria")}">
         <div>
           <span>${t("modalQuantityLabel")}</span>
-          <strong>${t("pieces", { count: formatter.format(modalQuantity) })}</strong>
+          <strong>${t("pieces", { count: displayText(formatter.format(modalQuantity)) })}</strong>
         </div>
         <div class="quantity-stepper">
           <button
@@ -1570,7 +1648,7 @@ function renderProductModal() {
           >
             -
           </button>
-          <output>${formatter.format(modalQuantity)}</output>
+          <output>${displayText(formatter.format(modalQuantity))}</output>
           <button
             class="quantity-step"
             type="button"
@@ -1593,7 +1671,7 @@ function renderProductModal() {
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <path d="M12 5v14M5 12h14" />
         </svg>
-        ${t("addToCart", { count: formatter.format(modalQuantity) })}
+        ${t("addToCart", { count: displayText(formatter.format(modalQuantity)) })}
       </button>
     </div>
   `;
@@ -1802,10 +1880,10 @@ function cartTotalAmount() {
 function orderLinesFromCart() {
   return cartEntries()
     .map((item) => {
-      const productName = localized(item.product.name);
+      const productName = displayText(localized(item.product.name));
       const priceText = item.price === null ? t("askPrice") : money(item.price);
       const selected = item.optionText ? ` (${item.optionText})` : "";
-      return `- ${productName}${selected}: ${formatter.format(item.qty)} × ${priceText}`;
+      return `- ${productName}${selected}: ${displayText(formatter.format(item.qty))} × ${priceText}`;
     })
     .join("\n");
 }
@@ -2086,17 +2164,17 @@ function renderCart() {
 
   cartItems.innerHTML = entries
     .map((item) => {
-      const productName = localized(item.product.name);
+      const productName = displayText(localized(item.product.name));
       return `
         <article class="cart-item">
           <div>
             <h3>${escapeHtml(productName)}</h3>
             ${item.optionText ? `<p class="cart-variant">${escapeHtml(item.optionText)}</p>` : ""}
-            <p>${money(item.price)} × ${formatter.format(item.qty)}</p>
+            <p>${money(item.price)} × ${displayText(formatter.format(item.qty))}</p>
           </div>
           <div class="qty-control" aria-label="${escapeHtml(t("quantityAdjustAria", { name: productName }))}">
             <button type="button" data-qty="${escapeHtml(item.key)}" data-delta="-1" aria-label="${t("decreaseQuantity")}">−</button>
-            <span>${formatter.format(item.qty)}</span>
+            <span>${displayText(formatter.format(item.qty))}</span>
             <button type="button" data-qty="${escapeHtml(item.key)}" data-delta="1" aria-label="${t("increaseQuantity")}">+</button>
           </div>
         </article>
@@ -2106,10 +2184,10 @@ function renderCart() {
 
   const orderLines = entries
     .map((item) => {
-      const productName = localized(item.product.name);
+      const productName = displayText(localized(item.product.name));
       const priceText = item.price === null ? t("askPrice") : money(item.price);
       const selected = item.optionText ? ` (${item.optionText})` : "";
-      return `- ${productName}${selected}: ${formatter.format(item.qty)} × ${priceText}`;
+      return `- ${productName}${selected}: ${displayText(formatter.format(item.qty))} × ${priceText}`;
     })
     .join("\n");
   const message = isEnglish()
@@ -2501,8 +2579,8 @@ function addToCart(productId, variantId = "", amount = 1) {
   saveCartNow();
   const selected = variantOptionText(variant);
   showToast(t("addedToast", {
-    count: formatter.format(requestedAmount),
-    name: localized(product.name),
+    count: displayText(formatter.format(requestedAmount)),
+    name: displayText(localized(product.name)),
     option: selected ? ` - ${selected}` : ""
   }));
 }
@@ -2625,6 +2703,31 @@ function closeHeaderSearch(force = false) {
   headerSearch?.classList.remove("is-open");
   searchToggle?.setAttribute("aria-expanded", "false");
 }
+
+function isProtectedImageTarget(target) {
+  return Boolean(
+    target?.closest?.(
+      ".product-gallery, .product-modal-media, .image-lightbox-stage, .product-photo, .modal-product-photo, .product-thumb img, .modal-thumb img"
+    )
+  );
+}
+
+document.addEventListener("contextmenu", (event) => {
+  if (!isProtectedImageTarget(event.target)) return;
+  event.preventDefault();
+  showToast(t("imageProtected"));
+});
+
+document.addEventListener("dragstart", (event) => {
+  if (!event.target.closest?.("img")) return;
+  event.preventDefault();
+});
+
+document.addEventListener("copy", (event) => {
+  if (!isProtectedImageTarget(event.target)) return;
+  event.preventDefault();
+  showToast(t("imageProtected"));
+});
 
 filterButtons.forEach((button) => {
   button.addEventListener("click", (event) => {
