@@ -1,3 +1,35 @@
+@font-face {
+  font-display: swap;
+  font-family: "GE SS TWO";
+  font-style: normal;
+  font-weight: 400;
+  src: url("assets/fonts/ge-ss-two-bold.otf") format("opentype");
+}
+
+@font-face {
+  font-display: swap;
+  font-family: "GE SS TWO";
+  font-style: normal;
+  font-weight: 700;
+  src: url("assets/fonts/ge-ss-two-bold.otf") format("opentype");
+}
+
+@font-face {
+  font-display: swap;
+  font-family: "GE SS TWO";
+  font-style: normal;
+  font-weight: 800;
+  src: url("assets/fonts/ge-ss-two-bold.otf") format("opentype");
+}
+
+@font-face {
+  font-display: swap;
+  font-family: "GE SS TWO";
+  font-style: normal;
+  font-weight: 900;
+  src: url("assets/fonts/ge-ss-two-bold.otf") format("opentype");
+}
+
 :root {
   color-scheme: light;
   --ink: #10212a;
