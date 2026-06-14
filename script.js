@@ -197,6 +197,8 @@ const translations = {
     policiesEyebrow: "الشروط والأحكام",
     policiesTitle: "سياسات الدفع والخصوصية",
     policiesIntro: "هذه السياسات متاحة بالعربية والإنجليزية لتوضيح شروط الدفع، الخصوصية، التواصل، والشحن.",
+    policiesLinkText: "تقدر تراجع سياسات الاسترداد والخصوصية والتواصل والشحن من هنا.",
+    policiesLink: "عرض السياسات",
     cartEyebrow: "طلبك",
     cartTitle: "سلة المنتجات",
     paymentMethod: "طريقة الدفع",
@@ -405,6 +407,8 @@ const translations = {
     policiesEyebrow: "Terms & Policies",
     policiesTitle: "Payment and privacy policies",
     policiesIntro: "These policies are available in Arabic and English for payment terms, privacy, contact, and shipping information.",
+    policiesLinkText: "Review refund, privacy, contact, and shipping policies from here.",
+    policiesLink: "View policies",
     cartEyebrow: "Your order",
     cartTitle: "Product cart",
     paymentMethod: "Payment method",
@@ -871,6 +875,8 @@ function applyLanguage({ render = true } = {}) {
   setText("[data-policies-eyebrow]", t("policiesEyebrow"));
   setText("[data-policies-title]", t("policiesTitle"));
   setText("[data-policies-intro]", t("policiesIntro"));
+  setText("[data-policies-link-text]", t("policiesLinkText"));
+  setText("[data-policies-link]", t("policiesLink"));
 
   setText(".cart-panel-head .eyebrow", t("cartEyebrow"));
   setText(".cart-panel-head h2", t("cartTitle"));
