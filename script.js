@@ -968,6 +968,34 @@ function productIdFromUrl() {
   return hashMatch ? hashMatch[1] : "";
 }
 
+function catalogFilterFromUrl() {
+  const url = new URL(window.location.href);
+  const category = url.searchParams.get("category") || "all";
+  const validCategory = category === "all" || catalogCategoryOrder.includes(category) ? category : "all";
+  return {
+    category: validCategory,
+    label: url.searchParams.get("label") || ""
+  };
+}
+
+function categoryShareUrl(category = "all", label = "") {
+  const url = new URL(window.location.href);
+  url.searchParams.delete("product");
+  url.searchParams.set("category", category || "all");
+  if (label) url.searchParams.set("label", label);
+  else url.searchParams.delete("label");
+  url.hash = "catalog";
+  return url.toString();
+}
+
+function setCatalogUrl(category = "all", label = "", { replace = false } = {}) {
+  const nextUrl = categoryShareUrl(category, label);
+  if (nextUrl === window.location.href) return;
+  const stateData = { category, label };
+  if (replace) window.history.replaceState(stateData, "", nextUrl);
+  else window.history.pushState(stateData, "", nextUrl);
+}
+
 function setProductUrl(productId) {
   const url = productShareUrl(productId);
   if (url !== window.location.href) window.history.pushState({ productId }, "", url);
@@ -2534,14 +2562,29 @@ function updateFloatingShopButton() {
   document.body.classList.toggle("shop-toggle-floating", shouldFloat);
 }
 
-function applyCatalogFilter(category = "all", label = "") {
+function applyCatalogFilter(category = "all", label = "", { updateUrl = true, scroll = true, replaceUrl = false } = {}) {
   state.filter = category;
   state.labelFilter = label;
   updateFilterButtons();
   renderProducts();
   renderShopMenu();
   closeShopMenu();
-  document.querySelector("#catalog")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  if (updateUrl) setCatalogUrl(category, label, { replace: replaceUrl });
+  if (scroll) document.querySelector("#catalog")?.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function applyCatalogFilterFromUrl({ render = true, scroll = false } = {}) {
+  const { category, label } = catalogFilterFromUrl();
+  state.filter = category;
+  state.labelFilter = label;
+  updateFilterButtons();
+  if (render) {
+    renderProducts();
+    renderShopMenu();
+  }
+  if (scroll && window.location.hash === "#catalog") {
+    document.querySelector("#catalog")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
 }
 
 function openProductFromUrl() {
@@ -2564,6 +2607,7 @@ async function loadProducts() {
   }
   state.cart = clampCartMap(state.cart);
   saveCartToLocal(currentCartStorageKey(), state.cart);
+  applyCatalogFilterFromUrl({ render: false });
   renderProducts();
   renderShopMenu();
   renderCart();
@@ -2583,12 +2627,9 @@ function closeHeaderSearch(force = false) {
 }
 
 filterButtons.forEach((button) => {
-  button.addEventListener("click", () => {
-    state.filter = button.dataset.filter;
-    state.labelFilter = "";
-    updateFilterButtons();
-    renderProducts();
-    renderShopMenu();
+  button.addEventListener("click", (event) => {
+    event.preventDefault();
+    applyCatalogFilter(button.dataset.filter || "all", "");
   });
 });
 
@@ -2870,6 +2911,7 @@ window.addEventListener("popstate", () => {
     openProductFromUrl();
     return;
   }
+  applyCatalogFilterFromUrl({ render: true, scroll: true });
   if (document.body.classList.contains("product-open")) {
     closeProductModal({ updateUrl: false });
   }
