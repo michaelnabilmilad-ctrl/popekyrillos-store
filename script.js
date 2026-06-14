@@ -1407,7 +1407,7 @@ function renderProducts() {
                     aria-label="${escapeHtml(t("showImageLabel", { index: displayText(formatter.format(index + 1)), name: productDisplayName }))}"
                     aria-pressed="${index === 0 ? "true" : "false"}"
                   >
-                    <img src="${escapeHtml(image)}" alt="" loading="lazy" draggable="false" />
+                    <img src="${escapeHtml(image)}" alt="" loading="lazy" decoding="async" draggable="false" />
                   </button>
                 `
               )
@@ -1419,7 +1419,7 @@ function renderProducts() {
         ? `
           <div class="product-gallery ${galleryImages.length > 1 ? "has-thumbs" : ""}">
             <div class="product-gallery-main">
-              <img class="product-photo" data-main-image="${productId}" src="${escapeHtml(galleryImages[0])}" alt="${productName}" loading="lazy" draggable="false" />
+              <img class="product-photo" data-main-image="${productId}" src="${escapeHtml(galleryImages[0])}" alt="${productName}" loading="lazy" decoding="async" draggable="false" />
             </div>
             ${thumbnails}
           </div>
@@ -1539,7 +1539,7 @@ function renderProductModal() {
         data-zoom-alt="${productName}"
         aria-label="${escapeHtml(t("zoomImageLabel", { name: productDisplayName }))}"
       >
-        <img class="modal-product-photo" src="${escapeHtml(activeImage)}" alt="${productName}" draggable="false" />
+        <img class="modal-product-photo" src="${escapeHtml(activeImage)}" alt="${productName}" decoding="async" draggable="false" />
         <span class="zoom-hint">${t("zoomHint")}</span>
       </button>
       ${
@@ -1559,7 +1559,7 @@ function renderProductModal() {
                       aria-label="${escapeHtml(t("showImageLabel", { index: displayText(formatter.format(index + 1)), name: productDisplayName }))}"
                       aria-pressed="${isActive ? "true" : "false"}"
                     >
-                      <img src="${escapeHtml(image)}" alt="" loading="lazy" draggable="false" />
+                      <img src="${escapeHtml(image)}" alt="" loading="lazy" decoding="async" draggable="false" />
                     </button>
                   `;
                 })
@@ -2277,10 +2277,12 @@ function renderAuthState() {
 }
 
 function openAccountModal() {
+  state.auth.configured = hasFirebaseConfig();
   renderAuthState();
   accountModal.setAttribute("aria-hidden", "false");
   document.body.classList.add("account-open");
   accountClose?.focus();
+  ensureAuthServices();
 }
 
 function closeAccountModal() {
@@ -2676,7 +2678,7 @@ function openProductFromUrl() {
 
 async function loadProducts() {
   try {
-    const response = await fetch("products.json?v=stole-finish-order-20260613", { cache: "no-store" });
+    const response = await fetch("products.json?v=performance-20260615");
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     products = await response.json();
   } catch (error) {
@@ -3023,5 +3025,6 @@ window.addEventListener("popstate", () => {
 loadGuestCart();
 applyLanguage();
 updateFloatingShopButton();
-authInitPromise = initCustomerAuth();
+state.auth.configured = hasFirebaseConfig();
+renderAuthState();
 loadProducts();

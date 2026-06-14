@@ -245,7 +245,7 @@ body[data-lang="en"] .header-actions {
 body[data-lang="en"] .hero-media {
   background:
     linear-gradient(270deg, rgba(5, 18, 23, 0.08) 0%, rgba(5, 18, 23, 0.42) 48%, rgba(5, 18, 23, 0.9) 100%),
-    url("assets/hero-papa-kyrillos-products.png") center / cover no-repeat;
+    url("assets/optimized/hero-papa-kyrillos-products.webp") center / cover no-repeat;
 }
 
 body[data-lang="en"] .hero-copy,
@@ -417,7 +417,7 @@ body[data-lang="en"] .hero h1 {
   inset: 0;
   background:
     linear-gradient(90deg, rgba(5, 18, 23, 0.08) 0%, rgba(5, 18, 23, 0.42) 48%, rgba(5, 18, 23, 0.9) 100%),
-    url("assets/hero-papa-kyrillos-products.png") center / cover no-repeat;
+    url("assets/optimized/hero-papa-kyrillos-products.webp") center / cover no-repeat;
 }
 
 .hero-copy {
@@ -815,7 +815,7 @@ body[data-lang="en"] .category-art {
   min-height: 440px;
   background:
     linear-gradient(90deg, rgba(7, 61, 66, 0.04), rgba(7, 61, 66, 0.22)),
-    url("assets/featured-service-bundle.png") center / cover no-repeat;
+    url("assets/optimized/featured-service-bundle.webp") center / cover no-repeat;
 }
 
 .featured-copy {
@@ -2767,7 +2767,7 @@ body.account-open .scrim {
     background:
       linear-gradient(180deg, rgba(5, 18, 23, 0.24) 0%, rgba(5, 18, 23, 0.42) 42%, rgba(5, 18, 23, 0.78) 100%),
       linear-gradient(270deg, rgba(5, 18, 23, 0.04) 0%, rgba(5, 18, 23, 0.26) 42%, rgba(5, 18, 23, 0.82) 100%),
-      url("assets/hero-papa-kyrillos-products.png") 35% center / cover no-repeat;
+      url("assets/optimized/hero-papa-kyrillos-products.webp") 35% center / cover no-repeat;
   }
 
   body[data-lang="en"] .hero-copy {
@@ -2798,7 +2798,7 @@ body.account-open .scrim {
     background:
       linear-gradient(180deg, rgba(5, 18, 23, 0.24) 0%, rgba(5, 18, 23, 0.42) 42%, rgba(5, 18, 23, 0.78) 100%),
       linear-gradient(90deg, rgba(5, 18, 23, 0.04) 0%, rgba(5, 18, 23, 0.26) 42%, rgba(5, 18, 23, 0.82) 100%),
-      url("assets/hero-papa-kyrillos-products.png") 35% center / cover no-repeat;
+      url("assets/optimized/hero-papa-kyrillos-products.webp") 35% center / cover no-repeat;
   }
 
   .hero h1 {
