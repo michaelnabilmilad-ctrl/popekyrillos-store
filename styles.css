@@ -1213,7 +1213,7 @@ body.shop-toggle-floating .hero-shop-button svg {
   align-items: start;
   padding: 90px clamp(18px, 5vw, 74px);
   background:
-    linear-gradient(135deg, rgba(7, 61, 66, 0.98), rgba(16, 33, 42, 0.98)),
+    linear-gradient(135deg, rgba(26, 39, 81, 0.98), rgba(10, 18, 45, 0.98)),
     repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.04) 0 1px, transparent 1px 84px);
   color: #fff;
 }
