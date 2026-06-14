@@ -1784,6 +1784,8 @@ body[data-lang="en"] .policy-lang[lang="en"] {
   left: 18px;
   z-index: 82;
   background: #fff;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.24);
+  touch-action: manipulation;
 }
 
 .image-lightbox-stage {
@@ -2990,16 +2992,28 @@ body.account-open .scrim {
   }
 
   .image-lightbox {
-    padding: 12px;
+    padding: 78px 12px 16px;
   }
 
   .image-lightbox-close {
-    top: 10px;
-    left: 10px;
+    top: max(14px, calc(env(safe-area-inset-top) + 14px));
+    left: max(14px, calc(env(safe-area-inset-left) + 14px));
+    z-index: 90;
+    width: 60px;
+    height: 60px;
+    border: 2px solid rgba(26, 39, 81, 0.18);
+    background: #fff;
+    color: var(--navy);
+    box-shadow: 0 16px 34px rgba(0, 0, 0, 0.32);
+  }
+
+  .image-lightbox-close svg {
+    width: 28px;
+    height: 28px;
   }
 
   .image-lightbox-stage img {
-    max-height: calc(100vh - 62px);
+    max-height: calc(100dvh - 108px);
   }
 
   .account-modal {
