@@ -1184,6 +1184,18 @@ function getProductImages(product) {
   return [];
 }
 
+function productDetailImage(image = "") {
+  const value = String(image || "");
+  if (!value) return "";
+  if (value.startsWith("assets/optimized/products/")) {
+    return value.replace(/^assets\/optimized\/products\//, "assets/detail/products/");
+  }
+  if (value.startsWith("assets/products/")) {
+    return value.replace(/^assets\/products\//, "assets/detail/products/").replace(/\.(?:jpe?g|png)$/i, ".webp");
+  }
+  return value;
+}
+
 function getProductVariants(product) {
   if (Array.isArray(product?.variants) && product.variants.length) return product.variants;
 
@@ -1530,6 +1542,7 @@ function renderProductModal() {
   const variantImage = variant?.image || "";
   const activeImage = state.modal.image || variantImage || images[0] || "";
   const modalImages = activeImage && !images.includes(activeImage) ? [activeImage, ...images] : images;
+  const activeDetailImage = productDetailImage(activeImage);
   const optionText = variantOptionText(variant);
   const price = variantPrice(variant, product);
   const isAvailable = isVariantAvailable(variant);
@@ -1551,11 +1564,11 @@ function renderProductModal() {
       <button
         class="modal-photo-frame modal-photo-zoom"
         type="button"
-        data-zoom-image="${escapeHtml(activeImage)}"
+        data-zoom-image="${escapeHtml(activeDetailImage)}"
         data-zoom-alt="${productName}"
         aria-label="${escapeHtml(t("zoomImageLabel", { name: productDisplayName }))}"
       >
-        <img class="modal-product-photo" src="${escapeHtml(activeImage)}" alt="${productName}" width="800" height="800" decoding="async" draggable="false" />
+        <img class="modal-product-photo" src="${escapeHtml(activeDetailImage)}" alt="${productName}" width="1400" height="1400" decoding="async" draggable="false" />
         <span class="zoom-hint">${t("zoomHint")}</span>
       </button>
       ${
@@ -1711,7 +1724,7 @@ function openProductModal(productId, { updateUrl = true } = {}) {
 
 function openImageLightbox(src, alt = "") {
   if (!src) return;
-  imageLightboxImage.src = src;
+  imageLightboxImage.src = productDetailImage(src);
   imageLightboxImage.alt = alt;
   imageLightbox.setAttribute("aria-hidden", "false");
   document.body.classList.add("image-zoom-open");
