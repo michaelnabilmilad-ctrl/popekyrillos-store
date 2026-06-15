@@ -1183,6 +1183,19 @@ body[data-lang="en"] .category-art {
   text-align: center;
 }
 
+.load-more-wrap {
+  display: flex;
+  justify-content: center;
+  margin: 28px auto 0;
+}
+
+.load-more-button {
+  min-width: 180px;
+  border-color: rgba(26, 39, 81, 0.22);
+  color: var(--navy);
+  font-weight: 900;
+}
+
 .services {
   display: block;
   padding: 90px clamp(18px, 5vw, 74px);
@@ -1418,6 +1431,52 @@ body[data-lang="en"] .services-copy {
 }
 
 .policies:target .policy-grid {
+  display: grid;
+}
+
+.policy-footer-links {
+  padding-block: 44px;
+}
+
+.policy-footer-links .section-head {
+  margin-bottom: 18px;
+}
+
+.policy-footer-nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.policy-footer-nav a {
+  padding: 10px 14px;
+  border: 1px solid rgba(26, 39, 81, 0.18);
+  border-radius: 999px;
+  background: #fffaf0;
+  color: var(--navy);
+  font-size: 14px;
+  font-weight: 900;
+  text-decoration: none;
+}
+
+.policy-footer-nav a:hover,
+.policy-footer-nav a:focus-visible {
+  border-color: var(--burgundy);
+  color: var(--burgundy);
+}
+
+.policies-page .policies {
+  padding-top: 120px;
+}
+
+.policies-page .policy-link-card {
+  display: none;
+}
+
+.policies-page .policy-grid {
   display: grid;
 }
 

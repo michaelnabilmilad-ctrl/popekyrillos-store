@@ -1,6 +1,7 @@
 const whatsappNumber = "201016125589";
 const paymobPaymentLink = "https://accept.paymob.com/payme/popekyrillosstore";
 const firebaseSdkVersion = "10.14.1";
+const productBatchSize = 12;
 const guestCartStorageKey = "pope-kyrillos-cart:guest";
 const userCartStoragePrefix = "pope-kyrillos-cart:user:";
 const languageStorageKey = "pope-kyrillos-language";
@@ -44,6 +45,7 @@ const state = {
   filter: "all",
   labelFilter: "",
   search: "",
+  visibleProductCount: productBatchSize,
   language: localStorage.getItem(languageStorageKey) === "en" ? "en" : "ar",
   cart: new Map(),
   paymentMethod: "instapay",
@@ -73,6 +75,7 @@ const state = {
 
 let formatter = new Intl.NumberFormat("ar-EG");
 const productGrid = document.querySelector("[data-products]");
+const loadMoreButton = document.querySelector("[data-load-more]");
 const filterButtons = document.querySelectorAll("[data-filter]");
 const searchInput = document.querySelector("#product-search");
 const headerSearch = document.querySelector("[data-header-search]");
@@ -927,6 +930,7 @@ function applyLanguage({ render = true } = {}) {
 
   if (searchInput) searchInput.placeholder = t("searchPlaceholder");
   searchToggle?.setAttribute("aria-label", t("searchPlaceholder"));
+  if (loadMoreButton) loadMoreButton.textContent = isEnglish() ? "Load more" : "عرض المزيد";
 
   setText("#services .eyebrow", t("servicesEyebrow"));
   setText("#services-title", t("servicesTitle"));
@@ -1382,15 +1386,17 @@ function getFilteredProducts() {
 }
 
 function renderProducts() {
-  const items = getFilteredProducts();
+  const filteredItems = getFilteredProducts();
+  const items = filteredItems.slice(0, state.visibleProductCount);
 
   if (!items.length) {
     productGrid.innerHTML = `<div class="empty-state">${t("emptyProducts")}</div>`;
+    if (loadMoreButton) loadMoreButton.hidden = true;
     return;
   }
 
   productGrid.innerHTML = items
-    .map((product) => {
+    .map((product, cardIndex) => {
       const galleryImages = getProductImages(product);
       const hasImage = galleryImages.length > 0;
       const hasChoices = hasProductChoices(product);
@@ -1403,6 +1409,8 @@ function renderProducts() {
       const actionLabel = !isAvailable ? t("unavailable") : hasChoices ? t("choose") : t("add");
       const actionAttribute = hasChoices ? `data-view-product="${productId}"` : `data-add="${productId}"`;
       const disabledAttribute = isAvailable ? "" : "disabled aria-disabled=\"true\"";
+      const imageLoading = cardIndex === 0 ? "eager" : "lazy";
+      const imagePriority = cardIndex === 0 ? " fetchpriority=\"high\"" : "";
       const thumbnails = galleryImages.length > 1
         ? `
           <div class="product-thumbs" aria-label="${escapeHtml(t("galleryLabel", { name: productDisplayName }))}">
@@ -1417,7 +1425,7 @@ function renderProducts() {
                     aria-label="${escapeHtml(t("showImageLabel", { index: displayText(formatter.format(index + 1)), name: productDisplayName }))}"
                     aria-pressed="${index === 0 ? "true" : "false"}"
                   >
-                    <img src="${escapeHtml(image)}" alt="" loading="lazy" decoding="async" draggable="false" />
+                    <img src="${escapeHtml(image)}" alt="" width="72" height="72" loading="lazy" decoding="async" draggable="false" />
                   </button>
                 `
               )
@@ -1429,7 +1437,7 @@ function renderProducts() {
         ? `
           <div class="product-gallery ${galleryImages.length > 1 ? "has-thumbs" : ""}">
             <div class="product-gallery-main">
-              <img class="product-photo" data-main-image="${productId}" src="${escapeHtml(galleryImages[0])}" alt="${productName}" loading="lazy" decoding="async" draggable="false" />
+              <img class="product-photo" data-main-image="${productId}" src="${escapeHtml(galleryImages[0])}" alt="${productName}" width="800" height="800" loading="${imageLoading}" decoding="async"${imagePriority} draggable="false" />
             </div>
             ${thumbnails}
           </div>
@@ -1465,6 +1473,10 @@ function renderProducts() {
       `;
     })
     .join("");
+
+  if (loadMoreButton) {
+    loadMoreButton.hidden = filteredItems.length <= state.visibleProductCount;
+  }
 }
 
 function normalizeModalSelection(product, preferredOption = "") {
@@ -1543,7 +1555,7 @@ function renderProductModal() {
         data-zoom-alt="${productName}"
         aria-label="${escapeHtml(t("zoomImageLabel", { name: productDisplayName }))}"
       >
-        <img class="modal-product-photo" src="${escapeHtml(activeImage)}" alt="${productName}" decoding="async" draggable="false" />
+        <img class="modal-product-photo" src="${escapeHtml(activeImage)}" alt="${productName}" width="800" height="800" decoding="async" draggable="false" />
         <span class="zoom-hint">${t("zoomHint")}</span>
       </button>
       ${
@@ -1563,7 +1575,7 @@ function renderProductModal() {
                       aria-label="${escapeHtml(t("showImageLabel", { index: displayText(formatter.format(index + 1)), name: productDisplayName }))}"
                       aria-pressed="${isActive ? "true" : "false"}"
                     >
-                      <img src="${escapeHtml(image)}" alt="" loading="lazy" decoding="async" draggable="false" />
+                      <img src="${escapeHtml(image)}" alt="" width="72" height="72" loading="lazy" decoding="async" draggable="false" />
                     </button>
                   `;
                 })
@@ -2649,6 +2661,7 @@ function updateFloatingShopButton() {
 function applyCatalogFilter(category = "all", label = "", { updateUrl = true, scroll = true, replaceUrl = false } = {}) {
   state.filter = category;
   state.labelFilter = label;
+  state.visibleProductCount = productBatchSize;
   updateFilterButtons();
   renderProducts();
   renderShopMenu();
@@ -2661,6 +2674,7 @@ function applyCatalogFilterFromUrl({ render = true, scroll = false } = {}) {
   const { category, label } = catalogFilterFromUrl();
   state.filter = category;
   state.labelFilter = label;
+  state.visibleProductCount = productBatchSize;
   updateFilterButtons();
   if (render) {
     renderProducts();
@@ -2752,8 +2766,14 @@ searchInput?.addEventListener("focus", () => openHeaderSearch(false));
 
 searchInput?.addEventListener("input", (event) => {
   state.search = event.target.value;
+  state.visibleProductCount = productBatchSize;
   renderProducts();
   if (state.search.trim()) openHeaderSearch(false);
+});
+
+loadMoreButton?.addEventListener("click", () => {
+  state.visibleProductCount += productBatchSize;
+  renderProducts();
 });
 
 document.addEventListener("click", (event) => {
