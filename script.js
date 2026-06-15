@@ -175,14 +175,19 @@ const translations = {
     catalogTitle: "منتجات مختارة للطلب",
     searchPlaceholder: "ابحث عن منتج",
     servicesEyebrow: "خدمات الكنائس",
-    servicesTitle: "نجهز طلبك بنفس ترتيب الخدمة",
-    servicesText: "سواء طلب موسمي، مقاس خاص، أو كميات لمدارس الأحد، نرتب لك المنتجات في قائمة واضحة ونجهزها حسب الميعاد.",
-    service1Title: "قوائم توريد",
-    service1Text: "قائمة بالكميات والأسعار حسب احتياج الكنيسة أو الاجتماع.",
-    service2Title: "تطريز وتخصيص",
-    service2Text: "ألوان ومقاسات وأسماء كنائس على الأقمشة والمفارش.",
-    service3Title: "هدايا خدمة",
-    service3Text: "تجميعات كتب وأيقونات وتذكارات للمؤتمرات والفصول.",
+    servicesTitle: "طلبات الكنائس والخدام",
+    servicesText: "محتاج كمية كبيرة، هدايا اجتماع، كتب لمكتبة الكنيسة أو منتج بمواصفات خاصة؟ ابعت لنا التفاصيل وسنتواصل معك بعرض سعر وموعد التجهيز.",
+    service1Number: "١",
+    service1Title: "أرسل تفاصيل الطلب",
+    service1Text: "حدد المنتجات والكميات والمناسبة والميزانية.",
+    service2Number: "٢",
+    service2Title: "استلم عرض السعر",
+    service2Text: "نرسل لك السعر ومدة التجهيز وخيارات التوصيل.",
+    service3Number: "٣",
+    service3Title: "نجهز ونوصل",
+    service3Text: "نبدأ تجهيز الطلب بعد التأكيد ونبلغك عند الشحن.",
+    servicesQuoteCta: "اطلب عرض سعر الآن",
+    servicesWhatsappCta: "تواصل معنا على واتساب",
     contactEyebrow: "تواصل",
     contactTitle: "اطلب عرض سعر أو منتج غير موجود",
     nameLabel: "الاسم",
@@ -386,14 +391,19 @@ const translations = {
     catalogTitle: "Selected products to order",
     searchPlaceholder: "Search products",
     servicesEyebrow: "Church services",
-    servicesTitle: "We prepare your order around your service needs",
-    servicesText: "Seasonal orders, custom sizes, or Sunday School quantities can be arranged in a clear list and prepared on time.",
-    service1Title: "Supply lists",
-    service1Text: "Quantities and prices based on church or meeting needs.",
-    service2Title: "Embroidery and custom work",
-    service2Text: "Colors, sizes, and church names on fabrics and altar cloths.",
-    service3Title: "Ministry gifts",
-    service3Text: "Bundles of books, icons, and keepsakes for conferences and classes.",
+    servicesTitle: "Church and ministry requests",
+    servicesText: "Need a large quantity, meeting gifts, books for a church library, or a custom product? Send us the details and we will reply with a quote and preparation time.",
+    service1Number: "1",
+    service1Title: "Send request details",
+    service1Text: "Share products, quantities, occasion, and budget.",
+    service2Number: "2",
+    service2Title: "Receive a quote",
+    service2Text: "We send price, preparation time, and delivery options.",
+    service3Number: "3",
+    service3Title: "Prepare and deliver",
+    service3Text: "We start after confirmation and update you on shipping.",
+    servicesQuoteCta: "Request a quote now",
+    servicesWhatsappCta: "Contact us on WhatsApp",
     contactEyebrow: "Contact",
     contactTitle: "Request a quote or a product not listed",
     nameLabel: "Name",
@@ -923,17 +933,21 @@ function applyLanguage({ render = true } = {}) {
   setText(".services-copy p:not(.eyebrow)", t("servicesText"));
   const serviceArticles = document.querySelectorAll(".service-list article");
   [
-    ["service1Title", "service1Text"],
-    ["service2Title", "service2Text"],
-    ["service3Title", "service3Text"]
-  ].forEach(([titleKey, textKey], index) => {
+    ["service1Number", "service1Title", "service1Text"],
+    ["service2Number", "service2Title", "service2Text"],
+    ["service3Number", "service3Title", "service3Text"]
+  ].forEach(([numberKey, titleKey, textKey], index) => {
     const article = serviceArticles[index];
     if (!article) return;
+    const number = article.querySelector(".service-number");
     const title = article.querySelector("h3");
     const text = article.querySelector("p");
+    if (number) number.textContent = t(numberKey);
     if (title) title.textContent = t(titleKey);
     if (text) text.textContent = t(textKey);
   });
+  setText("[data-services-quote]", t("servicesQuoteCta"));
+  setText("[data-services-whatsapp]", t("servicesWhatsappCta"));
 
   setText("#contact .eyebrow", t("contactEyebrow"));
   setText("#contact-title", t("contactTitle"));
