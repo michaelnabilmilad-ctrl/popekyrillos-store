@@ -1468,12 +1468,30 @@ body[data-lang="en"] .policy-lang[lang="en"] {
   line-height: 1.25;
 }
 
+.policy-lang h4 {
+  margin: 18px 0 8px;
+  color: var(--navy);
+  font-size: 16px;
+  line-height: 1.35;
+}
+
 .policy-lang p,
-.policy-contact {
+.policy-lang ul {
   margin: 0;
   color: var(--muted);
   font-size: 14px;
   line-height: 1.85;
+}
+
+.policy-lang ul {
+  display: grid;
+  gap: 6px;
+  margin: 8px 0 0;
+  padding-inline-start: 20px;
+}
+
+.policy-lang li::marker {
+  color: var(--gold);
 }
 
 .policy-lang p + p {
@@ -1483,7 +1501,11 @@ body[data-lang="en"] .policy-lang[lang="en"] {
 .policy-contact {
   display: grid;
   gap: 7px;
+  margin: 0;
   padding: 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.85;
   list-style: none;
 }
 
