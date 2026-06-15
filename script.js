@@ -1377,14 +1377,10 @@ function renderProducts() {
 
   productGrid.innerHTML = items
     .map((product) => {
-      const tags = Array.isArray(product.tags) ? product.tags : [];
       const galleryImages = getProductImages(product);
       const hasImage = galleryImages.length > 0;
       const hasChoices = hasProductChoices(product);
       const isAvailable = hasAvailableVariant(product);
-      const localizedDescription = displayText(localized(product.description || ""));
-      const fullDescription = escapeHtml(localizedDescription);
-      const shortDescription = escapeHtml(compactText(localizedDescription));
       const priceText = productPriceText(product);
       const stockText = productStockText(product);
       const productDisplayName = displayText(localized(product.name));
@@ -1438,15 +1434,9 @@ function renderProducts() {
               <span class="stock">${escapeHtml(stockText)}</span>
             </div>
             <h3>${productName}</h3>
-            <p class="product-summary">${shortDescription}</p>
-            <details class="product-details">
-              <summary>${t("detailsAndPrices")}</summary>
-              <p>${fullDescription}</p>
-            </details>
-            <div class="product-tags">
-              ${tags.map((tag) => `<span>${escapeHtml(localized(tag))}</span>`).join("")}
-              ${hasChoices ? `<span>${t("choices")}</span>` : ""}
-            </div>
+            <button class="product-details" type="button" data-view-product="${productId}">
+              <span>${t("detailsAndPrices")}</span>
+            </button>
             <div class="product-bottom">
               <span class="price">${escapeHtml(priceText)}</span>
               <button class="button primary add-button" type="button" ${actionAttribute} ${disabledAttribute}>
