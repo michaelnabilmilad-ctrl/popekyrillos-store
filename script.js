@@ -2810,6 +2810,11 @@ productGrid.addEventListener("click", (event) => {
 });
 
 productModal.addEventListener("click", (event) => {
+  if (event.target === productModal) {
+    closeProductModal();
+    return;
+  }
+
   const closeButton = event.target.closest("[data-product-modal-close]");
   if (closeButton) {
     closeProductModal();
