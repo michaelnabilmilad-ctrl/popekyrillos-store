@@ -45,6 +45,9 @@ const state = {
   filter: "all",
   labelFilter: "",
   search: "",
+  priceFilter: "all",
+  choicesOnly: false,
+  sortFilter: "default",
   visibleProductCount: productBatchSize,
   language: localStorage.getItem(languageStorageKey) === "en" ? "en" : "ar",
   cart: new Map(),
@@ -78,6 +81,10 @@ const productGrid = document.querySelector("[data-products]");
 const loadMoreButton = document.querySelector("[data-load-more]");
 const filterButtons = document.querySelectorAll("[data-filter]");
 const searchInput = document.querySelector("#product-search");
+const priceFilterSelect = document.querySelector("[data-price-filter]");
+const choiceFilterInput = document.querySelector("[data-choice-filter]");
+const sortFilterSelect = document.querySelector("[data-sort-filter]");
+const resetCatalogFilters = document.querySelector("[data-reset-catalog-filters]");
 const headerSearch = document.querySelector("[data-header-search]");
 const searchToggle = document.querySelector("[data-search-toggle]");
 const header = document.querySelector(".site-header");
@@ -177,6 +184,17 @@ const translations = {
     catalogEyebrow: "الكتالوج",
     catalogTitle: "منتجات مختارة للطلب",
     searchPlaceholder: "ابحث عن منتج",
+    filterPriceLabel: "السعر",
+    filterSortLabel: "الترتيب",
+    choiceFilterLabel: "فيه اختيارات",
+    resetFilters: "مسح الفلاتر",
+    priceAll: "كل الأسعار",
+    priceUnder1000: "أقل من 1000 ج.م",
+    price1000to5000: "من 1000 لـ 5000 ج.م",
+    priceOver5000: "أكثر من 5000 ج.م",
+    sortDefault: "الأنسب",
+    sortPriceAsc: "الأرخص أولاً",
+    sortPriceDesc: "الأعلى سعراً",
     servicesEyebrow: "خدمات الكنائس",
     servicesTitle: "طلبات الكنائس والخدام",
     servicesText: "محتاج كمية كبيرة، هدايا اجتماع، كتب لمكتبة الكنيسة أو منتج بمواصفات خاصة؟ ابعت لنا التفاصيل وسنتواصل معك بعرض سعر وموعد التجهيز.",
@@ -393,6 +411,17 @@ const translations = {
     catalogEyebrow: "Catalog",
     catalogTitle: "Selected products to order",
     searchPlaceholder: "Search products",
+    filterPriceLabel: "Price",
+    filterSortLabel: "Sort",
+    choiceFilterLabel: "Has options",
+    resetFilters: "Clear filters",
+    priceAll: "All prices",
+    priceUnder1000: "Under EGP 1,000",
+    price1000to5000: "EGP 1,000 to 5,000",
+    priceOver5000: "Over EGP 5,000",
+    sortDefault: "Recommended",
+    sortPriceAsc: "Lowest price first",
+    sortPriceDesc: "Highest price first",
     servicesEyebrow: "Church services",
     servicesTitle: "Church and ministry requests",
     servicesText: "Need a large quantity, meeting gifts, books for a church library, or a custom product? Send us the details and we will reply with a quote and preparation time.",
@@ -806,6 +835,26 @@ function updateFilterButtons() {
   });
 }
 
+function updateCatalogFilterText() {
+  const textMap = {
+    "[data-filter-price-label]": "filterPriceLabel",
+    "[data-filter-sort-label]": "filterSortLabel",
+    "[data-choice-filter-label]": "choiceFilterLabel",
+    "[data-reset-catalog-filters]": "resetFilters",
+    "[data-price-option='all']": "priceAll",
+    "[data-price-option='under1000']": "priceUnder1000",
+    "[data-price-option='1000to5000']": "price1000to5000",
+    "[data-price-option='over5000']": "priceOver5000",
+    "[data-sort-option='default']": "sortDefault",
+    "[data-sort-option='priceAsc']": "sortPriceAsc",
+    "[data-sort-option='priceDesc']": "sortPriceDesc"
+  };
+
+  Object.entries(textMap).forEach(([selector, key]) => {
+    setText(selector, t(key));
+  });
+}
+
 function renderShopMenu() {
   if (!shopMenuList) return;
   const categories = catalogCategoryOrder.filter((category) => availableProducts().some((product) => product.category === category));
@@ -931,6 +980,7 @@ function applyLanguage({ render = true } = {}) {
   if (searchInput) searchInput.placeholder = t("searchPlaceholder");
   searchToggle?.setAttribute("aria-label", t("searchPlaceholder"));
   if (loadMoreButton) loadMoreButton.textContent = isEnglish() ? "Load more" : "عرض المزيد";
+  updateCatalogFilterText();
 
   setText("#services .eyebrow", t("servicesEyebrow"));
   setText("#services-title", t("servicesTitle"));
@@ -1148,9 +1198,45 @@ function compareCatalogProducts(first, second) {
   return first.index - second.index;
 }
 
+function compareFilteredProducts(first, second) {
+  if (state.sortFilter === "price-asc" || state.sortFilter === "price-desc") {
+    const firstPrice = productPriceRange(first.product).min ?? 999999999;
+    const secondPrice = productPriceRange(second.product).min ?? 999999999;
+    if (firstPrice !== secondPrice) {
+      return state.sortFilter === "price-desc" ? secondPrice - firstPrice : firstPrice - secondPrice;
+    }
+  }
+
+  return compareCatalogProducts(first, second);
+}
+
 function productPrice(product) {
   const value = Number(product.price);
   return Number.isFinite(value) && value > 0 ? value : null;
+}
+
+function productPriceRange(product) {
+  const prices = getProductVariants(product).map((variant) => variantPrice(variant, product)).filter((price) => price !== null);
+  if (!prices.length) {
+    const price = productPrice(product);
+    return price === null ? { min: null, max: null } : { min: price, max: price };
+  }
+
+  return {
+    min: Math.min(...prices),
+    max: Math.max(...prices)
+  };
+}
+
+function matchesPriceFilter(product) {
+  if (state.priceFilter === "all") return true;
+  const { min, max } = productPriceRange(product);
+  if (min === null || max === null) return false;
+
+  if (state.priceFilter === "under-1000") return min < 1000;
+  if (state.priceFilter === "1000-5000") return max >= 1000 && min <= 5000;
+  if (state.priceFilter === "over-5000") return max > 5000;
+  return true;
 }
 
 function variantPrice(variant, product) {
@@ -1389,15 +1475,23 @@ function getFilteredProducts() {
       if (!hasAvailableVariant(product)) return false;
       const matchesCategory = state.filter === "all" || product.category === state.filter;
       const matchesLabel = !state.labelFilter || product.label === state.labelFilter;
+      const matchesChoices = !state.choicesOnly || hasProductChoices(product);
       const tags = Array.isArray(product.tags) ? product.tags.join(" ") : "";
       const text = `${product.name} ${product.label} ${localized(product.label)} ${product.description} ${tags} ${localized(tags)}`.toLowerCase();
-      return matchesCategory && matchesLabel && (!query || text.includes(query));
+      return matchesCategory && matchesLabel && matchesChoices && matchesPriceFilter(product) && (!query || text.includes(query));
     })
-    .sort(compareCatalogProducts)
+    .sort(compareFilteredProducts)
     .map(({ product }) => product);
 }
 
+function syncCatalogFilterControls() {
+  if (priceFilterSelect) priceFilterSelect.value = state.priceFilter;
+  if (choiceFilterInput) choiceFilterInput.checked = state.choicesOnly;
+  if (sortFilterSelect) sortFilterSelect.value = state.sortFilter;
+}
+
 function renderProducts() {
+  syncCatalogFilterControls();
   const filteredItems = getFilteredProducts();
   const items = filteredItems.slice(0, state.visibleProductCount);
 
@@ -2782,6 +2876,39 @@ searchInput?.addEventListener("input", (event) => {
   state.visibleProductCount = productBatchSize;
   renderProducts();
   if (state.search.trim()) openHeaderSearch(false);
+});
+
+priceFilterSelect?.addEventListener("change", (event) => {
+  state.priceFilter = event.target.value || "all";
+  state.visibleProductCount = productBatchSize;
+  renderProducts();
+});
+
+choiceFilterInput?.addEventListener("change", (event) => {
+  state.choicesOnly = event.target.checked;
+  state.visibleProductCount = productBatchSize;
+  renderProducts();
+});
+
+sortFilterSelect?.addEventListener("change", (event) => {
+  state.sortFilter = event.target.value || "default";
+  state.visibleProductCount = productBatchSize;
+  renderProducts();
+});
+
+resetCatalogFilters?.addEventListener("click", () => {
+  state.filter = "all";
+  state.labelFilter = "";
+  state.search = "";
+  state.priceFilter = "all";
+  state.choicesOnly = false;
+  state.sortFilter = "default";
+  state.visibleProductCount = productBatchSize;
+  if (searchInput) searchInput.value = "";
+  closeHeaderSearch(true);
+  renderProducts();
+  renderShopMenu();
+  setCatalogUrl("all", "");
 });
 
 loadMoreButton?.addEventListener("click", () => {

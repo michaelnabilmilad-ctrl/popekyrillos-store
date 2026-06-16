@@ -1623,171 +1623,97 @@
     ]
   },
   {
-    "id": "old-9841772396851",
-    "name": "أنبوبة رفات قديسين زان مقاس 5",
+    "id": "reliquary-tubes-papa-kyrillos",
+    "name": "أنابيب رفات قديسين زان",
     "category": "brass",
     "label": "نحاسيات",
-    "description": "أنابيب رفات القديسين مصنوعة من خشب الزان عالي الجودة، تتميز بتصميم مجوف من الداخل وفتحة علوية تسهل الاستخدام والحماية. توفر هذه الأنابيب متانة فائقة ومقاومة طبيعية بفضل خشب الزان المختار بعناية، مما يضمن حفظ الرفات بصورة آمنة ومحترمة. تصميمها الدقيق يعكس خبرة في الصنع ويضمن استخدامها في البيئات الروحية بأعلى معايير الجودة.\nمقاس 37*15",
-    "price": 462,
-    "priceNote": "",
-    "stock": "متاح",
-    "badge": "نحاسيات",
-    "image": "assets/products/gallery/029-9841772396851-01.jpg",
-    "url": "https://popekyrillos.store/en/products/أنبوبة-رفات-قديسين-زان-مقاس-5",
-    "tags": [
-      "نحاسيات"
-    ],
-    "images": [
-      "assets/products/gallery/029-9841772396851-01.jpg",
-      "assets/products/gallery/029-9841772396851-02.jpg",
-      "assets/products/gallery/029-9841772396851-03.jpg"
-    ],
-    "options": [],
-    "variants": [
-      {
-        "id": "old-52135783694643",
-        "title": "الاختيار الافتراضي",
-        "options": {},
-        "price": 462,
-        "compareAtPrice": null,
-        "available": true,
-        "image": null,
-        "sku": ""
-      }
-    ]
-  },
-  {
-    "id": "old-9841770725683",
-    "name": "أنبوبة رفات قديسين زان مقاس 4",
-    "category": "brass",
-    "label": "نحاسيات",
-    "description": "أنابيب رفات القديسين مصنوعة من خشب الزان عالي الجودة، تتميز بتصميم مجوف من الداخل وفتحة علوية تسهل الاستخدام والحماية. توفر هذه الأنابيب متانة فائقة ومقاومة طبيعية بفضل خشب الزان المختار بعناية، مما يضمن حفظ الرفات بصورة آمنة ومحترمة. تصميمها الدقيق يعكس خبرة في الصنع ويضمن استخدامها في البيئات الروحية بأعلى معايير الجودة.\nمقاسها 37*12",
-    "price": 330,
-    "priceNote": "",
-    "stock": "متاح",
-    "badge": "نحاسيات",
-    "image": "assets/products/gallery/030-9841770725683-01.jpg",
-    "url": "https://popekyrillos.store/en/products/أنبوبة-رفات-قديسين-زان-مقاس-4",
-    "tags": [
-      "نحاسيات"
-    ],
-    "images": [
-      "assets/products/gallery/030-9841770725683-01.jpg",
-      "assets/products/gallery/030-9841770725683-02.jpg",
-      "assets/products/gallery/030-9841770725683-03.jpg"
-    ],
-    "options": [],
-    "variants": [
-      {
-        "id": "old-52135629488435",
-        "title": "الاختيار الافتراضي",
-        "options": {},
-        "price": 330,
-        "compareAtPrice": null,
-        "available": true,
-        "image": null,
-        "sku": ""
-      }
-    ]
-  },
-  {
-    "id": "old-9841769054515",
-    "name": "أنبوبة رفات قديسين زان مقاس 3",
-    "category": "brass",
-    "label": "نحاسيات",
-    "description": "أنابيب رفات القديسين مصنوعة من خشب الزان عالي الجودة، تتميز بتصميم مجوف من الداخل وفتحة علوية تسهل الاستخدام والحماية. توفر هذه الأنابيب متانة فائقة ومقاومة طبيعية بفضل خشب الزان المختار بعناية، مما يضمن حفظ الرفات بصورة آمنة ومحترمة. تصميمها الدقيق يعكس خبرة في الصنع ويضمن استخدامها في البيئات الروحية بأعلى معايير الجودة.\nمقاس 37*9.5",
-    "price": 234,
-    "priceNote": "",
-    "stock": "متاح",
-    "badge": "نحاسيات",
-    "image": "assets/products/gallery/031-9841769054515-01.jpg",
-    "url": "https://popekyrillos.store/en/products/أنبوبة-رفات-قديسين-زان-مقاس-3",
-    "tags": [
-      "نحاسيات"
-    ],
-    "images": [
-      "assets/products/gallery/031-9841769054515-01.jpg",
-      "assets/products/gallery/031-9841769054515-02.jpg",
-      "assets/products/gallery/031-9841769054515-03.jpg"
-    ],
-    "options": [],
-    "variants": [
-      {
-        "id": "old-52135475642675",
-        "title": "الاختيار الافتراضي",
-        "options": {},
-        "price": 234,
-        "compareAtPrice": null,
-        "available": true,
-        "image": null,
-        "sku": ""
-      }
-    ]
-  },
-  {
-    "id": "old-9841765515571",
-    "name": "أنبوبة رفات قديسين زان مقاس فوق الزيرو",
-    "category": "brass",
-    "label": "نحاسيات",
-    "description": "أنابيب رفات القديسين مصنوعة من خشب الزان عالي الجودة، تتميز بتصميم مجوف من الداخل وفتحة علوية تسهل الاستخدام والحماية. توفر هذه الأنابيب متانة فائقة ومقاومة طبيعية بفضل خشب الزان المختار بعناية، مما يضمن حفظ الرفات بصورة آمنة ومحترمة. تصميمها الدقيق يعكس خبرة في الصنع ويضمن استخدامها في البيئات الروحية بأعلى معايير الجودة.\nمقاسها 27*9.5",
-    "price": 180,
-    "priceNote": "",
-    "stock": "متاح",
-    "badge": "نحاسيات",
-    "image": "assets/products/gallery/032-9841765515571-01.jpg",
-    "url": "https://popekyrillos.store/en/products/أنبوبة-رفات-قديسين-زان-مقاس-فوق-الزيرو",
-    "tags": [
-      "نحاسيات"
-    ],
-    "images": [
-      "assets/products/gallery/032-9841765515571-01.jpg",
-      "assets/products/gallery/032-9841765515571-02.jpg",
-      "assets/products/gallery/032-9841765515571-03.jpg"
-    ],
-    "options": [],
-    "variants": [
-      {
-        "id": "old-52135270285619",
-        "title": "الاختيار الافتراضي",
-        "options": {},
-        "price": 180,
-        "compareAtPrice": null,
-        "available": true,
-        "image": null,
-        "sku": ""
-      }
-    ]
-  },
-  {
-    "id": "old-9841763516723",
-    "name": "أنبوبة رفات قديسين زان مقاس زيرو",
-    "category": "brass",
-    "label": "نحاسيات",
-    "description": "أنابيب رفات القديسين مصنوعة من خشب الزان عالي الجودة، تتميز بتصميم مجوف من الداخل وفتحة علوية تسهل الاستخدام والحماية. توفر هذه الأنابيب متانة فائقة ومقاومة طبيعية بفضل خشب الزان المختار بعناية، مما يضمن حفظ الرفات بصورة آمنة ومحترمة. تصميمها الدقيق يعكس خبرة في الصنع ويضمن استخدامها في البيئات الروحية بأعلى معايير الجودة.\nمقاسها 17*9.5",
+    "description": "أنابيب رفات القديسين مصنوعة من خشب الزان عالي الجودة، تتميز بتصميم مجوف من الداخل وفتحة علوية تسهل الاستخدام والحماية. توفر هذه الأنابيب متانة فائقة ومقاومة طبيعية بفضل خشب الزان المختار بعناية، مما يضمن حفظ الرفات بصورة آمنة ومحترمة. تصميمها الدقيق يعكس خبرة في الصنع ويضمن استخدامها في البيئات الروحية بأعلى معايير الجودة.\nاختر المقاس المناسب من الاختيارات.",
     "price": 144,
     "priceNote": "",
     "stock": "متاح",
     "badge": "نحاسيات",
-    "image": "assets/products/gallery/033-9841763516723-01.jpg",
-    "url": "https://popekyrillos.store/en/products/أنبوبة-رفات-قديسين-زان-مقاس-زيرو",
+    "image": "assets/products/reliquary-tubes-papa-kyrillos.jpg",
+    "url": "https://popekyrillos.store/products/reliquary-tubes-papa-kyrillos",
     "tags": [
-      "نحاسيات"
+      "نحاسيات",
+      "أنابيب",
+      "رفات",
+      "خشب زان"
     ],
     "images": [
-      "assets/products/gallery/033-9841763516723-01.jpg",
-      "assets/products/gallery/033-9841763516723-02.jpg",
-      "assets/products/gallery/033-9841763516723-03.jpg"
+      "assets/products/reliquary-tubes-papa-kyrillos.jpg"
     ],
-    "options": [],
+    "options": [
+      {
+        "name": "المقاس",
+        "values": [
+          "مقاس 5 - 37×15",
+          "مقاس 4 - 37×12",
+          "مقاس 3 - 37×9.5",
+          "فوق الزيرو - 27×9.5",
+          "زيرو - 17×9.5"
+        ]
+      }
+    ],
     "variants": [
       {
-        "id": "old-52135103562035",
-        "title": "الاختيار الافتراضي",
-        "options": {},
+        "id": "reliquary-tubes-size-5",
+        "title": "مقاس 5 - 37×15",
+        "options": {
+          "المقاس": "مقاس 5 - 37×15"
+        },
+        "price": 462,
+        "compareAtPrice": null,
+        "available": true,
+        "image": "assets/products/reliquary-tubes-papa-kyrillos.jpg",
+        "sku": ""
+      },
+      {
+        "id": "reliquary-tubes-size-4",
+        "title": "مقاس 4 - 37×12",
+        "options": {
+          "المقاس": "مقاس 4 - 37×12"
+        },
+        "price": 330,
+        "compareAtPrice": null,
+        "available": true,
+        "image": "assets/products/reliquary-tubes-papa-kyrillos.jpg",
+        "sku": ""
+      },
+      {
+        "id": "reliquary-tubes-size-3",
+        "title": "مقاس 3 - 37×9.5",
+        "options": {
+          "المقاس": "مقاس 3 - 37×9.5"
+        },
+        "price": 234,
+        "compareAtPrice": null,
+        "available": true,
+        "image": "assets/products/reliquary-tubes-papa-kyrillos.jpg",
+        "sku": ""
+      },
+      {
+        "id": "reliquary-tubes-above-zero",
+        "title": "فوق الزيرو - 27×9.5",
+        "options": {
+          "المقاس": "فوق الزيرو - 27×9.5"
+        },
+        "price": 180,
+        "compareAtPrice": null,
+        "available": true,
+        "image": "assets/products/reliquary-tubes-papa-kyrillos.jpg",
+        "sku": ""
+      },
+      {
+        "id": "reliquary-tubes-zero",
+        "title": "زيرو - 17×9.5",
+        "options": {
+          "المقاس": "زيرو - 17×9.5"
+        },
         "price": 144,
         "compareAtPrice": null,
         "available": true,
-        "image": null,
+        "image": "assets/products/reliquary-tubes-papa-kyrillos.jpg",
         "sku": ""
       }
     ]

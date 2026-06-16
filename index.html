@@ -234,6 +234,30 @@
       </section>
 
       <section class="section catalog" id="catalog" aria-label="منتجات مختارة للطلب">
+        <div class="catalog-filters" data-catalog-filters>
+          <div class="catalog-filter-group">
+            <label for="catalog-price-filter" data-filter-price-label>السعر</label>
+            <select id="catalog-price-filter" data-price-filter>
+              <option value="all" data-price-option="all">كل الأسعار</option>
+              <option value="under-1000" data-price-option="under1000">أقل من 1000 ج.م</option>
+              <option value="1000-5000" data-price-option="1000to5000">من 1000 لـ 5000 ج.م</option>
+              <option value="over-5000" data-price-option="over5000">أكثر من 5000 ج.م</option>
+            </select>
+          </div>
+          <label class="catalog-choice-filter">
+            <input type="checkbox" data-choice-filter />
+            <span data-choice-filter-label>فيه اختيارات</span>
+          </label>
+          <div class="catalog-filter-group">
+            <label for="catalog-sort-filter" data-filter-sort-label>الترتيب</label>
+            <select id="catalog-sort-filter" data-sort-filter>
+              <option value="default" data-sort-option="default">الأنسب</option>
+              <option value="price-asc" data-sort-option="priceAsc">الأرخص أولاً</option>
+              <option value="price-desc" data-sort-option="priceDesc">الأعلى سعراً</option>
+            </select>
+          </div>
+          <button class="catalog-filter-reset" type="button" data-reset-catalog-filters>مسح الفلاتر</button>
+        </div>
         <div class="product-grid" data-products></div>
         <div class="load-more-wrap">
           <button class="button secondary load-more-button" type="button" data-load-more hidden>عرض المزيد</button>

@@ -854,6 +854,83 @@ body[data-lang="en"] .category-art {
     repeating-linear-gradient(90deg, rgba(12, 107, 104, 0.04) 0 1px, transparent 1px 90px);
 }
 
+.catalog-filters {
+  display: flex;
+  align-items: end;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  max-width: 1040px;
+  margin: 0 auto 24px;
+  padding: 14px;
+  border: 1px solid rgba(222, 216, 203, 0.95);
+  border-radius: 18px;
+  background: rgba(255, 252, 246, 0.92);
+  box-shadow: 0 16px 34px rgba(14, 32, 39, 0.08);
+}
+
+.catalog-filter-group {
+  display: grid;
+  gap: 7px;
+  min-width: min(210px, 100%);
+}
+
+.catalog-filter-group label,
+.catalog-choice-filter {
+  color: var(--teal-dark);
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.catalog-filter-group select {
+  width: 100%;
+  min-height: 44px;
+  border: 1px solid rgba(26, 39, 81, 0.16);
+  border-radius: 12px;
+  background: #fff;
+  color: var(--ink);
+  font: inherit;
+  font-weight: 800;
+  padding: 0 14px;
+}
+
+.catalog-choice-filter {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 44px;
+  padding: 10px 14px;
+  border: 1px solid rgba(26, 39, 81, 0.16);
+  border-radius: 12px;
+  background: #fff;
+  cursor: pointer;
+}
+
+.catalog-choice-filter input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--navy);
+}
+
+.catalog-filter-reset {
+  min-height: 44px;
+  border: 1px solid rgba(143, 34, 63, 0.24);
+  border-radius: 12px;
+  background: rgba(143, 34, 63, 0.08);
+  color: var(--burgundy);
+  font: inherit;
+  font-weight: 900;
+  padding: 0 16px;
+  cursor: pointer;
+}
+
+.catalog-filter-reset:hover,
+.catalog-filter-reset:focus-visible {
+  border-color: var(--burgundy);
+  background: rgba(143, 34, 63, 0.13);
+  outline: none;
+}
+
 .product-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -2827,6 +2904,19 @@ body.account-open .scrim {
 }
 
 @media (max-width: 680px) {
+  .catalog-filters {
+    align-items: stretch;
+    justify-content: stretch;
+    gap: 10px;
+    padding: 12px;
+  }
+
+  .catalog-filter-group,
+  .catalog-choice-filter,
+  .catalog-filter-reset {
+    width: 100%;
+  }
+
   .site-header {
     height: 70px;
     padding: 0 14px;
