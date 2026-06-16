@@ -1270,6 +1270,16 @@ function getProductImages(product) {
   return [];
 }
 
+function uniqueImages(images = []) {
+  return [...new Set(images.filter(Boolean))];
+}
+
+function getVariantImages(variant) {
+  if (Array.isArray(variant?.images) && variant.images.length) return variant.images;
+  if (variant?.image) return [variant.image];
+  return [];
+}
+
 function productDetailImage(image = "") {
   const value = String(image || "");
   if (!value) return "";
@@ -1633,9 +1643,10 @@ function renderProductModal() {
 
   const variant = selectedModalVariant(product);
   const images = getProductImages(product);
+  const variantImages = getVariantImages(variant);
   const variantImage = variant?.image || "";
-  const activeImage = state.modal.image || variantImage || images[0] || "";
-  const modalImages = activeImage && !images.includes(activeImage) ? [activeImage, ...images] : images;
+  const activeImage = state.modal.image || variantImage || variantImages[0] || images[0] || "";
+  const modalImages = uniqueImages([activeImage, ...variantImages, ...images]);
   const activeDetailImage = productDetailImage(activeImage);
   const optionText = variantOptionText(variant);
   const price = variantPrice(variant, product);
