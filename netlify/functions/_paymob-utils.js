@@ -1,0 +1,408 @@
+const crypto = require("crypto");
+const fs = require("fs/promises");
+const os = require("os");
+const path = require("path");
+
+const currency = "EGP";
+const productsPath = path.join(__dirname, "..", "..", "products.json");
+const fallbackOrderDir = path.join(os.tmpdir(), "pope-kyrillos-paymob-orders");
+
+function jsonResponse(statusCode, body, extraHeaders = {}) {
+  return {
+    statusCode,
+    headers: {
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "no-store",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Headers": "Content-Type, Authorization",
+      "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
+      ...extraHeaders
+    },
+    body: JSON.stringify(body)
+  };
+}
+
+function publicError(statusCode, message) {
+  const error = new Error(message);
+  error.statusCode = statusCode;
+  error.publicMessage = message;
+  return error;
+}
+
+function cleanText(value = "", maxLength = 500) {
+  return String(value || "").replace(/\s+/g, " ").trim().slice(0, maxLength);
+}
+
+function normalizePhone(value = "") {
+  const digits = String(value || "").replace(/[^\d+]/g, "");
+  if (digits.startsWith("+20")) return digits;
+  if (digits.startsWith("20")) return `+${digits}`;
+  if (digits.startsWith("0")) return `+2${digits}`;
+  return digits;
+}
+
+function parseJsonBody(event) {
+  const raw = event.isBase64Encoded ? Buffer.from(event.body || "", "base64").toString("utf8") : event.body || "";
+  if (!raw) return {};
+
+  const contentType = event.headers?.["content-type"] || event.headers?.["Content-Type"] || "";
+  if (contentType.includes("application/x-www-form-urlencoded")) {
+    const params = new URLSearchParams(raw);
+    return [...params.entries()].reduce((data, [key, value]) => {
+      data[key] = value;
+      return data;
+    }, {});
+  }
+
+  try {
+    return JSON.parse(raw);
+  } catch {
+    throw publicError(400, "بيانات الطلب غير صالحة.");
+  }
+}
+
+async function loadProducts() {
+  const data = await fs.readFile(productsPath, "utf8");
+  return JSON.parse(data);
+}
+
+function productUnavailable(product = {}) {
+  const stock = cleanText(product.stock, 120);
+  return product.available === false || /غير\s*متاح|sold\s*out|out\s*of\s*stock/i.test(stock);
+}
+
+function getProductVariants(product = {}) {
+  return Array.isArray(product.variants) && product.variants.length
+    ? product.variants
+    : [
+        {
+          id: "default",
+          title: product.name || "Default",
+          options: {},
+          price: product.price,
+          available: product.available !== false && !productUnavailable(product)
+        }
+      ];
+}
+
+function findVariant(product = {}, variantId = "default") {
+  const variants = getProductVariants(product);
+  return variants.find((variant) => String(variant.id) === String(variantId)) || (variantId === "default" ? variants[0] : null);
+}
+
+function variantPrice(variant = {}, product = {}) {
+  const value = Number(variant.price ?? product.price);
+  return Number.isFinite(value) && value >= 0 ? value : null;
+}
+
+function variantQuantity(variant = {}) {
+  const raw = variant.quantity ?? variant.inventoryQuantity ?? variant.inventory_quantity ?? null;
+  if (raw === null || raw === undefined || raw === "") return null;
+  const value = Number(raw);
+  return Number.isFinite(value) ? Math.max(0, Math.floor(value)) : null;
+}
+
+function variantAvailable(product = {}, variant = {}) {
+  const quantity = variantQuantity(variant);
+  return !productUnavailable(product) && variant.available !== false && quantity !== 0;
+}
+
+function variantTitle(variant = {}) {
+  if (variant.title && variant.title !== "Default Title") return cleanText(variant.title, 160);
+  const options = variant.options && typeof variant.options === "object" ? Object.values(variant.options).filter(Boolean) : [];
+  return options.length ? cleanText(options.join(" / "), 160) : "";
+}
+
+function toCents(amount) {
+  return Math.round(Number(amount || 0) * 100);
+}
+
+function integrationIds() {
+  const ids = String(process.env.PAYMOB_INTEGRATION_IDS || "")
+    .split(/[,\s]+/)
+    .map((id) => Number(id.trim()))
+    .filter((id) => Number.isInteger(id) && id > 0);
+  if (!ids.length) throw publicError(500, "Paymob integration IDs are not configured.");
+  return ids;
+}
+
+function siteUrl() {
+  return String(process.env.SITE_URL || "https://popekyrillos.store").replace(/\/+$/, "");
+}
+
+function splitName(fullName = "") {
+  const parts = cleanText(fullName, 120).split(" ").filter(Boolean);
+  if (!parts.length) return { firstName: "Customer", lastName: "Pope Kyrillos" };
+  return {
+    firstName: parts[0],
+    lastName: parts.slice(1).join(" ") || "Customer"
+  };
+}
+
+function validateCustomer(customer = {}, orderReference = "") {
+  const deliveryMethod = cleanText(customer.deliveryMethod, 30) || "bosta";
+  if (!["bosta", "pickup"].includes(deliveryMethod)) throw publicError(400, "طريقة الاستلام غير صحيحة.");
+
+  const name = cleanText(customer.name, 120);
+  const phone = normalizePhone(customer.phone);
+  const email = cleanText(customer.email, 160);
+  const governorate = cleanText(customer.governorate, 100);
+  const city = cleanText(customer.city, 100);
+  const address = cleanText(customer.address, 260);
+  const notes = cleanText(customer.notes, 600);
+
+  if (!name) throw publicError(400, "اسم العميل مطلوب.");
+  if (!phone || phone.length < 10) throw publicError(400, "رقم الموبايل غير صحيح.");
+  if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) throw publicError(400, "البريد الإلكتروني غير صحيح.");
+  if (deliveryMethod === "bosta") {
+    if (!governorate) throw publicError(400, "المحافظة مطلوبة للشحن.");
+    if (!city) throw publicError(400, "المدينة أو المنطقة مطلوبة للشحن.");
+    if (!address || address.length < 6) throw publicError(400, "العنوان التفصيلي مطلوب للشحن.");
+  }
+
+  return {
+    deliveryMethod,
+    name,
+    phone,
+    email: email || `customer-${orderReference.toLowerCase()}@popekyrillos.store`,
+    governorate,
+    city,
+    address,
+    notes
+  };
+}
+
+async function validateCartItems(items = []) {
+  if (!Array.isArray(items) || !items.length) throw publicError(400, "السلة فارغة.");
+  if (items.length > 80) throw publicError(400, "عدد المنتجات في الطلب كبير جداً.");
+
+  const products = await loadProducts();
+  const catalog = new Map(products.map((product) => [String(product.id), product]));
+
+  const orderItems = items.map((item) => {
+    const product = catalog.get(String(item.productId || ""));
+    if (!product) throw publicError(400, "منتج غير موجود في الكتالوج.");
+
+    const variant = findVariant(product, item.variantId || "default");
+    if (!variant) throw publicError(400, "اختيار المنتج غير موجود.");
+    if (!variantAvailable(product, variant)) throw publicError(400, "أحد المنتجات أو الاختيارات غير متاح حالياً.");
+
+    const quantity = Math.floor(Number(item.qty || item.quantity));
+    if (!Number.isInteger(quantity) || quantity < 1 || quantity > 99) throw publicError(400, "كمية غير صحيحة في السلة.");
+
+    const availableQuantity = variantQuantity(variant);
+    if (availableQuantity !== null && quantity > availableQuantity) {
+      throw publicError(400, "الكمية المطلوبة أكبر من المتاح حالياً.");
+    }
+
+    const price = variantPrice(variant, product);
+    if (price === null || price <= 0) throw publicError(400, "سعر أحد المنتجات غير متاح للدفع أونلاين.");
+
+    const unitAmountCents = toCents(price);
+    return {
+      productId: String(product.id),
+      variantId: String(variant.id || "default"),
+      name: cleanText(product.name, 180),
+      option: variantTitle(variant),
+      quantity,
+      unitPrice: price,
+      unitAmountCents,
+      lineAmountCents: unitAmountCents * quantity,
+      sku: cleanText(variant.sku || product.sku || "", 80)
+    };
+  });
+
+  const subtotalCents = orderItems.reduce((sum, item) => sum + item.lineAmountCents, 0);
+  if (subtotalCents <= 0) throw publicError(400, "إجمالي الطلب غير صالح.");
+  return { items: orderItems, subtotalCents };
+}
+
+function calculateShippingCents(customer = {}) {
+  // The current storefront confirms Bosta shipping separately, so no online shipping fee is charged here.
+  return customer.deliveryMethod === "pickup" ? 0 : 0;
+}
+
+function buildBillingData(customer = {}, orderReference = "") {
+  const { firstName, lastName } = splitName(customer.name);
+  return {
+    first_name: firstName,
+    last_name: lastName,
+    phone_number: customer.phone,
+    email: customer.email || `customer-${orderReference.toLowerCase()}@popekyrillos.store`,
+    country: "EG",
+    state: customer.governorate || "Cairo",
+    city: customer.city || customer.governorate || "Cairo",
+    street: customer.address || "Pickup from Pope Kyrillos Store",
+    building: "NA",
+    floor: "NA",
+    apartment: "NA",
+    postal_code: "NA",
+    shipping_method: customer.deliveryMethod === "pickup" ? "pickup" : "delivery"
+  };
+}
+
+function checkoutUrl(clientSecret) {
+  const publicKey = process.env.PAYMOB_PUBLIC_KEY;
+  if (!publicKey) throw publicError(500, "Paymob public key is not configured.");
+  return `https://accept.paymob.com/unifiedcheckout/?publicKey=${encodeURIComponent(publicKey)}&clientSecret=${encodeURIComponent(clientSecret)}`;
+}
+
+function orderStoreName() {
+  return "paymob-orders";
+}
+
+function blobStore() {
+  try {
+    const { getStore } = require("@netlify/blobs");
+    return getStore(orderStoreName());
+  } catch {
+    return null;
+  }
+}
+
+async function saveOrder(order) {
+  const store = blobStore();
+  if (store?.setJSON) {
+    await store.setJSON(order.reference, order);
+    return order;
+  }
+
+  await fs.mkdir(fallbackOrderDir, { recursive: true });
+  await fs.writeFile(path.join(fallbackOrderDir, `${order.reference}.json`), JSON.stringify(order, null, 2), "utf8");
+  return order;
+}
+
+async function getOrder(reference = "") {
+  const safeReference = cleanText(reference, 80);
+  if (!safeReference) return null;
+
+  const store = blobStore();
+  if (store?.get) {
+    return (await store.get(safeReference, { type: "json" }).catch(() => null)) || null;
+  }
+
+  try {
+    const data = await fs.readFile(path.join(fallbackOrderDir, `${safeReference}.json`), "utf8");
+    return JSON.parse(data);
+  } catch {
+    return null;
+  }
+}
+
+async function updateOrder(reference, updater) {
+  const existing = (await getOrder(reference)) || { reference, createdAt: new Date().toISOString() };
+  const updated = updater(existing);
+  updated.updatedAt = new Date().toISOString();
+  return saveOrder(updated);
+}
+
+const hmacFields = [
+  "amount_cents",
+  "created_at",
+  "currency",
+  "error_occured",
+  "has_parent_transaction",
+  "id",
+  "integration_id",
+  "is_3d_secure",
+  "is_auth",
+  "is_capture",
+  "is_refunded",
+  "is_standalone_payment",
+  "is_voided",
+  "order.id",
+  "owner",
+  "pending",
+  "source_data.pan",
+  "source_data.sub_type",
+  "source_data.type",
+  "success"
+];
+
+function nestedValue(object, field) {
+  return field.split(".").reduce((value, key) => (value && value[key] !== undefined ? value[key] : undefined), object);
+}
+
+function hmacValue(value) {
+  if (value === true) return "true";
+  if (value === false) return "false";
+  if (value === null || value === undefined) return "";
+  return String(value);
+}
+
+function computePaymobHmac(transaction, secret) {
+  const data = hmacFields.map((field) => hmacValue(nestedValue(transaction, field))).join("");
+  return crypto.createHmac("sha512", secret).update(data).digest("hex");
+}
+
+function timingSafeEqualHex(left = "", right = "") {
+  const a = Buffer.from(String(left).toLowerCase(), "hex");
+  const b = Buffer.from(String(right).toLowerCase(), "hex");
+  return a.length === b.length && crypto.timingSafeEqual(a, b);
+}
+
+function verifyPaymobHmac(transaction, providedHmac, secret) {
+  if (!providedHmac || !secret) return false;
+  const expected = computePaymobHmac(transaction, secret);
+  return timingSafeEqualHex(expected, providedHmac);
+}
+
+function boolValue(value) {
+  return value === true || value === "true" || value === 1 || value === "1";
+}
+
+function extractWebhookData(event) {
+  const query = event.queryStringParameters || {};
+  const body = parseJsonBody(event);
+  const source = Object.keys(body).length ? body : query;
+  let obj = source.obj || source.transaction || source.data?.obj || source.data || source;
+  if (typeof obj === "string") {
+    try {
+      obj = JSON.parse(obj);
+    } catch {
+      obj = {};
+    }
+  }
+  const hmac = query.hmac || source.hmac || source.hmac_hash || obj.hmac || "";
+  return { payload: source, obj, hmac };
+}
+
+function extractOrderReference(payload = {}, transaction = {}) {
+  const candidates = [
+    payload.special_reference,
+    payload.merchant_order_id,
+    payload.order_reference,
+    transaction.special_reference,
+    transaction.merchant_order_id,
+    transaction.order_reference,
+    nestedValue(transaction, "order.special_reference"),
+    nestedValue(transaction, "order.merchant_order_id"),
+    nestedValue(transaction, "order.order_reference"),
+    nestedValue(transaction, "payment_key_claims.extra.special_reference"),
+    nestedValue(transaction, "data.special_reference")
+  ];
+
+  return cleanText(candidates.find((value) => value && String(value).startsWith("PKS-")) || candidates.find(Boolean) || "", 80);
+}
+
+module.exports = {
+  boolValue,
+  buildBillingData,
+  calculateShippingCents,
+  checkoutUrl,
+  cleanText,
+  currency,
+  extractOrderReference,
+  extractWebhookData,
+  getOrder,
+  integrationIds,
+  jsonResponse,
+  parseJsonBody,
+  publicError,
+  saveOrder,
+  siteUrl,
+  updateOrder,
+  validateCartItems,
+  validateCustomer,
+  verifyPaymobHmac
+};

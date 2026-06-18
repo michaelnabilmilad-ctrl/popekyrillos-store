@@ -490,6 +490,14 @@ body[data-lang="en"] .hero h1 {
   box-shadow: none;
 }
 
+.button.is-busy,
+.button[aria-busy="true"] {
+  pointer-events: none;
+  cursor: wait;
+  opacity: 0.72;
+  transform: none;
+}
+
 .button.primary {
   background: var(--navy);
   color: #fff;

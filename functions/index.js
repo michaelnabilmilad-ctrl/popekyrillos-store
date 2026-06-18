@@ -8,7 +8,6 @@ import { fileURLToPath } from "node:url";
 const bostaApiKey = defineSecret("BOSTA_API_KEY");
 const bostaBaseUrl = "https://app.bosta.co/api/v2";
 const currency = "EGP";
-const paymobFallbackLink = "https://accept.paymob.com/payme/popekyrillosstore";
 const allowedOrigins = new Set([
   "https://popekyrillos.store",
   "https://www.popekyrillos.store",
@@ -302,7 +301,7 @@ export const createOrder = onRequest(
     response.status(200).json({
       orderId: doc.id,
       order: secureOrder,
-      paymentUrl: paymentMethod === "paymob" ? paymobFallbackLink : "",
+      paymentUrl: "",
       paymentStatus: orderDoc.payment.status
     });
   }

@@ -1,5 +1,5 @@
 const whatsappNumber = "201016125589";
-const paymobPaymentLink = "https://accept.paymob.com/payme/popekyrillosstore";
+const paymobIntentionEndpointPath = "/.netlify/functions/create-paymob-intention";
 const firebaseSdkVersion = "10.14.1";
 const productBatchSize = 12;
 const guestCartStorageKey = "pope-kyrillos-cart:guest";
@@ -16,7 +16,7 @@ const paymentMethods = {
     label: "Paymob",
     note: "ادفع أونلاين مباشرة ببطاقتك عن طريق Paymob.",
     message: "طريقة الدفع: Paymob Checkout.",
-    copyText: "Paymob Checkout\nلينك الدفع الاحتياطي: https://accept.paymob.com/payme/popekyrillosstore"
+    copyText: "Paymob Checkout\nالدفع يتم من زر Paymob داخل السلة."
   }
 };
 
@@ -330,8 +330,6 @@ const translations = {
     emailSignup: "إنشاء حساب",
     emailReset: "تعيين أو استرجاع كلمة المرور",
     signOut: "تسجيل الخروج",
-    paymentFallback: "سيتم فتح صفحة Paymob الرسمية لإتمام الدفع ببطاقة بنكية.",
-    fallbackLink: "لينك دفع احتياطي",
     checkoutBusy: "جاري فتح Paymob...",
     paymobNow: "ادفع Paymob الآن",
     unpricedSuffix: " + منتجات بسعر عند التواصل",
@@ -339,7 +337,7 @@ const translations = {
     instapayMessage: "طريقة الدفع: إنستاباي / تحويل بنكي على رقم 01223515989 باسم مايكل نبيل ميلاد. بعد التحويل سأرسل صورة الإيصال.",
     instapayCopy: "إنستاباي / تحويل بنكي\nرقم التحويل: 01223515989\nاسم الحساب: مايكل نبيل ميلاد",
     paymobNote: "سيتم فتح صفحة Paymob الرسمية لإتمام الدفع ببطاقة بنكية.",
-    paymobCopy: "Paymob Checkout\nلينك الدفع: https://accept.paymob.com/payme/popekyrillosstore",
+    paymobCopy: "Paymob Checkout\nالدفع يتم من زر Paymob داخل السلة.",
     pickupCashNote: "سيتم تجهيز الأوردر أولا، وبعد التأكيد يمكنك الاستلام من الفرع والدفع كاش.",
     pickupCashMessage: "طريقة الاستلام والدفع: استلام من الفرع، والدفع كاش بعد تجهيز الأوردر والتأكيد.",
     pickupCashCopy: "استلام من الفرع\nالدفع: كاش بعد تجهيز الأوردر والتأكيد",
@@ -349,7 +347,7 @@ const translations = {
     checkoutNameRequired: "اكتب اسم العميل قبل الدفع",
     checkoutPhoneRequired: "اكتب رقم موبايل صحيح قبل الدفع",
     checkoutEmailInvalid: "اكتب بريد إلكتروني صحيح أو سيبه فاضي",
-    paymobCheckoutFailed: "تعذر فتح checkout، هفتح لينك Paymob الاحتياطي",
+    paymobCheckoutFailed: "تعذر فتح Paymob الآن. راجع بيانات الطلب وحاول مرة أخرى.",
     firebaseRequired: "تسجيل الدخول يحتاج إعداد Firebase أولا",
     firebaseLoading: "جاري تجهيز تسجيل الدخول، حاول مرة أخرى بعد لحظة",
     signinFailed: "تعذر تسجيل الدخول، راجع إعدادات Firebase",
@@ -557,8 +555,6 @@ const translations = {
     emailSignup: "Create account",
     emailReset: "Set or reset password",
     signOut: "Sign out",
-    paymentFallback: "The official Paymob page will open to complete card payment.",
-    fallbackLink: "Backup payment link",
     checkoutBusy: "Opening Paymob...",
     paymobNow: "Pay with Paymob",
     unpricedSuffix: " + products priced on request",
@@ -566,7 +562,7 @@ const translations = {
     instapayMessage: "Payment method: Instapay / bank transfer to 01223515989 under the name Michael Nabil Milad. I will send the receipt photo after transfer.",
     instapayCopy: "Instapay / bank transfer\nTransfer number: 01223515989\nAccount name: Michael Nabil Milad",
     paymobNote: "The official Paymob page will open to complete card payment.",
-    paymobCopy: "Paymob Checkout\nPayment link: https://accept.paymob.com/payme/popekyrillosstore",
+    paymobCopy: "Paymob Checkout\nUse the Paymob button inside the cart to pay securely.",
     pickupCashNote: "Your order will be prepared first. After confirmation, you can pick it up from the branch and pay cash.",
     pickupCashMessage: "Pickup and payment method: pickup from branch and cash payment after the order is prepared and confirmed.",
     pickupCashCopy: "Pickup from branch\nPayment: cash after the order is prepared and confirmed",
@@ -576,7 +572,7 @@ const translations = {
     checkoutNameRequired: "Enter the customer name before payment",
     checkoutPhoneRequired: "Enter a valid mobile number before payment",
     checkoutEmailInvalid: "Enter a valid email or leave it empty",
-    paymobCheckoutFailed: "Checkout could not open. Opening the backup Paymob link",
+    paymobCheckoutFailed: "Paymob checkout could not open. Check the order details and try again.",
     firebaseRequired: "Login needs Firebase setup first",
     firebaseLoading: "Preparing login. Try again in a moment",
     signinFailed: "Sign-in failed. Check Firebase settings",
@@ -1997,6 +1993,10 @@ function orderEndpoint() {
   return projectId ? `https://us-central1-${projectId}.cloudfunctions.net/createOrder` : "";
 }
 
+function paymobIntentionEndpoint() {
+  return window.POPE_KYRILLOS_API_CONFIG?.paymobIntentionEndpoint || paymobIntentionEndpointPath;
+}
+
 async function authHeaders() {
   const user = state.auth.services?.auth?.currentUser || state.auth.user;
   if (!user?.getIdToken) return {};
@@ -2089,6 +2089,27 @@ async function createSecureOrder() {
   return data;
 }
 
+async function createPaymobIntention() {
+  const endpoint = paymobIntentionEndpoint();
+  const response = await fetch(endpoint, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      ...(await authHeaders())
+    },
+    body: JSON.stringify({
+      items: checkoutCartPayload(),
+      customer: state.shipping,
+      language: state.language
+    })
+  });
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok || data.error || !data.checkoutUrl || !data.clientSecret) {
+    throw new Error(data.error || data.message || "Paymob checkout failed");
+  }
+  return data;
+}
+
 async function createBostaShipment() {
   if (state.shipping?.deliveryMethod !== "bosta") return null;
   const endpoint = bostaEndpoint();
@@ -2120,7 +2141,7 @@ function renderPaymentDetails() {
   if (paymentSummary) paymentSummary.textContent = label;
   if (paymentNote) {
     if (isPaymob) {
-      paymentNote.innerHTML = `${escapeHtml(t("paymobNote"))} <a href="${escapeHtml(paymobPaymentLink)}" target="_blank" rel="noopener">${escapeHtml(t("fallbackLink"))}</a>`;
+      paymentNote.textContent = t("paymobNote");
     } else if (isPickupCash) {
       paymentNote.textContent = t("pickupCashNote");
     } else {
@@ -2166,8 +2187,8 @@ function renderDeliveryDetails() {
 }
 
 function paymentMessageLine() {
-  if (state.paymentMethod === "paymob" && paymobPaymentLink) {
-    return isEnglish() ? `Payment method: Paymob\nPayment link: ${paymobPaymentLink}` : `طريقة الدفع: Paymob\nلينك الدفع: ${paymobPaymentLink}`;
+  if (state.paymentMethod === "paymob") {
+    return isEnglish() ? "Payment method: Paymob Checkout" : "طريقة الدفع: Paymob Checkout";
   }
   if (state.paymentMethod === "pickupCash") return t("pickupCashMessage");
 
@@ -2175,7 +2196,7 @@ function paymentMessageLine() {
 }
 
 function copyPaymentDetails() {
-  const text = state.paymentMethod === "paymob" && paymobPaymentLink
+  const text = state.paymentMethod === "paymob"
     ? t("paymobCopy")
     : state.paymentMethod === "pickupCash"
     ? t("pickupCashCopy")
@@ -2252,12 +2273,11 @@ async function startPaymobCheckout() {
 
   try {
     state.shipping = customer;
-    const data = await createSecureOrder();
-    window.location.href = data?.checkoutUrl || data?.paymentUrl || paymobPaymentLink;
+    const data = await createPaymobIntention();
+    window.location.href = data.checkoutUrl;
   } catch (error) {
-    console.warn("Paymob checkout failed, opening fallback payment link.", error);
-    showToast(t("paymobCheckoutFailed"));
-    window.location.href = paymobPaymentLink;
+    console.warn("Paymob checkout failed.", error);
+    showToast(error.message || t("paymobCheckoutFailed"));
   } finally {
     state.checkoutBusy = false;
     renderCart();
@@ -2333,9 +2353,15 @@ function renderCart() {
     return;
   }
   if (state.paymentMethod === "paymob") {
-    whatsappLink.href = paymobPaymentLink;
+    whatsappLink.href = "#";
+    whatsappLink.classList.toggle("is-busy", state.checkoutBusy);
+    whatsappLink.setAttribute("aria-busy", state.checkoutBusy ? "true" : "false");
+    whatsappLink.setAttribute("aria-disabled", state.checkoutBusy ? "true" : "false");
     if (checkoutLabel) checkoutLabel.textContent = state.checkoutBusy ? t("checkoutBusy") : t("paymobNow");
   } else {
+    whatsappLink.classList.remove("is-busy");
+    whatsappLink.removeAttribute("aria-busy");
+    whatsappLink.removeAttribute("aria-disabled");
     whatsappLink.href = orderWhatsappUrl(bostaReferenceLine(state.bosta.shipment));
     if (checkoutLabel) checkoutLabel.textContent = state.bosta.busy ? t("bostaCreating") : t("sendOrder");
   }
@@ -3114,6 +3140,7 @@ authSignoutButton?.addEventListener("click", signOutCustomer);
 
 whatsappLink.addEventListener("click", async (event) => {
   event.preventDefault();
+  if (state.checkoutBusy || state.bosta.busy) return;
   if (!state.shippingConfirmed) {
     validateCheckoutCustomer({ requireConfirmed: true });
     return;

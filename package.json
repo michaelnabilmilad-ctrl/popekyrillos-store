@@ -1,0 +1,14 @@
+{
+  "name": "pope-kyrillos-store",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "check:functions": "node --check netlify/functions/create-paymob-intention.js && node --check netlify/functions/paymob-webhook.js && node --check netlify/functions/_paymob-utils.js"
+  },
+  "dependencies": {
+    "@netlify/blobs": "^9.0.0"
+  },
+  "devDependencies": {
+    "terser": "^5.31.0"
+  }
+}
