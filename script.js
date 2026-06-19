@@ -1,5 +1,5 @@
 const whatsappNumber = "201016125589";
-const paymobIntentionEndpointPath = "/.netlify/functions/create-paymob-intention";
+const paymobIntentionEndpointPath = "/api/create-paymob-intention";
 const firebaseSdkVersion = "10.14.1";
 const productBatchSize = 12;
 const guestCartStorageKey = "pope-kyrillos-cart:guest";

@@ -3,7 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "scripts": {
-    "check:functions": "node --check netlify/functions/create-paymob-intention.js && node --check netlify/functions/paymob-webhook.js && node --check netlify/functions/_paymob-utils.js"
+    "check:functions": "node --check netlify/functions/create-paymob-intention.js && node --check netlify/functions/paymob-webhook.js && node --check netlify/functions/_paymob-utils.js && node --check functions/_paymob-utils.js && node --check functions/api/create-paymob-intention.js && node --check functions/api/paymob-webhook.js"
   },
   "dependencies": {
     "@netlify/blobs": "^9.0.0"
