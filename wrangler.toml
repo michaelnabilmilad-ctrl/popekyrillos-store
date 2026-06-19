@@ -1,5 +1,9 @@
 name = "popekyrillos-store"
+main = "cloudflare-worker.js"
 compatibility_date = "2026-06-19"
 compatibility_flags = ["nodejs_compat"]
-pages_build_output_dir = "dist"
+keep_vars = true
 
+[assets]
+directory = "./dist"
+binding = "ASSETS"

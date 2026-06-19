@@ -5,7 +5,8 @@
 - Connect the GitHub repository: `michaelnabilmilad-ctrl/popekyrillos-store`
 - Framework preset: `None`
 - Build command: `npm run build:cloudflare`
-- Build output directory: `dist`
+- Deploy command: `npx wrangler deploy`
+- Path: `/`
 - Production branch: `main`
 
 ## Environment variables
