@@ -4,8 +4,8 @@
 
 - Connect the GitHub repository: `michaelnabilmilad-ctrl/popekyrillos-store`
 - Framework preset: `None`
-- Build command: leave empty
-- Build output directory: `/`
+- Build command: `npm run build:cloudflare`
+- Build output directory: `dist`
 - Production branch: `main`
 
 ## Environment variables
