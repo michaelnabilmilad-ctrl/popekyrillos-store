@@ -7,7 +7,7 @@
     "description": "علبة بخور أنيقة مصنوعة من النحاس الذهبي بتصميم كلاسيكي راقي. تتميز بصليب من فوق جميل يضيف لمسة جمالية مميزة للمذبح. تجمع بين الأناقة والوظيفة.",
     "price": 900,
     "priceNote": "",
-    "stock": "متاح",
+    "stock": "غير متاح حاليا",
     "badge": "علب بخور",
     "image": "assets/optimized/products/gallery/001-10123915690291-01.webp",
     "url": "https://popekyrillos.store/en/products/علبة-بخور-نحاس-ذهبي-بصليب",
@@ -28,11 +28,9 @@
         "options": {},
         "price": 900,
         "compareAtPrice": 1050,
-        "available": true,
+        "available": false,
         "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": 1
+        "sku": ""
       }
     ]
   },
@@ -67,9 +65,7 @@
         "compareAtPrice": 840,
         "available": false,
         "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       }
     ]
   },
@@ -105,9 +101,7 @@
         "compareAtPrice": 840,
         "available": false,
         "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       }
     ]
   },
@@ -152,9 +146,7 @@
         "compareAtPrice": 84,
         "available": true,
         "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "old-53153831911731",
@@ -166,9 +158,7 @@
         "compareAtPrice": 84,
         "available": true,
         "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "old-53153831944499",
@@ -180,9 +170,7 @@
         "compareAtPrice": 84,
         "available": true,
         "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       }
     ]
   },
@@ -233,9 +221,7 @@
         "compareAtPrice": 1050,
         "available": true,
         "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "old-53153828405555",
@@ -247,9 +233,7 @@
         "compareAtPrice": 1050,
         "available": true,
         "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "old-53153828438323",
@@ -261,9 +245,7 @@
         "compareAtPrice": 1050,
         "available": true,
         "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "old-53153828471091",
@@ -275,9 +257,7 @@
         "compareAtPrice": 1050,
         "available": true,
         "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "old-53153828503859",
@@ -289,9 +269,7 @@
         "compareAtPrice": 1050,
         "available": true,
         "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "old-53153828536627",
@@ -303,9 +281,7 @@
         "compareAtPrice": 1050,
         "available": true,
         "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "old-53153828569395",
@@ -317,9 +293,7 @@
         "compareAtPrice": 1050,
         "available": true,
         "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       }
     ]
   },
@@ -391,11 +365,7 @@
         "compareAtPrice": null,
         "available": false,
         "image": "assets/optimized/products/gallery/006-10121173303603-07.webp",
-        "images": [
-          "assets/optimized/products/gallery/006-10121173303603-07.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "old-53153382695219",
@@ -408,11 +378,7 @@
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/006-10121173303603-01.webp",
-        "images": [
-          "assets/optimized/products/gallery/006-10121173303603-01.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "old-53153382727987",
@@ -425,11 +391,7 @@
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/006-10121173303603-04.webp",
-        "images": [
-          "assets/optimized/products/gallery/006-10121173303603-04.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "old-53153382760755",
@@ -442,11 +404,7 @@
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/006-10121173303603-09.webp",
-        "images": [
-          "assets/optimized/products/gallery/006-10121173303603-09.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "old-53153382793523",
@@ -459,11 +417,7 @@
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/006-10121173303603-08.webp",
-        "images": [
-          "assets/optimized/products/gallery/006-10121173303603-08.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "old-53153382826291",
@@ -476,11 +430,7 @@
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/006-10121173303603-06.webp",
-        "images": [
-          "assets/optimized/products/gallery/006-10121173303603-06.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "old-53249962475827",
@@ -493,11 +443,7 @@
         "compareAtPrice": null,
         "available": false,
         "image": "assets/optimized/products/gallery/006-10121173303603-11.webp",
-        "images": [
-          "assets/optimized/products/gallery/006-10121173303603-11.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "old-53249962508595",
@@ -510,11 +456,7 @@
         "compareAtPrice": null,
         "available": false,
         "image": "assets/optimized/products/gallery/006-10121173303603-12.webp",
-        "images": [
-          "assets/optimized/products/gallery/006-10121173303603-12.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "old-53153382859059",
@@ -527,11 +469,7 @@
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/006-10121173303603-07.webp",
-        "images": [
-          "assets/optimized/products/gallery/006-10121173303603-07.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "old-53153382891827",
@@ -544,11 +482,7 @@
         "compareAtPrice": null,
         "available": false,
         "image": "assets/optimized/products/gallery/006-10121173303603-01.webp",
-        "images": [
-          "assets/optimized/products/gallery/006-10121173303603-01.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "old-53153382924595",
@@ -561,11 +495,7 @@
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/006-10121173303603-04.webp",
-        "images": [
-          "assets/optimized/products/gallery/006-10121173303603-04.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "old-53153382957363",
@@ -578,11 +508,7 @@
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/006-10121173303603-09.webp",
-        "images": [
-          "assets/optimized/products/gallery/006-10121173303603-09.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "old-53153382990131",
@@ -595,11 +521,7 @@
         "compareAtPrice": null,
         "available": false,
         "image": "assets/optimized/products/gallery/006-10121173303603-08.webp",
-        "images": [
-          "assets/optimized/products/gallery/006-10121173303603-08.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "old-53153383022899",
@@ -612,11 +534,7 @@
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/006-10121173303603-06.webp",
-        "images": [
-          "assets/optimized/products/gallery/006-10121173303603-06.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "old-53249962541363",
@@ -629,11 +547,7 @@
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/006-10121173303603-11.webp",
-        "images": [
-          "assets/optimized/products/gallery/006-10121173303603-11.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "old-53249962574131",
@@ -646,11 +560,7 @@
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/006-10121173303603-12.webp",
-        "images": [
-          "assets/optimized/products/gallery/006-10121173303603-12.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "old-53153383055667",
@@ -663,11 +573,7 @@
         "compareAtPrice": null,
         "available": false,
         "image": "assets/optimized/products/gallery/006-10121173303603-07.webp",
-        "images": [
-          "assets/optimized/products/gallery/006-10121173303603-07.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "old-53153383088435",
@@ -680,11 +586,7 @@
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/006-10121173303603-01.webp",
-        "images": [
-          "assets/optimized/products/gallery/006-10121173303603-01.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "old-53153383121203",
@@ -697,11 +599,7 @@
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/006-10121173303603-04.webp",
-        "images": [
-          "assets/optimized/products/gallery/006-10121173303603-04.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "old-53153383153971",
@@ -714,11 +612,7 @@
         "compareAtPrice": null,
         "available": false,
         "image": "assets/optimized/products/gallery/006-10121173303603-09.webp",
-        "images": [
-          "assets/optimized/products/gallery/006-10121173303603-09.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "old-53153383186739",
@@ -731,11 +625,7 @@
         "compareAtPrice": null,
         "available": false,
         "image": "assets/optimized/products/gallery/006-10121173303603-08.webp",
-        "images": [
-          "assets/optimized/products/gallery/006-10121173303603-08.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "old-53153383219507",
@@ -748,11 +638,7 @@
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/006-10121173303603-06.webp",
-        "images": [
-          "assets/optimized/products/gallery/006-10121173303603-06.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "old-53249962606899",
@@ -765,11 +651,7 @@
         "compareAtPrice": null,
         "available": false,
         "image": "assets/optimized/products/gallery/006-10121173303603-11.webp",
-        "images": [
-          "assets/optimized/products/gallery/006-10121173303603-11.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "old-53249962639667",
@@ -782,11 +664,7 @@
         "compareAtPrice": null,
         "available": false,
         "image": "assets/optimized/products/gallery/006-10121173303603-12.webp",
-        "images": [
-          "assets/optimized/products/gallery/006-10121173303603-12.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       }
     ]
   },
@@ -820,9 +698,7 @@
         "compareAtPrice": 7000,
         "available": true,
         "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       }
     ]
   },
@@ -856,9 +732,7 @@
         "compareAtPrice": 7000,
         "available": true,
         "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       }
     ]
   },
@@ -892,9 +766,7 @@
         "compareAtPrice": 4620,
         "available": true,
         "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       }
     ]
   },
@@ -928,9 +800,7 @@
         "compareAtPrice": 5180,
         "available": true,
         "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       }
     ]
   },
@@ -963,9 +833,7 @@
         "compareAtPrice": 2800,
         "available": true,
         "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       }
     ]
   },
@@ -1003,9 +871,7 @@
         "compareAtPrice": 2500,
         "available": true,
         "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       }
     ]
   },
@@ -1052,11 +918,7 @@
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/013-10070727000371-01.webp",
-        "images": [
-          "assets/optimized/products/gallery/013-10070727000371-01.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "old-53014357311795",
@@ -1068,11 +930,7 @@
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/013-10070727000371-02.webp",
-        "images": [
-          "assets/optimized/products/gallery/013-10070727000371-02.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       }
     ]
   },
@@ -1105,9 +963,7 @@
         "compareAtPrice": 300,
         "available": true,
         "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       }
     ]
   },
@@ -1154,11 +1010,7 @@
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/015-10070704980275-01.webp",
-        "images": [
-          "assets/optimized/products/gallery/015-10070704980275-01.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "old-53014277521715",
@@ -1170,11 +1022,7 @@
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/015-10070704980275-02.webp",
-        "images": [
-          "assets/optimized/products/gallery/015-10070704980275-02.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "old-53014277554483",
@@ -1186,9 +1034,7 @@
         "compareAtPrice": null,
         "available": false,
         "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       }
     ]
   },
@@ -1238,11 +1084,7 @@
         "compareAtPrice": 650,
         "available": true,
         "image": "assets/optimized/products/gallery/016-10070671687987-03.webp",
-        "images": [
-          "assets/optimized/products/gallery/016-10070671687987-03.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "old-53014267068723",
@@ -1254,11 +1096,7 @@
         "compareAtPrice": 650,
         "available": true,
         "image": "assets/optimized/products/gallery/016-10070671687987-05.webp",
-        "images": [
-          "assets/optimized/products/gallery/016-10070671687987-05.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "old-53014267101491",
@@ -1270,11 +1108,7 @@
         "compareAtPrice": 650,
         "available": true,
         "image": "assets/optimized/products/gallery/016-10070671687987-04.webp",
-        "images": [
-          "assets/optimized/products/gallery/016-10070671687987-04.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       }
     ]
   },
@@ -1309,9 +1143,7 @@
         "compareAtPrice": 630,
         "available": true,
         "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       }
     ]
   },
@@ -1346,9 +1178,7 @@
         "compareAtPrice": 385,
         "available": true,
         "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       }
     ]
   },
@@ -1383,9 +1213,7 @@
         "compareAtPrice": 420,
         "available": true,
         "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       }
     ]
   },
@@ -1421,9 +1249,7 @@
         "compareAtPrice": 350,
         "available": true,
         "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       }
     ]
   },
@@ -1458,9 +1284,7 @@
         "compareAtPrice": 280,
         "available": true,
         "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       }
     ]
   },
@@ -1509,9 +1333,7 @@
         "compareAtPrice": 3360,
         "available": true,
         "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "old-53005035602227",
@@ -1523,9 +1345,7 @@
         "compareAtPrice": 3360,
         "available": true,
         "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "old-53005035634995",
@@ -1537,9 +1357,7 @@
         "compareAtPrice": 3360,
         "available": true,
         "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       }
     ]
   },
@@ -1575,9 +1393,7 @@
         "compareAtPrice": 1050,
         "available": true,
         "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       }
     ]
   },
@@ -1614,9 +1430,7 @@
         "compareAtPrice": 1400,
         "available": true,
         "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       }
     ]
   },
@@ -1653,9 +1467,7 @@
         "compareAtPrice": 770,
         "available": true,
         "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       }
     ]
   },
@@ -1707,9 +1519,7 @@
         "compareAtPrice": 1500,
         "available": true,
         "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "old-53149452370227",
@@ -1721,9 +1531,7 @@
         "compareAtPrice": 1500,
         "available": true,
         "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "old-53149452402995",
@@ -1735,9 +1543,7 @@
         "compareAtPrice": 1500,
         "available": true,
         "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       }
     ]
   },
@@ -1775,9 +1581,7 @@
         "compareAtPrice": 840,
         "available": true,
         "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": 1
+        "sku": ""
       }
     ]
   },
@@ -1814,9 +1618,7 @@
         "compareAtPrice": 1260,
         "available": true,
         "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       }
     ]
   },
@@ -1864,14 +1666,13 @@
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/029-9841772396851-01.webp",
+        "sku": "",
         "images": [
           "assets/optimized/products/gallery/029-9841772396851-01.webp",
           "assets/optimized/products/gallery/029-9841772396851-02.webp",
           "assets/optimized/products/gallery/029-9841772396851-03.webp",
           "assets/optimized/products/reliquary-tubes-papa-kyrillos.jpg"
-        ],
-        "sku": "",
-        "quantity": null
+        ]
       },
       {
         "id": "reliquary-tubes-size-4",
@@ -1883,14 +1684,13 @@
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/030-9841770725683-01.webp",
+        "sku": "",
         "images": [
           "assets/optimized/products/gallery/030-9841770725683-01.webp",
           "assets/optimized/products/gallery/030-9841770725683-02.webp",
           "assets/optimized/products/gallery/030-9841770725683-03.webp",
           "assets/optimized/products/reliquary-tubes-papa-kyrillos.jpg"
-        ],
-        "sku": "",
-        "quantity": null
+        ]
       },
       {
         "id": "reliquary-tubes-size-3",
@@ -1902,14 +1702,13 @@
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/031-9841769054515-01.webp",
+        "sku": "",
         "images": [
           "assets/optimized/products/gallery/031-9841769054515-01.webp",
           "assets/optimized/products/gallery/031-9841769054515-02.webp",
           "assets/optimized/products/gallery/031-9841769054515-03.webp",
           "assets/optimized/products/reliquary-tubes-papa-kyrillos.jpg"
-        ],
-        "sku": "",
-        "quantity": null
+        ]
       },
       {
         "id": "reliquary-tubes-above-zero",
@@ -1921,14 +1720,13 @@
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/032-9841765515571-01.webp",
+        "sku": "",
         "images": [
           "assets/optimized/products/gallery/032-9841765515571-01.webp",
           "assets/optimized/products/gallery/032-9841765515571-02.webp",
           "assets/optimized/products/gallery/032-9841765515571-03.webp",
           "assets/optimized/products/reliquary-tubes-papa-kyrillos.jpg"
-        ],
-        "sku": "",
-        "quantity": null
+        ]
       },
       {
         "id": "reliquary-tubes-zero",
@@ -1940,14 +1738,13 @@
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/033-9841763516723-01.webp",
+        "sku": "",
         "images": [
           "assets/optimized/products/gallery/033-9841763516723-01.webp",
           "assets/optimized/products/gallery/033-9841763516723-02.webp",
           "assets/optimized/products/gallery/033-9841763516723-03.webp",
           "assets/optimized/products/reliquary-tubes-papa-kyrillos.jpg"
-        ],
-        "sku": "",
-        "quantity": null
+        ]
       }
     ]
   },
@@ -1962,7 +1759,7 @@
     "stock": "متاح",
     "badge": "بخور",
     "image": "assets/optimized/products/incense-chat-v2.webp",
-    "url": "https://popekyrillos.store/?product=incense-chat-1500-kg",
+    "url": "",
     "tags": [
       "شموع وبخور",
       "بخور",
@@ -1994,11 +1791,7 @@
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/incense-chat-v2.webp",
-        "images": [
-          "assets/optimized/products/incense-chat-v2.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "incense-chat-250g",
@@ -2010,11 +1803,7 @@
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/incense-chat-v2.webp",
-        "images": [
-          "assets/optimized/products/incense-chat-v2.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "incense-chat-500g",
@@ -2026,11 +1815,7 @@
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/incense-chat-v2.webp",
-        "images": [
-          "assets/optimized/products/incense-chat-v2.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "incense-chat-750g",
@@ -2042,11 +1827,7 @@
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/incense-chat-v2.webp",
-        "images": [
-          "assets/optimized/products/incense-chat-v2.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "incense-chat-1kg",
@@ -2058,11 +1839,7 @@
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/incense-chat-v2.webp",
-        "images": [
-          "assets/optimized/products/incense-chat-v2.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       }
     ]
   },
@@ -2096,9 +1873,7 @@
         "compareAtPrice": null,
         "available": false,
         "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       }
     ]
   },
@@ -2133,9 +1908,7 @@
         "compareAtPrice": null,
         "available": false,
         "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       }
     ]
   },
@@ -2171,9 +1944,7 @@
         "compareAtPrice": null,
         "available": true,
         "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       }
     ]
   },
@@ -2209,9 +1980,7 @@
         "compareAtPrice": null,
         "available": true,
         "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       }
     ]
   },
@@ -2248,9 +2017,7 @@
         "compareAtPrice": null,
         "available": true,
         "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       }
     ]
   },
@@ -2285,9 +2052,7 @@
         "compareAtPrice": 16000,
         "available": true,
         "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       }
     ]
   },
@@ -2334,11 +2099,7 @@
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/040-9762760196403-01.webp",
-        "images": [
-          "assets/optimized/products/gallery/040-9762760196403-01.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "old-51620560961843",
@@ -2350,11 +2111,7 @@
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/040-9762760196403-02.webp",
-        "images": [
-          "assets/optimized/products/gallery/040-9762760196403-02.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       }
     ]
   },
@@ -2401,11 +2158,7 @@
         "compareAtPrice": 26000,
         "available": true,
         "image": "assets/optimized/products/gallery/041-9762682011955-01.webp",
-        "images": [
-          "assets/optimized/products/gallery/041-9762682011955-01.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "old-51620385915187",
@@ -2417,11 +2170,7 @@
         "compareAtPrice": 26000,
         "available": true,
         "image": "assets/optimized/products/gallery/041-9762682011955-02.webp",
-        "images": [
-          "assets/optimized/products/gallery/041-9762682011955-02.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       }
     ]
   },
@@ -2453,9 +2202,7 @@
         "compareAtPrice": 6000,
         "available": true,
         "image": null,
-        "images": [],
-        "sku": "123",
-        "quantity": null
+        "sku": "123"
       }
     ]
   },
@@ -2514,11 +2261,7 @@
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/stole-01.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-01.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "stole-red-gold-01-2-2",
@@ -2531,11 +2274,7 @@
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/stole-01.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-01.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "stole-red-gold-01-3-2",
@@ -2548,11 +2287,7 @@
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/stole-01.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-01.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "stole-red-gold-01-4-2",
@@ -2565,11 +2300,7 @@
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/stole-01.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-01.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "stole-red-gold-01-5-2",
@@ -2582,11 +2313,7 @@
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/stole-01.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-01.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "stole-red-gold-01-6-2",
@@ -2599,11 +2326,7 @@
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/stole-01.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-01.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "stole-red-gold-01-7-2",
@@ -2616,11 +2339,7 @@
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/stole-01.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-01.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "stole-red-gold-01-1-1",
@@ -2633,11 +2352,7 @@
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/stole-01.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-01.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "stole-red-gold-01-2-1",
@@ -2650,11 +2365,7 @@
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/stole-01.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-01.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "stole-red-gold-01-3-1",
@@ -2667,11 +2378,7 @@
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/stole-01.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-01.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "stole-red-gold-01-4-1",
@@ -2684,11 +2391,7 @@
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/stole-01.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-01.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "stole-red-gold-01-5-1",
@@ -2701,11 +2404,7 @@
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/stole-01.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-01.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "stole-red-gold-01-6-1",
@@ -2718,11 +2417,7 @@
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/stole-01.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-01.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "stole-red-gold-01-7-1",
@@ -2735,11 +2430,7 @@
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/stole-01.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-01.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       }
     ]
   },
@@ -2798,11 +2489,7 @@
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/stole-02.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-02.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "stole-red-gold-02-2-2",
@@ -2815,11 +2502,7 @@
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/stole-02.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-02.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "stole-red-gold-02-3-2",
@@ -2832,11 +2515,7 @@
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/stole-02.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-02.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "stole-red-gold-02-4-2",
@@ -2849,11 +2528,7 @@
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/stole-02.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-02.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "stole-red-gold-02-5-2",
@@ -2866,11 +2541,7 @@
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/stole-02.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-02.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "stole-red-gold-02-6-2",
@@ -2883,11 +2554,7 @@
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/stole-02.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-02.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "stole-red-gold-02-7-2",
@@ -2900,11 +2567,7 @@
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/stole-02.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-02.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "stole-red-gold-02-1-1",
@@ -2917,11 +2580,7 @@
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/stole-02.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-02.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "stole-red-gold-02-2-1",
@@ -2934,11 +2593,7 @@
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/stole-02.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-02.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "stole-red-gold-02-3-1",
@@ -2951,11 +2606,7 @@
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/stole-02.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-02.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "stole-red-gold-02-4-1",
@@ -2968,11 +2619,7 @@
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/stole-02.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-02.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "stole-red-gold-02-5-1",
@@ -2985,11 +2632,7 @@
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/stole-02.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-02.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "stole-red-gold-02-6-1",
@@ -3002,11 +2645,7 @@
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/stole-02.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-02.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "stole-red-gold-02-7-1",
@@ -3019,11 +2658,7 @@
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/stole-02.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-02.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       }
     ]
   },
@@ -3082,11 +2717,7 @@
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/stole-03.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-03.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "stole-red-gold-03-2-2",
@@ -3099,11 +2730,7 @@
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/stole-03.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-03.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "stole-red-gold-03-3-2",
@@ -3116,11 +2743,7 @@
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/stole-03.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-03.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "stole-red-gold-03-4-2",
@@ -3133,11 +2756,7 @@
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/stole-03.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-03.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "stole-red-gold-03-5-2",
@@ -3150,11 +2769,7 @@
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/stole-03.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-03.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "stole-red-gold-03-6-2",
@@ -3167,11 +2782,7 @@
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/stole-03.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-03.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "stole-red-gold-03-7-2",
@@ -3184,11 +2795,7 @@
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/stole-03.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-03.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "stole-red-gold-03-1-1",
@@ -3201,11 +2808,7 @@
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/stole-03.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-03.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "stole-red-gold-03-2-1",
@@ -3218,11 +2821,7 @@
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/stole-03.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-03.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "stole-red-gold-03-3-1",
@@ -3235,11 +2834,7 @@
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/stole-03.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-03.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "stole-red-gold-03-4-1",
@@ -3252,11 +2847,7 @@
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/stole-03.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-03.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "stole-red-gold-03-5-1",
@@ -3269,11 +2860,7 @@
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/stole-03.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-03.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "stole-red-gold-03-6-1",
@@ -3286,11 +2873,7 @@
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/stole-03.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-03.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "stole-red-gold-03-7-1",
@@ -3303,11 +2886,7 @@
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/stole-03.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-03.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       }
     ]
   },
@@ -3366,11 +2945,7 @@
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/stole-04.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-04.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "stole-red-gold-04-2-2",
@@ -3383,11 +2958,7 @@
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/stole-04.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-04.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "stole-red-gold-04-3-2",
@@ -3400,11 +2971,7 @@
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/stole-04.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-04.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "stole-red-gold-04-4-2",
@@ -3417,11 +2984,7 @@
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/stole-04.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-04.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "stole-red-gold-04-5-2",
@@ -3434,11 +2997,7 @@
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/stole-04.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-04.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "stole-red-gold-04-6-2",
@@ -3451,11 +3010,7 @@
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/stole-04.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-04.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "stole-red-gold-04-7-2",
@@ -3468,11 +3023,7 @@
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/stole-04.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-04.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "stole-red-gold-04-1-1",
@@ -3485,11 +3036,7 @@
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/stole-04.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-04.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "stole-red-gold-04-2-1",
@@ -3502,11 +3049,7 @@
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/stole-04.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-04.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "stole-red-gold-04-3-1",
@@ -3519,11 +3062,7 @@
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/stole-04.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-04.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "stole-red-gold-04-4-1",
@@ -3536,11 +3075,7 @@
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/stole-04.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-04.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "stole-red-gold-04-5-1",
@@ -3553,11 +3088,7 @@
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/stole-04.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-04.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "stole-red-gold-04-6-1",
@@ -3570,11 +3101,7 @@
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/stole-04.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-04.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "stole-red-gold-04-7-1",
@@ -3587,11 +3114,7 @@
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/stole-04.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-04.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       }
     ]
   }
