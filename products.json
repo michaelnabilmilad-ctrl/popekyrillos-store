@@ -78,7 +78,7 @@
     "description": "علبة بخور أنيقة مصنوعة من النحاس الفضي بتصميم كلاسيكي راقي. تتميز بصليب من فوق جميل يضيف لمسة جمالية مميزة للمذبح. تجمع بين الأناقة والوظيفة.",
     "price": 720,
     "priceNote": "",
-    "stock": "غير متاح حاليا",
+    "stock": "متاح",
     "badge": "علب بخور",
     "image": "assets/optimized/products/gallery/002-10123914805555-01.webp",
     "url": "https://popekyrillos.store/en/products/علبة-بخور-نحاس-فضي-بصليب",
@@ -3120,7 +3120,7 @@
           "assets/optimized/products/gallery/stole-03.webp"
         ],
         "sku": "",
-        "quantity": null
+        "quantity": 1
       },
       {
         "id": "stole-red-gold-03-2-2",
