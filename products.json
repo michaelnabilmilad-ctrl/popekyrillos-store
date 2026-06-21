@@ -103,7 +103,7 @@
         "image": null,
         "images": [],
         "sku": "",
-        "quantity": null
+        "quantity": 1
       }
     ]
   },
@@ -141,7 +141,7 @@
         "image": null,
         "images": [],
         "sku": "",
-        "quantity": null
+        "quantity": 1
       }
     ]
   },
@@ -297,7 +297,7 @@
         "image": null,
         "images": [],
         "sku": "",
-        "quantity": null
+        "quantity": 1
       },
       {
         "id": "old-53153828471091",
@@ -311,7 +311,7 @@
         "image": null,
         "images": [],
         "sku": "",
-        "quantity": null
+        "quantity": 1
       },
       {
         "id": "old-53153828503859",
@@ -325,7 +325,7 @@
         "image": null,
         "images": [],
         "sku": "",
-        "quantity": null
+        "quantity": 1
       },
       {
         "id": "old-53153828536627",
@@ -339,7 +339,7 @@
         "image": null,
         "images": [],
         "sku": "",
-        "quantity": null
+        "quantity": 1
       },
       {
         "id": "old-53153828569395",
@@ -353,7 +353,7 @@
         "image": null,
         "images": [],
         "sku": "",
-        "quantity": null
+        "quantity": 1
       }
     ]
   },
@@ -531,7 +531,7 @@
           "assets/optimized/products/gallery/006-10121173303603-11.webp"
         ],
         "sku": "",
-        "quantity": null
+        "quantity": 1
       },
       {
         "id": "old-53249962508595",
@@ -548,7 +548,7 @@
           "assets/optimized/products/gallery/006-10121173303603-12.webp"
         ],
         "sku": "",
-        "quantity": null
+        "quantity": 1
       },
       {
         "id": "old-53153382859059",
@@ -565,7 +565,7 @@
           "assets/optimized/products/gallery/006-10121173303603-07.webp"
         ],
         "sku": "",
-        "quantity": null
+        "quantity": 15
       },
       {
         "id": "old-53153382891827",
@@ -575,7 +575,7 @@
           "اللون": "أزرق"
         },
         "price": 80,
-        "compareAtPrice": null,
+        "compareAtPrice": 90,
         "available": false,
         "image": "assets/optimized/products/gallery/006-10121173303603-01.webp",
         "images": [
