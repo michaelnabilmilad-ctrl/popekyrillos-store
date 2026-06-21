@@ -188,7 +188,7 @@
         "image": null,
         "images": [],
         "sku": "",
-        "quantity": null
+        "quantity": 10
       },
       {
         "id": "old-53153831911731",
@@ -202,7 +202,7 @@
         "image": null,
         "images": [],
         "sku": "",
-        "quantity": null
+        "quantity": 9
       },
       {
         "id": "old-53153831944499",
@@ -216,7 +216,7 @@
         "image": null,
         "images": [],
         "sku": "",
-        "quantity": null
+        "quantity": 11
       }
     ]
   },
