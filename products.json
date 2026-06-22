@@ -1,5 +1,38 @@
 [
   {
+    "id": "custom-1782091096359",
+    "name": "منتج جديد",
+    "category": "icons",
+    "label": "يوتا",
+    "description": "",
+    "price": 0,
+    "priceNote": "",
+    "stock": "متاح",
+    "badge": "يوتا",
+    "image": "",
+    "url": "https://popekyrillos.store/?product=custom-1782091096359",
+    "tags": [
+      "مادليات",
+      "يوتا"
+    ],
+    "images": [],
+    "options": [],
+    "variants": [
+      {
+        "id": "custom-1782091096359-variant-1782091096359-1",
+        "title": "الاختيار الافتراضي",
+        "options": {},
+        "price": 0,
+        "compareAtPrice": null,
+        "available": true,
+        "image": null,
+        "images": [],
+        "sku": "",
+        "quantity": null
+      }
+    ]
+  },
+  {
     "id": "custom-1782085094346-copy-1782089139611",
     "name": "صليب يوطا مادلية موديل 1 ",
     "category": "icons",
@@ -9,14 +42,14 @@
     "priceNote": "",
     "stock": "متاح",
     "badge": "يوتا",
-    "image": "assets/optimized/products/gallery/madlia-iota-sada-1-v2.webp",
+    "image": "assets/optimized/products/gallery/madlia-iota-sada-2.webp",
     "url": "https://popekyrillos.store/?product=custom-1782085094346-copy-1782089139611",
     "tags": [
       "مادليات",
       "يوطا"
     ],
     "images": [
-      "assets/optimized/products/gallery/madlia-iota-sada-1-v2.webp"
+      "assets/optimized/products/gallery/madlia-iota-sada-2.webp"
     ],
     "options": [],
     "variants": [
