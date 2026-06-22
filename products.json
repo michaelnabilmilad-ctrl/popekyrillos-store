@@ -1,5 +1,40 @@
 [
   {
+    "id": "custom-1782085094346-copy-1782089139611",
+    "name": "صليب يوطا مادلية موديل 1 ",
+    "category": "icons",
+    "label": "يوتا",
+    "description": "",
+    "price": 0,
+    "priceNote": "",
+    "stock": "متاح",
+    "badge": "يوتا",
+    "image": "assets/optimized/products/gallery/madlia-iota-sada-1-v2.webp",
+    "url": "https://popekyrillos.store/?product=custom-1782085094346-copy-1782089139611",
+    "tags": [
+      "مادليات",
+      "يوطا"
+    ],
+    "images": [
+      "assets/optimized/products/gallery/madlia-iota-sada-1-v2.webp"
+    ],
+    "options": [],
+    "variants": [
+      {
+        "id": "custom-1782085094346-copy-1782089139611-variant-1",
+        "title": "الاختيار الافتراضي",
+        "options": {},
+        "price": 0,
+        "compareAtPrice": null,
+        "available": true,
+        "image": null,
+        "images": [],
+        "sku": "",
+        "quantity": 1000
+      }
+    ]
+  },
+  {
     "id": "custom-1782085094346-copy-1782085785931-copy-1782085787013-copy-1782085787633-copy-1782085791699-copy-1782085792663-copy-1782085793567",
     "name": "صليب يوطا مادلية موديل 7",
     "category": "icons",
