@@ -1,5 +1,37 @@
 [
   {
+    "id": "custom-1782093846224",
+    "name": "منتج جديد",
+    "category": "brass",
+    "label": "نحاسيات",
+    "description": "",
+    "price": 0,
+    "priceNote": "",
+    "stock": "متاح",
+    "badge": "نحاسيات",
+    "image": "assets/products/gallery/006-10121173303603-10.jpg",
+    "url": "https://popekyrillos.store/?product=custom-1782093846224",
+    "tags": [],
+    "images": [
+      "assets/products/gallery/006-10121173303603-10.jpg"
+    ],
+    "options": [],
+    "variants": [
+      {
+        "id": "custom-1782093846224-variant-1782093846224-1",
+        "title": "الاختيار الافتراضي",
+        "options": {},
+        "price": 0,
+        "compareAtPrice": null,
+        "available": true,
+        "image": null,
+        "images": [],
+        "sku": "",
+        "quantity": 1
+      }
+    ]
+  },
+  {
     "id": "custom-1782091096359",
     "name": "منتج جديد",
     "category": "icons",
