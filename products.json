@@ -1,70 +1,5 @@
 [
   {
-    "id": "custom-1782093846224",
-    "name": "منتج جديد",
-    "category": "brass",
-    "label": "نحاسيات",
-    "description": "",
-    "price": 0,
-    "priceNote": "",
-    "stock": "متاح",
-    "badge": "نحاسيات",
-    "image": "assets/optimized/products/gallery/ChatGPT Image Jun 15, 2026, 12_13_42 PM.png",
-    "url": "https://popekyrillos.store/?product=custom-1782093846224",
-    "tags": [],
-    "images": [
-      "assets/optimized/products/gallery/ChatGPT Image Jun 15, 2026, 12_13_42 PM.png"
-    ],
-    "options": [],
-    "variants": [
-      {
-        "id": "custom-1782093846224-variant-1782093846224-1",
-        "title": "الاختيار الافتراضي",
-        "options": {},
-        "price": 0,
-        "compareAtPrice": null,
-        "available": true,
-        "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": 1
-      }
-    ]
-  },
-  {
-    "id": "custom-1782091096359",
-    "name": "منتج جديد",
-    "category": "icons",
-    "label": "يوتا",
-    "description": "",
-    "price": 0,
-    "priceNote": "",
-    "stock": "متاح",
-    "badge": "يوتا",
-    "image": "",
-    "url": "https://popekyrillos.store/?product=custom-1782091096359",
-    "tags": [
-      "مادليات",
-      "يوتا"
-    ],
-    "images": [],
-    "options": [],
-    "variants": [
-      {
-        "id": "custom-1782091096359-variant-1782091096359-1",
-        "title": "الاختيار الافتراضي",
-        "options": {},
-        "price": 0,
-        "compareAtPrice": null,
-        "available": true,
-        "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": null
-      }
-    ]
-  },
-  {
     "id": "custom-1782085094346-copy-1782089139611",
     "name": "صليب يوطا مادلية موديل 1 ",
     "category": "icons",
@@ -411,7 +346,7 @@
         "image": null,
         "images": [],
         "sku": "",
-        "quantity": 1
+        "quantity": 10
       }
     ]
   },
@@ -448,7 +383,7 @@
         "image": null,
         "images": [],
         "sku": "",
-        "quantity": 1
+        "quantity": 10
       }
     ]
   },
@@ -460,7 +395,7 @@
     "description": "علبة بخور أنيقة مصنوعة من النحاس الفضي بتصميم كلاسيكي راقي. تتميز بفص ملون جميل يضيف لمسة جمالية مميزة للمذبح. تجمع بين الأناقة والوظيفة.",
     "price": 720,
     "priceNote": "",
-    "stock": "غير متاح حاليا",
+    "stock": "متاح",
     "badge": "علب بخور",
     "image": "assets/optimized/products/gallery/003-10123913003315-01.webp",
     "url": "https://popekyrillos.store/en/products/علبة-بخور-نحاس-فضي-فص-ملون",
@@ -482,11 +417,11 @@
         "options": {},
         "price": 720,
         "compareAtPrice": 840,
-        "available": false,
+        "available": true,
         "image": null,
         "images": [],
         "sku": "",
-        "quantity": 1
+        "quantity": 10
       }
     ]
   },
@@ -614,7 +549,7 @@
         "image": null,
         "images": [],
         "sku": "",
-        "quantity": null
+        "quantity": 10
       },
       {
         "id": "old-53153828405555",
@@ -628,7 +563,7 @@
         "image": null,
         "images": [],
         "sku": "",
-        "quantity": null
+        "quantity": 10
       },
       {
         "id": "old-53153828438323",
@@ -642,7 +577,7 @@
         "image": null,
         "images": [],
         "sku": "",
-        "quantity": 1
+        "quantity": 10
       },
       {
         "id": "old-53153828471091",
@@ -656,7 +591,7 @@
         "image": null,
         "images": [],
         "sku": "",
-        "quantity": 1
+        "quantity": 10
       },
       {
         "id": "old-53153828503859",
@@ -670,7 +605,7 @@
         "image": null,
         "images": [],
         "sku": "",
-        "quantity": 1
+        "quantity": 10
       },
       {
         "id": "old-53153828536627",
@@ -684,7 +619,7 @@
         "image": null,
         "images": [],
         "sku": "",
-        "quantity": 1
+        "quantity": 10
       },
       {
         "id": "old-53153828569395",
@@ -698,7 +633,7 @@
         "image": null,
         "images": [],
         "sku": "",
-        "quantity": 1
+        "quantity": 10
       }
     ]
   },
@@ -1201,7 +1136,7 @@
         "image": null,
         "images": [],
         "sku": "",
-        "quantity": null
+        "quantity": 12
       }
     ]
   },
@@ -1237,7 +1172,7 @@
         "image": null,
         "images": [],
         "sku": "",
-        "quantity": null
+        "quantity": 12
       }
     ]
   },
@@ -1273,7 +1208,7 @@
         "image": null,
         "images": [],
         "sku": "",
-        "quantity": null
+        "quantity": 12
       }
     ]
   },
@@ -1309,7 +1244,7 @@
         "image": null,
         "images": [],
         "sku": "",
-        "quantity": null
+        "quantity": 12
       }
     ]
   },
@@ -1344,7 +1279,7 @@
         "image": null,
         "images": [],
         "sku": "",
-        "quantity": null
+        "quantity": 12
       }
     ]
   },
@@ -1354,7 +1289,7 @@
     "category": "candles",
     "label": "شموع وبخور",
     "description": "شمعدان مذبح فاخر مصنوع من البلاستيك عالي الجودةشحن تايب سي، مصمم خصيصاً للاستخدام على المذابح. يتميز بتصميم كلاسيكي أنيق يعكس الوقار والجلال، مع قاعدة ثابتة توفر استقراراً آمناً. سهل التنظيف والصيانة، ويتحمل الاستخدام المتكرر. مثالي للكنائس والمؤسسات الدينية التي تبحث عن حل عملي وموثوق. يأتي جاهزاً للاستخدام الفوري دون الحاجة لتجميع معقد.\nبطارية تدوم لأيام\nطول الشمعدان 52 سم\nيأتي معه وصلة شحن",
-    "price": 2300,
+    "price": 2200,
     "priceNote": "",
     "stock": "متاح",
     "badge": "شغل شحن",
@@ -1378,13 +1313,13 @@
         "id": "old-53014358196531",
         "title": "الاختيار الافتراضي",
         "options": {},
-        "price": 2300,
+        "price": 2200,
         "compareAtPrice": 2500,
         "available": true,
         "image": null,
         "images": [],
         "sku": "",
-        "quantity": null
+        "quantity": 12
       }
     ]
   },
@@ -1435,7 +1370,7 @@
           "assets/optimized/products/gallery/013-10070727000371-01.webp"
         ],
         "sku": "",
-        "quantity": null
+        "quantity": 100
       },
       {
         "id": "old-53014357311795",
@@ -1486,7 +1421,7 @@
         "image": null,
         "images": [],
         "sku": "",
-        "quantity": null
+        "quantity": 12
       }
     ]
   },
@@ -1537,7 +1472,7 @@
           "assets/optimized/products/gallery/015-10070704980275-01.webp"
         ],
         "sku": "",
-        "quantity": null
+        "quantity": 12
       },
       {
         "id": "old-53014277521715",
@@ -1621,7 +1556,7 @@
           "assets/optimized/products/gallery/016-10070671687987-03.webp"
         ],
         "sku": "",
-        "quantity": null
+        "quantity": 100
       },
       {
         "id": "old-53014267068723",
@@ -1890,7 +1825,7 @@
         "image": null,
         "images": [],
         "sku": "",
-        "quantity": null
+        "quantity": 10
       },
       {
         "id": "old-53005035602227",
@@ -1904,7 +1839,7 @@
         "image": null,
         "images": [],
         "sku": "",
-        "quantity": null
+        "quantity": 10
       },
       {
         "id": "old-53005035634995",
@@ -1918,7 +1853,7 @@
         "image": null,
         "images": [],
         "sku": "",
-        "quantity": null
+        "quantity": 10
       }
     ]
   },
@@ -1956,7 +1891,7 @@
         "image": null,
         "images": [],
         "sku": "",
-        "quantity": null
+        "quantity": 10
       }
     ]
   },
@@ -1995,7 +1930,7 @@
         "image": null,
         "images": [],
         "sku": "",
-        "quantity": null
+        "quantity": 10
       }
     ]
   },
@@ -2034,7 +1969,7 @@
         "image": null,
         "images": [],
         "sku": "",
-        "quantity": null
+        "quantity": 10
       }
     ]
   },
@@ -2088,7 +2023,7 @@
         "image": null,
         "images": [],
         "sku": "",
-        "quantity": null
+        "quantity": 10
       },
       {
         "id": "old-53149452370227",
@@ -2156,7 +2091,7 @@
         "image": null,
         "images": [],
         "sku": "",
-        "quantity": null
+        "quantity": 12
       }
     ]
   },
@@ -2195,7 +2130,7 @@
         "image": null,
         "images": [],
         "sku": "",
-        "quantity": null
+        "quantity": 12
       }
     ]
   },
@@ -2451,7 +2386,7 @@
     "category": "candles",
     "label": "شموع وبخور",
     "description": "زوج شمعدان مصنوع من النحاس المصري الثقيل ومطلي أيضاً باللون الذهبي حتي يضمن شكل جميل\nطول الشمعدان 50 سم",
-    "price": 6000,
+    "price": 6720,
     "priceNote": "",
     "stock": "غير متاح حاليا",
     "badge": "شموع وبخور",
@@ -2471,13 +2406,13 @@
         "id": "old-52070352879923",
         "title": "الاختيار الافتراضي",
         "options": {},
-        "price": 6000,
+        "price": 6720,
         "compareAtPrice": null,
         "available": false,
         "image": null,
         "images": [],
         "sku": "",
-        "quantity": null
+        "quantity": 12
       }
     ]
   },
@@ -2514,7 +2449,7 @@
         "image": null,
         "images": [],
         "sku": "",
-        "quantity": null
+        "quantity": 12
       }
     ]
   },
@@ -2524,7 +2459,7 @@
     "category": "candles",
     "label": "شموع وبخور",
     "description": "زوج شمعدان شكل الوردة مصنوع من النحاس المصري الثقيل ومطلي أيضاً باللون الذهبي حتي يضمن شكل جميل\nطول الشمعدان 40 سم",
-    "price": 3600,
+    "price": 4200,
     "priceNote": "",
     "stock": "متاح",
     "badge": "شموع وبخور",
@@ -2546,13 +2481,13 @@
         "id": "old-52069875089715",
         "title": "الاختيار الافتراضي",
         "options": {},
-        "price": 3600,
+        "price": 4200,
         "compareAtPrice": null,
         "available": true,
         "image": null,
         "images": [],
         "sku": "",
-        "quantity": null
+        "quantity": 12
       }
     ]
   },
@@ -2562,7 +2497,7 @@
     "category": "candles",
     "label": "شموع وبخور",
     "description": "زوج شمعدان مصنوع من النحاس المصري الثقيل ومطلي أيضاً باللون الذهبي حتي يضمن شكل جميل\nطول الشمعدان 51 سم",
-    "price": 10800,
+    "price": 13200,
     "priceNote": "",
     "stock": "متاح",
     "badge": "شموع وبخور",
@@ -2584,13 +2519,13 @@
         "id": "old-52069520802099",
         "title": "الاختيار الافتراضي",
         "options": {},
-        "price": 10800,
+        "price": 13200,
         "compareAtPrice": null,
         "available": true,
         "image": null,
         "images": [],
         "sku": "",
-        "quantity": null
+        "quantity": 12
       }
     ]
   },
@@ -2600,7 +2535,7 @@
     "category": "candles",
     "label": "شموع وبخور",
     "description": "زوج شمعدان مصنوع من النحاس المصري الثقيل ومطلي أيضاً باللون الذهبي حتي يضمن شكل جميل\nطول الشمعان 56 سم",
-    "price": 10800,
+    "price": 13200,
     "priceNote": "",
     "stock": "متاح",
     "badge": "شموع وبخور",
@@ -2623,13 +2558,13 @@
         "id": "old-52069259182387",
         "title": "الاختيار الافتراضي",
         "options": {},
-        "price": 10800,
+        "price": 13200,
         "compareAtPrice": null,
         "available": true,
         "image": null,
         "images": [],
         "sku": "",
-        "quantity": 2
+        "quantity": 12
       }
     ]
   },
@@ -2666,7 +2601,7 @@
         "image": null,
         "images": [],
         "sku": "",
-        "quantity": null
+        "quantity": 1
       }
     ]
   },
@@ -2717,7 +2652,7 @@
           "assets/optimized/products/gallery/040-9762760196403-01.webp"
         ],
         "sku": "",
-        "quantity": null
+        "quantity": 3
       },
       {
         "id": "old-51620560961843",
@@ -2784,7 +2719,7 @@
           "assets/optimized/products/gallery/041-9762682011955-01.webp"
         ],
         "sku": "",
-        "quantity": null
+        "quantity": 1
       },
       {
         "id": "old-51620385915187",
@@ -2800,7 +2735,7 @@
           "assets/optimized/products/gallery/041-9762682011955-02.webp"
         ],
         "sku": "",
-        "quantity": null
+        "quantity": 1
       }
     ]
   },
@@ -2897,7 +2832,7 @@
           "assets/optimized/products/gallery/stole-01.webp"
         ],
         "sku": "",
-        "quantity": null
+        "quantity": 100
       },
       {
         "id": "stole-red-gold-01-2-2",
@@ -2914,7 +2849,7 @@
           "assets/optimized/products/gallery/stole-01.webp"
         ],
         "sku": "",
-        "quantity": null
+        "quantity": 100
       },
       {
         "id": "stole-red-gold-01-3-2",
@@ -2931,7 +2866,7 @@
           "assets/optimized/products/gallery/stole-01.webp"
         ],
         "sku": "",
-        "quantity": null
+        "quantity": 100
       },
       {
         "id": "stole-red-gold-01-4-2",
@@ -2948,7 +2883,7 @@
           "assets/optimized/products/gallery/stole-01.webp"
         ],
         "sku": "",
-        "quantity": null
+        "quantity": 100
       },
       {
         "id": "stole-red-gold-01-5-2",
@@ -2965,7 +2900,7 @@
           "assets/optimized/products/gallery/stole-01.webp"
         ],
         "sku": "",
-        "quantity": null
+        "quantity": 100
       },
       {
         "id": "stole-red-gold-01-6-2",
@@ -2982,7 +2917,7 @@
           "assets/optimized/products/gallery/stole-01.webp"
         ],
         "sku": "",
-        "quantity": null
+        "quantity": 100
       },
       {
         "id": "stole-red-gold-01-7-2",
@@ -2999,7 +2934,7 @@
           "assets/optimized/products/gallery/stole-01.webp"
         ],
         "sku": "",
-        "quantity": null
+        "quantity": 100
       },
       {
         "id": "stole-red-gold-01-1-1",
@@ -3016,7 +2951,7 @@
           "assets/optimized/products/gallery/stole-01.webp"
         ],
         "sku": "",
-        "quantity": null
+        "quantity": 100
       },
       {
         "id": "stole-red-gold-01-2-1",
@@ -3033,7 +2968,7 @@
           "assets/optimized/products/gallery/stole-01.webp"
         ],
         "sku": "",
-        "quantity": null
+        "quantity": 100
       },
       {
         "id": "stole-red-gold-01-3-1",
@@ -3050,7 +2985,7 @@
           "assets/optimized/products/gallery/stole-01.webp"
         ],
         "sku": "",
-        "quantity": null
+        "quantity": 100
       },
       {
         "id": "stole-red-gold-01-4-1",
@@ -3067,7 +3002,7 @@
           "assets/optimized/products/gallery/stole-01.webp"
         ],
         "sku": "",
-        "quantity": null
+        "quantity": 100
       },
       {
         "id": "stole-red-gold-01-5-1",
@@ -3084,7 +3019,7 @@
           "assets/optimized/products/gallery/stole-01.webp"
         ],
         "sku": "",
-        "quantity": null
+        "quantity": 100
       },
       {
         "id": "stole-red-gold-01-6-1",
@@ -3101,7 +3036,7 @@
           "assets/optimized/products/gallery/stole-01.webp"
         ],
         "sku": "",
-        "quantity": null
+        "quantity": 100
       },
       {
         "id": "stole-red-gold-01-7-1",
@@ -3118,7 +3053,7 @@
           "assets/optimized/products/gallery/stole-01.webp"
         ],
         "sku": "",
-        "quantity": null
+        "quantity": 100
       }
     ]
   },
@@ -3181,7 +3116,7 @@
           "assets/optimized/products/gallery/stole-02.webp"
         ],
         "sku": "",
-        "quantity": null
+        "quantity": 100
       },
       {
         "id": "stole-red-gold-02-2-2",
@@ -3198,7 +3133,7 @@
           "assets/optimized/products/gallery/stole-02.webp"
         ],
         "sku": "",
-        "quantity": null
+        "quantity": 100
       },
       {
         "id": "stole-red-gold-02-3-2",
@@ -3215,7 +3150,7 @@
           "assets/optimized/products/gallery/stole-02.webp"
         ],
         "sku": "",
-        "quantity": null
+        "quantity": 100
       },
       {
         "id": "stole-red-gold-02-4-2",
@@ -3232,7 +3167,7 @@
           "assets/optimized/products/gallery/stole-02.webp"
         ],
         "sku": "",
-        "quantity": null
+        "quantity": 100
       },
       {
         "id": "stole-red-gold-02-5-2",
@@ -3249,7 +3184,7 @@
           "assets/optimized/products/gallery/stole-02.webp"
         ],
         "sku": "",
-        "quantity": null
+        "quantity": 100
       },
       {
         "id": "stole-red-gold-02-6-2",
@@ -3266,7 +3201,7 @@
           "assets/optimized/products/gallery/stole-02.webp"
         ],
         "sku": "",
-        "quantity": null
+        "quantity": 100
       },
       {
         "id": "stole-red-gold-02-7-2",
@@ -3283,7 +3218,7 @@
           "assets/optimized/products/gallery/stole-02.webp"
         ],
         "sku": "",
-        "quantity": null
+        "quantity": 100
       },
       {
         "id": "stole-red-gold-02-1-1",
@@ -3300,7 +3235,7 @@
           "assets/optimized/products/gallery/stole-02.webp"
         ],
         "sku": "",
-        "quantity": null
+        "quantity": 100
       },
       {
         "id": "stole-red-gold-02-2-1",
@@ -3317,7 +3252,7 @@
           "assets/optimized/products/gallery/stole-02.webp"
         ],
         "sku": "",
-        "quantity": null
+        "quantity": 100
       },
       {
         "id": "stole-red-gold-02-3-1",
@@ -3334,7 +3269,7 @@
           "assets/optimized/products/gallery/stole-02.webp"
         ],
         "sku": "",
-        "quantity": null
+        "quantity": 100
       },
       {
         "id": "stole-red-gold-02-4-1",
@@ -3351,7 +3286,7 @@
           "assets/optimized/products/gallery/stole-02.webp"
         ],
         "sku": "",
-        "quantity": null
+        "quantity": 100
       },
       {
         "id": "stole-red-gold-02-5-1",
@@ -3368,7 +3303,7 @@
           "assets/optimized/products/gallery/stole-02.webp"
         ],
         "sku": "",
-        "quantity": null
+        "quantity": 100
       },
       {
         "id": "stole-red-gold-02-6-1",
@@ -3385,7 +3320,7 @@
           "assets/optimized/products/gallery/stole-02.webp"
         ],
         "sku": "",
-        "quantity": null
+        "quantity": 100
       },
       {
         "id": "stole-red-gold-02-7-1",
@@ -3402,7 +3337,7 @@
           "assets/optimized/products/gallery/stole-02.webp"
         ],
         "sku": "",
-        "quantity": null
+        "quantity": 100
       }
     ]
   },
@@ -3465,7 +3400,7 @@
           "assets/optimized/products/gallery/stole-03.webp"
         ],
         "sku": "",
-        "quantity": 1
+        "quantity": 100
       },
       {
         "id": "stole-red-gold-03-2-2",
@@ -3482,7 +3417,7 @@
           "assets/optimized/products/gallery/stole-03.webp"
         ],
         "sku": "",
-        "quantity": null
+        "quantity": 100
       },
       {
         "id": "stole-red-gold-03-3-2",
@@ -3516,7 +3451,7 @@
           "assets/optimized/products/gallery/stole-03.webp"
         ],
         "sku": "",
-        "quantity": 4
+        "quantity": 100
       },
       {
         "id": "stole-red-gold-03-5-2",
@@ -3533,7 +3468,7 @@
           "assets/optimized/products/gallery/stole-03.webp"
         ],
         "sku": "",
-        "quantity": 2
+        "quantity": 100
       },
       {
         "id": "stole-red-gold-03-6-2",
@@ -3550,7 +3485,7 @@
           "assets/optimized/products/gallery/stole-03.webp"
         ],
         "sku": "",
-        "quantity": null
+        "quantity": 100
       },
       {
         "id": "stole-red-gold-03-7-2",
@@ -3567,7 +3502,7 @@
           "assets/optimized/products/gallery/stole-03.webp"
         ],
         "sku": "",
-        "quantity": null
+        "quantity": 100
       },
       {
         "id": "stole-red-gold-03-1-1",
@@ -3584,7 +3519,7 @@
           "assets/optimized/products/gallery/stole-03.webp"
         ],
         "sku": "",
-        "quantity": null
+        "quantity": 100
       },
       {
         "id": "stole-red-gold-03-2-1",
@@ -3601,7 +3536,7 @@
           "assets/optimized/products/gallery/stole-03.webp"
         ],
         "sku": "",
-        "quantity": null
+        "quantity": 100
       },
       {
         "id": "stole-red-gold-03-3-1",
@@ -3618,7 +3553,7 @@
           "assets/optimized/products/gallery/stole-03.webp"
         ],
         "sku": "",
-        "quantity": null
+        "quantity": 100
       },
       {
         "id": "stole-red-gold-03-4-1",
@@ -3635,7 +3570,7 @@
           "assets/optimized/products/gallery/stole-03.webp"
         ],
         "sku": "",
-        "quantity": null
+        "quantity": 100
       },
       {
         "id": "stole-red-gold-03-5-1",
@@ -3652,7 +3587,7 @@
           "assets/optimized/products/gallery/stole-03.webp"
         ],
         "sku": "",
-        "quantity": null
+        "quantity": 100
       },
       {
         "id": "stole-red-gold-03-6-1",
@@ -3669,7 +3604,7 @@
           "assets/optimized/products/gallery/stole-03.webp"
         ],
         "sku": "",
-        "quantity": null
+        "quantity": 100
       },
       {
         "id": "stole-red-gold-03-7-1",
@@ -3686,7 +3621,7 @@
           "assets/optimized/products/gallery/stole-03.webp"
         ],
         "sku": "",
-        "quantity": null
+        "quantity": 100
       }
     ]
   },
@@ -3749,7 +3684,7 @@
           "assets/optimized/products/gallery/stole-04.webp"
         ],
         "sku": "",
-        "quantity": null
+        "quantity": 100
       },
       {
         "id": "stole-red-gold-04-2-2",
@@ -3766,7 +3701,7 @@
           "assets/optimized/products/gallery/stole-04.webp"
         ],
         "sku": "",
-        "quantity": null
+        "quantity": 100
       },
       {
         "id": "stole-red-gold-04-3-2",
@@ -3783,7 +3718,7 @@
           "assets/optimized/products/gallery/stole-04.webp"
         ],
         "sku": "",
-        "quantity": null
+        "quantity": 100
       },
       {
         "id": "stole-red-gold-04-4-2",
@@ -3800,7 +3735,7 @@
           "assets/optimized/products/gallery/stole-04.webp"
         ],
         "sku": "",
-        "quantity": null
+        "quantity": 100
       },
       {
         "id": "stole-red-gold-04-5-2",
@@ -3817,7 +3752,7 @@
           "assets/optimized/products/gallery/stole-04.webp"
         ],
         "sku": "",
-        "quantity": null
+        "quantity": 100
       },
       {
         "id": "stole-red-gold-04-6-2",
@@ -3834,7 +3769,7 @@
           "assets/optimized/products/gallery/stole-04.webp"
         ],
         "sku": "",
-        "quantity": null
+        "quantity": 100
       },
       {
         "id": "stole-red-gold-04-7-2",
@@ -3851,7 +3786,7 @@
           "assets/optimized/products/gallery/stole-04.webp"
         ],
         "sku": "",
-        "quantity": null
+        "quantity": 100
       },
       {
         "id": "stole-red-gold-04-1-1",
@@ -3868,7 +3803,7 @@
           "assets/optimized/products/gallery/stole-04.webp"
         ],
         "sku": "",
-        "quantity": null
+        "quantity": 100
       },
       {
         "id": "stole-red-gold-04-2-1",
@@ -3885,7 +3820,7 @@
           "assets/optimized/products/gallery/stole-04.webp"
         ],
         "sku": "",
-        "quantity": null
+        "quantity": 100
       },
       {
         "id": "stole-red-gold-04-3-1",
@@ -3902,7 +3837,7 @@
           "assets/optimized/products/gallery/stole-04.webp"
         ],
         "sku": "",
-        "quantity": null
+        "quantity": 100
       },
       {
         "id": "stole-red-gold-04-4-1",
@@ -3919,7 +3854,7 @@
           "assets/optimized/products/gallery/stole-04.webp"
         ],
         "sku": "",
-        "quantity": null
+        "quantity": 100
       },
       {
         "id": "stole-red-gold-04-5-1",
@@ -3936,7 +3871,7 @@
           "assets/optimized/products/gallery/stole-04.webp"
         ],
         "sku": "",
-        "quantity": null
+        "quantity": 100
       },
       {
         "id": "stole-red-gold-04-6-1",
@@ -3953,7 +3888,7 @@
           "assets/optimized/products/gallery/stole-04.webp"
         ],
         "sku": "",
-        "quantity": null
+        "quantity": 100
       },
       {
         "id": "stole-red-gold-04-7-1",
@@ -3970,7 +3905,7 @@
           "assets/optimized/products/gallery/stole-04.webp"
         ],
         "sku": "",
-        "quantity": null
+        "quantity": 100
       }
     ]
   }
