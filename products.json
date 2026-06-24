@@ -73,7 +73,7 @@
   },
   {
     "id": "custom-1782306615168-copy-1782306883366-copy-1782307173548-copy-1782307256776-copy-1782307341493-copy-1782310276272",
-    "name": "قطمارس الخمسي – قبطي – دير الشهيد العظيم مارمينا العجائبي بمريوط",
+    "name": "قطمارس الخمسين – قبطي – دير الشهيد العظيم مارمينا العجائبي بمريوط",
     "category": "books",
     "label": "قطمارس",
     "description": "كتاب طقسي كنسي يضم قراءات أيام الخمسين المقدسة باللغة القبطية بحسب ترتيب الكنيسة القبطية الأرثوذكسية. إصدار دير مارمينا بمريوط، بغلاف أسود متين وكتابات ذهبية أنيقة، مناسب للاستخدام داخل الكنيسة وللخدام والشمامسة والمهتمين بالقراءات والطقوس الكنسية.\n\nالمقاس: 25 × 35 سم\nالغلاف: هارد كفر أسود\nالإصدار: دير الشهيد العظيم مارمينا العجائبي بمريوط",
@@ -81,7 +81,7 @@
     "priceNote": "",
     "stock": "متاح",
     "badge": "قطمارس",
-    "image": "",
+    "image": "assets/optimized/products/gallery/5amsin-2epty.webp",
     "url": "https://popekyrillos.store/?product=custom-1782306615168-copy-1782306883366-copy-1782307173548-copy-1782307256776-copy-1782307341493-copy-1782310276272",
     "tags": [
       "كتب",
@@ -90,7 +90,9 @@
       "إنجيل",
       "قراءات"
     ],
-    "images": [],
+    "images": [
+      "assets/optimized/products/gallery/5amsin-2epty.webp"
+    ],
     "options": [],
     "variants": [
       {
@@ -109,7 +111,7 @@
   },
   {
     "id": "custom-1782306615168-copy-1782306883366-copy-1782307173548-copy-1782307256776-copy-1782307341493",
-    "name": "قطمارس الخمسي – عربي – دير الشهيد العظيم مارمينا العجائبي بمريوط",
+    "name": "قطمارس الخمسين – عربي – دير الشهيد العظيم مارمينا العجائبي بمريوط",
     "category": "books",
     "label": "قطمارس",
     "description": "كتاب طقسي كنسي يضم قراءات أيام الخمسين المقدسة باللغة العربية بحسب ترتيب الكنيسة القبطية الأرثوذكسية. إصدار دير مارمينا بمريوط، بغلاف أسود متين وكتابات ذهبية أنيقة، مناسب للاستخدام داخل الكنيسة وللخدام والشمامسة والمهتمين بالقراءات والطقوس الكنسية.\n\nالمقاس: 25 × 35 سم\nالغلاف: هارد كفر أسود\nالإصدار: دير الشهيد العظيم مارمينا العجائبي بمريوط",
@@ -117,7 +119,7 @@
     "priceNote": "",
     "stock": "متاح",
     "badge": "قطمارس",
-    "image": "",
+    "image": "assets/optimized/products/gallery/5amsin-araby.webp",
     "url": "https://popekyrillos.store/?product=custom-1782306615168-copy-1782306883366-copy-1782307173548-copy-1782307256776-copy-1782307341493",
     "tags": [
       "كتب",
@@ -126,7 +128,9 @@
       "إنجيل",
       "قراءات"
     ],
-    "images": [],
+    "images": [
+      "assets/optimized/products/gallery/5amsin-araby.webp"
+    ],
     "options": [],
     "variants": [
       {
@@ -153,7 +157,7 @@
     "priceNote": "",
     "stock": "متاح",
     "badge": "قطمارس",
-    "image": "",
+    "image": "assets/optimized/products/gallery/ahad-araby.webp",
     "url": "https://popekyrillos.store/?product=custom-1782306615168-copy-1782306883366-copy-1782307173548-copy-1782307256776",
     "tags": [
       "كتب",
@@ -162,7 +166,9 @@
       "إنجيل",
       "قراءات"
     ],
-    "images": [],
+    "images": [
+      "assets/optimized/products/gallery/ahad-araby.webp"
+    ],
     "options": [],
     "variants": [
       {
@@ -225,7 +231,7 @@
     "priceNote": "",
     "stock": "متاح",
     "badge": "قطمارس",
-    "image": "",
+    "image": "assets/optimized/products/gallery/ayam-sanawy-2epty.webp",
     "url": "https://popekyrillos.store/?product=custom-1782306615168-copy-1782306883366",
     "tags": [
       "كتب",
@@ -234,7 +240,9 @@
       "إنجيل",
       "قراءات"
     ],
-    "images": [],
+    "images": [
+      "assets/optimized/products/gallery/ayam-sanawy-2epty.webp"
+    ],
     "options": [],
     "variants": [
       {
@@ -261,7 +269,7 @@
     "priceNote": "",
     "stock": "متاح",
     "badge": "قطمارس",
-    "image": "",
+    "image": "assets/optimized/products/gallery/ayam-sanawy-araby.webp",
     "url": "https://popekyrillos.store/?product=custom-1782306615168",
     "tags": [
       "كتب",
@@ -270,7 +278,9 @@
       "إنجيل",
       "قراءات"
     ],
-    "images": [],
+    "images": [
+      "assets/optimized/products/gallery/ayam-sanawy-araby.webp"
+    ],
     "options": [],
     "variants": [
       {
