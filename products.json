@@ -1,281 +1,289 @@
 [
   {
-    "id": "custom-1782085094346-copy-1782089139611",
-    "name": "صليب يوطا مادلية موديل 1 ",
-    "category": "icons",
-    "label": "يوتا",
-    "description": "",
-    "price": 0,
+    "id": "custom-1782306615168-copy-1782306883366-copy-1782307173548-copy-1782307256776-copy-1782307341493-copy-1782310276272-copy-1782310382795-copy-1782310383710",
+    "name": "قطمارس البصخة – عربي – دير الشهيد العظيم مارمينا العجائبي بمريوط",
+    "category": "books",
+    "label": "قطمارس",
+    "description": "كتاب طقسي كنسي يضم قراءات أيام البصخة المقدسة باللغة العربية بحسب ترتيب الكنيسة القبطية الأرثوذكسية. إصدار دير مارمينا بمريوط، بغلاف أسود متين وكتابات ذهبية أنيقة، مناسب للاستخدام داخل الكنيسة وللخدام والشمامسة والمهتمين بالقراءات والطقوس الكنسية.\n\nالمقاس: 25 × 35 سم\nالغلاف: هارد كفر أسود\nالإصدار: دير الشهيد العظيم مارمينا العجائبي بمريوط",
+    "price": 700,
     "priceNote": "",
     "stock": "متاح",
-    "badge": "يوتا",
-    "image": "assets/optimized/products/gallery/madlia-iota-sada-2.webp",
-    "url": "https://popekyrillos.store/?product=custom-1782085094346-copy-1782089139611",
+    "badge": "قطمارس",
+    "image": "",
+    "url": "https://popekyrillos.store/?product=custom-1782306615168-copy-1782306883366-copy-1782307173548-copy-1782307256776-copy-1782307341493-copy-1782310276272-copy-1782310382795-copy-1782310383710",
     "tags": [
-      "مادليات",
-      "يوطا"
+      "كتب",
+      "كتاب مقدس",
+      "قطمارس",
+      "إنجيل",
+      "قراءات"
     ],
-    "images": [
-      "assets/optimized/products/gallery/madlia-iota-sada-2.webp"
-    ],
+    "images": [],
     "options": [],
     "variants": [
       {
-        "id": "custom-1782085094346-copy-1782089139611-variant-1",
+        "id": "custom-1782306615168-copy-1782306883366-copy-1782307173548-copy-1782307256776-copy-1782307341493-copy-1782310276272-copy-1782310382795-copy-1782310383710-variant-1",
         "title": "الاختيار الافتراضي",
         "options": {},
-        "price": 0,
+        "price": 700,
         "compareAtPrice": null,
         "available": true,
         "image": null,
         "images": [],
         "sku": "",
-        "quantity": 1000
+        "quantity": 10
       }
     ]
   },
   {
-    "id": "custom-1782085094346-copy-1782085785931-copy-1782085787013-copy-1782085787633-copy-1782085791699-copy-1782085792663-copy-1782085793567",
-    "name": "صليب يوطا مادلية موديل 7",
-    "category": "icons",
-    "label": "يوتا",
-    "description": "",
-    "price": 0,
+    "id": "custom-1782306615168-copy-1782306883366-copy-1782307173548-copy-1782307256776-copy-1782307341493-copy-1782310276272-copy-1782310382795",
+    "name": "قطمارس الصوم الكبير – عربي– دير الشهيد العظيم مارمينا العجائبي بمريوط - نسخة",
+    "category": "books",
+    "label": "قطمارس",
+    "description": "كتاب طقسي كنسي يضم قراءات أيام الصوم الكبير المقدس باللغة العربية بحسب ترتيب الكنيسة القبطية الأرثوذكسية. إصدار دير مارمينا بمريوط، بغلاف أسود متين وكتابات ذهبية أنيقة، مناسب للاستخدام داخل الكنيسة وللخدام والشمامسة والمهتمين بالقراءات والطقوس الكنسية.\n\nالمقاس: 25 × 35 سم\nالغلاف: هارد كفر أسود\nالإصدار: دير الشهيد العظيم مارمينا العجائبي بمريوط",
+    "price": 700,
     "priceNote": "",
     "stock": "متاح",
-    "badge": "يوتا",
-    "image": "\\assets\\optimized\\products\\gallery\\madlia-iota-sada-7.webp",
-    "url": "https://popekyrillos.store/?product=custom-1782085094346-copy-1782085785931-copy-1782085787013-copy-1782085787633-copy-1782085791699-copy-1782085792663-copy-1782085793567",
+    "badge": "قطمارس",
+    "image": "",
+    "url": "https://popekyrillos.store/?product=custom-1782306615168-copy-1782306883366-copy-1782307173548-copy-1782307256776-copy-1782307341493-copy-1782310276272-copy-1782310382795",
     "tags": [
-      "مادليات",
-      "يوطا"
+      "كتب",
+      "كتاب مقدس",
+      "قطمارس",
+      "إنجيل",
+      "قراءات"
     ],
-    "images": [
-      "\\assets\\optimized\\products\\gallery\\madlia-iota-sada-7.webp"
-    ],
+    "images": [],
     "options": [],
     "variants": [
       {
-        "id": "custom-1782085094346-copy-1782085785931-copy-1782085787013-copy-1782085787633-copy-1782085791699-copy-1782085792663-copy-1782085793567-variant-1",
+        "id": "custom-1782306615168-copy-1782306883366-copy-1782307173548-copy-1782307256776-copy-1782307341493-copy-1782310276272-copy-1782310382795-variant-1",
         "title": "الاختيار الافتراضي",
         "options": {},
-        "price": 0,
+        "price": 700,
         "compareAtPrice": null,
         "available": true,
         "image": null,
         "images": [],
         "sku": "",
-        "quantity": 1000
+        "quantity": 10
       }
     ]
   },
   {
-    "id": "custom-1782085094346-copy-1782085785931-copy-1782085787013-copy-1782085787633-copy-1782085791699-copy-1782085792663",
-    "name": "صليب يوطا مادلية موديل 6",
-    "category": "icons",
-    "label": "يوتا",
-    "description": "",
-    "price": 0,
+    "id": "custom-1782306615168-copy-1782306883366-copy-1782307173548-copy-1782307256776-copy-1782307341493-copy-1782310276272",
+    "name": "قطمارس الخمسي – قبطي – دير الشهيد العظيم مارمينا العجائبي بمريوط",
+    "category": "books",
+    "label": "قطمارس",
+    "description": "كتاب طقسي كنسي يضم قراءات أيام الخمسين المقدسة باللغة القبطية بحسب ترتيب الكنيسة القبطية الأرثوذكسية. إصدار دير مارمينا بمريوط، بغلاف أسود متين وكتابات ذهبية أنيقة، مناسب للاستخدام داخل الكنيسة وللخدام والشمامسة والمهتمين بالقراءات والطقوس الكنسية.\n\nالمقاس: 25 × 35 سم\nالغلاف: هارد كفر أسود\nالإصدار: دير الشهيد العظيم مارمينا العجائبي بمريوط",
+    "price": 700,
     "priceNote": "",
     "stock": "متاح",
-    "badge": "يوتا",
-    "image": "\\assets\\optimized\\products\\gallery\\madlia-iota-sada-6.webp",
-    "url": "https://popekyrillos.store/?product=custom-1782085094346-copy-1782085785931-copy-1782085787013-copy-1782085787633-copy-1782085791699-copy-1782085792663",
+    "badge": "قطمارس",
+    "image": "",
+    "url": "https://popekyrillos.store/?product=custom-1782306615168-copy-1782306883366-copy-1782307173548-copy-1782307256776-copy-1782307341493-copy-1782310276272",
     "tags": [
-      "مادليات",
-      "يوطا"
+      "كتب",
+      "كتاب مقدس",
+      "قطمارس",
+      "إنجيل",
+      "قراءات"
     ],
-    "images": [
-      "\\assets\\optimized\\products\\gallery\\madlia-iota-sada-6.webp"
-    ],
+    "images": [],
     "options": [],
     "variants": [
       {
-        "id": "custom-1782085094346-copy-1782085785931-copy-1782085787013-copy-1782085787633-copy-1782085791699-copy-1782085792663-variant-1",
+        "id": "custom-1782306615168-copy-1782306883366-copy-1782307173548-copy-1782307256776-copy-1782307341493-copy-1782310276272-variant-1",
         "title": "الاختيار الافتراضي",
         "options": {},
-        "price": 0,
+        "price": 700,
         "compareAtPrice": null,
         "available": true,
         "image": null,
         "images": [],
         "sku": "",
-        "quantity": 1000
+        "quantity": 10
       }
     ]
   },
   {
-    "id": "custom-1782085094346-copy-1782085785931-copy-1782085787013-copy-1782085787633-copy-1782085791699",
-    "name": "صليب يوطا مادلية موديل 5",
-    "category": "icons",
-    "label": "يوتا",
-    "description": "",
-    "price": 0,
+    "id": "custom-1782306615168-copy-1782306883366-copy-1782307173548-copy-1782307256776-copy-1782307341493",
+    "name": "قطمارس الخمسي – عربي – دير الشهيد العظيم مارمينا العجائبي بمريوط",
+    "category": "books",
+    "label": "قطمارس",
+    "description": "كتاب طقسي كنسي يضم قراءات أيام الخمسين المقدسة باللغة العربية بحسب ترتيب الكنيسة القبطية الأرثوذكسية. إصدار دير مارمينا بمريوط، بغلاف أسود متين وكتابات ذهبية أنيقة، مناسب للاستخدام داخل الكنيسة وللخدام والشمامسة والمهتمين بالقراءات والطقوس الكنسية.\n\nالمقاس: 25 × 35 سم\nالغلاف: هارد كفر أسود\nالإصدار: دير الشهيد العظيم مارمينا العجائبي بمريوط",
+    "price": 600,
     "priceNote": "",
     "stock": "متاح",
-    "badge": "يوتا",
-    "image": "\\assets\\optimized\\products\\gallery\\madlia-iota-sada-5.webp",
-    "url": "https://popekyrillos.store/?product=custom-1782085094346-copy-1782085785931-copy-1782085787013-copy-1782085787633-copy-1782085791699",
+    "badge": "قطمارس",
+    "image": "",
+    "url": "https://popekyrillos.store/?product=custom-1782306615168-copy-1782306883366-copy-1782307173548-copy-1782307256776-copy-1782307341493",
     "tags": [
-      "مادليات",
-      "يوطا"
+      "كتب",
+      "كتاب مقدس",
+      "قطمارس",
+      "إنجيل",
+      "قراءات"
     ],
-    "images": [
-      "\\assets\\optimized\\products\\gallery\\madlia-iota-sada-5.webp"
-    ],
+    "images": [],
     "options": [],
     "variants": [
       {
-        "id": "custom-1782085094346-copy-1782085785931-copy-1782085787013-copy-1782085787633-copy-1782085791699-variant-1",
+        "id": "custom-1782306615168-copy-1782306883366-copy-1782307173548-copy-1782307256776-copy-1782307341493-variant-1",
         "title": "الاختيار الافتراضي",
         "options": {},
-        "price": 0,
+        "price": 600,
         "compareAtPrice": null,
         "available": true,
         "image": null,
         "images": [],
         "sku": "",
-        "quantity": 1000
+        "quantity": 10
       }
     ]
   },
   {
-    "id": "custom-1782085094346-copy-1782085785931-copy-1782085787013-copy-1782085787633",
-    "name": "صليب يوطا مادلية موديل 4",
-    "category": "icons",
-    "label": "يوتا",
-    "description": "",
-    "price": 0,
+    "id": "custom-1782306615168-copy-1782306883366-copy-1782307173548-copy-1782307256776",
+    "name": "قطمارس الآحاد – عربي – دير الشهيد العظيم مارمينا العجائبي بمريوط",
+    "category": "books",
+    "label": "قطمارس",
+    "description": "كتاب طقسي كنسي يضم قراءات أيام الآحاد السنوية باللغة العربية بحسب ترتيب الكنيسة القبطية الأرثوذكسية. إصدار دير مارمينا بمريوط، بغلاف أسود متين وكتابات ذهبية أنيقة، مناسب للاستخدام داخل الكنيسة وللخدام والشمامسة والمهتمين بالقراءات والطقوس الكنسية.\n\nالمقاس: 25 × 35 سم\nالغلاف: هارد كفر أسود\nالإصدار: دير الشهيد العظيم مارمينا العجائبي بمريوط",
+    "price": 600,
     "priceNote": "",
     "stock": "متاح",
-    "badge": "يوتا",
-    "image": "\\assets\\optimized\\products\\gallery\\madlia-iota-sada-4.webp",
-    "url": "https://popekyrillos.store/?product=custom-1782085094346-copy-1782085785931-copy-1782085787013-copy-1782085787633",
+    "badge": "قطمارس",
+    "image": "",
+    "url": "https://popekyrillos.store/?product=custom-1782306615168-copy-1782306883366-copy-1782307173548-copy-1782307256776",
     "tags": [
-      "مادليات",
-      "يوطا"
+      "كتب",
+      "كتاب مقدس",
+      "قطمارس",
+      "إنجيل",
+      "قراءات"
     ],
-    "images": [
-      "\\assets\\optimized\\products\\gallery\\madlia-iota-sada-4.webp"
-    ],
+    "images": [],
     "options": [],
     "variants": [
       {
-        "id": "custom-1782085094346-copy-1782085785931-copy-1782085787013-copy-1782085787633-variant-1",
+        "id": "custom-1782306615168-copy-1782306883366-copy-1782307173548-copy-1782307256776-variant-1",
         "title": "الاختيار الافتراضي",
         "options": {},
-        "price": 0,
+        "price": 600,
         "compareAtPrice": null,
         "available": true,
         "image": null,
         "images": [],
         "sku": "",
-        "quantity": 1000
+        "quantity": 10
       }
     ]
   },
   {
-    "id": "custom-1782085094346-copy-1782085785931-copy-1782085787013",
-    "name": "صليب يوطا مادلية موديل 3",
-    "category": "icons",
-    "label": "يوتا",
-    "description": "",
-    "price": 0,
+    "id": "custom-1782306615168-copy-1782306883366-copy-1782307173548",
+    "name": "قطمارس الآحاد – قبطي – دير الشهيد العظيم مارمينا العجائبي بمريوط",
+    "category": "books",
+    "label": "قطمارس",
+    "description": "كتاب طقسي كنسي يضم قراءات أيام الآحاد السنوية باللغة القبطية  بحسب ترتيب الكنيسة القبطية الأرثوذكسية. إصدار دير مارمينا بمريوط، بغلاف أسود متين وكتابات ذهبية أنيقة، مناسب للاستخدام داخل الكنيسة وللخدام والشمامسة والمهتمين بالقراءات والطقوس الكنسية.\n\nالمقاس: 25 × 35 سم\nالغلاف: هارد كفر أسود\nالإصدار: دير الشهيد العظيم مارمينا العجائبي بمريوط",
+    "price": 700,
     "priceNote": "",
     "stock": "متاح",
-    "badge": "يوتا",
-    "image": "\\assets\\optimized\\products\\gallery\\madlia-iota-sada-3.webp",
-    "url": "https://popekyrillos.store/?product=custom-1782085094346-copy-1782085785931-copy-1782085787013",
+    "badge": "قطمارس",
+    "image": "",
+    "url": "https://popekyrillos.store/?product=custom-1782306615168-copy-1782306883366-copy-1782307173548",
     "tags": [
-      "مادليات",
-      "يوطا"
+      "كتب",
+      "كتاب مقدس",
+      "قطمارس",
+      "إنجيل",
+      "قراءات"
     ],
-    "images": [
-      "\\assets\\optimized\\products\\gallery\\madlia-iota-sada-3.webp"
-    ],
+    "images": [],
     "options": [],
     "variants": [
       {
-        "id": "custom-1782085094346-copy-1782085785931-copy-1782085787013-variant-1",
+        "id": "custom-1782306615168-copy-1782306883366-copy-1782307173548-variant-1",
         "title": "الاختيار الافتراضي",
         "options": {},
-        "price": 0,
+        "price": 700,
         "compareAtPrice": null,
         "available": true,
         "image": null,
         "images": [],
         "sku": "",
-        "quantity": 1000
+        "quantity": 10
       }
     ]
   },
   {
-    "id": "custom-1782085094346-copy-1782085785931",
-    "name": "صليب يوطا مادلية موديل 2",
-    "category": "icons",
-    "label": "يوتا",
-    "description": "",
-    "price": 0,
+    "id": "custom-1782306615168-copy-1782306883366",
+    "name": "قطمارس الأيام السنوي – قبطي – دير الشهيد العظيم مارمينا العجائبي بمريوط",
+    "category": "books",
+    "label": "قطمارس",
+    "description": "كتاب طقسي كنسي يضم قراءات الأيام السنوية دون الآحاد باللغة القبطية  بحسب ترتيب الكنيسة القبطية الأرثوذكسية. إصدار دير مارمينا بمريوط، بغلاف أسود متين وكتابات ذهبية أنيقة، مناسب للاستخدام داخل الكنيسة وللخدام والشمامسة والمهتمين بالقراءات والطقوس الكنسية.\n\nالمقاس: 25 × 35 سم\nالغلاف: هارد كفر أسود\nالإصدار: دير الشهيد العظيم مارمينا العجائبي بمريوط",
+    "price": 900,
     "priceNote": "",
     "stock": "متاح",
-    "badge": "يوتا",
-    "image": "\\assets\\optimized\\products\\gallery\\madlia-iota-sada-2.webp",
-    "url": "https://popekyrillos.store/?product=custom-1782085094346-copy-1782085785931",
+    "badge": "قطمارس",
+    "image": "",
+    "url": "https://popekyrillos.store/?product=custom-1782306615168-copy-1782306883366",
     "tags": [
-      "مادليات",
-      "يوطا"
+      "كتب",
+      "كتاب مقدس",
+      "قطمارس",
+      "إنجيل",
+      "قراءات"
     ],
-    "images": [
-      "\\assets\\optimized\\products\\gallery\\madlia-iota-sada-2.webp"
-    ],
+    "images": [],
     "options": [],
     "variants": [
       {
-        "id": "custom-1782085094346-copy-1782085785931-variant-1",
+        "id": "custom-1782306615168-copy-1782306883366-variant-1",
         "title": "الاختيار الافتراضي",
         "options": {},
-        "price": 0,
+        "price": 900,
         "compareAtPrice": null,
         "available": true,
         "image": null,
         "images": [],
         "sku": "",
-        "quantity": 1000
+        "quantity": 10
       }
     ]
   },
   {
-    "id": "custom-1782085094346",
-    "name": "صليب يوطا مادلية موديل 1",
-    "category": "icons",
-    "label": "يوتا",
-    "description": "",
-    "price": 0,
+    "id": "custom-1782306615168",
+    "name": "قطمارس الأيام السنوي – عربي – نسخة دير الشهيد العظيم مارمينا العجائبي بمريوط",
+    "category": "books",
+    "label": "قطمارس",
+    "description": "كتاب طقسي كنسي يضم قراءات الأيام السنوية دون الآحاد باللغة العربية  بحسب ترتيب الكنيسة القبطية الأرثوذكسية. إصدار دير مارمينا بمريوط، بغلاف أسود متين وكتابات ذهبية أنيقة، مناسب للاستخدام داخل الكنيسة وللخدام والشمامسة والمهتمين بالقراءات والطقوس الكنسية.\n\nالمقاس: 25 × 35 سم\nالغلاف: هارد كفر أسود\nالإصدار: دير الشهيد العظيم مارمينا العجائبي بمريوط",
+    "price": 750,
     "priceNote": "",
     "stock": "متاح",
-    "badge": "يوتا",
-    "image": "assets/optimized/products/gallery/madlia-iota-sada-1-v2.webp",
-    "url": "https://popekyrillos.store/?product=custom-1782085094346",
+    "badge": "قطمارس",
+    "image": "",
+    "url": "https://popekyrillos.store/?product=custom-1782306615168",
     "tags": [
-      "مادليات",
-      "يوطا"
+      "كتب",
+      "كتاب مقدس",
+      "قطمارس",
+      "إنجيل",
+      "قراءات"
     ],
-    "images": [
-      "assets/optimized/products/gallery/madlia-iota-sada-1-v2.webp"
-    ],
+    "images": [],
     "options": [],
     "variants": [
       {
-        "id": "custom-1782085094346-variant-1782085094346-1",
+        "id": "custom-1782306615168-variant-1782306615168-1",
         "title": "الاختيار الافتراضي",
         "options": {},
-        "price": 0,
+        "price": 750,
         "compareAtPrice": null,
         "available": true,
         "image": null,
         "images": [],
         "sku": "",
-        "quantity": 1000
+        "quantity": 10
       }
     ]
   },
