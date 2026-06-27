@@ -1016,11 +1016,15 @@ body[data-lang="en"] .category-art {
   inset: 0;
   z-index: 1;
   display: grid;
-  grid-template-rows: minmax(0, 1fr) 52px;
+  grid-template-rows: minmax(0, 1fr);
   gap: 8px;
   padding: 14px 12px 10px;
   -webkit-touch-callout: none;
   user-select: none;
+}
+
+.product-gallery.has-thumbs {
+  grid-template-rows: minmax(0, 1fr) 52px;
 }
 
 .product-gallery-main {
@@ -3304,9 +3308,13 @@ body.account-open .scrim {
   }
 
   .product-gallery {
-    grid-template-rows: minmax(0, 1fr) 48px;
+    grid-template-rows: minmax(0, 1fr);
     gap: 7px;
     padding: 12px 10px 9px;
+  }
+
+  .product-gallery.has-thumbs {
+    grid-template-rows: minmax(0, 1fr) 48px;
   }
 
   .product-gallery-main {
