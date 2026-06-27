@@ -16,13 +16,15 @@ Add these variables in Cloudflare Pages:
 ```text
 PAYMOB_SECRET_KEY=...
 PAYMOB_PUBLIC_KEY=...
-PAYMOB_INTEGRATION_IDS=5497028
+PAYMOB_INTEGRATION_IDS=<card integration id from the same Paymob account>
 PAYMOB_HMAC_SECRET=...
 BOSTA_API_KEY=...
 SITE_URL=https://popekyrillos.store
 ```
 
 Keep `PAYMOB_SECRET_KEY`, `PAYMOB_HMAC_SECRET`, and `BOSTA_API_KEY` secret.
+
+`PAYMOB_INTEGRATION_IDS` must come from the same Paymob merchant account as `PAYMOB_SECRET_KEY` and `PAYMOB_PUBLIC_KEY`. In Paymob Dashboard, open **Developers -> Payment Integrations** and copy the card integration ID. If Paymob returns `Integration ID/Name does not exist`, this value is wrong or belongs to another account/environment.
 
 ## KV binding
 

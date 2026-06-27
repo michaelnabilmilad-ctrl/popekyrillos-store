@@ -55,6 +55,13 @@ function paymobErrorMessage(data = {}) {
   return String(message || "Paymob rejected the request.");
 }
 
+function publicPaymobError(message = "") {
+  if (/integration id\/name does not exist|integration.*does not exist/i.test(message)) {
+    return "رقم Paymob Integration ID غير صحيح أو لا يتبع نفس حساب Paymob. راجع PAYMOB_INTEGRATION_IDS في Cloudflare.";
+  }
+  return message || "تعذر فتح Paymob الآن.";
+}
+
 exports.handler = async (event) => {
   if (event.httpMethod === "OPTIONS") return jsonResponse(204, {});
   if (event.httpMethod !== "POST") return jsonResponse(405, { error: "Method not allowed." });
@@ -135,7 +142,8 @@ exports.handler = async (event) => {
       }));
       return jsonResponse(502, {
         error: "تعذر فتح Paymob الآن.",
-        message: providerMessage,
+        message: publicPaymobError(providerMessage),
+        providerMessage,
         providerStatus: paymobResponse.status
       });
     }
