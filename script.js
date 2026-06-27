@@ -1351,6 +1351,7 @@ function variantStockText(variant) {
   if (!isVariantAvailable(variant)) return isEnglish() ? "Currently unavailable" : "غير متاح حاليا";
   const quantity = variantQuantity(variant);
   if (quantity === null) return t("available");
+  if (quantity > 3) return t("available");
   return isEnglish() ? `Available - ${displayText(formatter.format(quantity))} pcs` : `متاح - ${formatter.format(quantity)} قطعة`;
 }
 
@@ -1373,6 +1374,7 @@ function productStockText(product) {
   const quantities = availableVariants.map(variantQuantity).filter((quantity) => quantity !== null);
   if (quantities.length === availableVariants.length && quantities.length) {
     const total = quantities.reduce((sum, quantity) => sum + quantity, 0);
+    if (total > 3) return t("available");
     return isEnglish() ? `Available - ${displayText(formatter.format(total))} pcs` : `متاح - ${formatter.format(total)} قطعة`;
   }
 

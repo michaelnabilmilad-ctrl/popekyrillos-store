@@ -1262,7 +1262,7 @@ body[data-lang="en"] .category-art {
   flex: 1 1 132px;
   min-width: 0;
   color: var(--burgundy);
-  font-size: 19px;
+  font-size: 23px;
   font-weight: 900;
   line-height: 1.35;
   white-space: normal;
@@ -3541,7 +3541,7 @@ body.account-open .scrim {
 
   .price {
     flex-basis: auto;
-    font-size: 15px;
+    font-size: 18px;
     text-align: start;
   }
 
