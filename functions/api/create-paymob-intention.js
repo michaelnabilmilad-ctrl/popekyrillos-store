@@ -53,6 +53,13 @@ function paymobItems(orderItems, shippingCents) {
   return items;
 }
 
+function paymobErrorMessage(data = {}) {
+  const message = data.message || data.error || data.detail || data.details || data.raw || "";
+  if (Array.isArray(message)) return message.filter(Boolean).join(" ");
+  if (message && typeof message === "object") return JSON.stringify(message);
+  return String(message || "Paymob rejected the request.");
+}
+
 export async function onRequest(context) {
   const { request, env } = context;
   if (request.method === "OPTIONS") return jsonResponse(204, {});
@@ -117,10 +124,11 @@ export async function onRequest(context) {
 
     const paymobData = await paymobResponse.json().catch(async () => ({ raw: await paymobResponse.text().catch(() => "") }));
     if (!paymobResponse.ok || !paymobData.client_secret) {
+      const providerMessage = paymobErrorMessage(paymobData);
       console.error("Paymob intention rejected", {
         status: paymobResponse.status,
         orderReference,
-        message: paymobData.message || paymobData.error || paymobData.detail || "Unknown Paymob error"
+        message: providerMessage
       });
       await updateOrder(env, orderReference, (order) => ({
         ...order,
@@ -131,7 +139,11 @@ export async function onRequest(context) {
           providerResponseStatus: paymobResponse.status
         }
       }));
-      return jsonResponse(502, { error: "تعذر فتح Paymob الآن. حاول مرة أخرى بعد لحظات." });
+      return jsonResponse(502, {
+        error: "تعذر فتح Paymob الآن.",
+        message: providerMessage,
+        providerStatus: paymobResponse.status
+      });
     }
 
     await updateOrder(env, orderReference, (order) => ({

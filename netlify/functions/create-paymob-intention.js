@@ -48,6 +48,13 @@ function paymobItems(orderItems, shippingCents) {
   return items;
 }
 
+function paymobErrorMessage(data = {}) {
+  const message = data.message || data.error || data.detail || data.details || data.raw || "";
+  if (Array.isArray(message)) return message.filter(Boolean).join(" ");
+  if (message && typeof message === "object") return JSON.stringify(message);
+  return String(message || "Paymob rejected the request.");
+}
+
 exports.handler = async (event) => {
   if (event.httpMethod === "OPTIONS") return jsonResponse(204, {});
   if (event.httpMethod !== "POST") return jsonResponse(405, { error: "Method not allowed." });
@@ -111,10 +118,11 @@ exports.handler = async (event) => {
 
     const paymobData = await paymobResponse.json().catch(async () => ({ raw: await paymobResponse.text().catch(() => "") }));
     if (!paymobResponse.ok || !paymobData.client_secret) {
+      const providerMessage = paymobErrorMessage(paymobData);
       console.error("Paymob intention rejected", {
         status: paymobResponse.status,
         orderReference,
-        message: paymobData.message || paymobData.error || paymobData.detail || "Unknown Paymob error"
+        message: providerMessage
       });
       await updateOrder(orderReference, (order) => ({
         ...order,
@@ -125,7 +133,11 @@ exports.handler = async (event) => {
           providerResponseStatus: paymobResponse.status
         }
       }));
-      return jsonResponse(502, { error: "تعذر فتح Paymob الآن. حاول مرة أخرى بعد لحظات." });
+      return jsonResponse(502, {
+        error: "تعذر فتح Paymob الآن.",
+        message: providerMessage,
+        providerStatus: paymobResponse.status
+      });
     }
 
     await updateOrder(orderReference, (order) => ({
