@@ -12,15 +12,22 @@
   </head>
   <body dir="rtl">
     <header class="site-header" data-elevated="false">
-      <a class="brand" href="/" aria-label="مكتبة البابا كيرلس">
-        <span class="brand-logo-wrap" aria-hidden="true">
-          <img src="assets/logo-papa-kyrillos-original.jpeg" alt="" width="160" height="160" decoding="async" />
-        </span>
-        <span>
-          <strong>مكتبة البابا كيرلس</strong>
-          <small>مستلزمات الكنائس والخدمة</small>
-        </span>
-      </a>
+      <div class="brand-cluster">
+        <a class="brand" href="/" aria-label="مكتبة البابا كيرلس">
+          <span class="brand-logo-wrap" aria-hidden="true">
+            <img src="assets/logo-papa-kyrillos-original.jpeg" alt="" width="160" height="160" decoding="async" />
+          </span>
+          <span>
+            <strong>مكتبة البابا كيرلس</strong>
+            <small>مستلزمات الكنائس والخدمة</small>
+          </span>
+        </a>
+        <button class="header-shop-toggle" type="button" data-header-shop-menu-toggle aria-expanded="false" aria-controls="shop-menu" aria-label="فتح قائمة الأقسام">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M4 7h16M4 12h16M4 17h10" />
+          </svg>
+        </button>
+      </div>
 
       <nav class="main-nav" aria-label="التنقل الرئيسي">
         <a href="#categories">الأقسام</a>
@@ -57,10 +64,27 @@
           </svg>
           <span class="cart-count" data-cart-count>0</span>
         </button>
-      </div>
-    </header>
+    </div>
+  </header>
 
-    <main id="top">
+  <aside class="mini-cart" data-mini-cart aria-hidden="true" aria-label="ملخص السلة">
+    <div class="mini-cart-head">
+      <div>
+        <span data-mini-cart-eyebrow>ملخص السلة</span>
+        <strong data-mini-cart-title>اختيارات العميل</strong>
+      </div>
+      <a href="cart.html" data-mini-cart-page>فتح السلة</a>
+    </div>
+    <div class="mini-cart-items" data-mini-cart-items>
+      <div class="mini-cart-empty">السلة فارغة حالياً</div>
+    </div>
+    <div class="mini-cart-foot">
+      <span data-mini-cart-total-label>الإجمالي</span>
+      <strong data-mini-cart-total>٠ ج.م</strong>
+    </div>
+  </aside>
+
+  <main id="top">
       <section class="hero" aria-labelledby="hero-title">
         <div class="hero-media" aria-hidden="true"></div>
         <div class="hero-copy">
@@ -86,11 +110,11 @@
             </div>
             <div>
               <strong>48 ساعة</strong>
-              <span>تجهيز شائع</span>
+          <span>تجهيز الطلب</span>
             </div>
             <div>
               <strong>طلبات كنائس</strong>
-              <span>كميات ومقاسات</span>
+          <span>كميات وأسعار خاصة</span>
             </div>
           </div>
         </div>
@@ -109,13 +133,13 @@
             <svg viewBox="0 0 24 24"><path d="M7 4h10v16H7z" /><path d="M10 8h4M10 12h4" /></svg>
           </span>
           <strong>منتجات مختارة</strong>
-          <span>كتب وأدوات بجودة ثابتة</span>
+        <span>أدوات كنسية وكتب بأعلي جودة</span>
         </div>
         <div>
           <span class="trust-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24"><path d="M12 3v18M7 8h10M5 21h14" /></svg>
           </span>
-          <strong>تغليف محترم</strong>
+        <strong>تغليف مضمون</strong>
           <span>جاهز للهدايا والخدمة</span>
         </div>
         <div>
@@ -123,7 +147,7 @@
             <svg viewBox="0 0 24 24"><path d="M3 7h12v10H3z" /><path d="M15 10h3l3 3v4h-6z" /><circle cx="7" cy="19" r="1.5" /><circle cx="18" cy="19" r="1.5" /></svg>
           </span>
           <strong>استلام أو شحن</strong>
-          <span>حسب المدينة والكمية</span>
+        <span>استلم من الفرع أو أطلبه أونلاين</span>
         </div>
       </section>
 
@@ -620,6 +644,6 @@
 
     <div class="toast" data-toast role="status" aria-live="polite"></div>
     <script src="firebase-config.min.js?v=secure-orders-20260612" defer></script>
-    <script src="script.min.js?v=cloudflare-20260619" defer></script>
+    <script src="script.min.js?v=image-cache-20260627" defer></script>
   </body>
 </html>

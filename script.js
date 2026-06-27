@@ -2,6 +2,7 @@ const whatsappNumber = "201016125589";
 const paymobIntentionEndpointPath = "/api/create-paymob-intention";
 const firebaseSdkVersion = "10.14.1";
 const productBatchSize = 12;
+const catalogVersion = Date.now().toString(36);
 const guestCartStorageKey = "pope-kyrillos-cart:guest";
 const userCartStoragePrefix = "pope-kyrillos-cart:user:";
 const languageStorageKey = "pope-kyrillos-language";
@@ -40,6 +41,7 @@ const fallbackProducts = [
 
 let products = [];
 let authInitPromise = null;
+let productsAssetVersion = "";
 
 const state = {
   filter: "all",
@@ -91,6 +93,7 @@ const header = document.querySelector(".site-header");
 const languageToggle = document.querySelector("[data-language-toggle]");
 const languageLabel = document.querySelector("[data-language-label]");
 const shopMenuToggle = document.querySelector("[data-shop-menu-toggle]");
+const headerShopMenuToggle = document.querySelector("[data-header-shop-menu-toggle]");
 const shopMenu = document.querySelector("[data-shop-menu]");
 const shopMenuList = document.querySelector("[data-shop-menu-list]");
 const shopMenuClose = document.querySelector("[data-shop-menu-close]");
@@ -169,16 +172,16 @@ const translations = {
     shopMenuSubtitle: "الأقسام الرئيسية والفرعية",
     shopMenuAll: "كل المنتجات",
     metricProducts: "منتج للخدمة",
-    metricTime: "تجهيز شائع",
-    metricChurch: "كميات ومقاسات",
+    metricTime: "تجهيز الطلب",
+    metricChurch: "كميات وأسعار خاصة",
     trustPaymentTitle: "طرق دفع مرنة",
     trustPaymentText: "دفع عند الاستلام أو أونلاين",
     trustChosenTitle: "منتجات مختارة",
-    trustChosenText: "كتب وأدوات بجودة ثابتة",
-    trustGiftTitle: "تغليف محترم",
+    trustChosenText: "أدوات كنسية وكتب بأعلي جودة",
+    trustGiftTitle: "تغليف مضمون",
     trustGiftText: "جاهز للهدايا والخدمة",
     trustShippingTitle: "استلام أو شحن",
-    trustShippingText: "حسب المدينة والكمية",
+    trustShippingText: "استلم من الفرع أو أطلبه أونلاين",
     categoriesEyebrow: "الأقسام",
     categoriesTitle: "لدينا كل ما تحتاج إليه الكنيسة",
     catalogEyebrow: "الكتالوج",
@@ -1276,14 +1279,37 @@ function getVariantImages(variant) {
   return [];
 }
 
+function productAssetVersion(product) {
+  return product?.assetVersion || product?.updatedAt || productsAssetVersion;
+}
+
+function versionedAssetUrl(src = "", version = "") {
+  const value = String(src || "");
+  if (!value || /^(?:data|blob):/i.test(value) || !version) return value;
+  const hashIndex = value.indexOf("#");
+  const withoutHash = hashIndex >= 0 ? value.slice(0, hashIndex) : value;
+  const hash = hashIndex >= 0 ? value.slice(hashIndex) : "";
+  const queryIndex = withoutHash.indexOf("?");
+  const path = queryIndex >= 0 ? withoutHash.slice(0, queryIndex) : withoutHash;
+  const query = queryIndex >= 0 ? withoutHash.slice(queryIndex + 1) : "";
+  const params = new URLSearchParams(query);
+  params.set("v", version);
+  return `${path}?${params.toString()}${hash}`;
+}
+
+function productImageUrl(image, product) {
+  return versionedAssetUrl(image, productAssetVersion(product));
+}
+
+function productDetailImageUrl(image, product) {
+  return productImageUrl(productDetailImage(image), product);
+}
+
 function productDetailImage(image = "") {
   const value = String(image || "");
   if (!value) return "";
   if (value.startsWith("assets/optimized/products/")) {
     return value.replace(/^assets\/optimized\/products\//, "assets/detail/products/");
-  }
-  if (value.startsWith("assets/products/")) {
-    return value.replace(/^assets\/products\//, "assets/detail/products/").replace(/\.(?:jpe?g|png)$/i, ".webp");
   }
   return value;
 }
@@ -1528,18 +1554,21 @@ function renderProducts() {
           <div class="product-thumbs" aria-label="${escapeHtml(t("galleryLabel", { name: productDisplayName }))}">
             ${galleryImages
               .map(
-                (image, index) => `
+                (image, index) => {
+                  const displayImage = productImageUrl(image, product);
+                  return `
                   <button
                     class="product-thumb ${index === 0 ? "active" : ""}"
                     type="button"
                     data-gallery="${productId}"
-                    data-gallery-image="${escapeHtml(image)}"
+                    data-gallery-image="${escapeHtml(displayImage)}"
                     aria-label="${escapeHtml(t("showImageLabel", { index: displayText(formatter.format(index + 1)), name: productDisplayName }))}"
                     aria-pressed="${index === 0 ? "true" : "false"}"
                   >
-                    <img src="${escapeHtml(image)}" alt="" width="72" height="72" loading="lazy" decoding="async" draggable="false" />
+                    <img src="${escapeHtml(displayImage)}" alt="" width="72" height="72" loading="lazy" decoding="async" draggable="false" />
                   </button>
-                `
+                `;
+                }
               )
               .join("")}
           </div>
@@ -1549,7 +1578,7 @@ function renderProducts() {
         ? `
           <div class="product-gallery ${galleryImages.length > 1 ? "has-thumbs" : ""}">
             <div class="product-gallery-main">
-              <img class="product-photo" data-main-image="${productId}" src="${escapeHtml(galleryImages[0])}" alt="${productName}" width="800" height="800" loading="${imageLoading}" decoding="async"${imagePriority} draggable="false" />
+              <img class="product-photo" data-main-image="${productId}" src="${escapeHtml(productImageUrl(galleryImages[0], product))}" alt="${productName}" width="800" height="800" loading="${imageLoading}" decoding="async"${imagePriority} draggable="false" />
             </div>
             ${thumbnails}
           </div>
@@ -1643,7 +1672,7 @@ function renderProductModal() {
   const variantImage = variant?.image || "";
   const activeImage = state.modal.image || variantImage || variantImages[0] || images[0] || "";
   const modalImages = uniqueImages([activeImage, ...variantImages, ...images]);
-  const activeDetailImage = productDetailImage(activeImage);
+  const activeDetailImage = productDetailImageUrl(activeImage, product);
   const optionText = variantOptionText(variant);
   const price = variantPrice(variant, product);
   const isAvailable = isVariantAvailable(variant);
@@ -1684,12 +1713,12 @@ function renderProductModal() {
                       class="modal-thumb ${isActive ? "active" : ""}"
                       type="button"
                       data-modal-image="${escapeHtml(image)}"
-                      data-zoom-image="${escapeHtml(image)}"
+                      data-zoom-image="${escapeHtml(productDetailImageUrl(image, product))}"
                       data-zoom-alt="${productName}"
                       aria-label="${escapeHtml(t("showImageLabel", { index: displayText(formatter.format(index + 1)), name: productDisplayName }))}"
                       aria-pressed="${isActive ? "true" : "false"}"
                     >
-                      <img src="${escapeHtml(image)}" alt="" width="72" height="72" loading="lazy" decoding="async" draggable="false" />
+                      <img src="${escapeHtml(productImageUrl(image, product))}" alt="" width="72" height="72" loading="lazy" decoding="async" draggable="false" />
                     </button>
                   `;
                 })
@@ -2781,6 +2810,12 @@ function closeCart() {
   cartPanel.setAttribute("aria-hidden", "true");
 }
 
+function setShopMenuExpanded(isExpanded) {
+  const expandedValue = isExpanded ? "true" : "false";
+  shopMenuToggle?.setAttribute("aria-expanded", expandedValue);
+  headerShopMenuToggle?.setAttribute("aria-expanded", expandedValue);
+}
+
 function openShopMenu() {
   closeCart();
   closeProductModal();
@@ -2788,13 +2823,13 @@ function openShopMenu() {
   renderShopMenu();
   document.body.classList.add("shop-menu-open");
   shopMenu?.setAttribute("aria-hidden", "false");
-  shopMenuToggle?.setAttribute("aria-expanded", "true");
+  setShopMenuExpanded(true);
 }
 
 function closeShopMenu() {
   document.body.classList.remove("shop-menu-open");
   shopMenu?.setAttribute("aria-hidden", "true");
-  shopMenuToggle?.setAttribute("aria-expanded", "false");
+  setShopMenuExpanded(false);
 }
 
 function updateFloatingShopButton() {
@@ -2839,8 +2874,9 @@ function openProductFromUrl() {
 }
 
 async function loadProducts() {
+  productsAssetVersion = String(Date.now());
   try {
-    const response = await fetch("products.json?v=performance-20260615");
+    const response = await fetch(`products.json?v=${productsAssetVersion}`, { cache: "no-store" });
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     products = await response.json();
   } catch (error) {
@@ -2934,18 +2970,21 @@ sortFilterSelect?.addEventListener("change", (event) => {
 });
 
 resetCatalogFilters?.addEventListener("click", () => {
-  state.filter = "all";
-  state.labelFilter = "";
+  const currentCategory = state.filter || "all";
+  const currentLabel = state.labelFilter || "";
   state.search = "";
   state.priceFilter = "all";
   state.choicesOnly = false;
   state.sortFilter = "default";
   state.visibleProductCount = productBatchSize;
   if (searchInput) searchInput.value = "";
+  if (priceFilterSelect) priceFilterSelect.value = "all";
+  if (choiceFilterInput) choiceFilterInput.checked = false;
+  if (sortFilterSelect) sortFilterSelect.value = "default";
   closeHeaderSearch(true);
   renderProducts();
   renderShopMenu();
-  setCatalogUrl("all", "");
+  setCatalogUrl(currentCategory, currentLabel, { replace: true });
 });
 
 loadMoreButton?.addEventListener("click", () => {
@@ -2966,6 +3005,7 @@ document.addEventListener("keydown", (event) => {
 });
 
 shopMenuToggle?.addEventListener("click", openShopMenu);
+headerShopMenuToggle?.addEventListener("click", openShopMenu);
 shopMenuClose?.addEventListener("click", closeShopMenu);
 shopMenuList?.addEventListener("click", (event) => {
   const button = event.target.closest("[data-shop-category]");
@@ -3028,7 +3068,7 @@ productModal.addEventListener("click", (event) => {
   if (zoomButton) {
     const image = zoomButton.dataset.zoomImage;
     if (zoomButton.dataset.modalImage) {
-      state.modal.image = image;
+      state.modal.image = zoomButton.dataset.modalImage;
       renderProductModal();
     }
     openImageLightbox(image, zoomButton.dataset.zoomAlt || "");
