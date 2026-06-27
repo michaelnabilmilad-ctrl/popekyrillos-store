@@ -197,7 +197,7 @@ export function validateCustomer(customer = {}, orderReference = "") {
   };
 }
 
-export async function validateCartItems(context, items = []) {
+export async function validateCartItems(context, items = [], options = {}) {
   if (!Array.isArray(items) || !items.length) throw publicError(400, "السلة فارغة.");
   if (items.length > 80) throw publicError(400, "عدد المنتجات في الطلب كبير جدا.");
 
@@ -221,9 +221,11 @@ export async function validateCartItems(context, items = []) {
     }
 
     const price = variantPrice(variant, product);
-    if (price === null || price <= 0) throw publicError(400, "سعر أحد المنتجات غير متاح للدفع أونلاين.");
+    if ((price === null || price <= 0) && options.requirePrices !== false) {
+      throw publicError(400, "سعر أحد المنتجات غير متاح للدفع أونلاين.");
+    }
 
-    const unitAmountCents = toCents(price);
+    const unitAmountCents = price === null ? 0 : toCents(price);
     return {
       productId: String(product.id),
       variantId: String(variant.id || "default"),
@@ -238,7 +240,7 @@ export async function validateCartItems(context, items = []) {
   });
 
   const subtotalCents = orderItems.reduce((sum, item) => sum + item.lineAmountCents, 0);
-  if (subtotalCents <= 0) throw publicError(400, "إجمالي الطلب غير صالح.");
+  if (subtotalCents <= 0 && options.requirePrices !== false) throw publicError(400, "إجمالي الطلب غير صالح.");
   return { items: orderItems, subtotalCents };
 }
 

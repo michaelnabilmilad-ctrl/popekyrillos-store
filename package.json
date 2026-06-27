@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "scripts": {
     "build:cloudflare": "node scripts/build-cloudflare.js",
-    "check:functions": "node --check netlify/functions/create-paymob-intention.js && node --check netlify/functions/paymob-webhook.js && node --check netlify/functions/_paymob-utils.js && node --check functions/_paymob-utils.js && node --check functions/api/create-paymob-intention.js && node --check functions/api/paymob-webhook.js && node --check cloudflare-worker.js"
+    "check:functions": "node --check netlify/functions/create-paymob-intention.js && node --check netlify/functions/paymob-webhook.js && node --check netlify/functions/_paymob-utils.js && node --check functions/_paymob-utils.js && node --check functions/_bosta-utils.js && node --check functions/api/create-paymob-intention.js && node --check functions/api/create-bosta-delivery.js && node --check functions/api/paymob-webhook.js && node --check cloudflare-worker.js"
   },
   "dependencies": {
     "@netlify/blobs": "^9.0.0"

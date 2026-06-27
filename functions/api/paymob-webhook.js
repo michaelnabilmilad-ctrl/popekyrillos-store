@@ -7,6 +7,7 @@ import {
   updateOrder,
   verifyPaymobHmac
 } from "../_paymob-utils.js";
+import { bostaReference, createBostaDeliveryForOrder } from "../_bosta-utils.js";
 
 function paymentStatus(transaction = {}) {
   const success = boolValue(transaction.success);
@@ -89,10 +90,36 @@ export async function onRequest(context) {
       status: order.status
     });
 
+    let bostaShipment = null;
+    if (paid && order.customer?.deliveryMethod === "bosta" && !order.bosta?.delivery) {
+      try {
+        bostaShipment = await createBostaDeliveryForOrder(env, order);
+        console.info("Bosta delivery created after Paymob payment", {
+          orderReference: reference,
+          bostaReference: bostaReference(bostaShipment)
+        });
+      } catch (error) {
+        console.error("Bosta delivery creation after Paymob payment failed", {
+          orderReference: reference,
+          message: error.message
+        });
+        await updateOrder(env, reference, (existing) => ({
+          ...existing,
+          bosta: {
+            ...(existing.bosta || {}),
+            status: "failed",
+            error: cleanText(error.message, 300),
+            failedAt: new Date().toISOString()
+          }
+        }));
+      }
+    }
+
     return jsonResponse(200, {
       received: true,
       orderReference: reference,
-      status: order.status
+      status: order.status,
+      bostaReference: bostaShipment ? bostaReference(bostaShipment) : order.bosta?.reference || null
     });
   } catch (error) {
     console.error("Paymob webhook processing failed", { message: error.message });

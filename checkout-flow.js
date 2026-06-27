@@ -1,5 +1,6 @@
 const whatsappNumber = "201016125589";
 const paymobIntentionEndpointPath = "/api/create-paymob-intention";
+const bostaDeliveryEndpointPath = "/api/create-bosta-delivery";
 const guestCartStorageKey = "pope-kyrillos-cart:guest";
 const userCartStoragePrefix = "pope-kyrillos-cart:user:";
 const checkoutStorageKey = "pope-kyrillos-checkout";
@@ -34,11 +35,19 @@ const translations = {
   paymobFailed: "تعذر فتح Paymob الآن. حاول مرة أخرى.",
   sendOrder: "إرسال الطلب",
   payPaymob: "ادفع Paymob الآن",
-  copied: "تم النسخ"
+  copied: "تم النسخ",
+  bostaBusy: "جاري إنشاء شحنة بوسطا...",
+  bostaFailed: "تعذر إنشاء شحنة بوسطا الآن. هنرسل الطلب وتقدر تتابعه يدويًا.",
+  bostaReady: "تم إنشاء شحنة بوسطا",
+  bostaReferenceLine: "رقم شحنة بوسطا: {reference}"
 };
 
 function t(key) {
   return translations[key] || key;
+}
+
+function text(key, values = {}) {
+  return Object.entries(values).reduce((message, [name, value]) => message.replaceAll(`{${name}}`, value), t(key));
 }
 
 function money(value) {
@@ -361,6 +370,35 @@ function paymentMessageLine(paymentMethod) {
   return "طريقة الدفع: إنستاباي / تحويل بنكي على رقم 01223515989 باسم مايكل نبيل ميلاد. بعد التحويل سأرسل صورة الإيصال.";
 }
 
+function bostaReferenceLine(delivery = {}) {
+  const reference =
+    delivery.bostaReference ||
+    delivery.trackingNumber ||
+    delivery.awbNumber ||
+    delivery.trackingCode ||
+    delivery._id ||
+    delivery.id ||
+    delivery.businessReference ||
+    "";
+  return reference ? text("bostaReferenceLine", { reference }) : "";
+}
+
+async function createBostaDelivery(paymentMethod) {
+  if (customer.deliveryMethod !== "bosta") return null;
+  const response = await fetch(bostaDeliveryEndpointPath, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      items: cartPayloadFromMap(),
+      customer,
+      paymentMethod
+    })
+  });
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok || data.error) throw new Error(data.error || data.message || t("bostaFailed"));
+  return data;
+}
+
 function shippingMessageLine() {
   const email = customer.email ? `\nالبريد الإلكتروني: ${customer.email}` : "";
   const notes = customer.notes ? `\nملاحظات: ${customer.notes}` : "";
@@ -427,7 +465,26 @@ function bindPaymentPage() {
         startPaymob(button);
         return;
       }
-      window.open(whatsappOrderUrl(method), "_blank", "noopener");
+      const sendOrder = async () => {
+        const status = document.querySelector("[data-payment-status]");
+        let extraLine = "";
+        button.disabled = true;
+        try {
+          if (customer.deliveryMethod === "bosta") {
+            if (status) status.textContent = t("bostaBusy");
+            const result = await createBostaDelivery(method);
+            extraLine = bostaReferenceLine(result) || bostaReferenceLine(result.delivery);
+            if (status) status.textContent = extraLine ? `${t("bostaReady")} - ${extraLine}` : t("bostaReady");
+          }
+        } catch (error) {
+          if (status) status.textContent = error.message || t("bostaFailed");
+          extraLine = t("bostaFailed");
+        } finally {
+          button.disabled = false;
+        }
+        window.open(whatsappOrderUrl(method, extraLine), "_blank", "noopener");
+      };
+      sendOrder();
     });
   });
   const copyButton = document.querySelector("[data-copy-instapay]");

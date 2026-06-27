@@ -18,10 +18,11 @@ PAYMOB_SECRET_KEY=...
 PAYMOB_PUBLIC_KEY=...
 PAYMOB_INTEGRATION_IDS=5497028
 PAYMOB_HMAC_SECRET=...
+BOSTA_API_KEY=...
 SITE_URL=https://popekyrillos.store
 ```
 
-Keep `PAYMOB_SECRET_KEY` and `PAYMOB_HMAC_SECRET` secret.
+Keep `PAYMOB_SECRET_KEY`, `PAYMOB_HMAC_SECRET`, and `BOSTA_API_KEY` secret.
 
 ## KV binding
 
@@ -54,4 +55,10 @@ After the Cloudflare deploy is live, Paymob checkout should use:
 
 ```text
 https://popekyrillos.store/api/create-paymob-intention
+```
+
+Bosta delivery creation should use:
+
+```text
+https://popekyrillos.store/api/create-bosta-delivery
 ```
