@@ -32,7 +32,7 @@ Create a KV namespace for Paymob orders and bind it to the Pages project:
 Binding name: PAYMOB_ORDERS
 ```
 
-The Paymob functions use this binding to store pending orders, webhook updates, transaction IDs, and paid/failed status.
+The Paymob functions use this binding to store pending orders, webhook updates, transaction IDs, paid/failed status, and Bosta shipment creation after paid Paymob orders. If the binding is missing, Paymob checkout can still open, but persistent order tracking and automatic Bosta shipment creation after Paymob payment will be skipped.
 
 ## Paymob webhook
 

@@ -273,20 +273,28 @@ export function checkoutUrl(env = {}, clientSecret = "") {
   return `https://accept.paymob.com/unifiedcheckout/?publicKey=${encodeURIComponent(env.PAYMOB_PUBLIC_KEY)}&clientSecret=${encodeURIComponent(clientSecret)}`;
 }
 
-function requireOrderStore(env = {}) {
-  if (!env.PAYMOB_ORDERS) throw publicError(500, "PAYMOB_ORDERS KV binding is not configured.");
-  return env.PAYMOB_ORDERS;
+function orderStore(env = {}) {
+  return env.PAYMOB_ORDERS || null;
 }
 
 export async function saveOrder(env, order) {
-  await requireOrderStore(env).put(order.reference, JSON.stringify(order));
+  const store = orderStore(env);
+  if (!store) {
+    console.warn("PAYMOB_ORDERS KV binding is not configured; continuing without persistent order storage.", {
+      reference: order.reference
+    });
+    return order;
+  }
+  await store.put(order.reference, JSON.stringify(order));
   return order;
 }
 
 export async function getOrder(env, reference = "") {
   const safeReference = cleanText(reference, 80);
   if (!safeReference) return null;
-  return requireOrderStore(env).get(safeReference, "json");
+  const store = orderStore(env);
+  if (!store) return null;
+  return store.get(safeReference, "json");
 }
 
 export async function updateOrder(env, reference, updater) {
