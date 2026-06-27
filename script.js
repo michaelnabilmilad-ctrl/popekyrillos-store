@@ -230,6 +230,11 @@ const translations = {
     policiesIntro: "هذه السياسات متاحة بالعربية والإنجليزية لتوضيح شروط الاسترجاع والاستبدال، الشحن، الخصوصية، والتواصل.",
     policiesLinkText: "تقدر تراجع سياسات الاسترجاع والاستبدال والشحن والخصوصية والتواصل من هنا.",
     policiesLink: "عرض السياسات",
+    policiesNavLabel: "روابط السياسات",
+    policyReturns: "سياسة الاسترجاع والاستبدال",
+    policyPrivacy: "سياسة الخصوصية",
+    policyContact: "سياسة التواصل",
+    policyShipping: "سياسة الشحن",
     cartEyebrow: "طلبك",
     cartTitle: "سلة المنتجات",
     paymentMethod: "طريقة الدفع",
@@ -455,6 +460,11 @@ const translations = {
     policiesIntro: "These policies are available in Arabic and English for returns, exchanges, shipping, privacy, and contact information.",
     policiesLinkText: "Review return, exchange, shipping, privacy, and contact policies from here.",
     policiesLink: "View policies",
+    policiesNavLabel: "Policy links",
+    policyReturns: "Return and exchange policy",
+    policyPrivacy: "Privacy policy",
+    policyContact: "Contact policy",
+    policyShipping: "Shipping policy",
     cartEyebrow: "Your order",
     cartTitle: "Product cart",
     paymentMethod: "Payment method",
@@ -1028,6 +1038,12 @@ function applyLanguage({ render = true } = {}) {
   setText("[data-policies-intro]", t("policiesIntro"));
   setText("[data-policies-link-text]", t("policiesLinkText"));
   setText("[data-policies-link]", t("policiesLink"));
+  const policyFooterNav = document.querySelector("[data-policy-footer-nav-label]");
+  if (policyFooterNav) policyFooterNav.setAttribute("aria-label", t("policiesNavLabel"));
+  setText("[data-policy-footer-returns]", t("policyReturns"));
+  setText("[data-policy-footer-privacy]", t("policyPrivacy"));
+  setText("[data-policy-footer-contact]", t("policyContact"));
+  setText("[data-policy-footer-shipping]", t("policyShipping"));
 
   setText(".cart-panel-head .eyebrow", t("cartEyebrow"));
   setText(".cart-panel-head h2", t("cartTitle"));
