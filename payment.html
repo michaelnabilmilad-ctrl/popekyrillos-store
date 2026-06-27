@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="ar">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>الدفع | مكتبة البابا كيرلس</title>
+    <meta name="description" content="اختر طريقة الدفع وأرسل الطلب." />
+    <link rel="stylesheet" href="styles.min.css?v=checkout-pages-20260628" />
+  </head>
+  <body dir="rtl" class="checkout-page">
+    <header class="checkout-header">
+      <a class="brand" href="index.html" aria-label="مكتبة البابا كيرلس">
+        <span class="brand-logo-wrap" aria-hidden="true">
+          <img src="assets/logo-papa-kyrillos-original.jpeg" alt="" width="160" height="160" decoding="async" />
+        </span>
+        <span>
+          <strong>مكتبة البابا كيرلس</strong>
+          <small>مستلزمات الكنائس والخدمة</small>
+        </span>
+      </a>
+      <a class="icon-button" href="cart.html" aria-label="السلة">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M6 6h15l-2 8H8L6 3H3" />
+          <circle cx="9" cy="20" r="1.6" />
+          <circle cx="18" cy="20" r="1.6" />
+        </svg>
+        <span class="cart-count" data-cart-count>0</span>
+      </a>
+    </header>
+
+    <main class="checkout-shell" data-payment-page>
+      <nav class="checkout-steps" aria-label="خطوات الطلب">
+        <a href="cart.html">١. السلة</a>
+        <a href="checkout.html">٢. البيانات</a>
+        <strong class="active">٣. الدفع</strong>
+      </nav>
+
+      <section class="checkout-layout">
+        <div class="checkout-card payment-page-card">
+          <p class="eyebrow">طريقة الدفع</p>
+          <h1>اختر طريقة الدفع المناسبة</h1>
+
+          <div class="payment-page-options">
+            <article>
+              <h2>إنستاباي / تحويل بنكي</h2>
+              <p>حوّل على رقم 01223515989 باسم مايكل نبيل ميلاد، وبعد التحويل ابعت صورة الإيصال على الواتساب.</p>
+              <div class="payment-page-actions">
+                <button class="button secondary" type="button" data-copy-instapay>نسخ بيانات الدفع</button>
+                <button class="button primary" type="button" data-payment-action="instapay">إرسال الطلب واتساب</button>
+              </div>
+            </article>
+            <article>
+              <h2>Paymob</h2>
+              <p>ادفع أونلاين مباشرة ببطاقتك عن طريق صفحة Paymob الرسمية.</p>
+              <button class="button primary full" type="button" data-payment-action="paymob">ادفع Paymob الآن</button>
+            </article>
+            <article>
+              <h2>استلام من الفرع</h2>
+              <p>متاحة عند اختيار استلام من الفرع، والدفع كاش بعد تجهيز الأوردر والتأكيد.</p>
+              <button class="button secondary full" type="button" data-payment-action="pickupCash">إرسال طلب الاستلام</button>
+            </article>
+          </div>
+          <p class="shipping-status checkout-error" data-payment-status></p>
+        </div>
+
+        <aside class="checkout-card">
+          <p class="eyebrow">ملخص الطلب</p>
+          <div data-order-summary></div>
+        </aside>
+      </section>
+    </main>
+
+    <script src="checkout-flow.min.js?v=checkout-pages-20260628" defer></script>
+  </body>
+</html>

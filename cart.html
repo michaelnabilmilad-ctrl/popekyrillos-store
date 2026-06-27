@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="ar">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>السلة | مكتبة البابا كيرلس</title>
+    <meta name="description" content="راجع منتجاتك قبل إدخال بيانات الاستلام والدفع." />
+    <link rel="stylesheet" href="styles.min.css?v=checkout-pages-20260628" />
+  </head>
+  <body dir="rtl" class="checkout-page">
+    <header class="checkout-header">
+      <a class="brand" href="index.html" aria-label="مكتبة البابا كيرلس">
+        <span class="brand-logo-wrap" aria-hidden="true">
+          <img src="assets/logo-papa-kyrillos-original.jpeg" alt="" width="160" height="160" decoding="async" />
+        </span>
+        <span>
+          <strong>مكتبة البابا كيرلس</strong>
+          <small>مستلزمات الكنائس والخدمة</small>
+        </span>
+      </a>
+      <a class="icon-button" href="cart.html" aria-label="السلة">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M6 6h15l-2 8H8L6 3H3" />
+          <circle cx="9" cy="20" r="1.6" />
+          <circle cx="18" cy="20" r="1.6" />
+        </svg>
+        <span class="cart-count" data-cart-count>0</span>
+      </a>
+    </header>
+
+    <main class="checkout-shell">
+      <nav class="checkout-steps" aria-label="خطوات الطلب">
+        <strong class="active">١. السلة</strong>
+        <span>٢. البيانات</span>
+        <span>٣. الدفع</span>
+      </nav>
+
+      <section class="checkout-layout">
+        <div class="checkout-card">
+          <p class="eyebrow">سلة الطلب</p>
+          <h1>راجع المنتجات والكميات</h1>
+          <div class="cart-page-list" data-cart-page-items></div>
+        </div>
+
+        <aside class="checkout-card checkout-total-card">
+          <span>إجمالي المنتجات</span>
+          <strong data-cart-page-total>٠ ج.م</strong>
+          <a class="button primary full" href="checkout.html" data-cart-next>إدخال بيانات الاستلام</a>
+          <a class="button secondary full" href="index.html#catalog">الرجوع للتسوق</a>
+        </aside>
+      </section>
+    </main>
+
+    <script src="checkout-flow.min.js?v=checkout-pages-20260628" defer></script>
+  </body>
+</html>

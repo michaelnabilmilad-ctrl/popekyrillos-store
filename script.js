@@ -3241,8 +3241,8 @@ whatsappLink.addEventListener("click", async (event) => {
   window.open(orderWhatsappUrl([orderLine, bostaLine].filter(Boolean).join("\n")), "_blank", "noopener");
 });
 
-document.querySelector(".cart-toggle").addEventListener("click", openCart);
-document.querySelector(".cart-close").addEventListener("click", closeCart);
+document.querySelector(".cart-toggle")?.addEventListener("click", openCart);
+document.querySelector(".cart-close")?.addEventListener("click", closeCart);
 scrim.addEventListener("click", () => {
   closeShopMenu();
   closeCart();

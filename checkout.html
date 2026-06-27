@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="ar">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>بيانات الاستلام | مكتبة البابا كيرلس</title>
+    <meta name="description" content="أدخل بيانات الاستلام والشحن قبل اختيار طريقة الدفع." />
+    <link rel="stylesheet" href="styles.min.css?v=checkout-pages-20260628" />
+  </head>
+  <body dir="rtl" class="checkout-page">
+    <header class="checkout-header">
+      <a class="brand" href="index.html" aria-label="مكتبة البابا كيرلس">
+        <span class="brand-logo-wrap" aria-hidden="true">
+          <img src="assets/logo-papa-kyrillos-original.jpeg" alt="" width="160" height="160" decoding="async" />
+        </span>
+        <span>
+          <strong>مكتبة البابا كيرلس</strong>
+          <small>مستلزمات الكنائس والخدمة</small>
+        </span>
+      </a>
+      <a class="icon-button" href="cart.html" aria-label="السلة">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M6 6h15l-2 8H8L6 3H3" />
+          <circle cx="9" cy="20" r="1.6" />
+          <circle cx="18" cy="20" r="1.6" />
+        </svg>
+        <span class="cart-count" data-cart-count>0</span>
+      </a>
+    </header>
+
+    <main class="checkout-shell">
+      <nav class="checkout-steps" aria-label="خطوات الطلب">
+        <a href="cart.html">١. السلة</a>
+        <strong class="active">٢. البيانات</strong>
+        <span>٣. الدفع</span>
+      </nav>
+
+      <section class="checkout-layout">
+        <form class="checkout-card checkout-form-page" data-checkout-form>
+          <p class="eyebrow">بيانات العميل</p>
+          <h1>اكتب بيانات الاستلام</h1>
+
+          <div class="delivery-options">
+            <label class="delivery-option active">
+              <input type="radio" name="deliveryMethod" value="bosta" checked />
+              <span>
+                <strong>شحن مع بوسطا</strong>
+                <small>للبيت أو الكنيسة حسب العنوان</small>
+              </span>
+            </label>
+            <label class="delivery-option">
+              <input type="radio" name="deliveryMethod" value="pickup" />
+              <span>
+                <strong>استلام من الفرع</strong>
+                <small>بدون شحن</small>
+              </span>
+            </label>
+          </div>
+
+          <div class="checkout-fields">
+            <label>
+              <span>الاسم</span>
+              <input type="text" data-checkout-name autocomplete="name" placeholder="اسم العميل" />
+            </label>
+            <label>
+              <span>رقم الموبايل</span>
+              <input type="tel" data-checkout-phone autocomplete="tel" placeholder="01xxxxxxxxx" />
+            </label>
+            <label>
+              <span>البريد الإلكتروني</span>
+              <input type="email" data-checkout-email autocomplete="email" placeholder="اختياري" />
+            </label>
+            <div class="shipping-fields" data-shipping-fields>
+              <label>
+                <span>المحافظة</span>
+                <input type="text" data-checkout-governorate autocomplete="address-level1" placeholder="مثال: القاهرة" />
+              </label>
+              <label>
+                <span>المدينة / المنطقة</span>
+                <input type="text" data-checkout-city autocomplete="address-level2" placeholder="مثال: شبرا، مدينة نصر..." />
+              </label>
+              <label>
+                <span>العنوان بالتفصيل</span>
+                <textarea data-checkout-address rows="3" autocomplete="street-address" placeholder="اسم الشارع، رقم العمارة، الدور، الشقة، علامة مميزة"></textarea>
+              </label>
+            </div>
+            <label>
+              <span>ملاحظات للطلب</span>
+              <textarea data-checkout-notes rows="2" placeholder="اختياري: ميعاد مناسب، اسم كنيسة، ملاحظة للتغليف"></textarea>
+            </label>
+          </div>
+
+          <p class="shipping-status" data-delivery-note>الشحن مع بوسطا يتم تأكيده حسب العنوان.</p>
+          <p class="shipping-status checkout-error" data-checkout-status></p>
+          <button class="button primary full" type="submit">الذهاب للدفع</button>
+        </form>
+
+        <aside class="checkout-card">
+          <p class="eyebrow">ملخص الطلب</p>
+          <div data-order-summary></div>
+        </aside>
+      </section>
+    </main>
+
+    <script src="checkout-flow.min.js?v=checkout-pages-20260628" defer></script>
+  </body>
+</html>

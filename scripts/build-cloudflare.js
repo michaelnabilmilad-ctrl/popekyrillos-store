@@ -6,8 +6,13 @@ const dist = path.join(root, "dist");
 
 const files = [
   "index.html",
+  "cart.html",
+  "checkout.html",
+  "payment.html",
   "styles.min.css",
   "styles.css",
+  "checkout-flow.min.js",
+  "checkout-flow.js",
   "script.min.js",
   "script.js",
   "firebase-config.min.js",
