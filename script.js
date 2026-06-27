@@ -603,18 +603,18 @@ const translations = {
 const categoryCopy = {
   all: { ar: ["الكل", "كل المنتجات"], en: ["All", "All products"] },
   books: { ar: ["كتب وطقوس", "أجبية، قطمارس، ألحان"], en: ["Books & rites", "Agpeya, katameros, hymns"] },
-  candles: { ar: ["شموع وبخور", "شموع، فحم، شورية"], en: ["Candles & incense", "Candles, charcoal, censers"] },
-  vestments: { ar: ["أقمشة ومفارش", "بطرشيلات، مفارش، تطريز"], en: ["Fabrics & altar cloths", "Stoles, altar cloths, embroidery"] },
-  icons: { ar: ["أيقونات وهدايا", "براويز، صلبان، تذكارات"], en: ["Icons & gifts", "Frames, crosses, keepsakes"] },
-  brass: { ar: ["نحاسيات", "صلبان، شمعدانات، ذخائر"], en: ["Brassware", "Crosses, candlesticks, reliquaries"] }
+  candles: { ar: ["شمع وبخور وأباركة", "شمع، فحم، أباركة، بخور"], en: ["Candles & incense", "Candles, charcoal, censers"] },
+  vestments: { ar: ["تواني وأقمشة", "تواني، بطرشيلات، مفارش،"], en: ["Fabrics & altar cloths", "Stoles, altar cloths, embroidery"] },
+  icons: { ar: ["صلبان وهدايا", "براويز، صلبان، تذكارات"], en: ["Icons & gifts", "Frames, crosses, keepsakes"] },
+  brass: { ar: ["مستلزمات المذبح", "صلبان، شمعدانات، ذخائر"], en: ["Brassware", "Crosses, candlesticks, reliquaries"] }
 };
 
 const catalogCategoryOrder = ["brass", "candles", "vestments", "icons", "books"];
 const catalogLabelOrder = {
-  brass: ["صلبان زفة", "إبريق نحاس", "حُق ذخيرة", "نحاسيات", "دفوف وتريانتو", "شغل شحن"],
-  candles: ["شموع وبخور"],
-  vestments: ["بطرشيلات", "أقمشة ومفارش"],
-  icons: ["أيقونات وهدايا"],
+  brass: ["صلبان زفة", "إبريق نحاس", "حُق ذخيرة", "مستلزمات المذبح", "نحاسيات", "دفوف وتريانتو", "شغل شحن"],
+  candles: ["شمع وبخور وأباركة", "شموع وبخور"],
+  vestments: ["بطرشيلات", "تواني وأقمشة", "أقمشة ومفارش"],
+  icons: ["صلبان وهدايا", "أيقونات وهدايا"],
   books: ["كتب وطقوس"]
 };
 const featuredProductOrder = [
@@ -634,10 +634,14 @@ const featuredProductOrder = [
 const textMapEn = {
   "دفوف وتريانتو": "Cymbals & triangle",
   "كتب وطقوس": "Books & rites",
+  "شمع وبخور وأباركة": "Candles, incense & ewers",
   "شموع وبخور": "Candles & incense",
+  "صلبان وهدايا": "Crosses & gifts",
   "أيقونات وهدايا": "Icons & gifts",
+  "مستلزمات المذبح": "Altar supplies",
   "نحاسيات": "Brassware",
   "بطرشيلات": "Stoles",
+  "تواني وأقمشة": "Patens & fabrics",
   "أقمشة ومفارش": "Fabrics & altar cloths",
   "بطرشيل كنسي أحمر ذهبي - موديل 1": "Red and gold church stole - Model 1",
   "بطرشيل كنسي أحمر ذهبي - موديل 2": "Red and gold church stole - Model 2",
