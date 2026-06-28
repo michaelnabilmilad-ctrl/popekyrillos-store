@@ -31,7 +31,7 @@ function requirePaymobConfig() {
 function paymobItems(orderItems, shippingCents) {
   const items = orderItems.map((item) => ({
     name: item.option ? `${item.name} - ${item.option}`.slice(0, 255) : item.name.slice(0, 255),
-    amount: item.unitAmountCents,
+    amount: item.lineAmountCents,
     description: item.option || item.name,
     quantity: item.quantity
   }));

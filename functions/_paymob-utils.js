@@ -262,9 +262,7 @@ export function buildBillingData(customer = {}, orderReference = "") {
     street: customer.address || "Pickup from Pope Kyrillos Store",
     building: "NA",
     floor: "NA",
-    apartment: "NA",
-    postal_code: "NA",
-    shipping_method: customer.deliveryMethod === "pickup" ? "pickup" : "delivery"
+    apartment: "NA"
   };
 }
 
