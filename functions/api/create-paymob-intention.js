@@ -50,7 +50,7 @@ function paymobItems(orderItems, shippingCents) {
   return [
     {
       name: "Pope Kyrillos Store order",
-      amount: itemsTotal,
+      amount_cents: itemsTotal,
       description: `${productsCount || 1} product(s)`,
       quantity: 1
     }
