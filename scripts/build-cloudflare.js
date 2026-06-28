@@ -49,6 +49,24 @@ function copyFile(relativePath) {
   fs.copyFileSync(source, target);
 }
 
+function copyFileAs(sourceRelativePath, targetRelativePath, transform = (content) => content) {
+  const source = path.join(root, sourceRelativePath);
+  const target = path.join(dist, targetRelativePath);
+
+  if (!fs.existsSync(source)) {
+    return;
+  }
+
+  fs.mkdirSync(path.dirname(target), { recursive: true });
+
+  if (transform === null) {
+    fs.copyFileSync(source, target);
+    return;
+  }
+
+  fs.writeFileSync(target, transform(fs.readFileSync(source, "utf8")));
+}
+
 function copyDirectory(relativePath) {
   const source = path.join(root, relativePath);
   const target = path.join(dist, relativePath);
@@ -65,5 +83,10 @@ fs.mkdirSync(dist, { recursive: true });
 
 files.forEach(copyFile);
 directories.forEach(copyDirectory);
+copyFileAs("admin.html", "admin/index.html", (content) =>
+  content.replace('href="index.html"', 'href="/"')
+);
+copyFileAs("admin.css", "admin/admin.css", null);
+copyFileAs("admin.js", "admin/admin.js", null);
 
 console.log(`Cloudflare build ready: ${path.relative(root, dist)}`);

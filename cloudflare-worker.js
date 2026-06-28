@@ -8,14 +8,6 @@ const rewrites = {
   "/payment-pending": "/payment-pending.html"
 };
 
-const protectedAdminPaths = new Set([
-  "/admin",
-  "/admin/",
-  "/admin.html",
-  "/admin.css",
-  "/admin.js"
-]);
-
 function unauthorizedAdminResponse() {
   return new Response("Authentication required", {
     status: 401,
@@ -78,6 +70,16 @@ function isAdminAuthorized(request, env) {
   );
 }
 
+function isProtectedAdminPath(pathname) {
+  return (
+    pathname === "/admin" ||
+    pathname === "/admin.html" ||
+    pathname === "/admin.css" ||
+    pathname === "/admin.js" ||
+    pathname.startsWith("/admin/")
+  );
+}
+
 function requestContext(request, env, ctx) {
   return {
     request,
@@ -98,13 +100,14 @@ export default {
     const url = new URL(request.url);
     const context = requestContext(request, env, ctx);
 
-    if (protectedAdminPaths.has(url.pathname)) {
+    if (isProtectedAdminPath(url.pathname)) {
       if (!isAdminAuthorized(request, env)) {
         return unauthorizedAdminResponse();
       }
 
-      if (url.pathname === "/admin" || url.pathname === "/admin/") {
-        return env.ASSETS.fetch(rewriteRequest(request, "/admin.html"));
+      if (url.pathname === "/admin" || url.pathname === "/admin.html") {
+        url.pathname = "/admin/";
+        return Response.redirect(url.toString(), 302);
       }
     }
 

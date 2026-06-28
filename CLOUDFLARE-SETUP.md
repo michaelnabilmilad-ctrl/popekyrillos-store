@@ -31,7 +31,7 @@ Keep `PAYMOB_SECRET_KEY`, `PAYMOB_API_KEY`, `PAYMOB_HMAC_SECRET`, `BOSTA_API_KEY
 
 The admin page is protected by the Cloudflare Worker. Add `ADMIN_USERNAME` and `ADMIN_PASSWORD` under **Settings -> Variables and secrets**, then deploy. Opening `/admin`, `/admin.html`, `/admin.css`, or `/admin.js` will require these credentials before any admin files load.
 
-The `wrangler.toml` asset config runs the Worker before static assets for the admin paths only. Keep `run_worker_first` enabled for `/admin`, `/admin.html`, `/admin.css`, and `/admin.js`; otherwise Cloudflare can serve the static admin files before the password check runs.
+The `wrangler.toml` asset config runs the Worker before static assets for the admin paths only. Keep `run_worker_first` enabled for `/admin`, `/admin/*`, `/admin.html`, `/admin.css`, and `/admin.js`; otherwise Cloudflare can serve the static admin files before the password check runs. The Cloudflare build also publishes the admin dashboard at `/admin/` to avoid automatic `admin.html` redirects.
 
 `PAYMOB_INTEGRATION_IDS` must come from the same Paymob merchant account as `PAYMOB_SECRET_KEY` and `PAYMOB_PUBLIC_KEY`. In Paymob Dashboard, open **Developers -> Payment Integrations** and copy the card integration ID. If Paymob returns `Integration ID/Name does not exist`, this value is wrong or belongs to another account/environment.
 
