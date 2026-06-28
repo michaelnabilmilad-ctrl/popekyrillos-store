@@ -2155,7 +2155,7 @@ async function createPaymobIntention() {
     })
   });
   const data = await response.json().catch(() => ({}));
-  if (!response.ok || data.error || !data.checkoutUrl || !data.clientSecret) {
+  if (!response.ok || data.error || !data.checkoutUrl) {
     throw new Error(data.error || data.message || "Paymob checkout failed");
   }
   return data;

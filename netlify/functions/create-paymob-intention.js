@@ -2,14 +2,12 @@ const crypto = require("crypto");
 const {
   buildBillingData,
   calculateShippingCents,
-  checkoutUrl,
   cleanText,
   currency,
   integrationIds,
   jsonResponse,
   parseJsonBody,
   saveOrder,
-  siteUrl,
   updateOrder,
   validateCartItems,
   validateCustomer
@@ -20,11 +18,14 @@ function newOrderReference() {
 }
 
 function requirePaymobConfig() {
-  if (!process.env.PAYMOB_SECRET_KEY) throw new Error("PAYMOB_SECRET_KEY is not configured.");
-  if (!process.env.PAYMOB_PUBLIC_KEY) throw new Error("PAYMOB_PUBLIC_KEY is not configured.");
+  const apiKey = cleanText(process.env.PAYMOB_API_KEY || process.env.PAYMOB_SECRET_KEY, 1000);
+  const iframeId = cleanText(process.env.PAYMOB_IFRAME_ID, 80);
+  if (!apiKey) throw new Error("PAYMOB_API_KEY is not configured.");
+  if (!iframeId) throw new Error("PAYMOB_IFRAME_ID is not configured.");
   return {
-    secretKey: process.env.PAYMOB_SECRET_KEY,
-    integrationIds: integrationIds()
+    apiKey,
+    iframeId,
+    integrationId: integrationIds()[0]
   };
 }
 
@@ -55,6 +56,46 @@ function publicPaymobError(message = "") {
   return message || "تعذر فتح Paymob الآن.";
 }
 
+function legacyBillingData(customer, orderReference) {
+  const data = buildBillingData(customer, orderReference);
+  return {
+    apartment: data.apartment || "NA",
+    email: data.email,
+    floor: data.floor || "NA",
+    first_name: data.first_name,
+    street: data.street,
+    building: data.building || "NA",
+    phone_number: data.phone_number,
+    shipping_method: "NA",
+    postal_code: "NA",
+    city: data.city,
+    country: data.country || "EG",
+    last_name: data.last_name,
+    state: data.state
+  };
+}
+
+async function postPaymob(path, payload) {
+  const response = await fetch(`https://accept.paymob.com${path}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload)
+  });
+  const data = await response.json().catch(async () => ({ raw: await response.text().catch(() => "") }));
+  if (!response.ok) {
+    throw Object.assign(new Error(paymobErrorMessage(data)), {
+      statusCode: 502,
+      providerStatus: response.status,
+      providerData: data
+    });
+  }
+  return data;
+}
+
+function legacyCheckoutUrl(iframeId, token) {
+  return `https://accept.paymob.com/api/acceptance/iframes/${encodeURIComponent(iframeId)}?payment_token=${encodeURIComponent(token)}`;
+}
+
 exports.handler = async (event) => {
   if (event.httpMethod === "OPTIONS") return jsonResponse(204, {});
   if (event.httpMethod !== "POST") return jsonResponse(405, { error: "Method not allowed." });
@@ -62,7 +103,7 @@ exports.handler = async (event) => {
   const orderReference = newOrderReference();
 
   try {
-    const { secretKey, integrationIds: paymentMethods } = requirePaymobConfig();
+    const { apiKey, iframeId, integrationId } = requirePaymobConfig();
     const body = parseJsonBody(event);
     const secureCart = await validateCartItems(body.items || body.cart || []);
     const customer = validateCustomer(body.customer || {}, orderReference);
@@ -90,57 +131,33 @@ exports.handler = async (event) => {
     };
     await saveOrder(pendingOrder);
 
-    const baseUrl = siteUrl();
-    const intentionPayload = {
-      amount: amountCents,
+    const authData = await postPaymob("/api/auth/tokens", { api_key: apiKey });
+    const authToken = authData.token;
+    if (!authToken) throw new Error("Paymob auth token was not returned.");
+
+    const orderData = await postPaymob("/api/ecommerce/orders", {
+      auth_token: authToken,
+      delivery_needed: false,
+      amount_cents: amountCents,
       currency,
-      payment_methods: paymentMethods,
-      billing_data: buildBillingData(customer, orderReference),
-      items: paymobItems(secureCart.items, shippingCents),
-      special_reference: orderReference,
-      notification_url: `${baseUrl}/.netlify/functions/paymob-webhook`,
-      redirection_url: `${baseUrl}/payment-pending?order=${encodeURIComponent(orderReference)}`,
-      extras: {
-        internal_order_reference: orderReference,
-        delivery_method: customer.deliveryMethod,
-        customer_note: cleanText(customer.notes, 300)
-      }
-    };
-
-    const paymobResponse = await fetch("https://accept.paymob.com/v1/intention/", {
-      method: "POST",
-      headers: {
-        "Authorization": `Token ${secretKey}`,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(intentionPayload)
+      merchant_order_id: orderReference,
+      items: paymobItems(secureCart.items, shippingCents)
     });
+    const paymobOrderId = orderData.id;
+    if (!paymobOrderId) throw new Error("Paymob order ID was not returned.");
 
-    const paymobData = await paymobResponse.json().catch(async () => ({ raw: await paymobResponse.text().catch(() => "") }));
-
-    if (!paymobResponse.ok || !paymobData.client_secret) {
-      const providerMessage = paymobErrorMessage(paymobData);
-      console.error("Paymob intention rejected", {
-        status: paymobResponse.status,
-        orderReference,
-        message: providerMessage
-      });
-      await updateOrder(orderReference, (order) => ({
-        ...order,
-        status: "payment_intention_failed",
-        payment: {
-          ...order.payment,
-          status: "failed_to_create",
-          providerResponseStatus: paymobResponse.status
-        }
-      }));
-      return jsonResponse(502, {
-        error: "تعذر فتح Paymob الآن.",
-        message: publicPaymobError(providerMessage),
-        providerMessage,
-        providerStatus: paymobResponse.status
-      });
-    }
+    const paymentKeyData = await postPaymob("/api/acceptance/payment_keys", {
+      auth_token: authToken,
+      amount_cents: amountCents,
+      expiration: 3600,
+      order_id: paymobOrderId,
+      billing_data: legacyBillingData(customer, orderReference),
+      currency,
+      integration_id: integrationId,
+      lock_order_when_paid: false
+    });
+    const paymentToken = paymentKeyData.token;
+    if (!paymentToken) throw new Error("Paymob payment token was not returned.");
 
     await updateOrder(orderReference, (order) => ({
       ...order,
@@ -148,7 +165,8 @@ exports.handler = async (event) => {
       payment: {
         ...order.payment,
         status: "pending",
-        paymobIntentionId: paymobData.id || paymobData.intention_id || null
+        paymobOrderId,
+        paymobIntegrationId: integrationId
       }
     }));
 
@@ -158,8 +176,7 @@ exports.handler = async (event) => {
       orderReference,
       currency,
       amountCents,
-      clientSecret: paymobData.client_secret,
-      checkoutUrl: checkoutUrl(paymobData.client_secret)
+      checkoutUrl: legacyCheckoutUrl(iframeId, paymentToken)
     });
   } catch (error) {
     const statusCode = error.statusCode || 500;
@@ -169,6 +186,12 @@ exports.handler = async (event) => {
         message: error.message
       });
     }
-    return jsonResponse(statusCode, { error: error.publicMessage || "تعذر تجهيز الدفع الآن. حاول مرة أخرى." });
+    const providerMessage = error.providerData ? paymobErrorMessage(error.providerData) : error.message;
+    return jsonResponse(statusCode, {
+      error: error.publicMessage || "تعذر تجهيز الدفع الآن. حاول مرة أخرى.",
+      message: publicPaymobError(providerMessage),
+      providerMessage,
+      providerStatus: error.providerStatus || null
+    });
   }
 };
