@@ -33,9 +33,7 @@ function requirePaymobConfig() {
 
 function paymobBaseUrlCandidates(baseUrl) {
   const normalized = baseUrl.replace(/\/+$/, "");
-  const candidates = [normalized];
-  if (normalized.includes("accept-alpha.paymob.com")) candidates.push("https://accept.paymob.com");
-  return [...new Set(candidates)];
+  return [normalized];
 }
 
 function paymobItems(orderItems, shippingCents) {
