@@ -192,17 +192,18 @@ svg {
 
 .header-shop-toggle {
   display: none;
-  flex: 0 0 48px;
+  order: -1;
+  flex: 0 0 40px;
   place-items: center;
-  width: 48px;
-  height: 48px;
-  border: 1px solid rgba(198, 146, 69, 0.38);
-  border-radius: 50%;
-  background: var(--navy);
-  color: #fff;
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--navy);
   cursor: pointer;
-  box-shadow: 0 14px 32px rgba(26, 39, 81, 0.22);
-  transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease;
+  box-shadow: none;
+  transition: color 160ms ease, transform 160ms ease;
 }
 
 .header-shop-toggle svg {
@@ -210,14 +211,13 @@ svg {
   height: 24px;
   fill: none;
   stroke: currentColor;
-  stroke-width: 2;
+  stroke-width: 2.6;
   stroke-linecap: round;
 }
 
 .header-shop-toggle:hover,
 .header-shop-toggle:focus-visible {
-  background: #111d42;
-  box-shadow: 0 18px 38px rgba(26, 39, 81, 0.3);
+  color: #0c6bff;
   outline: 0;
   transform: translateY(-1px);
 }
@@ -3335,9 +3335,9 @@ body.account-open .scrim {
   }
 
   .header-shop-toggle {
-    flex-basis: 46px;
-    width: 46px;
-    height: 46px;
+    flex-basis: 36px;
+    width: 36px;
+    height: 40px;
   }
 
   .brand-logo-wrap {
