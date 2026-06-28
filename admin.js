@@ -45,7 +45,7 @@
     renderProductList();
   });
   elements.importFallback.addEventListener("change", importFallbackFile);
-  elements.imageUpload.addEventListener("change", uploadProductImage);
+  getImageUploadInput().addEventListener("change", uploadProductImage);
   elements.editor.addEventListener("input", handleEditorInput);
   elements.editor.addEventListener("change", handleEditorInput);
 
@@ -75,7 +75,7 @@
     }
 
     if (action === "upload-image") {
-      openImageUpload();
+      await openImageUpload();
     }
 
     if (action === "download-products") {
@@ -243,13 +243,32 @@
     }
   }
 
-  function openImageUpload() {
+  async function openImageUpload() {
     if (!currentProduct()) {
       showToast("اختر منتجاً أولاً قبل رفع الصورة.");
       return;
     }
 
-    elements.imageUpload.click();
+    if (window.showOpenFilePicker) {
+      try {
+        const [fileHandle] = await window.showOpenFilePicker({
+          types: [
+            {
+              description: "Images",
+              accept: { "image/*": [".png", ".jpg", ".jpeg", ".webp", ".gif", ".avif"] }
+            }
+          ],
+          multiple: false
+        });
+        await processProductImageFile(await fileHandle.getFile());
+        return;
+      } catch (error) {
+        if (error.name === "AbortError") return;
+        console.warn("Image picker failed, falling back to file input.", error);
+      }
+    }
+
+    getImageUploadInput().click();
   }
 
   async function uploadProductImage(event) {
@@ -257,7 +276,10 @@
     event.target.value = "";
 
     if (!file) return;
+    await processProductImageFile(file);
+  }
 
+  async function processProductImageFile(file) {
     const product = currentProduct();
     if (!product) {
       showToast("اختر منتجاً أولاً قبل رفع الصورة.");
@@ -301,6 +323,20 @@
       showToast(`تعذر رفع الصورة: ${error.message}`);
       console.error(error);
     }
+  }
+
+  function getImageUploadInput() {
+    if (elements.imageUpload) return elements.imageUpload;
+
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "image/*";
+    input.hidden = true;
+    input.dataset.imageUpload = "";
+    document.body.append(input);
+    elements.imageUpload = input;
+
+    return input;
   }
 
   async function convertImageToWebp(file) {
