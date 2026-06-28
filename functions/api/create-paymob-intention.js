@@ -100,6 +100,8 @@ async function postPaymob(baseUrl, path, payload) {
   if (!response.ok) {
     throw Object.assign(new Error(paymobErrorMessage(data)), {
       statusCode: 502,
+      providerBaseUrl: baseUrl,
+      providerPath: path,
       providerStatus: response.status,
       providerData: data
     });
@@ -236,6 +238,8 @@ export async function onRequest(context) {
       error: error.publicMessage || "تعذر تجهيز الدفع الآن. حاول مرة أخرى.",
       message: publicPaymobError(providerMessage),
       providerMessage,
+      providerBaseUrl: error.providerBaseUrl || null,
+      providerPath: error.providerPath || null,
       providerStatus: error.providerStatus || null
     });
   }
