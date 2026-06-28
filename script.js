@@ -43,6 +43,10 @@ const fallbackProducts = [
 let products = [];
 let authInitPromise = null;
 let productsAssetVersion = "";
+let galleryPointerStart = null;
+let gallerySwipeSuppressUntil = 0;
+let modalPointerStart = null;
+let modalSwipeSuppressUntil = 0;
 
 const state = {
   filter: "all",
@@ -3110,18 +3114,61 @@ shopMenuList?.addEventListener("click", (event) => {
   applyCatalogFilter(button.dataset.shopCategory || "all", button.dataset.shopLabel || "");
 });
 
+function setProductGalleryImage(thumb) {
+  const card = thumb?.closest(".product-card");
+  const mainImage = card?.querySelector("[data-main-image]");
+  const image = thumb?.dataset.galleryImage;
+  if (!card || !mainImage || !image) return false;
+
+  mainImage.src = image;
+  card.querySelectorAll("[data-gallery-image]").forEach((button) => {
+    const active = button === thumb;
+    button.classList.toggle("active", active);
+    button.setAttribute("aria-pressed", active ? "true" : "false");
+  });
+  return true;
+}
+
+function showAdjacentProductGalleryImage(card, delta) {
+  const thumbs = [...(card?.querySelectorAll("[data-gallery-image]") || [])];
+  if (thumbs.length < 2) return false;
+
+  const activeIndex = Math.max(0, thumbs.findIndex((button) => button.classList.contains("active")));
+  const nextIndex = (activeIndex + delta + thumbs.length) % thumbs.length;
+  return setProductGalleryImage(thumbs[nextIndex]);
+}
+
+function modalGalleryImages(product) {
+  if (!product) return [];
+  const variant = selectedModalVariant(product);
+  const variantImages = getVariantImages(variant);
+  const images = getProductImages(product);
+  const activeImage = state.modal.image || variant?.image || variantImages[0] || images[0] || "";
+  return uniqueImages([activeImage, ...variantImages, ...images]);
+}
+
+function showAdjacentModalImage(delta) {
+  const product = getProduct(state.modal.productId);
+  const images = modalGalleryImages(product);
+  if (images.length < 2) return false;
+
+  const activeImage = state.modal.image || images[0];
+  const activeIndex = Math.max(0, images.indexOf(activeImage));
+  state.modal.image = images[(activeIndex + delta + images.length) % images.length];
+  renderProductModal();
+  return true;
+}
+
 productGrid.addEventListener("click", (event) => {
+  if (Date.now() < gallerySwipeSuppressUntil) {
+    event.preventDefault();
+    event.stopPropagation();
+    return;
+  }
+
   const thumb = event.target.closest("[data-gallery-image]");
   if (thumb) {
-    const card = thumb.closest(".product-card");
-    const mainImage = card?.querySelector("[data-main-image]");
-    if (!mainImage) return;
-    mainImage.src = thumb.dataset.galleryImage;
-    card.querySelectorAll("[data-gallery-image]").forEach((button) => {
-      const active = button === thumb;
-      button.classList.toggle("active", active);
-      button.setAttribute("aria-pressed", active ? "true" : "false");
-    });
+    setProductGalleryImage(thumb);
     return;
   }
 
@@ -3143,7 +3190,56 @@ productGrid.addEventListener("click", (event) => {
   if (card) openProductModal(card.dataset.cardProduct);
 });
 
+productGrid.addEventListener("pointerover", (event) => {
+  if (event.pointerType === "touch") return;
+  const thumb = event.target.closest("[data-gallery-image]");
+  if (thumb) setProductGalleryImage(thumb);
+});
+
+productGrid.addEventListener("focusin", (event) => {
+  const thumb = event.target.closest("[data-gallery-image]");
+  if (thumb) setProductGalleryImage(thumb);
+});
+
+productGrid.addEventListener("pointerdown", (event) => {
+  const main = event.target.closest(".product-gallery-main");
+  if (!main) return;
+  const card = main.closest(".product-card");
+  if (!card || card.querySelectorAll("[data-gallery-image]").length < 2) return;
+  galleryPointerStart = {
+    pointerId: event.pointerId,
+    x: event.clientX,
+    y: event.clientY,
+    card
+  };
+});
+
+productGrid.addEventListener("pointerup", (event) => {
+  if (!galleryPointerStart || galleryPointerStart.pointerId !== event.pointerId) return;
+  const { x, y, card } = galleryPointerStart;
+  galleryPointerStart = null;
+  const dx = event.clientX - x;
+  const dy = event.clientY - y;
+
+  if (Math.abs(dx) < 45 || Math.abs(dx) <= Math.abs(dy) * 1.2) return;
+  if (showAdjacentProductGalleryImage(card, dx < 0 ? 1 : -1)) {
+    gallerySwipeSuppressUntil = Date.now() + 450;
+    event.preventDefault();
+    event.stopPropagation();
+  }
+});
+
+productGrid.addEventListener("pointercancel", () => {
+  galleryPointerStart = null;
+});
+
 productModal.addEventListener("click", (event) => {
+  if (Date.now() < modalSwipeSuppressUntil) {
+    event.preventDefault();
+    event.stopPropagation();
+    return;
+  }
+
   if (event.target === productModal) {
     closeProductModal();
     return;
@@ -3213,6 +3309,35 @@ productModal.addEventListener("click", (event) => {
     state.modal.quantity = 1;
     renderProductModal();
   }
+});
+
+productModal.addEventListener("pointerdown", (event) => {
+  const frame = event.target.closest(".modal-photo-frame");
+  if (!frame || frame.classList.contains("empty")) return;
+  modalPointerStart = {
+    pointerId: event.pointerId,
+    x: event.clientX,
+    y: event.clientY
+  };
+});
+
+productModal.addEventListener("pointerup", (event) => {
+  if (!modalPointerStart || modalPointerStart.pointerId !== event.pointerId) return;
+  const { x, y } = modalPointerStart;
+  modalPointerStart = null;
+  const dx = event.clientX - x;
+  const dy = event.clientY - y;
+
+  if (Math.abs(dx) < 45 || Math.abs(dx) <= Math.abs(dy) * 1.2) return;
+  if (showAdjacentModalImage(dx < 0 ? 1 : -1)) {
+    modalSwipeSuppressUntil = Date.now() + 450;
+    event.preventDefault();
+    event.stopPropagation();
+  }
+});
+
+productModal.addEventListener("pointercancel", () => {
+  modalPointerStart = null;
 });
 
 imageLightbox.addEventListener("click", (event) => {
