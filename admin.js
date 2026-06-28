@@ -30,7 +30,8 @@
     variantList: document.querySelector("[data-variant-list]"),
     importFallback: document.querySelector("[data-import-fallback]"),
     toast: document.querySelector("[data-toast]"),
-    saveFileButton: document.querySelector("[data-action='save-file']")
+    saveFileButton: document.querySelector("[data-action='save-file']"),
+    publishProductsButton: document.querySelector("[data-action='publish-products']")
   };
 
   document.addEventListener("click", handleActionClick);
@@ -65,6 +66,10 @@
 
     if (action === "save-file") {
       await saveProductsToOpenedFile();
+    }
+
+    if (action === "publish-products") {
+      await publishProductsToSite();
     }
 
     if (action === "download-products") {
@@ -181,6 +186,54 @@
     } catch (error) {
       showToast("تعذر الحفظ. جرّب تحميل نسخة جديدة بدلاً من الحفظ المباشر.");
       console.error(error);
+    }
+  }
+
+  async function publishProductsToSite() {
+    if (!state.products.length) {
+      showToast("لا توجد منتجات للنشر.");
+      return;
+    }
+
+    const confirmed = window.confirm("سيتم حفظ products.json على GitHub وبدء نشر الموقع. هل تريد المتابعة؟");
+    if (!confirmed) return;
+
+    const previousText = elements.publishProductsButton?.textContent || "";
+
+    try {
+      if (elements.publishProductsButton) {
+        elements.publishProductsButton.disabled = true;
+        elements.publishProductsButton.textContent = "جاري الحفظ والنشر...";
+      }
+
+      const products = normalizeProducts(state.products);
+      const response = await fetch("/admin/api/update-products", {
+        method: "POST",
+        credentials: "same-origin",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          products,
+          message: `Update products from admin ${new Date().toISOString()}`
+        })
+      });
+      const result = await response.json().catch(() => ({}));
+
+      if (!response.ok) {
+        throw new Error(result.error || result.message || `HTTP ${response.status}`);
+      }
+
+      state.products = products;
+      state.dirty = false;
+      renderAll(`تم نشر المنتجات. Commit: ${(result.commitSha || "").slice(0, 7)}`);
+      showToast("تم حفظ products.json على GitHub. Cloudflare سيبدأ النشر تلقائياً خلال دقائق.");
+    } catch (error) {
+      showToast(`تعذر النشر: ${error.message}`);
+      console.error(error);
+    } finally {
+      if (elements.publishProductsButton) {
+        elements.publishProductsButton.disabled = false;
+        elements.publishProductsButton.textContent = previousText;
+      }
     }
   }
 

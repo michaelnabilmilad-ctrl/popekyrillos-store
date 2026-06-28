@@ -25,13 +25,27 @@ BOSTA_API_KEY=...
 SITE_URL=https://popekyrillos.store
 ADMIN_USERNAME=...
 ADMIN_PASSWORD=...
+GITHUB_TOKEN=...
+GITHUB_OWNER=michaelnabilmilad-ctrl
+GITHUB_REPO=popekyrillos-store
+GITHUB_BRANCH=main
 ```
 
-Keep `PAYMOB_SECRET_KEY`, `PAYMOB_API_KEY`, `PAYMOB_HMAC_SECRET`, `BOSTA_API_KEY`, and `ADMIN_PASSWORD` secret. `ADMIN_USERNAME` can be plaintext, but using a secret for it is also fine.
+Keep `PAYMOB_SECRET_KEY`, `PAYMOB_API_KEY`, `PAYMOB_HMAC_SECRET`, `BOSTA_API_KEY`, `ADMIN_PASSWORD`, and `GITHUB_TOKEN` secret. `ADMIN_USERNAME`, `GITHUB_OWNER`, `GITHUB_REPO`, and `GITHUB_BRANCH` can be plaintext.
 
 The admin page is protected by the Cloudflare Worker. Add `ADMIN_USERNAME` and `ADMIN_PASSWORD` under **Settings -> Variables and secrets**, then deploy. Opening `/admin`, `/admin.html`, `/admin.css`, or `/admin.js` will require these credentials before any admin files load.
 
 The `wrangler.toml` asset config runs the Worker before static assets for the admin paths only. Keep `run_worker_first` enabled for `/admin`, `/admin/*`, `/admin.html`, `/admin.css`, and `/admin.js`; otherwise Cloudflare can serve the static admin files before the password check runs. The Cloudflare build also publishes the admin dashboard at `/admin/` to avoid automatic `admin.html` redirects.
+
+## Admin direct publishing
+
+The admin dashboard can commit `products.json` directly to GitHub through `/admin/api/update-products`. Create a GitHub fine-grained personal access token with access only to `michaelnabilmilad-ctrl/popekyrillos-store` and **Contents: Read and write**, then add it to Cloudflare as:
+
+```text
+GITHUB_TOKEN=<token>
+```
+
+When the admin button saves products, the Worker updates `products.json` on the `main` branch. Cloudflare should then start a new deploy automatically from the GitHub commit.
 
 `PAYMOB_INTEGRATION_IDS` must come from the same Paymob merchant account as `PAYMOB_SECRET_KEY` and `PAYMOB_PUBLIC_KEY`. In Paymob Dashboard, open **Developers -> Payment Integrations** and copy the card integration ID. If Paymob returns `Integration ID/Name does not exist`, this value is wrong or belongs to another account/environment.
 

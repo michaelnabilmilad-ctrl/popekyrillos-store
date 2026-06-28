@@ -1,6 +1,7 @@
 import { onRequest as createBostaDelivery } from "./functions/api/create-bosta-delivery.js";
 import { onRequest as createPaymobIntention } from "./functions/api/create-paymob-intention.js";
 import { onRequest as paymobWebhook } from "./functions/api/paymob-webhook.js";
+import { onRequest as updateProducts } from "./functions/api/update-products.js";
 
 const rewrites = {
   "/payment-success": "/payment-success.html",
@@ -108,6 +109,10 @@ export default {
       if (url.pathname === "/admin" || url.pathname === "/admin.html") {
         url.pathname = "/admin/";
         return Response.redirect(url.toString(), 302);
+      }
+
+      if (url.pathname === "/admin/api/update-products") {
+        return updateProducts(context);
       }
     }
 

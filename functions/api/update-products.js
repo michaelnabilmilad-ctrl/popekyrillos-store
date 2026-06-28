@@ -1,0 +1,127 @@
+function jsonResponse(status, data) {
+  return new Response(JSON.stringify(data), {
+    status,
+    headers: {
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "no-store"
+    }
+  });
+}
+
+function githubConfig(env = {}) {
+  const token = String(env.GITHUB_TOKEN || "").trim();
+  const owner = String(env.GITHUB_OWNER || "michaelnabilmilad-ctrl").trim();
+  const repo = String(env.GITHUB_REPO || "popekyrillos-store").trim();
+  const branch = String(env.GITHUB_BRANCH || "main").trim();
+
+  if (!token) {
+    throw Object.assign(new Error("GITHUB_TOKEN is not configured."), { statusCode: 500 });
+  }
+
+  return { token, owner, repo, branch };
+}
+
+function utf8ToBase64(value) {
+  const bytes = new TextEncoder().encode(value);
+  let binary = "";
+
+  for (let index = 0; index < bytes.length; index += 0x8000) {
+    const chunk = bytes.slice(index, index + 0x8000);
+    binary += String.fromCharCode(...chunk);
+  }
+
+  return btoa(binary);
+}
+
+async function githubFetch(config, path, options = {}) {
+  const response = await fetch(`https://api.github.com/repos/${config.owner}/${config.repo}${path}`, {
+    ...options,
+    headers: {
+      Accept: "application/vnd.github+json",
+      Authorization: `Bearer ${config.token}`,
+      "Content-Type": "application/json",
+      "User-Agent": "popekyrillos-store-admin",
+      "X-GitHub-Api-Version": "2022-11-28",
+      ...(options.headers || {})
+    }
+  });
+
+  const data = await response.json().catch(async () => ({ message: await response.text().catch(() => "") }));
+
+  if (!response.ok) {
+    throw Object.assign(new Error(data.message || `GitHub API failed with ${response.status}`), {
+      statusCode: response.status,
+      providerStatus: response.status,
+      providerData: data
+    });
+  }
+
+  return data;
+}
+
+function validateProducts(products) {
+  if (!Array.isArray(products)) {
+    throw Object.assign(new Error("products must be an array."), { statusCode: 400 });
+  }
+
+  for (const [index, product] of products.entries()) {
+    if (!product || typeof product !== "object" || Array.isArray(product)) {
+      throw Object.assign(new Error(`Invalid product at index ${index}.`), { statusCode: 400 });
+    }
+
+    if (!product.id || !product.name) {
+      throw Object.assign(new Error(`Product at index ${index} must include id and name.`), { statusCode: 400 });
+    }
+  }
+}
+
+export async function onRequest(context) {
+  const { request, env } = context;
+
+  if (request.method === "OPTIONS") return jsonResponse(204, {});
+  if (request.method !== "POST") return jsonResponse(405, { error: "Method not allowed." });
+
+  try {
+    const body = await request.json();
+    const products = body.products;
+    validateProducts(products);
+
+    const config = githubConfig(env);
+    const currentFile = await githubFetch(config, `/contents/products.json?ref=${encodeURIComponent(config.branch)}`);
+    const content = `${JSON.stringify(products, null, 2)}\n`;
+    const message = String(body.message || `Update products from admin ${new Date().toISOString()}`).slice(0, 180);
+
+    const result = await githubFetch(config, "/contents/products.json", {
+      method: "PUT",
+      body: JSON.stringify({
+        message,
+        content: utf8ToBase64(content),
+        sha: currentFile.sha,
+        branch: config.branch
+      })
+    });
+
+    return jsonResponse(200, {
+      ok: true,
+      commitSha: result.commit?.sha || "",
+      commitUrl: result.commit?.html_url || "",
+      path: result.content?.path || "products.json",
+      message: "products.json was committed to GitHub."
+    });
+  } catch (error) {
+    const statusCode = error.statusCode || 500;
+    if (statusCode >= 500) {
+      console.error("Update products failed", {
+        message: error.message,
+        providerStatus: error.providerStatus || null,
+        providerData: error.providerData || null
+      });
+    }
+
+    return jsonResponse(statusCode, {
+      error: error.message || "Failed to update products.json.",
+      providerStatus: error.providerStatus || null,
+      providerData: error.providerData || null
+    });
+  }
+}
