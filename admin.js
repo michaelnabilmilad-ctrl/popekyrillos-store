@@ -296,7 +296,7 @@
       const webp = await convertImageToWebp(file);
       showToast("جاري رفع الصورة على GitHub...");
 
-      const response = await fetch("/admin/api/upload-product-image", {
+      const response = await fetchWithTimeout("/admin/api/upload-product-image", {
         method: "POST",
         credentials: "same-origin",
         headers: { "Content-Type": "application/json" },
@@ -305,7 +305,7 @@
           productId: product.id || product.name || "product",
           imageBase64: webp.base64
         })
-      });
+      }, 60000);
       const result = await response.json().catch(() => ({}));
 
       if (!response.ok) {
@@ -320,7 +320,7 @@
       markDirty();
       showToast("تم رفع الصورة وإضافتها للمنتج. اضغط حفظ ونشر على الموقع لتحديث products.json.");
     } catch (error) {
-      showToast(`تعذر رفع الصورة: ${error.message}`);
+      showToast(`تعذر رفع الصورة: ${friendlyUploadError(error.message)}`);
       console.error(error);
     }
   }
@@ -341,7 +341,35 @@
 
   async function convertImageToWebp(file) {
     const bitmap = await loadImageBitmap(file);
-    const maxSide = 1800;
+    const attempts = [
+      { maxSide: 1400, quality: 0.84 },
+      { maxSide: 1100, quality: 0.78 },
+      { maxSide: 900, quality: 0.72 }
+    ];
+    let converted = null;
+
+    try {
+      for (const attempt of attempts) {
+        converted = await renderWebpBlob(bitmap, attempt);
+        if (converted.blob.size <= 1800 * 1024) break;
+      }
+    } finally {
+      if (bitmap.close) bitmap.close();
+    }
+
+    if (!converted || converted.blob.size > 2 * 1024 * 1024) {
+      throw new Error("الصورة كبيرة بعد التحويل. جرّب صورة أصغر أو قصها قبل الرفع.");
+    }
+
+    return {
+      blob: converted.blob,
+      base64: await blobToBase64(converted.blob),
+      width: converted.width,
+      height: converted.height
+    };
+  }
+
+  async function renderWebpBlob(bitmap, { maxSide, quality }) {
     const scale = Math.min(1, maxSide / Math.max(bitmap.width, bitmap.height));
     const width = Math.max(1, Math.round(bitmap.width * scale));
     const height = Math.max(1, Math.round(bitmap.height * scale));
@@ -350,25 +378,15 @@
     canvas.height = height;
     const context = canvas.getContext("2d");
     context.drawImage(bitmap, 0, 0, width, height);
-    if (bitmap.close) bitmap.close();
 
     const blob = await new Promise((resolve, reject) => {
       canvas.toBlob((result) => {
         if (result) resolve(result);
         else reject(new Error("المتصفح لم ينجح في تحويل الصورة إلى WebP."));
-      }, "image/webp", 0.88);
+      }, "image/webp", quality);
     });
 
-    if (blob.size > 5 * 1024 * 1024) {
-      throw new Error("الصورة كبيرة بعد التحويل. جرّب صورة أصغر.");
-    }
-
-    return {
-      blob,
-      base64: await blobToBase64(blob),
-      width,
-      height
-    };
+    return { blob, width, height };
   }
 
   async function loadImageBitmap(file) {
@@ -397,6 +415,41 @@
       reader.onerror = () => reject(new Error("تعذر قراءة الصورة بعد التحويل."));
       reader.readAsDataURL(blob);
     });
+  }
+
+  async function fetchWithTimeout(url, options = {}, timeoutMs = 30000) {
+    const controller = new AbortController();
+    const timer = window.setTimeout(() => controller.abort(), timeoutMs);
+
+    try {
+      return await fetch(url, {
+        ...options,
+        signal: controller.signal
+      });
+    } catch (error) {
+      if (error.name === "AbortError") {
+        throw new Error("انتهت مهلة رفع الصورة. جرّب صورة أصغر أو تأكد من GITHUB_TOKEN.");
+      }
+      throw error;
+    } finally {
+      window.clearTimeout(timer);
+    }
+  }
+
+  function friendlyUploadError(message = "") {
+    if (/GITHUB_TOKEN/i.test(message)) {
+      return "GITHUB_TOKEN غير موجود في Cloudflare أو لم يتم عمل Deploy بعد إضافته.";
+    }
+
+    if (/bad credentials|401/i.test(message)) {
+      return "GitHub token غير صحيح. أنشئ token جديد وضعه في Cloudflare.";
+    }
+
+    if (/resource not accessible|403|permission/i.test(message)) {
+      return "صلاحيات GitHub token ناقصة. يجب أن تكون Contents: Read and write.";
+    }
+
+    return message || "حدث خطأ غير معروف.";
   }
 
   async function copyProductsJson() {

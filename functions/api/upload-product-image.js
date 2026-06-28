@@ -75,8 +75,8 @@ function validateWebpBase64(base64) {
   }
 
   const size = decodeBase64Length(base64);
-  if (size <= 0 || size > 5 * 1024 * 1024) {
-    throw Object.assign(new Error("Image must be smaller than 5 MB after WebP conversion."), { statusCode: 400 });
+  if (size <= 0 || size > 2 * 1024 * 1024) {
+    throw Object.assign(new Error("Image must be smaller than 2 MB after WebP conversion."), { statusCode: 400 });
   }
 
   const header = atob(base64.slice(0, 32));
