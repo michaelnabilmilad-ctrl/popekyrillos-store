@@ -1,6 +1,7 @@
 import { onRequest as createBostaDelivery } from "./functions/api/create-bosta-delivery.js";
 import { onRequest as createPaymobIntention } from "./functions/api/create-paymob-intention.js";
 import { onRequest as paymobWebhook } from "./functions/api/paymob-webhook.js";
+import { onRequest as uploadProductImage } from "./functions/api/upload-product-image.js";
 import { onRequest as updateProducts } from "./functions/api/update-products.js";
 
 const rewrites = {
@@ -113,6 +114,10 @@ export default {
 
       if (url.pathname === "/admin/api/update-products") {
         return updateProducts(context);
+      }
+
+      if (url.pathname === "/admin/api/upload-product-image") {
+        return uploadProductImage(context);
       }
     }
 

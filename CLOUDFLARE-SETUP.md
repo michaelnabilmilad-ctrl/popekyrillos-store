@@ -47,6 +47,8 @@ GITHUB_TOKEN=<token>
 
 When the admin button saves products, the Worker updates `products.json` on the `main` branch. Cloudflare should then start a new deploy automatically from the GitHub commit.
 
+The admin image upload button uses the same `GITHUB_TOKEN` to commit converted WebP images into `assets/optimized/products/gallery/`. After uploading an image, click **Save and publish** in the admin dashboard so the new image path is saved into `products.json`.
+
 `PAYMOB_INTEGRATION_IDS` must come from the same Paymob merchant account as `PAYMOB_SECRET_KEY` and `PAYMOB_PUBLIC_KEY`. In Paymob Dashboard, open **Developers -> Payment Integrations** and copy the card integration ID. If Paymob returns `Integration ID/Name does not exist`, this value is wrong or belongs to another account/environment.
 
 For VPC integrations such as `MIGS-online`, the Worker uses Paymob Accept's token/order/payment-key flow. Add `PAYMOB_API_KEY` from **Developers -> API Keys** and `PAYMOB_IFRAME_ID` from **Developers -> Iframes**.

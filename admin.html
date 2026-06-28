@@ -120,6 +120,7 @@
           <section class="form-section">
             <div class="section-title-row">
               <h3>صور المنتج</h3>
+              <button class="button small secondary" type="button" data-action="upload-image">رفع صورة WebP</button>
               <span class="hint">اكتب مسار كل صورة في سطر. أول صورة هي التي تظهر في الكارت.</span>
             </div>
             <label>
@@ -179,6 +180,7 @@
     </main>
 
     <input type="file" data-import-fallback accept=".json,application/json" hidden>
+    <input type="file" data-image-upload accept="image/*" hidden>
     <div class="toast" data-toast hidden></div>
 
     <script src="admin.js?v=admin-image-paths-2-20260628" defer></script>

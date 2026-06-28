@@ -29,6 +29,7 @@
     imagePreview: document.querySelector("[data-image-preview]"),
     variantList: document.querySelector("[data-variant-list]"),
     importFallback: document.querySelector("[data-import-fallback]"),
+    imageUpload: document.querySelector("[data-image-upload]"),
     toast: document.querySelector("[data-toast]"),
     saveFileButton: document.querySelector("[data-action='save-file']"),
     publishProductsButton: document.querySelector("[data-action='publish-products']")
@@ -44,6 +45,7 @@
     renderProductList();
   });
   elements.importFallback.addEventListener("change", importFallbackFile);
+  elements.imageUpload.addEventListener("change", uploadProductImage);
   elements.editor.addEventListener("input", handleEditorInput);
   elements.editor.addEventListener("change", handleEditorInput);
 
@@ -70,6 +72,10 @@
 
     if (action === "publish-products") {
       await publishProductsToSite();
+    }
+
+    if (action === "upload-image") {
+      openImageUpload();
     }
 
     if (action === "download-products") {
@@ -235,6 +241,126 @@
         elements.publishProductsButton.textContent = previousText;
       }
     }
+  }
+
+  function openImageUpload() {
+    if (!currentProduct()) {
+      showToast("اختر منتجاً أولاً قبل رفع الصورة.");
+      return;
+    }
+
+    elements.imageUpload.click();
+  }
+
+  async function uploadProductImage(event) {
+    const file = event.target.files?.[0];
+    event.target.value = "";
+
+    if (!file) return;
+
+    const product = currentProduct();
+    if (!product) {
+      showToast("اختر منتجاً أولاً قبل رفع الصورة.");
+      return;
+    }
+
+    if (!file.type.startsWith("image/")) {
+      showToast("اختر ملف صورة صحيح.");
+      return;
+    }
+
+    try {
+      showToast("جاري تحويل الصورة إلى WebP...");
+      const webp = await convertImageToWebp(file);
+      showToast("جاري رفع الصورة على GitHub...");
+
+      const response = await fetch("/admin/api/upload-product-image", {
+        method: "POST",
+        credentials: "same-origin",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          filename: file.name,
+          productId: product.id || product.name || "product",
+          imageBase64: webp.base64
+        })
+      });
+      const result = await response.json().catch(() => ({}));
+
+      if (!response.ok) {
+        throw new Error(result.error || result.message || `HTTP ${response.status}`);
+      }
+
+      ensureProductShape(product);
+      product.images = unique([...(product.images || []), result.path]);
+      product.image = product.images[0] || result.path;
+      setValue("images", arrayToLines(product.images));
+      renderImagePreview(product.images);
+      markDirty();
+      showToast("تم رفع الصورة وإضافتها للمنتج. اضغط حفظ ونشر على الموقع لتحديث products.json.");
+    } catch (error) {
+      showToast(`تعذر رفع الصورة: ${error.message}`);
+      console.error(error);
+    }
+  }
+
+  async function convertImageToWebp(file) {
+    const bitmap = await loadImageBitmap(file);
+    const maxSide = 1800;
+    const scale = Math.min(1, maxSide / Math.max(bitmap.width, bitmap.height));
+    const width = Math.max(1, Math.round(bitmap.width * scale));
+    const height = Math.max(1, Math.round(bitmap.height * scale));
+    const canvas = document.createElement("canvas");
+    canvas.width = width;
+    canvas.height = height;
+    const context = canvas.getContext("2d");
+    context.drawImage(bitmap, 0, 0, width, height);
+    if (bitmap.close) bitmap.close();
+
+    const blob = await new Promise((resolve, reject) => {
+      canvas.toBlob((result) => {
+        if (result) resolve(result);
+        else reject(new Error("المتصفح لم ينجح في تحويل الصورة إلى WebP."));
+      }, "image/webp", 0.88);
+    });
+
+    if (blob.size > 5 * 1024 * 1024) {
+      throw new Error("الصورة كبيرة بعد التحويل. جرّب صورة أصغر.");
+    }
+
+    return {
+      blob,
+      base64: await blobToBase64(blob),
+      width,
+      height
+    };
+  }
+
+  async function loadImageBitmap(file) {
+    if (window.createImageBitmap) {
+      return createImageBitmap(file, { imageOrientation: "from-image" });
+    }
+
+    const url = URL.createObjectURL(file);
+    try {
+      const image = await new Promise((resolve, reject) => {
+        const element = new Image();
+        element.onload = () => resolve(element);
+        element.onerror = () => reject(new Error("تعذر قراءة الصورة."));
+        element.src = url;
+      });
+      return image;
+    } finally {
+      URL.revokeObjectURL(url);
+    }
+  }
+
+  function blobToBase64(blob) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(String(reader.result || "").split(",")[1] || "");
+      reader.onerror = () => reject(new Error("تعذر قراءة الصورة بعد التحويل."));
+      reader.readAsDataURL(blob);
+    });
   }
 
   async function copyProductsJson() {
