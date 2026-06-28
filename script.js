@@ -3016,7 +3016,6 @@ function isProtectedImageTarget(target) {
 document.addEventListener("contextmenu", (event) => {
   if (!isProtectedImageTarget(event.target)) return;
   event.preventDefault();
-  showToast(t("imageProtected"));
 });
 
 document.addEventListener("dragstart", (event) => {
