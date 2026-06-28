@@ -19,6 +19,7 @@ PAYMOB_API_KEY=...
 PAYMOB_PUBLIC_KEY=...
 PAYMOB_INTEGRATION_IDS=<card integration id from the same Paymob account>
 PAYMOB_IFRAME_ID=<Paymob iframe id>
+PAYMOB_ACCEPT_BASE_URL=https://accept.paymob.com
 PAYMOB_HMAC_SECRET=...
 BOSTA_API_KEY=...
 SITE_URL=https://popekyrillos.store
@@ -29,6 +30,8 @@ Keep `PAYMOB_SECRET_KEY`, `PAYMOB_API_KEY`, `PAYMOB_HMAC_SECRET`, and `BOSTA_API
 `PAYMOB_INTEGRATION_IDS` must come from the same Paymob merchant account as `PAYMOB_SECRET_KEY` and `PAYMOB_PUBLIC_KEY`. In Paymob Dashboard, open **Developers -> Payment Integrations** and copy the card integration ID. If Paymob returns `Integration ID/Name does not exist`, this value is wrong or belongs to another account/environment.
 
 For VPC integrations such as `MIGS-online`, the Worker uses Paymob Accept's token/order/payment-key flow. Add `PAYMOB_API_KEY` from **Developers -> API Keys** and `PAYMOB_IFRAME_ID` from **Developers -> Iframes**.
+
+Use `PAYMOB_ACCEPT_BASE_URL=https://accept-alpha.paymob.com` when the Paymob iframe link starts with `accept-alpha.paymob.com` or the account is in Test mode. Use `https://accept.paymob.com` for Live mode.
 
 ## KV binding
 

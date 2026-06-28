@@ -26,11 +26,13 @@ function newOrderReference() {
 function requirePaymobConfig(env = {}) {
   const apiKey = cleanText(env.PAYMOB_API_KEY || env.PAYMOB_SECRET_KEY, 1000);
   const iframeId = cleanText(env.PAYMOB_IFRAME_ID, 80);
+  const baseUrl = cleanText(env.PAYMOB_ACCEPT_BASE_URL, 160) || "https://accept.paymob.com";
   if (!apiKey) throw new Error("PAYMOB_API_KEY is not configured.");
   if (!iframeId) throw new Error("PAYMOB_IFRAME_ID is not configured.");
   return {
     apiKey,
     iframeId,
+    baseUrl: baseUrl.replace(/\/+$/, ""),
     integrationId: integrationIds(env)[0]
   };
 }
@@ -81,8 +83,8 @@ function legacyBillingData(customer, orderReference) {
   };
 }
 
-async function postPaymob(path, payload) {
-  const response = await fetch(`https://accept.paymob.com${path}`, {
+async function postPaymob(baseUrl, path, payload) {
+  const response = await fetch(`${baseUrl}${path}`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload)
@@ -98,8 +100,8 @@ async function postPaymob(path, payload) {
   return data;
 }
 
-function legacyCheckoutUrl(iframeId, token) {
-  return `https://accept.paymob.com/api/acceptance/iframes/${encodeURIComponent(iframeId)}?payment_token=${encodeURIComponent(token)}`;
+function legacyCheckoutUrl(baseUrl, iframeId, token) {
+  return `${baseUrl}/api/acceptance/iframes/${encodeURIComponent(iframeId)}?payment_token=${encodeURIComponent(token)}`;
 }
 
 export async function onRequest(context) {
@@ -110,7 +112,7 @@ export async function onRequest(context) {
   const orderReference = newOrderReference();
 
   try {
-    const { apiKey, iframeId, integrationId } = requirePaymobConfig(env);
+    const { apiKey, iframeId, baseUrl, integrationId } = requirePaymobConfig(env);
     const body = await parseRequestBody(request);
     const secureCart = await validateCartItems(context, body.items || body.cart || []);
     const customer = validateCustomer(body.customer || {}, orderReference);
@@ -138,11 +140,11 @@ export async function onRequest(context) {
     };
     await saveOrder(env, pendingOrder);
 
-    const authData = await postPaymob("/api/auth/tokens", { api_key: apiKey });
+    const authData = await postPaymob(baseUrl, "/api/auth/tokens", { api_key: apiKey });
     const authToken = authData.token;
     if (!authToken) throw new Error("Paymob auth token was not returned.");
 
-    const orderData = await postPaymob("/api/ecommerce/orders", {
+    const orderData = await postPaymob(baseUrl, "/api/ecommerce/orders", {
       auth_token: authToken,
       delivery_needed: false,
       amount_cents: amountCents,
@@ -153,7 +155,7 @@ export async function onRequest(context) {
     const paymobOrderId = orderData.id;
     if (!paymobOrderId) throw new Error("Paymob order ID was not returned.");
 
-    const paymentKeyData = await postPaymob("/api/acceptance/payment_keys", {
+    const paymentKeyData = await postPaymob(baseUrl, "/api/acceptance/payment_keys", {
       auth_token: authToken,
       amount_cents: amountCents,
       expiration: 3600,
@@ -183,7 +185,7 @@ export async function onRequest(context) {
       orderReference,
       currency,
       amountCents,
-      checkoutUrl: legacyCheckoutUrl(iframeId, paymentToken)
+      checkoutUrl: legacyCheckoutUrl(baseUrl, iframeId, paymentToken)
     });
   } catch (error) {
     const statusCode = error.statusCode || 500;
