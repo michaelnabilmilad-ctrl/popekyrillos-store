@@ -9,7 +9,7 @@
     "priceNote": "",
     "stock": "متاح",
     "badge": "قطمارس",
-    "image": "",
+    "image": "assets/optimized/products/gallery/baskha-araby.webp",
     "url": "https://popekyrillos.store/?product=custom-1782306615168-copy-1782306883366-copy-1782307173548-copy-1782307256776-copy-1782307341493-copy-1782310276272-copy-1782310382795-copy-1782310383710",
     "tags": [
       "كتب",
@@ -18,7 +18,9 @@
       "إنجيل",
       "قراءات"
     ],
-    "images": [],
+    "images": [
+      "assets/optimized/products/gallery/baskha-araby.webp"
+    ],
     "options": [],
     "variants": [
       {
@@ -28,8 +30,10 @@
         "price": 700,
         "compareAtPrice": null,
         "available": true,
-        "image": null,
-        "images": [],
+        "image": "assets/optimized/products/gallery/baskha-araby.webp",
+        "images": [
+          "assets/optimized/products/gallery/baskha-araby.webp"
+        ],
         "sku": "",
         "quantity": 10
       }
@@ -45,7 +49,7 @@
     "priceNote": "",
     "stock": "متاح",
     "badge": "قطمارس",
-    "image": "",
+    "image": "assets/optimized/products/gallery/som-araby.webp",
     "url": "https://popekyrillos.store/?product=custom-1782306615168-copy-1782306883366-copy-1782307173548-copy-1782307256776-copy-1782307341493-copy-1782310276272-copy-1782310382795",
     "tags": [
       "كتب",
@@ -54,7 +58,9 @@
       "إنجيل",
       "قراءات"
     ],
-    "images": [],
+    "images": [
+      "assets/optimized/products/gallery/som-araby.webp"
+    ],
     "options": [],
     "variants": [
       {
@@ -64,8 +70,10 @@
         "price": 700,
         "compareAtPrice": null,
         "available": true,
-        "image": null,
-        "images": [],
+        "image": "assets/optimized/products/gallery/som-araby.webp",
+        "images": [
+          "assets/optimized/products/gallery/som-araby.webp"
+        ],
         "sku": "",
         "quantity": 10
       }
@@ -195,7 +203,7 @@
     "priceNote": "",
     "stock": "متاح",
     "badge": "قطمارس",
-    "image": "",
+    "image": "assets/optimized/products/gallery/ahad-epty.webp",
     "url": "https://popekyrillos.store/?product=custom-1782306615168-copy-1782306883366-copy-1782307173548",
     "tags": [
       "كتب",
@@ -204,7 +212,9 @@
       "إنجيل",
       "قراءات"
     ],
-    "images": [],
+    "images": [
+      "assets/optimized/products/gallery/ahad-epty.webp"
+    ],
     "options": [],
     "variants": [
       {
@@ -214,8 +224,10 @@
         "price": 700,
         "compareAtPrice": null,
         "available": true,
-        "image": null,
-        "images": [],
+        "image": "assets/optimized/products/gallery/ahad-epty.webp",
+        "images": [
+          "assets/optimized/products/gallery/ahad-epty.webp"
+        ],
         "sku": "",
         "quantity": 10
       }

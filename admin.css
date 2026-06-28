@@ -345,6 +345,25 @@ textarea:focus {
   background: #fff;
 }
 
+.image-preview figure.image-missing {
+  border-color: var(--danger);
+  background: #fff5f5;
+}
+
+.image-preview figure.image-missing::before {
+  content: "الصورة غير موجودة";
+  display: block;
+  padding: 8px;
+  color: var(--danger);
+  font-size: 0.78rem;
+  font-weight: 900;
+  text-align: center;
+}
+
+.image-preview figure.image-missing img {
+  display: none;
+}
+
 .image-preview figcaption {
   padding: 6px;
   color: var(--muted);

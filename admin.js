@@ -316,7 +316,7 @@
 
     elements.imagePreview.innerHTML = visibleImages.map((image, index) => `
       <figure>
-        <img src="${escapeAttribute(image)}" alt="صورة ${index + 1}" loading="lazy" decoding="async">
+        <img src="${escapeAttribute(image)}" alt="صورة ${index + 1}" loading="lazy" decoding="async" onerror="this.closest('figure').classList.add('image-missing')">
         <figcaption>${escapeHtml(image)}</figcaption>
       </figure>
     `).join("");
@@ -407,7 +407,8 @@
     }
 
     if (field === "images") {
-      product.images = parseLines(value);
+      product.images = parseImageLines(value);
+      syncNormalizedFieldValue(element, product.images);
       product.image = product.images[0] || "";
       renderImagePreview(product.images);
       return;
@@ -483,7 +484,8 @@
     }
 
     if (field === "images") {
-      variant.images = parseLines(element.value);
+      variant.images = parseImageLines(element.value);
+      syncNormalizedFieldValue(element, variant.images);
       variant.image = variant.images[0] || null;
       return;
     }
@@ -624,8 +626,8 @@
       product.stock = product.stock || "متاح";
       product.badge = product.badge || product.label || "";
       product.tags = unique(product.tags || []);
-      product.images = unique((product.images || []).filter(Boolean));
-      product.image = product.images[0] || product.image || "";
+      product.images = unique((product.images || []).map(normalizeImagePath).filter(Boolean));
+      product.image = product.images[0] || normalizeImagePath(product.image) || "";
       product.url = product.url || `https://popekyrillos.store/?product=${product.id}`;
       product.variants = product.variants.length ? product.variants : [createVariant(product)];
       product.variants = product.variants.map((variant, index) => normalizeVariant(product, variant, index));
@@ -634,7 +636,7 @@
   }
 
   function normalizeVariant(product, variant, index) {
-    const images = unique((variant.images || [variant.image].filter(Boolean)).filter(Boolean));
+    const images = unique((variant.images || [variant.image].filter(Boolean)).map(normalizeImagePath).filter(Boolean));
     return {
       id: variant.id || `${product.id}-variant-${index + 1}`,
       title: variant.title || `اختيار ${index + 1}`,
@@ -642,7 +644,7 @@
       price: numberOrNull(variant.price) ?? product.price ?? 0,
       compareAtPrice: numberOrNull(variant.compareAtPrice),
       available: variant.available !== false,
-      image: images[0] || variant.image || null,
+      image: images[0] || normalizeImagePath(variant.image) || null,
       images,
       sku: variant.sku || "",
       quantity: numberOrNull(variant.quantity)
@@ -701,6 +703,26 @@
       .split(/\r?\n/)
       .map((line) => line.trim())
       .filter(Boolean));
+  }
+
+  function parseImageLines(value) {
+    return unique(String(value || "")
+      .split(/\r?\n/)
+      .map(normalizeImagePath)
+      .filter(Boolean));
+  }
+
+  function normalizeImagePath(value = "") {
+    return String(value || "")
+      .trim()
+      .replace(/[\u2010-\u2015\u2212]/g, "-")
+      .replace(/\\/g, "/")
+      .replace(/\s+/g, "%20");
+  }
+
+  function syncNormalizedFieldValue(element, values) {
+    const normalizedValue = arrayToLines(values);
+    if (element.value !== normalizedValue) element.value = normalizedValue;
   }
 
   function arrayToLines(value) {
