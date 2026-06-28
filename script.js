@@ -115,6 +115,11 @@ const emailResetButton = document.querySelector("[data-email-reset]");
 const cartPanel = document.querySelector("[data-cart-panel]");
 const cartItems = document.querySelector("[data-cart-items]");
 const cartCount = document.querySelector("[data-cart-count]");
+const cartHover = document.querySelector("[data-cart-hover]");
+const cartPreviewToggle = document.querySelector("[data-cart-preview-toggle]");
+const miniCart = document.querySelector("[data-mini-cart]");
+const miniCartItems = document.querySelector("[data-mini-cart-items]");
+const miniCartTotal = document.querySelector("[data-mini-cart-total]");
 const cartTotal = document.querySelector("[data-cart-total]");
 const whatsappLink = document.querySelector("[data-whatsapp-link]");
 const checkoutLabel = document.querySelector("[data-checkout-label]");
@@ -238,6 +243,11 @@ const translations = {
     policyShipping: "سياسة الشحن",
     cartEyebrow: "طلبك",
     cartTitle: "سلة المنتجات",
+    miniCartEyebrow: "ملخص السلة",
+    miniCartTitle: "اختيارات العميل",
+    miniCartGoToCart: "اذهب للسلة",
+    miniCartTotal: "الإجمالي",
+    miniCartMore: "+ {count} منتج آخر",
     paymentMethod: "طريقة الدفع",
     instapayLabel: "إنستاباي / تحويل بنكي",
     instapaySmall: "01223515989 - مايكل نبيل ميلاد",
@@ -468,6 +478,11 @@ const translations = {
     policyShipping: "Shipping policy",
     cartEyebrow: "Your order",
     cartTitle: "Product cart",
+    miniCartEyebrow: "Cart summary",
+    miniCartTitle: "Customer picks",
+    miniCartGoToCart: "Go to cart",
+    miniCartTotal: "Total",
+    miniCartMore: "+ {count} more item(s)",
     paymentMethod: "Payment method",
     instapayLabel: "Instapay / bank transfer",
     instapaySmall: "01223515989 - Michael Nabil Milad",
@@ -1048,6 +1063,10 @@ function applyLanguage({ render = true } = {}) {
 
   setText(".cart-panel-head .eyebrow", t("cartEyebrow"));
   setText(".cart-panel-head h2", t("cartTitle"));
+  setText("[data-mini-cart-eyebrow]", t("miniCartEyebrow"));
+  setText("[data-mini-cart-title]", t("miniCartTitle"));
+  setText("[data-mini-cart-page]", t("miniCartGoToCart"));
+  setText("[data-mini-cart-total-label]", t("miniCartTotal"));
   setText(".payment-box-head span", t("paymentMethod"));
   const paymentOptions = document.querySelectorAll(".payment-option");
   if (paymentOptions[0]) {
@@ -2346,6 +2365,50 @@ async function startPaymobCheckout() {
   }
 }
 
+function setMiniCartOpen(open) {
+  if (!miniCart) return;
+  miniCart.setAttribute("aria-hidden", open ? "false" : "true");
+  cartPreviewToggle?.setAttribute("aria-expanded", open ? "true" : "false");
+}
+
+function renderMiniCart(entries, total, rawCount, hasUnpriced) {
+  if (!miniCartItems) return;
+
+  if (miniCartTotal) {
+    miniCartTotal.textContent = hasUnpriced ? `${money(total)}${t("unpricedSuffix")}` : money(total);
+  }
+
+  if (!entries.length) {
+    miniCartItems.innerHTML = `<div class="mini-cart-empty">${rawCount && !products.length ? t("cartLoading") : t("emptyCart")}</div>`;
+    return;
+  }
+
+  const previewItems = entries.slice(0, 4);
+  const moreCount = Math.max(0, entries.length - previewItems.length);
+  miniCartItems.innerHTML = `${previewItems
+    .map((item) => {
+      const productName = displayText(localized(item.product.name));
+      const image = item.variant?.image || getVariantImages(item.variant)[0] || getProductImages(item.product)[0] || "";
+      const imageUrl = image ? productImageUrl(image, item.product) : "";
+      const thumb = imageUrl
+        ? `<img class="mini-cart-thumb" src="${escapeHtml(imageUrl)}" alt="" width="108" height="108" loading="lazy" decoding="async" />`
+        : `<span class="mini-cart-thumb mini-cart-thumb-empty" aria-hidden="true"></span>`;
+      const qtyText = displayText(formatter.format(item.qty));
+      const priceText = item.price === null ? t("askPrice") : money(item.price);
+      return `
+        <article class="mini-cart-item">
+          ${thumb}
+          <div>
+            <strong>${escapeHtml(productName)}</strong>
+            <small>${item.optionText ? `${escapeHtml(item.optionText)} · ` : ""}${qtyText} × ${priceText}</small>
+          </div>
+          <span class="mini-cart-price">${item.price === null ? t("askPrice") : money(item.price * item.qty)}</span>
+        </article>
+      `;
+    })
+    .join("")}${moreCount ? `<div class="mini-cart-more">${t("miniCartMore", { count: displayText(formatter.format(moreCount)) })}</div>` : ""}`;
+}
+
 function renderCart() {
   renderPaymentDetails();
   renderDeliveryDetails();
@@ -2358,6 +2421,7 @@ function renderCart() {
   const needsBostaShipping = detailsReady && state.shipping.deliveryMethod === "bosta";
 
   cartCount.textContent = count;
+  renderMiniCart(entries, total, rawCount, hasUnpriced);
   if (cartTotalBox) cartTotalBox.classList.remove("locked");
   if (cartTotalLabel) cartTotalLabel.textContent = t("totalReadyLabel");
   if (cartTotal) cartTotal.textContent = hasUnpriced ? `${money(total)}${t("unpricedSuffix")}` : money(total);
@@ -3211,6 +3275,14 @@ emailSignupButton?.addEventListener("click", signUpWithEmail);
 emailResetButton?.addEventListener("click", resetEmailPassword);
 authSignoutButton?.addEventListener("click", signOutCustomer);
 
+cartHover?.addEventListener("mouseenter", () => setMiniCartOpen(true));
+cartHover?.addEventListener("mouseleave", () => setMiniCartOpen(false));
+cartHover?.addEventListener("focusin", () => setMiniCartOpen(true));
+cartHover?.addEventListener("focusout", (event) => {
+  if (cartHover.contains(event.relatedTarget)) return;
+  setMiniCartOpen(false);
+});
+
 whatsappLink.addEventListener("click", async (event) => {
   event.preventDefault();
   if (state.checkoutBusy || state.bosta.busy) return;
@@ -3271,6 +3343,7 @@ document.addEventListener("keydown", (event) => {
     closeShopMenu();
     closeProductModal();
     closeAccountModal();
+    setMiniCartOpen(false);
   }
 });
 

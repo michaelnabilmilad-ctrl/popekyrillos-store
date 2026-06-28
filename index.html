@@ -8,7 +8,7 @@
       name="description"
       content="مكتبة البابا كيرلس: مكتبة مسيحية متخصصة في مستلزمات الكنائس، الكتب الطقسية، الشموع، البخور، الأيقونات، والأقمشة الكنسية."
     />
-    <link rel="stylesheet" href="styles.min.css?v=menu-icon-20260628" />
+    <link rel="stylesheet" href="styles.min.css?v=mini-cart-20260628" />
   </head>
   <body dir="rtl">
     <header class="site-header" data-elevated="false">
@@ -56,33 +56,36 @@
           </button>
           <input class="header-search-input" type="search" id="product-search" placeholder="ابحث عن منتج" autocomplete="off" />
         </div>
-        <a class="icon-button cart-link" href="cart.html" aria-label="فتح السلة">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M6 6h15l-2 8H8L6 3H3" />
-            <circle cx="9" cy="20" r="1.6" />
-            <circle cx="18" cy="20" r="1.6" />
-          </svg>
-          <span class="cart-count" data-cart-count>0</span>
-        </a>
+        <div class="cart-hover" data-cart-hover>
+          <a class="icon-button cart-link" href="cart.html" aria-label="فتح السلة" aria-haspopup="dialog" aria-expanded="false" data-cart-preview-toggle>
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M6 6h15l-2 8H8L6 3H3" />
+              <circle cx="9" cy="20" r="1.6" />
+              <circle cx="18" cy="20" r="1.6" />
+            </svg>
+            <span class="cart-count" data-cart-count>0</span>
+          </a>
+          <aside class="mini-cart" data-mini-cart aria-hidden="true" aria-label="ملخص السلة">
+            <div class="mini-cart-head">
+              <div>
+                <span data-mini-cart-eyebrow>ملخص السلة</span>
+                <strong data-mini-cart-title>اختيارات العميل</strong>
+              </div>
+            </div>
+            <div class="mini-cart-items" data-mini-cart-items>
+              <div class="mini-cart-empty">السلة فارغة حالياً</div>
+            </div>
+            <div class="mini-cart-foot">
+              <div>
+                <span data-mini-cart-total-label>الإجمالي</span>
+                <strong data-mini-cart-total>٠ ج.م</strong>
+              </div>
+              <a class="mini-cart-action" href="cart.html" data-mini-cart-page>اذهب للسلة</a>
+            </div>
+          </aside>
+        </div>
     </div>
   </header>
-
-  <aside class="mini-cart" data-mini-cart aria-hidden="true" aria-label="ملخص السلة">
-    <div class="mini-cart-head">
-      <div>
-        <span data-mini-cart-eyebrow>ملخص السلة</span>
-        <strong data-mini-cart-title>اختيارات العميل</strong>
-      </div>
-      <a href="cart.html" data-mini-cart-page>فتح السلة</a>
-    </div>
-    <div class="mini-cart-items" data-mini-cart-items>
-      <div class="mini-cart-empty">السلة فارغة حالياً</div>
-    </div>
-    <div class="mini-cart-foot">
-      <span data-mini-cart-total-label>الإجمالي</span>
-      <strong data-mini-cart-total>٠ ج.م</strong>
-    </div>
-  </aside>
 
   <main id="top">
       <section class="hero" aria-labelledby="hero-title">
@@ -644,6 +647,6 @@
 
     <div class="toast" data-toast role="status" aria-live="polite"></div>
     <script src="firebase-config.min.js?v=secure-orders-20260612" defer></script>
-    <script src="script.min.js?v=cart-save-20260628" defer></script>
+    <script src="script.min.js?v=mini-cart-20260628" defer></script>
   </body>
 </html>
