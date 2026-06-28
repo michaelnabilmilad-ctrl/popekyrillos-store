@@ -106,7 +106,7 @@
 
   async function loadProductsFromSite() {
     try {
-      const response = await fetch(`products.json?admin=${Date.now()}`);
+      const response = await fetch(`/products.json?admin=${Date.now()}`);
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const products = await response.json();
       setProducts(products, "تم تحميل منتجات الموقع");
