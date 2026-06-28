@@ -59,6 +59,56 @@ async function githubFetch(config, path, options = {}) {
   return data;
 }
 
+async function commitFiles(config, message, files) {
+  const ref = await githubFetch(config, `/git/ref/heads/${encodeURIComponent(config.branch)}`);
+  const baseCommit = await githubFetch(config, `/git/commits/${ref.object.sha}`);
+  const treeItems = [];
+
+  for (const file of files) {
+    const blob = await githubFetch(config, "/git/blobs", {
+      method: "POST",
+      body: JSON.stringify({
+        content: file.content,
+        encoding: "base64"
+      })
+    });
+
+    treeItems.push({
+      path: file.path,
+      mode: "100644",
+      type: "blob",
+      sha: blob.sha
+    });
+  }
+
+  const tree = await githubFetch(config, "/git/trees", {
+    method: "POST",
+    body: JSON.stringify({
+      base_tree: baseCommit.tree.sha,
+      tree: treeItems
+    })
+  });
+
+  const commit = await githubFetch(config, "/git/commits", {
+    method: "POST",
+    body: JSON.stringify({
+      message,
+      tree: tree.sha,
+      parents: [ref.object.sha]
+    })
+  });
+
+  await githubFetch(config, `/git/refs/heads/${encodeURIComponent(config.branch)}`, {
+    method: "PATCH",
+    body: JSON.stringify({
+      sha: commit.sha,
+      force: false
+    })
+  });
+
+  return commit;
+}
+
 function validateProducts(products) {
   if (!Array.isArray(products)) {
     throw Object.assign(new Error("products must be an array."), { statusCode: 400 });
@@ -87,25 +137,20 @@ export async function onRequest(context) {
     validateProducts(products);
 
     const config = githubConfig(env);
-    const currentFile = await githubFetch(config, `/contents/products.json?ref=${encodeURIComponent(config.branch)}`);
     const content = `${JSON.stringify(products, null, 2)}\n`;
+    const encodedContent = utf8ToBase64(content);
     const message = String(body.message || `Update products from admin ${new Date().toISOString()}`).slice(0, 180);
 
-    const result = await githubFetch(config, "/contents/products.json", {
-      method: "PUT",
-      body: JSON.stringify({
-        message,
-        content: utf8ToBase64(content),
-        sha: currentFile.sha,
-        branch: config.branch
-      })
-    });
+    const result = await commitFiles(config, message, [
+      { path: "products.json", content: encodedContent },
+      { path: "dist/products.json", content: encodedContent }
+    ]);
 
     return jsonResponse(200, {
       ok: true,
-      commitSha: result.commit?.sha || "",
-      commitUrl: result.commit?.html_url || "",
-      path: result.content?.path || "products.json",
+      commitSha: result.sha || "",
+      commitUrl: result.html_url || "",
+      path: "products.json",
       message: "products.json was committed to GitHub."
     });
   } catch (error) {

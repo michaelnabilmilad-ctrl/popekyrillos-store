@@ -47,6 +47,56 @@ async function githubFetch(config, path, options = {}) {
   return data;
 }
 
+async function commitFiles(config, message, files) {
+  const ref = await githubFetch(config, `/git/ref/heads/${encodeURIComponent(config.branch)}`);
+  const baseCommit = await githubFetch(config, `/git/commits/${ref.object.sha}`);
+  const treeItems = [];
+
+  for (const file of files) {
+    const blob = await githubFetch(config, "/git/blobs", {
+      method: "POST",
+      body: JSON.stringify({
+        content: file.content,
+        encoding: "base64"
+      })
+    });
+
+    treeItems.push({
+      path: file.path,
+      mode: "100644",
+      type: "blob",
+      sha: blob.sha
+    });
+  }
+
+  const tree = await githubFetch(config, "/git/trees", {
+    method: "POST",
+    body: JSON.stringify({
+      base_tree: baseCommit.tree.sha,
+      tree: treeItems
+    })
+  });
+
+  const commit = await githubFetch(config, "/git/commits", {
+    method: "POST",
+    body: JSON.stringify({
+      message,
+      tree: tree.sha,
+      parents: [ref.object.sha]
+    })
+  });
+
+  await githubFetch(config, `/git/refs/heads/${encodeURIComponent(config.branch)}`, {
+    method: "PATCH",
+    body: JSON.stringify({
+      sha: commit.sha,
+      force: false
+    })
+  });
+
+  return commit;
+}
+
 function safeName(value = "") {
   return String(value)
     .normalize("NFKD")
@@ -102,22 +152,19 @@ export async function onRequest(context) {
     const timestamp = new Date().toISOString().replace(/[-:.TZ]/g, "").slice(0, 14);
     const filename = `${productId}-${sourceName}-${timestamp}-${randomHex()}.webp`;
     const path = `assets/optimized/products/gallery/${filename}`;
+    const distPath = `dist/${path}`;
     const config = githubConfig(env);
 
-    const result = await githubFetch(config, `/contents/${encodeURIComponent(path).replaceAll("%2F", "/")}`, {
-      method: "PUT",
-      body: JSON.stringify({
-        message: `Upload product image ${filename}`,
-        content: imageBase64,
-        branch: config.branch
-      })
-    });
+    const result = await commitFiles(config, `Upload product image ${filename}`, [
+      { path, content: imageBase64 },
+      { path: distPath, content: imageBase64 }
+    ]);
 
     return jsonResponse(200, {
       ok: true,
       path,
-      commitSha: result.commit?.sha || "",
-      commitUrl: result.commit?.html_url || "",
+      commitSha: result.sha || "",
+      commitUrl: result.html_url || "",
       size: decodeBase64Length(imageBase64)
     });
   } catch (error) {
