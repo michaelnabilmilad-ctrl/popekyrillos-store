@@ -152,12 +152,16 @@ export async function onRequest(context) {
     const timestamp = new Date().toISOString().replace(/[-:.TZ]/g, "").slice(0, 14);
     const filename = `${productId}-${sourceName}-${timestamp}-${randomHex()}.webp`;
     const path = `assets/optimized/products/gallery/${filename}`;
+    const detailPath = path.replace(/^assets\/optimized\/products\//, "assets/detail/products/");
     const distPath = `dist/${path}`;
+    const distDetailPath = `dist/${detailPath}`;
     const config = githubConfig(env);
 
     const result = await commitFiles(config, `Upload product image ${filename}`, [
       { path, content: imageBase64 },
-      { path: distPath, content: imageBase64 }
+      { path: detailPath, content: imageBase64 },
+      { path: distPath, content: imageBase64 },
+      { path: distDetailPath, content: imageBase64 }
     ]);
 
     return jsonResponse(200, {
