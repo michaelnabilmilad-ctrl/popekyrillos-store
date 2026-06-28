@@ -34,23 +34,16 @@ function requirePaymobConfig(env = {}) {
 }
 
 function paymobItems(orderItems, shippingCents) {
-  const items = orderItems.map((item) => ({
-    name: item.option ? `${item.name} - ${item.option}`.slice(0, 255) : item.name.slice(0, 255),
-    amount: item.unitAmountCents,
-    description: item.option || item.name,
-    quantity: item.quantity
-  }));
-
-  if (shippingCents > 0) {
-    items.push({
-      name: "Shipping",
-      amount: shippingCents,
-      description: "Delivery fee",
+  const itemsTotal = orderItems.reduce((sum, item) => sum + item.lineAmountCents, 0) + shippingCents;
+  const productsCount = orderItems.reduce((sum, item) => sum + item.quantity, 0);
+  return [
+    {
+      name: "Pope Kyrillos Store order",
+      amount: itemsTotal,
+      description: `${productsCount || 1} product(s)`,
       quantity: 1
-    });
-  }
-
-  return items;
+    }
+  ];
 }
 
 function paymobErrorMessage(data = {}) {
