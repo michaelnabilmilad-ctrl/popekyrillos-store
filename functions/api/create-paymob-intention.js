@@ -239,6 +239,7 @@ export async function onRequest(context) {
       message: publicPaymobError(providerMessage),
       providerMessage,
       providerBaseUrl: error.providerBaseUrl || null,
+      providerData: error.providerData || null,
       providerPath: error.providerPath || null,
       providerStatus: error.providerStatus || null
     });
