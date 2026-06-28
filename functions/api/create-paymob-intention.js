@@ -37,6 +37,13 @@ function requirePaymobConfig(env = {}) {
   };
 }
 
+function paymobBaseUrlCandidates(baseUrl) {
+  const normalized = baseUrl.replace(/\/+$/, "");
+  const candidates = [normalized];
+  if (normalized.includes("accept-alpha.paymob.com")) candidates.push("https://accept.paymob.com");
+  return [...new Set(candidates)];
+}
+
 function paymobItems(orderItems, shippingCents) {
   const itemsTotal = orderItems.reduce((sum, item) => sum + item.lineAmountCents, 0) + shippingCents;
   const productsCount = orderItems.reduce((sum, item) => sum + item.quantity, 0);
@@ -104,6 +111,41 @@ function legacyCheckoutUrl(baseUrl, iframeId, token) {
   return `${baseUrl}/api/acceptance/iframes/${encodeURIComponent(iframeId)}?payment_token=${encodeURIComponent(token)}`;
 }
 
+async function createLegacyPaymobCheckout({ apiKey, iframeId, baseUrl, integrationId, orderReference, secureCart, customer, shippingCents, amountCents }) {
+  const authData = await postPaymob(baseUrl, "/api/auth/tokens", { api_key: apiKey });
+  const authToken = authData.token;
+  if (!authToken) throw new Error("Paymob auth token was not returned.");
+
+  const orderData = await postPaymob(baseUrl, "/api/ecommerce/orders", {
+    auth_token: authToken,
+    delivery_needed: false,
+    amount_cents: amountCents,
+    currency,
+    merchant_order_id: orderReference,
+    items: paymobItems(secureCart.items, shippingCents)
+  });
+  const paymobOrderId = orderData.id;
+  if (!paymobOrderId) throw new Error("Paymob order ID was not returned.");
+
+  const paymentKeyData = await postPaymob(baseUrl, "/api/acceptance/payment_keys", {
+    auth_token: authToken,
+    amount_cents: amountCents,
+    expiration: 3600,
+    order_id: paymobOrderId,
+    billing_data: legacyBillingData(customer, orderReference),
+    currency,
+    integration_id: integrationId,
+    lock_order_when_paid: false
+  });
+  const paymentToken = paymentKeyData.token;
+  if (!paymentToken) throw new Error("Paymob payment token was not returned.");
+
+  return {
+    paymobOrderId,
+    checkoutUrl: legacyCheckoutUrl(baseUrl, iframeId, paymentToken)
+  };
+}
+
 export async function onRequest(context) {
   const { request, env } = context;
   if (request.method === "OPTIONS") return jsonResponse(204, {});
@@ -140,33 +182,27 @@ export async function onRequest(context) {
     };
     await saveOrder(env, pendingOrder);
 
-    const authData = await postPaymob(baseUrl, "/api/auth/tokens", { api_key: apiKey });
-    const authToken = authData.token;
-    if (!authToken) throw new Error("Paymob auth token was not returned.");
-
-    const orderData = await postPaymob(baseUrl, "/api/ecommerce/orders", {
-      auth_token: authToken,
-      delivery_needed: false,
-      amount_cents: amountCents,
-      currency,
-      merchant_order_id: orderReference,
-      items: paymobItems(secureCart.items, shippingCents)
-    });
-    const paymobOrderId = orderData.id;
-    if (!paymobOrderId) throw new Error("Paymob order ID was not returned.");
-
-    const paymentKeyData = await postPaymob(baseUrl, "/api/acceptance/payment_keys", {
-      auth_token: authToken,
-      amount_cents: amountCents,
-      expiration: 3600,
-      order_id: paymobOrderId,
-      billing_data: legacyBillingData(customer, orderReference),
-      currency,
-      integration_id: integrationId,
-      lock_order_when_paid: false
-    });
-    const paymentToken = paymentKeyData.token;
-    if (!paymentToken) throw new Error("Paymob payment token was not returned.");
+    let checkout;
+    let lastPaymobError;
+    for (const candidateBaseUrl of paymobBaseUrlCandidates(baseUrl)) {
+      try {
+        checkout = await createLegacyPaymobCheckout({
+          apiKey,
+          iframeId,
+          baseUrl: candidateBaseUrl,
+          integrationId,
+          orderReference,
+          secureCart,
+          customer,
+          shippingCents,
+          amountCents
+        });
+        break;
+      } catch (error) {
+        lastPaymobError = error;
+      }
+    }
+    if (!checkout) throw lastPaymobError || new Error("Paymob checkout failed.");
 
     await updateOrder(env, orderReference, (order) => ({
       ...order,
@@ -174,7 +210,7 @@ export async function onRequest(context) {
       payment: {
         ...order.payment,
         status: "pending",
-        paymobOrderId,
+        paymobOrderId: checkout.paymobOrderId,
         paymobIntegrationId: integrationId
       }
     }));
@@ -185,7 +221,7 @@ export async function onRequest(context) {
       orderReference,
       currency,
       amountCents,
-      checkoutUrl: legacyCheckoutUrl(baseUrl, iframeId, paymentToken)
+      checkoutUrl: checkout.checkoutUrl
     });
   } catch (error) {
     const statusCode = error.statusCode || 500;
