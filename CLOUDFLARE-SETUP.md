@@ -23,9 +23,13 @@ PAYMOB_ACCEPT_BASE_URL=https://accept.paymob.com
 PAYMOB_HMAC_SECRET=...
 BOSTA_API_KEY=...
 SITE_URL=https://popekyrillos.store
+ADMIN_USERNAME=...
+ADMIN_PASSWORD=...
 ```
 
-Keep `PAYMOB_SECRET_KEY`, `PAYMOB_API_KEY`, `PAYMOB_HMAC_SECRET`, and `BOSTA_API_KEY` secret.
+Keep `PAYMOB_SECRET_KEY`, `PAYMOB_API_KEY`, `PAYMOB_HMAC_SECRET`, `BOSTA_API_KEY`, and `ADMIN_PASSWORD` secret. `ADMIN_USERNAME` can be plaintext, but using a secret for it is also fine.
+
+The admin page is protected by the Cloudflare Worker. Add `ADMIN_USERNAME` and `ADMIN_PASSWORD` under **Settings -> Variables and secrets**, then deploy. Opening `/admin`, `/admin.html`, `/admin.css`, or `/admin.js` will require these credentials before any admin files load.
 
 `PAYMOB_INTEGRATION_IDS` must come from the same Paymob merchant account as `PAYMOB_SECRET_KEY` and `PAYMOB_PUBLIC_KEY`. In Paymob Dashboard, open **Developers -> Payment Integrations** and copy the card integration ID. If Paymob returns `Integration ID/Name does not exist`, this value is wrong or belongs to another account/environment.
 
