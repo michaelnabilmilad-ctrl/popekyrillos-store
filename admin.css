@@ -46,6 +46,20 @@ textarea {
   font: inherit;
 }
 
+[dir="ltr"],
+input[type="number"],
+[data-field="id"],
+[data-field="images"],
+[data-variant-field="sku"],
+[data-variant-field="options"],
+[data-variant-field="images"] {
+  direction: ltr;
+  unicode-bidi: plaintext;
+  text-align: left;
+  font-family: Consolas, "Courier New", monospace;
+  font-variant-numeric: tabular-nums;
+}
+
 button {
   cursor: pointer;
 }

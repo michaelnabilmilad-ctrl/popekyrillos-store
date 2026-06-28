@@ -316,7 +316,7 @@
 
     elements.imagePreview.innerHTML = visibleImages.map((image, index) => `
       <figure>
-        <img src="${escapeAttribute(image)}" alt="صورة ${index + 1}" loading="lazy" decoding="async" onerror="this.closest('figure').classList.add('image-missing')">
+        <img src="${escapeAttribute(previewAssetUrl(image))}" alt="صورة ${index + 1}" loading="lazy" decoding="async" onerror="this.closest('figure').classList.add('image-missing')">
         <figcaption>${escapeHtml(image)}</figcaption>
       </figure>
     `).join("");
@@ -712,12 +712,25 @@
       .filter(Boolean));
   }
 
-  function normalizeImagePath(value = "") {
+  function normalizeLatinDigits(value = "") {
     return String(value || "")
+      .replace(/[\u0660-\u0669]/g, (digit) => String(digit.charCodeAt(0) - 0x0660))
+      .replace(/[\u06f0-\u06f9]/g, (digit) => String(digit.charCodeAt(0) - 0x06f0));
+  }
+
+  function normalizeImagePath(value = "") {
+    return normalizeLatinDigits(value)
       .trim()
       .replace(/[\u2010-\u2015\u2212]/g, "-")
       .replace(/\\/g, "/")
       .replace(/\s+/g, "%20");
+  }
+
+  function previewAssetUrl(path = "") {
+    const value = String(path || "");
+    if (!value || /^(?:https?:|data:|blob:|\/)/i.test(value)) return value;
+    if (value.startsWith("assets/")) return `/${value}`;
+    return value;
   }
 
   function syncNormalizedFieldValue(element, values) {
