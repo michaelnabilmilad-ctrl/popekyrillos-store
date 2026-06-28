@@ -67,6 +67,20 @@ function publicPaymobError(message = "") {
   return message || "تعذر فتح Paymob الآن.";
 }
 
+async function createPaymobIntention(secretKey, intentionPayload) {
+  const response = await fetch("https://accept.paymob.com/v1/intention/", {
+    method: "POST",
+    headers: {
+      "Authorization": `Token ${secretKey}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(intentionPayload)
+  });
+
+  const data = await response.json().catch(async () => ({ raw: await response.text().catch(() => "") }));
+  return { response, data };
+}
+
 export async function onRequest(context) {
   const { request, env } = context;
   if (request.method === "OPTIONS") return jsonResponse(204, {});
@@ -120,22 +134,23 @@ export async function onRequest(context) {
       }
     };
 
-    const paymobResponse = await fetch("https://accept.paymob.com/v1/intention/", {
-      method: "POST",
-      headers: {
-        "Authorization": `Token ${secretKey}`,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(intentionPayload)
-    });
+    let { response: paymobResponse, data: paymobData } = await createPaymobIntention(secretKey, intentionPayload);
+    let retriedWithCardAlias = false;
+    if (!paymobResponse.ok && paymobResponse.status === 400 && paymentMethods.some((method) => Number.isInteger(method))) {
+      retriedWithCardAlias = true;
+      ({ response: paymobResponse, data: paymobData } = await createPaymobIntention(secretKey, {
+        ...intentionPayload,
+        payment_methods: ["card"]
+      }));
+    }
 
-    const paymobData = await paymobResponse.json().catch(async () => ({ raw: await paymobResponse.text().catch(() => "") }));
     if (!paymobResponse.ok || !paymobData.client_secret) {
       const providerMessage = paymobErrorMessage(paymobData);
       console.error("Paymob intention rejected", {
         status: paymobResponse.status,
         orderReference,
-        message: providerMessage
+        message: providerMessage,
+        retriedWithCardAlias
       });
       await updateOrder(env, orderReference, (order) => ({
         ...order,
@@ -150,7 +165,8 @@ export async function onRequest(context) {
         error: "تعذر فتح Paymob الآن.",
         message: publicPaymobError(providerMessage),
         providerMessage,
-        providerStatus: paymobResponse.status
+        providerStatus: paymobResponse.status,
+        retriedWithCardAlias
       });
     }
 
