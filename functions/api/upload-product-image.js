@@ -49,13 +49,14 @@ async function githubFetch(config, path, options = {}) {
 
 function safeName(value = "") {
   return String(value)
+    .normalize("NFKD")
     .toLowerCase()
     .trim()
     .replace(/\.[a-z0-9]+$/i, "")
-    .replace(/[^a-z0-9\u0600-\u06ff]+/g, "-")
+    .replace(/[^a-z0-9]+/g, "-")
     .replace(/-+/g, "-")
     .replace(/^-|-$/g, "")
-    .slice(0, 80);
+    .slice(0, 36);
 }
 
 function randomHex(bytes = 3) {
@@ -96,10 +97,10 @@ export async function onRequest(context) {
     const imageBase64 = String(body.imageBase64 || "").replace(/^data:image\/webp;base64,/, "");
     validateWebpBase64(imageBase64);
 
-    const productId = safeName(body.productId || "product");
-    const sourceName = safeName(body.filename || "image");
+    const productId = safeName(body.productId || "product") || "product";
+    const sourceName = safeName(body.filename || "image") || "image";
     const timestamp = new Date().toISOString().replace(/[-:.TZ]/g, "").slice(0, 14);
-    const filename = `${productId || "product"}-${sourceName || "image"}-${timestamp}-${randomHex()}.webp`;
+    const filename = `${productId}-${sourceName}-${timestamp}-${randomHex()}.webp`;
     const path = `assets/optimized/products/gallery/${filename}`;
     const config = githubConfig(env);
 

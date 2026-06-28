@@ -302,7 +302,7 @@
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           filename: file.name,
-          productId: product.id || product.name || "product",
+          productId: shortUploadProductId(product),
           imageBase64: webp.base64
         })
       }, 60000);
@@ -450,6 +450,12 @@
     }
 
     return message || "حدث خطأ غير معروف.";
+  }
+
+  function shortUploadProductId(product) {
+    const productIndex = state.products.findIndex((item) => item.id === product.id);
+    const numericId = productIndex >= 0 ? productIndex + 1 : Date.now();
+    return `product-${numericId}`;
   }
 
   async function copyProductsJson() {
