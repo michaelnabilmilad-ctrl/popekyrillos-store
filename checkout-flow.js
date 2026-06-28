@@ -3,6 +3,7 @@ const paymobIntentionEndpointPath = "/api/create-paymob-intention";
 const bostaDeliveryEndpointPath = "/api/create-bosta-delivery";
 const guestCartStorageKey = "pope-kyrillos-cart:guest";
 const userCartStoragePrefix = "pope-kyrillos-cart:user:";
+const activeCartStorageKey = "pope-kyrillos-cart:active";
 const checkoutStorageKey = "pope-kyrillos-checkout";
 const cartSeparator = "::";
 
@@ -98,35 +99,68 @@ function cartMapFromPayload(items = []) {
 
 function mergeCartMaps(first, second) {
   const merged = new Map(first);
-  second.forEach((qty, key) => merged.set(key, (merged.get(key) || 0) + qty));
+  second.forEach((qty, key) => merged.set(key, qty));
   return merged;
 }
 
-function loadCartKey(key) {
+function readCartRecord(key) {
   try {
     const raw = localStorage.getItem(key);
-    if (!raw) return new Map();
+    if (!raw) return { key, cart: new Map(), updatedAt: 0 };
     const data = JSON.parse(raw);
-    return cartMapFromPayload(data.items || data);
+    const updatedAt = Date.parse(data.updatedAt || "") || 0;
+    return { key, cart: cartMapFromPayload(data.items || data), updatedAt };
   } catch {
-    return new Map();
+    return { key, cart: new Map(), updatedAt: 0 };
   }
+}
+
+function setActiveCartKey(key) {
+  try {
+    localStorage.setItem(activeCartStorageKey, key);
+  } catch {
+    // Ignore localStorage write failures.
+  }
+}
+
+function cartHasItems(map) {
+  return [...map.values()].some((qty) => Number(qty) > 0);
+}
+
+function savedCartKeys() {
+  const keys = [guestCartStorageKey];
+  for (let index = 0; index < localStorage.length; index += 1) {
+    const key = localStorage.key(index) || "";
+    if (key.startsWith(userCartStoragePrefix)) keys.push(key);
+  }
+  return [...new Set(keys)];
 }
 
 function loadCart() {
-  let next = loadCartKey(guestCartStorageKey);
-  for (let index = 0; index < localStorage.length; index += 1) {
-    const key = localStorage.key(index) || "";
-    if (key.startsWith(userCartStoragePrefix)) next = mergeCartMaps(next, loadCartKey(key));
+  const activeKey = localStorage.getItem(activeCartStorageKey);
+  if (activeKey === guestCartStorageKey || activeKey?.startsWith(userCartStoragePrefix)) {
+    const active = readCartRecord(activeKey);
+    if (cartHasItems(active.cart)) return active.cart;
   }
-  return next;
+
+  const records = savedCartKeys()
+    .map(readCartRecord)
+    .filter((record) => cartHasItems(record.cart))
+    .sort((a, b) => b.updatedAt - a.updatedAt);
+  const selected = records[0];
+  if (!selected) return new Map();
+  setActiveCartKey(selected.key);
+  return selected.cart;
 }
 
 function saveCart() {
+  const activeKey = localStorage.getItem(activeCartStorageKey);
+  const targetKey = activeKey === guestCartStorageKey || activeKey?.startsWith(userCartStoragePrefix) ? activeKey : guestCartStorageKey;
   localStorage.setItem(
-    guestCartStorageKey,
+    targetKey,
     JSON.stringify({ items: cartPayloadFromMap(), updatedAt: new Date().toISOString() })
   );
+  setActiveCartKey(targetKey);
 }
 
 function loadCustomer() {

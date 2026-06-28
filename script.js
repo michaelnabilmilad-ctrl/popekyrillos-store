@@ -5,6 +5,7 @@ const productBatchSize = 12;
 const catalogVersion = Date.now().toString(36);
 const guestCartStorageKey = "pope-kyrillos-cart:guest";
 const userCartStoragePrefix = "pope-kyrillos-cart:user:";
+const activeCartStorageKey = "pope-kyrillos-cart:active";
 const languageStorageKey = "pope-kyrillos-language";
 const paymentMethods = {
   instapay: {
@@ -1415,6 +1416,14 @@ function currentCartStorageKey() {
   return state.auth.user?.uid ? `${userCartStoragePrefix}${state.auth.user.uid}` : guestCartStorageKey;
 }
 
+function setActiveCartStorageKey(key = currentCartStorageKey()) {
+  try {
+    localStorage.setItem(activeCartStorageKey, key);
+  } catch {
+    // Local storage availability varies in private browsing.
+  }
+}
+
 function cartPayloadFromMap(map = state.cart) {
   return [...map.entries()]
     .map(([key, qty]) => {
@@ -1489,6 +1498,7 @@ function saveCartToLocal(key = currentCartStorageKey(), map = state.cart) {
         updatedAt: new Date().toISOString()
       })
     );
+    setActiveCartStorageKey(key);
   } catch (error) {
     console.warn("Could not save cart locally.", error);
   }
@@ -1496,6 +1506,7 @@ function saveCartToLocal(key = currentCartStorageKey(), map = state.cart) {
 
 function loadGuestCart() {
   state.cart = loadCartFromLocal(guestCartStorageKey);
+  setActiveCartStorageKey(guestCartStorageKey);
 }
 
 function findVariant(product, variantId) {
