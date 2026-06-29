@@ -1552,9 +1552,13 @@ function cartMapFromPayload(items = []) {
 function mergeCartMaps(first, second) {
   const merged = new Map(first);
   second.forEach((qty, key) => {
-    merged.set(key, (merged.get(key) || 0) + qty);
+    merged.set(key, Math.max(merged.get(key) || 0, qty));
   });
   return clampCartMap(merged);
+}
+
+function cartHasItems(map) {
+  return [...map.values()].some((qty) => Number(qty) > 0);
 }
 
 function clampCartMap(map) {
@@ -2749,21 +2753,23 @@ async function applySignedInCart(user) {
   const guestCart = loadCartFromLocal(guestCartStorageKey);
   const userCartKey = `${userCartStoragePrefix}${user.uid}`;
   const userLocalCart = loadCartFromLocal(userCartKey);
+  const remoteCart = await loadRemoteCart(user);
+  const hasRemoteCart = cartHasItems(remoteCart);
+  const hasGuestCart = cartHasItems(guestCart);
 
-  state.cart = mergeCartMaps(userLocalCart, guestCart);
-  saveCartToLocal(userCartKey, state.cart);
+  state.cart = hasRemoteCart ? remoteCart : userLocalCart;
+  if (hasGuestCart) {
+    state.cart = mergeCartMaps(state.cart, guestCart);
+  }
   try {
     localStorage.removeItem(guestCartStorageKey);
   } catch {
     // Local storage cleanup is best-effort.
   }
-  renderCart();
 
-  const remoteCart = await loadRemoteCart(user);
-  state.cart = mergeCartMaps(remoteCart, state.cart);
   saveCartToLocal(userCartKey, state.cart);
   renderCart();
-  await saveRemoteCart();
+  if (hasGuestCart || !hasRemoteCart) await saveRemoteCart();
 }
 
 async function initCustomerAuth() {

@@ -102,7 +102,7 @@ function cartMapFromPayload(items = []) {
 
 function mergeCartMaps(first, second) {
   const merged = new Map(first);
-  second.forEach((qty, key) => merged.set(key, qty));
+  second.forEach((qty, key) => merged.set(key, Math.max(merged.get(key) || 0, qty)));
   return merged;
 }
 
@@ -236,7 +236,7 @@ async function currentCheckoutUser() {
       const timeout = window.setTimeout(() => {
         unsubscribe();
         resolve(null);
-      }, 2500);
+      }, 8000);
       unsubscribe = services.onAuthStateChanged(services.auth, (user) => {
         window.clearTimeout(timeout);
         unsubscribe();
@@ -293,7 +293,8 @@ async function saveCurrentCheckoutCartRemote() {
 
 async function restoreSignedInCheckoutCart() {
   const cachedUser = loadCachedAuthUser();
-  const user = (await currentCheckoutUser()) || cachedUser;
+  const realUser = await currentCheckoutUser();
+  const user = realUser || cachedUser;
   if (!user) return;
 
   let services = null;
@@ -305,8 +306,11 @@ async function restoreSignedInCheckoutCart() {
   const userCartKey = `${userCartStoragePrefix}${user.uid}`;
   const guestCart = readCartRecord(guestCartStorageKey).cart;
   const userLocalCart = readCartRecord(userCartKey).cart;
-  const remoteCart = services && user.getIdToken ? await loadRemoteCartForCheckout(services, user) : new Map();
-  const signedInCart = mergeCartMaps(mergeCartMaps(remoteCart, userLocalCart), guestCart);
+  const remoteCart = services && realUser?.getIdToken ? await loadRemoteCartForCheckout(services, realUser) : new Map();
+  const hasRemoteCart = cartHasItems(remoteCart);
+  const hasGuestCart = cartHasItems(guestCart);
+  let signedInCart = hasRemoteCart ? remoteCart : userLocalCart;
+  if (hasGuestCart) signedInCart = mergeCartMaps(signedInCart, guestCart);
 
   saveCartRecord(userCartKey, signedInCart);
   try {
@@ -314,7 +318,9 @@ async function restoreSignedInCheckoutCart() {
   } catch {
     // Local storage cleanup is best-effort.
   }
-  if (services && user.getIdToken) await saveRemoteCartForCheckout(services, user, signedInCart);
+  if (services && realUser?.getIdToken && (hasGuestCart || !hasRemoteCart)) {
+    await saveRemoteCartForCheckout(services, realUser, signedInCart);
+  }
 }
 
 function loadCustomer() {
