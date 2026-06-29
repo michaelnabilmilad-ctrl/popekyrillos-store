@@ -1549,6 +1549,22 @@ function cartMapFromPayload(items = []) {
   return map;
 }
 
+function readCartRecord(key) {
+  try {
+    const raw = localStorage.getItem(key);
+    if (!raw) return { key, cart: new Map(), updatedAt: 0 };
+    const data = JSON.parse(raw);
+    return {
+      key,
+      cart: cartMapFromPayload(data.items || data),
+      updatedAt: Date.parse(data.updatedAt || "") || 0
+    };
+  } catch (error) {
+    console.warn("Could not load saved cart.", error);
+    return { key, cart: new Map(), updatedAt: 0 };
+  }
+}
+
 function mergeCartMaps(first, second) {
   const merged = new Map(first);
   second.forEach((qty, key) => {
@@ -1579,15 +1595,7 @@ function clampCartMap(map) {
 }
 
 function loadCartFromLocal(key = currentCartStorageKey()) {
-  try {
-    const raw = localStorage.getItem(key);
-    if (!raw) return new Map();
-    const data = JSON.parse(raw);
-    return cartMapFromPayload(data.items || data);
-  } catch (error) {
-    console.warn("Could not load saved cart.", error);
-    return new Map();
-  }
+  return readCartRecord(key).cart;
 }
 
 function saveCartToLocal(key = currentCartStorageKey(), map = state.cart) {
@@ -1605,16 +1613,34 @@ function saveCartToLocal(key = currentCartStorageKey(), map = state.cart) {
   }
 }
 
-function loadGuestCart() {
-  const cachedUser = state.auth.cachedUser;
-  if (cachedUser?.uid) {
-    const userCartKey = `${userCartStoragePrefix}${cachedUser.uid}`;
-    state.cart = loadCartFromLocal(userCartKey);
-    setActiveCartStorageKey(userCartKey);
-    return;
+function localCartCandidateKeys(user = effectiveAuthUser()) {
+  const keys = [];
+  const userCartKey = user?.uid ? `${userCartStoragePrefix}${user.uid}` : "";
+  if (userCartKey) keys.push(userCartKey);
+  try {
+    const activeKey = localStorage.getItem(activeCartStorageKey);
+    if (activeKey === guestCartStorageKey || activeKey === userCartKey) keys.push(activeKey);
+  } catch {
+    // Local storage availability varies in private browsing.
   }
-  state.cart = loadCartFromLocal(guestCartStorageKey);
-  setActiveCartStorageKey(guestCartStorageKey);
+  keys.push(guestCartStorageKey);
+  return [...new Set(keys.filter(Boolean))];
+}
+
+function preferredLocalCartRecord(user = effectiveAuthUser()) {
+  const selected = localCartCandidateKeys(user)
+    .map(readCartRecord)
+    .filter((record) => cartHasItems(record.cart))
+    .sort((a, b) => b.updatedAt - a.updatedAt)[0];
+  if (selected) return selected;
+  const fallbackKey = user?.uid ? `${userCartStoragePrefix}${user.uid}` : guestCartStorageKey;
+  return { key: fallbackKey, cart: new Map(), updatedAt: 0 };
+}
+
+function loadGuestCart() {
+  const record = preferredLocalCartRecord();
+  state.cart = record.cart;
+  setActiveCartStorageKey(record.key);
 }
 
 function findVariant(product, variantId) {
@@ -2736,16 +2762,22 @@ async function saveRemoteCart() {
 }
 
 async function loadRemoteCart(user) {
+  return (await loadRemoteCartRecord(user)).cart;
+}
+
+async function loadRemoteCartRecord(user) {
   const services = state.auth.services;
-  if (!services?.db || !user) return new Map();
+  if (!services?.db || !user?.getIdToken) return { ok: false, cart: new Map() };
 
   try {
     const snapshot = await services.getDoc(services.doc(services.db, "customerCarts", user.uid));
-    if (!snapshot.exists()) return new Map();
-    return cartMapFromPayload(snapshot.data().items || []);
+    return {
+      ok: true,
+      cart: snapshot.exists() ? cartMapFromPayload(snapshot.data().items || []) : new Map()
+    };
   } catch (error) {
     console.warn("Could not load remote cart.", error);
-    return new Map();
+    return { ok: false, cart: new Map() };
   }
 }
 
@@ -2753,23 +2785,31 @@ async function applySignedInCart(user) {
   const guestCart = loadCartFromLocal(guestCartStorageKey);
   const userCartKey = `${userCartStoragePrefix}${user.uid}`;
   const userLocalCart = loadCartFromLocal(userCartKey);
-  const remoteCart = await loadRemoteCart(user);
+  const localCart = mergeCartMaps(userLocalCart, guestCart);
+  const remoteResult = await loadRemoteCartRecord(user);
+  const remoteCart = remoteResult.cart;
   const hasRemoteCart = cartHasItems(remoteCart);
   const hasGuestCart = cartHasItems(guestCart);
+  const hasLocalCart = cartHasItems(localCart);
 
-  state.cart = hasRemoteCart ? remoteCart : userLocalCart;
+  state.cart = remoteResult.ok && hasRemoteCart ? remoteCart : localCart;
   if (hasGuestCart) {
     state.cart = mergeCartMaps(state.cart, guestCart);
-  }
-  try {
-    localStorage.removeItem(guestCartStorageKey);
-  } catch {
-    // Local storage cleanup is best-effort.
   }
 
   saveCartToLocal(userCartKey, state.cart);
   renderCart();
-  if (hasGuestCart || !hasRemoteCart) await saveRemoteCart();
+  if (!remoteResult.ok) return;
+  if (hasGuestCart || (!hasRemoteCart && hasLocalCart)) {
+    const saved = await saveRemoteCart();
+    if (saved) {
+      try {
+        localStorage.removeItem(guestCartStorageKey);
+      } catch {
+        // Local storage cleanup is best-effort.
+      }
+    }
+  }
 }
 
 async function initCustomerAuth() {

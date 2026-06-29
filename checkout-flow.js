@@ -250,13 +250,19 @@ async function currentCheckoutUser() {
 }
 
 async function loadRemoteCartForCheckout(services, user) {
+  return (await loadRemoteCartRecordForCheckout(services, user)).cart;
+}
+
+async function loadRemoteCartRecordForCheckout(services, user) {
   try {
     const snapshot = await services.getDoc(services.doc(services.db, "customerCarts", user.uid));
-    if (!snapshot.exists()) return new Map();
-    return cartMapFromPayload(snapshot.data().items || []);
+    return {
+      ok: true,
+      cart: snapshot.exists() ? cartMapFromPayload(snapshot.data().items || []) : new Map()
+    };
   } catch (error) {
     console.warn("Could not load remote checkout cart.", error);
-    return new Map();
+    return { ok: false, cart: new Map() };
   }
 }
 
@@ -270,8 +276,10 @@ async function saveRemoteCartForCheckout(services, user, map) {
       },
       { merge: true }
     );
+    return true;
   } catch (error) {
     console.warn("Could not save remote checkout cart.", error);
+    return false;
   }
 }
 
@@ -287,8 +295,7 @@ async function saveCurrentCheckoutCartRemote() {
   }
   if (!services?.db) return false;
 
-  await saveRemoteCartForCheckout(services, user, cart);
-  return true;
+  return saveRemoteCartForCheckout(services, user, cart);
 }
 
 async function restoreSignedInCheckoutCart() {
@@ -306,20 +313,26 @@ async function restoreSignedInCheckoutCart() {
   const userCartKey = `${userCartStoragePrefix}${user.uid}`;
   const guestCart = readCartRecord(guestCartStorageKey).cart;
   const userLocalCart = readCartRecord(userCartKey).cart;
-  const remoteCart = services && realUser?.getIdToken ? await loadRemoteCartForCheckout(services, realUser) : new Map();
+  const localCart = mergeCartMaps(userLocalCart, guestCart);
+  const remoteResult =
+    services && realUser?.getIdToken ? await loadRemoteCartRecordForCheckout(services, realUser) : { ok: false, cart: new Map() };
+  const remoteCart = remoteResult.cart;
   const hasRemoteCart = cartHasItems(remoteCart);
   const hasGuestCart = cartHasItems(guestCart);
-  let signedInCart = hasRemoteCart ? remoteCart : userLocalCart;
+  const hasLocalCart = cartHasItems(localCart);
+  let signedInCart = remoteResult.ok && hasRemoteCart ? remoteCart : localCart;
   if (hasGuestCart) signedInCart = mergeCartMaps(signedInCart, guestCart);
 
   saveCartRecord(userCartKey, signedInCart);
-  try {
-    localStorage.removeItem(guestCartStorageKey);
-  } catch {
-    // Local storage cleanup is best-effort.
-  }
-  if (services && realUser?.getIdToken && (hasGuestCart || !hasRemoteCart)) {
-    await saveRemoteCartForCheckout(services, realUser, signedInCart);
+  if (remoteResult.ok && services && realUser?.getIdToken && (hasGuestCart || (!hasRemoteCart && hasLocalCart))) {
+    const saved = await saveRemoteCartForCheckout(services, realUser, signedInCart);
+    if (saved) {
+      try {
+        localStorage.removeItem(guestCartStorageKey);
+      } catch {
+        // Local storage cleanup is best-effort.
+      }
+    }
   }
 }
 
