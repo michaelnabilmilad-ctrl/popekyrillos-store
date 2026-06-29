@@ -3151,6 +3151,11 @@ function setProductGalleryImage(thumb) {
   return true;
 }
 
+function resetProductGalleryImage(card) {
+  const firstThumb = card?.querySelector("[data-gallery-image]");
+  return firstThumb ? setProductGalleryImage(firstThumb) : false;
+}
+
 function showAdjacentProductGalleryImage(card, delta) {
   const thumbs = [...(card?.querySelectorAll("[data-gallery-image]") || [])];
   if (thumbs.length < 2) return false;
@@ -3226,9 +3231,30 @@ productGrid.addEventListener("pointerover", (event) => {
   if (thumb) setProductGalleryImage(thumb);
 });
 
+productGrid.addEventListener("pointerout", (event) => {
+  if (event.pointerType === "touch") return;
+  const thumb = event.target.closest("[data-gallery-image]");
+  if (!thumb) return;
+
+  const card = thumb.closest(".product-card");
+  const nextThumb = event.relatedTarget?.closest?.("[data-gallery-image]");
+  if (nextThumb && nextThumb.closest(".product-card") === card) return;
+  resetProductGalleryImage(card);
+});
+
 productGrid.addEventListener("focusin", (event) => {
   const thumb = event.target.closest("[data-gallery-image]");
   if (thumb) setProductGalleryImage(thumb);
+});
+
+productGrid.addEventListener("focusout", (event) => {
+  const thumb = event.target.closest("[data-gallery-image]");
+  if (!thumb) return;
+
+  const card = thumb.closest(".product-card");
+  const nextThumb = event.relatedTarget?.closest?.("[data-gallery-image]");
+  if (nextThumb && nextThumb.closest(".product-card") === card) return;
+  resetProductGalleryImage(card);
 });
 
 productGrid.addEventListener("pointerdown", (event) => {
