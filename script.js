@@ -1312,14 +1312,13 @@ function variantPrice(variant, product) {
 }
 
 function productPriceText(product) {
-  if (!isEnglish() && product.priceNote) return product.priceNote;
   const prices = getProductVariants(product).map((variant) => variantPrice(variant, product)).filter((price) => price !== null);
   if (!prices.length) return money(productPrice(product));
 
   const min = Math.min(...prices);
-  const max = Math.max(...prices);
-  if (min === max) return money(min);
-  return isEnglish() ? `From ${money(min)} to ${money(max)}` : `يبدأ من ${money(min)} حتى ${money(max)}`;
+  const hasMultiplePrices = new Set(prices).size > 1;
+  if (!hasMultiplePrices) return money(min);
+  return isEnglish() ? `From ${money(min)}` : `يبدأ من ${money(min)}`;
 }
 
 function variantQuantity(variant) {
