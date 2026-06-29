@@ -3582,4 +3582,5 @@ applyLanguage();
 updateFloatingShopButton();
 state.auth.configured = hasFirebaseConfig();
 renderAuthState();
+ensureAuthServices();
 loadProducts();
