@@ -187,6 +187,7 @@ function saveCart() {
     JSON.stringify({ items: cartPayloadFromMap(), updatedAt: new Date().toISOString() })
   );
   setActiveCartKey(targetKey);
+  saveCurrentCheckoutCartRemote();
 }
 
 function firebaseConfig() {
@@ -272,6 +273,22 @@ async function saveRemoteCartForCheckout(services, user, map) {
   } catch (error) {
     console.warn("Could not save remote checkout cart.", error);
   }
+}
+
+async function saveCurrentCheckoutCartRemote() {
+  const user = await currentCheckoutUser();
+  if (!user?.getIdToken) return false;
+
+  let services = null;
+  try {
+    services = await checkoutAuthServices();
+  } catch {
+    services = null;
+  }
+  if (!services?.db) return false;
+
+  await saveRemoteCartForCheckout(services, user, cart);
+  return true;
 }
 
 async function restoreSignedInCheckoutCart() {

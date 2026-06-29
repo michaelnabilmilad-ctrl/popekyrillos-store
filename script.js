@@ -75,7 +75,8 @@ const state = {
     user: null,
     cachedUser: loadCachedAuthUser(),
     services: null,
-    saveTimer: null
+    saveTimer: null,
+    cartSaveWarningShown: false
   },
   modal: {
     productId: "",
@@ -384,6 +385,7 @@ const translations = {
     paymobCheckoutFailed: "تعذر فتح Paymob الآن. راجع بيانات الطلب وحاول مرة أخرى.",
     firebaseRequired: "تسجيل الدخول يحتاج إعداد Firebase أولا",
     firebaseLoading: "جاري تجهيز تسجيل الدخول، حاول مرة أخرى بعد لحظة",
+    cartAccountSaveFailed: "تعذر حفظ السلة على حسابك الآن. سجل دخول بجوجل مرة أخرى لو عايزها تظهر على جهاز تاني.",
     signinFailed: "تعذر تسجيل الدخول، راجع إعدادات Firebase",
     signupFailed: "تعذر إنشاء الحساب، تأكد من تفعيل Email/Password في Firebase",
     emailAuthInvalid: "اكتب بريد إلكتروني صحيح وكلمة مرور 6 أحرف على الأقل",
@@ -626,6 +628,7 @@ const translations = {
     paymobCheckoutFailed: "Paymob checkout could not open. Check the order details and try again.",
     firebaseRequired: "Login needs Firebase setup first",
     firebaseLoading: "Preparing login. Try again in a moment",
+    cartAccountSaveFailed: "Could not save the cart to your account. Sign in with Google again if you want it on another device.",
     signinFailed: "Sign-in failed. Check Firebase settings",
     signupFailed: "Could not create the account. Make sure Email/Password is enabled in Firebase",
     emailAuthInvalid: "Enter a valid email and a password of at least 6 characters",
@@ -2658,22 +2661,58 @@ function closeAccountModal() {
   document.body.classList.remove("account-open");
 }
 
-function saveCartNow({ remote = true } = {}) {
+function shouldSyncCartToAccount() {
+  return Boolean(effectiveAuthUser()?.uid);
+}
+
+function warnCartAccountSaveFailed() {
+  if (!shouldSyncCartToAccount() || state.auth.cartSaveWarningShown) return;
+  state.auth.cartSaveWarningShown = true;
+  showToast(t("cartAccountSaveFailed"));
+}
+
+async function authenticatedCartUser() {
+  if (state.auth.user?.getIdToken) return state.auth.user;
+
+  await ensureAuthServices();
+  const user = state.auth.services?.auth?.currentUser || null;
+  if (user?.getIdToken) {
+    state.auth.user = user;
+    saveCachedAuthUser(user);
+    renderAuthState();
+    return user;
+  }
+  return null;
+}
+
+function saveCartNow({ remote = true, immediateRemote = false } = {}) {
   state.cart = clampCartMap(state.cart);
   saveCartToLocal(currentCartStorageKey(), state.cart);
-  if (remote) queueRemoteCartSave();
+  if (!remote) return Promise.resolve(true);
+  if (immediateRemote) {
+    return saveRemoteCart().then((saved) => {
+      if (!saved) warnCartAccountSaveFailed();
+      return saved;
+    });
+  }
+  return queueRemoteCartSave();
 }
 
 function queueRemoteCartSave() {
-  if (!state.auth.user || !state.auth.services?.db) return;
+  if (!shouldSyncCartToAccount()) return Promise.resolve(false);
   window.clearTimeout(state.auth.saveTimer);
-  state.auth.saveTimer = window.setTimeout(saveRemoteCart, 350);
+  state.auth.saveTimer = window.setTimeout(() => {
+    saveRemoteCart().then((saved) => {
+      if (!saved) warnCartAccountSaveFailed();
+    });
+  }, 250);
+  return Promise.resolve(true);
 }
 
 async function saveRemoteCart() {
+  const user = await authenticatedCartUser();
   const services = state.auth.services;
-  const user = state.auth.user;
-  if (!services?.db || !user) return;
+  if (!services?.db || !user?.getIdToken) return false;
 
   try {
     await services.setDoc(
@@ -2684,8 +2723,11 @@ async function saveRemoteCart() {
       },
       { merge: true }
     );
+    state.auth.cartSaveWarningShown = false;
+    return true;
   } catch (error) {
     console.warn("Could not save remote cart.", error);
+    return false;
   }
 }
 
@@ -2721,7 +2763,7 @@ async function applySignedInCart(user) {
   state.cart = mergeCartMaps(remoteCart, state.cart);
   saveCartToLocal(userCartKey, state.cart);
   renderCart();
-  queueRemoteCartSave();
+  await saveRemoteCart();
 }
 
 async function initCustomerAuth() {
@@ -2934,8 +2976,7 @@ async function resetEmailPassword() {
 
 async function signOutCustomer() {
   const services = state.auth.services;
-  saveCartNow();
-  await saveRemoteCart();
+  await saveCartNow({ immediateRemote: true });
   clearCachedAuthUser();
   state.auth.user = null;
   if (services?.auth) await services.signOut(services.auth);
@@ -2969,7 +3010,7 @@ function addToCart(productId, variantId = "", amount = 1) {
   state.cart.set(key, nextQty);
   state.bosta.shipment = null;
   renderCart();
-  saveCartNow();
+  saveCartNow({ immediateRemote: true });
   const selected = variantOptionText(variant);
   showToast(t("addedToast", {
     count: displayText(formatter.format(requestedAmount)),
@@ -2998,7 +3039,7 @@ function changeQty(key, delta) {
   }
   state.bosta.shipment = null;
   renderCart();
-  saveCartNow();
+  saveCartNow({ immediateRemote: true });
 }
 
 function openCart() {
