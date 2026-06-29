@@ -1,4 +1,5 @@
 const whatsappNumber = "201016125589";
+const firebaseSdkVersion = "10.14.1";
 const paymobIntentionEndpointPath = "/api/create-paymob-intention";
 const bostaDeliveryEndpointPath = "/api/create-bosta-delivery";
 const guestCartStorageKey = "pope-kyrillos-cart:guest";
@@ -11,6 +12,7 @@ const formatter = new Intl.NumberFormat("ar-EG");
 let products = [];
 let cart = new Map();
 let customer = loadCustomer();
+let checkoutAuthServicesPromise = null;
 
 const translations = {
   available: "متاح",
@@ -115,6 +117,18 @@ function readCartRecord(key) {
   }
 }
 
+function saveCartRecord(key, map) {
+  try {
+    localStorage.setItem(
+      key,
+      JSON.stringify({ items: cartPayloadFromMap(map), updatedAt: new Date().toISOString() })
+    );
+    setActiveCartKey(key);
+  } catch {
+    // Ignore localStorage write failures.
+  }
+}
+
 function setActiveCartKey(key) {
   try {
     localStorage.setItem(activeCartStorageKey, key);
@@ -161,6 +175,111 @@ function saveCart() {
     JSON.stringify({ items: cartPayloadFromMap(), updatedAt: new Date().toISOString() })
   );
   setActiveCartKey(targetKey);
+}
+
+function firebaseConfig() {
+  return window.POPE_KYRILLOS_FIREBASE_CONFIG || {};
+}
+
+function hasFirebaseConfig() {
+  const config = firebaseConfig();
+  return Boolean(config.apiKey && config.authDomain && config.projectId && config.appId);
+}
+
+async function checkoutAuthServices() {
+  if (!hasFirebaseConfig()) return null;
+  if (checkoutAuthServicesPromise) return checkoutAuthServicesPromise;
+
+  checkoutAuthServicesPromise = (async () => {
+    const [appModule, authModule, firestoreModule] = await Promise.all([
+      import(`https://www.gstatic.com/firebasejs/${firebaseSdkVersion}/firebase-app.js`),
+      import(`https://www.gstatic.com/firebasejs/${firebaseSdkVersion}/firebase-auth.js`),
+      import(`https://www.gstatic.com/firebasejs/${firebaseSdkVersion}/firebase-firestore.js`)
+    ]);
+    const app = appModule.initializeApp(firebaseConfig());
+    const auth = authModule.getAuth(app);
+    await authModule.setPersistence(auth, authModule.browserLocalPersistence);
+    return {
+      auth,
+      db: firestoreModule.getFirestore(app),
+      onAuthStateChanged: authModule.onAuthStateChanged,
+      doc: firestoreModule.doc,
+      getDoc: firestoreModule.getDoc,
+      setDoc: firestoreModule.setDoc,
+      serverTimestamp: firestoreModule.serverTimestamp
+    };
+  })();
+
+  return checkoutAuthServicesPromise;
+}
+
+async function currentCheckoutUser() {
+  try {
+    const services = await checkoutAuthServices();
+    if (!services?.auth) return null;
+    if (services.auth.currentUser) return services.auth.currentUser;
+    return await new Promise((resolve) => {
+      let unsubscribe = () => {};
+      const timeout = window.setTimeout(() => {
+        unsubscribe();
+        resolve(null);
+      }, 2500);
+      unsubscribe = services.onAuthStateChanged(services.auth, (user) => {
+        window.clearTimeout(timeout);
+        unsubscribe();
+        resolve(user);
+      });
+    });
+  } catch (error) {
+    console.warn("Could not restore checkout auth.", error);
+    return null;
+  }
+}
+
+async function loadRemoteCartForCheckout(services, user) {
+  try {
+    const snapshot = await services.getDoc(services.doc(services.db, "customerCarts", user.uid));
+    if (!snapshot.exists()) return new Map();
+    return cartMapFromPayload(snapshot.data().items || []);
+  } catch (error) {
+    console.warn("Could not load remote checkout cart.", error);
+    return new Map();
+  }
+}
+
+async function saveRemoteCartForCheckout(services, user, map) {
+  try {
+    await services.setDoc(
+      services.doc(services.db, "customerCarts", user.uid),
+      {
+        items: cartPayloadFromMap(map),
+        updatedAt: services.serverTimestamp()
+      },
+      { merge: true }
+    );
+  } catch (error) {
+    console.warn("Could not save remote checkout cart.", error);
+  }
+}
+
+async function restoreSignedInCheckoutCart() {
+  const user = await currentCheckoutUser();
+  if (!user) return;
+
+  const services = await checkoutAuthServices();
+  const userCartKey = `${userCartStoragePrefix}${user.uid}`;
+  const guestCart = readCartRecord(guestCartStorageKey).cart;
+  const userLocalCart = readCartRecord(userCartKey).cart;
+  const remoteCart = await loadRemoteCartForCheckout(services, user);
+  const signedInCart = mergeCartMaps(mergeCartMaps(remoteCart, userLocalCart), guestCart);
+
+  saveCartRecord(userCartKey, signedInCart);
+  try {
+    localStorage.removeItem(guestCartStorageKey);
+  } catch {
+    // Local storage cleanup is best-effort.
+  }
+  await saveRemoteCartForCheckout(services, user, signedInCart);
 }
 
 function loadCustomer() {
@@ -530,6 +649,7 @@ function bindPaymentPage() {
 }
 
 async function initCheckoutFlow() {
+  await restoreSignedInCheckoutCart();
   cart = loadCart();
   setCartCount();
   try {
