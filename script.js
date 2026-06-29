@@ -124,6 +124,8 @@ const cartPreviewToggle = document.querySelector("[data-cart-preview-toggle]");
 const miniCart = document.querySelector("[data-mini-cart]");
 const miniCartItems = document.querySelector("[data-mini-cart-items]");
 const miniCartTotal = document.querySelector("[data-mini-cart-total]");
+const customerService = document.querySelector("[data-customer-service]");
+const customerServiceToggle = document.querySelector(".customer-service-toggle");
 const cartTotal = document.querySelector("[data-cart-total]");
 const whatsappLink = document.querySelector("[data-whatsapp-link]");
 const checkoutLabel = document.querySelector("[data-checkout-label]");
@@ -222,6 +224,13 @@ const translations = {
     service3Text: "نبدأ تجهيز الطلب بعد التأكيد ونبلغك عند الشحن.",
     servicesQuoteCta: "اطلب عرض سعر الآن",
     servicesWhatsappCta: "تواصل معنا على واتساب",
+    customerSupportButton: "خدمة العملاء",
+    customerSupportTitle: "محتاج مساعدة؟",
+    customerSupportText: "كلمنا بأي استفسار عن المنتجات أو الطلبات.",
+    customerSupportWhatsapp: "واتساب",
+    customerSupportCall: "اتصال",
+    customerSupportEmail: "إيميل",
+    customerSupportAria: "خيارات خدمة العملاء",
     contactEyebrow: "تواصل",
     contactTitle: "اطلب عرض سعر أو منتج غير موجود",
     nameLabel: "الاسم",
@@ -457,6 +466,13 @@ const translations = {
     service3Text: "We start after confirmation and update you on shipping.",
     servicesQuoteCta: "Request a quote now",
     servicesWhatsappCta: "Contact us on WhatsApp",
+    customerSupportButton: "Customer care",
+    customerSupportTitle: "Need help?",
+    customerSupportText: "Contact us with any product or order question.",
+    customerSupportWhatsapp: "WhatsApp",
+    customerSupportCall: "Call",
+    customerSupportEmail: "Email",
+    customerSupportAria: "Customer care contact options",
     contactEyebrow: "Contact",
     contactTitle: "Request a quote or a product not listed",
     nameLabel: "Name",
@@ -1035,6 +1051,14 @@ function applyLanguage({ render = true } = {}) {
   });
   setText("[data-services-quote]", t("servicesQuoteCta"));
   setText("[data-services-whatsapp]", t("servicesWhatsappCta"));
+  setText("[data-customer-support-button]", t("customerSupportButton"));
+  setText("[data-customer-support-title]", t("customerSupportTitle"));
+  setText("[data-customer-support-text]", t("customerSupportText"));
+  setText("[data-customer-support-whatsapp]", t("customerSupportWhatsapp"));
+  setText("[data-customer-support-call]", t("customerSupportCall"));
+  setText("[data-customer-support-email]", t("customerSupportEmail"));
+  customerServiceToggle?.setAttribute("aria-label", t("customerSupportAria"));
+  customerService?.querySelector(".customer-service-menu")?.setAttribute("aria-label", t("customerSupportAria"));
 
   setText("#contact .eyebrow", t("contactEyebrow"));
   setText("#contact-title", t("contactTitle"));
@@ -3158,6 +3182,14 @@ function showAdjacentModalImage(delta) {
   return true;
 }
 
+function setModalGalleryImage(button) {
+  const image = button?.dataset.modalImage;
+  if (!image || image === state.modal.image) return Boolean(image);
+  state.modal.image = image;
+  renderProductModal();
+  return true;
+}
+
 productGrid.addEventListener("click", (event) => {
   if (Date.now() < gallerySwipeSuppressUntil) {
     event.preventDefault();
@@ -3269,8 +3301,7 @@ productModal.addEventListener("click", (event) => {
 
   const imageButton = event.target.closest("[data-modal-image]");
   if (imageButton) {
-    state.modal.image = imageButton.dataset.modalImage;
-    renderProductModal();
+    setModalGalleryImage(imageButton);
     return;
   }
 
@@ -3308,6 +3339,17 @@ productModal.addEventListener("click", (event) => {
     state.modal.quantity = 1;
     renderProductModal();
   }
+});
+
+productModal.addEventListener("pointerover", (event) => {
+  if (event.pointerType === "touch") return;
+  const imageButton = event.target.closest("[data-modal-image]");
+  if (imageButton) setModalGalleryImage(imageButton);
+});
+
+productModal.addEventListener("focusin", (event) => {
+  const imageButton = event.target.closest("[data-modal-image]");
+  if (imageButton) setModalGalleryImage(imageButton);
 });
 
 productModal.addEventListener("pointerdown", (event) => {
@@ -3384,6 +3426,17 @@ languageToggle?.addEventListener("click", () => {
   state.language = isEnglish() ? "ar" : "en";
   localStorage.setItem(languageStorageKey, state.language);
   applyLanguage();
+});
+
+document.addEventListener("click", (event) => {
+  if (!customerService?.open || customerService.contains(event.target)) return;
+  customerService.open = false;
+});
+
+document.addEventListener("keydown", (event) => {
+  if (event.key !== "Escape" || !customerService?.open) return;
+  customerService.open = false;
+  customerServiceToggle?.focus();
 });
 
 accountToggle?.addEventListener("click", openAccountModal);
