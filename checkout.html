@@ -9,7 +9,7 @@
   </head>
   <body dir="rtl" class="checkout-page">
     <header class="checkout-header">
-      <a class="brand" href="index.html" aria-label="مكتبة البابا كيرلس">
+      <a class="brand" href="/" aria-label="مكتبة البابا كيرلس">
         <span class="brand-logo-wrap" aria-hidden="true">
           <img src="assets/logo-papa-kyrillos-original.jpeg" alt="" width="160" height="160" decoding="async" />
         </span>
@@ -18,7 +18,7 @@
           <small>مستلزمات الكنائس والخدمة</small>
         </span>
       </a>
-      <a class="icon-button" href="cart.html" aria-label="السلة">
+      <a class="icon-button" href="/cart" aria-label="السلة">
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <path d="M6 6h15l-2 8H8L6 3H3" />
           <circle cx="9" cy="20" r="1.6" />
@@ -30,7 +30,7 @@
 
     <main class="checkout-shell">
       <nav class="checkout-steps" aria-label="خطوات الطلب">
-        <a href="cart.html">١. السلة</a>
+        <a href="/cart">١. السلة</a>
         <strong class="active">٢. البيانات</strong>
         <span>٣. الدفع</span>
       </nav>
@@ -103,6 +103,6 @@
     </main>
 
     <script src="firebase-config.min.js?v=secure-orders-20260612" defer></script>
-    <script src="checkout-flow.min.js?v=checkout-cart-background-sync-20260630" defer></script>
+    <script src="checkout-flow.min.js?v=checkout-route-loop-fix-20260630" defer></script>
   </body>
 </html>
