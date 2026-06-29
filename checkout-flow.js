@@ -5,6 +5,7 @@ const bostaDeliveryEndpointPath = "/api/create-bosta-delivery";
 const guestCartStorageKey = "pope-kyrillos-cart:guest";
 const userCartStoragePrefix = "pope-kyrillos-cart:user:";
 const activeCartStorageKey = "pope-kyrillos-cart:active";
+const cachedAuthStorageKey = "pope-kyrillos-auth:user";
 const checkoutStorageKey = "pope-kyrillos-checkout";
 const cartSeparator = "::";
 
@@ -114,6 +115,17 @@ function readCartRecord(key) {
     return { key, cart: cartMapFromPayload(data.items || data), updatedAt };
   } catch {
     return { key, cart: new Map(), updatedAt: 0 };
+  }
+}
+
+function loadCachedAuthUser() {
+  try {
+    const raw = localStorage.getItem(cachedAuthStorageKey);
+    if (!raw) return null;
+    const user = JSON.parse(raw);
+    return user?.uid ? user : null;
+  } catch {
+    return null;
   }
 }
 
@@ -263,14 +275,20 @@ async function saveRemoteCartForCheckout(services, user, map) {
 }
 
 async function restoreSignedInCheckoutCart() {
-  const user = await currentCheckoutUser();
+  const cachedUser = loadCachedAuthUser();
+  const user = (await currentCheckoutUser()) || cachedUser;
   if (!user) return;
 
-  const services = await checkoutAuthServices();
+  let services = null;
+  try {
+    services = await checkoutAuthServices();
+  } catch {
+    services = null;
+  }
   const userCartKey = `${userCartStoragePrefix}${user.uid}`;
   const guestCart = readCartRecord(guestCartStorageKey).cart;
   const userLocalCart = readCartRecord(userCartKey).cart;
-  const remoteCart = await loadRemoteCartForCheckout(services, user);
+  const remoteCart = services && user.getIdToken ? await loadRemoteCartForCheckout(services, user) : new Map();
   const signedInCart = mergeCartMaps(mergeCartMaps(remoteCart, userLocalCart), guestCart);
 
   saveCartRecord(userCartKey, signedInCart);
@@ -279,7 +297,7 @@ async function restoreSignedInCheckoutCart() {
   } catch {
     // Local storage cleanup is best-effort.
   }
-  await saveRemoteCartForCheckout(services, user, signedInCart);
+  if (services && user.getIdToken) await saveRemoteCartForCheckout(services, user, signedInCart);
 }
 
 function loadCustomer() {

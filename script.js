@@ -6,6 +6,7 @@ const catalogVersion = Date.now().toString(36);
 const guestCartStorageKey = "pope-kyrillos-cart:guest";
 const userCartStoragePrefix = "pope-kyrillos-cart:user:";
 const activeCartStorageKey = "pope-kyrillos-cart:active";
+const cachedAuthStorageKey = "pope-kyrillos-auth:user";
 const languageStorageKey = "pope-kyrillos-language";
 const paymentMethods = {
   instapay: {
@@ -72,6 +73,7 @@ const state = {
     ready: false,
     loading: false,
     user: null,
+    cachedUser: loadCachedAuthUser(),
     services: null,
     saveTimer: null
   },
@@ -1458,8 +1460,54 @@ function parseCartKey(key) {
   return { productId, variantId };
 }
 
+function loadCachedAuthUser() {
+  try {
+    const raw = localStorage.getItem(cachedAuthStorageKey);
+    if (!raw) return null;
+    const user = JSON.parse(raw);
+    return user?.uid ? user : null;
+  } catch {
+    return null;
+  }
+}
+
+function authProfile(user) {
+  if (!user?.uid) return null;
+  return {
+    uid: user.uid,
+    displayName: user.displayName || "",
+    email: user.email || "",
+    photoURL: user.photoURL || ""
+  };
+}
+
+function effectiveAuthUser() {
+  return state.auth.user || state.auth.cachedUser;
+}
+
+function saveCachedAuthUser(user) {
+  const profile = authProfile(user);
+  if (!profile) return;
+  state.auth.cachedUser = profile;
+  try {
+    localStorage.setItem(cachedAuthStorageKey, JSON.stringify(profile));
+  } catch {
+    // Local storage can be unavailable in strict privacy modes.
+  }
+}
+
+function clearCachedAuthUser() {
+  state.auth.cachedUser = null;
+  try {
+    localStorage.removeItem(cachedAuthStorageKey);
+  } catch {
+    // Local storage cleanup is best-effort.
+  }
+}
+
 function currentCartStorageKey() {
-  return state.auth.user?.uid ? `${userCartStoragePrefix}${state.auth.user.uid}` : guestCartStorageKey;
+  const user = effectiveAuthUser();
+  return user?.uid ? `${userCartStoragePrefix}${user.uid}` : guestCartStorageKey;
 }
 
 function setActiveCartStorageKey(key = currentCartStorageKey()) {
@@ -1551,6 +1599,13 @@ function saveCartToLocal(key = currentCartStorageKey(), map = state.cart) {
 }
 
 function loadGuestCart() {
+  const cachedUser = state.auth.cachedUser;
+  if (cachedUser?.uid) {
+    const userCartKey = `${userCartStoragePrefix}${cachedUser.uid}`;
+    state.cart = loadCartFromLocal(userCartKey);
+    setActiveCartStorageKey(userCartKey);
+    return;
+  }
   state.cart = loadCartFromLocal(guestCartStorageKey);
   setActiveCartStorageKey(guestCartStorageKey);
 }
@@ -2553,7 +2608,7 @@ async function ensureAuthServices() {
 }
 
 function renderAuthState() {
-  const user = state.auth.user;
+  const user = effectiveAuthUser();
   const configured = state.auth.configured;
   const displayName = user?.displayName || user?.email || (isEnglish() ? "Customer" : "عميل");
 
@@ -2708,6 +2763,7 @@ async function initCustomerAuth() {
     state.auth.services.onAuthStateChanged(auth, async (user) => {
       state.auth.user = user;
       state.auth.loading = false;
+      if (user) saveCachedAuthUser(user);
       renderAuthState();
       if (user) {
         await applySignedInCart(user);
@@ -2743,7 +2799,13 @@ async function signInWithProvider(providerName) {
   try {
     state.auth.loading = true;
     renderAuthState();
-    await services.signInWithPopup(services.auth, provider);
+    const result = await services.signInWithPopup(services.auth, provider);
+    if (result?.user) {
+      state.auth.user = result.user;
+      saveCachedAuthUser(result.user);
+      renderAuthState();
+      await applySignedInCart(result.user);
+    }
     closeAccountModal();
   } catch (error) {
     if (error?.code === "auth/popup-blocked" || error?.code === "auth/cancelled-popup-request") {
@@ -2795,7 +2857,13 @@ async function signInWithEmail() {
   try {
     state.auth.loading = true;
     renderAuthState();
-    await services.signInWithEmailAndPassword(services.auth, credentials.email, credentials.password);
+    const result = await services.signInWithEmailAndPassword(services.auth, credentials.email, credentials.password);
+    if (result?.user) {
+      state.auth.user = result.user;
+      saveCachedAuthUser(result.user);
+      renderAuthState();
+      await applySignedInCart(result.user);
+    }
     showToast(t("emailSigninSuccess"));
     closeAccountModal();
   } catch (error) {
@@ -2818,7 +2886,13 @@ async function signUpWithEmail() {
   try {
     state.auth.loading = true;
     renderAuthState();
-    await services.createUserWithEmailAndPassword(services.auth, credentials.email, credentials.password);
+    const result = await services.createUserWithEmailAndPassword(services.auth, credentials.email, credentials.password);
+    if (result?.user) {
+      state.auth.user = result.user;
+      saveCachedAuthUser(result.user);
+      renderAuthState();
+      await applySignedInCart(result.user);
+    }
     showToast(t("emailSignupSuccess"));
     closeAccountModal();
   } catch (error) {
@@ -2860,10 +2934,14 @@ async function resetEmailPassword() {
 
 async function signOutCustomer() {
   const services = state.auth.services;
-  if (!services?.auth) return;
   saveCartNow();
   await saveRemoteCart();
-  await services.signOut(services.auth);
+  clearCachedAuthUser();
+  state.auth.user = null;
+  if (services?.auth) await services.signOut(services.auth);
+  loadGuestCart();
+  renderCart();
+  renderAuthState();
   closeAccountModal();
   showToast(t("signoutToast"));
 }
