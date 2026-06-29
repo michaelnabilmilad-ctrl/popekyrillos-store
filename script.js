@@ -1577,6 +1577,29 @@ function cartHasItems(map) {
   return [...map.values()].some((qty) => Number(qty) > 0);
 }
 
+function cartFingerprint(map) {
+  return JSON.stringify(
+    cartPayloadFromMap(map).sort((a, b) => `${a.productId}:${a.variantId}`.localeCompare(`${b.productId}:${b.variantId}`))
+  );
+}
+
+function timestampMillis(value) {
+  if (!value) return 0;
+  if (typeof value.toMillis === "function") return value.toMillis();
+  if (typeof value.seconds === "number") return value.seconds * 1000 + Math.floor((value.nanoseconds || 0) / 1000000);
+  if (typeof value === "number") return value;
+  return Date.parse(String(value)) || 0;
+}
+
+function withTimeout(promise, timeoutMs = 3500) {
+  return Promise.race([
+    promise,
+    new Promise((_, reject) => {
+      window.setTimeout(() => reject(new Error("Timed out")), timeoutMs);
+    })
+  ]);
+}
+
 function clampCartMap(map) {
   const next = new Map();
   map.forEach((qty, key) => {
@@ -2745,13 +2768,16 @@ async function saveRemoteCart() {
   if (!services?.db || !user?.getIdToken) return false;
 
   try {
-    await services.setDoc(
-      services.doc(services.db, "customerCarts", user.uid),
-      {
-        items: cartPayloadFromMap(),
-        updatedAt: services.serverTimestamp()
-      },
-      { merge: true }
+    await withTimeout(
+      services.setDoc(
+        services.doc(services.db, "customerCarts", user.uid),
+        {
+          items: cartPayloadFromMap(),
+          clientUpdatedAt: new Date().toISOString(),
+          updatedAt: services.serverTimestamp()
+        },
+        { merge: true }
+      )
     );
     state.auth.cartSaveWarningShown = false;
     return true;
@@ -2770,37 +2796,43 @@ async function loadRemoteCartRecord(user) {
   if (!services?.db || !user?.getIdToken) return { ok: false, cart: new Map() };
 
   try {
-    const snapshot = await services.getDoc(services.doc(services.db, "customerCarts", user.uid));
+    const snapshot = await withTimeout(services.getDoc(services.doc(services.db, "customerCarts", user.uid)));
+    const data = snapshot.exists() ? snapshot.data() : {};
     return {
       ok: true,
-      cart: snapshot.exists() ? cartMapFromPayload(snapshot.data().items || []) : new Map()
+      cart: cartMapFromPayload(data.items || []),
+      updatedAt: Math.max(timestampMillis(data.clientUpdatedAt), timestampMillis(data.updatedAt))
     };
   } catch (error) {
     console.warn("Could not load remote cart.", error);
-    return { ok: false, cart: new Map() };
+    return { ok: false, cart: new Map(), updatedAt: 0 };
   }
 }
 
 async function applySignedInCart(user) {
-  const guestCart = loadCartFromLocal(guestCartStorageKey);
   const userCartKey = `${userCartStoragePrefix}${user.uid}`;
-  const userLocalCart = loadCartFromLocal(userCartKey);
-  const localCart = mergeCartMaps(userLocalCart, guestCart);
+  const before = cartFingerprint(state.cart);
+  const guestRecord = readCartRecord(guestCartStorageKey);
+  const userLocalRecord = readCartRecord(userCartKey);
+  const localRecord = guestRecord.updatedAt > userLocalRecord.updatedAt ? guestRecord : userLocalRecord;
+  const localCart = localRecord.cart;
   const remoteResult = await loadRemoteCartRecord(user);
   const remoteCart = remoteResult.cart;
   const hasRemoteCart = cartHasItems(remoteCart);
-  const hasGuestCart = cartHasItems(guestCart);
+  const hasGuestCart = cartHasItems(guestRecord.cart);
   const hasLocalCart = cartHasItems(localCart);
+  const guestIsNewer = hasGuestCart && guestRecord.updatedAt > Math.max(remoteResult.updatedAt || 0, userLocalRecord.updatedAt || 0);
 
-  state.cart = remoteResult.ok && hasRemoteCart ? remoteCart : localCart;
-  if (hasGuestCart) {
-    state.cart = mergeCartMaps(state.cart, guestCart);
+  if (remoteResult.ok && hasRemoteCart) {
+    state.cart = guestIsNewer ? mergeCartMaps(remoteCart, guestRecord.cart) : remoteCart;
+  } else {
+    state.cart = localCart;
   }
 
   saveCartToLocal(userCartKey, state.cart);
-  renderCart();
+  if (cartFingerprint(state.cart) !== before) renderCart();
   if (!remoteResult.ok) return;
-  if (hasGuestCart || (!hasRemoteCart && hasLocalCart)) {
+  if (guestIsNewer || (!hasRemoteCart && hasLocalCart)) {
     const saved = await saveRemoteCart();
     if (saved) {
       try {
@@ -2808,6 +2840,12 @@ async function applySignedInCart(user) {
       } catch {
         // Local storage cleanup is best-effort.
       }
+    }
+  } else if (hasRemoteCart && hasGuestCart && !guestIsNewer) {
+    try {
+      localStorage.removeItem(guestCartStorageKey);
+    } catch {
+      // Local storage cleanup is best-effort.
     }
   }
 }
@@ -2854,7 +2892,7 @@ async function initCustomerAuth() {
       if (user) saveCachedAuthUser(user);
       renderAuthState();
       if (user) {
-        await applySignedInCart(user);
+        applySignedInCart(user).catch((error) => console.warn("Could not sync signed-in cart.", error));
       } else {
         loadGuestCart();
         renderCart();

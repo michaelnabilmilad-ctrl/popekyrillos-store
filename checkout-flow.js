@@ -153,6 +153,29 @@ function cartHasItems(map) {
   return [...map.values()].some((qty) => Number(qty) > 0);
 }
 
+function cartFingerprint(map) {
+  return JSON.stringify(
+    cartPayloadFromMap(map).sort((a, b) => `${a.productId}:${a.variantId}`.localeCompare(`${b.productId}:${b.variantId}`))
+  );
+}
+
+function timestampMillis(value) {
+  if (!value) return 0;
+  if (typeof value.toMillis === "function") return value.toMillis();
+  if (typeof value.seconds === "number") return value.seconds * 1000 + Math.floor((value.nanoseconds || 0) / 1000000);
+  if (typeof value === "number") return value;
+  return Date.parse(String(value)) || 0;
+}
+
+function withTimeout(promise, timeoutMs = 3500) {
+  return Promise.race([
+    promise,
+    new Promise((_, reject) => {
+      window.setTimeout(() => reject(new Error("Timed out")), timeoutMs);
+    })
+  ]);
+}
+
 function savedCartKeys() {
   const keys = [guestCartStorageKey];
   for (let index = 0; index < localStorage.length; index += 1) {
@@ -236,7 +259,7 @@ async function currentCheckoutUser() {
       const timeout = window.setTimeout(() => {
         unsubscribe();
         resolve(null);
-      }, 8000);
+      }, 2500);
       unsubscribe = services.onAuthStateChanged(services.auth, (user) => {
         window.clearTimeout(timeout);
         unsubscribe();
@@ -255,26 +278,31 @@ async function loadRemoteCartForCheckout(services, user) {
 
 async function loadRemoteCartRecordForCheckout(services, user) {
   try {
-    const snapshot = await services.getDoc(services.doc(services.db, "customerCarts", user.uid));
+    const snapshot = await withTimeout(services.getDoc(services.doc(services.db, "customerCarts", user.uid)));
+    const data = snapshot.exists() ? snapshot.data() : {};
     return {
       ok: true,
-      cart: snapshot.exists() ? cartMapFromPayload(snapshot.data().items || []) : new Map()
+      cart: cartMapFromPayload(data.items || []),
+      updatedAt: Math.max(timestampMillis(data.clientUpdatedAt), timestampMillis(data.updatedAt))
     };
   } catch (error) {
     console.warn("Could not load remote checkout cart.", error);
-    return { ok: false, cart: new Map() };
+    return { ok: false, cart: new Map(), updatedAt: 0 };
   }
 }
 
 async function saveRemoteCartForCheckout(services, user, map) {
   try {
-    await services.setDoc(
-      services.doc(services.db, "customerCarts", user.uid),
-      {
-        items: cartPayloadFromMap(map),
-        updatedAt: services.serverTimestamp()
-      },
-      { merge: true }
+    await withTimeout(
+      services.setDoc(
+        services.doc(services.db, "customerCarts", user.uid),
+        {
+          items: cartPayloadFromMap(map),
+          clientUpdatedAt: new Date().toISOString(),
+          updatedAt: services.serverTimestamp()
+        },
+        { merge: true }
+      )
     );
     return true;
   } catch (error) {
@@ -302,7 +330,8 @@ async function restoreSignedInCheckoutCart() {
   const cachedUser = loadCachedAuthUser();
   const realUser = await currentCheckoutUser();
   const user = realUser || cachedUser;
-  if (!user) return;
+  if (!user) return false;
+  const before = cartFingerprint(cart);
 
   let services = null;
   try {
@@ -311,20 +340,22 @@ async function restoreSignedInCheckoutCart() {
     services = null;
   }
   const userCartKey = `${userCartStoragePrefix}${user.uid}`;
-  const guestCart = readCartRecord(guestCartStorageKey).cart;
-  const userLocalCart = readCartRecord(userCartKey).cart;
-  const localCart = mergeCartMaps(userLocalCart, guestCart);
+  const guestRecord = readCartRecord(guestCartStorageKey);
+  const userLocalRecord = readCartRecord(userCartKey);
+  const localRecord = guestRecord.updatedAt > userLocalRecord.updatedAt ? guestRecord : userLocalRecord;
+  const localCart = localRecord.cart;
   const remoteResult =
     services && realUser?.getIdToken ? await loadRemoteCartRecordForCheckout(services, realUser) : { ok: false, cart: new Map() };
   const remoteCart = remoteResult.cart;
   const hasRemoteCart = cartHasItems(remoteCart);
-  const hasGuestCart = cartHasItems(guestCart);
+  const hasGuestCart = cartHasItems(guestRecord.cart);
   const hasLocalCart = cartHasItems(localCart);
+  const guestIsNewer = hasGuestCart && guestRecord.updatedAt > Math.max(remoteResult.updatedAt || 0, userLocalRecord.updatedAt || 0);
   let signedInCart = remoteResult.ok && hasRemoteCart ? remoteCart : localCart;
-  if (hasGuestCart) signedInCart = mergeCartMaps(signedInCart, guestCart);
+  if (remoteResult.ok && hasRemoteCart && guestIsNewer) signedInCart = mergeCartMaps(signedInCart, guestRecord.cart);
 
   saveCartRecord(userCartKey, signedInCart);
-  if (remoteResult.ok && services && realUser?.getIdToken && (hasGuestCart || (!hasRemoteCart && hasLocalCart))) {
+  if (remoteResult.ok && services && realUser?.getIdToken && (guestIsNewer || (!hasRemoteCart && hasLocalCart))) {
     const saved = await saveRemoteCartForCheckout(services, realUser, signedInCart);
     if (saved) {
       try {
@@ -333,7 +364,14 @@ async function restoreSignedInCheckoutCart() {
         // Local storage cleanup is best-effort.
       }
     }
+  } else if (remoteResult.ok && hasRemoteCart && hasGuestCart && !guestIsNewer) {
+    try {
+      localStorage.removeItem(guestCartStorageKey);
+    } catch {
+      // Local storage cleanup is best-effort.
+    }
   }
+  return cartFingerprint(signedInCart) !== before;
 }
 
 function loadCustomer() {
@@ -703,14 +741,19 @@ function bindPaymentPage() {
 }
 
 async function initCheckoutFlow() {
-  await restoreSignedInCheckoutCart();
   cart = loadCart();
   setCartCount();
+  const syncCartPromise = restoreSignedInCheckoutCart();
   try {
     const response = await fetch(`products.json?v=${Date.now()}`, { cache: "no-store" });
     products = await response.json();
   } catch {
     products = [];
+  }
+  if (!cartEntries().length && !location.pathname.endsWith("/cart.html")) {
+    await Promise.race([syncCartPromise, new Promise((resolve) => window.setTimeout(resolve, 2500))]);
+    cart = loadCart();
+    setCartCount();
   }
   if (!cartEntries().length && !location.pathname.endsWith("/cart.html")) {
     window.location.href = "cart.html";
@@ -722,6 +765,15 @@ async function initCheckoutFlow() {
   bindCartPage();
   bindCheckoutPage();
   bindPaymentPage();
+  syncCartPromise
+    .then((changed) => {
+      if (!changed) return;
+      cart = loadCart();
+      setCartCount();
+      renderCartPage();
+      renderOrderSummary();
+    })
+    .catch((error) => console.warn("Could not sync checkout cart.", error));
 }
 
 initCheckoutFlow();
