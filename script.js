@@ -7,6 +7,7 @@ const guestCartStorageKey = "pope-kyrillos-cart:guest";
 const userCartStoragePrefix = "pope-kyrillos-cart:user:";
 const activeCartStorageKey = "pope-kyrillos-cart:active";
 const cachedAuthStorageKey = "pope-kyrillos-auth:user";
+const cartSyncStorageKey = "pope-kyrillos-cart:sync";
 const languageStorageKey = "pope-kyrillos-language";
 const paymentMethods = {
   instapay: {
@@ -1508,9 +1509,16 @@ function clearCachedAuthUser() {
   }
 }
 
-function currentCartStorageKey() {
-  const user = effectiveAuthUser();
+function currentUserCartStorageKey(user = effectiveAuthUser()) {
   return user?.uid ? `${userCartStoragePrefix}${user.uid}` : guestCartStorageKey;
+}
+
+function currentCartStorageKey(user = effectiveAuthUser()) {
+  return currentUserCartStorageKey(user);
+}
+
+function isAllowedCartStorageKey(key, user = effectiveAuthUser()) {
+  return key === guestCartStorageKey || key === currentUserCartStorageKey(user);
 }
 
 function setActiveCartStorageKey(key = currentCartStorageKey()) {
@@ -1631,6 +1639,7 @@ function saveCartToLocal(key = currentCartStorageKey(), map = state.cart) {
       })
     );
     setActiveCartStorageKey(key);
+    localStorage.setItem(cartSyncStorageKey, JSON.stringify({ key, updatedAt: new Date().toISOString() }));
   } catch (error) {
     console.warn("Could not save cart locally.", error);
   }
@@ -1638,11 +1647,11 @@ function saveCartToLocal(key = currentCartStorageKey(), map = state.cart) {
 
 function localCartCandidateKeys(user = effectiveAuthUser()) {
   const keys = [];
-  const userCartKey = user?.uid ? `${userCartStoragePrefix}${user.uid}` : "";
+  const userCartKey = user?.uid ? currentUserCartStorageKey(user) : "";
   if (userCartKey) keys.push(userCartKey);
   try {
     const activeKey = localStorage.getItem(activeCartStorageKey);
-    if (activeKey === guestCartStorageKey || activeKey === userCartKey) keys.push(activeKey);
+    if (isAllowedCartStorageKey(activeKey, user)) keys.push(activeKey);
   } catch {
     // Local storage availability varies in private browsing.
   }
@@ -1664,6 +1673,14 @@ function loadGuestCart() {
   const record = preferredLocalCartRecord();
   state.cart = record.cart;
   setActiveCartStorageKey(record.key);
+}
+
+function refreshCartFromLocalStorage() {
+  const before = cartFingerprint(state.cart);
+  const record = preferredLocalCartRecord();
+  state.cart = record.cart;
+  setActiveCartStorageKey(record.key);
+  if (cartFingerprint(state.cart) !== before) renderCart();
 }
 
 function findVariant(product, variantId) {
@@ -2810,21 +2827,32 @@ async function loadRemoteCartRecord(user) {
 }
 
 async function applySignedInCart(user) {
-  const userCartKey = `${userCartStoragePrefix}${user.uid}`;
+  const userCartKey = currentUserCartStorageKey(user);
   const before = cartFingerprint(state.cart);
   const guestRecord = readCartRecord(guestCartStorageKey);
   const userLocalRecord = readCartRecord(userCartKey);
-  const localRecord = guestRecord.updatedAt > userLocalRecord.updatedAt ? guestRecord : userLocalRecord;
+  const currentFingerprint = cartFingerprint(state.cart);
+  const currentUpdatedAt = Math.max(
+    cartFingerprint(guestRecord.cart) === currentFingerprint ? guestRecord.updatedAt : 0,
+    cartFingerprint(userLocalRecord.cart) === currentFingerprint ? userLocalRecord.updatedAt : 0
+  );
+  const currentRecord = cartHasItems(state.cart)
+    ? { key: userCartKey, cart: state.cart, updatedAt: currentUpdatedAt }
+    : null;
+  const localRecord = [guestRecord, userLocalRecord, currentRecord]
+    .filter(Boolean)
+    .filter((record) => cartHasItems(record.cart))
+    .sort((a, b) => b.updatedAt - a.updatedAt)[0] || { key: userCartKey, cart: new Map(), updatedAt: 0 };
   const localCart = localRecord.cart;
   const remoteResult = await loadRemoteCartRecord(user);
   const remoteCart = remoteResult.cart;
   const hasRemoteCart = cartHasItems(remoteCart);
   const hasGuestCart = cartHasItems(guestRecord.cart);
   const hasLocalCart = cartHasItems(localCart);
-  const guestIsNewer = hasGuestCart && guestRecord.updatedAt > Math.max(remoteResult.updatedAt || 0, userLocalRecord.updatedAt || 0);
+  const localIsNewer = hasLocalCart && localRecord.updatedAt > (remoteResult.updatedAt || 0);
 
   if (remoteResult.ok && hasRemoteCart) {
-    state.cart = guestIsNewer ? mergeCartMaps(remoteCart, guestRecord.cart) : remoteCart;
+    state.cart = localIsNewer ? localCart : remoteCart;
   } else {
     state.cart = localCart;
   }
@@ -2832,7 +2860,7 @@ async function applySignedInCart(user) {
   saveCartToLocal(userCartKey, state.cart);
   if (cartFingerprint(state.cart) !== before) renderCart();
   if (!remoteResult.ok) return;
-  if (guestIsNewer || (!hasRemoteCart && hasLocalCart)) {
+  if (localIsNewer || (!hasRemoteCart && hasLocalCart)) {
     const saved = await saveRemoteCart();
     if (saved) {
       try {
@@ -2841,7 +2869,7 @@ async function applySignedInCart(user) {
         // Local storage cleanup is best-effort.
       }
     }
-  } else if (hasRemoteCart && hasGuestCart && !guestIsNewer) {
+  } else if (hasRemoteCart && hasGuestCart && !localIsNewer) {
     try {
       localStorage.removeItem(guestCartStorageKey);
     } catch {
@@ -3210,8 +3238,11 @@ async function loadProducts() {
     console.warn("Could not load products.json, using fallback products.", error);
     products = fallbackProducts;
   }
+  const cartBeforeProducts = cartFingerprint(state.cart);
   state.cart = clampCartMap(state.cart);
-  saveCartToLocal(currentCartStorageKey(), state.cart);
+  if (cartFingerprint(state.cart) !== cartBeforeProducts) {
+    saveCartToLocal(currentCartStorageKey(), state.cart);
+  }
   applyCatalogFilterFromUrl({ render: false });
   renderProducts();
   renderShopMenu();
@@ -3778,6 +3809,13 @@ window.addEventListener("popstate", () => {
   if (document.body.classList.contains("product-open")) {
     closeProductModal({ updateUrl: false });
   }
+});
+
+window.addEventListener("storage", (event) => {
+  const userKey = currentUserCartStorageKey();
+  const relevantKeys = [guestCartStorageKey, userKey, activeCartStorageKey, cartSyncStorageKey];
+  if (!relevantKeys.includes(event.key)) return;
+  refreshCartFromLocalStorage();
 });
 
 loadGuestCart();

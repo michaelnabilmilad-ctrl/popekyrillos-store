@@ -6,6 +6,7 @@ const guestCartStorageKey = "pope-kyrillos-cart:guest";
 const userCartStoragePrefix = "pope-kyrillos-cart:user:";
 const activeCartStorageKey = "pope-kyrillos-cart:active";
 const cachedAuthStorageKey = "pope-kyrillos-auth:user";
+const cartSyncStorageKey = "pope-kyrillos-cart:sync";
 const checkoutStorageKey = "pope-kyrillos-checkout";
 const cartSeparator = "::";
 
@@ -129,6 +130,34 @@ function loadCachedAuthUser() {
   }
 }
 
+function authProfile(user) {
+  if (!user?.uid) return null;
+  return {
+    uid: user.uid,
+    displayName: user.displayName || "",
+    email: user.email || "",
+    photoURL: user.photoURL || ""
+  };
+}
+
+function saveCachedAuthUser(user) {
+  const profile = authProfile(user);
+  if (!profile) return;
+  try {
+    localStorage.setItem(cachedAuthStorageKey, JSON.stringify(profile));
+  } catch {
+    // Ignore localStorage write failures.
+  }
+}
+
+function currentUserCartStorageKey(user = loadCachedAuthUser()) {
+  return user?.uid ? `${userCartStoragePrefix}${user.uid}` : guestCartStorageKey;
+}
+
+function isAllowedCartStorageKey(key, user = loadCachedAuthUser()) {
+  return key === guestCartStorageKey || key === currentUserCartStorageKey(user);
+}
+
 function saveCartRecord(key, map) {
   try {
     localStorage.setItem(
@@ -136,6 +165,7 @@ function saveCartRecord(key, map) {
       JSON.stringify({ items: cartPayloadFromMap(map), updatedAt: new Date().toISOString() })
     );
     setActiveCartKey(key);
+    localStorage.setItem(cartSyncStorageKey, JSON.stringify({ key, updatedAt: new Date().toISOString() }));
   } catch {
     // Ignore localStorage write failures.
   }
@@ -176,23 +206,28 @@ function withTimeout(promise, timeoutMs = 3500) {
   ]);
 }
 
-function savedCartKeys() {
-  const keys = [guestCartStorageKey];
-  for (let index = 0; index < localStorage.length; index += 1) {
-    const key = localStorage.key(index) || "";
-    if (key.startsWith(userCartStoragePrefix)) keys.push(key);
+function savedCartKeys(user = loadCachedAuthUser()) {
+  const keys = [];
+  const userKey = user?.uid ? currentUserCartStorageKey(user) : "";
+  if (userKey) keys.push(userKey);
+  try {
+    const activeKey = localStorage.getItem(activeCartStorageKey);
+    if (isAllowedCartStorageKey(activeKey, user)) keys.push(activeKey);
+  } catch {
+    // Ignore localStorage read failures.
   }
-  return [...new Set(keys)];
+  keys.push(guestCartStorageKey);
+  return [...new Set(keys.filter(Boolean))];
 }
 
-function loadCart() {
+function loadCart(user = loadCachedAuthUser()) {
   const activeKey = localStorage.getItem(activeCartStorageKey);
-  if (activeKey === guestCartStorageKey || activeKey?.startsWith(userCartStoragePrefix)) {
+  if (isAllowedCartStorageKey(activeKey, user)) {
     const active = readCartRecord(activeKey);
     if (cartHasItems(active.cart)) return active.cart;
   }
 
-  const records = savedCartKeys()
+  const records = savedCartKeys(user)
     .map(readCartRecord)
     .filter((record) => cartHasItems(record.cart))
     .sort((a, b) => b.updatedAt - a.updatedAt);
@@ -204,12 +239,14 @@ function loadCart() {
 
 function saveCart() {
   const activeKey = localStorage.getItem(activeCartStorageKey);
-  const targetKey = activeKey === guestCartStorageKey || activeKey?.startsWith(userCartStoragePrefix) ? activeKey : guestCartStorageKey;
+  const cachedUser = loadCachedAuthUser();
+  const targetKey = isAllowedCartStorageKey(activeKey, cachedUser) ? activeKey : currentUserCartStorageKey(cachedUser);
   localStorage.setItem(
     targetKey,
     JSON.stringify({ items: cartPayloadFromMap(), updatedAt: new Date().toISOString() })
   );
   setActiveCartKey(targetKey);
+  localStorage.setItem(cartSyncStorageKey, JSON.stringify({ key: targetKey, updatedAt: new Date().toISOString() }));
   saveCurrentCheckoutCartRemote();
 }
 
@@ -253,7 +290,10 @@ async function currentCheckoutUser() {
   try {
     const services = await checkoutAuthServices();
     if (!services?.auth) return null;
-    if (services.auth.currentUser) return services.auth.currentUser;
+    if (services.auth.currentUser) {
+      saveCachedAuthUser(services.auth.currentUser);
+      return services.auth.currentUser;
+    }
     return await new Promise((resolve) => {
       let unsubscribe = () => {};
       const timeout = window.setTimeout(() => {
@@ -263,6 +303,7 @@ async function currentCheckoutUser() {
       unsubscribe = services.onAuthStateChanged(services.auth, (user) => {
         window.clearTimeout(timeout);
         unsubscribe();
+        if (user) saveCachedAuthUser(user);
         resolve(user);
       });
     });
@@ -342,7 +383,16 @@ async function restoreSignedInCheckoutCart() {
   const userCartKey = `${userCartStoragePrefix}${user.uid}`;
   const guestRecord = readCartRecord(guestCartStorageKey);
   const userLocalRecord = readCartRecord(userCartKey);
-  const localRecord = guestRecord.updatedAt > userLocalRecord.updatedAt ? guestRecord : userLocalRecord;
+  const currentFingerprint = cartFingerprint(cart);
+  const currentUpdatedAt = Math.max(
+    cartFingerprint(guestRecord.cart) === currentFingerprint ? guestRecord.updatedAt : 0,
+    cartFingerprint(userLocalRecord.cart) === currentFingerprint ? userLocalRecord.updatedAt : 0
+  );
+  const currentRecord = cartHasItems(cart) ? { key: userCartKey, cart, updatedAt: currentUpdatedAt } : null;
+  const localRecord = [guestRecord, userLocalRecord, currentRecord]
+    .filter(Boolean)
+    .filter((record) => cartHasItems(record.cart))
+    .sort((a, b) => b.updatedAt - a.updatedAt)[0] || { key: userCartKey, cart: new Map(), updatedAt: 0 };
   const localCart = localRecord.cart;
   const remoteResult =
     services && realUser?.getIdToken ? await loadRemoteCartRecordForCheckout(services, realUser) : { ok: false, cart: new Map() };
@@ -350,12 +400,11 @@ async function restoreSignedInCheckoutCart() {
   const hasRemoteCart = cartHasItems(remoteCart);
   const hasGuestCart = cartHasItems(guestRecord.cart);
   const hasLocalCart = cartHasItems(localCart);
-  const guestIsNewer = hasGuestCart && guestRecord.updatedAt > Math.max(remoteResult.updatedAt || 0, userLocalRecord.updatedAt || 0);
-  let signedInCart = remoteResult.ok && hasRemoteCart ? remoteCart : localCart;
-  if (remoteResult.ok && hasRemoteCart && guestIsNewer) signedInCart = mergeCartMaps(signedInCart, guestRecord.cart);
+  const localIsNewer = hasLocalCart && localRecord.updatedAt > (remoteResult.updatedAt || 0);
+  let signedInCart = remoteResult.ok && hasRemoteCart ? (localIsNewer ? localCart : remoteCart) : localCart;
 
   saveCartRecord(userCartKey, signedInCart);
-  if (remoteResult.ok && services && realUser?.getIdToken && (guestIsNewer || (!hasRemoteCart && hasLocalCart))) {
+  if (remoteResult.ok && services && realUser?.getIdToken && (localIsNewer || (!hasRemoteCart && hasLocalCart))) {
     const saved = await saveRemoteCartForCheckout(services, realUser, signedInCart);
     if (saved) {
       try {
@@ -364,7 +413,7 @@ async function restoreSignedInCheckoutCart() {
         // Local storage cleanup is best-effort.
       }
     }
-  } else if (remoteResult.ok && hasRemoteCart && hasGuestCart && !guestIsNewer) {
+  } else if (remoteResult.ok && hasRemoteCart && hasGuestCart && !localIsNewer) {
     try {
       localStorage.removeItem(guestCartStorageKey);
     } catch {
@@ -784,5 +833,17 @@ async function initCheckoutFlow() {
     })
     .catch((error) => console.warn("Could not sync checkout cart.", error));
 }
+
+window.addEventListener("storage", (event) => {
+  const userKey = currentUserCartStorageKey();
+  const relevantKeys = [guestCartStorageKey, userKey, activeCartStorageKey, cartSyncStorageKey];
+  if (!relevantKeys.includes(event.key)) return;
+  const before = cartFingerprint(cart);
+  cart = loadCart();
+  if (cartFingerprint(cart) === before) return;
+  setCartCount();
+  renderCartPage();
+  renderOrderSummary();
+});
 
 initCheckoutFlow();
