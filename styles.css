@@ -4052,9 +4052,8 @@ body.account-open .scrim {
   }
 
   .customer-service-toggle span {
-    max-width: 92px;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    max-width: none;
+    overflow: visible;
     white-space: nowrap;
   }
 
