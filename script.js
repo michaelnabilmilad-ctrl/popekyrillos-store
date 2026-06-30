@@ -55,7 +55,6 @@ const state = {
   labelFilter: "",
   search: "",
   priceFilter: "all",
-  choicesOnly: false,
   sortFilter: "default",
   visibleProductCount: productBatchSize,
   language: localStorage.getItem(languageStorageKey) === "en" ? "en" : "ar",
@@ -92,8 +91,8 @@ const productGrid = document.querySelector("[data-products]");
 const loadMoreButton = document.querySelector("[data-load-more]");
 const filterButtons = document.querySelectorAll("[data-filter]");
 const searchInput = document.querySelector("#product-search");
+const labelFilterSelect = document.querySelector("[data-label-filter]");
 const priceFilterSelect = document.querySelector("[data-price-filter]");
-const choiceFilterInput = document.querySelector("[data-choice-filter]");
 const sortFilterSelect = document.querySelector("[data-sort-filter]");
 const resetCatalogFilters = document.querySelector("[data-reset-catalog-filters]");
 const headerSearch = document.querySelector("[data-header-search]");
@@ -203,9 +202,10 @@ const translations = {
     catalogEyebrow: "الكتالوج",
     catalogTitle: "منتجات مختارة للطلب",
     searchPlaceholder: "ابحث عن منتج",
+    filterLabelLabel: "القسم الفرعي",
+    labelAll: "كل الأقسام الفرعية",
     filterPriceLabel: "السعر",
     filterSortLabel: "الترتيب",
-    choiceFilterLabel: "فيه اختيارات",
     resetFilters: "مسح الفلاتر",
     priceAll: "كل الأسعار",
     priceUnder1000: "أقل من 1000 ج.م",
@@ -446,9 +446,10 @@ const translations = {
     catalogEyebrow: "Catalog",
     catalogTitle: "Selected products to order",
     searchPlaceholder: "Search products",
+    filterLabelLabel: "Subcategory",
+    labelAll: "All subcategories",
     filterPriceLabel: "Price",
     filterSortLabel: "Sort",
-    choiceFilterLabel: "Has options",
     resetFilters: "Clear filters",
     priceAll: "All prices",
     priceUnder1000: "Under EGP 1,000",
@@ -881,10 +882,45 @@ function orderedLabelsForCategory(category) {
   });
 }
 
+function productsForCurrentCategory() {
+  const category = state.filter || "all";
+  return availableProducts().filter((product) => category === "all" || product.category === category);
+}
+
+function orderedLabelsForCurrentFilter() {
+  const labels = [...new Set(productsForCurrentCategory().map((product) => product.label).filter(Boolean))];
+  const preferred = state.filter === "all"
+    ? Object.values(catalogLabelOrder).flat()
+    : catalogLabelOrder[state.filter] || [];
+  return labels.sort((first, second) => {
+    const firstRank = rankFromList(preferred, first);
+    const secondRank = rankFromList(preferred, second);
+    if (firstRank !== secondRank) return firstRank - secondRank;
+    return localized(first).localeCompare(localized(second), isEnglish() ? "en" : "ar");
+  });
+}
+
+function renderLabelFilterOptions() {
+  if (!labelFilterSelect) return;
+  const labels = orderedLabelsForCurrentFilter();
+  if (state.labelFilter && !labels.includes(state.labelFilter)) {
+    state.labelFilter = "";
+  }
+
+  const allOption = new Option(t("labelAll"), "");
+  allOption.dataset.labelOptionAll = "";
+  labelFilterSelect.replaceChildren(allOption);
+  labels.forEach((label) => {
+    const count = productsForCurrentCategory().filter((product) => product.label === label).length;
+    labelFilterSelect.append(new Option(`${localized(label)} (${displayText(formatter.format(count))})`, label));
+  });
+  labelFilterSelect.value = state.labelFilter || "";
+}
+
 function updateFilterButtons() {
   filterButtons.forEach((item) => {
     const active = state.filter === "all"
-      ? item.dataset.filter === "all" && !state.labelFilter
+      ? item.dataset.filter === "all"
       : item.dataset.filter === state.filter;
     item.classList.toggle("active", active);
   });
@@ -892,10 +928,11 @@ function updateFilterButtons() {
 
 function updateCatalogFilterText() {
   const textMap = {
+    "[data-filter-label-label]": "filterLabelLabel",
     "[data-filter-price-label]": "filterPriceLabel",
     "[data-filter-sort-label]": "filterSortLabel",
-    "[data-choice-filter-label]": "choiceFilterLabel",
     "[data-reset-catalog-filters]": "resetFilters",
+    "[data-label-option-all]": "labelAll",
     "[data-price-option='all']": "priceAll",
     "[data-price-option='under1000']": "priceUnder1000",
     "[data-price-option='1000to5000']": "price1000to5000",
@@ -948,7 +985,7 @@ function renderShopMenu() {
     .join("");
 
   shopMenuList.innerHTML = `
-    <button class="shop-category shop-category-all ${state.filter === "all" && !state.labelFilter ? "active" : ""}" type="button" data-shop-category="all">
+    <button class="shop-category shop-category-all ${state.filter === "all" ? "active" : ""}" type="button" data-shop-category="all">
       <span>
         <strong>${escapeHtml(t("shopMenuAll"))}</strong>
         <small>${escapeHtml(categoryCopy.all[state.language][1])}</small>
@@ -1714,18 +1751,18 @@ function getFilteredProducts() {
       if (!hasAvailableVariant(product)) return false;
       const matchesCategory = state.filter === "all" || product.category === state.filter;
       const matchesLabel = !state.labelFilter || product.label === state.labelFilter;
-      const matchesChoices = !state.choicesOnly || hasProductChoices(product);
       const tags = Array.isArray(product.tags) ? product.tags.join(" ") : "";
       const text = `${product.name} ${product.label} ${localized(product.label)} ${product.description} ${tags} ${localized(tags)}`.toLowerCase();
-      return matchesCategory && matchesLabel && matchesChoices && matchesPriceFilter(product) && (!query || text.includes(query));
+      return matchesCategory && matchesLabel && matchesPriceFilter(product) && (!query || text.includes(query));
     })
     .sort(compareFilteredProducts)
     .map(({ product }) => product);
 }
 
 function syncCatalogFilterControls() {
+  renderLabelFilterOptions();
+  if (labelFilterSelect) labelFilterSelect.value = state.labelFilter || "";
   if (priceFilterSelect) priceFilterSelect.value = state.priceFilter;
-  if (choiceFilterInput) choiceFilterInput.checked = state.choicesOnly;
   if (sortFilterSelect) sortFilterSelect.value = state.sortFilter;
 }
 
@@ -3314,10 +3351,12 @@ priceFilterSelect?.addEventListener("change", (event) => {
   renderProducts();
 });
 
-choiceFilterInput?.addEventListener("change", (event) => {
-  state.choicesOnly = event.target.checked;
+labelFilterSelect?.addEventListener("change", (event) => {
+  state.labelFilter = event.target.value || "";
   state.visibleProductCount = productBatchSize;
   renderProducts();
+  renderShopMenu();
+  setCatalogUrl(state.filter || "all", state.labelFilter, { replace: true });
 });
 
 sortFilterSelect?.addEventListener("change", (event) => {
@@ -3328,20 +3367,19 @@ sortFilterSelect?.addEventListener("change", (event) => {
 
 resetCatalogFilters?.addEventListener("click", () => {
   const currentCategory = state.filter || "all";
-  const currentLabel = state.labelFilter || "";
   state.search = "";
+  state.labelFilter = "";
   state.priceFilter = "all";
-  state.choicesOnly = false;
   state.sortFilter = "default";
   state.visibleProductCount = productBatchSize;
   if (searchInput) searchInput.value = "";
+  if (labelFilterSelect) labelFilterSelect.value = "";
   if (priceFilterSelect) priceFilterSelect.value = "all";
-  if (choiceFilterInput) choiceFilterInput.checked = false;
   if (sortFilterSelect) sortFilterSelect.value = "default";
   closeHeaderSearch(true);
   renderProducts();
   renderShopMenu();
-  setCatalogUrl(currentCategory, currentLabel, { replace: true });
+  setCatalogUrl(currentCategory, "", { replace: true });
 });
 
 loadMoreButton?.addEventListener("click", () => {
