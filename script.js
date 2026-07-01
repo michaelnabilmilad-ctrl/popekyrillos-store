@@ -1189,9 +1189,9 @@ function applyLanguage({ render = true } = {}) {
   document.querySelectorAll(".payment-option").forEach((option) => {
     const value = option.querySelector("[data-payment-method]")?.value;
     const [labelKey, smallKey] = paymentTextKeys[value] || paymentTextKeys.instapay;
-    const strong = option.querySelector("strong");
+    const label = option.querySelector("[data-payment-label-text]") || option.querySelector("strong");
     const small = option.querySelector("small");
-    if (strong) strong.textContent = labelKey ? t(labelKey) : "Paymob";
+    if (label) label.textContent = labelKey ? t(labelKey) : "Paymob";
     if (small) small.textContent = t(smallKey);
   });
   setText("[data-checkout-step-label]", t("deliveryStep"));

@@ -3106,9 +3106,58 @@ body[data-lang="en"] .shop-menu[aria-hidden="false"] {
 }
 
 .payment-option strong {
+  display: flex;
+  align-items: center;
+  gap: 7px;
   color: var(--ink);
   font-size: 13px;
   line-height: 1.35;
+}
+
+.payment-logo {
+  direction: ltr;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  min-width: 30px;
+  height: 22px;
+  padding: 0 7px;
+  border-radius: 7px;
+  color: #fff;
+  font-family: Arial, sans-serif;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0;
+  line-height: 1;
+  text-transform: uppercase;
+  box-shadow: 0 8px 18px rgba(19, 37, 49, 0.12);
+}
+
+.payment-logo-instapay {
+  background: linear-gradient(135deg, #5f2eea, #02a66a);
+}
+
+.payment-logo-vodafone {
+  background: #e60000;
+  font-size: 13px;
+}
+
+.payment-logo-fawry {
+  background: #ffd233;
+  color: #173b78;
+  font-family: inherit;
+  font-size: 11px;
+}
+
+.payment-logo-cash {
+  background: #0c6b68;
+  font-size: 9px;
+}
+
+.payment-logo-paymob {
+  background: #1652f0;
+  font-size: 13px;
 }
 
 .payment-option small {
@@ -3442,6 +3491,9 @@ body.account-open .scrim {
 }
 
 .payment-page-options h2 {
+  display: flex;
+  align-items: center;
+  gap: 9px;
   margin: 0 0 6px;
   font-size: 20px;
 }
