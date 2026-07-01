@@ -3162,9 +3162,35 @@ body[data-lang="en"] .shop-menu[aria-hidden="false"] {
 }
 
 .payment-option small {
+  display: grid;
+  gap: 6px;
   color: var(--muted);
   font-size: 11px;
   line-height: 1.4;
+}
+
+.payment-number,
+.payment-transfer-number {
+  direction: ltr;
+  unicode-bidi: isolate;
+  font-family: Arial, "Segoe UI", sans-serif;
+  letter-spacing: 0.03em;
+}
+
+.payment-number {
+  display: inline-block;
+  width: fit-content;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: rgba(133, 36, 60, 0.08);
+  color: var(--burgundy);
+  font-size: 14px;
+  font-weight: 900;
+  line-height: 1.2;
+}
+
+.payment-small-detail {
+  display: block;
 }
 
 .payment-note {
@@ -3497,6 +3523,23 @@ body.account-open .scrim {
   gap: 9px;
   margin: 0 0 6px;
   font-size: 20px;
+}
+
+.payment-transfer-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 46px;
+  margin: 14px 0 16px;
+  padding: 9px 18px;
+  border: 1px solid rgba(133, 36, 60, 0.18);
+  border-radius: 999px;
+  background: rgba(133, 36, 60, 0.07);
+  color: var(--burgundy);
+  font-size: 24px;
+  font-weight: 900;
+  line-height: 1;
+  box-shadow: 0 10px 24px rgba(133, 36, 60, 0.08);
 }
 
 .payment-page-actions {

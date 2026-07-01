@@ -1192,7 +1192,26 @@ function applyLanguage({ render = true } = {}) {
     const label = option.querySelector("[data-payment-label-text]") || option.querySelector("strong");
     const small = option.querySelector("small");
     if (label) label.textContent = labelKey ? t(labelKey) : "Paymob";
-    if (small) small.textContent = t(smallKey);
+    if (small) {
+      small.textContent = t(smallKey);
+      if (value === "instapay" || value === "vodafoneCash") {
+        const number = value === "instapay" ? instapayNumber : vodafoneCashNumber;
+        const detail = t(smallKey).replace(number, "").replace(/^[\s-]+|[\s-]+$/g, "");
+        small.textContent = "";
+        const numberSpan = document.createElement("span");
+        numberSpan.className = "payment-number";
+        numberSpan.dir = "ltr";
+        numberSpan.lang = "en";
+        numberSpan.textContent = number;
+        small.appendChild(numberSpan);
+        if (detail) {
+          const detailSpan = document.createElement("span");
+          detailSpan.className = "payment-small-detail";
+          detailSpan.textContent = detail;
+          small.appendChild(detailSpan);
+        }
+      }
+    }
   });
   setText("[data-checkout-step-label]", t("deliveryStep"));
   setText("[data-delivery-bosta-label]", t("deliveryBostaLabel"));
