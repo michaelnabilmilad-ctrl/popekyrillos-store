@@ -268,7 +268,8 @@ export function buildBillingData(customer = {}, orderReference = "") {
 
 export function checkoutUrl(env = {}, clientSecret = "") {
   if (!env.PAYMOB_PUBLIC_KEY) throw publicError(500, "Paymob public key is not configured.");
-  return `https://accept.paymob.com/unifiedcheckout/?publicKey=${encodeURIComponent(env.PAYMOB_PUBLIC_KEY)}&clientSecret=${encodeURIComponent(clientSecret)}`;
+  const baseUrl = cleanText(env.PAYMOB_ACCEPT_BASE_URL, 160) || "https://accept.paymob.com";
+  return `${baseUrl.replace(/\/+$/, "")}/unifiedcheckout/?publicKey=${encodeURIComponent(env.PAYMOB_PUBLIC_KEY)}&clientSecret=${encodeURIComponent(clientSecret)}`;
 }
 
 function orderStore(env = {}) {

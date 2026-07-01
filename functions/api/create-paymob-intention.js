@@ -1,6 +1,7 @@
 import {
   buildBillingData,
   calculateShippingCents,
+  checkoutUrl,
   cleanText,
   currency,
   integrationIds,
@@ -24,16 +25,34 @@ function newOrderReference() {
 }
 
 function requirePaymobConfig(env = {}) {
-  const apiKey = cleanText(env.PAYMOB_API_KEY || env.PAYMOB_SECRET_KEY, 1000);
+  const secretKey = cleanText(env.PAYMOB_SECRET_KEY, 1000);
+  const apiKey = cleanText(env.PAYMOB_API_KEY, 1000);
   const iframeId = cleanText(env.PAYMOB_IFRAME_ID, 80);
   const baseUrl = cleanText(env.PAYMOB_ACCEPT_BASE_URL, 160) || "https://accept.paymob.com";
-  if (!apiKey) throw new Error("PAYMOB_API_KEY is not configured.");
-  if (!iframeId) throw new Error("PAYMOB_IFRAME_ID is not configured.");
+  const integrationId = integrationIds(env)[0];
+  const normalizedBaseUrl = baseUrl.replace(/\/+$/, "");
+
+  if (secretKey) {
+    if (!env.PAYMOB_PUBLIC_KEY) throw new Error("PAYMOB_PUBLIC_KEY is not configured.");
+    return {
+      mode: "intention",
+      secretKey,
+      baseUrl: normalizedBaseUrl,
+      integrationId
+    };
+  }
+
+  if (!apiKey) throw new Error("PAYMOB_SECRET_KEY is not configured.");
+  if (/^(egy_)?sk_/i.test(apiKey)) {
+    throw new Error("PAYMOB_API_KEY contains a modern Secret Key. Move it to PAYMOB_SECRET_KEY.");
+  }
+  if (!iframeId) throw new Error("PAYMOB_IFRAME_ID is not configured for legacy Paymob checkout.");
   return {
+    mode: "legacy",
     apiKey,
     iframeId,
-    baseUrl: baseUrl.replace(/\/+$/, ""),
-    integrationId: integrationIds(env)[0]
+    baseUrl: normalizedBaseUrl,
+    integrationId
   };
 }
 
@@ -53,6 +72,26 @@ function paymobItems(orderItems, shippingCents) {
       quantity: 1
     }
   ];
+}
+
+function intentionItems(orderItems, shippingCents) {
+  const items = orderItems.map((item) => ({
+    name: item.name || "Product",
+    amount: item.lineAmountCents,
+    description: item.option || item.sku || item.name || "Product",
+    quantity: item.quantity
+  }));
+
+  if (shippingCents > 0) {
+    items.push({
+      name: "Shipping",
+      amount: shippingCents,
+      description: "Bosta shipping",
+      quantity: 1
+    });
+  }
+
+  return items;
 }
 
 function paymobErrorMessage(data = {}) {
@@ -88,10 +127,10 @@ function legacyBillingData(customer, orderReference) {
   };
 }
 
-async function postPaymob(baseUrl, path, payload) {
+async function postPaymob(baseUrl, path, payload, extraHeaders = {}) {
   const response = await fetch(`${baseUrl}${path}`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json", ...extraHeaders },
     body: JSON.stringify(payload)
   });
   const data = await response.json().catch(async () => ({ raw: await response.text().catch(() => "") }));
@@ -105,6 +144,53 @@ async function postPaymob(baseUrl, path, payload) {
     });
   }
   return data;
+}
+
+async function createModernPaymobCheckout({
+  secretKey,
+  baseUrl,
+  integrationId,
+  orderReference,
+  secureCart,
+  customer,
+  shippingCents,
+  amountCents,
+  notificationUrl,
+  redirectUrl,
+  checkoutUrlForClientSecret
+}) {
+  const billingData = legacyBillingData(customer, orderReference);
+  const payload = {
+    amount: amountCents,
+    currency,
+    payment_methods: [integrationId],
+    billing_data: billingData,
+    customer: {
+      first_name: billingData.first_name,
+      last_name: billingData.last_name,
+      email: billingData.email,
+      phone_number: billingData.phone_number
+    },
+    items: intentionItems(secureCart.items, shippingCents),
+    extras: { orderReference },
+    special_reference: orderReference,
+    notification_url: notificationUrl,
+    redirection_url: redirectUrl,
+    expiration: 3600
+  };
+
+  const data = await postPaymob(baseUrl, "/v1/intention/", payload, {
+    Authorization: `Token ${secretKey}`
+  });
+  const clientSecret = data.client_secret || data.clientSecret || data.payment_keys?.[0]?.key;
+  if (!clientSecret) throw new Error("Paymob client secret was not returned.");
+
+  return {
+    paymobOrderId: data.intention_order_id || data.order?.id || data.id || null,
+    paymobIntentionId: data.id || data.intention_id || null,
+    clientSecret,
+    checkoutUrl: checkoutUrlForClientSecret(clientSecret)
+  };
 }
 
 function legacyCheckoutUrl(baseUrl, iframeId, token) {
@@ -166,13 +252,15 @@ export async function onRequest(context) {
   const orderReference = newOrderReference();
 
   try {
-    const { apiKey, iframeId, baseUrl, integrationId } = requirePaymobConfig(env);
+    const paymobConfig = requirePaymobConfig(env);
+    const { baseUrl, integrationId } = paymobConfig;
     const body = await parseRequestBody(request);
     const secureCart = await validateCartItems(context, body.items || body.cart || []);
     const customer = validateCustomer(body.customer || {}, orderReference);
     const shippingCents = calculateShippingCents(customer);
     const amountCents = secureCart.subtotalCents + shippingCents;
     const notificationUrl = `${siteUrl(env, request)}/api/paymob-webhook`;
+    const redirectUrl = `${siteUrl(env, request)}/payment`;
     const now = new Date().toISOString();
 
     const pendingOrder = {
@@ -196,27 +284,43 @@ export async function onRequest(context) {
     await saveOrder(env, pendingOrder);
 
     let checkout;
-    let lastPaymobError;
-    for (const candidateBaseUrl of paymobBaseUrlCandidates(baseUrl)) {
-      try {
-        checkout = await createLegacyPaymobCheckout({
-          apiKey,
-          iframeId,
-          baseUrl: candidateBaseUrl,
-          integrationId,
-          orderReference,
-          secureCart,
-          customer,
-          shippingCents,
-          amountCents,
-          notificationUrl
-        });
-        break;
-      } catch (error) {
-        lastPaymobError = error;
+    if (paymobConfig.mode === "intention") {
+      checkout = await createModernPaymobCheckout({
+        secretKey: paymobConfig.secretKey,
+        baseUrl,
+        integrationId,
+        orderReference,
+        secureCart,
+        customer,
+        shippingCents,
+        amountCents,
+        notificationUrl,
+        redirectUrl,
+        checkoutUrlForClientSecret: (clientSecret) => checkoutUrl(env, clientSecret)
+      });
+    } else {
+      let lastPaymobError;
+      for (const candidateBaseUrl of paymobBaseUrlCandidates(baseUrl)) {
+        try {
+          checkout = await createLegacyPaymobCheckout({
+            apiKey: paymobConfig.apiKey,
+            iframeId: paymobConfig.iframeId,
+            baseUrl: candidateBaseUrl,
+            integrationId,
+            orderReference,
+            secureCart,
+            customer,
+            shippingCents,
+            amountCents,
+            notificationUrl
+          });
+          break;
+        } catch (error) {
+          lastPaymobError = error;
+        }
       }
+      if (!checkout) throw lastPaymobError || new Error("Paymob checkout failed.");
     }
-    if (!checkout) throw lastPaymobError || new Error("Paymob checkout failed.");
 
     await updateOrder(env, orderReference, (order) => ({
       ...order,
@@ -225,12 +329,14 @@ export async function onRequest(context) {
         ...order.payment,
         status: "pending",
         paymobOrderId: checkout.paymobOrderId,
+        paymobIntentionId: checkout.paymobIntentionId || null,
         paymobIntegrationId: integrationId,
+        paymobMode: paymobConfig.mode,
         notificationUrl
       }
     }));
 
-    console.info("Paymob intention created", { orderReference, amountCents });
+    console.info("Paymob checkout created", { orderReference, amountCents, mode: paymobConfig.mode });
 
     return jsonResponse(200, {
       orderReference,
