@@ -1272,6 +1272,7 @@ function money(amount) {
 function productShareUrl(productId) {
   const url = new URL(window.location.href);
   url.searchParams.set("product", productId);
+  url.searchParams.delete("image");
   url.hash = "";
   return url.toString();
 }
@@ -1282,6 +1283,29 @@ function productIdFromUrl() {
   if (queryProduct) return queryProduct;
   const hashMatch = decodeURIComponent(url.hash || "").match(/^#product=(.+)$/);
   return hashMatch ? hashMatch[1] : "";
+}
+
+function productImageFromUrl() {
+  const url = new URL(window.location.href);
+  return url.searchParams.get("image") || "";
+}
+
+function setProductImageUrl(productId, image) {
+  if (!productId || !image) return;
+  const url = new URL(productShareUrl(productId));
+  url.searchParams.set("image", image);
+  const nextUrl = url.toString();
+  if (nextUrl !== window.location.href) window.history.pushState({ productId, image }, "", nextUrl);
+}
+
+function clearProductImageUrl({ replace = true } = {}) {
+  const url = new URL(window.location.href);
+  if (!url.searchParams.has("image")) return;
+  const productId = url.searchParams.get("product");
+  url.searchParams.delete("image");
+  const stateData = productId ? { productId } : {};
+  if (replace) window.history.replaceState(stateData, "", url.toString());
+  else window.history.pushState(stateData, "", url.toString());
 }
 
 function catalogFilterFromUrl() {
@@ -1319,9 +1343,10 @@ function setProductUrl(productId) {
 
 function clearProductUrl() {
   const url = new URL(window.location.href);
-  const hadProductUrl = url.searchParams.has("product") || decodeURIComponent(url.hash || "").startsWith("#product=");
+  const hadProductUrl = url.searchParams.has("product") || url.searchParams.has("image") || decodeURIComponent(url.hash || "").startsWith("#product=");
   if (!hadProductUrl) return;
   url.searchParams.delete("product");
+  url.searchParams.delete("image");
   url.hash = "catalog";
   window.history.replaceState({}, "", url);
 }
@@ -1867,6 +1892,7 @@ function renderProducts() {
                     type="button"
                     data-gallery="${productId}"
                     data-gallery-image="${escapeHtml(displayImage)}"
+                    data-gallery-raw-image="${escapeHtml(image)}"
                     aria-label="${escapeHtml(t("showImageLabel", { index: displayText(formatter.format(index + 1)), name: productDisplayName }))}"
                     aria-pressed="${index === 0 ? "true" : "false"}"
                   >
@@ -1976,7 +2002,7 @@ function renderProductModal() {
   const variantImages = getVariantImages(variant);
   const variantImage = variant?.image || "";
   const activeImage = state.modal.image || variantImage || variantImages[0] || images[0] || "";
-  const modalImages = uniqueImages([activeImage, ...variantImages, ...images]);
+  const modalImages = uniqueImages([...variantImages, ...images, activeImage]);
   const activeDetailImage = productDetailImageUrl(activeImage, product);
   const optionText = variantOptionText(variant);
   const price = variantPrice(variant, product);
@@ -2157,24 +2183,41 @@ function openProductModal(productId, { updateUrl = true } = {}) {
   productModalClose.focus();
 }
 
-function openImageLightbox(src, alt = "") {
+function openImageLightbox(src, alt = "", { productId = "", image = "", updateUrl = false } = {}) {
   if (!src) return;
   imageLightboxImage.src = productDetailImage(src);
   imageLightboxImage.alt = alt;
   imageLightbox.setAttribute("aria-hidden", "false");
   document.body.classList.add("image-zoom-open");
+  if (updateUrl && productId && image) setProductImageUrl(productId, image);
   imageLightboxClose.focus();
 }
 
-function closeImageLightbox() {
+function closeImageLightbox({ updateUrl = false } = {}) {
   document.body.classList.remove("image-zoom-open");
   imageLightbox.setAttribute("aria-hidden", "true");
   imageLightboxImage.removeAttribute("src");
   imageLightboxImage.alt = "";
+  if (updateUrl) clearProductImageUrl();
+}
+
+function openProductImageLightbox(productId, image, alt = "", { updateUrl = true } = {}) {
+  const product = getProduct(productId);
+  if (!product || !image) return false;
+  state.modal.productId = product.id;
+  state.modal.image = image;
+  renderProductModal();
+  const productName = alt || displayText(localized(product.name));
+  openImageLightbox(productDetailImageUrl(image, product), productName, {
+    productId: product.id,
+    image,
+    updateUrl
+  });
+  return true;
 }
 
 function closeProductModal({ updateUrl = true } = {}) {
-  closeImageLightbox();
+  closeImageLightbox({ updateUrl: false });
   document.body.classList.remove("product-open");
   productModal.setAttribute("aria-hidden", "true");
   state.modal.productId = "";
@@ -3312,6 +3355,12 @@ function openProductFromUrl() {
   const product = getProduct(productId);
   if (!product || !hasAvailableVariant(product)) return false;
   openProductModal(productId, { updateUrl: false });
+  const image = productImageFromUrl();
+  if (image) {
+    openProductImageLightbox(productId, image, displayText(localized(product.name)), { updateUrl: false });
+  } else {
+    closeImageLightbox({ updateUrl: false });
+  }
   return true;
 }
 
@@ -3493,7 +3542,7 @@ function modalGalleryImages(product) {
   const variantImages = getVariantImages(variant);
   const images = getProductImages(product);
   const activeImage = state.modal.image || variant?.image || variantImages[0] || images[0] || "";
-  return uniqueImages([activeImage, ...variantImages, ...images]);
+  return uniqueImages([...variantImages, ...images, activeImage]);
 }
 
 function showAdjacentModalImage(delta) {
@@ -3526,6 +3575,13 @@ productGrid.addEventListener("click", (event) => {
   const thumb = event.target.closest("[data-gallery-image]");
   if (thumb) {
     setProductGalleryImage(thumb);
+    const card = thumb.closest("[data-card-product]");
+    const productId = card?.dataset.cardProduct || thumb.dataset.gallery;
+    const image = thumb.dataset.galleryRawImage || "";
+    if (productId && image) {
+      openProductModal(productId);
+      openProductImageLightbox(productId, image, thumb.querySelector("img")?.alt || "", { updateUrl: true });
+    }
     return;
   }
 
@@ -3637,18 +3693,22 @@ productModal.addEventListener("click", (event) => {
 
   const zoomButton = event.target.closest("[data-zoom-image]");
   if (zoomButton) {
-    const image = zoomButton.dataset.zoomImage;
-    if (zoomButton.dataset.modalImage) {
-      state.modal.image = zoomButton.dataset.modalImage;
-      renderProductModal();
+    const image = zoomButton.dataset.modalImage || state.modal.image;
+    if (state.modal.productId && image) {
+      openProductImageLightbox(state.modal.productId, image, zoomButton.dataset.zoomAlt || "", { updateUrl: true });
+    } else {
+      openImageLightbox(zoomButton.dataset.zoomImage, zoomButton.dataset.zoomAlt || "");
     }
-    openImageLightbox(image, zoomButton.dataset.zoomAlt || "");
     return;
   }
 
   const imageButton = event.target.closest("[data-modal-image]");
   if (imageButton) {
-    setModalGalleryImage(imageButton);
+    const image = imageButton.dataset.modalImage;
+    if (image) {
+      setModalGalleryImage(imageButton);
+      openProductImageLightbox(state.modal.productId, image, imageButton.dataset.zoomAlt || "", { updateUrl: true });
+    }
     return;
   }
 
@@ -3691,6 +3751,7 @@ productModal.addEventListener("click", (event) => {
 productModal.addEventListener("pointerover", (event) => {
   if (event.pointerType === "touch") return;
   const imageButton = event.target.closest("[data-modal-image]");
+  if (imageButton?.contains(event.relatedTarget)) return;
   if (imageButton) setModalGalleryImage(imageButton);
 });
 
@@ -3730,7 +3791,7 @@ productModal.addEventListener("pointercancel", () => {
 
 imageLightbox.addEventListener("click", (event) => {
   if (event.target === imageLightbox || event.target.closest("[data-image-lightbox-close]")) {
-    closeImageLightbox();
+    closeImageLightbox({ updateUrl: true });
   }
 });
 
@@ -3855,7 +3916,7 @@ scrim.addEventListener("click", () => {
 document.addEventListener("keydown", (event) => {
   if (event.key === "Escape") {
     if (document.body.classList.contains("image-zoom-open")) {
-      closeImageLightbox();
+      closeImageLightbox({ updateUrl: true });
       return;
     }
     closeCart();
@@ -3887,6 +3948,9 @@ window.addEventListener("popstate", () => {
   if (productId) {
     openProductFromUrl();
     return;
+  }
+  if (document.body.classList.contains("image-zoom-open")) {
+    closeImageLightbox({ updateUrl: false });
   }
   applyCatalogFilterFromUrl({ render: true, scroll: true });
   if (document.body.classList.contains("product-open")) {
