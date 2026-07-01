@@ -111,7 +111,18 @@ function legacyCheckoutUrl(baseUrl, iframeId, token) {
   return `${baseUrl}/api/acceptance/iframes/${encodeURIComponent(iframeId)}?payment_token=${encodeURIComponent(token)}`;
 }
 
-async function createLegacyPaymobCheckout({ apiKey, iframeId, baseUrl, integrationId, orderReference, secureCart, customer, shippingCents, amountCents }) {
+async function createLegacyPaymobCheckout({
+  apiKey,
+  iframeId,
+  baseUrl,
+  integrationId,
+  orderReference,
+  secureCart,
+  customer,
+  shippingCents,
+  amountCents,
+  notificationUrl
+}) {
   const authData = await postPaymob(baseUrl, "/api/auth/tokens", { api_key: apiKey });
   const authToken = authData.token;
   if (!authToken) throw new Error("Paymob auth token was not returned.");
@@ -135,6 +146,7 @@ async function createLegacyPaymobCheckout({ apiKey, iframeId, baseUrl, integrati
     billing_data: legacyBillingData(customer, orderReference),
     currency,
     integration_id: integrationId,
+    notification_url: notificationUrl,
     lock_order_when_paid: false
   });
   const paymentToken = paymentKeyData.token;
@@ -160,6 +172,7 @@ export async function onRequest(context) {
     const customer = validateCustomer(body.customer || {}, orderReference);
     const shippingCents = calculateShippingCents(customer);
     const amountCents = secureCart.subtotalCents + shippingCents;
+    const notificationUrl = `${siteUrl(env, request)}/api/paymob-webhook`;
     const now = new Date().toISOString();
 
     const pendingOrder = {
@@ -195,7 +208,8 @@ export async function onRequest(context) {
           secureCart,
           customer,
           shippingCents,
-          amountCents
+          amountCents,
+          notificationUrl
         });
         break;
       } catch (error) {
@@ -211,7 +225,8 @@ export async function onRequest(context) {
         ...order.payment,
         status: "pending",
         paymobOrderId: checkout.paymobOrderId,
-        paymobIntegrationId: integrationId
+        paymobIntegrationId: integrationId,
+        notificationUrl
       }
     }));
 
