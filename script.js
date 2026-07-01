@@ -1,4 +1,6 @@
 const whatsappNumber = "201016125589";
+const instapayNumber = "01223515989";
+const vodafoneCashNumber = "01016125589";
 const paymobIntentionEndpointPath = "/api/create-paymob-intention";
 const firebaseSdkVersion = "10.14.1";
 const productBatchSize = 12;
@@ -15,6 +17,24 @@ const paymentMethods = {
     note: "حوّل على رقم 01223515989 باسم مايكل نبيل ميلاد، وبعد التحويل ابعت صورة الإيصال على الواتساب.",
     message: "طريقة الدفع: إنستاباي / تحويل بنكي على رقم 01223515989 باسم مايكل نبيل ميلاد. بعد التحويل سأرسل صورة الإيصال.",
     copyText: "إنستاباي / تحويل بنكي\nرقم التحويل: 01223515989\nاسم الحساب: مايكل نبيل ميلاد"
+  },
+  vodafoneCash: {
+    label: "فودافون كاش",
+    note: "حوّل فودافون كاش على رقم 01016125589، وبعد التحويل ابعت صورة الإيصال على الواتساب.",
+    message: "طريقة الدفع: فودافون كاش على رقم 01016125589. بعد التحويل سأرسل صورة الإيصال.",
+    copyText: "فودافون كاش\nرقم المحفظة: 01016125589"
+  },
+  fawry: {
+    label: "فوري",
+    note: "اختار فوري وسيتم إرسال الطلب على الواتساب لتأكيد البيانات وإرسال كود الدفع عند توفر خدمة فوري.",
+    message: "طريقة الدفع: فوري. برجاء إرسال كود الدفع بعد تأكيد الطلب.",
+    copyText: "فوري\nسيتم تأكيد كود الدفع بعد مراجعة الطلب."
+  },
+  pickupCash: {
+    label: "استلام من الفرع",
+    note: "سيتم تجهيز الأوردر أولا، وبعد التأكيد يمكنك الاستلام من الفرع والدفع كاش.",
+    message: "طريقة الاستلام والدفع: استلام من الفرع، والدفع كاش بعد تجهيز الأوردر والتأكيد.",
+    copyText: "استلام من الفرع\nالدفع: كاش بعد تجهيز الأوردر والتأكيد"
   },
   paymob: {
     label: "Paymob",
@@ -268,6 +288,10 @@ const translations = {
     paymentMethod: "طريقة الدفع",
     instapayLabel: "إنستاباي / تحويل بنكي",
     instapaySmall: "01223515989 - مايكل نبيل ميلاد",
+    vodafoneCashLabel: "فودافون كاش",
+    vodafoneCashSmall: "01016125589",
+    fawryLabel: "فوري",
+    fawrySmall: "كود الدفع بعد تأكيد الطلب",
     paymobSmall: "دفع أونلاين مباشر",
     pickupCashLabel: "استلام من الفرع",
     pickupCashSmall: "دفع كاش بعد تجهيز الأوردر",
@@ -372,6 +396,12 @@ const translations = {
     instapayNote: "حوّل على رقم 01223515989 باسم مايكل نبيل ميلاد، وبعد التحويل ابعت صورة الإيصال على الواتساب.",
     instapayMessage: "طريقة الدفع: إنستاباي / تحويل بنكي على رقم 01223515989 باسم مايكل نبيل ميلاد. بعد التحويل سأرسل صورة الإيصال.",
     instapayCopy: "إنستاباي / تحويل بنكي\nرقم التحويل: 01223515989\nاسم الحساب: مايكل نبيل ميلاد",
+    vodafoneCashNote: "حوّل فودافون كاش على رقم 01016125589، وبعد التحويل ابعت صورة الإيصال على الواتساب.",
+    vodafoneCashMessage: "طريقة الدفع: فودافون كاش على رقم 01016125589. بعد التحويل سأرسل صورة الإيصال.",
+    vodafoneCashCopy: "فودافون كاش\nرقم المحفظة: 01016125589",
+    fawryNote: "اختار فوري وسيتم إرسال الطلب على الواتساب لتأكيد البيانات وإرسال كود الدفع عند توفر خدمة فوري.",
+    fawryMessage: "طريقة الدفع: فوري. برجاء إرسال كود الدفع بعد تأكيد الطلب.",
+    fawryCopy: "فوري\nسيتم تأكيد كود الدفع بعد مراجعة الطلب.",
     paymobNote: "سيتم فتح صفحة Paymob الرسمية لإتمام الدفع ببطاقة بنكية.",
     paymobCopy: "Paymob Checkout\nالدفع يتم من زر Paymob داخل السلة.",
     pickupCashNote: "سيتم تجهيز الأوردر أولا، وبعد التأكيد يمكنك الاستلام من الفرع والدفع كاش.",
@@ -512,6 +542,10 @@ const translations = {
     paymentMethod: "Payment method",
     instapayLabel: "Instapay / bank transfer",
     instapaySmall: "01223515989 - Michael Nabil Milad",
+    vodafoneCashLabel: "Vodafone Cash",
+    vodafoneCashSmall: "01016125589",
+    fawryLabel: "Fawry",
+    fawrySmall: "Payment code after order confirmation",
     paymobSmall: "Direct online payment",
     pickupCashLabel: "Pickup from branch",
     pickupCashSmall: "Cash after order preparation",
@@ -616,6 +650,12 @@ const translations = {
     instapayNote: "Transfer to 01223515989 under the name Michael Nabil Milad, then send the receipt photo on WhatsApp.",
     instapayMessage: "Payment method: Instapay / bank transfer to 01223515989 under the name Michael Nabil Milad. I will send the receipt photo after transfer.",
     instapayCopy: "Instapay / bank transfer\nTransfer number: 01223515989\nAccount name: Michael Nabil Milad",
+    vodafoneCashNote: "Transfer by Vodafone Cash to 01016125589, then send the receipt photo on WhatsApp.",
+    vodafoneCashMessage: "Payment method: Vodafone Cash to 01016125589. I will send the receipt photo after transfer.",
+    vodafoneCashCopy: "Vodafone Cash\nWallet number: 01016125589",
+    fawryNote: "Choose Fawry and the order will be sent on WhatsApp to confirm details and share the payment code once Fawry is available.",
+    fawryMessage: "Payment method: Fawry. Please send the payment code after confirming the order.",
+    fawryCopy: "Fawry\nThe payment code will be confirmed after reviewing the order.",
     paymobNote: "The official Paymob page will open to complete card payment.",
     paymobCopy: "Paymob Checkout\nUse the Paymob button inside the cart to pay securely.",
     pickupCashNote: "Your order will be prepared first. After confirmation, you can pick it up from the branch and pay cash.",
@@ -1139,19 +1179,21 @@ function applyLanguage({ render = true } = {}) {
   setText("[data-mini-cart-page]", t("miniCartGoToCart"));
   setText("[data-mini-cart-total-label]", t("miniCartTotal"));
   setText(".payment-box-head span", t("paymentMethod"));
-  const paymentOptions = document.querySelectorAll(".payment-option");
-  if (paymentOptions[0]) {
-    paymentOptions[0].querySelector("strong").textContent = t("instapayLabel");
-    paymentOptions[0].querySelector("small").textContent = t("instapaySmall");
-  }
-  if (paymentOptions[1]) {
-    paymentOptions[1].querySelector("strong").textContent = "Paymob";
-    paymentOptions[1].querySelector("small").textContent = t("paymobSmall");
-  }
-  if (paymentOptions[2]) {
-    paymentOptions[2].querySelector("strong").textContent = t("pickupCashLabel");
-    paymentOptions[2].querySelector("small").textContent = t("pickupCashSmall");
-  }
+  const paymentTextKeys = {
+    instapay: ["instapayLabel", "instapaySmall"],
+    vodafoneCash: ["vodafoneCashLabel", "vodafoneCashSmall"],
+    fawry: ["fawryLabel", "fawrySmall"],
+    pickupCash: ["pickupCashLabel", "pickupCashSmall"],
+    paymob: [null, "paymobSmall"]
+  };
+  document.querySelectorAll(".payment-option").forEach((option) => {
+    const value = option.querySelector("[data-payment-method]")?.value;
+    const [labelKey, smallKey] = paymentTextKeys[value] || paymentTextKeys.instapay;
+    const strong = option.querySelector("strong");
+    const small = option.querySelector("small");
+    if (strong) strong.textContent = labelKey ? t(labelKey) : "Paymob";
+    if (small) small.textContent = t(smallKey);
+  });
   setText("[data-checkout-step-label]", t("deliveryStep"));
   setText("[data-delivery-bosta-label]", t("deliveryBostaLabel"));
   setText("[data-delivery-bosta-small]", t("deliveryBostaSmall"));
@@ -2305,6 +2347,12 @@ function orderReferenceLine(orderResult) {
   return reference ? t("orderReferenceLine", { reference }) : "";
 }
 
+function paymentMethodText(method = state.paymentMethod, suffix = "Label") {
+  const key = `${method}${suffix}`;
+  const fallbackKey = `instapay${suffix}`;
+  return translations[state.language]?.[key] ? t(key) : t(fallbackKey);
+}
+
 function orderMessage(extraLine = "") {
   const total = cartTotalAmount();
   const shippingNote = state.shipping?.deliveryMethod === "bosta" ? t("shippingPendingNote") : t("pickupNoShippingNote");
@@ -2404,31 +2452,29 @@ async function createBostaShipment() {
 }
 
 function renderPaymentDetails() {
+  if (state.paymentMethod === "paymob") {
+    state.paymentMethod = "instapay";
+  }
   if (state.deliveryMethod !== "pickup" && state.paymentMethod === "pickupCash") {
     state.paymentMethod = "instapay";
   }
-  const isPaymob = state.paymentMethod === "paymob";
-  const isPickupCash = state.paymentMethod === "pickupCash";
-  const label = isPaymob ? "Paymob" : isPickupCash ? t("pickupCashLabel") : t("instapayLabel");
+  const label = paymentMethodText(state.paymentMethod, "Label");
 
   if (paymentSummary) paymentSummary.textContent = label;
-  if (paymentNote) {
-    if (isPaymob) {
-      paymentNote.textContent = t("paymobNote");
-    } else if (isPickupCash) {
-      paymentNote.textContent = t("pickupCashNote");
-    } else {
-      paymentNote.textContent = t("instapayNote");
-    }
-  }
+  if (paymentNote) paymentNote.textContent = paymentMethodText(state.paymentMethod, "Note");
 
   paymentInputs.forEach((input) => {
-    const disabled = input.value === "pickupCash" && state.deliveryMethod !== "pickup";
+    const hidden = input.value === "paymob";
+    const disabled = hidden || (input.value === "pickupCash" && state.deliveryMethod !== "pickup");
     const active = input.value === state.paymentMethod;
     input.disabled = disabled;
     input.checked = active;
-    input.closest(".payment-option")?.classList.toggle("active", active);
-    input.closest(".payment-option")?.classList.toggle("disabled", disabled);
+    const option = input.closest(".payment-option");
+    if (option) {
+      option.hidden = hidden;
+      option.classList.toggle("active", active);
+      option.classList.toggle("disabled", disabled);
+    }
   });
 }
 
@@ -2460,20 +2506,13 @@ function renderDeliveryDetails() {
 }
 
 function paymentMessageLine() {
-  if (state.paymentMethod === "paymob") {
-    return isEnglish() ? "Payment method: Paymob Checkout" : "طريقة الدفع: Paymob Checkout";
-  }
-  if (state.paymentMethod === "pickupCash") return t("pickupCashMessage");
-
-  return t("instapayMessage");
+  if (state.paymentMethod === "paymob") state.paymentMethod = "instapay";
+  return paymentMethodText(state.paymentMethod, "Message");
 }
 
 function copyPaymentDetails() {
-  const text = state.paymentMethod === "paymob"
-    ? t("paymobCopy")
-    : state.paymentMethod === "pickupCash"
-    ? t("pickupCashCopy")
-    : t("instapayCopy");
+  if (state.paymentMethod === "paymob") state.paymentMethod = "instapay";
+  const text = paymentMethodText(state.paymentMethod, "Copy");
 
   const fallbackCopy = () => {
     const textarea = document.createElement("textarea");
@@ -2670,19 +2709,11 @@ function renderCart() {
     if (checkoutLabel) checkoutLabel.textContent = t("checkoutDetailsFirst");
     return;
   }
-  if (state.paymentMethod === "paymob") {
-    whatsappLink.href = "#";
-    whatsappLink.classList.toggle("is-busy", state.checkoutBusy);
-    whatsappLink.setAttribute("aria-busy", state.checkoutBusy ? "true" : "false");
-    whatsappLink.setAttribute("aria-disabled", state.checkoutBusy ? "true" : "false");
-    if (checkoutLabel) checkoutLabel.textContent = state.checkoutBusy ? t("checkoutBusy") : t("paymobNow");
-  } else {
-    whatsappLink.classList.remove("is-busy");
-    whatsappLink.removeAttribute("aria-busy");
-    whatsappLink.removeAttribute("aria-disabled");
-    whatsappLink.href = orderWhatsappUrl(bostaReferenceLine(state.bosta.shipment));
-    if (checkoutLabel) checkoutLabel.textContent = state.bosta.busy ? t("bostaCreating") : t("sendOrder");
-  }
+  whatsappLink.classList.remove("is-busy");
+  whatsappLink.removeAttribute("aria-busy");
+  whatsappLink.removeAttribute("aria-disabled");
+  whatsappLink.href = orderWhatsappUrl(bostaReferenceLine(state.bosta.shipment));
+  if (checkoutLabel) checkoutLabel.textContent = state.bosta.busy ? t("bostaCreating") : t("sendOrder");
 }
 
 function showToast(message) {
@@ -3764,11 +3795,6 @@ whatsappLink.addEventListener("click", async (event) => {
     validateCheckoutCustomer({ requireConfirmed: true });
     return;
   }
-  if (state.paymentMethod === "paymob") {
-    startPaymobCheckout();
-    return;
-  }
-
   let orderLine = "";
   try {
     orderLine = orderReferenceLine(await createSecureOrder());

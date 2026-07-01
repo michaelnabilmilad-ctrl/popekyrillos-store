@@ -248,7 +248,7 @@ export const createOrder = onRequest(
     const customer = request.body?.customer || {};
     const paymentMethod = cleanText(request.body?.paymentMethod, 40);
     const deliveryMethod = cleanText(customer.deliveryMethod, 40);
-    const allowedPayments = new Set(["paymob", "instapay", "pickupCash"]);
+    const allowedPayments = new Set(["paymob", "instapay", "vodafoneCash", "fawry", "pickupCash"]);
 
     if (!allowedPayments.has(paymentMethod)) {
       response.status(400).json({ error: "Invalid payment method." });
@@ -289,7 +289,7 @@ export const createOrder = onRequest(
       order: secureOrder,
       payment: {
         method: paymentMethod,
-        status: paymentMethod === "pickupCash" || paymentMethod === "instapay" ? "pending_manual" : "pending_online"
+        status: paymentMethod === "paymob" ? "pending_online" : "pending_manual"
       },
       status: "new",
       source: "website",

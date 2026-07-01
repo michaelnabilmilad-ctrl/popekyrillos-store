@@ -670,7 +670,16 @@ function bindCheckoutPage() {
 function paymentMessageLine(paymentMethod) {
   if (paymentMethod === "paymob") return "طريقة الدفع: Paymob Checkout.";
   if (paymentMethod === "pickupCash") return "طريقة الاستلام والدفع: استلام من الفرع، والدفع كاش بعد تجهيز الأوردر والتأكيد.";
+  if (paymentMethod === "vodafoneCash") return "طريقة الدفع: فودافون كاش على رقم 01016125589. بعد التحويل سأرسل صورة الإيصال.";
+  if (paymentMethod === "fawry") return "طريقة الدفع: فوري. برجاء إرسال كود الدفع بعد تأكيد الطلب.";
   return "طريقة الدفع: إنستاباي / تحويل بنكي على رقم 01223515989 باسم مايكل نبيل ميلاد. بعد التحويل سأرسل صورة الإيصال.";
+}
+
+function paymentCopyText(paymentMethod) {
+  if (paymentMethod === "vodafoneCash") return "فودافون كاش\nرقم المحفظة: 01016125589";
+  if (paymentMethod === "fawry") return "فوري\nسيتم تأكيد كود الدفع بعد مراجعة الطلب.";
+  if (paymentMethod === "pickupCash") return "استلام من الفرع\nالدفع: كاش بعد تجهيز الأوردر والتأكيد";
+  return "إنستاباي / تحويل بنكي\nرقم التحويل: 01223515989\nاسم الحساب: مايكل نبيل ميلاد";
 }
 
 function bostaReferenceLine(delivery = {}) {
@@ -757,6 +766,11 @@ function bindPaymentPage() {
     return;
   }
   document.querySelectorAll("[data-payment-action]").forEach((button) => {
+    if (button.dataset.paymentAction === "paymob") {
+      button.disabled = true;
+      button.closest("article")?.setAttribute("hidden", "");
+      return;
+    }
     if (button.dataset.paymentAction === "pickupCash" && customer.deliveryMethod !== "pickup") {
       button.disabled = true;
       button.closest("article")?.classList.add("payment-option-disabled");
@@ -790,11 +804,13 @@ function bindPaymentPage() {
       sendOrder();
     });
   });
-  const copyButton = document.querySelector("[data-copy-instapay]");
-  copyButton?.addEventListener("click", async () => {
-    await navigator.clipboard?.writeText("إنستاباي / تحويل بنكي\nرقم التحويل: 01223515989\nاسم الحساب: مايكل نبيل ميلاد");
-    const status = document.querySelector("[data-payment-status]");
-    if (status) status.textContent = t("copied");
+  document.querySelectorAll("[data-copy-payment-method], [data-copy-instapay]").forEach((copyButton) => {
+    copyButton.addEventListener("click", async () => {
+      const method = copyButton.dataset.copyPaymentMethod || "instapay";
+      await navigator.clipboard?.writeText(paymentCopyText(method));
+      const status = document.querySelector("[data-payment-status]");
+      if (status) status.textContent = t("copied");
+    });
   });
 }
 
