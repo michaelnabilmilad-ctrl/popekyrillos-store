@@ -19,8 +19,12 @@ function newOrderReference() {
   return `PKS-${Date.now()}-${crypto.randomBytes(4).toString("hex").toUpperCase()}`;
 }
 
+function cleanPaymobSecretKey(value = "") {
+  return cleanText(value, 1000).replace(/^(Token|Bearer)\s+/i, "");
+}
+
 function requirePaymobConfig() {
-  const secretKey = cleanText(process.env.PAYMOB_SECRET_KEY, 1000);
+  const secretKey = cleanPaymobSecretKey(process.env.PAYMOB_SECRET_KEY);
   const apiKey = cleanText(process.env.PAYMOB_API_KEY, 1000);
   const iframeId = cleanText(process.env.PAYMOB_IFRAME_ID, 80);
   const baseUrl = cleanText(process.env.PAYMOB_ACCEPT_BASE_URL, 160) || "https://accept.paymob.com";
@@ -94,6 +98,11 @@ function paymobErrorMessage(data = {}) {
   if (Array.isArray(message)) return message.filter(Boolean).join(" ");
   if (message && typeof message === "object") return JSON.stringify(message);
   return String(message || "Paymob rejected the request.");
+}
+
+function isMissingAuthError(error) {
+  const message = error.providerData ? paymobErrorMessage(error.providerData) : error.message;
+  return error.providerStatus === 401 && /authentication credentials were not provided/i.test(message);
 }
 
 function publicPaymobError(message = "") {
@@ -173,9 +182,23 @@ async function createModernPaymobCheckout({
     expiration: 3600
   };
 
-  const data = await postPaymob(baseUrl, "/v1/intention/", payload, {
-    Authorization: `Token ${secretKey}`
-  });
+  const authHeaderCandidates = [
+    { Authorization: `Token ${secretKey}` },
+    { Authorization: `Bearer ${secretKey}` },
+    { Authorization: secretKey }
+  ];
+  let data;
+  let lastAuthError;
+  for (const headers of authHeaderCandidates) {
+    try {
+      data = await postPaymob(baseUrl, "/v1/intention/", payload, headers);
+      break;
+    } catch (error) {
+      if (!isMissingAuthError(error)) throw error;
+      lastAuthError = error;
+    }
+  }
+  if (!data) throw lastAuthError || new Error("Paymob intention authentication failed.");
   const clientSecret = data.client_secret || data.clientSecret || data.payment_keys?.[0]?.key;
   if (!clientSecret) throw new Error("Paymob client secret was not returned.");
 

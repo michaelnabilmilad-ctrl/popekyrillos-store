@@ -53,7 +53,7 @@ The admin image upload button uses the same `GITHUB_TOKEN` to commit converted W
 
 `PAYMOB_INTEGRATION_IDS` must come from the same Paymob merchant account as `PAYMOB_SECRET_KEY` and `PAYMOB_PUBLIC_KEY`. In Paymob Dashboard, open **Developers -> Payment Integrations** and copy the card integration ID. If Paymob returns `Integration ID/Name does not exist`, this value is wrong or belongs to another account/environment.
 
-For the current Paymob dashboard, use `PAYMOB_SECRET_KEY` with `PAYMOB_PUBLIC_KEY`; do not put the Secret Key in `PAYMOB_API_KEY`. The Worker will create a Paymob Intention and open Unified Checkout.
+For the current Paymob dashboard, use `PAYMOB_SECRET_KEY` with `PAYMOB_PUBLIC_KEY`; do not put the Secret Key in `PAYMOB_API_KEY`. The `PAYMOB_SECRET_KEY` value should be the key only, without adding `Token` or `Bearer` before it. The Worker will create a Paymob Intention and open Unified Checkout.
 
 For legacy VPC integrations such as `MIGS-online`, leave `PAYMOB_SECRET_KEY` empty and use Paymob Accept's token/order/payment-key flow instead. Add the old `PAYMOB_API_KEY` from the old dashboard/API Keys and `PAYMOB_IFRAME_ID` from **Developers -> Iframes**.
 
