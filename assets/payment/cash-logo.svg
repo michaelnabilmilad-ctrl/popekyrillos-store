@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 48" role="img" aria-labelledby="cashTitle">
+  <title id="cashTitle">Cash</title>
+  <rect x="6" y="10" width="84" height="28" rx="7" fill="#eef8f4" stroke="#0c6b68" stroke-width="3"/>
+  <circle cx="48" cy="24" r="9" fill="#0c6b68"/>
+  <path d="M21 20h11M64 28h11" fill="none" stroke="#0c6b68" stroke-width="4" stroke-linecap="round"/>
+</svg>
