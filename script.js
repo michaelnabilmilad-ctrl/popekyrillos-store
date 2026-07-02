@@ -2089,6 +2089,16 @@ function localCartCandidateKeys(user = effectiveAuthUser()) {
 }
 
 function preferredLocalCartRecord(user = effectiveAuthUser()) {
+  try {
+    const activeKey = localStorage.getItem(activeCartStorageKey);
+    if (isAllowedCartStorageKey(activeKey, user)) {
+      const active = readCartRecord(activeKey);
+      if (cartHasItems(active.cart)) return active;
+    }
+  } catch {
+    // Local storage availability varies in private browsing.
+  }
+
   const selected = localCartCandidateKeys(user)
     .map(readCartRecord)
     .filter((record) => cartHasItems(record.cart))
@@ -2102,6 +2112,7 @@ function loadGuestCart() {
   const record = preferredLocalCartRecord();
   state.cart = record.cart;
   setActiveCartStorageKey(record.key);
+  updateCartCount();
 }
 
 function refreshCartFromLocalStorage() {
@@ -2109,6 +2120,7 @@ function refreshCartFromLocalStorage() {
   const record = preferredLocalCartRecord();
   state.cart = record.cart;
   setActiveCartStorageKey(record.key);
+  updateCartCount();
   if (cartFingerprint(state.cart) !== before) renderCart();
 }
 
@@ -2561,6 +2573,11 @@ function cartEntries() {
 
 function cartQuantityCount(map = state.cart) {
   return [...map.values()].reduce((sum, qty) => sum + Math.max(0, Math.floor(Number(qty) || 0)), 0);
+}
+
+function updateCartCount(count = cartQuantityCount()) {
+  if (!cartCount) return;
+  cartCount.textContent = displayText(formatter.format(count));
 }
 
 function selectedPayment() {
@@ -3019,13 +3036,12 @@ function renderCart() {
   renderDeliveryDetails();
   const entries = cartEntries();
   const rawCount = cartQuantityCount();
-  const count = entries.length ? entries.reduce((sum, item) => sum + item.qty, 0) : !products.length ? rawCount : 0;
   const total = entries.reduce((sum, item) => sum + (item.price || 0) * item.qty, 0);
   const hasUnpriced = entries.some((item) => item.price === null);
   const detailsReady = state.shippingConfirmed && state.shipping;
   const needsBostaShipping = detailsReady && state.shipping.deliveryMethod === "bosta";
 
-  cartCount.textContent = count;
+  updateCartCount(rawCount);
   renderMiniCart(entries, total, rawCount, hasUnpriced);
   if (cartTotalBox) cartTotalBox.classList.remove("locked");
   if (cartTotalLabel) cartTotalLabel.textContent = t("totalReadyLabel");
