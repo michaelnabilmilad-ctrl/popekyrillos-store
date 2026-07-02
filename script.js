@@ -203,7 +203,7 @@ const translations = {
     cartAria: "فتح السلة",
     heroEyebrow: "أدوات كنسية، بخور وشموع، أيقونات، كتب طقسية، وهدايا خدمة",
     heroTitle: "مكتبة البابا كيرلس",
-    heroLead: "أسسها الشماس الدياكون بولس ملاك عام 2001 م\nاطلب منتجاتك الكنسية أونلاين والدفع أونلاين أو عند الاستلام من الفرع",
+    heroLead: "أسسها الشماس الدياكون بولس ملاك عام 2001 م\nاطلب منتجاتك الكنسية أونلاين والدفع أونلاين أو كاش عند الاستلام من الفرع",
     shopNow: "تسوق الآن",
     shopMenuTitle: "اختار القسم",
     shopMenuSubtitle: "الأقسام الرئيسية والفرعية",
@@ -212,7 +212,7 @@ const translations = {
     metricTime: "تجهيز الطلب",
     metricChurch: "كميات وأسعار خاصة",
     trustPaymentTitle: "طرق دفع مرنة",
-    trustPaymentText: "الدفع أونلاين أو عند الاستلام من الفرع",
+    trustPaymentText: "الدفع أونلاين أو كاش عند الاستلام من الفرع",
     trustChosenTitle: "منتجات مختارة",
     trustChosenText: "أدوات كنسية وكتب بأعلي جودة",
     trustGiftTitle: "تغليف مضمون",
@@ -468,7 +468,7 @@ const translations = {
     metricTime: "common prep time",
     metricChurch: "church orders",
     trustPaymentTitle: "Flexible payment",
-    trustPaymentText: "Online payment or branch pickup cash",
+    trustPaymentText: "Online payment or cash at branch pickup",
     trustChosenTitle: "Curated products",
     trustChosenText: "Books and tools with steady quality",
     trustGiftTitle: "Careful packing",
@@ -3014,7 +3014,7 @@ function renderCart() {
 
   if (!entries.length) {
     cartItems.innerHTML = `<div class="empty-state">${rawCount && !products.length ? t("cartLoading") : t("emptyCart")}</div>`;
-    whatsappLink.setAttribute("href", "#");
+    whatsappLink?.setAttribute("href", "#");
     if (checkoutLabel) checkoutLabel.textContent = t("sendOrder");
     return;
   }
@@ -3051,14 +3051,14 @@ function renderCart() {
     ? `Hello, I would like to order the following products from Pope Kyrillos Store:\n${orderLines}\nProducts total: ${money(total)}\n${cartTotalNote?.textContent || ""}\n${shippingMessageLine()}\n${paymentMessageLine()}`
     : `مرحباً، أريد طلب المنتجات التالية من مكتبة البابا كيرلس:\n${orderLines}\nإجمالي المنتجات المسعرة: ${money(total)}\n${cartTotalNote?.textContent || ""}\n${shippingMessageLine()}\n${paymentMessageLine()}`;
   if (!detailsReady) {
-    whatsappLink.href = "#";
+    if (whatsappLink) whatsappLink.href = "#";
     if (checkoutLabel) checkoutLabel.textContent = t("checkoutDetailsFirst");
     return;
   }
-  whatsappLink.classList.remove("is-busy");
-  whatsappLink.removeAttribute("aria-busy");
-  whatsappLink.removeAttribute("aria-disabled");
-  whatsappLink.href = orderWhatsappUrl(bostaReferenceLine(state.bosta.shipment));
+  whatsappLink?.classList.remove("is-busy");
+  whatsappLink?.removeAttribute("aria-busy");
+  whatsappLink?.removeAttribute("aria-disabled");
+  if (whatsappLink) whatsappLink.href = orderWhatsappUrl(bostaReferenceLine(state.bosta.shipment));
   if (checkoutLabel) checkoutLabel.textContent = state.bosta.busy ? t("bostaCreating") : t("sendOrder");
 }
 
@@ -4160,7 +4160,7 @@ cartHover?.addEventListener("focusout", (event) => {
 });
 cartPreviewToggle?.addEventListener("click", () => setMiniCartOpen(false));
 
-whatsappLink.addEventListener("click", async (event) => {
+whatsappLink?.addEventListener("click", async (event) => {
   event.preventDefault();
   if (state.checkoutBusy || state.bosta.busy) return;
   if (!state.shippingConfirmed) {

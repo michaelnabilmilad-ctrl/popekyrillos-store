@@ -735,6 +735,12 @@ body.shop-toggle-floating .hero-shop-button {
   width: 100%;
 }
 
+.cart-footer-actions,
+.account-quick-links {
+  display: grid;
+  gap: 10px;
+}
+
 .hero-metrics {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
