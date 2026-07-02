@@ -12,8 +12,8 @@ const defaultPaths = [
   "/cart",
   "/checkout",
   "/payment",
-  "/assets/hero-products-collage.png",
-  "/assets/optimized/products/gallery/baskha-araby.webp"
+  "/assets/optimized/hero-products-collage.webp",
+  "/assets/optimized/products/gallery/baskha-araby-1200.webp"
 ];
 const pagePaths = ["/", "/products.json", "/cart", "/checkout", "/payment"];
 const paths = process.argv.includes("--pages-only") ? pagePaths : defaultPaths;
