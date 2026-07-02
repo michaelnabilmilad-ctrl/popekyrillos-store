@@ -496,13 +496,30 @@
     return taxonomy?.subcategoryIdFromName?.(value) || (taxonomy?.subcategoryById?.has(value) ? value : "needs-review");
   }
 
+  function inferredSubcategoryFromProduct(product) {
+    const values = [product.subCategory, product.label, product.badge, ...(product.tags || [])].filter(Boolean);
+    for (const value of values) {
+      const id = taxonomy?.subcategoryIdFromName?.(value) || (taxonomy?.subcategoryById?.has(value) ? value : "");
+      if (id && id !== "needs-review") return taxonomy.subcategoryById.get(id);
+    }
+    return null;
+  }
+
   function mainCategoryName(product) {
-    const id = normalizeMainCategoryValue(product.mainCategory, product.category);
+    let id = normalizeMainCategoryValue(product.mainCategory, product.category);
+    if (id === "uncategorized") {
+      const inferred = inferredSubcategoryFromProduct(product);
+      id = inferred?.mainId || legacyCategoryToMainCategory[product.category] || id;
+    }
     return taxonomy?.categoryNameFromId?.(id) || product.mainCategory || "غير مصنف";
   }
 
   function subCategoryName(product) {
-    const id = normalizeSubCategoryValue(product.subCategory);
+    let id = normalizeSubCategoryValue(product.subCategory);
+    if (id === "needs-review") {
+      const inferred = inferredSubcategoryFromProduct(product);
+      id = inferred?.id || id;
+    }
     return taxonomy?.subcategoryNameFromId?.(id) || product.subCategory || "يحتاج مراجعة";
   }
 
