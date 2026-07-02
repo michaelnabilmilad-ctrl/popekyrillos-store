@@ -218,7 +218,7 @@
       return;
     }
 
-    const confirmed = window.confirm("سيتم حفظ products.json على GitHub وتحديث الموقع مباشرة. هل تريد المتابعة؟");
+    const confirmed = window.confirm("سيتم حفظ products.json على فرع المنتجات وتحديث الموقع مباشرة بدون تشغيل Cloudflare build. هل تريد المتابعة؟");
     if (!confirmed) return;
 
     const previousText = elements.publishProductsButton?.textContent || "";
@@ -248,7 +248,7 @@
       state.products = products;
       state.dirty = false;
       renderAll(`تم نشر المنتجات. Commit: ${(result.commitSha || "").slice(0, 7)}`);
-      showToast("تم حفظ products.json على GitHub. التحديث يظهر على الموقع خلال ثواني قليلة.");
+      showToast("تم حفظ المنتجات بدون تشغيل Cloudflare build. التحديث يظهر خلال ثواني قليلة.");
     } catch (error) {
       showToast(`تعذر النشر: ${error.message}`);
       console.error(error);

@@ -29,7 +29,7 @@ function githubConfig(env = {}) {
     token: String(env.GITHUB_TOKEN || "").trim(),
     owner: String(env.GITHUB_OWNER || "michaelnabilmilad-ctrl").trim(),
     repo: String(env.GITHUB_REPO || "popekyrillos-store").trim(),
-    branch: String(env.GITHUB_BRANCH || "main").trim()
+    branch: String(env.GITHUB_PRODUCTS_BRANCH || env.GITHUB_DATA_BRANCH || "products-data").trim()
   };
 }
 

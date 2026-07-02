@@ -12,13 +12,14 @@ function githubConfig(env = {}) {
   const token = String(env.GITHUB_TOKEN || "").trim();
   const owner = String(env.GITHUB_OWNER || "michaelnabilmilad-ctrl").trim();
   const repo = String(env.GITHUB_REPO || "popekyrillos-store").trim();
-  const branch = String(env.GITHUB_BRANCH || "main").trim();
+  const branch = String(env.GITHUB_PRODUCTS_BRANCH || env.GITHUB_DATA_BRANCH || "products-data").trim();
+  const sourceBranch = String(env.GITHUB_SOURCE_BRANCH || env.GITHUB_BRANCH || "main").trim();
 
   if (!token) {
     throw Object.assign(new Error("GITHUB_TOKEN is not configured."), { statusCode: 500 });
   }
 
-  return { token, owner, repo, branch };
+  return { token, owner, repo, branch, sourceBranch };
 }
 
 function utf8ToBase64(value) {
@@ -59,8 +60,26 @@ async function githubFetch(config, path, options = {}) {
   return data;
 }
 
+async function ensureTargetBranch(config) {
+  try {
+    return await githubFetch(config, `/git/ref/heads/${encodeURIComponent(config.branch)}`);
+  } catch (error) {
+    if (error.statusCode !== 404) throw error;
+  }
+
+  const sourceRef = await githubFetch(config, `/git/ref/heads/${encodeURIComponent(config.sourceBranch)}`);
+  await githubFetch(config, "/git/refs", {
+    method: "POST",
+    body: JSON.stringify({
+      ref: `refs/heads/${config.branch}`,
+      sha: sourceRef.object.sha
+    })
+  });
+  return { object: { sha: sourceRef.object.sha } };
+}
+
 async function commitFiles(config, message, files) {
-  const ref = await githubFetch(config, `/git/ref/heads/${encodeURIComponent(config.branch)}`);
+  const ref = await ensureTargetBranch(config);
   const baseCommit = await githubFetch(config, `/git/commits/${ref.object.sha}`);
   const treeItems = [];
 
@@ -151,6 +170,7 @@ export async function onRequest(context) {
       commitSha: result.sha || "",
       commitUrl: result.html_url || "",
       path: "products.json",
+      branch: config.branch,
       message: "products.json was committed to GitHub."
     });
   } catch (error) {
