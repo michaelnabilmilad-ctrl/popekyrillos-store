@@ -358,7 +358,7 @@ body[data-lang="en"] .hero h1 {
 .cart-hover::before {
   content: "";
   position: absolute;
-  inset-inline-end: 0;
+  left: 0;
   top: 100%;
   width: min(360px, calc(100vw - 28px));
   height: 16px;
@@ -2683,23 +2683,27 @@ body[data-lang="en"] .shop-menu[aria-hidden="false"] {
 
 .mini-cart {
   position: absolute;
-  top: calc(100% + 12px);
-  inset-inline-end: 0;
+  top: calc(100% + 10px);
+  left: 0;
+  right: auto;
   z-index: 60;
   display: grid;
   gap: 12px;
-  width: min(360px, calc(100vw - 28px));
-  max-height: calc(100vh - 96px);
+  width: min(360px, calc(100vw - 20px));
+  max-height: min(520px, calc(100vh - 96px));
   overflow: auto;
   padding: 16px;
   border: 1px solid var(--line);
   border-radius: var(--radius);
   background: rgba(255, 253, 247, 0.98);
   color: var(--ink);
+  direction: rtl;
+  text-align: right;
   box-shadow: var(--shadow);
   opacity: 0;
   pointer-events: none;
   transform: translateY(-8px);
+  transform-origin: top left;
   transition: opacity 160ms ease, transform 160ms ease;
 }
 
@@ -2707,13 +2711,31 @@ body[data-lang="en"] .shop-menu[aria-hidden="false"] {
   content: "";
   position: absolute;
   top: -7px;
-  inset-inline-end: 16px;
+  left: 16px;
   width: 14px;
   height: 14px;
   border-top: 1px solid var(--line);
   border-inline-start: 1px solid var(--line);
   background: rgba(255, 253, 247, 0.98);
   transform: rotate(45deg);
+}
+
+body[data-lang="en"] .cart-hover::before {
+  left: auto;
+  right: 0;
+}
+
+body[data-lang="en"] .mini-cart {
+  left: auto;
+  right: 0;
+  direction: ltr;
+  text-align: left;
+  transform-origin: top right;
+}
+
+body[data-lang="en"] .mini-cart::before {
+  left: auto;
+  right: 16px;
 }
 
 .cart-hover:hover .mini-cart,

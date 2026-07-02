@@ -4014,6 +4014,7 @@ cartHover?.addEventListener("focusout", (event) => {
   if (cartHover.contains(event.relatedTarget)) return;
   setMiniCartOpen(false);
 });
+cartPreviewToggle?.addEventListener("click", () => setMiniCartOpen(false));
 
 whatsappLink.addEventListener("click", async (event) => {
   event.preventDefault();
