@@ -264,6 +264,20 @@ function isProductUploadAsset(pathname) {
   return pathname.startsWith("/assets/optimized/products/") || pathname.startsWith("/assets/detail/products/");
 }
 
+function assetContentType(pathname = "") {
+  const extension = pathname.toLowerCase().split("?")[0].split(".").pop();
+  const types = {
+    avif: "image/avif",
+    gif: "image/gif",
+    jpg: "image/jpeg",
+    jpeg: "image/jpeg",
+    png: "image/png",
+    svg: "image/svg+xml",
+    webp: "image/webp"
+  };
+  return types[extension] || "";
+}
+
 async function githubAssetFallbackResponse(pathname, env) {
   if (!isProductUploadAsset(pathname)) return null;
   const response = await githubFetchAsset(env, pathname);
@@ -271,7 +285,9 @@ async function githubAssetFallbackResponse(pathname, env) {
 
   const headers = new Headers(response.headers);
   headers.set("Cache-Control", "public, max-age=60, must-revalidate");
-  ensureUtf8ContentType(headers, pathname);
+  const contentType = assetContentType(pathname);
+  if (contentType) headers.set("Content-Type", contentType);
+  else ensureUtf8ContentType(headers, pathname);
   return new Response(response.body, { status: response.status, headers });
 }
 
