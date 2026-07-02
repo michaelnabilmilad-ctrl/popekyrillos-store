@@ -1384,6 +1384,31 @@ function productImageFromUrl() {
   return url.searchParams.get("image") || "";
 }
 
+function catalogSearchFromUrl() {
+  const url = new URL(window.location.href);
+  return url.searchParams.get("q") || url.searchParams.get("search") || "";
+}
+
+function syncSearchInput() {
+  if (searchInput && searchInput.value !== state.search) searchInput.value = state.search;
+  if (state.search.trim()) openHeaderSearch(false);
+}
+
+function setCatalogSearchUrl(query = "", { replace = true } = {}) {
+  const url = new URL(window.location.href);
+  const normalizedQuery = String(query || "").trim();
+  url.searchParams.delete("product");
+  url.searchParams.delete("image");
+  url.searchParams.delete("search");
+  if (normalizedQuery) url.searchParams.set("q", normalizedQuery);
+  else url.searchParams.delete("q");
+  url.hash = "catalog";
+  const nextUrl = url.toString();
+  if (nextUrl === window.location.href) return;
+  if (replace) window.history.replaceState({ category: state.filter, label: state.labelFilter, search: normalizedQuery }, "", nextUrl);
+  else window.history.pushState({ category: state.filter, label: state.labelFilter, search: normalizedQuery }, "", nextUrl);
+}
+
 function setProductImageUrl(productId, image) {
   if (!productId || !image) return;
   const url = new URL(productShareUrl(productId));
@@ -1424,6 +1449,10 @@ function categoryShareUrl(category = "all", label = "") {
   url.searchParams.delete("category");
   url.searchParams.delete("label");
   url.searchParams.delete("subcategory");
+  url.searchParams.delete("search");
+  const query = state.search.trim();
+  if (query) url.searchParams.set("q", query);
+  else url.searchParams.delete("q");
   const normalized = normalizeCategoryFilter(category);
   if (normalized === "all") {
     url.pathname = "/";
@@ -1588,9 +1617,10 @@ function productAssetVersion(product) {
 function versionedAssetUrl(src = "", version = "") {
   const value = String(src || "");
   if (!value || /^(?:data|blob):/i.test(value) || !version) return value;
-  const hashIndex = value.indexOf("#");
-  const withoutHash = hashIndex >= 0 ? value.slice(0, hashIndex) : value;
-  const hash = hashIndex >= 0 ? value.slice(hashIndex) : "";
+  const assetValue = value.startsWith("assets/") ? `/${value}` : value;
+  const hashIndex = assetValue.indexOf("#");
+  const withoutHash = hashIndex >= 0 ? assetValue.slice(0, hashIndex) : assetValue;
+  const hash = hashIndex >= 0 ? assetValue.slice(hashIndex) : "";
   const queryIndex = withoutHash.indexOf("?");
   const path = queryIndex >= 0 ? withoutHash.slice(0, queryIndex) : withoutHash;
   const query = queryIndex >= 0 ? withoutHash.slice(queryIndex + 1) : "";
@@ -3448,7 +3478,9 @@ function applyCatalogFilterFromUrl({ render = true, scroll = false } = {}) {
   const { category, label } = catalogFilterFromUrl();
   state.filter = normalizeCategoryFilter(category);
   state.labelFilter = label;
+  state.search = catalogSearchFromUrl();
   state.visibleProductCount = productBatchSize;
+  syncSearchInput();
   updateFilterButtons();
   if (render) {
     renderProducts();
@@ -3550,6 +3582,7 @@ searchInput?.addEventListener("focus", () => openHeaderSearch(false));
 searchInput?.addEventListener("input", (event) => {
   state.search = event.target.value;
   state.visibleProductCount = productBatchSize;
+  setCatalogSearchUrl(state.search, { replace: true });
   renderProducts();
   if (state.search.trim()) openHeaderSearch(false);
 });
