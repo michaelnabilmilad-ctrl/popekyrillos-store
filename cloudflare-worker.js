@@ -227,6 +227,33 @@ function injectCanonical(html, url) {
   return nextHtml;
 }
 
+function ensureUtf8ContentType(headers, pathname = "") {
+  const current = headers.get("Content-Type") || "";
+  const lower = current.toLowerCase();
+  if (lower.includes("charset=")) return;
+
+  const type = current.split(";")[0].trim().toLowerCase();
+  const fallbackByExtension = pathname.endsWith(".js")
+    ? "text/javascript"
+    : pathname.endsWith(".css")
+      ? "text/css"
+      : pathname.endsWith(".json")
+        ? "application/json"
+        : pathname.endsWith(".xml")
+          ? "application/xml"
+          : pathname.endsWith(".txt")
+            ? "text/plain"
+            : "";
+  const normalized = type || fallbackByExtension;
+  const needsUtf8 =
+    normalized.startsWith("text/") ||
+    normalized === "application/json" ||
+    normalized === "application/xml" ||
+    normalized === "application/javascript";
+
+  if (needsUtf8) headers.set("Content-Type", `${normalized}; charset=utf-8`);
+}
+
 function productMetaTags(product) {
   const titleText = `${localized(product.name)} | مكتبة البابا كيرلس`;
   const descriptionText = cleanDescription(localized(product.description)) || "تفاصيل المنتج من مكتبة البابا كيرلس.";
@@ -275,6 +302,7 @@ async function htmlResponse(request, env, pathname = "/index.html", init = {}) {
   const assetPath = pathname === "/index.html" ? "/" : pathname.replace(/\.html$/, "");
   const response = await env.ASSETS.fetch(rewriteGetRequest(request, assetPath));
   const headers = new Headers(response.headers);
+  ensureUtf8ContentType(headers, pathname);
   headers.set("Cache-Control", "no-store");
   headers.set("X-Content-Type-Options", "nosniff");
   if (request.method === "HEAD") return new Response(null, { status: init.status || response.status, headers });
@@ -344,6 +372,7 @@ function notFoundResponse() {
 
 function withAssetCacheHeaders(response, pathname) {
   const headers = new Headers(response.headers);
+  ensureUtf8ContentType(headers, pathname);
   if (pathname === "/products.json" || pathname === "/sitemap.xml" || pathname === "/robots.txt") {
     headers.set("Cache-Control", "no-store");
   }
