@@ -137,6 +137,10 @@ export default {
       return env.ASSETS.fetch(rewriteRequest(request, rewrites[url.pathname]));
     }
 
+    if (url.pathname.startsWith("/category/")) {
+      return env.ASSETS.fetch(rewriteRequest(request, "/index.html"));
+    }
+
     return env.ASSETS.fetch(request);
   }
 };

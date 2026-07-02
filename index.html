@@ -263,6 +263,12 @@
       <section class="section catalog" id="catalog" aria-label="منتجات مختارة للطلب">
         <div class="catalog-filters" data-catalog-filters>
           <div class="catalog-filter-group">
+            <label for="catalog-main-filter" data-filter-main-label>القسم الرئيسي</label>
+            <select id="catalog-main-filter" data-main-filter>
+              <option value="all">كل الأقسام</option>
+            </select>
+          </div>
+          <div class="catalog-filter-group">
             <label for="catalog-label-filter" data-filter-label-label>القسم الفرعي</label>
             <select id="catalog-label-filter" data-label-filter>
               <option value="" data-label-option-all>كل الأقسام الفرعية</option>
@@ -688,7 +694,8 @@
     <div class="scrim" data-scrim></div>
 
     <div class="toast" data-toast role="status" aria-live="polite"></div>
+    <script src="category-taxonomy.js?v=taxonomy-20260701" defer></script>
     <script src="firebase-config.min.js?v=secure-orders-20260612" defer></script>
-    <script src="script.min.js?v=gallery-lightbox-history-20260701" defer></script>
+    <script src="script.min.js?v=taxonomy-20260701" defer></script>
   </body>
 </html>

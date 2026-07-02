@@ -7,13 +7,26 @@
     { id: "books", label: "كتب وطقوس" }
   ];
 
+  const taxonomy = window.POPE_KYRILLOS_TAXONOMY || null;
+  const taxonomyCategories = taxonomy?.categories || [];
+  const legacyCategoryToMainCategory = {
+    brass: "altar-tools",
+    candles: "candles-incense",
+    vestments: "church-vestments",
+    icons: "icons-frames",
+    books: "books-rituals"
+  };
+
   const state = {
     products: [],
     selectedId: "",
     fileHandle: null,
     dirty: false,
     search: "",
-    categoryFilter: "all"
+    categoryFilter: "all",
+    mainCategoryFilter: "all",
+    subCategoryFilter: "all",
+    needsReviewOnly: false
   };
 
   const elements = {
@@ -22,6 +35,9 @@
     productList: document.querySelector("[data-product-list]"),
     search: document.querySelector("[data-search]"),
     categoryFilter: document.querySelector("[data-category-filter]"),
+    mainCategoryFilter: document.querySelector("[data-main-category-filter]"),
+    subCategoryFilter: document.querySelector("[data-sub-category-filter]"),
+    needsReviewFilter: document.querySelector("[data-needs-review-filter]"),
     editor: document.querySelector("[data-editor]"),
     editorEmpty: document.querySelector("[data-editor-empty]"),
     editorTitle: document.querySelector("[data-editor-title]"),
@@ -468,6 +484,30 @@
     }
   }
 
+  function normalizeMainCategoryValue(value, legacyCategory = "") {
+    if (!value) return legacyCategoryToMainCategory[legacyCategory] || "uncategorized";
+    return taxonomy?.categoryIdFromName?.(value) || (taxonomy?.categoryById?.has(value) ? value : "uncategorized");
+  }
+
+  function normalizeSubCategoryValue(value) {
+    if (!value) return "needs-review";
+    return taxonomy?.subcategoryIdFromName?.(value) || (taxonomy?.subcategoryById?.has(value) ? value : "needs-review");
+  }
+
+  function mainCategoryName(product) {
+    const id = normalizeMainCategoryValue(product.mainCategory, product.category);
+    return taxonomy?.categoryNameFromId?.(id) || product.mainCategory || "غير مصنف";
+  }
+
+  function subCategoryName(product) {
+    const id = normalizeSubCategoryValue(product.subCategory);
+    return taxonomy?.subcategoryNameFromId?.(id) || product.subCategory || "يحتاج مراجعة";
+  }
+
+  function needsReview(product) {
+    return mainCategoryName(product) === "غير مصنف" || subCategoryName(product) === "يحتاج مراجعة";
+  }
+
   function setProducts(products, message) {
     state.products = Array.isArray(products) ? products : [];
     state.selectedId = state.products[0]?.id || "";
@@ -477,22 +517,72 @@
   }
 
   function fillCategorySelects() {
-    const categorySelect = elements.editor.querySelector("[data-field='category']");
-    categorySelect.innerHTML = categories.map((category) => `<option value="${escapeHtml(category.id)}">${escapeHtml(category.label)}</option>`).join("");
-    fillCategoryFilter();
+  const categorySelect = elements.editor.querySelector("[data-field='category']");
+  categorySelect.innerHTML = categories.map((category) => `<option value="${escapeHtml(category.id)}">${escapeHtml(category.label)}</option>`).join("");
+  const mainSelect = elements.editor.querySelector("[data-field='mainCategory']");
+  if (mainSelect) {
+    mainSelect.innerHTML = taxonomyCategories.map((category) => `<option value="${escapeHtml(category.name)}">${escapeHtml(category.name)}</option>`).join("");
   }
+  fillCategoryFilter();
+  fillMainCategoryFilter();
+  fillSubCategoryFilter();
+}
 
   function fillCategoryFilter() {
+  const counts = new Map();
+  state.products.forEach((product) => {
+    counts.set(product.category, (counts.get(product.category) || 0) + 1);
+  });
+
+  elements.categoryFilter.innerHTML = [
+    `<option value="all">كل الأقسام القديمة (${state.products.length})</option>`,
+    ...categories.map((category) => `<option value="${category.id}">${category.label} (${counts.get(category.id) || 0})</option>`)
+  ].join("");
+  elements.categoryFilter.value = state.categoryFilter;
+}
+
+  function fillMainCategoryFilter() {
+    if (!elements.mainCategoryFilter) return;
     const counts = new Map();
     state.products.forEach((product) => {
-      counts.set(product.category, (counts.get(product.category) || 0) + 1);
+      const name = mainCategoryName(product);
+      counts.set(name, (counts.get(name) || 0) + 1);
     });
-
-    elements.categoryFilter.innerHTML = [
-      `<option value="all">كل الأقسام (${state.products.length})</option>`,
-      ...categories.map((category) => `<option value="${category.id}">${category.label} (${counts.get(category.id) || 0})</option>`)
+    elements.mainCategoryFilter.innerHTML = [
+      `<option value="all">كل الأقسام الرئيسية (${state.products.length})</option>`,
+      ...taxonomyCategories.map((category) => `<option value="${escapeHtml(category.name)}">${escapeHtml(category.name)} (${counts.get(category.name) || 0})</option>`)
     ].join("");
-    elements.categoryFilter.value = state.categoryFilter;
+    elements.mainCategoryFilter.value = state.mainCategoryFilter;
+  }
+
+  function fillSubCategoryFilter() {
+    if (!elements.subCategoryFilter) return;
+    const selectedMain = state.mainCategoryFilter === "all" ? "" : state.mainCategoryFilter;
+    const subcategories = selectedMain
+      ? taxonomy?.getSubcategories?.(selectedMain) || []
+      : taxonomyCategories.flatMap((category) => category.subcategories || []);
+    const counts = new Map();
+    state.products.forEach((product) => {
+      const name = subCategoryName(product);
+      counts.set(name, (counts.get(name) || 0) + 1);
+    });
+    elements.subCategoryFilter.innerHTML = [
+      `<option value="all">كل الأقسام الفرعية</option>`,
+      ...subcategories.map((subcategory) => `<option value="${escapeHtml(subcategory.name)}">${escapeHtml(subcategory.name)} (${counts.get(subcategory.name) || 0})</option>`)
+    ].join("");
+    elements.subCategoryFilter.value = state.subCategoryFilter;
+  }
+
+  function fillSubCategorySelect(product) {
+    const mainSelect = elements.editor.querySelector("[data-field='mainCategory']");
+    const subSelect = elements.editor.querySelector("[data-field='subCategory']");
+    if (!subSelect) return;
+    const mainValue = mainSelect?.value || product?.mainCategory || "غير مصنف";
+    const subcategories = taxonomy?.getSubcategories?.(mainValue) || taxonomy?.getSubcategories?.("غير مصنف") || [];
+    subSelect.innerHTML = subcategories.map((subcategory) => `<option value="${escapeHtml(subcategory.name)}">${escapeHtml(subcategory.name)}</option>`).join("");
+    const current = product?.subCategory || subcategories[0]?.name || "";
+    subSelect.value = subcategories.some((item) => item.name === current) ? current : subcategories[0]?.name || "";
+    if (product && subSelect.value && product.subCategory !== subSelect.value) product.subCategory = subSelect.value;
   }
 
   function renderAll(message) {
@@ -508,50 +598,55 @@
   }
 
   function renderProductList() {
-    if (!state.products.length) {
-      elements.productList.innerHTML = `<div class="empty-state">لا توجد منتجات محملة.</div>`;
-      return;
-    }
-
-    const products = filteredProducts();
-    if (!products.length) {
-      elements.productList.innerHTML = `<div class="empty-state">لا توجد نتائج بهذا البحث.</div>`;
-      return;
-    }
-
-    elements.productList.innerHTML = products.map((product) => {
-      const category = categories.find((item) => item.id === product.category)?.label || product.category || "بدون قسم";
-      const selected = product.id === state.selectedId ? " active" : "";
-      const price = product.price ? `${formatNumber(product.price)} ج.م` : "بدون سعر";
-      return `
-        <button class="product-list-item${selected}" type="button" data-select-product="${escapeHtml(product.id)}">
-          <strong>${escapeHtml(product.name || "منتج بدون اسم")}</strong>
-          <span>${escapeHtml(category)} - ${escapeHtml(product.label || "بدون تصنيف")}</span>
-          <small>${escapeHtml(price)}</small>
-        </button>
-      `;
-    }).join("");
-
-    elements.productList.querySelectorAll("[data-select-product]").forEach((button) => {
-      button.addEventListener("click", () => {
-        state.selectedId = button.dataset.selectProduct;
-        renderProductList();
-        renderEditor();
-      });
-    });
+  if (!state.products.length) {
+    elements.productList.innerHTML = `<div class="empty-state">لا توجد منتجات محملة.</div>`;
+    return;
   }
+
+  const products = filteredProducts();
+  if (!products.length) {
+    elements.productList.innerHTML = `<div class="empty-state">لا توجد منتجات تطابق الفلاتر.</div>`;
+    return;
+  }
+
+  elements.productList.innerHTML = products.map((product) => {
+    const legacyCategory = categories.find((item) => item.id === product.category)?.label || product.category || "قسم قديم";
+    const taxonomyLine = `${mainCategoryName(product)} / ${subCategoryName(product)}`;
+    const selected = product.id === state.selectedId ? " active" : "";
+    const price = product.price ? `${formatNumber(product.price)} ج.م` : "بدون سعر";
+    const reviewBadge = needsReview(product) ? " - يحتاج مراجعة" : "";
+    return `
+      <button class="product-list-item${selected}" type="button" data-select-product="${escapeHtml(product.id)}">
+        <strong>${escapeHtml(product.name || "منتج بدون اسم")}</strong>
+        <span>${escapeHtml(taxonomyLine)}${escapeHtml(reviewBadge)}</span>
+        <small>${escapeHtml(legacyCategory)} - ${escapeHtml(price)}</small>
+      </button>
+    `;
+  }).join("");
+
+  elements.productList.querySelectorAll("[data-select-product]").forEach((button) => {
+    button.addEventListener("click", () => {
+      state.selectedId = button.dataset.selectProduct;
+      renderProductList();
+      renderEditor();
+    });
+  });
+}
 
   function filteredProducts() {
-    return state.products.filter((product) => {
-      const searchText = [product.id, product.name, product.label, product.badge, product.description]
-        .filter(Boolean)
-        .join(" ")
-        .toLowerCase();
-      const matchesSearch = !state.search || searchText.includes(state.search);
-      const matchesCategory = state.categoryFilter === "all" || product.category === state.categoryFilter;
-      return matchesSearch && matchesCategory;
-    });
-  }
+  return state.products.filter((product) => {
+    const searchText = [product.id, product.name, product.label, product.badge, product.description, product.mainCategory, product.subCategory, ...(product.tags || [])]
+      .filter(Boolean)
+      .join(" ")
+      .toLowerCase();
+    const matchesSearch = !state.search || searchText.includes(state.search);
+    const matchesCategory = state.categoryFilter === "all" || product.category === state.categoryFilter;
+    const matchesMain = state.mainCategoryFilter === "all" || mainCategoryName(product) === state.mainCategoryFilter;
+    const matchesSub = state.subCategoryFilter === "all" || subCategoryName(product) === state.subCategoryFilter;
+    const matchesReview = !state.needsReviewOnly || needsReview(product);
+    return matchesSearch && matchesCategory && matchesMain && matchesSub && matchesReview;
+  });
+}
 
   function renderEditor() {
     const product = currentProduct();
@@ -568,6 +663,9 @@
     setValue("id", product.id);
     setValue("category", product.category);
     setValue("label", product.label);
+    setValue("mainCategory", product.mainCategory);
+    fillSubCategorySelect(product);
+    setValue("subCategory", product.subCategory);
     setValue("badge", product.badge);
     setValue("stock", product.stock || "متاح");
     setValue("price", product.price ?? "");
@@ -661,68 +759,84 @@
   }
 
   function updateProductField(product, element) {
-    const field = element.dataset.field;
-    const value = element.value;
+  const field = element.dataset.field;
+  const value = element.value;
 
-    if (field === "id") {
-      const oldId = product.id;
-      product.id = slugLike(value) || oldId;
-      state.selectedId = product.id;
-      elements.editorId.textContent = `الكود: ${product.id}`;
-      renderProductList();
-      return;
-    }
-
-    if (field === "price") {
-      product.price = numberOrNull(value) ?? 0;
-      syncSingleDefaultVariant(product);
-      renderProductList();
-      return;
-    }
-
-    if (field === "images") {
-      product.images = parseImageLines(value);
-      syncNormalizedFieldValue(element, product.images);
-      product.image = product.images[0] || "";
-      renderImagePreview(product.images);
-      return;
-    }
-
-    if (field === "tags") {
-      product.tags = parseLines(value);
-      return;
-    }
-
-    if (field === "options") {
-      try {
-        product.options = JSON.parse(value || "[]");
-        element.setCustomValidity("");
-      } catch {
-        element.setCustomValidity("صيغة JSON غير صحيحة");
-      }
-      return;
-    }
-
-    product[field] = value;
-
-    if (field === "name") {
-      elements.editorTitle.textContent = product.name || "منتج بدون اسم";
-      renderProductList();
-    }
-
-    if (field === "category" || field === "label" || field === "badge") {
-      fillCategoryFilter();
-      renderProductList();
-    }
-
-    if (field === "stock") {
-      const available = value !== "غير متاح حاليا";
-      product.variants.forEach((variant) => {
-        if (variant.available !== available && product.variants.length === 1) variant.available = available;
-      });
-      renderVariants(product);
-    }
+  if (field === "id") {
+    const oldId = product.id;
+    product.id = slugLike(value) || oldId;
+    state.selectedId = product.id;
+    elements.editorId.textContent = `المعرف: ${product.id}`;
+    renderProductList();
+    return;
   }
+
+  if (field === "price") {
+    product.price = numberOrNull(value) ?? 0;
+    syncSingleDefaultVariant(product);
+    renderProductList();
+    return;
+  }
+
+  if (field === "images") {
+    product.images = parseImageLines(value);
+    syncNormalizedFieldValue(element, product.images);
+    product.image = product.images[0] || "";
+    renderImagePreview(product.images);
+    return;
+  }
+
+  if (field === "tags") {
+    product.tags = parseLines(value);
+    return;
+  }
+
+  if (field === "mainCategory") {
+    product.mainCategory = value;
+    fillSubCategorySelect(product);
+    fillMainCategoryFilter();
+    fillSubCategoryFilter();
+    renderProductList();
+    return;
+  }
+
+  if (field === "subCategory") {
+    product.subCategory = value;
+    fillSubCategoryFilter();
+    renderProductList();
+    return;
+  }
+
+  if (field === "options") {
+    try {
+      product.options = JSON.parse(value || "[]");
+      element.setCustomValidity("");
+    } catch {
+      element.setCustomValidity("صيغة JSON غير صحيحة");
+    }
+    return;
+  }
+
+  product[field] = value;
+
+  if (field === "name") {
+    elements.editorTitle.textContent = product.name || "منتج بدون اسم";
+    renderProductList();
+  }
+
+  if (field === "category" || field === "label" || field === "badge") {
+    fillCategoryFilter();
+    renderProductList();
+  }
+
+  if (field === "stock") {
+    const available = value !== "غير متاح حاليا";
+    product.variants.forEach((variant) => {
+      if (variant.available !== available && product.variants.length === 1) variant.available = available;
+    });
+    renderVariants(product);
+  }
+}
 
   function updateVariantField(product, element) {
     const card = element.closest("[data-variant-index]");
@@ -860,11 +974,13 @@
   }
 
   function ensureProductShape(product) {
-    product.images = Array.isArray(product.images) ? product.images : [product.image].filter(Boolean);
-    product.tags = Array.isArray(product.tags) ? product.tags : [];
-    product.options = Array.isArray(product.options) ? product.options : [];
-    product.variants = Array.isArray(product.variants) ? product.variants : [];
-  }
+  product.images = Array.isArray(product.images) ? product.images : [product.image].filter(Boolean);
+  product.tags = Array.isArray(product.tags) ? product.tags : [];
+  product.options = Array.isArray(product.options) ? product.options : [];
+  product.variants = Array.isArray(product.variants) ? product.variants : [];
+  product.mainCategory = mainCategoryName(product);
+  product.subCategory = subCategoryName(product);
+}
 
   function createVariant(product, index = 1) {
     return {
@@ -889,25 +1005,28 @@
   }
 
   function normalizeProducts(products) {
-    return deepClone(products).map((product) => {
-      ensureProductShape(product);
-      product.id = slugLike(product.id || product.name || `custom-${Date.now()}`);
-      product.name = product.name || "منتج بدون اسم";
-      product.category = product.category || "brass";
-      product.label = product.label || categories.find((category) => category.id === product.category)?.label || "";
-      product.price = numberOrNull(product.price) ?? 0;
-      product.priceNote = product.priceNote || "";
-      product.stock = product.stock || "متاح";
-      product.badge = product.badge || product.label || "";
-      product.tags = unique(product.tags || []);
-      product.images = unique((product.images || []).map(normalizeImagePath).filter(Boolean));
-      product.image = product.images[0] || normalizeImagePath(product.image) || "";
-      product.url = product.url || `https://popekyrillos.store/?product=${product.id}`;
-      product.variants = product.variants.length ? product.variants : [createVariant(product)];
-      product.variants = product.variants.map((variant, index) => normalizeVariant(product, variant, index));
-      return product;
-    });
-  }
+  return deepClone(products).map((product) => {
+    ensureProductShape(product);
+    product.id = slugLike(product.id || product.name || `custom-${Date.now()}`);
+    product.name = product.name || "منتج بدون اسم";
+    product.category = product.category || "brass";
+    product.label = product.label || categories.find((category) => category.id === product.category)?.label || "";
+    product.mainCategory = mainCategoryName(product);
+    product.subCategory = subCategoryName(product);
+    if (!product.mainCategory || !product.subCategory) throw new Error("لا يمكن حفظ منتج بدون قسم رئيسي وفرعي.");
+    product.price = numberOrNull(product.price) ?? 0;
+    product.priceNote = product.priceNote || "";
+    product.stock = product.stock || "متاح";
+    product.badge = product.badge || product.label || product.subCategory || "";
+    product.tags = unique(product.tags || []);
+    product.images = unique((product.images || []).map(normalizeImagePath).filter(Boolean));
+    product.image = product.images[0] || normalizeImagePath(product.image) || "";
+    product.url = product.url || `https://popekyrillos.store/?product=${product.id}`;
+    product.variants = product.variants.length ? product.variants : [createVariant(product)];
+    product.variants = product.variants.map((variant, index) => normalizeVariant(product, variant, index));
+    return product;
+  });
+}
 
   function normalizeVariant(product, variant, index) {
     const images = unique((variant.images || [variant.image].filter(Boolean)).map(normalizeImagePath).filter(Boolean));

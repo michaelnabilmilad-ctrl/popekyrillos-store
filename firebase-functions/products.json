@@ -13,7 +13,10 @@
     "url": "https://popekyrillos.store/en/products/علبة-بخور-نحاس-ذهبي-بصليب",
     "tags": [
       "نحاسيات",
-      "علب بخور"
+      "علب بخور",
+      "brass",
+      "الشمع والبخور",
+      "أطقم بخور"
     ],
     "images": [
       "assets/products/gallery/001-10123915690291-01.jpg",
@@ -32,7 +35,9 @@
         "image": null,
         "sku": ""
       }
-    ]
+    ],
+    "mainCategory": "الشمع والبخور",
+    "subCategory": "أطقم بخور"
   },
   {
     "id": "old-10123914805555",
@@ -48,7 +53,10 @@
     "url": "https://popekyrillos.store/en/products/علبة-بخور-نحاس-فضي-بصليب",
     "tags": [
       "نحاسيات",
-      "علب بخور"
+      "علب بخور",
+      "brass",
+      "الشمع والبخور",
+      "أطقم بخور"
     ],
     "images": [
       "assets/products/gallery/002-10123914805555-01.jpg",
@@ -67,7 +75,9 @@
         "image": null,
         "sku": ""
       }
-    ]
+    ],
+    "mainCategory": "الشمع والبخور",
+    "subCategory": "أطقم بخور"
   },
   {
     "id": "old-10123913003315",
@@ -83,7 +93,10 @@
     "url": "https://popekyrillos.store/en/products/علبة-بخور-نحاس-فضي-فص-ملون",
     "tags": [
       "نحاسيات",
-      "علب بخور"
+      "علب بخور",
+      "brass",
+      "الشمع والبخور",
+      "أطقم بخور"
     ],
     "images": [
       "assets/products/gallery/003-10123913003315-01.jpg",
@@ -103,7 +116,9 @@
         "image": null,
         "sku": ""
       }
-    ]
+    ],
+    "mainCategory": "الشمع والبخور",
+    "subCategory": "أطقم بخور"
   },
   {
     "id": "old-10121340551475",
@@ -120,7 +135,10 @@
     "tags": [
       "دفوف وتريانتو",
       "الحجم",
-      "المقاس"
+      "المقاس",
+      "brass",
+      "أدوات المذبح",
+      "أدوات خدمة"
     ],
     "images": [
       "assets/products/gallery/004-10121340551475-01.jpg"
@@ -172,7 +190,9 @@
         "image": null,
         "sku": ""
       }
-    ]
+    ],
+    "mainCategory": "أدوات المذبح",
+    "subCategory": "أدوات خدمة"
   },
   {
     "id": "old-10121339568435",
@@ -189,7 +209,10 @@
     "tags": [
       "دفوف وتريانتو",
       "الحجم",
-      "المقاس"
+      "المقاس",
+      "brass",
+      "أدوات المذبح",
+      "أدوات خدمة"
     ],
     "images": [
       "assets/products/gallery/005-10121339568435-03.jpg",
@@ -295,7 +318,9 @@
         "image": null,
         "sku": ""
       }
-    ]
+    ],
+    "mainCategory": "أدوات المذبح",
+    "subCategory": "أدوات خدمة"
   },
   {
     "id": "old-10121173303603",
@@ -314,7 +339,10 @@
       "جرابات كتاب مقدس",
       "الحجم",
       "اللون",
-      "المقاس"
+      "المقاس",
+      "books",
+      "الكتب والطقوس",
+      "كتب طقسية"
     ],
     "images": [
       "assets/products/gallery/006-10121173303603-01.jpg",
@@ -666,7 +694,9 @@
         "image": "assets/products/gallery/006-10121173303603-12.jpg",
         "sku": ""
       }
-    ]
+    ],
+    "mainCategory": "الكتب والطقوس",
+    "subCategory": "كتب طقسية"
   },
   {
     "id": "old-10120837660979",
@@ -681,7 +711,10 @@
     "image": "assets/products/gallery/007-10120837660979-01.jpg",
     "url": "https://popekyrillos.store/en/products/صليب-زفة-نحاس-طبقتين-بفصوص-ملونة",
     "tags": [
-      "صلبان زفة"
+      "صلبان زفة",
+      "brass",
+      "أدوات المذبح",
+      "صلبان مذبح"
     ],
     "images": [
       "assets/products/gallery/007-10120837660979-01.jpg",
@@ -700,7 +733,9 @@
         "image": null,
         "sku": ""
       }
-    ]
+    ],
+    "mainCategory": "أدوات المذبح",
+    "subCategory": "صلبان مذبح"
   },
   {
     "id": "old-10120837300531",
@@ -715,7 +750,10 @@
     "image": "assets/products/gallery/008-10120837300531-01.jpg",
     "url": "https://popekyrillos.store/en/products/صليب-زفة-نحاس-طبقتين",
     "tags": [
-      "صلبان زفة"
+      "صلبان زفة",
+      "brass",
+      "أدوات المذبح",
+      "صلبان مذبح"
     ],
     "images": [
       "assets/products/gallery/008-10120837300531-01.jpg",
@@ -734,7 +772,9 @@
         "image": null,
         "sku": ""
       }
-    ]
+    ],
+    "mainCategory": "أدوات المذبح",
+    "subCategory": "صلبان مذبح"
   },
   {
     "id": "old-10120836481331",
@@ -749,7 +789,10 @@
     "image": "assets/products/gallery/009-10120836481331-01.jpg",
     "url": "https://popekyrillos.store/en/products/صليب-زفة-نحاس-رفيع-بفص-ألوان",
     "tags": [
-      "صلبان زفة"
+      "صلبان زفة",
+      "brass",
+      "أدوات المذبح",
+      "صلبان مذبح"
     ],
     "images": [
       "assets/products/gallery/009-10120836481331-01.jpg",
@@ -768,7 +811,9 @@
         "image": null,
         "sku": ""
       }
-    ]
+    ],
+    "mainCategory": "أدوات المذبح",
+    "subCategory": "صلبان مذبح"
   },
   {
     "id": "old-10120836317491",
@@ -783,7 +828,10 @@
     "image": "assets/products/gallery/010-10120836317491-01.jpg",
     "url": "https://popekyrillos.store/en/products/صليب-زفة-نحاس-أركت-بالمصلوب",
     "tags": [
-      "صلبان زفة"
+      "صلبان زفة",
+      "brass",
+      "أدوات المذبح",
+      "صلبان مذبح"
     ],
     "images": [
       "assets/products/gallery/010-10120836317491-01.jpg",
@@ -802,7 +850,9 @@
         "image": null,
         "sku": ""
       }
-    ]
+    ],
+    "mainCategory": "أدوات المذبح",
+    "subCategory": "صلبان مذبح"
   },
   {
     "id": "old-10120834908467",
@@ -817,7 +867,10 @@
     "image": "assets/products/gallery/011-10120834908467-01.jpg",
     "url": "https://popekyrillos.store/en/products/صليب-زفة-نحاس-أركت-ذهبي",
     "tags": [
-      "صلبان زفة"
+      "صلبان زفة",
+      "brass",
+      "أدوات المذبح",
+      "صلبان مذبح"
     ],
     "images": [
       "assets/products/gallery/011-10120834908467-01.jpg",
@@ -835,7 +888,9 @@
         "image": null,
         "sku": ""
       }
-    ]
+    ],
+    "mainCategory": "أدوات المذبح",
+    "subCategory": "صلبان مذبح"
   },
   {
     "id": "old-10070727688499",
@@ -851,7 +906,10 @@
     "url": "https://popekyrillos.store/en/products/شمعدان-مذبح-كبير",
     "tags": [
       "شموع وبخور",
-      "شغل شحن"
+      "شغل شحن",
+      "candles",
+      "أدوات المذبح",
+      "شمعدانات"
     ],
     "images": [
       "assets/products/gallery/012-10070727688499-01.jpg",
@@ -873,7 +931,9 @@
         "image": null,
         "sku": ""
       }
-    ]
+    ],
+    "mainCategory": "أدوات المذبح",
+    "subCategory": "شمعدانات"
   },
   {
     "id": "old-10070727000371",
@@ -889,7 +949,10 @@
     "url": "https://popekyrillos.store/en/products/شمعة-شحن",
     "tags": [
       "شغل شحن",
-      "اللون"
+      "اللون",
+      "brass",
+      "الشمع والبخور",
+      "شموع"
     ],
     "images": [
       "assets/products/gallery/013-10070727000371-01.jpg",
@@ -932,7 +995,9 @@
         "image": "assets/products/gallery/013-10070727000371-02.jpg",
         "sku": ""
       }
-    ]
+    ],
+    "mainCategory": "الشمع والبخور",
+    "subCategory": "شموع"
   },
   {
     "id": "old-10070726574387",
@@ -947,7 +1012,10 @@
     "image": "assets/products/gallery/014-10070726574387-01.jpg",
     "url": "https://popekyrillos.store/en/products/شمعة-شماس-شكل-صليب",
     "tags": [
-      "شغل شحن"
+      "شغل شحن",
+      "brass",
+      "الشمع والبخور",
+      "شموع"
     ],
     "images": [
       "assets/products/gallery/014-10070726574387-01.jpg",
@@ -965,7 +1033,9 @@
         "image": null,
         "sku": ""
       }
-    ]
+    ],
+    "mainCategory": "الشمع والبخور",
+    "subCategory": "شموع"
   },
   {
     "id": "old-10070704980275",
@@ -982,7 +1052,10 @@
     "tags": [
       "شموع وبخور",
       "شغل شحن",
-      "اللون"
+      "اللون",
+      "candles",
+      "أدوات المذبح",
+      "شمعدانات"
     ],
     "images": [
       "assets/products/gallery/015-10070704980275-01.jpg",
@@ -1036,7 +1109,9 @@
         "image": null,
         "sku": ""
       }
-    ]
+    ],
+    "mainCategory": "أدوات المذبح",
+    "subCategory": "شمعدانات"
   },
   {
     "id": "old-10070671687987",
@@ -1053,7 +1128,10 @@
     "tags": [
       "شغل شحن",
       "color",
-      "اللون"
+      "اللون",
+      "brass",
+      "أدوات المذبح",
+      "صلبان مذبح"
     ],
     "images": [
       "assets/products/gallery/016-10070671687987-01.jpg",
@@ -1110,7 +1188,9 @@
         "image": "assets/products/gallery/016-10070671687987-04.jpg",
         "sku": ""
       }
-    ]
+    ],
+    "mainCategory": "أدوات المذبح",
+    "subCategory": "صلبان مذبح"
   },
   {
     "id": "old-10068218806579",
@@ -1125,7 +1205,10 @@
     "image": "assets/products/gallery/017-10068218806579-01.jpg",
     "url": "https://popekyrillos.store/en/products/حُق-ذخيرة-كبير-نحاس-مطلي-نيكل",
     "tags": [
-      "حُق ذخيرة"
+      "حُق ذخيرة",
+      "brass",
+      "أدوات المذبح",
+      "ذخائر وعلب"
     ],
     "images": [
       "assets/products/gallery/017-10068218806579-01.jpg",
@@ -1145,7 +1228,9 @@
         "image": null,
         "sku": ""
       }
-    ]
+    ],
+    "mainCategory": "أدوات المذبح",
+    "subCategory": "ذخائر وعلب"
   },
   {
     "id": "old-10068217561395",
@@ -1160,7 +1245,10 @@
     "image": "assets/products/gallery/018-10068217561395-01.jpg",
     "url": "https://popekyrillos.store/en/products/حُق-ذخيرة-صغير-نحاس-مطلي-نيكل",
     "tags": [
-      "حُق ذخيرة"
+      "حُق ذخيرة",
+      "brass",
+      "أدوات المذبح",
+      "ذخائر وعلب"
     ],
     "images": [
       "assets/products/gallery/018-10068217561395-01.jpg",
@@ -1180,7 +1268,9 @@
         "image": null,
         "sku": ""
       }
-    ]
+    ],
+    "mainCategory": "أدوات المذبح",
+    "subCategory": "ذخائر وعلب"
   },
   {
     "id": "old-10068215628083",
@@ -1195,7 +1285,10 @@
     "image": "assets/products/gallery/019-10068215628083-01.jpg",
     "url": "https://popekyrillos.store/en/products/حُق-ذخيرة-استانلس-صغير-1",
     "tags": [
-      "حُق ذخيرة"
+      "حُق ذخيرة",
+      "brass",
+      "أدوات المذبح",
+      "ذخائر وعلب"
     ],
     "images": [
       "assets/products/gallery/019-10068215628083-01.jpg",
@@ -1215,7 +1308,9 @@
         "image": null,
         "sku": ""
       }
-    ]
+    ],
+    "mainCategory": "أدوات المذبح",
+    "subCategory": "ذخائر وعلب"
   },
   {
     "id": "old-10068213006643",
@@ -1230,7 +1325,10 @@
     "image": "assets/products/gallery/020-10068213006643-01.jpg",
     "url": "https://popekyrillos.store/en/products/حُق-ذخيرة-استانلس-وسط",
     "tags": [
-      "حُق ذخيرة"
+      "حُق ذخيرة",
+      "brass",
+      "أدوات المذبح",
+      "ذخائر وعلب"
     ],
     "images": [
       "assets/products/gallery/020-10068213006643-01.jpg",
@@ -1251,7 +1349,9 @@
         "image": null,
         "sku": ""
       }
-    ]
+    ],
+    "mainCategory": "أدوات المذبح",
+    "subCategory": "ذخائر وعلب"
   },
   {
     "id": "old-10068212646195",
@@ -1266,7 +1366,10 @@
     "image": "assets/products/gallery/021-10068212646195-01.jpg",
     "url": "https://popekyrillos.store/en/products/حُق-ذخيرة-استانلس-صغير",
     "tags": [
-      "حُق ذخيرة"
+      "حُق ذخيرة",
+      "brass",
+      "أدوات المذبح",
+      "ذخائر وعلب"
     ],
     "images": [
       "assets/products/gallery/021-10068212646195-01.jpg",
@@ -1286,7 +1389,9 @@
         "image": null,
         "sku": ""
       }
-    ]
+    ],
+    "mainCategory": "أدوات المذبح",
+    "subCategory": "ذخائر وعلب"
   },
   {
     "id": "old-10067794067763",
@@ -1303,7 +1408,10 @@
     "tags": [
       "إبريق نحاس",
       "الحجم",
-      "المقاس"
+      "المقاس",
+      "brass",
+      "أدوات المذبح",
+      "أواني المذبح"
     ],
     "images": [
       "assets/products/gallery/022-10067794067763-01.jpg",
@@ -1359,7 +1467,9 @@
         "image": null,
         "sku": ""
       }
-    ]
+    ],
+    "mainCategory": "أدوات المذبح",
+    "subCategory": "أواني المذبح"
   },
   {
     "id": "old-10067690586419",
@@ -1375,7 +1485,10 @@
     "url": "https://popekyrillos.store/en/products/علبة-بخور-من-النحاس-شكل-دائري",
     "tags": [
       "نحاسيات",
-      "علب بخور"
+      "علب بخور",
+      "brass",
+      "الشمع والبخور",
+      "أطقم بخور"
     ],
     "images": [
       "assets/products/gallery/023-10067690586419-01.jpg",
@@ -1395,7 +1508,9 @@
         "image": null,
         "sku": ""
       }
-    ]
+    ],
+    "mainCategory": "الشمع والبخور",
+    "subCategory": "أطقم بخور"
   },
   {
     "id": "old-10067690225971",
@@ -1411,7 +1526,10 @@
     "url": "https://popekyrillos.store/en/products/علبة-بخور-نحاس-علي-شكل-صليب",
     "tags": [
       "نحاسيات",
-      "علب بخور"
+      "علب بخور",
+      "brass",
+      "الشمع والبخور",
+      "أطقم بخور"
     ],
     "images": [
       "assets/products/gallery/024-10067690225971-01.jpg",
@@ -1432,7 +1550,9 @@
         "image": null,
         "sku": ""
       }
-    ]
+    ],
+    "mainCategory": "الشمع والبخور",
+    "subCategory": "أطقم بخور"
   },
   {
     "id": "old-10067689472307",
@@ -1448,7 +1568,10 @@
     "url": "https://popekyrillos.store/en/products/علبة-بخور-نحاس-علي-شكل-صندوق-كنز",
     "tags": [
       "نحاسيات",
-      "علب بخور"
+      "علب بخور",
+      "brass",
+      "الشمع والبخور",
+      "أطقم بخور"
     ],
     "images": [
       "assets/products/gallery/025-10067689472307-01.jpg",
@@ -1469,7 +1592,9 @@
         "image": null,
         "sku": ""
       }
-    ]
+    ],
+    "mainCategory": "الشمع والبخور",
+    "subCategory": "أطقم بخور"
   },
   {
     "id": "old-10067686162739",
@@ -1487,7 +1612,10 @@
       "نحاسيات",
       "علب بخور",
       "الحجم",
-      "المقاس"
+      "المقاس",
+      "brass",
+      "الشمع والبخور",
+      "أطقم بخور"
     ],
     "images": [
       "assets/products/gallery/026-10067686162739-01.jpg",
@@ -1545,7 +1673,9 @@
         "image": null,
         "sku": ""
       }
-    ]
+    ],
+    "mainCategory": "الشمع والبخور",
+    "subCategory": "أطقم بخور"
   },
   {
     "id": "old-10062404354355",
@@ -1561,7 +1691,10 @@
     "url": "https://popekyrillos.store/en/products/علبة-بخور-نحاس-صغيرة-شكل-مستطيل",
     "tags": [
       "نحاسيات",
-      "علب بخور"
+      "علب بخور",
+      "brass",
+      "الشمع والبخور",
+      "أطقم بخور"
     ],
     "images": [
       "assets/products/gallery/027-10062404354355-01.jpg",
@@ -1583,7 +1716,9 @@
         "image": null,
         "sku": ""
       }
-    ]
+    ],
+    "mainCategory": "الشمع والبخور",
+    "subCategory": "أطقم بخور"
   },
   {
     "id": "old-10062400258355",
@@ -1599,7 +1734,10 @@
     "url": "https://popekyrillos.store/en/products/علبة-بخور-نحاس-كبيرة-شكل-مستطيل",
     "tags": [
       "نحاسيات",
-      "علب بخور"
+      "علب بخور",
+      "brass",
+      "الشمع والبخور",
+      "أطقم بخور"
     ],
     "images": [
       "assets/products/gallery/028-10062400258355-01.jpg",
@@ -1620,7 +1758,9 @@
         "image": null,
         "sku": ""
       }
-    ]
+    ],
+    "mainCategory": "الشمع والبخور",
+    "subCategory": "أطقم بخور"
   },
   {
     "id": "reliquary-tubes-papa-kyrillos",
@@ -1638,7 +1778,10 @@
       "نحاسيات",
       "أنابيب",
       "رفات",
-      "خشب زان"
+      "خشب زان",
+      "brass",
+      "أدوات المذبح",
+      "ذخائر وعلب"
     ],
     "images": [
       "assets/products/reliquary-tubes-papa-kyrillos.jpg"
@@ -1746,7 +1889,9 @@
           "assets/products/reliquary-tubes-papa-kyrillos.jpg"
         ]
       }
-    ]
+    ],
+    "mainCategory": "أدوات المذبح",
+    "subCategory": "ذخائر وعلب"
   },
   {
     "id": "incense-chat-1500-kg",
@@ -1762,8 +1907,10 @@
     "url": "",
     "tags": [
       "شموع وبخور",
+      "الوزن",
+      "candles",
       "بخور",
-      "الوزن"
+      "الشمع والبخور"
     ],
     "images": [
       "assets/products/incense-chat-v2.png"
@@ -1841,7 +1988,9 @@
         "image": "assets/products/incense-chat-v2.png",
         "sku": ""
       }
-    ]
+    ],
+    "mainCategory": "الشمع والبخور",
+    "subCategory": "بخور"
   },
   {
     "id": "old-9840433955123",
@@ -1856,7 +2005,10 @@
     "image": "assets/products/gallery/034-9840433955123-01.jpg",
     "url": "https://popekyrillos.store/en/products/زوج-شمعدان-نحاس-ذهبي-كهرباء",
     "tags": [
-      "شموع وبخور"
+      "شموع وبخور",
+      "candles",
+      "أدوات المذبح",
+      "شمعدانات"
     ],
     "images": [
       "assets/products/gallery/034-9840433955123-01.jpg",
@@ -1875,7 +2027,9 @@
         "image": null,
         "sku": ""
       }
-    ]
+    ],
+    "mainCategory": "أدوات المذبح",
+    "subCategory": "شمعدانات"
   },
   {
     "id": "old-9840425500979",
@@ -1890,7 +2044,10 @@
     "image": "assets/products/gallery/035-9840425500979-01.jpg",
     "url": "https://popekyrillos.store/en/products/شمعدان-نحاس-ذهبي-سوستة",
     "tags": [
-      "شموع وبخور"
+      "شموع وبخور",
+      "candles",
+      "أدوات المذبح",
+      "شمعدانات"
     ],
     "images": [
       "assets/products/gallery/035-9840425500979-01.jpg",
@@ -1910,7 +2067,9 @@
         "image": null,
         "sku": ""
       }
-    ]
+    ],
+    "mainCategory": "أدوات المذبح",
+    "subCategory": "شمعدانات"
   },
   {
     "id": "old-9840420749619",
@@ -1925,7 +2084,10 @@
     "image": "assets/products/gallery/036-9840420749619-01.jpg",
     "url": "https://popekyrillos.store/en/products/زوج-شمعدان-نحاس-ذهبي-شكل-الوردة-صغير",
     "tags": [
-      "شموع وبخور"
+      "شموع وبخور",
+      "candles",
+      "أدوات المذبح",
+      "شمعدانات"
     ],
     "images": [
       "assets/products/gallery/036-9840420749619-01.jpg",
@@ -1946,7 +2108,9 @@
         "image": null,
         "sku": ""
       }
-    ]
+    ],
+    "mainCategory": "أدوات المذبح",
+    "subCategory": "شمعدانات"
   },
   {
     "id": "old-9840413475123",
@@ -1961,7 +2125,10 @@
     "image": "assets/products/gallery/037-9840413475123-01.jpg",
     "url": "https://popekyrillos.store/en/products/زوج-شمعدان-نحاس-ذهبي-شكل-الخروف",
     "tags": [
-      "شموع وبخور"
+      "شموع وبخور",
+      "candles",
+      "أدوات المذبح",
+      "شمعدانات"
     ],
     "images": [
       "assets/products/gallery/037-9840413475123-01.jpg",
@@ -1982,7 +2149,9 @@
         "image": null,
         "sku": ""
       }
-    ]
+    ],
+    "mainCategory": "أدوات المذبح",
+    "subCategory": "شمعدانات"
   },
   {
     "id": "old-9840407806259",
@@ -1997,7 +2166,10 @@
     "image": "assets/products/gallery/038-9840407806259-01.jpg",
     "url": "https://popekyrillos.store/en/products/زوج-شمعدان-برج-إيفل-نحاس-ذهبي-ثقيل",
     "tags": [
-      "شموع وبخور"
+      "شموع وبخور",
+      "candles",
+      "أدوات المذبح",
+      "شمعدانات"
     ],
     "images": [
       "assets/products/gallery/038-9840407806259-01.jpg",
@@ -2019,7 +2191,9 @@
         "image": null,
         "sku": ""
       }
-    ]
+    ],
+    "mainCategory": "أدوات المذبح",
+    "subCategory": "شمعدانات"
   },
   {
     "id": "old-9762774024499",
@@ -2034,7 +2208,10 @@
     "image": "assets/products/gallery/039-9762774024499-01.jpg",
     "url": "https://popekyrillos.store/en/products/بشارة-ذهبي-يوناني",
     "tags": [
-      "نحاسيات"
+      "نحاسيات",
+      "brass",
+      "أدوات المذبح",
+      "أدوات خدمة"
     ],
     "images": [
       "assets/products/gallery/039-9762774024499-01.jpg",
@@ -2054,7 +2231,9 @@
         "image": null,
         "sku": ""
       }
-    ]
+    ],
+    "mainCategory": "أدوات المذبح",
+    "subCategory": "أدوات خدمة"
   },
   {
     "id": "old-9762760196403",
@@ -2071,7 +2250,10 @@
     "tags": [
       "شموع وبخور",
       "الحجم",
-      "المقاس"
+      "المقاس",
+      "candles",
+      "الشمع والبخور",
+      "بخور"
     ],
     "images": [
       "assets/products/gallery/040-9762760196403-01.jpg",
@@ -2113,7 +2295,9 @@
         "image": "assets/products/gallery/040-9762760196403-02.jpg",
         "sku": ""
       }
-    ]
+    ],
+    "mainCategory": "الشمع والبخور",
+    "subCategory": "بخور"
   },
   {
     "id": "old-9762682011955",
@@ -2129,7 +2313,10 @@
     "url": "https://popekyrillos.store/en/products/طقم-أواني-مذبح-ذهبي-يوناني",
     "tags": [
       "نحاسيات",
-      "حجم الكأس"
+      "حجم الكأس",
+      "brass",
+      "أدوات المذبح",
+      "أواني المذبح"
     ],
     "images": [
       "assets/products/gallery/041-9762682011955-01.jpg",
@@ -2172,7 +2359,9 @@
         "image": "assets/products/gallery/041-9762682011955-02.jpg",
         "sku": ""
       }
-    ]
+    ],
+    "mainCategory": "أدوات المذبح",
+    "subCategory": "أواني المذبح"
   },
   {
     "id": "old-9757475930419",
@@ -2187,7 +2376,10 @@
     "image": "assets/products/gallery/042-9757475930419-01.jpg",
     "url": "https://popekyrillos.store/en/products/أيقونة-صليب-صدر-يوناني-ذهبي",
     "tags": [
-      "أيقونات وهدايا"
+      "أيقونات وهدايا",
+      "icons",
+      "الأيقونات والبراويز",
+      "أيقونات صغيرة"
     ],
     "images": [
       "assets/products/gallery/042-9757475930419-01.jpg"
@@ -2204,7 +2396,9 @@
         "image": null,
         "sku": "123"
       }
-    ]
+    ],
+    "mainCategory": "الأيقونات والبراويز",
+    "subCategory": "أيقونات صغيرة"
   },
   {
     "id": "stole-red-gold-01",
@@ -2220,9 +2414,11 @@
     "url": "https://popekyrillos.store/products/stole-red-gold-01",
     "tags": [
       "أقمشة ومفارش",
-      "بطرشيلات",
       "الطول",
-      "التفصيل"
+      "التفصيل",
+      "vestments",
+      "بطرشيلات",
+      "الملابس الكنسية"
     ],
     "images": [
       "assets/products/gallery/stole-01.jpg"
@@ -2431,7 +2627,9 @@
         "image": "assets/products/gallery/stole-01.jpg",
         "sku": ""
       }
-    ]
+    ],
+    "mainCategory": "الملابس الكنسية",
+    "subCategory": "بطرشيلات"
   },
   {
     "id": "stole-red-gold-02",
@@ -2447,9 +2645,11 @@
     "url": "https://popekyrillos.store/products/stole-red-gold-02",
     "tags": [
       "أقمشة ومفارش",
-      "بطرشيلات",
       "الطول",
-      "التفصيل"
+      "التفصيل",
+      "vestments",
+      "بطرشيلات",
+      "الملابس الكنسية"
     ],
     "images": [
       "assets/products/gallery/stole-02.jpg"
@@ -2658,7 +2858,9 @@
         "image": "assets/products/gallery/stole-02.jpg",
         "sku": ""
       }
-    ]
+    ],
+    "mainCategory": "الملابس الكنسية",
+    "subCategory": "بطرشيلات"
   },
   {
     "id": "stole-red-gold-03",
@@ -2674,9 +2876,11 @@
     "url": "https://popekyrillos.store/products/stole-red-gold-03",
     "tags": [
       "أقمشة ومفارش",
-      "بطرشيلات",
       "الطول",
-      "التفصيل"
+      "التفصيل",
+      "vestments",
+      "بطرشيلات",
+      "الملابس الكنسية"
     ],
     "images": [
       "assets/products/gallery/stole-03.jpg"
@@ -2885,7 +3089,9 @@
         "image": "assets/products/gallery/stole-03.jpg",
         "sku": ""
       }
-    ]
+    ],
+    "mainCategory": "الملابس الكنسية",
+    "subCategory": "بطرشيلات"
   },
   {
     "id": "stole-red-gold-04",
@@ -2901,9 +3107,11 @@
     "url": "https://popekyrillos.store/products/stole-red-gold-04",
     "tags": [
       "أقمشة ومفارش",
-      "بطرشيلات",
       "الطول",
-      "التفصيل"
+      "التفصيل",
+      "vestments",
+      "بطرشيلات",
+      "الملابس الكنسية"
     ],
     "images": [
       "assets/products/gallery/stole-04.jpg"
@@ -3112,6 +3320,8 @@
         "image": "assets/products/gallery/stole-04.jpg",
         "sku": ""
       }
-    ]
+    ],
+    "mainCategory": "الملابس الكنسية",
+    "subCategory": "بطرشيلات"
   }
 ]

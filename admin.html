@@ -41,6 +41,17 @@
           <select data-category-filter aria-label="فلترة حسب القسم">
             <option value="all">كل الأقسام</option>
           </select>
+          <select data-main-category-filter aria-label="فلترة حسب القسم الرئيسي">
+            <option value="all">كل الأقسام الرئيسية</option>
+          </select>
+          <select data-sub-category-filter aria-label="فلترة حسب القسم الفرعي">
+            <option value="all">كل الأقسام الفرعية</option>
+          </select>
+          <label class="check-row compact">
+            <input type="checkbox" data-needs-review-filter>
+            <span>منتجات تحتاج مراجعة</span>
+          </label>
+
           <button class="button small ghost" type="button" data-action="sort-name">ترتيب بالاسم</button>
         </div>
 
@@ -87,6 +98,15 @@
                 <span>التصنيف الفرعي</span>
                 <input type="text" data-field="label" placeholder="مثلاً: صلبان زفة">
               </label>
+              <label>
+                <span>القسم الرئيسي الجديد</span>
+                <select data-field="mainCategory" required></select>
+              </label>
+              <label>
+                <span>القسم الفرعي الجديد</span>
+                <select data-field="subCategory" required></select>
+              </label>
+
               <label>
                 <span>شارة الصورة</span>
                 <input type="text" data-field="badge" placeholder="مثلاً: بخور">
@@ -183,6 +203,7 @@
     <input type="file" data-image-upload accept="image/*" hidden>
     <div class="toast" data-toast hidden></div>
 
-    <script src="admin.js?v=admin-image-paths-2-20260628" defer></script>
+    <script src="category-taxonomy.js?v=taxonomy-20260701" defer></script>
+    <script src="admin.js?v=taxonomy-20260701" defer></script>
   </body>
 </html>

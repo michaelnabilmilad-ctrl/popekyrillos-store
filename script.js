@@ -111,6 +111,7 @@ const productGrid = document.querySelector("[data-products]");
 const loadMoreButton = document.querySelector("[data-load-more]");
 const filterButtons = document.querySelectorAll("[data-filter]");
 const searchInput = document.querySelector("#product-search");
+const mainFilterSelect = document.querySelector("[data-main-filter]");
 const labelFilterSelect = document.querySelector("[data-label-filter]");
 const priceFilterSelect = document.querySelector("[data-price-filter]");
 const sortFilterSelect = document.querySelector("[data-sort-filter]");
@@ -222,6 +223,8 @@ const translations = {
     catalogEyebrow: "الكتالوج",
     catalogTitle: "منتجات مختارة للطلب",
     searchPlaceholder: "ابحث عن منتج",
+    filterMainLabel: "القسم الرئيسي",
+    mainAll: "كل الأقسام الرئيسية",
     filterLabelLabel: "القسم الفرعي",
     labelAll: "كل الأقسام الفرعية",
     filterPriceLabel: "السعر",
@@ -476,6 +479,8 @@ const translations = {
     catalogEyebrow: "Catalog",
     catalogTitle: "Selected products to order",
     searchPlaceholder: "Search products",
+    filterMainLabel: "Main category",
+    mainAll: "All main categories",
     filterLabelLabel: "Subcategory",
     labelAll: "All subcategories",
     filterPriceLabel: "Price",
@@ -710,6 +715,17 @@ const catalogLabelOrder = {
   icons: ["صلبان وهدايا", "أيقونات وهدايا"],
   books: ["كتب وطقوس"]
 };
+const taxonomy = window.POPE_KYRILLOS_TAXONOMY || null;
+const taxonomyCategories = taxonomy?.customerCategories?.() || [];
+const taxonomyCategoryOrder = taxonomyCategories.map((category) => category.id);
+const legacyCategoryToMainCategory = {
+  brass: "altar-tools",
+  candles: "candles-incense",
+  vestments: "church-vestments",
+  icons: "icons-frames",
+  books: "books-rituals"
+};
+
 const featuredProductOrder = [
   "صليب زفة نحاس طبقتين بفصوص ملونة",
   "صليب زفة نحاس طبقتين",
@@ -897,14 +913,70 @@ function setLabelText(label, text) {
 
 function applyCategoryLanguage() {
   filterButtons.forEach((button) => {
-    const copy = categoryCopy[button.dataset.filter]?.[state.language];
-    if (!copy) return;
-    const [title, subtitle] = copy;
+    const filter = normalizeCategoryFilter(button.dataset.filter || "all");
+    if (filter === "all") {
+      const copy = categoryCopy.all?.[state.language] || [t("shopMenuAll"), ""];
+      button.dataset.filter = "all";
+      const strong = button.querySelector("strong");
+      const small = button.querySelector("small");
+      if (strong) strong.textContent = copy[0];
+      if (small) small.textContent = copy[1];
+      return;
+    }
+
+    const category = taxonomy?.categoryById?.get(filter);
+    if (!category) return;
+    button.dataset.filter = filter;
     const strong = button.querySelector("strong");
     const small = button.querySelector("small");
-    if (strong) strong.textContent = title;
-    if (small) small.textContent = subtitle;
+    if (strong) strong.textContent = localized(category.name);
+    if (small) small.textContent = localized(category.description || "");
+    const href = button.getAttribute("href") || "";
+    if (!href.startsWith("/category/")) button.setAttribute("href", `/category/${filter}#catalog`);
   });
+}
+
+function normalizeCategoryFilter(category = "all") {
+  if (!category || category === "all") return "all";
+  if (taxonomy?.categoryById?.has(category)) return category;
+  return legacyCategoryToMainCategory[category] || "all";
+}
+
+function productMainCategoryId(product) {
+  const raw = product?.mainCategory || "";
+  return taxonomy?.categoryIdFromName?.(raw) || (taxonomy?.categoryById?.has(raw) ? raw : "") || legacyCategoryToMainCategory[product?.category] || "uncategorized";
+}
+
+function productMainCategoryName(product) {
+  const id = productMainCategoryId(product);
+  return taxonomy?.categoryNameFromId?.(id) || product?.mainCategory || product?.category || "";
+}
+
+function productSubCategoryId(product) {
+  const raw = product?.subCategory || "";
+  const fromNew = taxonomy?.subcategoryIdFromName?.(raw) || (taxonomy?.subcategoryById?.has(raw) ? raw : "");
+  if (fromNew) return fromNew;
+  const fromLabel = taxonomy?.subcategoryIdFromName?.(product?.label || "");
+  return fromLabel || "needs-review";
+}
+
+function productSubCategoryName(product) {
+  const id = productSubCategoryId(product);
+  return taxonomy?.subcategoryNameFromId?.(id) || product?.subCategory || product?.label || "";
+}
+
+function productMatchesCategory(product, category = "all") {
+  const normalized = normalizeCategoryFilter(category);
+  return normalized === "all" || productMainCategoryId(product) === normalized;
+}
+
+function productMatchesSubcategory(product, subcategory = "") {
+  if (!subcategory) return true;
+  return productSubCategoryId(product) === subcategory || product?.subCategory === subcategory || product?.label === subcategory;
+}
+
+function visibleMainCategories() {
+  return taxonomyCategories.length ? taxonomyCategories : catalogCategoryOrder.map((id) => ({ id, name: categoryCopy[id]?.ar?.[0] || id, description: categoryCopy[id]?.ar?.[1] || "", subcategories: [] }));
 }
 
 function availableProducts() {
@@ -912,6 +984,13 @@ function availableProducts() {
 }
 
 function orderedLabelsForCategory(category) {
+  const normalized = normalizeCategoryFilter(category);
+  const categoryMeta = taxonomy?.categoryById?.get(normalized);
+  if (categoryMeta) {
+    return categoryMeta.subcategories
+      .filter((subcategory) => availableProducts().some((product) => productMainCategoryId(product) === normalized && productSubCategoryId(product) === subcategory.id));
+  }
+
   const labels = [...new Set(availableProducts().filter((product) => product.category === category).map((product) => product.label).filter(Boolean))];
   const preferred = catalogLabelOrder[category] || [];
   return labels.sort((first, second) => {
@@ -919,31 +998,46 @@ function orderedLabelsForCategory(category) {
     const secondRank = rankFromList(preferred, second);
     if (firstRank !== secondRank) return firstRank - secondRank;
     return localized(first).localeCompare(localized(second), isEnglish() ? "en" : "ar");
-  });
+  }).map((label) => ({ id: label, name: label }));
 }
 
 function productsForCurrentCategory() {
   const category = state.filter || "all";
-  return availableProducts().filter((product) => category === "all" || product.category === category);
+  return availableProducts().filter((product) => productMatchesCategory(product, category));
 }
 
 function orderedLabelsForCurrentFilter() {
-  const labels = [...new Set(productsForCurrentCategory().map((product) => product.label).filter(Boolean))];
-  const preferred = state.filter === "all"
-    ? Object.values(catalogLabelOrder).flat()
-    : catalogLabelOrder[state.filter] || [];
-  return labels.sort((first, second) => {
-    const firstRank = rankFromList(preferred, first);
-    const secondRank = rankFromList(preferred, second);
-    if (firstRank !== secondRank) return firstRank - secondRank;
-    return localized(first).localeCompare(localized(second), isEnglish() ? "en" : "ar");
+  const normalized = normalizeCategoryFilter(state.filter || "all");
+  if (normalized !== "all") return orderedLabelsForCategory(normalized);
+
+  const labels = [];
+  visibleMainCategories().forEach((category) => {
+    orderedLabelsForCategory(category.id).forEach((subcategory) => {
+      if (!labels.some((item) => item.id === subcategory.id)) labels.push(subcategory);
+    });
   });
+  return labels;
+}
+
+function renderMainFilterOptions() {
+  if (!mainFilterSelect) return;
+  const selected = normalizeCategoryFilter(state.filter || "all");
+  const allOption = new Option(t("mainAll"), "all");
+  mainFilterSelect.replaceChildren(allOption);
+
+  visibleMainCategories().forEach((category) => {
+    const count = availableProducts().filter((product) => productMainCategoryId(product) === category.id).length;
+    if (!count) return;
+    mainFilterSelect.append(new Option(`${localized(category.name)} (${displayText(formatter.format(count))})`, category.id));
+  });
+
+  mainFilterSelect.value = [...mainFilterSelect.options].some((option) => option.value === selected) ? selected : "all";
 }
 
 function renderLabelFilterOptions() {
   if (!labelFilterSelect) return;
   const labels = orderedLabelsForCurrentFilter();
-  if (state.labelFilter && !labels.includes(state.labelFilter)) {
+  if (state.labelFilter && !labels.some((label) => label.id === state.labelFilter || label.name === state.labelFilter)) {
     state.labelFilter = "";
   }
 
@@ -951,23 +1045,24 @@ function renderLabelFilterOptions() {
   allOption.dataset.labelOptionAll = "";
   labelFilterSelect.replaceChildren(allOption);
   labels.forEach((label) => {
-    const count = productsForCurrentCategory().filter((product) => product.label === label).length;
-    labelFilterSelect.append(new Option(`${localized(label)} (${displayText(formatter.format(count))})`, label));
+    const count = productsForCurrentCategory().filter((product) => productMatchesSubcategory(product, label.id)).length;
+    labelFilterSelect.append(new Option(`${localized(label.name)} (${displayText(formatter.format(count))})`, label.id));
   });
   labelFilterSelect.value = state.labelFilter || "";
 }
 
 function updateFilterButtons() {
+  renderMainFilterOptions();
   filterButtons.forEach((item) => {
-    const active = state.filter === "all"
-      ? item.dataset.filter === "all"
-      : item.dataset.filter === state.filter;
+    const itemFilter = normalizeCategoryFilter(item.dataset.filter || "all");
+    const active = normalizeCategoryFilter(state.filter || "all") === itemFilter;
     item.classList.toggle("active", active);
   });
 }
 
 function updateCatalogFilterText() {
   const textMap = {
+    "[data-filter-main-label]": "filterMainLabel",
     "[data-filter-label-label]": "filterLabelLabel",
     "[data-filter-price-label]": "filterPriceLabel",
     "[data-filter-sort-label]": "filterSortLabel",
@@ -989,32 +1084,31 @@ function updateCatalogFilterText() {
 
 function renderShopMenu() {
   if (!shopMenuList) return;
-  const categories = catalogCategoryOrder.filter((category) => availableProducts().some((product) => product.category === category));
+  const categories = visibleMainCategories().filter((category) => availableProducts().some((product) => productMainCategoryId(product) === category.id));
   const allCount = availableProducts().length;
   const groups = categories
     .map((category) => {
-      const copy = categoryCopy[category]?.[state.language] || [category, ""];
-      const labels = orderedLabelsForCategory(category);
-      const categoryCount = availableProducts().filter((product) => product.category === category).length;
+      const labels = orderedLabelsForCategory(category.id);
+      const categoryCount = availableProducts().filter((product) => productMainCategoryId(product) === category.id).length;
       const labelButtons = labels
         .map((label) => {
-          const labelCount = availableProducts().filter((product) => product.category === category && product.label === label).length;
-          const active = state.filter === category && state.labelFilter === label;
+          const labelCount = availableProducts().filter((product) => productMainCategoryId(product) === category.id && productMatchesSubcategory(product, label.id)).length;
+          const active = normalizeCategoryFilter(state.filter) === category.id && state.labelFilter === label.id;
           return `
-            <button class="shop-subcategory ${active ? "active" : ""}" type="button" data-shop-category="${escapeHtml(category)}" data-shop-label="${escapeHtml(label)}">
-              <span>${escapeHtml(localized(label))}</span>
+            <button class="shop-subcategory ${active ? "active" : ""}" type="button" data-shop-category="${escapeHtml(category.id)}" data-shop-label="${escapeHtml(label.id)}">
+              <span>${escapeHtml(localized(label.name))}</span>
               <small>${displayText(formatter.format(labelCount))}</small>
             </button>
           `;
         })
         .join("");
-      const activeCategory = state.filter === category && !state.labelFilter;
+      const activeCategory = normalizeCategoryFilter(state.filter) === category.id && !state.labelFilter;
       return `
         <section class="shop-menu-group">
-          <button class="shop-category ${activeCategory ? "active" : ""}" type="button" data-shop-category="${escapeHtml(category)}">
+          <button class="shop-category ${activeCategory ? "active" : ""}" type="button" data-shop-category="${escapeHtml(category.id)}">
             <span>
-              <strong>${escapeHtml(copy[0])}</strong>
-              <small>${escapeHtml(copy[1])}</small>
+              <strong>${escapeHtml(localized(category.name))}</strong>
+              <small>${escapeHtml(localized(category.description || ""))}</small>
             </span>
             <em>${displayText(formatter.format(categoryCount))}</em>
           </button>
@@ -1025,7 +1119,7 @@ function renderShopMenu() {
     .join("");
 
   shopMenuList.innerHTML = `
-    <button class="shop-category shop-category-all ${state.filter === "all" ? "active" : ""}" type="button" data-shop-category="all">
+    <button class="shop-category shop-category-all ${normalizeCategoryFilter(state.filter) === "all" ? "active" : ""}" type="button" data-shop-category="all">
       <span>
         <strong>${escapeHtml(t("shopMenuAll"))}</strong>
         <small>${escapeHtml(categoryCopy.all[state.language][1])}</small>
@@ -1310,20 +1404,32 @@ function clearProductImageUrl({ replace = true } = {}) {
 
 function catalogFilterFromUrl() {
   const url = new URL(window.location.href);
-  const category = url.searchParams.get("category") || "all";
-  const validCategory = category === "all" || catalogCategoryOrder.includes(category) ? category : "all";
-  return {
-    category: validCategory,
-    label: url.searchParams.get("label") || ""
-  };
+  const pathSegments = url.pathname.split("/").filter(Boolean).map((part) => decodeURIComponent(part));
+  if (pathSegments[0] === "category") {
+    const category = normalizeCategoryFilter(pathSegments[1] || "all");
+    const subcategory = pathSegments[2] || "";
+    return { category, label: taxonomy?.subcategoryById?.has(subcategory) ? subcategory : "" };
+  }
+
+  const category = normalizeCategoryFilter(url.searchParams.get("category") || "all");
+  const label = url.searchParams.get("subcategory") || url.searchParams.get("label") || "";
+  const subcategoryId = taxonomy?.subcategoryIdFromName?.(label) || (taxonomy?.subcategoryById?.has(label) ? label : label);
+  return { category, label: subcategoryId };
 }
 
 function categoryShareUrl(category = "all", label = "") {
   const url = new URL(window.location.href);
   url.searchParams.delete("product");
-  url.searchParams.set("category", category || "all");
-  if (label) url.searchParams.set("label", label);
-  else url.searchParams.delete("label");
+  url.searchParams.delete("image");
+  url.searchParams.delete("category");
+  url.searchParams.delete("label");
+  url.searchParams.delete("subcategory");
+  const normalized = normalizeCategoryFilter(category);
+  if (normalized === "all") {
+    url.pathname = "/";
+  } else {
+    url.pathname = `/category/${normalized}${label ? `/${label}` : ""}`;
+  }
   url.hash = "catalog";
   return url.toString();
 }
@@ -1835,10 +1941,12 @@ function getFilteredProducts() {
     .map((product, index) => ({ product, index }))
     .filter(({ product }) => {
       if (!hasAvailableVariant(product)) return false;
-      const matchesCategory = state.filter === "all" || product.category === state.filter;
-      const matchesLabel = !state.labelFilter || product.label === state.labelFilter;
+      const matchesCategory = productMatchesCategory(product, state.filter);
+      const matchesLabel = productMatchesSubcategory(product, state.labelFilter);
       const tags = Array.isArray(product.tags) ? product.tags.join(" ") : "";
-      const text = `${product.name} ${product.label} ${localized(product.label)} ${product.description} ${tags} ${localized(tags)}`.toLowerCase();
+      const mainCategory = productMainCategoryName(product);
+      const subCategory = productSubCategoryName(product);
+      const text = `${product.name} ${product.label} ${localized(product.label)} ${mainCategory} ${subCategory} ${product.description} ${tags} ${localized(tags)}`.toLowerCase();
       return matchesCategory && matchesLabel && matchesPriceFilter(product) && (!query || text.includes(query));
     })
     .sort(compareFilteredProducts)
@@ -1846,6 +1954,8 @@ function getFilteredProducts() {
 }
 
 function syncCatalogFilterControls() {
+  renderMainFilterOptions();
+  if (mainFilterSelect) mainFilterSelect.value = normalizeCategoryFilter(state.filter || "all");
   renderLabelFilterOptions();
   if (labelFilterSelect) labelFilterSelect.value = state.labelFilter || "";
   if (priceFilterSelect) priceFilterSelect.value = state.priceFilter;
@@ -3323,20 +3433,20 @@ function updateFloatingShopButton() {
 }
 
 function applyCatalogFilter(category = "all", label = "", { updateUrl = true, scroll = true, replaceUrl = false } = {}) {
-  state.filter = category;
+  state.filter = normalizeCategoryFilter(category);
   state.labelFilter = label;
   state.visibleProductCount = productBatchSize;
   updateFilterButtons();
   renderProducts();
   renderShopMenu();
   closeShopMenu();
-  if (updateUrl) setCatalogUrl(category, label, { replace: replaceUrl });
+  if (updateUrl) setCatalogUrl(state.filter, label, { replace: replaceUrl });
   if (scroll) document.querySelector("#catalog")?.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
 function applyCatalogFilterFromUrl({ render = true, scroll = false } = {}) {
   const { category, label } = catalogFilterFromUrl();
-  state.filter = category;
+  state.filter = normalizeCategoryFilter(category);
   state.labelFilter = label;
   state.visibleProductCount = productBatchSize;
   updateFilterButtons();
@@ -3448,6 +3558,10 @@ priceFilterSelect?.addEventListener("change", (event) => {
   state.priceFilter = event.target.value || "all";
   state.visibleProductCount = productBatchSize;
   renderProducts();
+});
+
+mainFilterSelect?.addEventListener("change", (event) => {
+  applyCatalogFilter(event.target.value || "all", "");
 });
 
 labelFilterSelect?.addEventListener("change", (event) => {

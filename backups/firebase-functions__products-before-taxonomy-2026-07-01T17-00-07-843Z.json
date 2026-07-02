@@ -1,388 +1,5 @@
 [
   {
-    "id": "custom-1782306615168-copy-1782306883366-copy-1782307173548-copy-1782307256776-copy-1782307341493-copy-1782310276272-copy-1782310382795-copy-1782310383710",
-    "name": "قطمارس البصخة – عربي – دير الشهيد العظيم مارمينا العجائبي بمريوط",
-    "category": "books",
-    "label": "قطمارس",
-    "description": "كتاب طقسي كنسي يضم قراءات أيام البصخة المقدسة باللغة العربية بحسب ترتيب الكنيسة القبطية الأرثوذكسية. إصدار دير مارمينا بمريوط، بغلاف أسود متين وكتابات ذهبية أنيقة، مناسب للاستخدام داخل الكنيسة وللخدام والشمامسة والمهتمين بالقراءات والطقوس الكنسية.\n\nالمقاس: 25 × 35 سم\nالغلاف: هارد كفر أسود\nالإصدار: دير الشهيد العظيم مارمينا العجائبي بمريوط",
-    "price": 700,
-    "priceNote": "",
-    "stock": "متاح",
-    "badge": "قطمارس",
-    "image": "assets/optimized/products/gallery/baskha-araby.webp",
-    "url": "https://popekyrillos.store/?product=custom-1782306615168-copy-1782306883366-copy-1782307173548-copy-1782307256776-copy-1782307341493-copy-1782310276272-copy-1782310382795-copy-1782310383710",
-    "tags": [
-      "كتب",
-      "كتاب مقدس",
-      "إنجيل",
-      "قراءات",
-      "books",
-      "قطمارس",
-      "الكتب والطقوس"
-    ],
-    "images": [
-      "assets/optimized/products/gallery/baskha-araby.webp",
-      "assets/optimized/products/gallery/som-araby.webp",
-      "assets/optimized/products/gallery/custom-1782306615168-copy-1782306883366-copy-1782307173548-copy-1782307256776-co-ahad-epty-20260628190711-75d37f.webp"
-    ],
-    "options": [],
-    "variants": [
-      {
-        "id": "custom-1782306615168-copy-1782306883366-copy-1782307173548-copy-1782307256776-copy-1782307341493-copy-1782310276272-copy-1782310382795-copy-1782310383710-variant-1",
-        "title": "الاختيار الافتراضي",
-        "options": {},
-        "price": 700,
-        "compareAtPrice": null,
-        "available": true,
-        "image": "assets/optimized/products/gallery/baskha-araby.webp",
-        "images": [
-          "assets/optimized/products/gallery/baskha-araby.webp"
-        ],
-        "sku": "",
-        "quantity": 10
-      }
-    ],
-    "mainCategory": "الكتب والطقوس",
-    "subCategory": "قطمارس"
-  },
-  {
-    "id": "custom-1782306615168-copy-1782306883366-copy-1782307173548-copy-1782307256776-copy-1782307341493-copy-1782310276272-copy-1782310382795",
-    "name": "قطمارس الصوم الكبير – عربي– دير الشهيد العظيم مارمينا العجائبي بمريوط - نسخة",
-    "category": "books",
-    "label": "قطمارس",
-    "description": "كتاب طقسي كنسي يضم قراءات أيام الصوم الكبير المقدس باللغة العربية بحسب ترتيب الكنيسة القبطية الأرثوذكسية. إصدار دير مارمينا بمريوط، بغلاف أسود متين وكتابات ذهبية أنيقة، مناسب للاستخدام داخل الكنيسة وللخدام والشمامسة والمهتمين بالقراءات والطقوس الكنسية.\n\nالمقاس: 25 × 35 سم\nالغلاف: هارد كفر أسود\nالإصدار: دير الشهيد العظيم مارمينا العجائبي بمريوط",
-    "price": 700,
-    "priceNote": "",
-    "stock": "متاح",
-    "badge": "قطمارس",
-    "image": "assets/optimized/products/gallery/som.araby.webp",
-    "url": "https://popekyrillos.store/?product=custom-1782306615168-copy-1782306883366-copy-1782307173548-copy-1782307256776-copy-1782307341493-copy-1782310276272-copy-1782310382795",
-    "tags": [
-      "كتب",
-      "كتاب مقدس",
-      "إنجيل",
-      "قراءات",
-      "books",
-      "قطمارس",
-      "الكتب والطقوس"
-    ],
-    "images": [
-      "assets/optimized/products/gallery/som.araby.webp"
-    ],
-    "options": [],
-    "variants": [
-      {
-        "id": "custom-1782306615168-copy-1782306883366-copy-1782307173548-copy-1782307256776-copy-1782307341493-copy-1782310276272-copy-1782310382795-variant-1",
-        "title": "الاختيار الافتراضي",
-        "options": {},
-        "price": 700,
-        "compareAtPrice": null,
-        "available": true,
-        "image": "assets/optimized/products/gallery/som-araby.webp",
-        "images": [
-          "assets/optimized/products/gallery/som-araby.webp"
-        ],
-        "sku": "",
-        "quantity": 10
-      }
-    ],
-    "mainCategory": "الكتب والطقوس",
-    "subCategory": "قطمارس"
-  },
-  {
-    "id": "custom-1782306615168-copy-1782306883366-copy-1782307173548-copy-1782307256776-copy-1782307341493-copy-1782310276272",
-    "name": "قطمارس الخمسين – قبطي – دير الشهيد العظيم مارمينا العجائبي بمريوط",
-    "category": "books",
-    "label": "قطمارس",
-    "description": "كتاب طقسي كنسي يضم قراءات أيام الخمسين المقدسة باللغة القبطية بحسب ترتيب الكنيسة القبطية الأرثوذكسية. إصدار دير مارمينا بمريوط، بغلاف أسود متين وكتابات ذهبية أنيقة، مناسب للاستخدام داخل الكنيسة وللخدام والشمامسة والمهتمين بالقراءات والطقوس الكنسية.\n\nالمقاس: 25 × 35 سم\nالغلاف: هارد كفر أسود\nالإصدار: دير الشهيد العظيم مارمينا العجائبي بمريوط",
-    "price": 700,
-    "priceNote": "",
-    "stock": "متاح",
-    "badge": "قطمارس",
-    "image": "assets/optimized/products/gallery/5amsin-2epty.webp",
-    "url": "https://popekyrillos.store/?product=custom-1782306615168-copy-1782306883366-copy-1782307173548-copy-1782307256776-copy-1782307341493-copy-1782310276272",
-    "tags": [
-      "كتب",
-      "كتاب مقدس",
-      "إنجيل",
-      "قراءات",
-      "books",
-      "قطمارس",
-      "الكتب والطقوس"
-    ],
-    "images": [
-      "assets/optimized/products/gallery/5amsin-2epty.webp"
-    ],
-    "options": [],
-    "variants": [
-      {
-        "id": "custom-1782306615168-copy-1782306883366-copy-1782307173548-copy-1782307256776-copy-1782307341493-copy-1782310276272-variant-1",
-        "title": "الاختيار الافتراضي",
-        "options": {},
-        "price": 700,
-        "compareAtPrice": null,
-        "available": true,
-        "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": 10
-      }
-    ],
-    "mainCategory": "الكتب والطقوس",
-    "subCategory": "قطمارس"
-  },
-  {
-    "id": "custom-1782306615168-copy-1782306883366-copy-1782307173548-copy-1782307256776-copy-1782307341493",
-    "name": "قطمارس الخمسين – عربي – دير الشهيد العظيم مارمينا العجائبي بمريوط",
-    "category": "books",
-    "label": "قطمارس",
-    "description": "كتاب طقسي كنسي يضم قراءات أيام الخمسين المقدسة باللغة العربية بحسب ترتيب الكنيسة القبطية الأرثوذكسية. إصدار دير مارمينا بمريوط، بغلاف أسود متين وكتابات ذهبية أنيقة، مناسب للاستخدام داخل الكنيسة وللخدام والشمامسة والمهتمين بالقراءات والطقوس الكنسية.\n\nالمقاس: 25 × 35 سم\nالغلاف: هارد كفر أسود\nالإصدار: دير الشهيد العظيم مارمينا العجائبي بمريوط",
-    "price": 600,
-    "priceNote": "",
-    "stock": "متاح",
-    "badge": "قطمارس",
-    "image": "assets/optimized/products/gallery/5amsin-araby.webp",
-    "url": "https://popekyrillos.store/?product=custom-1782306615168-copy-1782306883366-copy-1782307173548-copy-1782307256776-copy-1782307341493",
-    "tags": [
-      "كتب",
-      "كتاب مقدس",
-      "إنجيل",
-      "قراءات",
-      "books",
-      "قطمارس",
-      "الكتب والطقوس"
-    ],
-    "images": [
-      "assets/optimized/products/gallery/5amsin-araby.webp"
-    ],
-    "options": [],
-    "variants": [
-      {
-        "id": "custom-1782306615168-copy-1782306883366-copy-1782307173548-copy-1782307256776-copy-1782307341493-variant-1",
-        "title": "الاختيار الافتراضي",
-        "options": {},
-        "price": 600,
-        "compareAtPrice": null,
-        "available": true,
-        "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": 10
-      }
-    ],
-    "mainCategory": "الكتب والطقوس",
-    "subCategory": "قطمارس"
-  },
-  {
-    "id": "custom-1782306615168-copy-1782306883366-copy-1782307173548-copy-1782307256776",
-    "name": "قطمارس الآحاد – عربي – دير الشهيد العظيم مارمينا العجائبي بمريوط",
-    "category": "books",
-    "label": "قطمارس",
-    "description": "كتاب طقسي كنسي يضم قراءات أيام الآحاد السنوية باللغة العربية بحسب ترتيب الكنيسة القبطية الأرثوذكسية. إصدار دير مارمينا بمريوط، بغلاف أسود متين وكتابات ذهبية أنيقة، مناسب للاستخدام داخل الكنيسة وللخدام والشمامسة والمهتمين بالقراءات والطقوس الكنسية.\n\nالمقاس: 25 × 35 سم\nالغلاف: هارد كفر أسود\nالإصدار: دير الشهيد العظيم مارمينا العجائبي بمريوط",
-    "price": 600,
-    "priceNote": "",
-    "stock": "متاح",
-    "badge": "قطمارس",
-    "image": "assets/optimized/products/gallery/ahad-araby.webp",
-    "url": "https://popekyrillos.store/?product=custom-1782306615168-copy-1782306883366-copy-1782307173548-copy-1782307256776",
-    "tags": [
-      "كتب",
-      "كتاب مقدس",
-      "إنجيل",
-      "قراءات",
-      "books",
-      "قطمارس",
-      "الكتب والطقوس"
-    ],
-    "images": [
-      "assets/optimized/products/gallery/ahad-araby.webp"
-    ],
-    "options": [],
-    "variants": [
-      {
-        "id": "custom-1782306615168-copy-1782306883366-copy-1782307173548-copy-1782307256776-variant-1",
-        "title": "الاختيار الافتراضي",
-        "options": {},
-        "price": 600,
-        "compareAtPrice": null,
-        "available": true,
-        "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": 10
-      }
-    ],
-    "mainCategory": "الكتب والطقوس",
-    "subCategory": "قطمارس"
-  },
-  {
-    "id": "custom-1782306615168-copy-1782306883366-copy-1782307173548",
-    "name": "قطمارس الآحاد – قبطي – دير الشهيد العظيم مارمينا العجائبي بمريوط",
-    "category": "books",
-    "label": "قطمارس",
-    "description": "كتاب طقسي كنسي يضم قراءات أيام الآحاد السنوية باللغة القبطية  بحسب ترتيب الكنيسة القبطية الأرثوذكسية. إصدار دير مارمينا بمريوط، بغلاف أسود متين وكتابات ذهبية أنيقة، مناسب للاستخدام داخل الكنيسة وللخدام والشمامسة والمهتمين بالقراءات والطقوس الكنسية.\n\nالمقاس: 25 × 35 سم\nالغلاف: هارد كفر أسود\nالإصدار: دير الشهيد العظيم مارمينا العجائبي بمريوط",
-    "price": 700,
-    "priceNote": "",
-    "stock": "متاح",
-    "badge": "قطمارس",
-    "image": "assets/optimized/products/gallery/ahad-epty.webp",
-    "url": "https://popekyrillos.store/?product=custom-1782306615168-copy-1782306883366-copy-1782307173548",
-    "tags": [
-      "كتب",
-      "كتاب مقدس",
-      "إنجيل",
-      "قراءات",
-      "books",
-      "قطمارس",
-      "الكتب والطقوس"
-    ],
-    "images": [
-      "assets/optimized/products/gallery/ahad-epty.webp"
-    ],
-    "options": [],
-    "variants": [
-      {
-        "id": "custom-1782306615168-copy-1782306883366-copy-1782307173548-variant-1",
-        "title": "الاختيار الافتراضي",
-        "options": {},
-        "price": 700,
-        "compareAtPrice": null,
-        "available": true,
-        "image": "assets/optimized/products/gallery/ahad-epty.webp",
-        "images": [
-          "assets/optimized/products/gallery/ahad-epty.webp"
-        ],
-        "sku": "",
-        "quantity": 10
-      }
-    ],
-    "mainCategory": "الكتب والطقوس",
-    "subCategory": "قطمارس"
-  },
-  {
-    "id": "custom-1782306615168-copy-1782306883366",
-    "name": "قطمارس الأيام السنوي – قبطي – دير الشهيد العظيم مارمينا العجائبي بمريوط",
-    "category": "books",
-    "label": "قطمارس",
-    "description": "كتاب طقسي كنسي يضم قراءات الأيام السنوية دون الآحاد باللغة القبطية  بحسب ترتيب الكنيسة القبطية الأرثوذكسية. إصدار دير مارمينا بمريوط، بغلاف أسود متين وكتابات ذهبية أنيقة، مناسب للاستخدام داخل الكنيسة وللخدام والشمامسة والمهتمين بالقراءات والطقوس الكنسية.\n\nالمقاس: 25 × 35 سم\nالغلاف: هارد كفر أسود\nالإصدار: دير الشهيد العظيم مارمينا العجائبي بمريوط",
-    "price": 900,
-    "priceNote": "",
-    "stock": "متاح",
-    "badge": "قطمارس",
-    "image": "assets/optimized/products/gallery/ayam-sanawy-2epty.webp",
-    "url": "https://popekyrillos.store/?product=custom-1782306615168-copy-1782306883366",
-    "tags": [
-      "كتب",
-      "كتاب مقدس",
-      "إنجيل",
-      "قراءات",
-      "books",
-      "قطمارس",
-      "الكتب والطقوس"
-    ],
-    "images": [
-      "assets/optimized/products/gallery/ayam-sanawy-2epty.webp"
-    ],
-    "options": [],
-    "variants": [
-      {
-        "id": "custom-1782306615168-copy-1782306883366-variant-1",
-        "title": "الاختيار الافتراضي",
-        "options": {},
-        "price": 900,
-        "compareAtPrice": null,
-        "available": true,
-        "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": 10
-      }
-    ],
-    "mainCategory": "الكتب والطقوس",
-    "subCategory": "قطمارس"
-  },
-  {
-    "id": "custom-1782306615168",
-    "name": "قطمارس الأيام السنوي – عربي – نسخة دير الشهيد العظيم مارمينا العجائبي بمريوط",
-    "category": "books",
-    "label": "قطمارس",
-    "description": "كتاب طقسي كنسي يضم قراءات الأيام السنوية دون الآحاد باللغة العربية  بحسب ترتيب الكنيسة القبطية الأرثوذكسية. إصدار دير مارمينا بمريوط، بغلاف أسود متين وكتابات ذهبية أنيقة، مناسب للاستخدام داخل الكنيسة وللخدام والشمامسة والمهتمين بالقراءات والطقوس الكنسية.\n\nالمقاس: 25 × 35 سم\nالغلاف: هارد كفر أسود\nالإصدار: دير الشهيد العظيم مارمينا العجائبي بمريوط",
-    "price": 750,
-    "priceNote": "",
-    "stock": "متاح",
-    "badge": "قطمارس",
-    "image": "assets/optimized/products/gallery/ayam-sanawy-araby.webp",
-    "url": "https://popekyrillos.store/?product=custom-1782306615168",
-    "tags": [
-      "كتب",
-      "كتاب مقدس",
-      "إنجيل",
-      "قراءات",
-      "books",
-      "قطمارس",
-      "الكتب والطقوس"
-    ],
-    "images": [
-      "assets/optimized/products/gallery/ayam-sanawy-araby.webp"
-    ],
-    "options": [],
-    "variants": [
-      {
-        "id": "custom-1782306615168-variant-1782306615168-1",
-        "title": "الاختيار الافتراضي",
-        "options": {},
-        "price": 750,
-        "compareAtPrice": null,
-        "available": true,
-        "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": 10
-      }
-    ],
-    "mainCategory": "الكتب والطقوس",
-    "subCategory": "قطمارس"
-  },
-  {
-    "id": "custom-1782079632185",
-    "name": "شمع أيقونات",
-    "category": "candles",
-    "label": "شمع",
-    "description": "",
-    "price": 120,
-    "priceNote": "",
-    "stock": "متاح",
-    "badge": "شمع",
-    "image": "/assets/optimized/products/gallery/sham3.iconat.webp",
-    "url": "https://popekyrillos.store/?product=custom-1782079632185",
-    "tags": [
-      "شمع",
-      "candles",
-      "الشمع والبخور",
-      "شموع"
-    ],
-    "images": [
-      "/assets/optimized/products/gallery/sham3.iconat.webp"
-    ],
-    "options": [],
-    "variants": [
-      {
-        "id": "custom-1782079632185-variant-1782079632185-1",
-        "title": "الاختيار الافتراضي",
-        "options": {},
-        "price": 120,
-        "compareAtPrice": null,
-        "available": true,
-        "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": 1
-      }
-    ],
-    "mainCategory": "الشمع والبخور",
-    "subCategory": "شموع"
-  },
-  {
     "id": "old-10123915690291",
     "name": "علبة بخور نحاس ذهبي بصليب",
     "category": "brass",
@@ -390,21 +7,18 @@
     "description": "علبة بخور أنيقة مصنوعة من النحاس الذهبي بتصميم كلاسيكي راقي. تتميز بصليب من فوق جميل يضيف لمسة جمالية مميزة للمذبح. تجمع بين الأناقة والوظيفة.",
     "price": 900,
     "priceNote": "",
-    "stock": "متاح",
+    "stock": "غير متاح حاليا",
     "badge": "علب بخور",
-    "image": "assets/optimized/products/gallery/001-10123915690291-01.webp",
+    "image": "assets/products/gallery/001-10123915690291-01.jpg",
     "url": "https://popekyrillos.store/en/products/علبة-بخور-نحاس-ذهبي-بصليب",
     "tags": [
       "نحاسيات",
-      "علب بخور",
-      "brass",
-      "الشمع والبخور",
-      "أطقم بخور"
+      "علب بخور"
     ],
     "images": [
-      "assets/optimized/products/gallery/001-10123915690291-01.webp",
-      "assets/optimized/products/gallery/001-10123915690291-02.webp",
-      "assets/optimized/products/gallery/001-10123915690291-03.webp"
+      "assets/products/gallery/001-10123915690291-01.jpg",
+      "assets/products/gallery/001-10123915690291-02.jpg",
+      "assets/products/gallery/001-10123915690291-03.jpg"
     ],
     "options": [],
     "variants": [
@@ -414,15 +28,11 @@
         "options": {},
         "price": 900,
         "compareAtPrice": 1050,
-        "available": true,
+        "available": false,
         "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": 10
+        "sku": ""
       }
-    ],
-    "mainCategory": "الشمع والبخور",
-    "subCategory": "أطقم بخور"
+    ]
   },
   {
     "id": "old-10123914805555",
@@ -432,21 +42,18 @@
     "description": "علبة بخور أنيقة مصنوعة من النحاس الفضي بتصميم كلاسيكي راقي. تتميز بصليب من فوق جميل يضيف لمسة جمالية مميزة للمذبح. تجمع بين الأناقة والوظيفة.",
     "price": 720,
     "priceNote": "",
-    "stock": "متاح",
+    "stock": "غير متاح حاليا",
     "badge": "علب بخور",
-    "image": "assets/optimized/products/gallery/002-10123914805555-01.webp",
+    "image": "assets/products/gallery/002-10123914805555-01.jpg",
     "url": "https://popekyrillos.store/en/products/علبة-بخور-نحاس-فضي-بصليب",
     "tags": [
       "نحاسيات",
-      "علب بخور",
-      "brass",
-      "الشمع والبخور",
-      "أطقم بخور"
+      "علب بخور"
     ],
     "images": [
-      "assets/optimized/products/gallery/002-10123914805555-01.webp",
-      "assets/optimized/products/gallery/002-10123914805555-02.webp",
-      "assets/optimized/products/gallery/002-10123914805555-03.webp"
+      "assets/products/gallery/002-10123914805555-01.jpg",
+      "assets/products/gallery/002-10123914805555-02.jpg",
+      "assets/products/gallery/002-10123914805555-03.jpg"
     ],
     "options": [],
     "variants": [
@@ -458,13 +65,9 @@
         "compareAtPrice": 840,
         "available": false,
         "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": 10
+        "sku": ""
       }
-    ],
-    "mainCategory": "الشمع والبخور",
-    "subCategory": "أطقم بخور"
+    ]
   },
   {
     "id": "old-10123913003315",
@@ -474,22 +77,19 @@
     "description": "علبة بخور أنيقة مصنوعة من النحاس الفضي بتصميم كلاسيكي راقي. تتميز بفص ملون جميل يضيف لمسة جمالية مميزة للمذبح. تجمع بين الأناقة والوظيفة.",
     "price": 720,
     "priceNote": "",
-    "stock": "متاح",
+    "stock": "غير متاح حاليا",
     "badge": "علب بخور",
-    "image": "assets/optimized/products/gallery/003-10123913003315-01.webp",
+    "image": "assets/products/gallery/003-10123913003315-01.jpg",
     "url": "https://popekyrillos.store/en/products/علبة-بخور-نحاس-فضي-فص-ملون",
     "tags": [
       "نحاسيات",
-      "علب بخور",
-      "brass",
-      "الشمع والبخور",
-      "أطقم بخور"
+      "علب بخور"
     ],
     "images": [
-      "assets/optimized/products/gallery/003-10123913003315-01.webp",
-      "assets/optimized/products/gallery/003-10123913003315-02.webp",
-      "assets/optimized/products/gallery/003-10123913003315-03.webp",
-      "assets/optimized/products/gallery/003-10123913003315-04.webp"
+      "assets/products/gallery/003-10123913003315-01.jpg",
+      "assets/products/gallery/003-10123913003315-02.jpg",
+      "assets/products/gallery/003-10123913003315-03.jpg",
+      "assets/products/gallery/003-10123913003315-04.jpg"
     ],
     "options": [],
     "variants": [
@@ -499,15 +99,11 @@
         "options": {},
         "price": 720,
         "compareAtPrice": 840,
-        "available": true,
+        "available": false,
         "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": 10
+        "sku": ""
       }
-    ],
-    "mainCategory": "الشمع والبخور",
-    "subCategory": "أطقم بخور"
+    ]
   },
   {
     "id": "old-10121340551475",
@@ -519,18 +115,15 @@
     "priceNote": "يبدأ من ٥٠ ج.م حتى ٧٢ ج.م",
     "stock": "متاح",
     "badge": "دفوف وتريانتو",
-    "image": "assets/optimized/products/gallery/004-10121340551475-01.webp",
+    "image": "assets/products/gallery/004-10121340551475-01.jpg",
     "url": "https://popekyrillos.store/en/products/تريانتو-ستانلس",
     "tags": [
       "دفوف وتريانتو",
       "الحجم",
-      "المقاس",
-      "brass",
-      "أدوات المذبح",
-      "أدوات خدمة"
+      "المقاس"
     ],
     "images": [
-      "assets/optimized/products/gallery/004-10121340551475-01.webp"
+      "assets/products/gallery/004-10121340551475-01.jpg"
     ],
     "options": [
       {
@@ -553,9 +146,7 @@
         "compareAtPrice": 84,
         "available": true,
         "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": 10
+        "sku": ""
       },
       {
         "id": "old-53153831911731",
@@ -567,9 +158,7 @@
         "compareAtPrice": 84,
         "available": true,
         "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": 9
+        "sku": ""
       },
       {
         "id": "old-53153831944499",
@@ -581,13 +170,9 @@
         "compareAtPrice": 84,
         "available": true,
         "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": 11
+        "sku": ""
       }
-    ],
-    "mainCategory": "أدوات المذبح",
-    "subCategory": "أدوات خدمة"
+    ]
   },
   {
     "id": "old-10121339568435",
@@ -599,20 +184,17 @@
     "priceNote": "",
     "stock": "متاح",
     "badge": "دفوف وتريانتو",
-    "image": "assets/optimized/products/gallery/005-10121339568435-03.webp",
+    "image": "assets/products/gallery/005-10121339568435-03.jpg",
     "url": "https://popekyrillos.store/en/products/دف-18-سم-نحاس-ذهبي-تقيل",
     "tags": [
       "دفوف وتريانتو",
       "الحجم",
-      "المقاس",
-      "brass",
-      "أدوات المذبح",
-      "أدوات خدمة"
+      "المقاس"
     ],
     "images": [
-      "assets/optimized/products/gallery/005-10121339568435-03.webp",
-      "assets/optimized/products/gallery/005-10121339568435-02.webp",
-      "assets/optimized/products/gallery/005-10121339568435-01.webp"
+      "assets/products/gallery/005-10121339568435-03.jpg",
+      "assets/products/gallery/005-10121339568435-02.jpg",
+      "assets/products/gallery/005-10121339568435-01.jpg"
     ],
     "options": [
       {
@@ -639,9 +221,7 @@
         "compareAtPrice": 1050,
         "available": true,
         "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": 10
+        "sku": ""
       },
       {
         "id": "old-53153828405555",
@@ -653,9 +233,7 @@
         "compareAtPrice": 1050,
         "available": true,
         "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": 10
+        "sku": ""
       },
       {
         "id": "old-53153828438323",
@@ -667,9 +245,7 @@
         "compareAtPrice": 1050,
         "available": true,
         "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": 10
+        "sku": ""
       },
       {
         "id": "old-53153828471091",
@@ -681,9 +257,7 @@
         "compareAtPrice": 1050,
         "available": true,
         "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": 10
+        "sku": ""
       },
       {
         "id": "old-53153828503859",
@@ -695,9 +269,7 @@
         "compareAtPrice": 1050,
         "available": true,
         "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": 10
+        "sku": ""
       },
       {
         "id": "old-53153828536627",
@@ -709,9 +281,7 @@
         "compareAtPrice": 1050,
         "available": true,
         "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": 10
+        "sku": ""
       },
       {
         "id": "old-53153828569395",
@@ -723,13 +293,9 @@
         "compareAtPrice": 1050,
         "available": true,
         "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": 10
+        "sku": ""
       }
-    ],
-    "mainCategory": "أدوات المذبح",
-    "subCategory": "أدوات خدمة"
+    ]
   },
   {
     "id": "old-10121173303603",
@@ -741,31 +307,28 @@
     "priceNote": "يبدأ من ٦٠ ج.م حتى ١٣٠ ج.م",
     "stock": "متاح",
     "badge": "جرابات كتاب مقدس",
-    "image": "assets/optimized/products/gallery/006-10121173303603-01.webp",
+    "image": "assets/products/gallery/006-10121173303603-01.jpg",
     "url": "https://popekyrillos.store/en/products/جراب-للكتاب-المقدس",
     "tags": [
       "كتب وطقوس",
       "جرابات كتاب مقدس",
       "الحجم",
       "اللون",
-      "المقاس",
-      "books",
-      "الكتب والطقوس",
-      "كتب طقسية"
+      "المقاس"
     ],
     "images": [
-      "assets/optimized/products/gallery/006-10121173303603-01.webp",
-      "assets/optimized/products/gallery/006-10121173303603-02.webp",
-      "assets/optimized/products/gallery/006-10121173303603-03.webp",
-      "assets/optimized/products/gallery/006-10121173303603-04.webp",
-      "assets/optimized/products/gallery/006-10121173303603-05.webp",
-      "assets/optimized/products/gallery/006-10121173303603-06.webp",
-      "assets/optimized/products/gallery/006-10121173303603-07.webp",
-      "assets/optimized/products/gallery/006-10121173303603-08.webp",
-      "assets/optimized/products/gallery/006-10121173303603-09.webp",
-      "assets/optimized/products/gallery/006-10121173303603-10.webp",
-      "assets/optimized/products/gallery/006-10121173303603-11.webp",
-      "assets/optimized/products/gallery/006-10121173303603-12.webp"
+      "assets/products/gallery/006-10121173303603-01.jpg",
+      "assets/products/gallery/006-10121173303603-02.jpg",
+      "assets/products/gallery/006-10121173303603-03.jpg",
+      "assets/products/gallery/006-10121173303603-04.jpg",
+      "assets/products/gallery/006-10121173303603-05.jpg",
+      "assets/products/gallery/006-10121173303603-06.jpg",
+      "assets/products/gallery/006-10121173303603-07.jpg",
+      "assets/products/gallery/006-10121173303603-08.jpg",
+      "assets/products/gallery/006-10121173303603-09.jpg",
+      "assets/products/gallery/006-10121173303603-10.jpg",
+      "assets/products/gallery/006-10121173303603-11.jpg",
+      "assets/products/gallery/006-10121173303603-12.jpg"
     ],
     "options": [
       {
@@ -801,12 +364,8 @@
         "price": 60,
         "compareAtPrice": null,
         "available": false,
-        "image": "assets/optimized/products/gallery/006-10121173303603-07.webp",
-        "images": [
-          "assets/optimized/products/gallery/006-10121173303603-07.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "image": "assets/products/gallery/006-10121173303603-07.jpg",
+        "sku": ""
       },
       {
         "id": "old-53153382695219",
@@ -818,12 +377,8 @@
         "price": 60,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/optimized/products/gallery/006-10121173303603-01.webp",
-        "images": [
-          "assets/optimized/products/gallery/006-10121173303603-01.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "image": "assets/products/gallery/006-10121173303603-01.jpg",
+        "sku": ""
       },
       {
         "id": "old-53153382727987",
@@ -835,12 +390,8 @@
         "price": 60,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/optimized/products/gallery/006-10121173303603-04.webp",
-        "images": [
-          "assets/optimized/products/gallery/006-10121173303603-04.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "image": "assets/products/gallery/006-10121173303603-04.jpg",
+        "sku": ""
       },
       {
         "id": "old-53153382760755",
@@ -852,12 +403,8 @@
         "price": 60,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/optimized/products/gallery/006-10121173303603-09.webp",
-        "images": [
-          "assets/optimized/products/gallery/006-10121173303603-09.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "image": "assets/products/gallery/006-10121173303603-09.jpg",
+        "sku": ""
       },
       {
         "id": "old-53153382793523",
@@ -869,12 +416,8 @@
         "price": 60,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/optimized/products/gallery/006-10121173303603-08.webp",
-        "images": [
-          "assets/optimized/products/gallery/006-10121173303603-08.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "image": "assets/products/gallery/006-10121173303603-08.jpg",
+        "sku": ""
       },
       {
         "id": "old-53153382826291",
@@ -886,12 +429,8 @@
         "price": 60,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/optimized/products/gallery/006-10121173303603-06.webp",
-        "images": [
-          "assets/optimized/products/gallery/006-10121173303603-06.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "image": "assets/products/gallery/006-10121173303603-06.jpg",
+        "sku": ""
       },
       {
         "id": "old-53249962475827",
@@ -903,12 +442,8 @@
         "price": 60,
         "compareAtPrice": null,
         "available": false,
-        "image": "assets/optimized/products/gallery/006-10121173303603-11.webp",
-        "images": [
-          "assets/optimized/products/gallery/006-10121173303603-11.webp"
-        ],
-        "sku": "",
-        "quantity": 1
+        "image": "assets/products/gallery/006-10121173303603-11.jpg",
+        "sku": ""
       },
       {
         "id": "old-53249962508595",
@@ -920,12 +455,8 @@
         "price": 60,
         "compareAtPrice": null,
         "available": false,
-        "image": "assets/optimized/products/gallery/006-10121173303603-12.webp",
-        "images": [
-          "assets/optimized/products/gallery/006-10121173303603-12.webp"
-        ],
-        "sku": "",
-        "quantity": 1
+        "image": "assets/products/gallery/006-10121173303603-12.jpg",
+        "sku": ""
       },
       {
         "id": "old-53153382859059",
@@ -937,12 +468,8 @@
         "price": 80,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/optimized/products/gallery/006-10121173303603-07.webp",
-        "images": [
-          "assets/optimized/products/gallery/006-10121173303603-07.webp"
-        ],
-        "sku": "",
-        "quantity": 15
+        "image": "assets/products/gallery/006-10121173303603-07.jpg",
+        "sku": ""
       },
       {
         "id": "old-53153382891827",
@@ -952,14 +479,10 @@
           "اللون": "أزرق"
         },
         "price": 80,
-        "compareAtPrice": 90,
+        "compareAtPrice": null,
         "available": false,
-        "image": "assets/optimized/products/gallery/006-10121173303603-01.webp",
-        "images": [
-          "assets/optimized/products/gallery/006-10121173303603-01.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "image": "assets/products/gallery/006-10121173303603-01.jpg",
+        "sku": ""
       },
       {
         "id": "old-53153382924595",
@@ -971,12 +494,8 @@
         "price": 80,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/optimized/products/gallery/006-10121173303603-04.webp",
-        "images": [
-          "assets/optimized/products/gallery/006-10121173303603-04.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "image": "assets/products/gallery/006-10121173303603-04.jpg",
+        "sku": ""
       },
       {
         "id": "old-53153382957363",
@@ -988,12 +507,8 @@
         "price": 80,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/optimized/products/gallery/006-10121173303603-09.webp",
-        "images": [
-          "assets/optimized/products/gallery/006-10121173303603-09.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "image": "assets/products/gallery/006-10121173303603-09.jpg",
+        "sku": ""
       },
       {
         "id": "old-53153382990131",
@@ -1005,12 +520,8 @@
         "price": 80,
         "compareAtPrice": null,
         "available": false,
-        "image": "assets/optimized/products/gallery/006-10121173303603-08.webp",
-        "images": [
-          "assets/optimized/products/gallery/006-10121173303603-08.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "image": "assets/products/gallery/006-10121173303603-08.jpg",
+        "sku": ""
       },
       {
         "id": "old-53153383022899",
@@ -1022,12 +533,8 @@
         "price": 80,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/optimized/products/gallery/006-10121173303603-06.webp",
-        "images": [
-          "assets/optimized/products/gallery/006-10121173303603-06.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "image": "assets/products/gallery/006-10121173303603-06.jpg",
+        "sku": ""
       },
       {
         "id": "old-53249962541363",
@@ -1039,12 +546,8 @@
         "price": 60,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/optimized/products/gallery/006-10121173303603-11.webp",
-        "images": [
-          "assets/optimized/products/gallery/006-10121173303603-11.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "image": "assets/products/gallery/006-10121173303603-11.jpg",
+        "sku": ""
       },
       {
         "id": "old-53249962574131",
@@ -1056,12 +559,8 @@
         "price": 60,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/optimized/products/gallery/006-10121173303603-12.webp",
-        "images": [
-          "assets/optimized/products/gallery/006-10121173303603-12.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "image": "assets/products/gallery/006-10121173303603-12.jpg",
+        "sku": ""
       },
       {
         "id": "old-53153383055667",
@@ -1073,12 +572,8 @@
         "price": 130,
         "compareAtPrice": null,
         "available": false,
-        "image": "assets/optimized/products/gallery/006-10121173303603-07.webp",
-        "images": [
-          "assets/optimized/products/gallery/006-10121173303603-07.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "image": "assets/products/gallery/006-10121173303603-07.jpg",
+        "sku": ""
       },
       {
         "id": "old-53153383088435",
@@ -1090,12 +585,8 @@
         "price": 130,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/optimized/products/gallery/006-10121173303603-01.webp",
-        "images": [
-          "assets/optimized/products/gallery/006-10121173303603-01.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "image": "assets/products/gallery/006-10121173303603-01.jpg",
+        "sku": ""
       },
       {
         "id": "old-53153383121203",
@@ -1107,12 +598,8 @@
         "price": 130,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/optimized/products/gallery/006-10121173303603-04.webp",
-        "images": [
-          "assets/optimized/products/gallery/006-10121173303603-04.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "image": "assets/products/gallery/006-10121173303603-04.jpg",
+        "sku": ""
       },
       {
         "id": "old-53153383153971",
@@ -1124,12 +611,8 @@
         "price": 130,
         "compareAtPrice": null,
         "available": false,
-        "image": "assets/optimized/products/gallery/006-10121173303603-09.webp",
-        "images": [
-          "assets/optimized/products/gallery/006-10121173303603-09.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "image": "assets/products/gallery/006-10121173303603-09.jpg",
+        "sku": ""
       },
       {
         "id": "old-53153383186739",
@@ -1141,12 +624,8 @@
         "price": 130,
         "compareAtPrice": null,
         "available": false,
-        "image": "assets/optimized/products/gallery/006-10121173303603-08.webp",
-        "images": [
-          "assets/optimized/products/gallery/006-10121173303603-08.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "image": "assets/products/gallery/006-10121173303603-08.jpg",
+        "sku": ""
       },
       {
         "id": "old-53153383219507",
@@ -1158,12 +637,8 @@
         "price": 130,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/optimized/products/gallery/006-10121173303603-06.webp",
-        "images": [
-          "assets/optimized/products/gallery/006-10121173303603-06.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "image": "assets/products/gallery/006-10121173303603-06.jpg",
+        "sku": ""
       },
       {
         "id": "old-53249962606899",
@@ -1175,12 +650,8 @@
         "price": 60,
         "compareAtPrice": null,
         "available": false,
-        "image": "assets/optimized/products/gallery/006-10121173303603-11.webp",
-        "images": [
-          "assets/optimized/products/gallery/006-10121173303603-11.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "image": "assets/products/gallery/006-10121173303603-11.jpg",
+        "sku": ""
       },
       {
         "id": "old-53249962639667",
@@ -1192,16 +663,10 @@
         "price": 60,
         "compareAtPrice": null,
         "available": false,
-        "image": "assets/optimized/products/gallery/006-10121173303603-12.webp",
-        "images": [
-          "assets/optimized/products/gallery/006-10121173303603-12.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "image": "assets/products/gallery/006-10121173303603-12.jpg",
+        "sku": ""
       }
-    ],
-    "mainCategory": "الكتب والطقوس",
-    "subCategory": "كتب طقسية"
+    ]
   },
   {
     "id": "old-10120837660979",
@@ -1213,18 +678,15 @@
     "priceNote": "",
     "stock": "متاح",
     "badge": "صلبان زفة",
-    "image": "assets/optimized/products/gallery/007-10120837660979-01.webp",
+    "image": "assets/products/gallery/007-10120837660979-01.jpg",
     "url": "https://popekyrillos.store/en/products/صليب-زفة-نحاس-طبقتين-بفصوص-ملونة",
     "tags": [
-      "صلبان زفة",
-      "brass",
-      "أدوات المذبح",
-      "صلبان مذبح"
+      "صلبان زفة"
     ],
     "images": [
-      "assets/optimized/products/gallery/007-10120837660979-01.webp",
-      "assets/optimized/products/gallery/007-10120837660979-02.webp",
-      "assets/optimized/products/gallery/007-10120837660979-03.webp"
+      "assets/products/gallery/007-10120837660979-01.jpg",
+      "assets/products/gallery/007-10120837660979-02.jpg",
+      "assets/products/gallery/007-10120837660979-03.jpg"
     ],
     "options": [],
     "variants": [
@@ -1236,13 +698,9 @@
         "compareAtPrice": 7000,
         "available": true,
         "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": 12
+        "sku": ""
       }
-    ],
-    "mainCategory": "أدوات المذبح",
-    "subCategory": "صلبان مذبح"
+    ]
   },
   {
     "id": "old-10120837300531",
@@ -1254,18 +712,15 @@
     "priceNote": "",
     "stock": "متاح",
     "badge": "صلبان زفة",
-    "image": "assets/optimized/products/gallery/008-10120837300531-01.webp",
+    "image": "assets/products/gallery/008-10120837300531-01.jpg",
     "url": "https://popekyrillos.store/en/products/صليب-زفة-نحاس-طبقتين",
     "tags": [
-      "صلبان زفة",
-      "brass",
-      "أدوات المذبح",
-      "صلبان مذبح"
+      "صلبان زفة"
     ],
     "images": [
-      "assets/optimized/products/gallery/008-10120837300531-01.webp",
-      "assets/optimized/products/gallery/008-10120837300531-02.webp",
-      "assets/optimized/products/gallery/008-10120837300531-03.webp"
+      "assets/products/gallery/008-10120837300531-01.jpg",
+      "assets/products/gallery/008-10120837300531-02.jpg",
+      "assets/products/gallery/008-10120837300531-03.jpg"
     ],
     "options": [],
     "variants": [
@@ -1277,13 +732,9 @@
         "compareAtPrice": 7000,
         "available": true,
         "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": 12
+        "sku": ""
       }
-    ],
-    "mainCategory": "أدوات المذبح",
-    "subCategory": "صلبان مذبح"
+    ]
   },
   {
     "id": "old-10120836481331",
@@ -1295,18 +746,15 @@
     "priceNote": "",
     "stock": "متاح",
     "badge": "صلبان زفة",
-    "image": "assets/optimized/products/gallery/009-10120836481331-01.webp",
+    "image": "assets/products/gallery/009-10120836481331-01.jpg",
     "url": "https://popekyrillos.store/en/products/صليب-زفة-نحاس-رفيع-بفص-ألوان",
     "tags": [
-      "صلبان زفة",
-      "brass",
-      "أدوات المذبح",
-      "صلبان مذبح"
+      "صلبان زفة"
     ],
     "images": [
-      "assets/optimized/products/gallery/009-10120836481331-01.webp",
-      "assets/optimized/products/gallery/009-10120836481331-02.webp",
-      "assets/optimized/products/gallery/009-10120836481331-03.webp"
+      "assets/products/gallery/009-10120836481331-01.jpg",
+      "assets/products/gallery/009-10120836481331-02.jpg",
+      "assets/products/gallery/009-10120836481331-03.jpg"
     ],
     "options": [],
     "variants": [
@@ -1318,13 +766,9 @@
         "compareAtPrice": 4620,
         "available": true,
         "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": 12
+        "sku": ""
       }
-    ],
-    "mainCategory": "أدوات المذبح",
-    "subCategory": "صلبان مذبح"
+    ]
   },
   {
     "id": "old-10120836317491",
@@ -1336,18 +780,15 @@
     "priceNote": "",
     "stock": "متاح",
     "badge": "صلبان زفة",
-    "image": "assets/optimized/products/gallery/010-10120836317491-01.webp",
+    "image": "assets/products/gallery/010-10120836317491-01.jpg",
     "url": "https://popekyrillos.store/en/products/صليب-زفة-نحاس-أركت-بالمصلوب",
     "tags": [
-      "صلبان زفة",
-      "brass",
-      "أدوات المذبح",
-      "صلبان مذبح"
+      "صلبان زفة"
     ],
     "images": [
-      "assets/optimized/products/gallery/010-10120836317491-01.webp",
-      "assets/optimized/products/gallery/010-10120836317491-02.webp",
-      "assets/optimized/products/gallery/010-10120836317491-03.webp"
+      "assets/products/gallery/010-10120836317491-01.jpg",
+      "assets/products/gallery/010-10120836317491-02.jpg",
+      "assets/products/gallery/010-10120836317491-03.jpg"
     ],
     "options": [],
     "variants": [
@@ -1359,13 +800,9 @@
         "compareAtPrice": 5180,
         "available": true,
         "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": 12
+        "sku": ""
       }
-    ],
-    "mainCategory": "أدوات المذبح",
-    "subCategory": "صلبان مذبح"
+    ]
   },
   {
     "id": "old-10120834908467",
@@ -1377,17 +814,14 @@
     "priceNote": "",
     "stock": "متاح",
     "badge": "صلبان زفة",
-    "image": "assets/optimized/products/gallery/011-10120834908467-01.webp",
+    "image": "assets/products/gallery/011-10120834908467-01.jpg",
     "url": "https://popekyrillos.store/en/products/صليب-زفة-نحاس-أركت-ذهبي",
     "tags": [
-      "صلبان زفة",
-      "brass",
-      "أدوات المذبح",
-      "صلبان مذبح"
+      "صلبان زفة"
     ],
     "images": [
-      "assets/optimized/products/gallery/011-10120834908467-01.webp",
-      "assets/optimized/products/gallery/011-10120834908467-02.webp"
+      "assets/products/gallery/011-10120834908467-01.jpg",
+      "assets/products/gallery/011-10120834908467-02.jpg"
     ],
     "options": [],
     "variants": [
@@ -1399,13 +833,9 @@
         "compareAtPrice": 2800,
         "available": true,
         "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": 12
+        "sku": ""
       }
-    ],
-    "mainCategory": "أدوات المذبح",
-    "subCategory": "صلبان مذبح"
+    ]
   },
   {
     "id": "old-10070727688499",
@@ -1413,26 +843,23 @@
     "category": "candles",
     "label": "شموع وبخور",
     "description": "شمعدان مذبح فاخر مصنوع من البلاستيك عالي الجودةشحن تايب سي، مصمم خصيصاً للاستخدام على المذابح. يتميز بتصميم كلاسيكي أنيق يعكس الوقار والجلال، مع قاعدة ثابتة توفر استقراراً آمناً. سهل التنظيف والصيانة، ويتحمل الاستخدام المتكرر. مثالي للكنائس والمؤسسات الدينية التي تبحث عن حل عملي وموثوق. يأتي جاهزاً للاستخدام الفوري دون الحاجة لتجميع معقد.\nبطارية تدوم لأيام\nطول الشمعدان 52 سم\nيأتي معه وصلة شحن",
-    "price": 2200,
+    "price": 2300,
     "priceNote": "",
     "stock": "متاح",
     "badge": "شغل شحن",
-    "image": "assets/optimized/products/gallery/012-10070727688499-01.webp",
+    "image": "assets/products/gallery/012-10070727688499-01.jpg",
     "url": "https://popekyrillos.store/en/products/شمعدان-مذبح-كبير",
     "tags": [
       "شموع وبخور",
-      "شغل شحن",
-      "candles",
-      "أدوات المذبح",
-      "شمعدانات"
+      "شغل شحن"
     ],
     "images": [
-      "assets/optimized/products/gallery/012-10070727688499-01.webp",
-      "assets/optimized/products/gallery/012-10070727688499-02.webp",
-      "assets/optimized/products/gallery/012-10070727688499-03.webp",
-      "assets/optimized/products/gallery/012-10070727688499-04.webp",
-      "assets/optimized/products/gallery/012-10070727688499-05.webp",
-      "assets/optimized/products/gallery/012-10070727688499-06.webp"
+      "assets/products/gallery/012-10070727688499-01.jpg",
+      "assets/products/gallery/012-10070727688499-02.jpg",
+      "assets/products/gallery/012-10070727688499-03.jpg",
+      "assets/products/gallery/012-10070727688499-04.jpg",
+      "assets/products/gallery/012-10070727688499-05.jpg",
+      "assets/products/gallery/012-10070727688499-06.jpg"
     ],
     "options": [],
     "variants": [
@@ -1440,17 +867,13 @@
         "id": "old-53014358196531",
         "title": "الاختيار الافتراضي",
         "options": {},
-        "price": 2200,
+        "price": 2300,
         "compareAtPrice": 2500,
         "available": true,
         "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": 12
+        "sku": ""
       }
-    ],
-    "mainCategory": "أدوات المذبح",
-    "subCategory": "شمعدانات"
+    ]
   },
   {
     "id": "old-10070727000371",
@@ -1462,21 +885,18 @@
     "priceNote": "",
     "stock": "متاح",
     "badge": "شغل شحن",
-    "image": "assets/optimized/products/gallery/013-10070727000371-01.webp",
+    "image": "assets/products/gallery/013-10070727000371-01.jpg",
     "url": "https://popekyrillos.store/en/products/شمعة-شحن",
     "tags": [
       "شغل شحن",
-      "اللون",
-      "brass",
-      "الشمع والبخور",
-      "شموع"
+      "اللون"
     ],
     "images": [
-      "assets/optimized/products/gallery/013-10070727000371-01.webp",
-      "assets/optimized/products/gallery/013-10070727000371-02.webp",
-      "assets/optimized/products/gallery/013-10070727000371-03.webp",
-      "assets/optimized/products/gallery/013-10070727000371-04.webp",
-      "assets/optimized/products/gallery/013-10070727000371-05.webp"
+      "assets/products/gallery/013-10070727000371-01.jpg",
+      "assets/products/gallery/013-10070727000371-02.jpg",
+      "assets/products/gallery/013-10070727000371-03.jpg",
+      "assets/products/gallery/013-10070727000371-04.jpg",
+      "assets/products/gallery/013-10070727000371-05.jpg"
     ],
     "options": [
       {
@@ -1497,12 +917,8 @@
         "price": 230,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/optimized/products/gallery/013-10070727000371-01.webp",
-        "images": [
-          "assets/optimized/products/gallery/013-10070727000371-01.webp"
-        ],
-        "sku": "",
-        "quantity": 100
+        "image": "assets/products/gallery/013-10070727000371-01.jpg",
+        "sku": ""
       },
       {
         "id": "old-53014357311795",
@@ -1513,16 +929,10 @@
         "price": 230,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/optimized/products/gallery/013-10070727000371-02.webp",
-        "images": [
-          "assets/optimized/products/gallery/013-10070727000371-02.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "image": "assets/products/gallery/013-10070727000371-02.jpg",
+        "sku": ""
       }
-    ],
-    "mainCategory": "الشمع والبخور",
-    "subCategory": "شموع"
+    ]
   },
   {
     "id": "old-10070726574387",
@@ -1534,17 +944,14 @@
     "priceNote": "",
     "stock": "متاح",
     "badge": "شغل شحن",
-    "image": "assets/optimized/products/gallery/014-10070726574387-01.webp",
+    "image": "assets/products/gallery/014-10070726574387-01.jpg",
     "url": "https://popekyrillos.store/en/products/شمعة-شماس-شكل-صليب",
     "tags": [
-      "شغل شحن",
-      "brass",
-      "الشمع والبخور",
-      "شموع"
+      "شغل شحن"
     ],
     "images": [
-      "assets/optimized/products/gallery/014-10070726574387-01.webp",
-      "assets/optimized/products/gallery/014-10070726574387-02.webp"
+      "assets/products/gallery/014-10070726574387-01.jpg",
+      "assets/products/gallery/014-10070726574387-02.jpg"
     ],
     "options": [],
     "variants": [
@@ -1556,13 +963,9 @@
         "compareAtPrice": 300,
         "available": true,
         "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": 12
+        "sku": ""
       }
-    ],
-    "mainCategory": "الشمع والبخور",
-    "subCategory": "شموع"
+    ]
   },
   {
     "id": "old-10070704980275",
@@ -1574,20 +977,17 @@
     "priceNote": "",
     "stock": "متاح",
     "badge": "شغل شحن",
-    "image": "assets/optimized/products/gallery/015-10070704980275-01.webp",
+    "image": "assets/products/gallery/015-10070704980275-01.jpg",
     "url": "https://popekyrillos.store/en/products/شمعدان-منجلية",
     "tags": [
       "شموع وبخور",
       "شغل شحن",
-      "اللون",
-      "candles",
-      "أدوات المذبح",
-      "شمعدانات"
+      "اللون"
     ],
     "images": [
-      "assets/optimized/products/gallery/015-10070704980275-01.webp",
-      "assets/optimized/products/gallery/015-10070704980275-02.webp",
-      "assets/optimized/products/gallery/015-10070704980275-03.webp"
+      "assets/products/gallery/015-10070704980275-01.jpg",
+      "assets/products/gallery/015-10070704980275-02.jpg",
+      "assets/products/gallery/015-10070704980275-03.jpg"
     ],
     "options": [
       {
@@ -1609,12 +1009,8 @@
         "price": 950,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/optimized/products/gallery/015-10070704980275-01.webp",
-        "images": [
-          "assets/optimized/products/gallery/015-10070704980275-01.webp"
-        ],
-        "sku": "",
-        "quantity": 12
+        "image": "assets/products/gallery/015-10070704980275-01.jpg",
+        "sku": ""
       },
       {
         "id": "old-53014277521715",
@@ -1625,12 +1021,8 @@
         "price": 950,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/optimized/products/gallery/015-10070704980275-02.webp",
-        "images": [
-          "assets/optimized/products/gallery/015-10070704980275-02.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "image": "assets/products/gallery/015-10070704980275-02.jpg",
+        "sku": ""
       },
       {
         "id": "old-53014277554483",
@@ -1642,13 +1034,9 @@
         "compareAtPrice": null,
         "available": false,
         "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       }
-    ],
-    "mainCategory": "أدوات المذبح",
-    "subCategory": "شمعدانات"
+    ]
   },
   {
     "id": "old-10070671687987",
@@ -1660,23 +1048,20 @@
     "priceNote": "",
     "stock": "متاح",
     "badge": "شغل شحن",
-    "image": "assets/optimized/products/gallery/016-10070671687987-01.webp",
+    "image": "assets/products/gallery/016-10070671687987-01.jpg",
     "url": "https://popekyrillos.store/en/products/صليب-إفنوتي-شحن-بالوصلة",
     "tags": [
       "شغل شحن",
       "color",
-      "اللون",
-      "brass",
-      "أدوات المذبح",
-      "صلبان مذبح"
+      "اللون"
     ],
     "images": [
-      "assets/optimized/products/gallery/016-10070671687987-01.webp",
-      "assets/optimized/products/gallery/016-10070671687987-02.webp",
-      "assets/optimized/products/gallery/016-10070671687987-03.webp",
-      "assets/optimized/products/gallery/016-10070671687987-04.webp",
-      "assets/optimized/products/gallery/016-10070671687987-05.webp",
-      "assets/optimized/products/gallery/016-10070671687987-06.webp"
+      "assets/products/gallery/016-10070671687987-01.jpg",
+      "assets/products/gallery/016-10070671687987-02.jpg",
+      "assets/products/gallery/016-10070671687987-03.jpg",
+      "assets/products/gallery/016-10070671687987-04.jpg",
+      "assets/products/gallery/016-10070671687987-05.jpg",
+      "assets/products/gallery/016-10070671687987-06.jpg"
     ],
     "options": [
       {
@@ -1698,12 +1083,8 @@
         "price": 540,
         "compareAtPrice": 650,
         "available": true,
-        "image": "assets/optimized/products/gallery/016-10070671687987-03.webp",
-        "images": [
-          "assets/optimized/products/gallery/016-10070671687987-03.webp"
-        ],
-        "sku": "",
-        "quantity": 100
+        "image": "assets/products/gallery/016-10070671687987-03.jpg",
+        "sku": ""
       },
       {
         "id": "old-53014267068723",
@@ -1714,12 +1095,8 @@
         "price": 540,
         "compareAtPrice": 650,
         "available": true,
-        "image": "assets/optimized/products/gallery/016-10070671687987-05.webp",
-        "images": [
-          "assets/optimized/products/gallery/016-10070671687987-05.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "image": "assets/products/gallery/016-10070671687987-05.jpg",
+        "sku": ""
       },
       {
         "id": "old-53014267101491",
@@ -1730,16 +1107,10 @@
         "price": 540,
         "compareAtPrice": 650,
         "available": true,
-        "image": "assets/optimized/products/gallery/016-10070671687987-04.webp",
-        "images": [
-          "assets/optimized/products/gallery/016-10070671687987-04.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "image": "assets/products/gallery/016-10070671687987-04.jpg",
+        "sku": ""
       }
-    ],
-    "mainCategory": "أدوات المذبح",
-    "subCategory": "صلبان مذبح"
+    ]
   },
   {
     "id": "old-10068218806579",
@@ -1751,19 +1122,16 @@
     "priceNote": "",
     "stock": "متاح",
     "badge": "حُق ذخيرة",
-    "image": "assets/optimized/products/gallery/017-10068218806579-01.webp",
+    "image": "assets/products/gallery/017-10068218806579-01.jpg",
     "url": "https://popekyrillos.store/en/products/حُق-ذخيرة-كبير-نحاس-مطلي-نيكل",
     "tags": [
-      "حُق ذخيرة",
-      "brass",
-      "أدوات المذبح",
-      "ذخائر وعلب"
+      "حُق ذخيرة"
     ],
     "images": [
-      "assets/optimized/products/gallery/017-10068218806579-01.webp",
-      "assets/optimized/products/gallery/017-10068218806579-02.webp",
-      "assets/optimized/products/gallery/017-10068218806579-03.webp",
-      "assets/optimized/products/gallery/017-10068218806579-04.webp"
+      "assets/products/gallery/017-10068218806579-01.jpg",
+      "assets/products/gallery/017-10068218806579-02.jpg",
+      "assets/products/gallery/017-10068218806579-03.jpg",
+      "assets/products/gallery/017-10068218806579-04.jpg"
     ],
     "options": [],
     "variants": [
@@ -1775,13 +1143,9 @@
         "compareAtPrice": 630,
         "available": true,
         "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       }
-    ],
-    "mainCategory": "أدوات المذبح",
-    "subCategory": "ذخائر وعلب"
+    ]
   },
   {
     "id": "old-10068217561395",
@@ -1793,19 +1157,16 @@
     "priceNote": "",
     "stock": "متاح",
     "badge": "حُق ذخيرة",
-    "image": "assets/optimized/products/gallery/018-10068217561395-01.webp",
+    "image": "assets/products/gallery/018-10068217561395-01.jpg",
     "url": "https://popekyrillos.store/en/products/حُق-ذخيرة-صغير-نحاس-مطلي-نيكل",
     "tags": [
-      "حُق ذخيرة",
-      "brass",
-      "أدوات المذبح",
-      "ذخائر وعلب"
+      "حُق ذخيرة"
     ],
     "images": [
-      "assets/optimized/products/gallery/018-10068217561395-01.webp",
-      "assets/optimized/products/gallery/018-10068217561395-02.webp",
-      "assets/optimized/products/gallery/018-10068217561395-03.webp",
-      "assets/optimized/products/gallery/018-10068217561395-04.webp"
+      "assets/products/gallery/018-10068217561395-01.jpg",
+      "assets/products/gallery/018-10068217561395-02.jpg",
+      "assets/products/gallery/018-10068217561395-03.jpg",
+      "assets/products/gallery/018-10068217561395-04.jpg"
     ],
     "options": [],
     "variants": [
@@ -1817,13 +1178,9 @@
         "compareAtPrice": 385,
         "available": true,
         "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       }
-    ],
-    "mainCategory": "أدوات المذبح",
-    "subCategory": "ذخائر وعلب"
+    ]
   },
   {
     "id": "old-10068215628083",
@@ -1835,19 +1192,16 @@
     "priceNote": "",
     "stock": "متاح",
     "badge": "حُق ذخيرة",
-    "image": "assets/optimized/products/gallery/019-10068215628083-01.webp",
+    "image": "assets/products/gallery/019-10068215628083-01.jpg",
     "url": "https://popekyrillos.store/en/products/حُق-ذخيرة-استانلس-صغير-1",
     "tags": [
-      "حُق ذخيرة",
-      "brass",
-      "أدوات المذبح",
-      "ذخائر وعلب"
+      "حُق ذخيرة"
     ],
     "images": [
-      "assets/optimized/products/gallery/019-10068215628083-01.webp",
-      "assets/optimized/products/gallery/019-10068215628083-02.webp",
-      "assets/optimized/products/gallery/019-10068215628083-03.webp",
-      "assets/optimized/products/gallery/019-10068215628083-04.webp"
+      "assets/products/gallery/019-10068215628083-01.jpg",
+      "assets/products/gallery/019-10068215628083-02.jpg",
+      "assets/products/gallery/019-10068215628083-03.jpg",
+      "assets/products/gallery/019-10068215628083-04.jpg"
     ],
     "options": [],
     "variants": [
@@ -1859,13 +1213,9 @@
         "compareAtPrice": 420,
         "available": true,
         "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       }
-    ],
-    "mainCategory": "أدوات المذبح",
-    "subCategory": "ذخائر وعلب"
+    ]
   },
   {
     "id": "old-10068213006643",
@@ -1877,20 +1227,17 @@
     "priceNote": "",
     "stock": "متاح",
     "badge": "حُق ذخيرة",
-    "image": "assets/optimized/products/gallery/020-10068213006643-01.webp",
+    "image": "assets/products/gallery/020-10068213006643-01.jpg",
     "url": "https://popekyrillos.store/en/products/حُق-ذخيرة-استانلس-وسط",
     "tags": [
-      "حُق ذخيرة",
-      "brass",
-      "أدوات المذبح",
-      "ذخائر وعلب"
+      "حُق ذخيرة"
     ],
     "images": [
-      "assets/optimized/products/gallery/020-10068213006643-01.webp",
-      "assets/optimized/products/gallery/020-10068213006643-02.webp",
-      "assets/optimized/products/gallery/020-10068213006643-03.webp",
-      "assets/optimized/products/gallery/020-10068213006643-04.webp",
-      "assets/optimized/products/gallery/020-10068213006643-05.webp"
+      "assets/products/gallery/020-10068213006643-01.jpg",
+      "assets/products/gallery/020-10068213006643-02.jpg",
+      "assets/products/gallery/020-10068213006643-03.jpg",
+      "assets/products/gallery/020-10068213006643-04.jpg",
+      "assets/products/gallery/020-10068213006643-05.jpg"
     ],
     "options": [],
     "variants": [
@@ -1902,13 +1249,9 @@
         "compareAtPrice": 350,
         "available": true,
         "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       }
-    ],
-    "mainCategory": "أدوات المذبح",
-    "subCategory": "ذخائر وعلب"
+    ]
   },
   {
     "id": "old-10068212646195",
@@ -1920,19 +1263,16 @@
     "priceNote": "",
     "stock": "متاح",
     "badge": "حُق ذخيرة",
-    "image": "assets/optimized/products/gallery/021-10068212646195-01.webp",
+    "image": "assets/products/gallery/021-10068212646195-01.jpg",
     "url": "https://popekyrillos.store/en/products/حُق-ذخيرة-استانلس-صغير",
     "tags": [
-      "حُق ذخيرة",
-      "brass",
-      "أدوات المذبح",
-      "ذخائر وعلب"
+      "حُق ذخيرة"
     ],
     "images": [
-      "assets/optimized/products/gallery/021-10068212646195-01.webp",
-      "assets/optimized/products/gallery/021-10068212646195-02.webp",
-      "assets/optimized/products/gallery/021-10068212646195-03.webp",
-      "assets/optimized/products/gallery/021-10068212646195-04.webp"
+      "assets/products/gallery/021-10068212646195-01.jpg",
+      "assets/products/gallery/021-10068212646195-02.jpg",
+      "assets/products/gallery/021-10068212646195-03.jpg",
+      "assets/products/gallery/021-10068212646195-04.jpg"
     ],
     "options": [],
     "variants": [
@@ -1944,13 +1284,9 @@
         "compareAtPrice": 280,
         "available": true,
         "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       }
-    ],
-    "mainCategory": "أدوات المذبح",
-    "subCategory": "ذخائر وعلب"
+    ]
   },
   {
     "id": "old-10067794067763",
@@ -1962,22 +1298,19 @@
     "priceNote": "يبدأ من ٥٬٢٨٠ ج.م حتى ٦٬٠٠٠ ج.م",
     "stock": "متاح",
     "badge": "إبريق نحاس",
-    "image": "assets/optimized/products/gallery/022-10067794067763-01.webp",
+    "image": "assets/products/gallery/022-10067794067763-01.jpg",
     "url": "https://popekyrillos.store/en/products/إبريق-نحاس-ذهبي",
     "tags": [
       "إبريق نحاس",
       "الحجم",
-      "المقاس",
-      "brass",
-      "أدوات المذبح",
-      "أواني المذبح"
+      "المقاس"
     ],
     "images": [
-      "assets/optimized/products/gallery/022-10067794067763-01.webp",
-      "assets/optimized/products/gallery/022-10067794067763-02.webp",
-      "assets/optimized/products/gallery/022-10067794067763-03.webp",
-      "assets/optimized/products/gallery/022-10067794067763-04.webp",
-      "assets/optimized/products/gallery/022-10067794067763-05.webp"
+      "assets/products/gallery/022-10067794067763-01.jpg",
+      "assets/products/gallery/022-10067794067763-02.jpg",
+      "assets/products/gallery/022-10067794067763-03.jpg",
+      "assets/products/gallery/022-10067794067763-04.jpg",
+      "assets/products/gallery/022-10067794067763-05.jpg"
     ],
     "options": [
       {
@@ -2000,9 +1333,7 @@
         "compareAtPrice": 3360,
         "available": true,
         "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": 10
+        "sku": ""
       },
       {
         "id": "old-53005035602227",
@@ -2014,9 +1345,7 @@
         "compareAtPrice": 3360,
         "available": true,
         "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": 10
+        "sku": ""
       },
       {
         "id": "old-53005035634995",
@@ -2028,13 +1357,9 @@
         "compareAtPrice": 3360,
         "available": true,
         "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": 10
+        "sku": ""
       }
-    ],
-    "mainCategory": "أدوات المذبح",
-    "subCategory": "أواني المذبح"
+    ]
   },
   {
     "id": "old-10067690586419",
@@ -2046,20 +1371,17 @@
     "priceNote": "",
     "stock": "متاح",
     "badge": "علب بخور",
-    "image": "assets/optimized/products/gallery/023-10067690586419-01.webp",
+    "image": "assets/products/gallery/023-10067690586419-01.jpg",
     "url": "https://popekyrillos.store/en/products/علبة-بخور-من-النحاس-شكل-دائري",
     "tags": [
       "نحاسيات",
-      "علب بخور",
-      "brass",
-      "الشمع والبخور",
-      "أطقم بخور"
+      "علب بخور"
     ],
     "images": [
-      "assets/optimized/products/gallery/023-10067690586419-01.webp",
-      "assets/optimized/products/gallery/023-10067690586419-02.webp",
-      "assets/optimized/products/gallery/023-10067690586419-03.webp",
-      "assets/optimized/products/gallery/023-10067690586419-04.webp"
+      "assets/products/gallery/023-10067690586419-01.jpg",
+      "assets/products/gallery/023-10067690586419-02.jpg",
+      "assets/products/gallery/023-10067690586419-03.jpg",
+      "assets/products/gallery/023-10067690586419-04.jpg"
     ],
     "options": [],
     "variants": [
@@ -2071,13 +1393,9 @@
         "compareAtPrice": 1050,
         "available": true,
         "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": 10
+        "sku": ""
       }
-    ],
-    "mainCategory": "الشمع والبخور",
-    "subCategory": "أطقم بخور"
+    ]
   },
   {
     "id": "old-10067690225971",
@@ -2089,21 +1407,18 @@
     "priceNote": "",
     "stock": "متاح",
     "badge": "علب بخور",
-    "image": "assets/optimized/products/gallery/024-10067690225971-01.webp",
+    "image": "assets/products/gallery/024-10067690225971-01.jpg",
     "url": "https://popekyrillos.store/en/products/علبة-بخور-نحاس-علي-شكل-صليب",
     "tags": [
       "نحاسيات",
-      "علب بخور",
-      "brass",
-      "الشمع والبخور",
-      "أطقم بخور"
+      "علب بخور"
     ],
     "images": [
-      "assets/optimized/products/gallery/024-10067690225971-01.webp",
-      "assets/optimized/products/gallery/024-10067690225971-02.webp",
-      "assets/optimized/products/gallery/024-10067690225971-03.webp",
-      "assets/optimized/products/gallery/024-10067690225971-04.webp",
-      "assets/optimized/products/gallery/024-10067690225971-05.webp"
+      "assets/products/gallery/024-10067690225971-01.jpg",
+      "assets/products/gallery/024-10067690225971-02.jpg",
+      "assets/products/gallery/024-10067690225971-03.jpg",
+      "assets/products/gallery/024-10067690225971-04.jpg",
+      "assets/products/gallery/024-10067690225971-05.jpg"
     ],
     "options": [],
     "variants": [
@@ -2115,13 +1430,9 @@
         "compareAtPrice": 1400,
         "available": true,
         "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": 10
+        "sku": ""
       }
-    ],
-    "mainCategory": "الشمع والبخور",
-    "subCategory": "أطقم بخور"
+    ]
   },
   {
     "id": "old-10067689472307",
@@ -2133,21 +1444,18 @@
     "priceNote": "",
     "stock": "متاح",
     "badge": "علب بخور",
-    "image": "assets/optimized/products/gallery/025-10067689472307-01.webp",
+    "image": "assets/products/gallery/025-10067689472307-01.jpg",
     "url": "https://popekyrillos.store/en/products/علبة-بخور-نحاس-علي-شكل-صندوق-كنز",
     "tags": [
       "نحاسيات",
-      "علب بخور",
-      "brass",
-      "الشمع والبخور",
-      "أطقم بخور"
+      "علب بخور"
     ],
     "images": [
-      "assets/optimized/products/gallery/025-10067689472307-01.webp",
-      "assets/optimized/products/gallery/025-10067689472307-02.webp",
-      "assets/optimized/products/gallery/025-10067689472307-03.webp",
-      "assets/optimized/products/gallery/025-10067689472307-04.webp",
-      "assets/optimized/products/gallery/025-10067689472307-05.webp"
+      "assets/products/gallery/025-10067689472307-01.jpg",
+      "assets/products/gallery/025-10067689472307-02.jpg",
+      "assets/products/gallery/025-10067689472307-03.jpg",
+      "assets/products/gallery/025-10067689472307-04.jpg",
+      "assets/products/gallery/025-10067689472307-05.jpg"
     ],
     "options": [],
     "variants": [
@@ -2159,13 +1467,9 @@
         "compareAtPrice": 770,
         "available": true,
         "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": 10
+        "sku": ""
       }
-    ],
-    "mainCategory": "الشمع والبخور",
-    "subCategory": "أطقم بخور"
+    ]
   },
   {
     "id": "old-10067686162739",
@@ -2177,25 +1481,22 @@
     "priceNote": "يبدأ من ١٬٨٠٠ ج.م حتى ٣٬٠٠٠ ج.م",
     "stock": "متاح",
     "badge": "علب بخور",
-    "image": "assets/optimized/products/gallery/026-10067686162739-01.webp",
+    "image": "assets/products/gallery/026-10067686162739-01.jpg",
     "url": "https://popekyrillos.store/en/products/علبة-بخور-نحاس-شكل-صندوق-عادي",
     "tags": [
       "نحاسيات",
       "علب بخور",
       "الحجم",
-      "المقاس",
-      "brass",
-      "الشمع والبخور",
-      "أطقم بخور"
+      "المقاس"
     ],
     "images": [
-      "assets/optimized/products/gallery/026-10067686162739-01.webp",
-      "assets/optimized/products/gallery/026-10067686162739-02.webp",
-      "assets/optimized/products/gallery/026-10067686162739-03.webp",
-      "assets/optimized/products/gallery/026-10067686162739-04.webp",
-      "assets/optimized/products/gallery/026-10067686162739-05.webp",
-      "assets/optimized/products/gallery/026-10067686162739-06.webp",
-      "assets/optimized/products/gallery/026-10067686162739-07.webp"
+      "assets/products/gallery/026-10067686162739-01.jpg",
+      "assets/products/gallery/026-10067686162739-02.jpg",
+      "assets/products/gallery/026-10067686162739-03.jpg",
+      "assets/products/gallery/026-10067686162739-04.jpg",
+      "assets/products/gallery/026-10067686162739-05.jpg",
+      "assets/products/gallery/026-10067686162739-06.jpg",
+      "assets/products/gallery/026-10067686162739-07.jpg"
     ],
     "options": [
       {
@@ -2218,9 +1519,7 @@
         "compareAtPrice": 1500,
         "available": true,
         "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": 10
+        "sku": ""
       },
       {
         "id": "old-53149452370227",
@@ -2232,9 +1531,7 @@
         "compareAtPrice": 1500,
         "available": true,
         "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       },
       {
         "id": "old-53149452402995",
@@ -2246,13 +1543,9 @@
         "compareAtPrice": 1500,
         "available": true,
         "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": null
+        "sku": ""
       }
-    ],
-    "mainCategory": "الشمع والبخور",
-    "subCategory": "أطقم بخور"
+    ]
   },
   {
     "id": "old-10062404354355",
@@ -2264,22 +1557,19 @@
     "priceNote": "",
     "stock": "متاح",
     "badge": "علب بخور",
-    "image": "assets/optimized/products/gallery/027-10062404354355-01.webp",
+    "image": "assets/products/gallery/027-10062404354355-01.jpg",
     "url": "https://popekyrillos.store/en/products/علبة-بخور-نحاس-صغيرة-شكل-مستطيل",
     "tags": [
       "نحاسيات",
-      "علب بخور",
-      "brass",
-      "الشمع والبخور",
-      "أطقم بخور"
+      "علب بخور"
     ],
     "images": [
-      "assets/optimized/products/gallery/027-10062404354355-01.webp",
-      "assets/optimized/products/gallery/027-10062404354355-02.webp",
-      "assets/optimized/products/gallery/027-10062404354355-03.webp",
-      "assets/optimized/products/gallery/027-10062404354355-04.webp",
-      "assets/optimized/products/gallery/027-10062404354355-05.webp",
-      "assets/optimized/products/gallery/027-10062404354355-06.webp"
+      "assets/products/gallery/027-10062404354355-01.jpg",
+      "assets/products/gallery/027-10062404354355-02.jpg",
+      "assets/products/gallery/027-10062404354355-03.jpg",
+      "assets/products/gallery/027-10062404354355-04.jpg",
+      "assets/products/gallery/027-10062404354355-05.jpg",
+      "assets/products/gallery/027-10062404354355-06.jpg"
     ],
     "options": [],
     "variants": [
@@ -2291,13 +1581,9 @@
         "compareAtPrice": 840,
         "available": true,
         "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": 12
+        "sku": ""
       }
-    ],
-    "mainCategory": "الشمع والبخور",
-    "subCategory": "أطقم بخور"
+    ]
   },
   {
     "id": "old-10062400258355",
@@ -2309,21 +1595,18 @@
     "priceNote": "",
     "stock": "متاح",
     "badge": "علب بخور",
-    "image": "assets/optimized/products/gallery/028-10062400258355-01.webp",
+    "image": "assets/products/gallery/028-10062400258355-01.jpg",
     "url": "https://popekyrillos.store/en/products/علبة-بخور-نحاس-كبيرة-شكل-مستطيل",
     "tags": [
       "نحاسيات",
-      "علب بخور",
-      "brass",
-      "الشمع والبخور",
-      "أطقم بخور"
+      "علب بخور"
     ],
     "images": [
-      "assets/optimized/products/gallery/028-10062400258355-01.webp",
-      "assets/optimized/products/gallery/028-10062400258355-02.webp",
-      "assets/optimized/products/gallery/028-10062400258355-03.webp",
-      "assets/optimized/products/gallery/028-10062400258355-04.webp",
-      "assets/optimized/products/gallery/028-10062400258355-05.webp"
+      "assets/products/gallery/028-10062400258355-01.jpg",
+      "assets/products/gallery/028-10062400258355-02.jpg",
+      "assets/products/gallery/028-10062400258355-03.jpg",
+      "assets/products/gallery/028-10062400258355-04.jpg",
+      "assets/products/gallery/028-10062400258355-05.jpg"
     ],
     "options": [],
     "variants": [
@@ -2335,13 +1618,9 @@
         "compareAtPrice": 1260,
         "available": true,
         "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": 12
+        "sku": ""
       }
-    ],
-    "mainCategory": "الشمع والبخور",
-    "subCategory": "أطقم بخور"
+    ]
   },
   {
     "id": "reliquary-tubes-papa-kyrillos",
@@ -2353,19 +1632,16 @@
     "priceNote": "",
     "stock": "متاح",
     "badge": "نحاسيات",
-    "image": "assets/optimized/products/reliquary-tubes-papa-kyrillos.jpg",
+    "image": "assets/products/reliquary-tubes-papa-kyrillos.jpg",
     "url": "https://popekyrillos.store/products/reliquary-tubes-papa-kyrillos",
     "tags": [
       "نحاسيات",
       "أنابيب",
       "رفات",
-      "خشب زان",
-      "brass",
-      "أدوات المذبح",
-      "ذخائر وعلب"
+      "خشب زان"
     ],
     "images": [
-      "assets/optimized/products/reliquary-tubes-papa-kyrillos.jpg"
+      "assets/products/reliquary-tubes-papa-kyrillos.jpg"
     ],
     "options": [
       {
@@ -2389,15 +1665,14 @@
         "price": 462,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/optimized/products/gallery/029-9841772396851-01.webp",
-        "images": [
-          "assets/optimized/products/gallery/029-9841772396851-01.webp",
-          "assets/optimized/products/gallery/029-9841772396851-02.webp",
-          "assets/optimized/products/gallery/029-9841772396851-03.webp",
-          "assets/optimized/products/reliquary-tubes-papa-kyrillos.jpg"
-        ],
+        "image": "assets/products/gallery/029-9841772396851-01.jpg",
         "sku": "",
-        "quantity": null
+        "images": [
+          "assets/products/gallery/029-9841772396851-01.jpg",
+          "assets/products/gallery/029-9841772396851-02.jpg",
+          "assets/products/gallery/029-9841772396851-03.jpg",
+          "assets/products/reliquary-tubes-papa-kyrillos.jpg"
+        ]
       },
       {
         "id": "reliquary-tubes-size-4",
@@ -2408,15 +1683,14 @@
         "price": 330,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/optimized/products/gallery/030-9841770725683-01.webp",
-        "images": [
-          "assets/optimized/products/gallery/030-9841770725683-01.webp",
-          "assets/optimized/products/gallery/030-9841770725683-02.webp",
-          "assets/optimized/products/gallery/030-9841770725683-03.webp",
-          "assets/optimized/products/reliquary-tubes-papa-kyrillos.jpg"
-        ],
+        "image": "assets/products/gallery/030-9841770725683-01.jpg",
         "sku": "",
-        "quantity": null
+        "images": [
+          "assets/products/gallery/030-9841770725683-01.jpg",
+          "assets/products/gallery/030-9841770725683-02.jpg",
+          "assets/products/gallery/030-9841770725683-03.jpg",
+          "assets/products/reliquary-tubes-papa-kyrillos.jpg"
+        ]
       },
       {
         "id": "reliquary-tubes-size-3",
@@ -2427,15 +1701,14 @@
         "price": 234,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/optimized/products/gallery/031-9841769054515-01.webp",
-        "images": [
-          "assets/optimized/products/gallery/031-9841769054515-01.webp",
-          "assets/optimized/products/gallery/031-9841769054515-02.webp",
-          "assets/optimized/products/gallery/031-9841769054515-03.webp",
-          "assets/optimized/products/reliquary-tubes-papa-kyrillos.jpg"
-        ],
+        "image": "assets/products/gallery/031-9841769054515-01.jpg",
         "sku": "",
-        "quantity": null
+        "images": [
+          "assets/products/gallery/031-9841769054515-01.jpg",
+          "assets/products/gallery/031-9841769054515-02.jpg",
+          "assets/products/gallery/031-9841769054515-03.jpg",
+          "assets/products/reliquary-tubes-papa-kyrillos.jpg"
+        ]
       },
       {
         "id": "reliquary-tubes-above-zero",
@@ -2446,15 +1719,14 @@
         "price": 180,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/optimized/products/gallery/032-9841765515571-01.webp",
-        "images": [
-          "assets/optimized/products/gallery/032-9841765515571-01.webp",
-          "assets/optimized/products/gallery/032-9841765515571-02.webp",
-          "assets/optimized/products/gallery/032-9841765515571-03.webp",
-          "assets/optimized/products/reliquary-tubes-papa-kyrillos.jpg"
-        ],
+        "image": "assets/products/gallery/032-9841765515571-01.jpg",
         "sku": "",
-        "quantity": null
+        "images": [
+          "assets/products/gallery/032-9841765515571-01.jpg",
+          "assets/products/gallery/032-9841765515571-02.jpg",
+          "assets/products/gallery/032-9841765515571-03.jpg",
+          "assets/products/reliquary-tubes-papa-kyrillos.jpg"
+        ]
       },
       {
         "id": "reliquary-tubes-zero",
@@ -2465,19 +1737,16 @@
         "price": 144,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/optimized/products/gallery/033-9841763516723-01.webp",
-        "images": [
-          "assets/optimized/products/gallery/033-9841763516723-01.webp",
-          "assets/optimized/products/gallery/033-9841763516723-02.webp",
-          "assets/optimized/products/gallery/033-9841763516723-03.webp",
-          "assets/optimized/products/reliquary-tubes-papa-kyrillos.jpg"
-        ],
+        "image": "assets/products/gallery/033-9841763516723-01.jpg",
         "sku": "",
-        "quantity": null
+        "images": [
+          "assets/products/gallery/033-9841763516723-01.jpg",
+          "assets/products/gallery/033-9841763516723-02.jpg",
+          "assets/products/gallery/033-9841763516723-03.jpg",
+          "assets/products/reliquary-tubes-papa-kyrillos.jpg"
+        ]
       }
-    ],
-    "mainCategory": "أدوات المذبح",
-    "subCategory": "ذخائر وعلب"
+    ]
   },
   {
     "id": "incense-chat-1500-kg",
@@ -2489,17 +1758,15 @@
     "priceNote": "يبدأ من ١٨٨ ج.م حتى ١٬٥٠٠ ج.م",
     "stock": "متاح",
     "badge": "بخور",
-    "image": "assets/optimized/products/incense-chat-v2.webp",
-    "url": "https://popekyrillos.store/?product=incense-chat-1500-kg",
+    "image": "assets/products/incense-chat-v2.png",
+    "url": "",
     "tags": [
       "شموع وبخور",
-      "الوزن",
-      "candles",
       "بخور",
-      "الشمع والبخور"
+      "الوزن"
     ],
     "images": [
-      "assets/optimized/products/incense-chat-v2.webp"
+      "assets/products/incense-chat-v2.png"
     ],
     "options": [
       {
@@ -2523,12 +1790,8 @@
         "price": 188,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/optimized/products/incense-chat-v2.webp",
-        "images": [
-          "assets/optimized/products/incense-chat-v2.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "image": "assets/products/incense-chat-v2.png",
+        "sku": ""
       },
       {
         "id": "incense-chat-250g",
@@ -2539,12 +1802,8 @@
         "price": 375,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/optimized/products/incense-chat-v2.webp",
-        "images": [
-          "assets/optimized/products/incense-chat-v2.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "image": "assets/products/incense-chat-v2.png",
+        "sku": ""
       },
       {
         "id": "incense-chat-500g",
@@ -2555,12 +1814,8 @@
         "price": 750,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/optimized/products/incense-chat-v2.webp",
-        "images": [
-          "assets/optimized/products/incense-chat-v2.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "image": "assets/products/incense-chat-v2.png",
+        "sku": ""
       },
       {
         "id": "incense-chat-750g",
@@ -2571,12 +1826,8 @@
         "price": 1125,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/optimized/products/incense-chat-v2.webp",
-        "images": [
-          "assets/optimized/products/incense-chat-v2.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "image": "assets/products/incense-chat-v2.png",
+        "sku": ""
       },
       {
         "id": "incense-chat-1kg",
@@ -2587,16 +1838,10 @@
         "price": 1500,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/optimized/products/incense-chat-v2.webp",
-        "images": [
-          "assets/optimized/products/incense-chat-v2.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "image": "assets/products/incense-chat-v2.png",
+        "sku": ""
       }
-    ],
-    "mainCategory": "الشمع والبخور",
-    "subCategory": "بخور"
+    ]
   },
   {
     "id": "old-9840433955123",
@@ -2604,22 +1849,19 @@
     "category": "candles",
     "label": "شموع وبخور",
     "description": "زوج شمعدان مصنوع من النحاس المصري الثقيل ومطلي أيضاً باللون الذهبي حتي يضمن شكل جميل\nطول الشمعدان 50 سم",
-    "price": 6720,
+    "price": 6000,
     "priceNote": "",
     "stock": "غير متاح حاليا",
     "badge": "شموع وبخور",
-    "image": "assets/optimized/products/gallery/034-9840433955123-01.webp",
+    "image": "assets/products/gallery/034-9840433955123-01.jpg",
     "url": "https://popekyrillos.store/en/products/زوج-شمعدان-نحاس-ذهبي-كهرباء",
     "tags": [
-      "شموع وبخور",
-      "candles",
-      "أدوات المذبح",
-      "شمعدانات"
+      "شموع وبخور"
     ],
     "images": [
-      "assets/optimized/products/gallery/034-9840433955123-01.webp",
-      "assets/optimized/products/gallery/034-9840433955123-02.webp",
-      "assets/optimized/products/gallery/034-9840433955123-03.webp"
+      "assets/products/gallery/034-9840433955123-01.jpg",
+      "assets/products/gallery/034-9840433955123-02.jpg",
+      "assets/products/gallery/034-9840433955123-03.jpg"
     ],
     "options": [],
     "variants": [
@@ -2627,17 +1869,13 @@
         "id": "old-52070352879923",
         "title": "الاختيار الافتراضي",
         "options": {},
-        "price": 6720,
+        "price": 6000,
         "compareAtPrice": null,
         "available": false,
         "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": 12
+        "sku": ""
       }
-    ],
-    "mainCategory": "أدوات المذبح",
-    "subCategory": "شمعدانات"
+    ]
   },
   {
     "id": "old-9840425500979",
@@ -2649,19 +1887,16 @@
     "priceNote": "",
     "stock": "غير متاح حاليا",
     "badge": "شموع وبخور",
-    "image": "assets/optimized/products/gallery/035-9840425500979-01.webp",
+    "image": "assets/products/gallery/035-9840425500979-01.jpg",
     "url": "https://popekyrillos.store/en/products/شمعدان-نحاس-ذهبي-سوستة",
     "tags": [
-      "شموع وبخور",
-      "candles",
-      "أدوات المذبح",
-      "شمعدانات"
+      "شموع وبخور"
     ],
     "images": [
-      "assets/optimized/products/gallery/035-9840425500979-01.webp",
-      "assets/optimized/products/gallery/035-9840425500979-02.webp",
-      "assets/optimized/products/gallery/035-9840425500979-03.webp",
-      "assets/optimized/products/gallery/035-9840425500979-04.webp"
+      "assets/products/gallery/035-9840425500979-01.jpg",
+      "assets/products/gallery/035-9840425500979-02.jpg",
+      "assets/products/gallery/035-9840425500979-03.jpg",
+      "assets/products/gallery/035-9840425500979-04.jpg"
     ],
     "options": [],
     "variants": [
@@ -2673,13 +1908,9 @@
         "compareAtPrice": null,
         "available": false,
         "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": 12
+        "sku": ""
       }
-    ],
-    "mainCategory": "أدوات المذبح",
-    "subCategory": "شمعدانات"
+    ]
   },
   {
     "id": "old-9840420749619",
@@ -2687,24 +1918,21 @@
     "category": "candles",
     "label": "شموع وبخور",
     "description": "زوج شمعدان شكل الوردة مصنوع من النحاس المصري الثقيل ومطلي أيضاً باللون الذهبي حتي يضمن شكل جميل\nطول الشمعدان 40 سم",
-    "price": 4200,
+    "price": 3600,
     "priceNote": "",
     "stock": "متاح",
     "badge": "شموع وبخور",
-    "image": "assets/optimized/products/gallery/036-9840420749619-01.webp",
+    "image": "assets/products/gallery/036-9840420749619-01.jpg",
     "url": "https://popekyrillos.store/en/products/زوج-شمعدان-نحاس-ذهبي-شكل-الوردة-صغير",
     "tags": [
-      "شموع وبخور",
-      "candles",
-      "أدوات المذبح",
-      "شمعدانات"
+      "شموع وبخور"
     ],
     "images": [
-      "assets/optimized/products/gallery/036-9840420749619-01.webp",
-      "assets/optimized/products/gallery/036-9840420749619-02.webp",
-      "assets/optimized/products/gallery/036-9840420749619-03.webp",
-      "assets/optimized/products/gallery/036-9840420749619-04.webp",
-      "assets/optimized/products/gallery/036-9840420749619-05.webp"
+      "assets/products/gallery/036-9840420749619-01.jpg",
+      "assets/products/gallery/036-9840420749619-02.jpg",
+      "assets/products/gallery/036-9840420749619-03.jpg",
+      "assets/products/gallery/036-9840420749619-04.jpg",
+      "assets/products/gallery/036-9840420749619-05.jpg"
     ],
     "options": [],
     "variants": [
@@ -2712,17 +1940,13 @@
         "id": "old-52069875089715",
         "title": "الاختيار الافتراضي",
         "options": {},
-        "price": 4200,
+        "price": 3600,
         "compareAtPrice": null,
         "available": true,
         "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": 12
+        "sku": ""
       }
-    ],
-    "mainCategory": "أدوات المذبح",
-    "subCategory": "شمعدانات"
+    ]
   },
   {
     "id": "old-9840413475123",
@@ -2730,24 +1954,21 @@
     "category": "candles",
     "label": "شموع وبخور",
     "description": "زوج شمعدان مصنوع من النحاس المصري الثقيل ومطلي أيضاً باللون الذهبي حتي يضمن شكل جميل\nطول الشمعدان 51 سم",
-    "price": 13200,
+    "price": 10800,
     "priceNote": "",
     "stock": "متاح",
     "badge": "شموع وبخور",
-    "image": "assets/optimized/products/gallery/037-9840413475123-01.webp",
+    "image": "assets/products/gallery/037-9840413475123-01.jpg",
     "url": "https://popekyrillos.store/en/products/زوج-شمعدان-نحاس-ذهبي-شكل-الخروف",
     "tags": [
-      "شموع وبخور",
-      "candles",
-      "أدوات المذبح",
-      "شمعدانات"
+      "شموع وبخور"
     ],
     "images": [
-      "assets/optimized/products/gallery/037-9840413475123-01.webp",
-      "assets/optimized/products/gallery/037-9840413475123-02.webp",
-      "assets/optimized/products/gallery/037-9840413475123-03.webp",
-      "assets/optimized/products/gallery/037-9840413475123-04.webp",
-      "assets/optimized/products/gallery/037-9840413475123-05.webp"
+      "assets/products/gallery/037-9840413475123-01.jpg",
+      "assets/products/gallery/037-9840413475123-02.jpg",
+      "assets/products/gallery/037-9840413475123-03.jpg",
+      "assets/products/gallery/037-9840413475123-04.jpg",
+      "assets/products/gallery/037-9840413475123-05.jpg"
     ],
     "options": [],
     "variants": [
@@ -2755,17 +1976,13 @@
         "id": "old-52069520802099",
         "title": "الاختيار الافتراضي",
         "options": {},
-        "price": 13200,
+        "price": 10800,
         "compareAtPrice": null,
         "available": true,
         "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": 12
+        "sku": ""
       }
-    ],
-    "mainCategory": "أدوات المذبح",
-    "subCategory": "شمعدانات"
+    ]
   },
   {
     "id": "old-9840407806259",
@@ -2773,25 +1990,22 @@
     "category": "candles",
     "label": "شموع وبخور",
     "description": "زوج شمعدان مصنوع من النحاس المصري الثقيل ومطلي أيضاً باللون الذهبي حتي يضمن شكل جميل\nطول الشمعان 56 سم",
-    "price": 13200,
+    "price": 10800,
     "priceNote": "",
     "stock": "متاح",
     "badge": "شموع وبخور",
-    "image": "assets/optimized/products/gallery/038-9840407806259-01.webp",
+    "image": "assets/products/gallery/038-9840407806259-01.jpg",
     "url": "https://popekyrillos.store/en/products/زوج-شمعدان-برج-إيفل-نحاس-ذهبي-ثقيل",
     "tags": [
-      "شموع وبخور",
-      "candles",
-      "أدوات المذبح",
-      "شمعدانات"
+      "شموع وبخور"
     ],
     "images": [
-      "assets/optimized/products/gallery/038-9840407806259-01.webp",
-      "assets/optimized/products/gallery/038-9840407806259-02.webp",
-      "assets/optimized/products/gallery/038-9840407806259-03.webp",
-      "assets/optimized/products/gallery/038-9840407806259-04.webp",
-      "assets/optimized/products/gallery/038-9840407806259-05.webp",
-      "assets/optimized/products/gallery/038-9840407806259-06.webp"
+      "assets/products/gallery/038-9840407806259-01.jpg",
+      "assets/products/gallery/038-9840407806259-02.jpg",
+      "assets/products/gallery/038-9840407806259-03.jpg",
+      "assets/products/gallery/038-9840407806259-04.jpg",
+      "assets/products/gallery/038-9840407806259-05.jpg",
+      "assets/products/gallery/038-9840407806259-06.jpg"
     ],
     "options": [],
     "variants": [
@@ -2799,17 +2013,13 @@
         "id": "old-52069259182387",
         "title": "الاختيار الافتراضي",
         "options": {},
-        "price": 13200,
+        "price": 10800,
         "compareAtPrice": null,
         "available": true,
         "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": 12
+        "sku": ""
       }
-    ],
-    "mainCategory": "أدوات المذبح",
-    "subCategory": "شمعدانات"
+    ]
   },
   {
     "id": "old-9762774024499",
@@ -2821,19 +2031,16 @@
     "priceNote": "",
     "stock": "متاح",
     "badge": "نحاسيات",
-    "image": "assets/optimized/products/gallery/039-9762774024499-01.webp",
+    "image": "assets/products/gallery/039-9762774024499-01.jpg",
     "url": "https://popekyrillos.store/en/products/بشارة-ذهبي-يوناني",
     "tags": [
-      "نحاسيات",
-      "brass",
-      "أدوات المذبح",
-      "أدوات خدمة"
+      "نحاسيات"
     ],
     "images": [
-      "assets/optimized/products/gallery/039-9762774024499-01.webp",
-      "assets/optimized/products/gallery/039-9762774024499-02.webp",
-      "assets/optimized/products/gallery/039-9762774024499-03.webp",
-      "assets/optimized/products/gallery/039-9762774024499-04.webp"
+      "assets/products/gallery/039-9762774024499-01.jpg",
+      "assets/products/gallery/039-9762774024499-02.jpg",
+      "assets/products/gallery/039-9762774024499-03.jpg",
+      "assets/products/gallery/039-9762774024499-04.jpg"
     ],
     "options": [],
     "variants": [
@@ -2845,13 +2052,9 @@
         "compareAtPrice": 16000,
         "available": true,
         "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": 1
+        "sku": ""
       }
-    ],
-    "mainCategory": "أدوات المذبح",
-    "subCategory": "أدوات خدمة"
+    ]
   },
   {
     "id": "old-9762760196403",
@@ -2863,21 +2066,18 @@
     "priceNote": "يبدأ من ١٠٬٠٠٠ ج.م حتى ١٢٬٠٠٠ ج.م",
     "stock": "متاح",
     "badge": "شموع وبخور",
-    "image": "assets/optimized/products/gallery/040-9762760196403-01.webp",
+    "image": "assets/products/gallery/040-9762760196403-01.jpg",
     "url": "https://popekyrillos.store/en/products/شورية-نحاس-ذهبي-يوناني",
     "tags": [
       "شموع وبخور",
       "الحجم",
-      "المقاس",
-      "candles",
-      "الشمع والبخور",
-      "بخور"
+      "المقاس"
     ],
     "images": [
-      "assets/optimized/products/gallery/040-9762760196403-01.webp",
-      "assets/optimized/products/gallery/040-9762760196403-02.webp",
-      "assets/optimized/products/gallery/040-9762760196403-03.webp",
-      "assets/optimized/products/gallery/040-9762760196403-04.webp"
+      "assets/products/gallery/040-9762760196403-01.jpg",
+      "assets/products/gallery/040-9762760196403-02.jpg",
+      "assets/products/gallery/040-9762760196403-03.jpg",
+      "assets/products/gallery/040-9762760196403-04.jpg"
     ],
     "options": [
       {
@@ -2898,12 +2098,8 @@
         "price": 10000,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/optimized/products/gallery/040-9762760196403-01.webp",
-        "images": [
-          "assets/optimized/products/gallery/040-9762760196403-01.webp"
-        ],
-        "sku": "",
-        "quantity": 3
+        "image": "assets/products/gallery/040-9762760196403-01.jpg",
+        "sku": ""
       },
       {
         "id": "old-51620560961843",
@@ -2914,16 +2110,10 @@
         "price": 12000,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/optimized/products/gallery/040-9762760196403-02.webp",
-        "images": [
-          "assets/optimized/products/gallery/040-9762760196403-02.webp"
-        ],
-        "sku": "",
-        "quantity": null
+        "image": "assets/products/gallery/040-9762760196403-02.jpg",
+        "sku": ""
       }
-    ],
-    "mainCategory": "الشمع والبخور",
-    "subCategory": "بخور"
+    ]
   },
   {
     "id": "old-9762682011955",
@@ -2935,21 +2125,18 @@
     "priceNote": "يبدأ من ٢٦٬٥٠٠ ج.م حتى ٣٢٬٠٠٠ ج.م",
     "stock": "متاح",
     "badge": "نحاسيات",
-    "image": "assets/optimized/products/gallery/041-9762682011955-01.webp",
+    "image": "assets/products/gallery/041-9762682011955-01.jpg",
     "url": "https://popekyrillos.store/en/products/طقم-أواني-مذبح-ذهبي-يوناني",
     "tags": [
       "نحاسيات",
-      "حجم الكأس",
-      "brass",
-      "أدوات المذبح",
-      "أواني المذبح"
+      "حجم الكأس"
     ],
     "images": [
-      "assets/optimized/products/gallery/041-9762682011955-01.webp",
-      "assets/optimized/products/gallery/041-9762682011955-02.webp",
-      "assets/optimized/products/gallery/041-9762682011955-03.webp",
-      "assets/optimized/products/gallery/041-9762682011955-04.webp",
-      "assets/optimized/products/gallery/041-9762682011955-05.webp"
+      "assets/products/gallery/041-9762682011955-01.jpg",
+      "assets/products/gallery/041-9762682011955-02.jpg",
+      "assets/products/gallery/041-9762682011955-03.jpg",
+      "assets/products/gallery/041-9762682011955-04.jpg",
+      "assets/products/gallery/041-9762682011955-05.jpg"
     ],
     "options": [
       {
@@ -2970,12 +2157,8 @@
         "price": 32000,
         "compareAtPrice": 26000,
         "available": true,
-        "image": "assets/optimized/products/gallery/041-9762682011955-01.webp",
-        "images": [
-          "assets/optimized/products/gallery/041-9762682011955-01.webp"
-        ],
-        "sku": "",
-        "quantity": 1
+        "image": "assets/products/gallery/041-9762682011955-01.jpg",
+        "sku": ""
       },
       {
         "id": "old-51620385915187",
@@ -2986,16 +2169,10 @@
         "price": 26500,
         "compareAtPrice": 26000,
         "available": true,
-        "image": "assets/optimized/products/gallery/041-9762682011955-02.webp",
-        "images": [
-          "assets/optimized/products/gallery/041-9762682011955-02.webp"
-        ],
-        "sku": "",
-        "quantity": 1
+        "image": "assets/products/gallery/041-9762682011955-02.jpg",
+        "sku": ""
       }
-    ],
-    "mainCategory": "أدوات المذبح",
-    "subCategory": "أواني المذبح"
+    ]
   },
   {
     "id": "old-9757475930419",
@@ -3007,16 +2184,13 @@
     "priceNote": "",
     "stock": "متاح",
     "badge": "أيقونات وهدايا",
-    "image": "assets/optimized/products/gallery/042-9757475930419-01.webp",
+    "image": "assets/products/gallery/042-9757475930419-01.jpg",
     "url": "https://popekyrillos.store/en/products/أيقونة-صليب-صدر-يوناني-ذهبي",
     "tags": [
-      "أيقونات وهدايا",
-      "icons",
-      "الأيقونات والبراويز",
-      "أيقونات صغيرة"
+      "أيقونات وهدايا"
     ],
     "images": [
-      "assets/optimized/products/gallery/042-9757475930419-01.webp"
+      "assets/products/gallery/042-9757475930419-01.jpg"
     ],
     "options": [],
     "variants": [
@@ -3028,13 +2202,9 @@
         "compareAtPrice": 6000,
         "available": true,
         "image": null,
-        "images": [],
-        "sku": "123",
-        "quantity": null
+        "sku": "123"
       }
-    ],
-    "mainCategory": "الأيقونات والبراويز",
-    "subCategory": "أيقونات صغيرة"
+    ]
   },
   {
     "id": "stole-red-gold-01",
@@ -3046,19 +2216,16 @@
     "priceNote": "",
     "stock": "متاح",
     "badge": "بطرشيلات",
-    "image": "assets/optimized/products/gallery/stole-01.webp",
+    "image": "assets/products/gallery/stole-01.jpg",
     "url": "https://popekyrillos.store/products/stole-red-gold-01",
     "tags": [
       "أقمشة ومفارش",
-      "الطول",
-      "التفصيل",
-      "vestments",
       "بطرشيلات",
-      "الملابس الكنسية"
+      "الطول",
+      "التفصيل"
     ],
     "images": [
-      "assets/optimized/products/gallery/stole-01.webp",
-      "assets/optimized/products/gallery/stole-black.webp"
+      "assets/products/gallery/stole-01.jpg"
     ],
     "options": [
       {
@@ -3092,12 +2259,8 @@
         "price": 650,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/optimized/products/gallery/stole-01.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-01.webp"
-        ],
-        "sku": "",
-        "quantity": 100
+        "image": "assets/products/gallery/stole-01.jpg",
+        "sku": ""
       },
       {
         "id": "stole-red-gold-01-2-2",
@@ -3109,12 +2272,8 @@
         "price": 650,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/optimized/products/gallery/stole-01.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-01.webp"
-        ],
-        "sku": "",
-        "quantity": 100
+        "image": "assets/products/gallery/stole-01.jpg",
+        "sku": ""
       },
       {
         "id": "stole-red-gold-01-3-2",
@@ -3126,12 +2285,8 @@
         "price": 650,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/optimized/products/gallery/stole-01.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-01.webp"
-        ],
-        "sku": "",
-        "quantity": 100
+        "image": "assets/products/gallery/stole-01.jpg",
+        "sku": ""
       },
       {
         "id": "stole-red-gold-01-4-2",
@@ -3143,12 +2298,8 @@
         "price": 650,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/optimized/products/gallery/stole-01.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-01.webp"
-        ],
-        "sku": "",
-        "quantity": 100
+        "image": "assets/products/gallery/stole-01.jpg",
+        "sku": ""
       },
       {
         "id": "stole-red-gold-01-5-2",
@@ -3160,12 +2311,8 @@
         "price": 650,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/optimized/products/gallery/stole-01.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-01.webp"
-        ],
-        "sku": "",
-        "quantity": 100
+        "image": "assets/products/gallery/stole-01.jpg",
+        "sku": ""
       },
       {
         "id": "stole-red-gold-01-6-2",
@@ -3177,12 +2324,8 @@
         "price": 650,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/optimized/products/gallery/stole-01.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-01.webp"
-        ],
-        "sku": "",
-        "quantity": 100
+        "image": "assets/products/gallery/stole-01.jpg",
+        "sku": ""
       },
       {
         "id": "stole-red-gold-01-7-2",
@@ -3194,12 +2337,8 @@
         "price": 650,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/optimized/products/gallery/stole-01.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-01.webp"
-        ],
-        "sku": "",
-        "quantity": 100
+        "image": "assets/products/gallery/stole-01.jpg",
+        "sku": ""
       },
       {
         "id": "stole-red-gold-01-1-1",
@@ -3211,12 +2350,8 @@
         "price": 650,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/optimized/products/gallery/stole-01.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-01.webp"
-        ],
-        "sku": "",
-        "quantity": 100
+        "image": "assets/products/gallery/stole-01.jpg",
+        "sku": ""
       },
       {
         "id": "stole-red-gold-01-2-1",
@@ -3228,12 +2363,8 @@
         "price": 650,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/optimized/products/gallery/stole-01.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-01.webp"
-        ],
-        "sku": "",
-        "quantity": 100
+        "image": "assets/products/gallery/stole-01.jpg",
+        "sku": ""
       },
       {
         "id": "stole-red-gold-01-3-1",
@@ -3245,12 +2376,8 @@
         "price": 650,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/optimized/products/gallery/stole-01.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-01.webp"
-        ],
-        "sku": "",
-        "quantity": 100
+        "image": "assets/products/gallery/stole-01.jpg",
+        "sku": ""
       },
       {
         "id": "stole-red-gold-01-4-1",
@@ -3262,12 +2389,8 @@
         "price": 650,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/optimized/products/gallery/stole-01.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-01.webp"
-        ],
-        "sku": "",
-        "quantity": 100
+        "image": "assets/products/gallery/stole-01.jpg",
+        "sku": ""
       },
       {
         "id": "stole-red-gold-01-5-1",
@@ -3279,12 +2402,8 @@
         "price": 650,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/optimized/products/gallery/stole-01.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-01.webp"
-        ],
-        "sku": "",
-        "quantity": 100
+        "image": "assets/products/gallery/stole-01.jpg",
+        "sku": ""
       },
       {
         "id": "stole-red-gold-01-6-1",
@@ -3296,12 +2415,8 @@
         "price": 650,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/optimized/products/gallery/stole-01.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-01.webp"
-        ],
-        "sku": "",
-        "quantity": 100
+        "image": "assets/products/gallery/stole-01.jpg",
+        "sku": ""
       },
       {
         "id": "stole-red-gold-01-7-1",
@@ -3313,16 +2428,10 @@
         "price": 650,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/optimized/products/gallery/stole-01.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-01.webp"
-        ],
-        "sku": "",
-        "quantity": 100
+        "image": "assets/products/gallery/stole-01.jpg",
+        "sku": ""
       }
-    ],
-    "mainCategory": "الملابس الكنسية",
-    "subCategory": "بطرشيلات"
+    ]
   },
   {
     "id": "stole-red-gold-02",
@@ -3334,19 +2443,16 @@
     "priceNote": "",
     "stock": "متاح",
     "badge": "بطرشيلات",
-    "image": "assets/optimized/products/gallery/stole-02.webp",
+    "image": "assets/products/gallery/stole-02.jpg",
     "url": "https://popekyrillos.store/products/stole-red-gold-02",
     "tags": [
       "أقمشة ومفارش",
-      "الطول",
-      "التفصيل",
-      "vestments",
       "بطرشيلات",
-      "الملابس الكنسية"
+      "الطول",
+      "التفصيل"
     ],
     "images": [
-      "assets/optimized/products/gallery/stole-02.webp",
-      "assets/optimized/products/gallery/stole-black.webp"
+      "assets/products/gallery/stole-02.jpg"
     ],
     "options": [
       {
@@ -3380,12 +2486,8 @@
         "price": 650,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/optimized/products/gallery/stole-02.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-02.webp"
-        ],
-        "sku": "",
-        "quantity": 100
+        "image": "assets/products/gallery/stole-02.jpg",
+        "sku": ""
       },
       {
         "id": "stole-red-gold-02-2-2",
@@ -3397,12 +2499,8 @@
         "price": 650,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/optimized/products/gallery/stole-02.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-02.webp"
-        ],
-        "sku": "",
-        "quantity": 100
+        "image": "assets/products/gallery/stole-02.jpg",
+        "sku": ""
       },
       {
         "id": "stole-red-gold-02-3-2",
@@ -3414,12 +2512,8 @@
         "price": 650,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/optimized/products/gallery/stole-02.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-02.webp"
-        ],
-        "sku": "",
-        "quantity": 100
+        "image": "assets/products/gallery/stole-02.jpg",
+        "sku": ""
       },
       {
         "id": "stole-red-gold-02-4-2",
@@ -3431,12 +2525,8 @@
         "price": 650,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/optimized/products/gallery/stole-02.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-02.webp"
-        ],
-        "sku": "",
-        "quantity": 100
+        "image": "assets/products/gallery/stole-02.jpg",
+        "sku": ""
       },
       {
         "id": "stole-red-gold-02-5-2",
@@ -3448,12 +2538,8 @@
         "price": 650,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/optimized/products/gallery/stole-02.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-02.webp"
-        ],
-        "sku": "",
-        "quantity": 100
+        "image": "assets/products/gallery/stole-02.jpg",
+        "sku": ""
       },
       {
         "id": "stole-red-gold-02-6-2",
@@ -3465,12 +2551,8 @@
         "price": 650,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/optimized/products/gallery/stole-02.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-02.webp"
-        ],
-        "sku": "",
-        "quantity": 100
+        "image": "assets/products/gallery/stole-02.jpg",
+        "sku": ""
       },
       {
         "id": "stole-red-gold-02-7-2",
@@ -3482,12 +2564,8 @@
         "price": 650,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/optimized/products/gallery/stole-02.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-02.webp"
-        ],
-        "sku": "",
-        "quantity": 100
+        "image": "assets/products/gallery/stole-02.jpg",
+        "sku": ""
       },
       {
         "id": "stole-red-gold-02-1-1",
@@ -3499,12 +2577,8 @@
         "price": 650,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/optimized/products/gallery/stole-02.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-02.webp"
-        ],
-        "sku": "",
-        "quantity": 100
+        "image": "assets/products/gallery/stole-02.jpg",
+        "sku": ""
       },
       {
         "id": "stole-red-gold-02-2-1",
@@ -3516,12 +2590,8 @@
         "price": 650,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/optimized/products/gallery/stole-02.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-02.webp"
-        ],
-        "sku": "",
-        "quantity": 100
+        "image": "assets/products/gallery/stole-02.jpg",
+        "sku": ""
       },
       {
         "id": "stole-red-gold-02-3-1",
@@ -3533,12 +2603,8 @@
         "price": 650,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/optimized/products/gallery/stole-02.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-02.webp"
-        ],
-        "sku": "",
-        "quantity": 100
+        "image": "assets/products/gallery/stole-02.jpg",
+        "sku": ""
       },
       {
         "id": "stole-red-gold-02-4-1",
@@ -3550,12 +2616,8 @@
         "price": 650,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/optimized/products/gallery/stole-02.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-02.webp"
-        ],
-        "sku": "",
-        "quantity": 100
+        "image": "assets/products/gallery/stole-02.jpg",
+        "sku": ""
       },
       {
         "id": "stole-red-gold-02-5-1",
@@ -3567,12 +2629,8 @@
         "price": 650,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/optimized/products/gallery/stole-02.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-02.webp"
-        ],
-        "sku": "",
-        "quantity": 100
+        "image": "assets/products/gallery/stole-02.jpg",
+        "sku": ""
       },
       {
         "id": "stole-red-gold-02-6-1",
@@ -3584,12 +2642,8 @@
         "price": 650,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/optimized/products/gallery/stole-02.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-02.webp"
-        ],
-        "sku": "",
-        "quantity": 100
+        "image": "assets/products/gallery/stole-02.jpg",
+        "sku": ""
       },
       {
         "id": "stole-red-gold-02-7-1",
@@ -3601,16 +2655,10 @@
         "price": 650,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/optimized/products/gallery/stole-02.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-02.webp"
-        ],
-        "sku": "",
-        "quantity": 100
+        "image": "assets/products/gallery/stole-02.jpg",
+        "sku": ""
       }
-    ],
-    "mainCategory": "الملابس الكنسية",
-    "subCategory": "بطرشيلات"
+    ]
   },
   {
     "id": "stole-red-gold-03",
@@ -3622,19 +2670,16 @@
     "priceNote": "",
     "stock": "متاح",
     "badge": "بطرشيلات",
-    "image": "assets/optimized/products/gallery/stole-03.webp",
+    "image": "assets/products/gallery/stole-03.jpg",
     "url": "https://popekyrillos.store/products/stole-red-gold-03",
     "tags": [
       "أقمشة ومفارش",
-      "الطول",
-      "التفصيل",
-      "vestments",
       "بطرشيلات",
-      "الملابس الكنسية"
+      "الطول",
+      "التفصيل"
     ],
     "images": [
-      "assets/optimized/products/gallery/stole-03.webp",
-      "assets/optimized/products/gallery/stole-black.webp"
+      "assets/products/gallery/stole-03.jpg"
     ],
     "options": [
       {
@@ -3668,12 +2713,8 @@
         "price": 650,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/optimized/products/gallery/stole-03.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-03.webp"
-        ],
-        "sku": "",
-        "quantity": 100
+        "image": "assets/products/gallery/stole-03.jpg",
+        "sku": ""
       },
       {
         "id": "stole-red-gold-03-2-2",
@@ -3685,12 +2726,8 @@
         "price": 650,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/optimized/products/gallery/stole-03.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-03.webp"
-        ],
-        "sku": "",
-        "quantity": 100
+        "image": "assets/products/gallery/stole-03.jpg",
+        "sku": ""
       },
       {
         "id": "stole-red-gold-03-3-2",
@@ -3702,12 +2739,8 @@
         "price": 650,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/optimized/products/gallery/stole-03.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-03.webp"
-        ],
-        "sku": "",
-        "quantity": 5
+        "image": "assets/products/gallery/stole-03.jpg",
+        "sku": ""
       },
       {
         "id": "stole-red-gold-03-4-2",
@@ -3719,12 +2752,8 @@
         "price": 650,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/optimized/products/gallery/stole-03.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-03.webp"
-        ],
-        "sku": "",
-        "quantity": 100
+        "image": "assets/products/gallery/stole-03.jpg",
+        "sku": ""
       },
       {
         "id": "stole-red-gold-03-5-2",
@@ -3736,12 +2765,8 @@
         "price": 650,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/optimized/products/gallery/stole-03.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-03.webp"
-        ],
-        "sku": "",
-        "quantity": 100
+        "image": "assets/products/gallery/stole-03.jpg",
+        "sku": ""
       },
       {
         "id": "stole-red-gold-03-6-2",
@@ -3753,12 +2778,8 @@
         "price": 650,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/optimized/products/gallery/stole-03.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-03.webp"
-        ],
-        "sku": "",
-        "quantity": 100
+        "image": "assets/products/gallery/stole-03.jpg",
+        "sku": ""
       },
       {
         "id": "stole-red-gold-03-7-2",
@@ -3770,12 +2791,8 @@
         "price": 650,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/optimized/products/gallery/stole-03.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-03.webp"
-        ],
-        "sku": "",
-        "quantity": 100
+        "image": "assets/products/gallery/stole-03.jpg",
+        "sku": ""
       },
       {
         "id": "stole-red-gold-03-1-1",
@@ -3787,12 +2804,8 @@
         "price": 650,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/optimized/products/gallery/stole-03.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-03.webp"
-        ],
-        "sku": "",
-        "quantity": 100
+        "image": "assets/products/gallery/stole-03.jpg",
+        "sku": ""
       },
       {
         "id": "stole-red-gold-03-2-1",
@@ -3804,12 +2817,8 @@
         "price": 650,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/optimized/products/gallery/stole-03.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-03.webp"
-        ],
-        "sku": "",
-        "quantity": 100
+        "image": "assets/products/gallery/stole-03.jpg",
+        "sku": ""
       },
       {
         "id": "stole-red-gold-03-3-1",
@@ -3821,12 +2830,8 @@
         "price": 650,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/optimized/products/gallery/stole-03.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-03.webp"
-        ],
-        "sku": "",
-        "quantity": 100
+        "image": "assets/products/gallery/stole-03.jpg",
+        "sku": ""
       },
       {
         "id": "stole-red-gold-03-4-1",
@@ -3838,12 +2843,8 @@
         "price": 650,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/optimized/products/gallery/stole-03.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-03.webp"
-        ],
-        "sku": "",
-        "quantity": 100
+        "image": "assets/products/gallery/stole-03.jpg",
+        "sku": ""
       },
       {
         "id": "stole-red-gold-03-5-1",
@@ -3855,12 +2856,8 @@
         "price": 650,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/optimized/products/gallery/stole-03.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-03.webp"
-        ],
-        "sku": "",
-        "quantity": 100
+        "image": "assets/products/gallery/stole-03.jpg",
+        "sku": ""
       },
       {
         "id": "stole-red-gold-03-6-1",
@@ -3872,12 +2869,8 @@
         "price": 650,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/optimized/products/gallery/stole-03.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-03.webp"
-        ],
-        "sku": "",
-        "quantity": 100
+        "image": "assets/products/gallery/stole-03.jpg",
+        "sku": ""
       },
       {
         "id": "stole-red-gold-03-7-1",
@@ -3889,16 +2882,10 @@
         "price": 650,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/optimized/products/gallery/stole-03.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-03.webp"
-        ],
-        "sku": "",
-        "quantity": 100
+        "image": "assets/products/gallery/stole-03.jpg",
+        "sku": ""
       }
-    ],
-    "mainCategory": "الملابس الكنسية",
-    "subCategory": "بطرشيلات"
+    ]
   },
   {
     "id": "stole-red-gold-04",
@@ -3910,19 +2897,16 @@
     "priceNote": "",
     "stock": "متاح",
     "badge": "بطرشيلات",
-    "image": "assets/optimized/products/gallery/stole-04.webp",
+    "image": "assets/products/gallery/stole-04.jpg",
     "url": "https://popekyrillos.store/products/stole-red-gold-04",
     "tags": [
       "أقمشة ومفارش",
-      "الطول",
-      "التفصيل",
-      "vestments",
       "بطرشيلات",
-      "الملابس الكنسية"
+      "الطول",
+      "التفصيل"
     ],
     "images": [
-      "assets/optimized/products/gallery/stole-04.webp",
-      "assets/optimized/products/gallery/stole-black.webp"
+      "assets/products/gallery/stole-04.jpg"
     ],
     "options": [
       {
@@ -3956,12 +2940,8 @@
         "price": 650,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/optimized/products/gallery/stole-04.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-04.webp"
-        ],
-        "sku": "",
-        "quantity": 100
+        "image": "assets/products/gallery/stole-04.jpg",
+        "sku": ""
       },
       {
         "id": "stole-red-gold-04-2-2",
@@ -3973,12 +2953,8 @@
         "price": 650,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/optimized/products/gallery/stole-04.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-04.webp"
-        ],
-        "sku": "",
-        "quantity": 100
+        "image": "assets/products/gallery/stole-04.jpg",
+        "sku": ""
       },
       {
         "id": "stole-red-gold-04-3-2",
@@ -3990,12 +2966,8 @@
         "price": 650,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/optimized/products/gallery/stole-04.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-04.webp"
-        ],
-        "sku": "",
-        "quantity": 100
+        "image": "assets/products/gallery/stole-04.jpg",
+        "sku": ""
       },
       {
         "id": "stole-red-gold-04-4-2",
@@ -4007,12 +2979,8 @@
         "price": 650,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/optimized/products/gallery/stole-04.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-04.webp"
-        ],
-        "sku": "",
-        "quantity": 100
+        "image": "assets/products/gallery/stole-04.jpg",
+        "sku": ""
       },
       {
         "id": "stole-red-gold-04-5-2",
@@ -4024,12 +2992,8 @@
         "price": 650,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/optimized/products/gallery/stole-04.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-04.webp"
-        ],
-        "sku": "",
-        "quantity": 100
+        "image": "assets/products/gallery/stole-04.jpg",
+        "sku": ""
       },
       {
         "id": "stole-red-gold-04-6-2",
@@ -4041,12 +3005,8 @@
         "price": 650,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/optimized/products/gallery/stole-04.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-04.webp"
-        ],
-        "sku": "",
-        "quantity": 100
+        "image": "assets/products/gallery/stole-04.jpg",
+        "sku": ""
       },
       {
         "id": "stole-red-gold-04-7-2",
@@ -4058,12 +3018,8 @@
         "price": 650,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/optimized/products/gallery/stole-04.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-04.webp"
-        ],
-        "sku": "",
-        "quantity": 100
+        "image": "assets/products/gallery/stole-04.jpg",
+        "sku": ""
       },
       {
         "id": "stole-red-gold-04-1-1",
@@ -4075,12 +3031,8 @@
         "price": 650,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/optimized/products/gallery/stole-04.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-04.webp"
-        ],
-        "sku": "",
-        "quantity": 100
+        "image": "assets/products/gallery/stole-04.jpg",
+        "sku": ""
       },
       {
         "id": "stole-red-gold-04-2-1",
@@ -4092,12 +3044,8 @@
         "price": 650,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/optimized/products/gallery/stole-04.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-04.webp"
-        ],
-        "sku": "",
-        "quantity": 100
+        "image": "assets/products/gallery/stole-04.jpg",
+        "sku": ""
       },
       {
         "id": "stole-red-gold-04-3-1",
@@ -4109,12 +3057,8 @@
         "price": 650,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/optimized/products/gallery/stole-04.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-04.webp"
-        ],
-        "sku": "",
-        "quantity": 100
+        "image": "assets/products/gallery/stole-04.jpg",
+        "sku": ""
       },
       {
         "id": "stole-red-gold-04-4-1",
@@ -4126,12 +3070,8 @@
         "price": 650,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/optimized/products/gallery/stole-04.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-04.webp"
-        ],
-        "sku": "",
-        "quantity": 100
+        "image": "assets/products/gallery/stole-04.jpg",
+        "sku": ""
       },
       {
         "id": "stole-red-gold-04-5-1",
@@ -4143,12 +3083,8 @@
         "price": 650,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/optimized/products/gallery/stole-04.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-04.webp"
-        ],
-        "sku": "",
-        "quantity": 100
+        "image": "assets/products/gallery/stole-04.jpg",
+        "sku": ""
       },
       {
         "id": "stole-red-gold-04-6-1",
@@ -4160,12 +3096,8 @@
         "price": 650,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/optimized/products/gallery/stole-04.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-04.webp"
-        ],
-        "sku": "",
-        "quantity": 100
+        "image": "assets/products/gallery/stole-04.jpg",
+        "sku": ""
       },
       {
         "id": "stole-red-gold-04-7-1",
@@ -4177,15 +3109,9 @@
         "price": 650,
         "compareAtPrice": null,
         "available": true,
-        "image": "assets/optimized/products/gallery/stole-04.webp",
-        "images": [
-          "assets/optimized/products/gallery/stole-04.webp"
-        ],
-        "sku": "",
-        "quantity": 100
+        "image": "assets/products/gallery/stole-04.jpg",
+        "sku": ""
       }
-    ],
-    "mainCategory": "الملابس الكنسية",
-    "subCategory": "بطرشيلات"
+    ]
   }
 ]
