@@ -5,6 +5,7 @@ const paymobIntentionEndpointPath = "/api/create-paymob-intention";
 const firebaseSdkVersion = "10.14.1";
 const productBatchSize = 12;
 const catalogVersion = Date.now().toString(36);
+const canonicalOrigin = "https://popekyrillos.store";
 const guestCartStorageKey = "pope-kyrillos-cart:guest";
 const userCartStoragePrefix = "pope-kyrillos-cart:user:";
 const activeCartStorageKey = "pope-kyrillos-cart:active";
@@ -202,7 +203,7 @@ const translations = {
     cartAria: "فتح السلة",
     heroEyebrow: "أدوات كنسية، بخور وشموع، أيقونات، كتب طقسية، وهدايا خدمة",
     heroTitle: "مكتبة البابا كيرلس",
-    heroLead: "أسسها الشماس الدياكون بولس ملاك عام 2001 م\nاطلب منتجاتك الكنسية أونلاين والدفع عند الاستلام متاح",
+    heroLead: "أسسها الشماس الدياكون بولس ملاك عام 2001 م\nاطلب منتجاتك الكنسية أونلاين والدفع أونلاين أو عند الاستلام من الفرع",
     shopNow: "تسوق الآن",
     shopMenuTitle: "اختار القسم",
     shopMenuSubtitle: "الأقسام الرئيسية والفرعية",
@@ -211,7 +212,7 @@ const translations = {
     metricTime: "تجهيز الطلب",
     metricChurch: "كميات وأسعار خاصة",
     trustPaymentTitle: "طرق دفع مرنة",
-    trustPaymentText: "دفع عند الاستلام أو أونلاين",
+    trustPaymentText: "الدفع أونلاين أو عند الاستلام من الفرع",
     trustChosenTitle: "منتجات مختارة",
     trustChosenText: "أدوات كنسية وكتب بأعلي جودة",
     trustGiftTitle: "تغليف مضمون",
@@ -458,7 +459,7 @@ const translations = {
     cartAria: "Open cart",
     heroEyebrow: "Church tools, incense and candles, icons, liturgical books, and ministry gifts",
     heroTitle: "Pope Kyrillos Store",
-    heroLead: "Founded by Deacon Boulos Malak in 2001\nOrder your church supplies online with cash on delivery available",
+    heroLead: "Founded by Deacon Boulos Malak in 2001\nOrder online and pay online or when picking up from the branch",
     shopNow: "Shop now",
     shopMenuTitle: "Choose a category",
     shopMenuSubtitle: "Main and subcategories",
@@ -467,7 +468,7 @@ const translations = {
     metricTime: "common prep time",
     metricChurch: "church orders",
     trustPaymentTitle: "Flexible payment",
-    trustPaymentText: "Cash on delivery or online",
+    trustPaymentText: "Online payment or branch pickup cash",
     trustChosenTitle: "Curated products",
     trustChosenText: "Books and tools with steady quality",
     trustGiftTitle: "Careful packing",
@@ -1136,10 +1137,7 @@ function applyLanguage({ render = true } = {}) {
   document.body.dir = t("dir");
   document.body.dataset.lang = state.language;
   formatter = new Intl.NumberFormat(isEnglish() ? "en-US-u-nu-latn" : "ar-EG");
-  document.title = t("documentTitle");
-
-  const metaDescription = document.querySelector('meta[name="description"]');
-  if (metaDescription) metaDescription.setAttribute("content", t("metaDescription"));
+  updatePageMeta(getProduct(state.modal.productId));
   if (languageLabel) languageLabel.textContent = t("languageButton");
   if (languageToggle) languageToggle.setAttribute("aria-label", t("languageToggleAria"));
 
@@ -1364,19 +1362,61 @@ function money(amount) {
 }
 
 function productShareUrl(productId) {
-  const url = new URL(window.location.href);
-  url.searchParams.set("product", productId);
+  const product = getProduct(productId);
+  const url = new URL(product ? canonicalProductPath(product) : "/", canonicalOrigin);
+  if (!product && productId) url.searchParams.set("product", productId);
   url.searchParams.delete("image");
   url.hash = "";
   return url.toString();
 }
 
+function normalizeSlug(value = "") {
+  return String(value)
+    .normalize("NFKD")
+    .replace(/[\u064b-\u065f\u0670]/g, "")
+    .replace(/[أإآ]/g, "ا")
+    .replace(/ى/g, "ي")
+    .replace(/ة/g, "ه")
+    .replace(/ؤ/g, "و")
+    .replace(/ئ/g, "ي")
+    .toLowerCase()
+    .trim()
+    .replace(/[^\p{L}\p{N}]+/gu, "-")
+    .replace(/^-+|-+$/g, "")
+    .replace(/-{2,}/g, "-");
+}
+
+function productSlug(product) {
+  return normalizeSlug(product?.slug || localized(product?.name) || product?.id || "");
+}
+
+function canonicalProductPath(product) {
+  const slug = productSlug(product) || normalizeSlug(product?.id || "");
+  return `/products/${encodeURIComponent(slug || product?.id || "")}`;
+}
+
+function productFromSlug(slug = "") {
+  const normalized = normalizeSlug(decodeURIComponent(String(slug || "")));
+  if (!normalized) return null;
+  return products.find((item) => productSlug(item) === normalized || normalizeSlug(item.id) === normalized) || null;
+}
+
 function productIdFromUrl() {
   const url = new URL(window.location.href);
+  const segments = url.pathname.split("/").filter(Boolean);
+  if (segments[0] === "products" && segments[1]) {
+    return productFromSlug(segments.slice(1).join("/"))?.id || "";
+  }
+  if (segments[0] === "product") {
+    const pathProduct = segments[1] ? productFromSlug(segments[1]) : null;
+    if (pathProduct) return pathProduct.id;
+    const idProduct = url.searchParams.get("id") || url.searchParams.get("product");
+    if (idProduct) return getProduct(idProduct)?.id || productFromSlug(idProduct)?.id || idProduct;
+  }
   const queryProduct = url.searchParams.get("product");
-  if (queryProduct) return queryProduct;
+  if (queryProduct) return getProduct(queryProduct)?.id || productFromSlug(queryProduct)?.id || queryProduct;
   const hashMatch = decodeURIComponent(url.hash || "").match(/^#product=(.+)$/);
-  return hashMatch ? hashMatch[1] : "";
+  return hashMatch ? getProduct(hashMatch[1])?.id || productFromSlug(hashMatch[1])?.id || hashMatch[1] : "";
 }
 
 function productImageFromUrl() {
@@ -1395,7 +1435,7 @@ function syncSearchInput() {
 }
 
 function setCatalogSearchUrl(query = "", { replace = true } = {}) {
-  const url = new URL(window.location.href);
+  const url = new URL("/", canonicalOrigin);
   const normalizedQuery = String(query || "").trim();
   url.searchParams.delete("product");
   url.searchParams.delete("image");
@@ -1420,7 +1460,7 @@ function setProductImageUrl(productId, image) {
 function clearProductImageUrl({ replace = true } = {}) {
   const url = new URL(window.location.href);
   if (!url.searchParams.has("image")) return;
-  const productId = url.searchParams.get("product");
+  const productId = productIdFromUrl();
   url.searchParams.delete("image");
   const stateData = productId ? { productId } : {};
   if (replace) window.history.replaceState(stateData, "", url.toString());
@@ -1443,7 +1483,7 @@ function catalogFilterFromUrl() {
 }
 
 function categoryShareUrl(category = "all", label = "") {
-  const url = new URL(window.location.href);
+  const url = new URL("/", canonicalOrigin);
   url.searchParams.delete("product");
   url.searchParams.delete("image");
   url.searchParams.delete("category");
@@ -1478,12 +1518,16 @@ function setProductUrl(productId) {
 
 function clearProductUrl() {
   const url = new URL(window.location.href);
-  const hadProductUrl = url.searchParams.has("product") || url.searchParams.has("image") || decodeURIComponent(url.hash || "").startsWith("#product=");
+  const hadProductUrl =
+    url.pathname.startsWith("/products/") ||
+    url.pathname.startsWith("/product/") ||
+    url.searchParams.has("product") ||
+    url.searchParams.has("image") ||
+    decodeURIComponent(url.hash || "").startsWith("#product=");
   if (!hadProductUrl) return;
-  url.searchParams.delete("product");
-  url.searchParams.delete("image");
-  url.hash = "catalog";
-  window.history.replaceState({}, "", url);
+  const nextUrl = new URL("/", canonicalOrigin);
+  nextUrl.hash = "catalog";
+  window.history.replaceState({}, "", nextUrl);
 }
 
 function escapeHtml(value = "") {
@@ -1492,6 +1536,104 @@ function escapeHtml(value = "") {
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;");
+}
+
+function absoluteUrl(value = "") {
+  if (!value) return "";
+  return new URL(value.startsWith("/") ? value : `/${value}`, canonicalOrigin).toString();
+}
+
+function setMetaTag(selector, attributes = {}) {
+  let element = document.head.querySelector(selector);
+  if (!element) {
+    element = document.createElement("meta");
+    document.head.appendChild(element);
+  }
+  Object.entries(attributes).forEach(([name, value]) => {
+    if (value === null || value === undefined) element.removeAttribute(name);
+    else element.setAttribute(name, value);
+  });
+  return element;
+}
+
+function setCanonical(url) {
+  document.head.querySelectorAll('link[rel="canonical"]').forEach((link, index) => {
+    if (index > 0) link.remove();
+  });
+  let canonical = document.head.querySelector('link[rel="canonical"]');
+  if (!canonical) {
+    canonical = document.createElement("link");
+    canonical.rel = "canonical";
+    document.head.appendChild(canonical);
+  }
+  canonical.href = url;
+}
+
+function replaceJsonLd(id, data) {
+  document.getElementById(id)?.remove();
+  if (!data) return;
+  const script = document.createElement("script");
+  script.type = "application/ld+json";
+  script.id = id;
+  script.textContent = JSON.stringify(data);
+  document.head.appendChild(script);
+}
+
+function pageDescription(product = null) {
+  const description = product ? cleanDescription(displayText(localized(product.description || ""))) : t("metaDescription");
+  return String(description || t("metaDescription")).replace(/\s+/g, " ").trim().slice(0, 170);
+}
+
+function updateIndexingMeta({ noindex = false } = {}) {
+  setMetaTag('meta[name="robots"]', { name: "robots", content: noindex ? "noindex, nofollow" : "index, follow" });
+}
+
+function updatePageMeta(product = null) {
+  const isProduct = Boolean(product);
+  const canonicalUrl = isProduct ? `${canonicalOrigin}${canonicalProductPath(product)}` : `${canonicalOrigin}/`;
+  const title = isProduct ? `${displayText(localized(product.name))} | ${t("brandName")}` : t("documentTitle");
+  const description = pageDescription(product);
+  const image = isProduct
+    ? absoluteUrl(productImageUrl(getProductImages(product)[0] || "", product).split("?")[0])
+    : absoluteUrl("assets/optimized/hero-papa-kyrillos-products.webp");
+  const price = isProduct ? productPrice(product) : null;
+  const availability = isProduct && hasAvailableVariant(product) ? "https://schema.org/InStock" : "https://schema.org/OutOfStock";
+
+  document.title = title;
+  setCanonical(canonicalUrl);
+  updateIndexingMeta({ noindex: false });
+  setMetaTag('meta[name="description"]', { name: "description", content: description });
+  setMetaTag('meta[property="og:type"]', { property: "og:type", content: isProduct ? "product" : "website" });
+  setMetaTag('meta[property="og:title"]', { property: "og:title", content: title });
+  setMetaTag('meta[property="og:description"]', { property: "og:description", content: description });
+  setMetaTag('meta[property="og:url"]', { property: "og:url", content: canonicalUrl });
+  if (image) setMetaTag('meta[property="og:image"]', { property: "og:image", content: image });
+  setMetaTag('meta[name="twitter:card"]', { name: "twitter:card", content: image ? "summary_large_image" : "summary" });
+  setMetaTag('meta[name="twitter:title"]', { name: "twitter:title", content: title });
+  setMetaTag('meta[name="twitter:description"]', { name: "twitter:description", content: description });
+  if (image) setMetaTag('meta[name="twitter:image"]', { name: "twitter:image", content: image });
+
+  replaceJsonLd(
+    "product-json-ld",
+    isProduct
+      ? {
+          "@context": "https://schema.org",
+          "@type": "Product",
+          name: displayText(localized(product.name)),
+          description,
+          image: image ? [image] : undefined,
+          sku: product.sku || product.id,
+          url: canonicalUrl,
+          offers: {
+            "@type": "Offer",
+            priceCurrency: "EGP",
+            price: price === null ? undefined : price,
+            availability,
+            url: canonicalUrl
+          }
+        }
+      : null
+  );
 }
 
 function compactText(value = "", maxLength = 150) {
@@ -2320,6 +2462,7 @@ function openProductModal(productId, { updateUrl = true } = {}) {
   productModal.setAttribute("aria-hidden", "false");
   document.body.classList.add("product-open");
   if (updateUrl) setProductUrl(product.id);
+  updatePageMeta(product);
   productModalClose.focus();
 }
 
@@ -2364,6 +2507,7 @@ function closeProductModal({ updateUrl = true } = {}) {
   state.modal.selectedOptions = {};
   state.modal.image = "";
   state.modal.quantity = 1;
+  updatePageMeta();
   if (updateUrl) clearProductUrl();
 }
 
@@ -3495,7 +3639,7 @@ function openProductFromUrl() {
   const productId = productIdFromUrl();
   if (!productId) return false;
   const product = getProduct(productId);
-  if (!product || !hasAvailableVariant(product)) return false;
+  if (!product) return false;
   openProductModal(productId, { updateUrl: false });
   const image = productImageFromUrl();
   if (image) {
@@ -3525,7 +3669,7 @@ async function loadProducts() {
   renderProducts();
   renderShopMenu();
   renderCart();
-  openProductFromUrl();
+  if (!openProductFromUrl()) updatePageMeta();
 }
 
 function openHeaderSearch(focusInput = true) {

@@ -10,6 +10,17 @@
 /products.json
   Cache-Control: no-store
 
+/sitemap.xml
+  Cache-Control: no-store
+  Content-Type: application/xml; charset=utf-8
+
+/robots.txt
+  Cache-Control: no-store
+  Content-Type: text/plain; charset=utf-8
+
+/*.html
+  Cache-Control: no-store
+
 /*
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin

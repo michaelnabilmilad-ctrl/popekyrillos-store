@@ -19,6 +19,8 @@ const files = [
   "firebase-config.js",
   "category-taxonomy.js",
   "products.json",
+  "sitemap.xml",
+  "robots.txt",
   "policies.html",
   "admin.html",
   "admin.css",

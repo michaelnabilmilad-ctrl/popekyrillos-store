@@ -1,0 +1,14 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /admin/
+Disallow: /cart
+Disallow: /checkout
+Disallow: /payment
+Disallow: /payment-success
+Disallow: /payment-failed
+Disallow: /payment-pending
+Disallow: /api/
+Disallow: /admin/api/
+
+Sitemap: https://popekyrillos.store/sitemap.xml
