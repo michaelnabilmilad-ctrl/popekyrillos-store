@@ -85,6 +85,15 @@ function rewriteRequest(request, pathname) {
   return new Request(url.toString(), request);
 }
 
+function rewriteGetRequest(request, pathname) {
+  const url = new URL(request.url);
+  url.pathname = pathname;
+  return new Request(url.toString(), {
+    method: "GET",
+    headers: request.headers
+  });
+}
+
 function normalizeSlug(value = "") {
   return String(value)
     .normalize("NFKD")
@@ -263,10 +272,11 @@ function productMetaTags(product) {
 
 async function htmlResponse(request, env, pathname = "/index.html", init = {}) {
   const assetPath = pathname === "/index.html" ? "/" : pathname.replace(/\.html$/, "");
-  const response = await env.ASSETS.fetch(rewriteRequest(request, assetPath));
+  const response = await env.ASSETS.fetch(rewriteGetRequest(request, assetPath));
   const headers = new Headers(response.headers);
   headers.set("Cache-Control", "no-store");
   headers.set("X-Content-Type-Options", "nosniff");
+  if (request.method === "HEAD") return new Response(null, { status: init.status || response.status, headers });
   if (headers.get("Content-Type")?.includes("text/html") && init.canonicalUrl) {
     return new Response(injectCanonical(await response.text(), init.canonicalUrl), { status: init.status || response.status, headers });
   }
@@ -274,7 +284,17 @@ async function htmlResponse(request, env, pathname = "/index.html", init = {}) {
 }
 
 async function productPageResponse(request, env, product) {
-  const response = await env.ASSETS.fetch(rewriteRequest(request, "/"));
+  const response = await env.ASSETS.fetch(rewriteGetRequest(request, "/"));
+  if (request.method === "HEAD") {
+    return new Response(null, {
+      status: 200,
+      headers: {
+        "Content-Type": "text/html; charset=utf-8",
+        "Cache-Control": "no-store",
+        "X-Content-Type-Options": "nosniff"
+      }
+    });
+  }
   let html = await response.text();
   html = injectHead(html, productMetaTags(product));
   return new Response(html, {
