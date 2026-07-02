@@ -538,10 +538,28 @@
           </div>
           <div class="account-user" data-account-user hidden></div>
           <div class="auth-provider-list" data-auth-provider-list>
-            <div class="account-quick-links">
-              <a class="button primary full" href="/cart">مراجعة السلة</a>
-              <a class="button secondary full" href="/checkout">إكمال الطلب</a>
-            </div>
+            <form class="email-auth-form" data-email-auth-form>
+              <label>
+                <span data-auth-email-label>البريد الإلكتروني</span>
+                <input type="email" data-auth-email autocomplete="email" placeholder="name@example.com" />
+              </label>
+              <label>
+                <span data-auth-password-label>كلمة المرور</span>
+                <input type="password" data-auth-password autocomplete="current-password" placeholder="6 أحرف على الأقل" />
+              </label>
+              <div class="email-auth-actions">
+                <button class="button primary" type="submit" data-email-signin>دخول</button>
+                <button class="button secondary" type="button" data-email-signup>إنشاء حساب</button>
+              </div>
+              <button class="email-reset-link" type="button" data-email-reset>تعيين أو استرجاع كلمة المرور</button>
+            </form>
+            <button class="auth-provider google" type="button" data-auth-provider="google">
+              <span class="auth-icon">G</span>
+              <span class="auth-text">
+                <strong>الدخول بجوجل</strong>
+                <small>الأسرع لحفظ السلة على حسابك</small>
+              </span>
+            </button>
           </div>
           <button class="button secondary full" type="button" data-auth-signout hidden>تسجيل الخروج</button>
         </div>
@@ -552,6 +570,6 @@
     <div class="toast" data-toast role="status" aria-live="polite"></div>
     <script src="category-taxonomy.js?v=utf8-20260702" defer></script>
     <script src="firebase-config.min.js?v=secure-orders-20260612" defer></script>
-    <script src="script.min.js?v=utf8-20260702" defer></script>
+    <script src="script.min.js?v=account-login-20260702" defer></script>
   </body>
 </html>
