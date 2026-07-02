@@ -26,7 +26,8 @@
     categoryFilter: "all",
     mainCategoryFilter: "all",
     subCategoryFilter: "all",
-    needsReviewOnly: false
+    needsReviewOnly: false,
+    assetPreviewVersion: String(Date.now())
   };
 
   const elements = {
@@ -331,6 +332,7 @@
       ensureProductShape(product);
       product.images = unique([...(product.images || []), result.path]);
       product.image = product.images[0] || result.path;
+      state.assetPreviewVersion = String(Date.now());
       setValue("images", arrayToLines(product.images));
       renderImagePreview(product.images);
       markDirty();
@@ -688,7 +690,7 @@
 
     elements.imagePreview.innerHTML = visibleImages.map((image, index) => `
       <figure>
-        <img src="${escapeAttribute(previewAssetUrl(image))}" alt="صورة ${index + 1}" loading="lazy" decoding="async" onerror="this.closest('figure').classList.add('image-missing')">
+        <img src="${escapeAttribute(previewAssetUrl(image))}" alt="صورة ${index + 1}" loading="lazy" decoding="async" onload="this.closest('figure').classList.remove('image-missing')" onerror="this.closest('figure').classList.add('image-missing')">
         <figcaption>${escapeHtml(image)}</figcaption>
       </figure>
     `).join("");
@@ -1122,7 +1124,7 @@
   function previewAssetUrl(path = "") {
     const value = String(path || "");
     if (!value || /^(?:https?:|data:|blob:|\/)/i.test(value)) return value;
-    if (value.startsWith("assets/")) return `/${value}`;
+    if (value.startsWith("assets/")) return `/${value}?admin_preview=${encodeURIComponent(state.assetPreviewVersion || "1")}`;
     return value;
   }
 

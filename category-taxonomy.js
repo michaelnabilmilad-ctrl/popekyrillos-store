@@ -112,6 +112,36 @@
     });
   });
 
+  const categoryAliases = new Map([
+    ["مستلزمات المذبح", "altar-tools"],
+    ["نحاسيات", "altar-tools"],
+    ["شموع وبخور", "candles-incense"],
+    ["شمع وبخور وأباركة", "candles-incense"],
+    ["تواني وأقمشة", "church-vestments"],
+    ["أقمشة ومفارش", "church-vestments"],
+    ["أيقونات وهدايا", "icons-frames"],
+    ["أيقونات", "icons-frames"],
+    ["كتب وطقوس", "books-rituals"],
+    ["صلبان وهدايا", "crosses-gifts"]
+  ]);
+
+  categoryAliases.forEach((categoryId, alias) => {
+    const category = categoryById.get(categoryId);
+    if (category) categoryByName.set(alias, category);
+  });
+
+  const subcategoryAliases = new Map([
+    ["يوتا", "small-icons"],
+    ["يوطا", "small-icons"],
+    ["مادليات", "small-icons"],
+    ["ميداليات", "medals"]
+  ]);
+
+  subcategoryAliases.forEach((subcategoryId, alias) => {
+    const subcategory = subcategoryById.get(subcategoryId);
+    if (subcategory) subcategoryByName.set(alias, subcategory);
+  });
+
   function customerCategories() {
     return categories.filter((category) => !category.hiddenFromCustomerNav);
   }
