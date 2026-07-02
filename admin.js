@@ -218,7 +218,7 @@
       return;
     }
 
-    const confirmed = window.confirm("سيتم حفظ products.json على GitHub وبدء نشر الموقع. هل تريد المتابعة؟");
+    const confirmed = window.confirm("سيتم حفظ products.json على GitHub وتحديث الموقع مباشرة. هل تريد المتابعة؟");
     if (!confirmed) return;
 
     const previousText = elements.publishProductsButton?.textContent || "";
@@ -226,7 +226,7 @@
     try {
       if (elements.publishProductsButton) {
         elements.publishProductsButton.disabled = true;
-        elements.publishProductsButton.textContent = "جاري الحفظ والنشر...";
+        elements.publishProductsButton.textContent = "جاري الحفظ والتحديث...";
       }
 
       const products = normalizeProducts(state.products);
@@ -248,7 +248,7 @@
       state.products = products;
       state.dirty = false;
       renderAll(`تم نشر المنتجات. Commit: ${(result.commitSha || "").slice(0, 7)}`);
-      showToast("تم حفظ products.json على GitHub. Cloudflare سيبدأ النشر تلقائياً خلال دقائق.");
+      showToast("تم حفظ products.json على GitHub. التحديث يظهر على الموقع خلال ثواني قليلة.");
     } catch (error) {
       showToast(`تعذر النشر: ${error.message}`);
       console.error(error);

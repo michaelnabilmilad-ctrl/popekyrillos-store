@@ -22,6 +22,72 @@ const htmlRoutePaths = new Set(["/", "/products", "/contact"]);
 
 let productsCache = null;
 let productsCacheTime = 0;
+let productsCacheSha = "";
+
+function githubConfig(env = {}) {
+  return {
+    token: String(env.GITHUB_TOKEN || "").trim(),
+    owner: String(env.GITHUB_OWNER || "michaelnabilmilad-ctrl").trim(),
+    repo: String(env.GITHUB_REPO || "popekyrillos-store").trim(),
+    branch: String(env.GITHUB_BRANCH || "main").trim()
+  };
+}
+
+function githubHeaders(config, accept = "application/vnd.github+json") {
+  return {
+    Accept: accept,
+    "User-Agent": "popekyrillos-store",
+    "X-GitHub-Api-Version": "2022-11-28",
+    ...(config.token ? { Authorization: `Bearer ${config.token}` } : {})
+  };
+}
+
+function githubContentsUrl(config, path) {
+  return `https://api.github.com/repos/${config.owner}/${config.repo}/contents/${path.replace(/^\/+/, "")}?ref=${encodeURIComponent(config.branch)}`;
+}
+
+function githubRawUrl(config, path) {
+  return `https://raw.githubusercontent.com/${config.owner}/${config.repo}/${encodeURIComponent(config.branch)}/${path.replace(/^\/+/, "")}`;
+}
+
+async function githubFetchText(env, path) {
+  const config = githubConfig(env);
+
+  if (config.token) {
+    const response = await fetch(githubContentsUrl(config, path), {
+      headers: githubHeaders(config, "application/vnd.github.raw")
+    });
+    if (response.ok) {
+      return {
+        text: await response.text(),
+        sha: response.headers.get("ETag") || ""
+      };
+    }
+  }
+
+  const response = await fetch(githubRawUrl(config, path), {
+    headers: { "User-Agent": "popekyrillos-store" }
+  });
+  if (!response.ok) throw new Error(`GitHub raw fetch failed with ${response.status}`);
+  return {
+    text: await response.text(),
+    sha: response.headers.get("ETag") || ""
+  };
+}
+
+async function githubFetchAsset(env, path) {
+  const config = githubConfig(env);
+  if (config.token) {
+    const response = await fetch(githubContentsUrl(config, path), {
+      headers: githubHeaders(config, "application/vnd.github.raw")
+    });
+    if (response.ok) return response;
+  }
+
+  return fetch(githubRawUrl(config, path), {
+    headers: { "User-Agent": "popekyrillos-store" }
+  });
+}
 
 function unauthorizedAdminResponse() {
   return new Response("Authentication required", {
@@ -158,13 +224,55 @@ function hasAvailableVariant(product) {
   return product?.stock !== "غير متاح حاليا" && product?.available !== false;
 }
 
-async function loadProducts(env, request) {
-  if (productsCache && Date.now() - productsCacheTime < 60000) return productsCache;
+async function loadProducts(env, request, { maxAgeMs = 5000 } = {}) {
+  if (productsCache && Date.now() - productsCacheTime < maxAgeMs) return productsCache;
+
+  try {
+    const latest = await githubFetchText(env, "products.json");
+    const products = JSON.parse(latest.text);
+    if (Array.isArray(products)) {
+      productsCache = products;
+      productsCacheTime = Date.now();
+      productsCacheSha = latest.sha;
+      return productsCache;
+    }
+  } catch (error) {
+    console.warn("Could not load products.json from GitHub, falling back to deployed assets.", error);
+  }
+
   const response = await env.ASSETS.fetch(rewriteRequest(request, "/products.json"));
   if (!response.ok) return [];
   productsCache = await response.json();
   productsCacheTime = Date.now();
+  productsCacheSha = response.headers.get("ETag") || "";
   return productsCache;
+}
+
+async function productsJsonResponse(request, env) {
+  const products = await loadProducts(env, request, { maxAgeMs: 5000 });
+  return new Response(JSON.stringify(products, null, 2), {
+    status: 200,
+    headers: {
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "no-store",
+      ...(productsCacheSha ? { ETag: productsCacheSha } : {})
+    }
+  });
+}
+
+function isProductUploadAsset(pathname) {
+  return pathname.startsWith("/assets/optimized/products/") || pathname.startsWith("/assets/detail/products/");
+}
+
+async function githubAssetFallbackResponse(pathname, env) {
+  if (!isProductUploadAsset(pathname)) return null;
+  const response = await githubFetchAsset(env, pathname);
+  if (!response.ok) return null;
+
+  const headers = new Headers(response.headers);
+  headers.set("Cache-Control", "public, max-age=60, must-revalidate");
+  ensureUtf8ContentType(headers, pathname);
+  return new Response(response.body, { status: response.status, headers });
 }
 
 function productByIdOrSlug(products, value = "") {
@@ -407,6 +515,7 @@ export default {
     if (url.pathname === "/api/create-paymob-intention") return createPaymobIntention(context);
     if (url.pathname === "/api/create-bosta-delivery") return createBostaDelivery(context);
     if (url.pathname === "/api/paymob-webhook") return paymobWebhook(context);
+    if (url.pathname === "/products.json") return productsJsonResponse(request, env);
 
     if (legacyProductUrl(url) || url.pathname.startsWith("/products/")) {
       const products = await loadProducts(env, request);
@@ -428,6 +537,10 @@ export default {
     }
 
     const assetResponse = await env.ASSETS.fetch(request);
+    if (assetResponse.status === 404 && isProductUploadAsset(url.pathname)) {
+      const githubAsset = await githubAssetFallbackResponse(url.pathname, env);
+      if (githubAsset) return githubAsset;
+    }
     return withAssetCacheHeaders(assetResponse, url.pathname);
   }
 };
