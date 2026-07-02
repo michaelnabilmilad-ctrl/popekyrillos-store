@@ -12,6 +12,8 @@ const activeCartStorageKey = "pope-kyrillos-cart:active";
 const cachedAuthStorageKey = "pope-kyrillos-auth:user";
 const cartSyncStorageKey = "pope-kyrillos-cart:sync";
 const languageStorageKey = "pope-kyrillos-language";
+const encodingCleanupStorageKey = "pope-kyrillos-encoding-cleanup:v1";
+const mojibakeSequencePattern = /[\u00d8\u00d9][\u0080-\u00ff\u201a-\u2026]/u;
 const paymentMethods = {
   instapay: {
     label: "إنستاباي / تحويل بنكي",
@@ -889,6 +891,32 @@ function lineBreakText(element, text) {
 function setText(selector, text) {
   const element = document.querySelector(selector);
   if (element) element.textContent = text;
+}
+
+function clearCorruptedBrowserStorage() {
+  try {
+    if (localStorage.getItem(encodingCleanupStorageKey) === "done") return;
+  } catch {
+    return;
+  }
+
+  [localStorage, sessionStorage].forEach((storage) => {
+    try {
+      for (let index = storage.length - 1; index >= 0; index -= 1) {
+        const key = storage.key(index);
+        const value = key ? storage.getItem(key) : "";
+        if (value && mojibakeSequencePattern.test(value)) storage.removeItem(key);
+      }
+    } catch {
+      // Storage can be blocked in private browsing; continue with fresh page data.
+    }
+  });
+
+  try {
+    localStorage.setItem(encodingCleanupStorageKey, "done");
+  } catch {
+    // Ignore storage write failures.
+  }
 }
 
 function setControlText(element, text) {
@@ -4257,6 +4285,7 @@ window.addEventListener("storage", (event) => {
   refreshCartFromLocalStorage();
 });
 
+clearCorruptedBrowserStorage();
 loadGuestCart();
 applyLanguage();
 updateFloatingShopButton();
