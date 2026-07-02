@@ -86,6 +86,7 @@ fs.mkdirSync(dist, { recursive: true });
 
 files.forEach(copyFile);
 directories.forEach(copyDirectory);
+copyFileAs("public/favicon.png", "favicon.png", null);
 copyFileAs("admin.html", "admin/index.html", (content) =>
   content.replace('href="index.html"', 'href="/"')
 );
