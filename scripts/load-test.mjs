@@ -12,7 +12,7 @@ const defaultPaths = [
   "/cart",
   "/checkout",
   "/payment",
-  "/assets/optimized/hero-products-collage.webp",
+  "/assets/optimized/hero-papa-kyrillos-products.webp",
   "/assets/optimized/products/gallery/baskha-araby-1200.webp"
 ];
 const pagePaths = ["/", "/products.json", "/cart", "/checkout", "/payment"];
