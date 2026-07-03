@@ -837,6 +837,48 @@ function displayText(value = "") {
   return isEnglish() ? toLatinDigits(text) : text;
 }
 
+function parseQuantityText(value = "") {
+  const digits = toLatinDigits(value).replace(/[^\d]/g, "");
+  const quantity = Number(digits);
+  return Number.isFinite(quantity) && quantity > 0 ? Math.floor(quantity) : 1;
+}
+
+function commitModalQuantity(value, { render = true } = {}) {
+  const product = getProduct(state.modal.productId);
+  if (!product) return 1;
+  const variant = selectedModalVariant(product);
+  state.modal.quantity = parseQuantityText(value);
+  state.modal.quantity = clampModalQuantity(variant);
+  if (render) renderProductModal();
+  return state.modal.quantity;
+}
+
+function syncModalQuantityControls(value) {
+  const product = getProduct(state.modal.productId);
+  if (!product) return 1;
+  const variant = selectedModalVariant(product);
+  state.modal.quantity = parseQuantityText(value);
+  state.modal.quantity = clampModalQuantity(variant);
+
+  const quantitySummary = productModal.querySelector("[data-modal-quantity-summary]");
+  if (quantitySummary) {
+    quantitySummary.textContent = t("pieces", { count: displayText(formatter.format(state.modal.quantity)) });
+  }
+
+  const addButton = productModal.querySelector("[data-modal-add]");
+  if (addButton) {
+    addButton.dataset.modalQuantity = String(state.modal.quantity);
+    addButton.innerHTML = `
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 5v14M5 12h14" />
+        </svg>
+        ${t("addToCart", { count: displayText(formatter.format(state.modal.quantity)) })}
+      `;
+  }
+
+  return state.modal.quantity;
+}
+
 function descriptionLines(description = "") {
   const normalized = displayText(description).replace(/\s+/g, " ").trim();
   if (!normalized) return [];
@@ -2448,7 +2490,7 @@ function renderProductModal() {
       <div class="modal-quantity" aria-label="${t("modalQuantityAria")}">
         <div>
           <span>${t("modalQuantityLabel")}</span>
-          <strong>${t("pieces", { count: displayText(formatter.format(modalQuantity)) })}</strong>
+          <strong data-modal-quantity-summary>${t("pieces", { count: displayText(formatter.format(modalQuantity)) })}</strong>
         </div>
         <div class="quantity-stepper">
           <button
@@ -2460,7 +2502,15 @@ function renderProductModal() {
           >
             -
           </button>
-          <output>${displayText(formatter.format(modalQuantity))}</output>
+          <input
+            class="quantity-input"
+            type="text"
+            inputmode="numeric"
+            pattern="[0-9٠-٩۰-۹]*"
+            value="${escapeHtml(displayText(formatter.format(modalQuantity)))}"
+            aria-label="${t("modalQuantityAria")}"
+            data-modal-qty-input
+          />
           <button
             class="quantity-step"
             type="button"
@@ -4077,10 +4127,32 @@ productModal.addEventListener("click", (event) => {
 
   const addButton = event.target.closest("[data-modal-add]");
   if (addButton) {
-    addToCart(addButton.dataset.modalAdd, addButton.dataset.modalVariant, addButton.dataset.modalQuantity);
+    const quantityInput = productModal.querySelector("[data-modal-qty-input]");
+    const quantity = quantityInput ? commitModalQuantity(quantityInput.value, { render: false }) : addButton.dataset.modalQuantity;
+    addToCart(addButton.dataset.modalAdd, addButton.dataset.modalVariant, quantity);
     state.modal.quantity = 1;
     renderProductModal();
   }
+});
+
+productModal.addEventListener("change", (event) => {
+  const quantityInput = event.target.closest("[data-modal-qty-input]");
+  if (!quantityInput) return;
+  commitModalQuantity(quantityInput.value);
+});
+
+productModal.addEventListener("input", (event) => {
+  const quantityInput = event.target.closest("[data-modal-qty-input]");
+  if (!quantityInput || !quantityInput.value.trim()) return;
+  syncModalQuantityControls(quantityInput.value);
+});
+
+productModal.addEventListener("keydown", (event) => {
+  const quantityInput = event.target.closest("[data-modal-qty-input]");
+  if (!quantityInput || event.key !== "Enter") return;
+  event.preventDefault();
+  commitModalQuantity(quantityInput.value);
+  quantityInput.blur();
 });
 
 productModal.addEventListener("pointerover", (event) => {

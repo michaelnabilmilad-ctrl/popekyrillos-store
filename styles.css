@@ -2149,12 +2149,19 @@ body[data-lang="en"] .policy-lang[lang="en"] {
   background: var(--surface);
 }
 
-.quantity-stepper output {
+.quantity-input {
   min-width: 54px;
   padding: 0 10px;
+  border: 0;
+  outline: 0;
+  background: transparent;
   color: var(--ink);
   font-weight: 900;
   text-align: center;
+}
+
+.quantity-input:focus {
+  background: rgba(0, 122, 116, 0.08);
 }
 
 .quantity-step {
