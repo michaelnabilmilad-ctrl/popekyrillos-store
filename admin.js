@@ -699,7 +699,7 @@
   }
 
   function renderImagePreview(images) {
-    const visibleImages = (images || []).filter(Boolean).slice(0, 8);
+    const visibleImages = (images || []).filter(Boolean);
     if (!visibleImages.length) {
       elements.imagePreview.innerHTML = `<div class="empty-state">لا توجد صور بعد.</div>`;
       return;
