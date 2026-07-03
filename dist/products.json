@@ -63,7 +63,7 @@
           "assets/optimized/products/gallery/iota-color-silver.webp"
         ],
         "sku": "IOTA-COLOR-SILVER",
-        "quantity": null
+        "quantity": 100
       },
       {
         "id": "custom-1783032232212-color-burgundy",
@@ -79,7 +79,7 @@
           "assets/optimized/products/gallery/iota-color-burgundy.webp"
         ],
         "sku": "IOTA-COLOR-BURGUNDY",
-        "quantity": null
+        "quantity": 100
       },
       {
         "id": "custom-1783032232212-color-sky-blue",
@@ -95,7 +95,7 @@
           "assets/optimized/products/gallery/iota-color-sky-blue.webp"
         ],
         "sku": "IOTA-COLOR-SKY-BLUE",
-        "quantity": null
+        "quantity": 100
       },
       {
         "id": "custom-1783032232212-color-red",
@@ -111,7 +111,7 @@
           "assets/optimized/products/gallery/iota-color-red.webp"
         ],
         "sku": "IOTA-COLOR-RED",
-        "quantity": null
+        "quantity": 100
       },
       {
         "id": "custom-1783032232212-color-yellow",
@@ -127,7 +127,7 @@
           "assets/optimized/products/gallery/iota-color-yellow.webp"
         ],
         "sku": "IOTA-COLOR-YELLOW",
-        "quantity": null
+        "quantity": 100
       },
       {
         "id": "custom-1783032232212-color-black",
@@ -143,7 +143,7 @@
           "assets/optimized/products/gallery/iota-color-black.webp"
         ],
         "sku": "IOTA-COLOR-BLACK",
-        "quantity": null
+        "quantity": 100
       },
       {
         "id": "custom-1783032232212-color-white",
@@ -159,7 +159,7 @@
           "assets/optimized/products/gallery/iota-color-white.webp"
         ],
         "sku": "IOTA-COLOR-WHITE",
-        "quantity": null
+        "quantity": 100
       },
       {
         "id": "custom-1783032232212-color-green",
@@ -175,7 +175,7 @@
           "assets/optimized/products/gallery/iota-color-green.webp"
         ],
         "sku": "IOTA-COLOR-GREEN",
-        "quantity": null
+        "quantity": 100
       },
       {
         "id": "custom-1783032232212-color-orange",
@@ -191,7 +191,7 @@
           "assets/optimized/products/gallery/iota-color-orange.webp"
         ],
         "sku": "IOTA-COLOR-ORANGE",
-        "quantity": null
+        "quantity": 100
       },
       {
         "id": "custom-1783032232212-color-brown",
@@ -207,7 +207,7 @@
           "assets/optimized/products/gallery/iota-color-brown.webp"
         ],
         "sku": "IOTA-COLOR-BROWN",
-        "quantity": null
+        "quantity": 100
       },
       {
         "id": "custom-1783032232212-color-beige",
@@ -223,7 +223,7 @@
           "assets/optimized/products/gallery/iota-color-beige.webp"
         ],
         "sku": "IOTA-COLOR-BEIGE",
-        "quantity": null
+        "quantity": 100
       }
     ],
     "mainCategory": "الأيقونات والبراويز",
