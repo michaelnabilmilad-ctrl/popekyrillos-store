@@ -848,7 +848,7 @@ async function initCheckoutFlow() {
   setCartCount();
   const syncCartPromise = restoreSignedInCheckoutCart();
   try {
-    const response = await fetch(`products.json?v=${Date.now()}`, { cache: "no-store" });
+    const response = await fetch(`/products.json?v=${Date.now()}`, { cache: "no-store" });
     products = await response.json();
   } catch {
     products = [];

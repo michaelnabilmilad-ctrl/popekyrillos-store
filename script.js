@@ -3747,7 +3747,7 @@ function openProductFromUrl() {
 async function loadProducts() {
   productsAssetVersion = String(Date.now());
   try {
-    const response = await fetch(`products.json?v=${productsAssetVersion}`, { cache: "no-store" });
+    const response = await fetch(`/products.json?v=${productsAssetVersion}`, { cache: "no-store" });
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     products = await response.json();
   } catch (error) {
