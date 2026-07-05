@@ -13,7 +13,7 @@
               {
                   "id": "altar-crosses",
                   "name": "صلبان مذبح",
-                  "subcategoryImage": "assets/optimized/products/processional-cross.webp"
+                  "subcategoryImage": "assets/optimized/products/gallery/taxonomy-altar-crosses-image-20260705123001-516aaf.webp"
               },
               {
                   "id": "censers",
