@@ -1,5 +1,69 @@
 [
   {
+    "id": "custom-1783272387022",
+    "name": "ألوان اليوطا",
+    "category": "brass",
+    "label": "نحاسيات",
+    "description": "وصف المنتج\n\nألوان تلوين صلبان اليوتا\nألوان جاهزة للاستخدام، مناسبة لتلوين صلبان وميداليات اليوتا خلال مدارس الأحد والخلوات والأنشطة الكنسية. تأتي كل عبوة بسن دقيق يساعد على التحكم في اللون وتنفيذ التفاصيل الصغيرة بسهولة، مع غطاء محكم للحفاظ على اللون.\n\nالألوان المتاحة:\nأحمر – أسود – أبيض – أصفر – أخضر – فضي – نبيتي – لبني – بني – بيج – برتقالي.\n\nمميزات المنتج:\n\nألوان واضحة وزاهية.\nسهلة الاستخدام للأطفال والخدام.\nسن دقيق للتلوين والتفاصيل.\nمناسبة للأنشطة والمسابقات والهدايا.\nتُباع العبوات بالألوان بصورة منفردة.\n\nتنبيه: يُفضّل رجّ العبوة جيدًا قبل الاستخدام وإغلاقها بإحكام بعد الانتهاء.",
+    "price": 70,
+    "priceNote": "",
+    "stock": "متاح",
+    "badge": "يوتا",
+    "image": "assets/optimized/products/gallery/product-1-image-20260705172724-e7fdfd.webp",
+    "url": "https://popekyrillos.store/?product=custom-1783272387022",
+    "tags": [],
+    "images": [
+      "assets/optimized/products/gallery/product-1-image-20260705172724-e7fdfd.webp",
+      "assets/optimized/products/gallery/product-1-image-20260705172735-c0297e.webp",
+      "assets/optimized/products/gallery/product-1-image-20260705172741-9b13e8.webp"
+    ],
+    "options": [],
+    "variants": [
+      {
+        "id": "custom-1783272387022-variant-1783272387022-1",
+        "title": "الاختيار الافتراضي",
+        "options": {},
+        "price": 70,
+        "compareAtPrice": null,
+        "available": true,
+        "image": null,
+        "images": [],
+        "sku": "",
+        "quantity": null
+      },
+      {
+        "id": "custom-1783272387022-variant-1783272480728-2",
+        "title": "أبيض",
+        "options": {},
+        "price": 70,
+        "compareAtPrice": null,
+        "available": true,
+        "image": "assets/optimized/products/gallery/product-1-image-20260705172735-c0297e.webp",
+        "images": [
+          "assets/optimized/products/gallery/product-1-image-20260705172735-c0297e.webp"
+        ],
+        "sku": "",
+        "quantity": 1000
+      },
+      {
+        "id": "custom-1783272387022-variant-1783272505128-3",
+        "title": "أحمر",
+        "options": {},
+        "price": 70,
+        "compareAtPrice": null,
+        "available": true,
+        "image": "assets/optimized/products/gallery/product-1-image-20260705172741-9b13e8.webp",
+        "images": [
+          "assets/optimized/products/gallery/product-1-image-20260705172741-9b13e8.webp"
+        ],
+        "sku": "",
+        "quantity": 1000
+      }
+    ],
+    "mainCategory": "الصلبان والهدايا",
+    "subCategory": "هدايا اجتماعات"
+  },
+  {
     "id": "atb3ho-10618130956453",
     "name": "شنطه اتبعه",
     "category": "atb3ho",
