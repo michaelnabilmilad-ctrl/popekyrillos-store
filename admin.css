@@ -470,6 +470,13 @@ textarea:focus {
   gap: 12px;
 }
 
+.variant-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
 .variant-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));

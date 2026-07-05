@@ -199,6 +199,14 @@
       removeVariant(Number(button.closest("[data-variant-index]")?.dataset.variantIndex));
     }
 
+    if (action === "move-variant-before") {
+      moveVariant(Number(button.closest("[data-variant-index]")?.dataset.variantIndex), -1);
+    }
+
+    if (action === "move-variant-after") {
+      moveVariant(Number(button.closest("[data-variant-index]")?.dataset.variantIndex), 1);
+    }
+
     if (action === "sort-name") {
       sortProductsByName();
     }
@@ -1205,7 +1213,11 @@
         <article class="variant-card" data-variant-index="${index}">
           <div class="variant-head">
             <strong>اختيار ${index + 1}</strong>
-            <button class="button small danger" type="button" data-action="remove-variant">حذف الاختيار</button>
+            <div class="variant-actions">
+              <button class="button small ghost" type="button" data-action="move-variant-before" ${index === 0 ? "disabled" : ""}>فوق</button>
+              <button class="button small ghost" type="button" data-action="move-variant-after" ${index === product.variants.length - 1 ? "disabled" : ""}>تحت</button>
+              <button class="button small danger" type="button" data-action="remove-variant">حذف الاختيار</button>
+            </div>
           </div>
           <div class="variant-grid">
             <label>
@@ -1471,6 +1483,21 @@
     renderVariants(product);
   }
 
+  function moveVariant(index, direction) {
+    const product = currentProduct();
+    if (!product || Number.isNaN(index) || !direction) return;
+    const nextIndex = index + direction;
+    if (nextIndex < 0 || nextIndex >= product.variants.length) return;
+
+    const [variant] = product.variants.splice(index, 1);
+    product.variants.splice(nextIndex, 0, variant);
+    reorderProductOptionsFromVariants(product);
+    setValue("options", JSON.stringify(product.options || [], null, 2));
+    markDirty();
+    renderVariants(product);
+    renderProductList();
+  }
+
   function sortProductsByName() {
     state.products.sort((first, second) => (first.name || "").localeCompare(second.name || "", "ar"));
     markDirty();
@@ -1514,6 +1541,25 @@
       });
     }
     return synced;
+  }
+
+  function reorderProductOptionsFromVariants(product) {
+    if (!Array.isArray(product.options) || !product.options.length || !Array.isArray(product.variants)) return;
+
+    product.options = product.options.map((option) => {
+      if (!option?.name || !Array.isArray(option.values)) return option;
+
+      const orderedValues = unique(product.variants.map((variant) => variant.options?.[option.name]).filter(Boolean));
+      if (!orderedValues.length) return option;
+
+      return {
+        ...option,
+        values: unique([
+          ...orderedValues,
+          ...option.values.filter((value) => !orderedValues.includes(value))
+        ])
+      };
+    });
   }
 
   function isValidProductOptions(options) {
