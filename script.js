@@ -2111,6 +2111,16 @@ function getVariantImages(variant) {
   return [];
 }
 
+function comparableImagePath(value = "") {
+  return String(value || "").split("?")[0].replace(/^\/+/, "");
+}
+
+function variantHasImage(variant, image) {
+  const target = comparableImagePath(image);
+  if (!target) return false;
+  return uniqueImages([variant?.image, ...getVariantImages(variant)]).some((item) => comparableImagePath(item) === target);
+}
+
 function productAssetVersion(product) {
   return product?.assetVersion || product?.updatedAt || productsAssetVersion;
 }
@@ -4341,14 +4351,31 @@ function showAdjacentModalImage(delta) {
 
   const activeImage = state.modal.image || images[0];
   const activeIndex = Math.max(0, images.indexOf(activeImage));
-  state.modal.image = images[(activeIndex + delta + images.length) % images.length];
+  const nextImage = images[(activeIndex + delta + images.length) % images.length];
+  selectModalVariantByImage(product, nextImage);
+  state.modal.image = nextImage;
   renderProductModal();
   return true;
 }
 
+function selectModalVariantByImage(product, image) {
+  if (!product || !image) return null;
+  const variants = getProductVariants(product);
+  const variant = variants.find((item) => isVariantAvailable(item) && variantHasImage(item, image)) || variants.find((item) => variantHasImage(item, image));
+  if (!variant) return null;
+  state.modal.variantId = variant.id || "";
+  state.modal.selectedOptions = { ...(variant.options || {}) };
+  state.modal.quantity = 1;
+  return variant;
+}
+
 function setModalGalleryImage(button) {
   const image = button?.dataset.modalImage;
-  if (!image || image === state.modal.image) return Boolean(image);
+  if (!image) return false;
+  const currentVariantId = state.modal.variantId;
+  const product = getProduct(state.modal.productId);
+  const variant = selectModalVariantByImage(product, image);
+  if (image === state.modal.image && (!variant || variant.id === currentVariantId)) return true;
   state.modal.image = image;
   renderProductModal();
   return true;
