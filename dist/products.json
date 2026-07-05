@@ -1071,7 +1071,7 @@
     "options": [],
     "variants": [
       {
-        "id": "custom-1783032232212-variant-1783032232212-1",
+        "id": "custom-1783032232212-variant-1783271382676-2",
         "title": "أحمر",
         "options": {},
         "price": 70,
@@ -1085,7 +1085,7 @@
         "quantity": 1000
       },
       {
-        "id": "custom-1783032232212-variant-1783032465055-2",
+        "id": "custom-1783032232212-variant-1783271453932-2",
         "title": "أبيض",
         "options": {},
         "price": 70,
@@ -1100,7 +1100,7 @@
       }
     ],
     "mainCategory": "الصلبان والهدايا",
-    "subCategory": "صلبان حائط",
+    "subCategory": "هدايا اجتماعات",
     "slug": "لون-تلوين-اليوتا"
   },
   {
