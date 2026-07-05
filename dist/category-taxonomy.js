@@ -12,13 +12,13 @@
               },
               {
                   "id": "altar-crosses",
-                  "name": "صلبان مذبح",
+                  "name": "صلبان زفة",
                   "subcategoryImage": "assets/optimized/products/gallery/taxonomy-altar-crosses-image-20260705123001-516aaf.webp"
               },
               {
                   "id": "censers",
                   "name": "شورية ومباخر",
-                  "subcategoryImage": "assets/optimized/products/incense-chat.webp"
+                  "subcategoryImage": "assets/optimized/products/gallery/taxonomy-censers-1-20260705231120-aa2652.webp"
               },
               {
                   "id": "altar-vessels",
