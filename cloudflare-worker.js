@@ -3,6 +3,7 @@ import { onRequest as createPaymobIntention } from "./functions/api/create-paymo
 import { onRequest as paymobWebhook } from "./functions/api/paymob-webhook.js";
 import { onRequest as uploadProductImage } from "./functions/api/upload-product-image.js";
 import { onRequest as updateProducts } from "./functions/api/update-products.js";
+import { onRequest as updateTaxonomy } from "./functions/api/update-taxonomy.js";
 
 const canonicalOrigin = "https://popekyrillos.store";
 const canonicalHostname = "popekyrillos.store";
@@ -23,6 +24,9 @@ const htmlRoutePaths = new Set(["/", "/products", "/contact"]);
 let productsCache = null;
 let productsCacheTime = 0;
 let productsCacheSha = "";
+let taxonomyCache = "";
+let taxonomyCacheTime = 0;
+let taxonomyCacheSha = "";
 
 function githubConfig(env = {}) {
   return {
@@ -256,6 +260,41 @@ async function productsJsonResponse(request, env) {
       "Content-Type": "application/json; charset=utf-8",
       "Cache-Control": "no-store",
       ...(productsCacheSha ? { ETag: productsCacheSha } : {})
+    }
+  });
+}
+
+async function loadTaxonomySource(env, request, { maxAgeMs = 5000 } = {}) {
+  if (taxonomyCache && Date.now() - taxonomyCacheTime < maxAgeMs) return taxonomyCache;
+
+  try {
+    const latest = await githubFetchText(env, "category-taxonomy.js");
+    if (latest.text.includes("window.POPE_KYRILLOS_TAXONOMY") && latest.text.includes("subcategoryImage")) {
+      taxonomyCache = latest.text;
+      taxonomyCacheTime = Date.now();
+      taxonomyCacheSha = latest.sha;
+      return taxonomyCache;
+    }
+  } catch (error) {
+    console.warn("Could not load category-taxonomy.js from GitHub, falling back to deployed assets.", error);
+  }
+
+  const response = await env.ASSETS.fetch(rewriteRequest(request, "/category-taxonomy.js"));
+  if (!response.ok) return "";
+  taxonomyCache = await response.text();
+  taxonomyCacheTime = Date.now();
+  taxonomyCacheSha = response.headers.get("ETag") || "";
+  return taxonomyCache;
+}
+
+async function taxonomyJsResponse(request, env) {
+  const source = await loadTaxonomySource(env, request, { maxAgeMs: 5000 });
+  return new Response(source, {
+    status: 200,
+    headers: {
+      "Content-Type": "application/javascript; charset=utf-8",
+      "Cache-Control": "no-store",
+      ...(taxonomyCacheSha ? { ETag: taxonomyCacheSha } : {})
     }
   });
 }
@@ -497,7 +536,7 @@ function notFoundResponse() {
 function withAssetCacheHeaders(response, pathname) {
   const headers = new Headers(response.headers);
   ensureUtf8ContentType(headers, pathname);
-  if (pathname === "/products.json" || pathname === "/sitemap.xml" || pathname === "/robots.txt") {
+  if (pathname === "/products.json" || pathname === "/category-taxonomy.js" || pathname === "/sitemap.xml" || pathname === "/robots.txt") {
     headers.set("Cache-Control", "no-store");
   }
   return new Response(response.body, { status: response.status, headers });
@@ -525,6 +564,7 @@ export default {
       }
 
       if (url.pathname === "/admin/api/update-products") return updateProducts(context);
+      if (url.pathname === "/admin/api/update-taxonomy") return updateTaxonomy(context);
       if (url.pathname === "/admin/api/upload-product-image") return uploadProductImage(context);
     }
 
@@ -532,6 +572,7 @@ export default {
     if (url.pathname === "/api/create-bosta-delivery") return createBostaDelivery(context);
     if (url.pathname === "/api/paymob-webhook") return paymobWebhook(context);
     if (url.pathname === "/products.json") return productsJsonResponse(request, env);
+    if (url.pathname === "/category-taxonomy.js") return taxonomyJsResponse(request, env);
 
     if (legacyProductUrl(url) || url.pathname.startsWith("/products/")) {
       const products = await loadProducts(env, request);

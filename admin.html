@@ -6,7 +6,7 @@
     <meta name="robots" content="noindex, nofollow">
     <title>إدارة منتجات مكتبة البابا كيرلس</title>
     <link rel="icon" href="data:,">
-    <link rel="stylesheet" href="admin.css?v=utf8-20260702">
+    <link rel="stylesheet" href="/admin.css?v=asset-fba932ed1ac8">
   </head>
   <body>
     <header class="admin-topbar">
@@ -38,7 +38,7 @@
         </label>
 
         <div class="list-tools">
-          <select data-category-filter aria-label="فلترة حسب القسم">
+          <select data-category-filter aria-label="فلترة حسب القسم" hidden>
             <option value="all">كل الأقسام</option>
           </select>
           <select data-main-category-filter aria-label="فلترة حسب القسم الرئيسي">
@@ -90,20 +90,20 @@
                 <span>كود المنتج</span>
                 <input type="text" data-field="id" required>
               </label>
-              <label>
+              <label class="legacy-taxonomy-field" hidden>
                 <span>القسم الرئيسي</span>
                 <select data-field="category" required></select>
               </label>
-              <label>
+              <label class="legacy-taxonomy-field" hidden>
                 <span>التصنيف الفرعي</span>
                 <input type="text" data-field="label" placeholder="مثلاً: صلبان زفة">
               </label>
               <label>
-                <span>القسم الرئيسي الجديد</span>
+                <span>القسم الرئيسي</span>
                 <select data-field="mainCategory" required></select>
               </label>
               <label>
-                <span>القسم الفرعي الجديد</span>
+                <span>القسم الفرعي</span>
                 <select data-field="subCategory" required></select>
               </label>
 
@@ -154,6 +154,7 @@
             <div class="section-title-row">
               <h3>الاختيارات والأسعار والكميات</h3>
               <button class="button small" type="button" data-action="add-variant">إضافة اختيار</button>
+              <button class="button small secondary" type="button" data-action="sync-variant-options">توليد الاختيارات</button>
             </div>
             <p class="hint">لو المنتج له مقاسات أو ألوان، أضف كل اختيار بسعره والكمية المتاحة وصوره الخاصة.</p>
             <div class="variant-list" data-variant-list></div>
@@ -166,6 +167,7 @@
                 <span>تعريف الاختيارات بصيغة JSON</span>
                 <textarea data-field="options" rows="6" dir="ltr"></textarea>
               </label>
+              <button class="button small secondary" type="button" data-action="sync-variant-options">توليد من أسماء الاختيارات</button>
               <p class="hint">اتركها كما هي لو مش محتاج تعدّل أسماء مجموعات الاختيارات.</p>
             </details>
           </section>
@@ -181,6 +183,26 @@
         <button class="button wide secondary" type="button" data-action="download-products">تحميل products.json</button>
         <button class="button wide secondary" type="button" data-action="download-functions">تحميل functions-products.json</button>
         <button class="button wide ghost" type="button" data-action="copy-json">نسخ JSON</button>
+
+        <section class="taxonomy-manager">
+          <div class="taxonomy-head">
+            <div>
+              <h3>إدارة الأقسام الفرعية</h3>
+              <p>عدّل الصورة، الاسم، الترتيب، أو انقل القسم الفرعي لقسم رئيسي آخر.</p>
+            </div>
+            <button class="button small" type="button" data-action="publish-taxonomy">حفظ ونشر الأقسام</button>
+            <button class="button small secondary" type="button" data-action="download-taxonomy">تحميل category-taxonomy.js</button>
+          </div>
+          <label>
+            <span>القسم الرئيسي</span>
+            <select data-taxonomy-main></select>
+          </label>
+          <div class="taxonomy-actions">
+            <button class="button small" type="button" data-action="add-subcategory">إضافة قسم فرعي</button>
+          </div>
+          <div class="taxonomy-list" data-taxonomy-list></div>
+          <p class="hint">بعد تعديل الصور أو ترتيب الأقسام، اضغط <b>حفظ ونشر الأقسام</b> حتى تظهر على الموقع.</p>
+        </section>
 
         <div class="publish-steps">
           <h3>طريقة الاستخدام السريعة</h3>
@@ -203,7 +225,7 @@
     <input type="file" data-image-upload accept="image/*" hidden>
     <div class="toast" data-toast hidden></div>
 
-    <script src="category-taxonomy.js?v=utf8-20260702" defer></script>
-    <script src="admin.js?v=show-all-image-previews-20260703" defer></script>
+    <script src="/category-taxonomy.js?v=asset-fba932ed1ac8" defer></script>
+    <script src="/admin.js?v=asset-fba932ed1ac8" defer></script>
   </body>
 </html>

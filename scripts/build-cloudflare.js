@@ -92,5 +92,6 @@ copyFileAs("admin.html", "admin/index.html", (content) =>
 );
 copyFileAs("admin.css", "admin/admin.css", null);
 copyFileAs("admin.js", "admin/admin.js", null);
+copyFileAs("category-taxonomy.js", "admin/category-taxonomy.js", null);
 
 console.log(`Cloudflare build ready: ${path.relative(root, dist)}`);

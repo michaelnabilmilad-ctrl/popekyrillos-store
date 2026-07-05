@@ -4,7 +4,8 @@
     { id: "candles", label: "شموع وبخور" },
     { id: "vestments", label: "أقمشة ومفارش" },
     { id: "icons", label: "أيقونات وهدايا" },
-    { id: "books", label: "كتب وطقوس" }
+    { id: "books", label: "كتب وطقوس" },
+    { id: "atb3ho", label: "منتجات أتبعه" }
   ];
 
   const taxonomy = window.POPE_KYRILLOS_TAXONOMY || null;
@@ -14,11 +15,15 @@
     candles: "candles-incense",
     vestments: "church-vestments",
     icons: "icons-frames",
-    books: "books-rituals"
+    books: "books-rituals",
+    atb3ho: "atb3ho-products"
   };
 
   const state = {
     products: [],
+    taxonomy: deepClone(taxonomyCategories),
+    taxonomyMain: taxonomyCategories.find((category) => !category.hiddenFromCustomerNav)?.id || taxonomyCategories[0]?.id || "",
+    taxonomyImageUpload: null,
     selectedId: "",
     fileHandle: null,
     dirty: false,
@@ -47,9 +52,12 @@
     variantList: document.querySelector("[data-variant-list]"),
     importFallback: document.querySelector("[data-import-fallback]"),
     imageUpload: document.querySelector("[data-image-upload]"),
+    taxonomyMain: document.querySelector("[data-taxonomy-main]"),
+    taxonomyList: document.querySelector("[data-taxonomy-list]"),
     toast: document.querySelector("[data-toast]"),
     saveFileButton: document.querySelector("[data-action='save-file']"),
-    publishProductsButton: document.querySelector("[data-action='publish-products']")
+    publishProductsButton: document.querySelector("[data-action='publish-products']"),
+    publishTaxonomyButton: document.querySelector("[data-action='publish-taxonomy']")
   };
 
   document.addEventListener("click", handleActionClick);
@@ -61,6 +69,26 @@
     state.categoryFilter = event.target.value;
     renderProductList();
   });
+  elements.mainCategoryFilter?.addEventListener("change", (event) => {
+    state.mainCategoryFilter = event.target.value;
+    state.subCategoryFilter = "all";
+    fillSubCategoryFilter();
+    renderProductList();
+  });
+  elements.subCategoryFilter?.addEventListener("change", (event) => {
+    state.subCategoryFilter = event.target.value;
+    renderProductList();
+  });
+  elements.needsReviewFilter?.addEventListener("change", (event) => {
+    state.needsReviewOnly = event.target.checked;
+    renderProductList();
+  });
+  elements.taxonomyMain?.addEventListener("change", (event) => {
+    state.taxonomyMain = event.target.value;
+    renderTaxonomyManager();
+  });
+  elements.taxonomyList?.addEventListener("input", handleTaxonomyInput);
+  elements.taxonomyList?.addEventListener("change", handleTaxonomyInput);
   elements.importFallback.addEventListener("change", importFallbackFile);
   getImageUploadInput().addEventListener("change", uploadProductImage);
   elements.editor.addEventListener("input", handleEditorInput);
@@ -91,8 +119,24 @@
       await publishProductsToSite();
     }
 
+    if (action === "publish-taxonomy") {
+      await publishTaxonomyToSite();
+    }
+
     if (action === "upload-image") {
       await openImageUpload();
+    }
+
+    if (action === "make-primary-image") {
+      makeProductImagePrimary(Number(button.closest("[data-image-index]")?.dataset.imageIndex));
+    }
+
+    if (action === "move-image-before") {
+      moveProductImage(Number(button.closest("[data-image-index]")?.dataset.imageIndex), -1);
+    }
+
+    if (action === "move-image-after") {
+      moveProductImage(Number(button.closest("[data-image-index]")?.dataset.imageIndex), 1);
     }
 
     if (action === "download-products") {
@@ -105,6 +149,30 @@
 
     if (action === "copy-json") {
       await copyProductsJson();
+    }
+
+    if (action === "download-taxonomy") {
+      downloadText("category-taxonomy.js", buildTaxonomyFile(), "text/javascript;charset=utf-8");
+    }
+
+    if (action === "add-subcategory") {
+      addSubcategory();
+    }
+
+    if (action === "upload-taxonomy-image") {
+      await openTaxonomyImageUpload(Number(button.closest("[data-taxonomy-sub-index]")?.dataset.taxonomySubIndex));
+    }
+
+    if (action === "remove-subcategory") {
+      removeSubcategory(Number(button.closest("[data-taxonomy-sub-index]")?.dataset.taxonomySubIndex));
+    }
+
+    if (action === "move-subcategory-before") {
+      moveSubcategory(Number(button.closest("[data-taxonomy-sub-index]")?.dataset.taxonomySubIndex), -1);
+    }
+
+    if (action === "move-subcategory-after") {
+      moveSubcategory(Number(button.closest("[data-taxonomy-sub-index]")?.dataset.taxonomySubIndex), 1);
     }
 
     if (action === "add-product") {
@@ -121,6 +189,10 @@
 
     if (action === "add-variant") {
       addVariant();
+    }
+
+    if (action === "sync-variant-options") {
+      syncCurrentVariantOptions();
     }
 
     if (action === "remove-variant") {
@@ -261,6 +333,7 @@
   }
 
   async function openImageUpload() {
+    state.taxonomyImageUpload = null;
     if (!currentProduct()) {
       showToast("اختر منتجاً أولاً قبل رفع الصورة.");
       return;
@@ -293,7 +366,138 @@
     event.target.value = "";
 
     if (!file) return;
+    if (state.taxonomyImageUpload) {
+      const uploadTarget = state.taxonomyImageUpload;
+      state.taxonomyImageUpload = null;
+      await processTaxonomyImageFile(file, uploadTarget);
+      return;
+    }
     await processProductImageFile(file);
+  }
+
+  async function publishTaxonomyToSite() {
+    const categoriesList = taxonomyCategoriesForAdmin();
+    if (!categoriesList.length) {
+      showToast("لا توجد أقسام للنشر.");
+      return;
+    }
+
+    const confirmed = window.confirm("سيتم حفظ صور وترتيب الأقسام على الموقع مباشرة. هل تريد المتابعة؟");
+    if (!confirmed) return;
+
+    const previousText = elements.publishTaxonomyButton?.textContent || "";
+
+    try {
+      if (elements.publishTaxonomyButton) {
+        elements.publishTaxonomyButton.disabled = true;
+        elements.publishTaxonomyButton.textContent = "جاري نشر الأقسام...";
+      }
+
+      const response = await fetch("/admin/api/update-taxonomy", {
+        method: "POST",
+        credentials: "same-origin",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          categories: categoriesList,
+          taxonomySource: buildTaxonomyFile(),
+          message: `Update category taxonomy from admin ${new Date().toISOString()}`
+        })
+      });
+      const result = await response.json().catch(() => ({}));
+
+      if (!response.ok) {
+        throw new Error(result.error || result.message || `HTTP ${response.status}`);
+      }
+
+      renderAll(`تم نشر الأقسام. Commit: ${(result.commitSha || "").slice(0, 7)}`);
+      showToast("تم حفظ الأقسام وصورها. التحديث يظهر خلال ثواني قليلة.");
+    } catch (error) {
+      showToast(`تعذر نشر الأقسام: ${error.message}`);
+      console.error(error);
+    } finally {
+      if (elements.publishTaxonomyButton) {
+        elements.publishTaxonomyButton.disabled = false;
+        elements.publishTaxonomyButton.textContent = previousText;
+      }
+    }
+  }
+
+  async function openTaxonomyImageUpload(index) {
+    const category = selectedTaxonomyCategory();
+    const subcategory = category?.subcategories?.[index];
+    if (!category || !subcategory || Number.isNaN(index)) return;
+
+    state.taxonomyImageUpload = { mainId: category.id, subcategoryId: subcategory.id };
+
+    if (window.showOpenFilePicker) {
+      try {
+        const [fileHandle] = await window.showOpenFilePicker({
+          types: [
+            {
+              description: "Images",
+              accept: { "image/*": [".png", ".jpg", ".jpeg", ".webp", ".gif", ".avif"] }
+            }
+          ],
+          multiple: false
+        });
+        const uploadTarget = state.taxonomyImageUpload;
+        state.taxonomyImageUpload = null;
+        await processTaxonomyImageFile(await fileHandle.getFile(), uploadTarget);
+        return;
+      } catch (error) {
+        state.taxonomyImageUpload = null;
+        if (error.name === "AbortError") return;
+        console.warn("Taxonomy image picker failed, falling back to file input.", error);
+      }
+    }
+
+    state.taxonomyImageUpload = { mainId: category.id, subcategoryId: subcategory.id };
+    getImageUploadInput().click();
+  }
+
+  async function processTaxonomyImageFile(file, uploadTarget) {
+    const category = findTaxonomyCategory(uploadTarget?.mainId);
+    const subcategory = category?.subcategories?.find((item) => item.id === uploadTarget?.subcategoryId);
+    if (!category || !subcategory) {
+      showToast("تعذر تحديد القسم الفرعي لرفع الصورة.");
+      return;
+    }
+
+    if (!file.type.startsWith("image/")) {
+      showToast("اختر ملف صورة صحيح.");
+      return;
+    }
+
+    try {
+      showToast("جاري تحويل صورة القسم إلى WebP...");
+      const webp = await convertImageToWebp(file);
+      showToast("جاري رفع صورة القسم على GitHub...");
+
+      const response = await fetchWithTimeout("/admin/api/upload-product-image", {
+        method: "POST",
+        credentials: "same-origin",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          filename: file.name,
+          productId: `taxonomy-${subcategory.id || "subcategory"}`,
+          imageBase64: webp.base64
+        })
+      }, 60000);
+      const result = await response.json().catch(() => ({}));
+
+      if (!response.ok) {
+        throw new Error(result.error || result.message || `HTTP ${response.status}`);
+      }
+
+      subcategory.subcategoryImage = result.path;
+      state.assetPreviewVersion = String(Date.now());
+      renderTaxonomyManager();
+      refreshTaxonomyDependentUi();
+      showToast("تم رفع الصورة واستبدال صورة القسم. اضغط حفظ ونشر الأقسام حتى تظهر على الموقع.");
+    } catch (error) {
+      showToast(`تعذر رفع صورة القسم: ${friendlyUploadError(error.message)}`);
+      console.error(error);
+    }
   }
 
   async function processProductImageFile(file) {
@@ -486,21 +690,68 @@
     }
   }
 
+  function taxonomyCategoriesForAdmin() {
+    return state.taxonomy || [];
+  }
+
+  function findTaxonomyCategory(value = "") {
+    return taxonomyCategoriesForAdmin().find((category) => category.id === value || category.name === value) || null;
+  }
+
+  function findTaxonomySubcategory(value = "") {
+    for (const category of taxonomyCategoriesForAdmin()) {
+      const subcategory = (category.subcategories || []).find((item) => item.id === value || item.name === value);
+      if (subcategory) return { ...subcategory, mainId: category.id, mainName: category.name };
+    }
+    return null;
+  }
+
+  function taxonomyCategoryIdFromName(value = "") {
+    return findTaxonomyCategory(value)?.id || "";
+  }
+
+  function taxonomyCategoryNameFromId(value = "") {
+    return findTaxonomyCategory(value)?.name || "";
+  }
+
+  function taxonomySubcategoryIdFromName(value = "") {
+    return findTaxonomySubcategory(value)?.id || "";
+  }
+
+  function taxonomySubcategoryNameFromId(value = "") {
+    return findTaxonomySubcategory(value)?.name || "";
+  }
+
+  function taxonomySubcategories(value = "") {
+    return findTaxonomyCategory(value)?.subcategories || [];
+  }
+
   function normalizeMainCategoryValue(value, legacyCategory = "") {
     if (!value) return legacyCategoryToMainCategory[legacyCategory] || "uncategorized";
-    return taxonomy?.categoryIdFromName?.(value) || (taxonomy?.categoryById?.has(value) ? value : "uncategorized");
+    return taxonomyCategoryIdFromName(value) || (findTaxonomyCategory(value) ? value : "uncategorized");
   }
 
   function normalizeSubCategoryValue(value) {
     if (!value) return "needs-review";
-    return taxonomy?.subcategoryIdFromName?.(value) || (taxonomy?.subcategoryById?.has(value) ? value : "needs-review");
+    return taxonomySubcategoryIdFromName(value) || (findTaxonomySubcategory(value) ? value : "needs-review");
+  }
+
+  function mainCategoryOptionValue(value, legacyCategory = "") {
+    const id = normalizeMainCategoryValue(value, legacyCategory);
+    return taxonomyCategoryNameFromId(id) || value || "";
+  }
+
+  function subCategoryOptionValue(value) {
+    const id = normalizeSubCategoryValue(value);
+    return taxonomySubcategoryNameFromId(id) || value || "";
   }
 
   function inferredSubcategoryFromProduct(product) {
     const values = [product.subCategory, product.label, product.badge, ...(product.tags || [])].filter(Boolean);
     for (const value of values) {
-      const id = taxonomy?.subcategoryIdFromName?.(value) || (taxonomy?.subcategoryById?.has(value) ? value : "");
-      if (id && id !== "needs-review") return taxonomy.subcategoryById.get(id);
+      const found = findTaxonomySubcategory(value);
+      const id = found?.id || "";
+      if (id && id !== "needs-review") return found;
     }
     return null;
   }
@@ -511,7 +762,7 @@
       const inferred = inferredSubcategoryFromProduct(product);
       id = inferred?.mainId || legacyCategoryToMainCategory[product.category] || id;
     }
-    return taxonomy?.categoryNameFromId?.(id) || product.mainCategory || "غير مصنف";
+    return taxonomyCategoryNameFromId(id) || product.mainCategory || "غير مصنف";
   }
 
   function subCategoryName(product) {
@@ -520,7 +771,7 @@
       const inferred = inferredSubcategoryFromProduct(product);
       id = inferred?.id || id;
     }
-    return taxonomy?.subcategoryNameFromId?.(id) || product.subCategory || "يحتاج مراجعة";
+    return taxonomySubcategoryNameFromId(id) || product.subCategory || "يحتاج مراجعة";
   }
 
   function needsReview(product) {
@@ -532,6 +783,8 @@
     state.selectedId = state.products[0]?.id || "";
     state.dirty = false;
     fillCategoryFilter();
+    fillMainCategoryFilter();
+    fillSubCategoryFilter();
     renderAll(message);
   }
 
@@ -540,11 +793,12 @@
   categorySelect.innerHTML = categories.map((category) => `<option value="${escapeHtml(category.id)}">${escapeHtml(category.label)}</option>`).join("");
   const mainSelect = elements.editor.querySelector("[data-field='mainCategory']");
   if (mainSelect) {
-    mainSelect.innerHTML = taxonomyCategories.map((category) => `<option value="${escapeHtml(category.name)}">${escapeHtml(category.name)}</option>`).join("");
+    mainSelect.innerHTML = taxonomyCategoriesForAdmin().map((category) => `<option value="${escapeHtml(category.name)}">${escapeHtml(category.name)}</option>`).join("");
   }
   fillCategoryFilter();
   fillMainCategoryFilter();
   fillSubCategoryFilter();
+  renderTaxonomyManager();
 }
 
   function fillCategoryFilter() {
@@ -569,7 +823,7 @@
     });
     elements.mainCategoryFilter.innerHTML = [
       `<option value="all">كل الأقسام الرئيسية (${state.products.length})</option>`,
-      ...taxonomyCategories.map((category) => `<option value="${escapeHtml(category.name)}">${escapeHtml(category.name)} (${counts.get(category.name) || 0})</option>`)
+      ...taxonomyCategoriesForAdmin().map((category) => `<option value="${escapeHtml(category.name)}">${escapeHtml(category.name)} (${counts.get(category.name) || 0})</option>`)
     ].join("");
     elements.mainCategoryFilter.value = state.mainCategoryFilter;
   }
@@ -578,8 +832,8 @@
     if (!elements.subCategoryFilter) return;
     const selectedMain = state.mainCategoryFilter === "all" ? "" : state.mainCategoryFilter;
     const subcategories = selectedMain
-      ? taxonomy?.getSubcategories?.(selectedMain) || []
-      : taxonomyCategories.flatMap((category) => category.subcategories || []);
+      ? taxonomySubcategories(selectedMain) || []
+      : taxonomyCategoriesForAdmin().flatMap((category) => category.subcategories || []);
     const counts = new Map();
     state.products.forEach((product) => {
       const name = subCategoryName(product);
@@ -596,12 +850,186 @@
     const mainSelect = elements.editor.querySelector("[data-field='mainCategory']");
     const subSelect = elements.editor.querySelector("[data-field='subCategory']");
     if (!subSelect) return;
-    const mainValue = mainSelect?.value || product?.mainCategory || "غير مصنف";
-    const subcategories = taxonomy?.getSubcategories?.(mainValue) || taxonomy?.getSubcategories?.("غير مصنف") || [];
+    const mainValue = mainCategoryOptionValue(mainSelect?.value || product?.mainCategory, product?.category);
+    const subcategories = taxonomySubcategories(mainValue) || taxonomySubcategories("غير مصنف") || [];
     subSelect.innerHTML = subcategories.map((subcategory) => `<option value="${escapeHtml(subcategory.name)}">${escapeHtml(subcategory.name)}</option>`).join("");
-    const current = product?.subCategory || subcategories[0]?.name || "";
+    const current = subCategoryOptionValue(product?.subCategory) || subcategories[0]?.name || "";
     subSelect.value = subcategories.some((item) => item.name === current) ? current : subcategories[0]?.name || "";
     if (product && subSelect.value && product.subCategory !== subSelect.value) product.subCategory = subSelect.value;
+  }
+
+  function selectedTaxonomyCategory() {
+    return findTaxonomyCategory(state.taxonomyMain) || taxonomyCategoriesForAdmin()[0] || null;
+  }
+
+  function renderTaxonomyManager() {
+    if (!elements.taxonomyMain || !elements.taxonomyList) return;
+    const categoriesList = taxonomyCategoriesForAdmin();
+    if (!categoriesList.length) {
+      elements.taxonomyMain.innerHTML = "";
+      elements.taxonomyList.innerHTML = `<div class="empty-state">لا توجد أقسام.</div>`;
+      return;
+    }
+
+    if (!findTaxonomyCategory(state.taxonomyMain)) state.taxonomyMain = categoriesList[0].id;
+    elements.taxonomyMain.innerHTML = categoriesList
+      .map((category) => `<option value="${escapeAttribute(category.id)}">${escapeHtml(category.name)}</option>`)
+      .join("");
+    elements.taxonomyMain.value = state.taxonomyMain;
+
+    const category = selectedTaxonomyCategory();
+    const subcategories = category?.subcategories || [];
+    if (!subcategories.length) {
+      elements.taxonomyList.innerHTML = `<div class="empty-state">لا توجد أقسام فرعية هنا.</div>`;
+      return;
+    }
+
+    const categoryOptions = categoriesList
+      .map((item) => `<option value="${escapeAttribute(item.id)}">${escapeHtml(item.name)}</option>`)
+      .join("");
+
+    elements.taxonomyList.innerHTML = subcategories.map((subcategory, index) => `
+      <article class="taxonomy-card" data-taxonomy-sub-index="${index}">
+        <div class="taxonomy-preview">
+          <img src="${escapeAttribute(previewAssetUrl(subcategory.subcategoryImage || ""))}" alt="" loading="lazy" decoding="async" onerror="this.closest('.taxonomy-preview').classList.add('image-missing')">
+        </div>
+        <div class="taxonomy-fields">
+          <label>
+            <span>اسم القسم الفرعي</span>
+            <input type="text" data-taxonomy-field="name" value="${escapeAttribute(subcategory.name || "")}">
+          </label>
+          <label>
+            <span>ID</span>
+            <input type="text" dir="ltr" data-taxonomy-field="id" value="${escapeAttribute(subcategory.id || "")}">
+          </label>
+          <label>
+            <span>مسار الصورة</span>
+            <input type="text" dir="ltr" data-taxonomy-field="subcategoryImage" value="${escapeAttribute(subcategory.subcategoryImage || "")}" placeholder="assets/optimized/products/example.webp">
+          </label>
+          <label>
+            <span>نقل إلى قسم رئيسي</span>
+            <select data-taxonomy-field="mainId">${categoryOptions}</select>
+          </label>
+        </div>
+        <div class="taxonomy-card-actions">
+          <button class="button small secondary" type="button" data-action="upload-taxonomy-image">رفع صورة</button>
+          <button class="button small ghost" type="button" data-action="move-subcategory-before" ${index === 0 ? "disabled" : ""}>فوق</button>
+          <button class="button small ghost" type="button" data-action="move-subcategory-after" ${index === subcategories.length - 1 ? "disabled" : ""}>تحت</button>
+          <button class="button small danger" type="button" data-action="remove-subcategory">حذف</button>
+        </div>
+      </article>
+    `).join("");
+
+    elements.taxonomyList.querySelectorAll("[data-taxonomy-field='mainId']").forEach((select) => {
+      select.value = category.id;
+    });
+  }
+
+  function handleTaxonomyInput(event) {
+    const element = event.target.closest("[data-taxonomy-field]");
+    const card = event.target.closest("[data-taxonomy-sub-index]");
+    const category = selectedTaxonomyCategory();
+    const index = Number(card?.dataset.taxonomySubIndex);
+    const subcategory = category?.subcategories?.[index];
+    if (!element || !subcategory || Number.isNaN(index)) return;
+
+    const field = element.dataset.taxonomyField;
+    if (field === "mainId") {
+      moveSubcategoryToMain(index, element.value);
+      return;
+    }
+
+    if (field === "id") {
+      subcategory.id = uniqueTaxonomySubcategoryId(slugLike(element.value) || `subcategory-${Date.now()}`, subcategory);
+      if (element.value !== subcategory.id) element.value = subcategory.id;
+    } else if (field === "subcategoryImage") {
+      subcategory.subcategoryImage = normalizeImagePath(element.value);
+      const image = card.querySelector(".taxonomy-preview img");
+      const preview = card.querySelector(".taxonomy-preview");
+      preview?.classList.remove("image-missing");
+      if (image) image.src = previewAssetUrl(subcategory.subcategoryImage);
+      if (element.value !== subcategory.subcategoryImage) element.value = subcategory.subcategoryImage;
+    } else {
+      subcategory[field] = element.value.trim();
+    }
+
+    refreshTaxonomyDependentUi();
+  }
+
+  function uniqueTaxonomySubcategoryId(baseId, currentSubcategory = null) {
+    const base = slugLike(baseId) || `subcategory-${Date.now()}`;
+    const used = new Set(
+      taxonomyCategoriesForAdmin()
+        .flatMap((category) => category.subcategories || [])
+        .filter((subcategory) => subcategory !== currentSubcategory)
+        .map((subcategory) => subcategory.id)
+    );
+    let nextId = base;
+    let counter = 2;
+    while (used.has(nextId)) {
+      nextId = `${base}-${counter}`;
+      counter += 1;
+    }
+    return nextId;
+  }
+
+  function addSubcategory() {
+    const category = selectedTaxonomyCategory();
+    if (!category) return;
+    category.subcategories = Array.isArray(category.subcategories) ? category.subcategories : [];
+    category.subcategories.push({
+      id: uniqueTaxonomySubcategoryId(`custom-subcategory-${Date.now()}`),
+      name: "قسم فرعي جديد",
+      subcategoryImage: "assets/optimized/hero-products-collage.webp"
+    });
+    renderTaxonomyManager();
+    refreshTaxonomyDependentUi();
+    showToast("تم إضافة قسم فرعي جديد.");
+  }
+
+  function removeSubcategory(index) {
+    const category = selectedTaxonomyCategory();
+    if (!category || Number.isNaN(index) || !category.subcategories?.[index]) return;
+    const confirmed = window.confirm("هل تريد حذف هذا القسم الفرعي من قائمة الأقسام؟ لن يتم حذف المنتجات نفسها.");
+    if (!confirmed) return;
+    category.subcategories.splice(index, 1);
+    renderTaxonomyManager();
+    refreshTaxonomyDependentUi();
+  }
+
+  function moveSubcategory(index, direction) {
+    const category = selectedTaxonomyCategory();
+    const nextIndex = index + direction;
+    if (!category || !category.subcategories || nextIndex < 0 || nextIndex >= category.subcategories.length) return;
+    [category.subcategories[index], category.subcategories[nextIndex]] = [category.subcategories[nextIndex], category.subcategories[index]];
+    renderTaxonomyManager();
+    refreshTaxonomyDependentUi();
+  }
+
+  function moveSubcategoryToMain(index, nextMainId) {
+    const category = selectedTaxonomyCategory();
+    const nextCategory = findTaxonomyCategory(nextMainId);
+    if (!category || !nextCategory || nextCategory.id === category.id || !category.subcategories?.[index]) return;
+    const [subcategory] = category.subcategories.splice(index, 1);
+    nextCategory.subcategories = Array.isArray(nextCategory.subcategories) ? nextCategory.subcategories : [];
+    nextCategory.subcategories.push(subcategory);
+    renderTaxonomyManager();
+    refreshTaxonomyDependentUi();
+    showToast(`تم نقل القسم الفرعي إلى ${nextCategory.name}.`);
+  }
+
+  function refreshTaxonomyDependentUi() {
+    const mainSelect = elements.editor.querySelector("[data-field='mainCategory']");
+    if (mainSelect) {
+      const selected = mainSelect.value;
+      mainSelect.innerHTML = taxonomyCategoriesForAdmin().map((category) => `<option value="${escapeHtml(category.name)}">${escapeHtml(category.name)}</option>`).join("");
+      mainSelect.value = [...mainSelect.options].some((option) => option.value === selected) ? selected : mainSelect.options[0]?.value || "";
+    }
+    fillMainCategoryFilter();
+    fillSubCategoryFilter();
+    const product = currentProduct();
+    if (product) fillSubCategorySelect(product);
+    renderProductList();
   }
 
   function renderAll(message) {
@@ -629,7 +1057,6 @@
   }
 
   elements.productList.innerHTML = products.map((product) => {
-    const legacyCategory = categories.find((item) => item.id === product.category)?.label || product.category || "قسم قديم";
     const taxonomyLine = `${mainCategoryName(product)} / ${subCategoryName(product)}`;
     const selected = product.id === state.selectedId ? " active" : "";
     const price = product.price ? `${formatNumber(product.price)} ج.م` : "بدون سعر";
@@ -638,7 +1065,7 @@
       <button class="product-list-item${selected}" type="button" data-select-product="${escapeHtml(product.id)}">
         <strong>${escapeHtml(product.name || "منتج بدون اسم")}</strong>
         <span>${escapeHtml(taxonomyLine)}${escapeHtml(reviewBadge)}</span>
-        <small>${escapeHtml(legacyCategory)} - ${escapeHtml(price)}</small>
+        <small>${escapeHtml(price)}</small>
       </button>
     `;
   }).join("");
@@ -682,9 +1109,9 @@
     setValue("id", product.id);
     setValue("category", product.category);
     setValue("label", product.label);
-    setValue("mainCategory", product.mainCategory);
+    setValue("mainCategory", mainCategoryOptionValue(product.mainCategory, product.category));
     fillSubCategorySelect(product);
-    setValue("subCategory", product.subCategory);
+    setValue("subCategory", subCategoryOptionValue(product.subCategory));
     setValue("badge", product.badge);
     setValue("stock", product.stock || "متاح");
     setValue("price", product.price ?? "");
@@ -706,11 +1133,47 @@
     }
 
     elements.imagePreview.innerHTML = visibleImages.map((image, index) => `
-      <figure>
+      <figure class="${index === 0 ? "image-primary" : ""}" data-image-index="${index}">
         <img src="${escapeAttribute(previewAssetUrl(image))}" alt="صورة ${index + 1}" loading="lazy" decoding="async" onload="this.closest('figure').classList.remove('image-missing')" onerror="this.closest('figure').classList.add('image-missing')">
+        <div class="image-preview-actions" aria-label="ترتيب الصورة">
+          <button type="button" data-action="move-image-before" ${index === 0 ? "disabled" : ""} title="انقل الصورة قبل اللي قبلها">قبلها</button>
+          <button type="button" data-action="make-primary-image" ${index === 0 ? "disabled" : ""} title="اجعل الصورة هي الصورة الأساسية">الأولى</button>
+          <button type="button" data-action="move-image-after" ${index === visibleImages.length - 1 ? "disabled" : ""} title="انقل الصورة بعد اللي بعدها">بعدها</button>
+        </div>
+        ${index === 0 ? `<span class="image-primary-badge">الصورة الأساسية</span>` : ""}
         <figcaption>${escapeHtml(image)}</figcaption>
       </figure>
     `).join("");
+  }
+
+  function makeProductImagePrimary(index) {
+    const product = currentProduct();
+    if (!product || !Number.isInteger(index) || index <= 0 || index >= product.images.length) return;
+
+    const nextImages = [...product.images];
+    const [selectedImage] = nextImages.splice(index, 1);
+    nextImages.unshift(selectedImage);
+    updateProductImages(product, nextImages);
+    showToast("تم جعل الصورة هي الصورة الأساسية.");
+  }
+
+  function moveProductImage(index, direction) {
+    const product = currentProduct();
+    const nextIndex = index + direction;
+    if (!product || !Number.isInteger(index) || nextIndex < 0 || nextIndex >= product.images.length) return;
+
+    const nextImages = [...product.images];
+    [nextImages[index], nextImages[nextIndex]] = [nextImages[nextIndex], nextImages[index]];
+    updateProductImages(product, nextImages);
+    showToast("تم تعديل ترتيب الصور.");
+  }
+
+  function updateProductImages(product, images) {
+    product.images = unique(images.map(normalizeImagePath).filter(Boolean));
+    product.image = product.images[0] || "";
+    setValue("images", arrayToLines(product.images));
+    renderImagePreview(product.images);
+    markDirty();
   }
 
   function renderVariants(product) {
@@ -811,7 +1274,7 @@
   }
 
   if (field === "mainCategory") {
-    product.mainCategory = value;
+    product.mainCategory = mainCategoryOptionValue(value, product.category);
     fillSubCategorySelect(product);
     fillMainCategoryFilter();
     fillSubCategoryFilter();
@@ -820,7 +1283,7 @@
   }
 
   if (field === "subCategory") {
-    product.subCategory = value;
+    product.subCategory = subCategoryOptionValue(value);
     fillSubCategoryFilter();
     renderProductList();
     return;
@@ -828,7 +1291,9 @@
 
   if (field === "options") {
     try {
-      product.options = JSON.parse(value || "[]");
+      const options = JSON.parse(value || "[]");
+      if (!isValidProductOptions(options)) throw new Error("Invalid options shape");
+      product.options = options;
       element.setCustomValidity("");
     } catch {
       element.setCustomValidity("صيغة JSON غير صحيحة");
@@ -898,6 +1363,9 @@
     }
 
     variant[field] = element.value;
+    if (field === "title") {
+      syncVariantOptionsFromTitles(product, { force: true, syncVisibleFields: true });
+    }
   }
 
   function addProduct() {
@@ -969,6 +1437,7 @@
     const product = currentProduct();
     if (!product) return;
     product.variants.push(createVariant(product, product.variants.length + 1));
+    syncVariantOptionsFromTitles(product, { force: true });
     markDirty();
     renderVariants(product);
   }
@@ -978,6 +1447,7 @@
     if (!product || Number.isNaN(index)) return;
     product.variants.splice(index, 1);
     if (!product.variants.length) product.variants.push(createVariant(product));
+    syncVariantOptionsFromTitles(product, { force: true });
     markDirty();
     renderVariants(product);
   }
@@ -986,6 +1456,54 @@
     state.products.sort((first, second) => (first.name || "").localeCompare(second.name || "", "ar"));
     markDirty();
     renderProductList();
+  }
+
+  function syncCurrentVariantOptions() {
+    const product = currentProduct();
+    if (!product) return;
+
+    ensureProductShape(product);
+    const synced = syncVariantOptionsFromTitles(product, { force: true, syncVisibleFields: true });
+    if (!synced) {
+      showToast("أضف اختيارين على الأقل قبل توليد الاختيارات.");
+      return;
+    }
+
+    renderVariants(product);
+    renderProductList();
+    markDirty();
+    showToast("تم توليد الاختيارات من أسماء الاختيارات.");
+  }
+
+  function syncVariantOptionsFromTitles(product, options = {}) {
+    const synced = syncVariantTitleOptions(product, options);
+    if (!synced && options.force && Array.isArray(product.variants) && product.variants.length < 2) {
+      product.options = [];
+      product.variants.forEach((variant) => {
+        variant.options = {};
+      });
+    }
+
+    setValue("options", JSON.stringify(product.options || [], null, 2));
+    if (options.syncVisibleFields) {
+      elements.variantList.querySelectorAll("[data-variant-index]").forEach((card) => {
+        const index = Number(card.dataset.variantIndex);
+        const textarea = card.querySelector("[data-variant-field='options']");
+        if (textarea && product.variants[index]) {
+          textarea.value = JSON.stringify(product.variants[index].options || {}, null, 2);
+        }
+      });
+    }
+    return synced;
+  }
+
+  function isValidProductOptions(options) {
+    return Array.isArray(options) && options.every((option) => (
+      option &&
+      typeof option === "object" &&
+      typeof option.name === "string" &&
+      Array.isArray(option.values)
+    ));
   }
 
   function currentProduct() {
@@ -1042,10 +1560,59 @@
     product.image = product.images[0] || normalizeImagePath(product.image) || "";
     product.url = product.url || `https://popekyrillos.store/?product=${product.id}`;
     product.variants = product.variants.length ? product.variants : [createVariant(product)];
+    removePlaceholderDefaultVariant(product);
     product.variants = product.variants.map((variant, index) => normalizeVariant(product, variant, index));
+    syncVariantTitleOptions(product);
     return product;
   });
 }
+
+  function removePlaceholderDefaultVariant(product) {
+    if (!Array.isArray(product.variants) || product.variants.length < 2) return;
+
+    const defaultTitle = "\u0627\u0644\u0627\u062e\u062a\u064a\u0627\u0631 \u0627\u0644\u0627\u0641\u062a\u0631\u0627\u0636\u064a";
+    const firstVariant = product.variants[0];
+    const hasOnlyPlaceholderData =
+      String(firstVariant.title || "").trim() === defaultTitle &&
+      !Object.keys(firstVariant.options || {}).length &&
+      !(firstVariant.images || []).filter(Boolean).length &&
+      !firstVariant.image &&
+      !firstVariant.sku &&
+      (firstVariant.quantity === null || firstVariant.quantity === undefined || firstVariant.quantity === "") &&
+      (numberOrNull(firstVariant.price) ?? product.price ?? 0) === (product.price ?? 0);
+
+    if (hasOnlyPlaceholderData) product.variants.shift();
+  }
+
+  function syncVariantTitleOptions(product, options = {}) {
+    if (!Array.isArray(product.variants) || product.variants.length < 2) return false;
+    const hasStructuredOptions = product.options.length && product.variants.some((variant) => Object.keys(variant.options || {}).length);
+    if (hasStructuredOptions && !options.force) return false;
+
+    const optionName = "\u0627\u0644\u0627\u062e\u062a\u064a\u0627\u0631";
+    const used = new Map();
+    const labels = product.variants.map((variant, index) => {
+      const raw = String(variant.title || "").trim();
+      const fallback = `اختيار ${index + 1}`;
+      const base = raw || fallback;
+      const count = used.get(base) || 0;
+      used.set(base, count + 1);
+      return count ? `${base} ${count + 1}` : base;
+    });
+
+    product.options = [
+      {
+        name: optionName,
+        values: labels
+      }
+    ];
+    product.variants.forEach((variant, index) => {
+      variant.options = {
+        [optionName]: labels[index]
+      };
+    });
+    return true;
+  }
 
   function normalizeVariant(product, variant, index) {
     const images = unique((variant.images || [variant.image].filter(Boolean)).map(normalizeImagePath).filter(Boolean));
@@ -1089,6 +1656,16 @@
 
   function downloadJson(filename, data) {
     const blob = new Blob([formatJson(data)], { type: "application/json;charset=utf-8" });
+    downloadBlob(filename, blob);
+    showToast(`تم تجهيز ${filename}.`);
+  }
+
+  function downloadText(filename, text, type = "text/plain;charset=utf-8") {
+    downloadBlob(filename, new Blob([text], { type }));
+    showToast(`تم تجهيز ${filename}.`);
+  }
+
+  function downloadBlob(filename, blob) {
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
@@ -1097,7 +1674,97 @@
     link.click();
     link.remove();
     URL.revokeObjectURL(url);
-    showToast(`تم تجهيز ${filename}.`);
+  }
+
+  function buildTaxonomyFile() {
+    const categoriesSource = JSON.stringify(taxonomyCategoriesForAdmin(), null, 4)
+      .replace(/^/gm, "  ");
+    return `(function () {
+  const categories = ${categoriesSource.trimStart()};
+
+  const categoryById = new Map(categories.map((category) => [category.id, category]));
+  const categoryByName = new Map(categories.map((category) => [category.name, category]));
+  const subcategoryById = new Map();
+  const subcategoryByName = new Map();
+
+  categories.forEach((category) => {
+    category.subcategories.forEach((subcategory) => {
+      const entry = { ...subcategory, mainId: category.id, mainName: category.name };
+      subcategoryById.set(subcategory.id, entry);
+      subcategoryByName.set(subcategory.name, entry);
+    });
+  });
+
+  const categoryAliases = new Map([
+    ["مستلزمات المذبح", "altar-tools"],
+    ["نحاسيات", "altar-tools"],
+    ["شموع وبخور", "candles-incense"],
+    ["شمع وبخور وأباركة", "candles-incense"],
+    ["تواني وأقمشة", "church-vestments"],
+    ["أقمشة ومفارش", "church-vestments"],
+    ["أيقونات وهدايا", "icons-frames"],
+    ["أيقونات", "icons-frames"],
+    ["كتب وطقوس", "books-rituals"],
+    ["صلبان وهدايا", "crosses-gifts"]
+  ]);
+
+  categoryAliases.forEach((categoryId, alias) => {
+    const category = categoryById.get(categoryId);
+    if (category) categoryByName.set(alias, category);
+  });
+
+  const subcategoryAliases = new Map([
+    ["يوتا", "small-icons"],
+    ["يوطا", "small-icons"],
+    ["مادليات", "small-icons"],
+    ["ميداليات", "medals"]
+  ]);
+
+  subcategoryAliases.forEach((subcategoryId, alias) => {
+    const subcategory = subcategoryById.get(subcategoryId);
+    if (subcategory) subcategoryByName.set(alias, subcategory);
+  });
+
+  function customerCategories() {
+    return categories.filter((category) => !category.hiddenFromCustomerNav);
+  }
+
+  function categoryIdFromName(name) {
+    return categoryByName.get(name)?.id || "";
+  }
+
+  function categoryNameFromId(id) {
+    return categoryById.get(id)?.name || "";
+  }
+
+  function subcategoryIdFromName(name) {
+    return subcategoryByName.get(name)?.id || "";
+  }
+
+  function subcategoryNameFromId(id) {
+    return subcategoryById.get(id)?.name || "";
+  }
+
+  function getSubcategories(categoryIdOrName) {
+    const category = categoryById.get(categoryIdOrName) || categoryByName.get(categoryIdOrName);
+    return category?.subcategories || [];
+  }
+
+  window.POPE_KYRILLOS_TAXONOMY = {
+    categories,
+    customerCategories,
+    categoryById,
+    categoryByName,
+    subcategoryById,
+    subcategoryByName,
+    categoryIdFromName,
+    categoryNameFromId,
+    subcategoryIdFromName,
+    subcategoryNameFromId,
+    getSubcategories
+  };
+})();
+`;
   }
 
   function markDirty() {
@@ -1107,7 +1774,11 @@
 
   function setValue(field, value) {
     const element = elements.editor.querySelector(`[data-field="${field}"]`);
-    if (element) element.value = value ?? "";
+    if (!element) return;
+    element.value = value ?? "";
+    if (element.tagName === "SELECT" && element.options.length && element.selectedIndex === -1) {
+      element.value = element.options[0].value;
+    }
   }
 
   function parseLines(value) {

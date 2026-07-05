@@ -1,5 +1,1043 @@
 [
   {
+    "id": "atb3ho-10618130956453",
+    "name": "شنطه اتبعه",
+    "category": "atb3ho",
+    "label": "شنط ومستلزمات روحية",
+    "description": "",
+    "price": 120,
+    "priceNote": "",
+    "stock": "متاح",
+    "badge": "شنط ومستلزمات روحية",
+    "image": "https://cdn.shopify.com/s/files/1/0761/9389/0469/files/IMG-9485.png?v=1781542743",
+    "url": "https://popekyrillos.store/products/%D8%B4%D9%86%D8%B7%D9%87-%D8%A7%D8%AA%D8%A8%D8%B9%D9%87",
+    "source": "atb3ho",
+    "sourceUpdatedAt": "2026-07-04T18:38:24+03:00",
+    "tags": [
+      "أتبعه",
+      "Atb3ho",
+      "شنط ومستلزمات روحية"
+    ],
+    "images": [
+      "https://cdn.shopify.com/s/files/1/0761/9389/0469/files/IMG-9485.png?v=1781542743"
+    ],
+    "options": [],
+    "variants": [
+      {
+        "id": "atb3ho-10618130956453-variant-47919392882853",
+        "title": "الاختيار الافتراضي",
+        "options": {},
+        "price": 120,
+        "compareAtPrice": null,
+        "available": true,
+        "image": null,
+        "images": [],
+        "sku": "",
+        "quantity": null
+      }
+    ],
+    "mainCategory": "منتجات أتبعه",
+    "subCategory": "شنط ومستلزمات روحية",
+    "updatedAt": "2026-07-04T18:38:24+03:00",
+    "slug": "شنطه-اتبعه"
+  },
+  {
+    "id": "atb3ho-10618127974565",
+    "name": "شنطه اتبعه",
+    "category": "atb3ho",
+    "label": "شنط ومستلزمات روحية",
+    "description": "",
+    "price": 120,
+    "priceNote": "",
+    "stock": "غير متاح حاليا",
+    "badge": "شنط ومستلزمات روحية",
+    "image": "https://cdn.shopify.com/s/files/1/0761/9389/0469/files/IMG-9485.png?v=1781542743",
+    "url": "https://popekyrillos.store/products/%D8%B4%D9%86%D8%B7%D9%87-%D8%A7%D8%AA%D8%A8%D8%B9%D9%87-3ho-10618127974565",
+    "source": "atb3ho",
+    "sourceUpdatedAt": "2026-07-04T18:38:24+03:00",
+    "tags": [
+      "أتبعه",
+      "Atb3ho",
+      "شنط ومستلزمات روحية"
+    ],
+    "images": [
+      "https://cdn.shopify.com/s/files/1/0761/9389/0469/files/IMG-9485.png?v=1781542743"
+    ],
+    "options": [],
+    "variants": [
+      {
+        "id": "atb3ho-10618127974565-variant-47919384330405",
+        "title": "الاختيار الافتراضي",
+        "options": {},
+        "price": 120,
+        "compareAtPrice": null,
+        "available": false,
+        "image": null,
+        "images": [],
+        "sku": "",
+        "quantity": null
+      }
+    ],
+    "mainCategory": "منتجات أتبعه",
+    "subCategory": "شنط ومستلزمات روحية",
+    "updatedAt": "2026-07-04T18:38:24+03:00",
+    "slug": "شنطه-اتبعه-3ho-10618127974565"
+  },
+  {
+    "id": "atb3ho-10558435197093",
+    "name": "كافر كتاب مقدس وشنطه مستلزمات روحيه",
+    "category": "atb3ho",
+    "label": "شنط ومستلزمات روحية",
+    "description": "",
+    "price": 260,
+    "priceNote": "",
+    "stock": "متاح",
+    "badge": "خصم",
+    "image": "https://cdn.shopify.com/s/files/1/0761/9389/0469/files/IMG-9406.png?v=1781264874",
+    "url": "https://popekyrillos.store/products/%D9%83%D8%A7%D9%81%D8%B1-%D9%83%D8%AA%D8%A7%D8%A8-%D9%85%D9%82%D8%AF%D8%B3-%D9%88%D8%B4%D9%86%D8%B7%D9%87-%D9%85%D8%B3%D8%AA%D9%84%D8%B2%D9%85%D8%A7%D8%AA-%D8%B1%D9%88%D8%AD%D9%8A%D9%87",
+    "source": "atb3ho",
+    "sourceUpdatedAt": "2026-07-04T18:38:24+03:00",
+    "tags": [
+      "أتبعه",
+      "Atb3ho",
+      "شنط ومستلزمات روحية"
+    ],
+    "images": [
+      "https://cdn.shopify.com/s/files/1/0761/9389/0469/files/IMG-9406.png?v=1781264874",
+      "https://cdn.shopify.com/s/files/1/0761/9389/0469/files/IMG-9405.png?v=1781264874",
+      "https://cdn.shopify.com/s/files/1/0761/9389/0469/files/IMG-9404.png?v=1781264874"
+    ],
+    "options": [
+      {
+        "name": "اللون",
+        "values": [
+          "بينك",
+          "Gray",
+          "Navy"
+        ]
+      }
+    ],
+    "variants": [
+      {
+        "id": "atb3ho-10558435197093-variant-47913991569573",
+        "title": "بينك",
+        "options": {
+          "اللون": "بينك"
+        },
+        "price": 260,
+        "compareAtPrice": 300,
+        "available": true,
+        "image": "https://cdn.shopify.com/s/files/1/0761/9389/0469/files/IMG-9404.png?v=1781264874",
+        "images": [
+          "https://cdn.shopify.com/s/files/1/0761/9389/0469/files/IMG-9404.png?v=1781264874"
+        ],
+        "sku": "",
+        "quantity": null
+      },
+      {
+        "id": "atb3ho-10558435197093-variant-47913991635109",
+        "title": "Gray",
+        "options": {
+          "اللون": "Gray"
+        },
+        "price": 260,
+        "compareAtPrice": 290,
+        "available": true,
+        "image": "https://cdn.shopify.com/s/files/1/0761/9389/0469/files/IMG-9406.png?v=1781264874",
+        "images": [
+          "https://cdn.shopify.com/s/files/1/0761/9389/0469/files/IMG-9406.png?v=1781264874"
+        ],
+        "sku": "",
+        "quantity": null
+      },
+      {
+        "id": "atb3ho-10558435197093-variant-47913991667877",
+        "title": "Navy",
+        "options": {
+          "اللون": "Navy"
+        },
+        "price": 290,
+        "compareAtPrice": null,
+        "available": true,
+        "image": "https://cdn.shopify.com/s/files/1/0761/9389/0469/files/IMG-9405.png?v=1781264874",
+        "images": [
+          "https://cdn.shopify.com/s/files/1/0761/9389/0469/files/IMG-9405.png?v=1781264874"
+        ],
+        "sku": "",
+        "quantity": null
+      }
+    ],
+    "mainCategory": "منتجات أتبعه",
+    "subCategory": "شنط ومستلزمات روحية",
+    "updatedAt": "2026-07-04T18:38:24+03:00",
+    "slug": "كافر-كتاب-مقدس-وشنطه-مستلزمات-روحيه"
+  },
+  {
+    "id": "atb3ho-10555319877797",
+    "name": "تحدي التغيير",
+    "category": "atb3ho",
+    "label": "كروت",
+    "description": "تحدي ١٠٠ تغيير لانهاء عاده سلبيه او التعود علي عاده ايجابيه 🙏🏻",
+    "price": 25,
+    "priceNote": "",
+    "stock": "متاح",
+    "badge": "كروت",
+    "image": "https://cdn.shopify.com/s/files/1/0761/9389/0469/files/CC0ED7AC-3925-46FB-BCCB-98AFA44821A6.png?v=1777366178",
+    "url": "https://popekyrillos.store/products/%D8%AA%D8%AD%D8%AF%D9%8A-%D8%A7%D9%84%D8%AA%D8%BA%D9%8A%D9%8A%D8%B1",
+    "source": "atb3ho",
+    "sourceUpdatedAt": "2026-07-04T18:38:24+03:00",
+    "tags": [
+      "أتبعه",
+      "Atb3ho",
+      "كروت"
+    ],
+    "images": [
+      "https://cdn.shopify.com/s/files/1/0761/9389/0469/files/CC0ED7AC-3925-46FB-BCCB-98AFA44821A6.png?v=1777366178"
+    ],
+    "options": [],
+    "variants": [
+      {
+        "id": "atb3ho-10555319877797-variant-47766712909989",
+        "title": "الاختيار الافتراضي",
+        "options": {},
+        "price": 25,
+        "compareAtPrice": null,
+        "available": true,
+        "image": null,
+        "images": [],
+        "sku": "",
+        "quantity": null
+      }
+    ],
+    "mainCategory": "منتجات أتبعه",
+    "subCategory": "كروت",
+    "updatedAt": "2026-07-04T18:38:24+03:00",
+    "slug": "تحدي-التغيير"
+  },
+  {
+    "id": "atb3ho-10547044876453",
+    "name": "٥ بوك مارك + ٥ FREE",
+    "category": "atb3ho",
+    "label": "بوك مارك",
+    "description": "",
+    "price": 65,
+    "priceNote": "",
+    "stock": "متاح",
+    "badge": "خصم",
+    "image": "https://cdn.shopify.com/s/files/1/0761/9389/0469/files/2928F643-1592-4F45-AEE1-5D67986FCB28.jpg?v=1776864500",
+    "url": "https://popekyrillos.store/products/%D9%A5-%D8%A8%D9%88%D9%83-%D9%85%D8%A7%D8%B1%D9%83-%D9%A5-free",
+    "source": "atb3ho",
+    "sourceUpdatedAt": "2026-07-04T18:38:24+03:00",
+    "tags": [
+      "أتبعه",
+      "Atb3ho",
+      "بوك مارك"
+    ],
+    "images": [
+      "https://cdn.shopify.com/s/files/1/0761/9389/0469/files/2928F643-1592-4F45-AEE1-5D67986FCB28.jpg?v=1776864500"
+    ],
+    "options": [],
+    "variants": [
+      {
+        "id": "atb3ho-10547044876453-variant-47746479489189",
+        "title": "الاختيار الافتراضي",
+        "options": {},
+        "price": 65,
+        "compareAtPrice": 150,
+        "available": true,
+        "image": null,
+        "images": [],
+        "sku": "",
+        "quantity": null
+      }
+    ],
+    "mainCategory": "منتجات أتبعه",
+    "subCategory": "بوك مارك",
+    "updatedAt": "2026-07-04T18:38:24+03:00",
+    "slug": "٥-بوك-مارك-٥-free"
+  },
+  {
+    "id": "atb3ho-10547041829029",
+    "name": "جورنالينج اتبعه ٣٦٥ يوم",
+    "category": "atb3ho",
+    "label": "جورنالينج",
+    "description": "رحله انهاء قراءه الكتاب المقدس كامل خلال سنه ( عدا الاسفار القانونيه) \n\nيبدأ من شهر يناير لشهر ديسمبر ٢٠٢٦\n\nتقسيم منظم يساعدك تلتزم يوميًا\nمساحات تكتب فيها تأملاتك ومشاعرك\nآيات تشجعك تكمل حتى لو وقعت\nنظام بسيط يخليك ترجع كل يوم",
+    "price": 215,
+    "priceNote": "",
+    "stock": "غير متاح حاليا",
+    "badge": "خصم",
+    "image": "https://cdn.shopify.com/s/files/1/0761/9389/0469/files/F1A779C9-209F-4C01-91B9-D15D85E6B032.jpg?v=1776864241",
+    "url": "https://popekyrillos.store/products/%D8%AC%D9%88%D8%B1%D9%86%D8%A7%D9%84%D9%8A%D9%86%D8%AC-%D8%A7%D8%AA%D8%A8%D8%B9%D9%87-%D9%A3%D9%A6%D9%A5-%D9%8A%D9%88%D9%85",
+    "source": "atb3ho",
+    "sourceUpdatedAt": "2026-07-04T18:38:24+03:00",
+    "tags": [
+      "أتبعه",
+      "Atb3ho",
+      "جورنالينج"
+    ],
+    "images": [
+      "https://cdn.shopify.com/s/files/1/0761/9389/0469/files/F1A779C9-209F-4C01-91B9-D15D85E6B032.jpg?v=1776864241"
+    ],
+    "options": [],
+    "variants": [
+      {
+        "id": "atb3ho-10547041829029-variant-47746469462181",
+        "title": "الاختيار الافتراضي",
+        "options": {},
+        "price": 215,
+        "compareAtPrice": 250,
+        "available": false,
+        "image": null,
+        "images": [],
+        "sku": "0",
+        "quantity": null
+      }
+    ],
+    "mainCategory": "منتجات أتبعه",
+    "subCategory": "جورنالينج",
+    "updatedAt": "2026-07-04T18:38:24+03:00",
+    "slug": "جورنالينج-اتبعه-٣٦٥-يوم"
+  },
+  {
+    "id": "atb3ho-10545390780581",
+    "name": "بوك مارك",
+    "category": "atb3ho",
+    "label": "بوك مارك",
+    "description": "",
+    "price": 16,
+    "priceNote": "",
+    "stock": "غير متاح حاليا",
+    "badge": "بوك مارك",
+    "image": "https://cdn.shopify.com/s/files/1/0761/9389/0469/files/16C982A3-58E3-4B99-98B6-B2C15CA83D79.jpg?v=1776782828",
+    "url": "https://popekyrillos.store/products/%D8%A8%D9%88%D9%83-%D9%85%D8%A7%D8%B1%D9%83",
+    "source": "atb3ho",
+    "sourceUpdatedAt": "2026-07-04T18:38:24+03:00",
+    "tags": [
+      "أتبعه",
+      "Atb3ho",
+      "بوك مارك"
+    ],
+    "images": [
+      "https://cdn.shopify.com/s/files/1/0761/9389/0469/files/16C982A3-58E3-4B99-98B6-B2C15CA83D79.jpg?v=1776782828"
+    ],
+    "options": [],
+    "variants": [
+      {
+        "id": "atb3ho-10545390780581-variant-47741277569189",
+        "title": "الاختيار الافتراضي",
+        "options": {},
+        "price": 16,
+        "compareAtPrice": null,
+        "available": false,
+        "image": null,
+        "images": [],
+        "sku": "0",
+        "quantity": null
+      }
+    ],
+    "mainCategory": "منتجات أتبعه",
+    "subCategory": "بوك مارك",
+    "updatedAt": "2026-07-04T18:38:24+03:00",
+    "slug": "بوك-مارك"
+  },
+  {
+    "id": "atb3ho-10545390354597",
+    "name": "بوك مارك داود",
+    "category": "atb3ho",
+    "label": "بوك مارك",
+    "description": "",
+    "price": 15,
+    "priceNote": "",
+    "stock": "متاح",
+    "badge": "بوك مارك",
+    "image": "https://cdn.shopify.com/s/files/1/0761/9389/0469/files/7B0117E8-6242-4FC8-B15A-E9312778CACF.jpg?v=1776782827",
+    "url": "https://popekyrillos.store/products/%D8%A8%D9%88%D9%83-%D9%85%D8%A7%D8%B1%D9%83-%D8%AF%D8%A7%D9%88%D8%AF",
+    "source": "atb3ho",
+    "sourceUpdatedAt": "2026-07-04T18:38:24+03:00",
+    "tags": [
+      "أتبعه",
+      "Atb3ho",
+      "بوك مارك"
+    ],
+    "images": [
+      "https://cdn.shopify.com/s/files/1/0761/9389/0469/files/7B0117E8-6242-4FC8-B15A-E9312778CACF.jpg?v=1776782827"
+    ],
+    "options": [],
+    "variants": [
+      {
+        "id": "atb3ho-10545390354597-variant-47741274456229",
+        "title": "الاختيار الافتراضي",
+        "options": {},
+        "price": 15,
+        "compareAtPrice": null,
+        "available": true,
+        "image": null,
+        "images": [],
+        "sku": "",
+        "quantity": null
+      }
+    ],
+    "mainCategory": "منتجات أتبعه",
+    "subCategory": "بوك مارك",
+    "updatedAt": "2026-07-04T18:38:24+03:00",
+    "slug": "بوك-مارك-داود"
+  },
+  {
+    "id": "atb3ho-10545389863077",
+    "name": "بوك مارك (بالإسم)",
+    "category": "atb3ho",
+    "label": "بوك مارك",
+    "description": "",
+    "price": 17,
+    "priceNote": "",
+    "stock": "متاح",
+    "badge": "بوك مارك",
+    "image": "https://cdn.shopify.com/s/files/1/0761/9389/0469/files/A701CECD-0388-408A-AF99-BF91B7394FA6.jpg?v=1776782827",
+    "url": "https://popekyrillos.store/products/%D8%A8%D9%88%D9%83-%D9%85%D8%A7%D8%B1%D9%83-%D8%A8%D8%A7%D9%84%D8%A7%D8%B3%D9%85",
+    "source": "atb3ho",
+    "sourceUpdatedAt": "2026-07-04T18:38:24+03:00",
+    "tags": [
+      "أتبعه",
+      "Atb3ho",
+      "بوك مارك"
+    ],
+    "images": [
+      "https://cdn.shopify.com/s/files/1/0761/9389/0469/files/A701CECD-0388-408A-AF99-BF91B7394FA6.jpg?v=1776782827"
+    ],
+    "options": [],
+    "variants": [
+      {
+        "id": "atb3ho-10545389863077-variant-47741271376037",
+        "title": "الاختيار الافتراضي",
+        "options": {},
+        "price": 17,
+        "compareAtPrice": null,
+        "available": true,
+        "image": null,
+        "images": [],
+        "sku": "",
+        "quantity": null
+      }
+    ],
+    "mainCategory": "منتجات أتبعه",
+    "subCategory": "بوك مارك",
+    "updatedAt": "2026-07-04T18:38:24+03:00",
+    "slug": "بوك-مارك-بالاسم"
+  },
+  {
+    "id": "atb3ho-10545388912805",
+    "name": "بوك مارك بالإسم اتبعه",
+    "category": "atb3ho",
+    "label": "بوك مارك",
+    "description": "",
+    "price": 12,
+    "priceNote": "",
+    "stock": "متاح",
+    "badge": "بوك مارك",
+    "image": "https://cdn.shopify.com/s/files/1/0761/9389/0469/files/1D553DA3-75AB-41D7-8F1A-6465FA4A554C.jpg?v=1776782828",
+    "url": "https://popekyrillos.store/products/%D8%A8%D9%88%D9%83-%D9%85%D8%A7%D8%B1%D9%83-%D8%A8%D8%A7%D9%84%D8%A7%D8%B3%D9%85-%D8%A7%D8%AA%D8%A8%D8%B9%D9%87",
+    "source": "atb3ho",
+    "sourceUpdatedAt": "2026-07-04T18:38:24+03:00",
+    "tags": [
+      "أتبعه",
+      "Atb3ho",
+      "بوك مارك"
+    ],
+    "images": [
+      "https://cdn.shopify.com/s/files/1/0761/9389/0469/files/1D553DA3-75AB-41D7-8F1A-6465FA4A554C.jpg?v=1776782828"
+    ],
+    "options": [],
+    "variants": [
+      {
+        "id": "atb3ho-10545388912805-variant-47741265182885",
+        "title": "الاختيار الافتراضي",
+        "options": {},
+        "price": 12,
+        "compareAtPrice": null,
+        "available": true,
+        "image": null,
+        "images": [],
+        "sku": "",
+        "quantity": null
+      }
+    ],
+    "mainCategory": "منتجات أتبعه",
+    "subCategory": "بوك مارك",
+    "updatedAt": "2026-07-04T18:38:24+03:00",
+    "slug": "بوك-مارك-بالاسم-اتبعه"
+  },
+  {
+    "id": "atb3ho-10545388191909",
+    "name": "بوك مارك (بالإسم)",
+    "category": "atb3ho",
+    "label": "بوك مارك",
+    "description": "",
+    "price": 16,
+    "priceNote": "",
+    "stock": "متاح",
+    "badge": "بوك مارك",
+    "image": "https://cdn.shopify.com/s/files/1/0761/9389/0469/files/2E205146-1D38-423E-8481-67918E23F787.jpg?v=1776783207",
+    "url": "https://popekyrillos.store/products/%D8%A8%D9%88%D9%83-%D9%85%D8%A7%D8%B1%D9%83-%D8%A8%D8%A7%D9%84%D8%A7%D8%B3%D9%85-3ho-10545388191909",
+    "source": "atb3ho",
+    "sourceUpdatedAt": "2026-07-04T18:38:24+03:00",
+    "tags": [
+      "أتبعه",
+      "Atb3ho",
+      "بوك مارك"
+    ],
+    "images": [
+      "https://cdn.shopify.com/s/files/1/0761/9389/0469/files/2E205146-1D38-423E-8481-67918E23F787.jpg?v=1776783207"
+    ],
+    "options": [],
+    "variants": [
+      {
+        "id": "atb3ho-10545388191909-variant-47741260005541",
+        "title": "الاختيار الافتراضي",
+        "options": {},
+        "price": 16,
+        "compareAtPrice": null,
+        "available": true,
+        "image": null,
+        "images": [],
+        "sku": "",
+        "quantity": null
+      }
+    ],
+    "mainCategory": "منتجات أتبعه",
+    "subCategory": "بوك مارك",
+    "updatedAt": "2026-07-04T18:38:24+03:00",
+    "slug": "بوك-مارك-بالاسم-3ho-10545388191909"
+  },
+  {
+    "id": "atb3ho-10545386553509",
+    "name": "بوك مارك مزمور ١١٧",
+    "category": "atb3ho",
+    "label": "بوك مارك",
+    "description": "",
+    "price": 16,
+    "priceNote": "",
+    "stock": "متاح",
+    "badge": "بوك مارك",
+    "image": "https://cdn.shopify.com/s/files/1/0761/9389/0469/files/8575E2D8-56EC-419E-A53F-01E1B5C0CF9A.jpg?v=1776782827",
+    "url": "https://popekyrillos.store/products/%D8%A8%D9%88%D9%83-%D9%85%D8%A7%D8%B1%D9%83-%D9%85%D8%B2%D9%85%D9%88%D8%B1-%D9%A1%D9%A1%D9%A7",
+    "source": "atb3ho",
+    "sourceUpdatedAt": "2026-07-04T18:38:24+03:00",
+    "tags": [
+      "أتبعه",
+      "Atb3ho",
+      "بوك مارك"
+    ],
+    "images": [
+      "https://cdn.shopify.com/s/files/1/0761/9389/0469/files/8575E2D8-56EC-419E-A53F-01E1B5C0CF9A.jpg?v=1776782827"
+    ],
+    "options": [],
+    "variants": [
+      {
+        "id": "atb3ho-10545386553509-variant-47741249749157",
+        "title": "الاختيار الافتراضي",
+        "options": {},
+        "price": 16,
+        "compareAtPrice": null,
+        "available": true,
+        "image": null,
+        "images": [],
+        "sku": "",
+        "quantity": null
+      }
+    ],
+    "mainCategory": "منتجات أتبعه",
+    "subCategory": "بوك مارك",
+    "updatedAt": "2026-07-04T18:38:24+03:00",
+    "slug": "بوك-مارك-مزمور-١١٧"
+  },
+  {
+    "id": "atb3ho-10545385636005",
+    "name": "بوك مارك رحلتك",
+    "category": "atb3ho",
+    "label": "بوك مارك",
+    "description": "",
+    "price": 15,
+    "priceNote": "",
+    "stock": "متاح",
+    "badge": "بوك مارك",
+    "image": "https://cdn.shopify.com/s/files/1/0761/9389/0469/files/72B2EAA4-1A42-45F8-87D5-EF505F47BB13.jpg?v=1776782828",
+    "url": "https://popekyrillos.store/products/%D8%A8%D9%88%D9%83-%D9%85%D8%A7%D8%B1%D9%83-%D8%B1%D8%AD%D9%84%D8%AA%D9%83",
+    "source": "atb3ho",
+    "sourceUpdatedAt": "2026-07-04T18:38:24+03:00",
+    "tags": [
+      "أتبعه",
+      "Atb3ho",
+      "بوك مارك"
+    ],
+    "images": [
+      "https://cdn.shopify.com/s/files/1/0761/9389/0469/files/72B2EAA4-1A42-45F8-87D5-EF505F47BB13.jpg?v=1776782828"
+    ],
+    "options": [],
+    "variants": [
+      {
+        "id": "atb3ho-10545385636005-variant-47741246603429",
+        "title": "الاختيار الافتراضي",
+        "options": {},
+        "price": 15,
+        "compareAtPrice": null,
+        "available": true,
+        "image": null,
+        "images": [],
+        "sku": "",
+        "quantity": null
+      }
+    ],
+    "mainCategory": "منتجات أتبعه",
+    "subCategory": "بوك مارك",
+    "updatedAt": "2026-07-04T18:38:24+03:00",
+    "slug": "بوك-مارك-رحلتك"
+  },
+  {
+    "id": "atb3ho-10545382686885",
+    "name": "بوك مارك الصليب",
+    "category": "atb3ho",
+    "label": "بوك مارك",
+    "description": "",
+    "price": 12,
+    "priceNote": "",
+    "stock": "متاح",
+    "badge": "بوك مارك",
+    "image": "https://cdn.shopify.com/s/files/1/0761/9389/0469/files/D6FE74AA-007A-4274-BB7A-6A3B52670938.jpg?v=1776782827",
+    "url": "https://popekyrillos.store/products/%D8%A8%D9%88%D9%83-%D9%85%D8%A7%D8%B1%D9%83-%D8%A7%D9%84%D8%B5%D9%84%D9%8A%D8%A8",
+    "source": "atb3ho",
+    "sourceUpdatedAt": "2026-07-04T18:38:24+03:00",
+    "tags": [
+      "أتبعه",
+      "Atb3ho",
+      "بوك مارك"
+    ],
+    "images": [
+      "https://cdn.shopify.com/s/files/1/0761/9389/0469/files/D6FE74AA-007A-4274-BB7A-6A3B52670938.jpg?v=1776782827"
+    ],
+    "options": [],
+    "variants": [
+      {
+        "id": "atb3ho-10545382686885-variant-47741238214821",
+        "title": "الاختيار الافتراضي",
+        "options": {},
+        "price": 12,
+        "compareAtPrice": null,
+        "available": true,
+        "image": null,
+        "images": [],
+        "sku": "",
+        "quantity": null
+      }
+    ],
+    "mainCategory": "منتجات أتبعه",
+    "subCategory": "بوك مارك",
+    "updatedAt": "2026-07-04T18:38:24+03:00",
+    "slug": "بوك-مارك-الصليب"
+  },
+  {
+    "id": "atb3ho-10545381474469",
+    "name": "بوك مارك اتبعه",
+    "category": "atb3ho",
+    "label": "بوك مارك",
+    "description": "",
+    "price": 12,
+    "priceNote": "",
+    "stock": "متاح",
+    "badge": "خصم",
+    "image": "https://cdn.shopify.com/s/files/1/0761/9389/0469/files/E165FB41-CDF4-4602-A665-6667F83CFC5A.jpg?v=1776782827",
+    "url": "https://popekyrillos.store/products/%D8%A8%D9%88%D9%83-%D9%85%D8%A7%D8%B1%D9%83-%D8%A7%D8%AA%D8%A8%D8%B9%D9%87",
+    "source": "atb3ho",
+    "sourceUpdatedAt": "2026-07-04T18:38:24+03:00",
+    "tags": [
+      "أتبعه",
+      "Atb3ho",
+      "بوك مارك"
+    ],
+    "images": [
+      "https://cdn.shopify.com/s/files/1/0761/9389/0469/files/E165FB41-CDF4-4602-A665-6667F83CFC5A.jpg?v=1776782827"
+    ],
+    "options": [],
+    "variants": [
+      {
+        "id": "atb3ho-10545381474469-variant-47741229760677",
+        "title": "الاختيار الافتراضي",
+        "options": {},
+        "price": 12,
+        "compareAtPrice": 15,
+        "available": true,
+        "image": null,
+        "images": [],
+        "sku": "",
+        "quantity": null
+      }
+    ],
+    "mainCategory": "منتجات أتبعه",
+    "subCategory": "بوك مارك",
+    "updatedAt": "2026-07-04T18:38:24+03:00",
+    "slug": "بوك-مارك-اتبعه"
+  },
+  {
+    "id": "atb3ho-10545380884645",
+    "name": "بوك مارك صلاة يسوع",
+    "category": "atb3ho",
+    "label": "بوك مارك",
+    "description": "",
+    "price": 15,
+    "priceNote": "",
+    "stock": "متاح",
+    "badge": "بوك مارك",
+    "image": "https://cdn.shopify.com/s/files/1/0761/9389/0469/files/51B3DCD2-8650-45A5-9478-8E7A06A0BF38.jpg?v=1776782828",
+    "url": "https://popekyrillos.store/products/%D8%A8%D9%88%D9%83-%D9%85%D8%A7%D8%B1%D9%83-%D8%B5%D9%84%D8%A7%D9%87-%D9%8A%D8%B3%D9%88%D8%B9",
+    "source": "atb3ho",
+    "sourceUpdatedAt": "2026-07-04T18:38:24+03:00",
+    "tags": [
+      "أتبعه",
+      "Atb3ho",
+      "بوك مارك"
+    ],
+    "images": [
+      "https://cdn.shopify.com/s/files/1/0761/9389/0469/files/51B3DCD2-8650-45A5-9478-8E7A06A0BF38.jpg?v=1776782828"
+    ],
+    "options": [],
+    "variants": [
+      {
+        "id": "atb3ho-10545380884645-variant-47741225664677",
+        "title": "الاختيار الافتراضي",
+        "options": {},
+        "price": 15,
+        "compareAtPrice": null,
+        "available": true,
+        "image": null,
+        "images": [],
+        "sku": "",
+        "quantity": null
+      }
+    ],
+    "mainCategory": "منتجات أتبعه",
+    "subCategory": "بوك مارك",
+    "updatedAt": "2026-07-04T18:38:24+03:00",
+    "slug": "بوك-مارك-صلاه-يسوع"
+  },
+  {
+    "id": "atb3ho-10545379934373",
+    "name": "بوك مارك بابا يسوع",
+    "category": "atb3ho",
+    "label": "بوك مارك",
+    "description": "",
+    "price": 15,
+    "priceNote": "",
+    "stock": "متاح",
+    "badge": "بوك مارك",
+    "image": "https://cdn.shopify.com/s/files/1/0761/9389/0469/files/6094CB0C-B6E5-461D-B747-C94536FE2AF1.jpg?v=1776782827",
+    "url": "https://popekyrillos.store/products/%D8%A8%D9%88%D9%83-%D9%85%D8%A7%D8%B1%D9%83-%D8%A8%D8%A7%D8%A8%D8%A7-%D9%8A%D8%B3%D9%88%D8%B9",
+    "source": "atb3ho",
+    "sourceUpdatedAt": "2026-07-04T18:38:24+03:00",
+    "tags": [
+      "أتبعه",
+      "Atb3ho",
+      "بوك مارك"
+    ],
+    "images": [
+      "https://cdn.shopify.com/s/files/1/0761/9389/0469/files/6094CB0C-B6E5-461D-B747-C94536FE2AF1.jpg?v=1776782827"
+    ],
+    "options": [],
+    "variants": [
+      {
+        "id": "atb3ho-10545379934373-variant-47741218848933",
+        "title": "الاختيار الافتراضي",
+        "options": {},
+        "price": 15,
+        "compareAtPrice": null,
+        "available": true,
+        "image": null,
+        "images": [],
+        "sku": "",
+        "quantity": null
+      }
+    ],
+    "mainCategory": "منتجات أتبعه",
+    "subCategory": "بوك مارك",
+    "updatedAt": "2026-07-04T18:38:24+03:00",
+    "slug": "بوك-مارك-بابا-يسوع"
+  },
+  {
+    "id": "atb3ho-10545379836069",
+    "name": "نوت بوك اتبعه في صلاتي (اجندة)",
+    "category": "atb3ho",
+    "label": "نوت بوك",
+    "description": "مقسم بين بعض الصلوات القصيره مع مساحات لتدوين اتمام الصلاه يومياً لمدة ٦٠ يوم حتى تكتسب عادة الصلاه عن طريق بعض العادات الصغيره.",
+    "price": 60,
+    "priceNote": "",
+    "stock": "متاح",
+    "badge": "نوت بوك",
+    "image": "https://cdn.shopify.com/s/files/1/0761/9389/0469/files/96E95E68-B3EC-4471-ADFF-532EA165DD0D.jpg?v=1776782748",
+    "url": "https://popekyrillos.store/products/%D9%86%D9%88%D8%AA-%D8%A8%D9%88%D9%83-%D8%A7%D8%AA%D8%A8%D8%B9%D9%87-%D9%81%D9%8A-%D8%B5%D9%84%D8%A7%D8%AA%D9%8A-%D8%A7%D8%AC%D9%86%D8%AF%D9%87",
+    "source": "atb3ho",
+    "sourceUpdatedAt": "2026-07-04T18:38:24+03:00",
+    "tags": [
+      "أتبعه",
+      "Atb3ho",
+      "نوت بوك"
+    ],
+    "images": [
+      "https://cdn.shopify.com/s/files/1/0761/9389/0469/files/96E95E68-B3EC-4471-ADFF-532EA165DD0D.jpg?v=1776782748"
+    ],
+    "options": [],
+    "variants": [
+      {
+        "id": "atb3ho-10545379836069-variant-47741218685093",
+        "title": "الاختيار الافتراضي",
+        "options": {},
+        "price": 60,
+        "compareAtPrice": null,
+        "available": true,
+        "image": null,
+        "images": [],
+        "sku": "",
+        "quantity": null
+      }
+    ],
+    "mainCategory": "منتجات أتبعه",
+    "subCategory": "نوت بوك",
+    "updatedAt": "2026-07-04T18:38:24+03:00",
+    "slug": "نوت-بوك-اتبعه-في-صلاتي-اجنده"
+  },
+  {
+    "id": "atb3ho-10545378001061",
+    "name": "نوت بوك اتبعه في صلاة (سلك)",
+    "category": "atb3ho",
+    "label": "نوت بوك",
+    "description": "مقسم بين بعض الصلوات القصيره مع مساحات لتدوين اتمام الصلاه يومياً لمدة ٦٠ يوم حتى تكتسب عادة الصلاه عن طريق بعض العادات الصغيره.",
+    "price": 65,
+    "priceNote": "",
+    "stock": "متاح",
+    "badge": "نوت بوك",
+    "image": "https://cdn.shopify.com/s/files/1/0761/9389/0469/files/DB9E0AC8-25AB-45C2-936E-40D00C7D9DC8.jpg?v=1776782657",
+    "url": "https://popekyrillos.store/products/%D9%86%D9%88%D8%AA-%D8%A8%D9%88%D9%83-%D8%A7%D8%AA%D8%A8%D8%B9%D9%87-%D9%81%D9%8A-%D8%B5%D9%84%D8%A7%D9%87-%D8%B3%D9%84%D9%83",
+    "source": "atb3ho",
+    "sourceUpdatedAt": "2026-07-04T18:38:24+03:00",
+    "tags": [
+      "أتبعه",
+      "Atb3ho",
+      "نوت بوك"
+    ],
+    "images": [
+      "https://cdn.shopify.com/s/files/1/0761/9389/0469/files/DB9E0AC8-25AB-45C2-936E-40D00C7D9DC8.jpg?v=1776782657"
+    ],
+    "options": [],
+    "variants": [
+      {
+        "id": "atb3ho-10545378001061-variant-47741218291877",
+        "title": "الاختيار الافتراضي",
+        "options": {},
+        "price": 65,
+        "compareAtPrice": null,
+        "available": true,
+        "image": null,
+        "images": [],
+        "sku": "",
+        "quantity": null
+      }
+    ],
+    "mainCategory": "منتجات أتبعه",
+    "subCategory": "نوت بوك",
+    "updatedAt": "2026-07-04T18:38:24+03:00",
+    "slug": "نوت-بوك-اتبعه-في-صلاه-سلك"
+  },
+  {
+    "id": "atb3ho-10545377149093",
+    "name": "اتبعه في تحدياتي",
+    "category": "atb3ho",
+    "label": "كروت",
+    "description": "كروت التحديات الروحية عباره عن ٥٠ تحدي روحي يساعدوك تعمل حاجات روحية كمهام كل يوم تكسر الملل في يومك وتاخد بركات",
+    "price": 120,
+    "priceNote": "",
+    "stock": "متاح",
+    "badge": "خصم",
+    "image": "https://cdn.shopify.com/s/files/1/0761/9389/0469/files/2D397627-C91B-4D14-8840-9202402BA337.jpg?v=1776782578",
+    "url": "https://popekyrillos.store/products/%D8%A7%D8%AA%D8%A8%D8%B9%D9%87-%D9%81%D9%8A-%D8%AA%D8%AD%D8%AF%D9%8A%D8%A7%D8%AA%D9%8A",
+    "source": "atb3ho",
+    "sourceUpdatedAt": "2026-07-04T18:38:24+03:00",
+    "tags": [
+      "أتبعه",
+      "Atb3ho",
+      "كروت"
+    ],
+    "images": [
+      "https://cdn.shopify.com/s/files/1/0761/9389/0469/files/2D397627-C91B-4D14-8840-9202402BA337.jpg?v=1776782578"
+    ],
+    "options": [],
+    "variants": [
+      {
+        "id": "atb3ho-10545377149093-variant-47741217472677",
+        "title": "الاختيار الافتراضي",
+        "options": {},
+        "price": 120,
+        "compareAtPrice": 150,
+        "available": true,
+        "image": null,
+        "images": [],
+        "sku": "",
+        "quantity": null
+      }
+    ],
+    "mainCategory": "منتجات أتبعه",
+    "subCategory": "كروت",
+    "updatedAt": "2026-07-04T18:38:24+03:00",
+    "slug": "اتبعه-في-تحدياتي"
+  },
+  {
+    "id": "atb3ho-10545374298277",
+    "name": "باكدج اتبعه",
+    "category": "atb3ho",
+    "label": "باكيدج",
+    "description": "جورنالينج اتبعه ٢١٤” للكتاب المقدس + نوت بوك اتبعه في صلاتي + كوتشينه التحديات الروحيه + تحدي ال١٠٠ يوم +٣ بوك مارك + كارت الاعتراف",
+    "price": 410,
+    "priceNote": "",
+    "stock": "متاح",
+    "badge": "خصم",
+    "image": "https://cdn.shopify.com/s/files/1/0761/9389/0469/files/FullSizeRender.jpg?v=1780567888",
+    "url": "https://popekyrillos.store/products/%D8%A8%D8%A7%D9%83%D8%AF%D8%AC-%D8%A7%D8%AA%D8%A8%D8%B9%D9%87",
+    "source": "atb3ho",
+    "sourceUpdatedAt": "2026-07-04T18:38:24+03:00",
+    "tags": [
+      "أتبعه",
+      "Atb3ho",
+      "باكيدج"
+    ],
+    "images": [
+      "https://cdn.shopify.com/s/files/1/0761/9389/0469/files/FullSizeRender.jpg?v=1780567888"
+    ],
+    "options": [],
+    "variants": [
+      {
+        "id": "atb3ho-10545374298277-variant-47741211607205",
+        "title": "الاختيار الافتراضي",
+        "options": {},
+        "price": 410,
+        "compareAtPrice": 460,
+        "available": true,
+        "image": null,
+        "images": [],
+        "sku": "",
+        "quantity": null
+      }
+    ],
+    "mainCategory": "منتجات أتبعه",
+    "subCategory": "باكيدج",
+    "updatedAt": "2026-07-04T18:38:24+03:00",
+    "slug": "باكدج-اتبعه"
+  },
+  {
+    "id": "atb3ho-10545373839525",
+    "name": "كارت منظم لمواعيد سر الاعتراف",
+    "category": "atb3ho",
+    "label": "كروت",
+    "description": "كارت منظم لمواعيد سر الاعتراف\n\nيساعدك تفتكر مواعيدك وتراجع نفسك وتقيم التزامك الروحي اخر السنه",
+    "price": 16,
+    "priceNote": "",
+    "stock": "متاح",
+    "badge": "كروت",
+    "image": "https://cdn.shopify.com/s/files/1/0761/9389/0469/files/0D7E02B3-4B63-43DC-A15F-901C92139529.jpg?v=1776781915",
+    "url": "https://popekyrillos.store/products/%D9%83%D8%A7%D8%B1%D8%AA-%D9%85%D9%86%D8%B8%D9%85-%D9%84%D9%85%D9%88%D8%A7%D8%B9%D9%8A%D8%AF-%D8%B3%D8%B1-%D8%A7%D9%84%D8%A7%D8%B9%D8%AA%D8%B1%D8%A7%D9%81",
+    "source": "atb3ho",
+    "sourceUpdatedAt": "2026-07-04T18:38:24+03:00",
+    "tags": [
+      "أتبعه",
+      "Atb3ho",
+      "كروت"
+    ],
+    "images": [
+      "https://cdn.shopify.com/s/files/1/0761/9389/0469/files/0D7E02B3-4B63-43DC-A15F-901C92139529.jpg?v=1776781915"
+    ],
+    "options": [],
+    "variants": [
+      {
+        "id": "atb3ho-10545373839525-variant-47741206233253",
+        "title": "الاختيار الافتراضي",
+        "options": {},
+        "price": 16,
+        "compareAtPrice": null,
+        "available": true,
+        "image": null,
+        "images": [],
+        "sku": "",
+        "quantity": null
+      }
+    ],
+    "mainCategory": "منتجات أتبعه",
+    "subCategory": "كروت",
+    "updatedAt": "2026-07-04T18:38:24+03:00",
+    "slug": "كارت-منظم-لمواعيد-سر-الاعتراف"
+  },
+  {
+    "id": "atb3ho-10545371218085",
+    "name": "اتبعُه رحلة ٢١٤ يوم",
+    "category": "atb3ho",
+    "label": "جورنالينج",
+    "description": "تبدأ من يونيو ٢٠٢٦ حتي ديسمبر٢٠٢٦\n\n٢١٤ يوم يساعدوك تبني عادة يومية ثابتة في القراءة، التأمل، والصلاة\n\nتقسيم منظم يساعدك تلتزم يوميًا\n\nمساحات تكتب فيها تأملاتك ومشاعرك\n\n تظام بسيط يخليك ترجع كل يوم",
+    "price": 115,
+    "priceNote": "",
+    "stock": "متاح",
+    "badge": "خصم",
+    "image": "https://cdn.shopify.com/s/files/1/0761/9389/0469/files/43977A72-EC68-430E-8385-3D3331D87A05.jpg?v=1776781534",
+    "url": "https://popekyrillos.store/products/%D8%A7%D8%AA%D8%A8%D8%B9%D9%87-%D8%B1%D8%AD%D9%84%D9%87-%D9%A2%D9%A1%D9%A4-%D9%8A%D9%88%D9%85",
+    "source": "atb3ho",
+    "sourceUpdatedAt": "2026-07-04T18:38:24+03:00",
+    "tags": [
+      "أتبعه",
+      "Atb3ho",
+      "جورنالينج"
+    ],
+    "images": [
+      "https://cdn.shopify.com/s/files/1/0761/9389/0469/files/43977A72-EC68-430E-8385-3D3331D87A05.jpg?v=1776781534",
+      "https://cdn.shopify.com/s/files/1/0761/9389/0469/files/C2B9113A-0926-496F-9191-E9D18C374585.png?v=1781180747"
+    ],
+    "options": [
+      {
+        "name": "اللغة",
+        "values": [
+          "Arabic",
+          "English"
+        ]
+      }
+    ],
+    "variants": [
+      {
+        "id": "atb3ho-10545371218085-variant-47741206003877",
+        "title": "Arabic",
+        "options": {
+          "اللغة": "Arabic"
+        },
+        "price": 160,
+        "compareAtPrice": null,
+        "available": true,
+        "image": null,
+        "images": [],
+        "sku": "0",
+        "quantity": null
+      },
+      {
+        "id": "atb3ho-10545371218085-variant-47741205971109",
+        "title": "English",
+        "options": {
+          "اللغة": "English"
+        },
+        "price": 115,
+        "compareAtPrice": 160,
+        "available": true,
+        "image": null,
+        "images": [],
+        "sku": "",
+        "quantity": null
+      }
+    ],
+    "mainCategory": "منتجات أتبعه",
+    "subCategory": "جورنالينج",
+    "updatedAt": "2026-07-04T18:38:24+03:00",
+    "slug": "اتبعه-رحله-٢١٤-يوم"
+  },
+  {
     "id": "custom-1783032232212",
     "name": "لون تلوين اليوتا",
     "category": "icons",
@@ -10,7 +1048,7 @@
     "stock": "متاح",
     "badge": "يوتا",
     "image": "assets/optimized/products/gallery/product-1-image-20260702224955-5f0f3a.webp",
-    "url": "https://popekyrillos.store/?product=custom-1783032232212",
+    "url": "https://popekyrillos.store/products/%D9%84%D9%88%D9%86-%D8%AA%D9%84%D9%88%D9%8A%D9%86-%D8%A7%D9%84%D9%8A%D9%88%D8%AA%D8%A7",
     "tags": [
       "يوتا",
       "تلوين",
@@ -19,12 +1057,22 @@
     "images": [
       "assets/optimized/products/gallery/product-1-image-20260702224955-5f0f3a.webp"
     ],
-    "options": [],
+    "options": [
+      {
+        "name": "الاختيار",
+        "values": [
+          "أحمر",
+          "اختيار 2"
+        ]
+      }
+    ],
     "variants": [
       {
         "id": "custom-1783032232212-variant-1783032232212-1",
         "title": "أحمر",
-        "options": {},
+        "options": {
+          "الاختيار": "أحمر"
+        },
         "price": 70,
         "compareAtPrice": null,
         "available": true,
@@ -36,7 +1084,9 @@
       {
         "id": "custom-1783032232212-variant-1783032465055-2",
         "title": "اختيار 2",
-        "options": {},
+        "options": {
+          "الاختيار": "اختيار 2"
+        },
         "price": 70,
         "compareAtPrice": null,
         "available": true,
@@ -47,7 +1097,8 @@
       }
     ],
     "mainCategory": "الأيقونات والبراويز",
-    "subCategory": "أيقونات صغيرة"
+    "subCategory": "أيقونات صغيرة",
+    "slug": "لون-تلوين-اليوتا"
   },
   {
     "id": "custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642-copy-1783007465321",
@@ -60,7 +1111,7 @@
     "stock": "متاح",
     "badge": "يوتا",
     "image": "assets/optimized/products/gallery/product-1-7-20260702155122-9f46d4.webp",
-    "url": "https://popekyrillos.store/?product=custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642-copy-1783007465321",
+    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D9%85%D8%A7%D8%AF%D9%84%D9%8A%D9%87-%D9%85%D9%88%D8%AF%D9%8A%D9%84-7",
     "tags": [
       "يوتا",
       "مادليات",
@@ -91,7 +1142,8 @@
       }
     ],
     "mainCategory": "الأيقونات والبراويز",
-    "subCategory": "أيقونات صغيرة"
+    "subCategory": "أيقونات صغيرة",
+    "slug": "صليب-يوتا-مادليه-موديل-7"
   },
   {
     "id": "custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642",
@@ -104,7 +1156,7 @@
     "stock": "متاح",
     "badge": "يوتا",
     "image": "assets/optimized/products/gallery/product-1-6-20260702155054-4c2515.webp",
-    "url": "https://popekyrillos.store/?product=custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642",
+    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D9%85%D8%A7%D8%AF%D9%84%D9%8A%D9%87-%D9%85%D9%88%D8%AF%D9%8A%D9%84-6",
     "tags": [
       "يوتا",
       "مادليات",
@@ -135,7 +1187,8 @@
       }
     ],
     "mainCategory": "الأيقونات والبراويز",
-    "subCategory": "أيقونات صغيرة"
+    "subCategory": "أيقونات صغيرة",
+    "slug": "صليب-يوتا-مادليه-موديل-6"
   },
   {
     "id": "custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119",
@@ -148,7 +1201,7 @@
     "stock": "متاح",
     "badge": "يوتا",
     "image": "assets/optimized/products/gallery/product-1-5-20260702155020-88d93d.webp",
-    "url": "https://popekyrillos.store/?product=custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119",
+    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D9%85%D8%A7%D8%AF%D9%84%D9%8A%D9%87-%D9%85%D9%88%D8%AF%D9%8A%D9%84-5",
     "tags": [
       "يوتا",
       "مادليات",
@@ -179,7 +1232,8 @@
       }
     ],
     "mainCategory": "الأيقونات والبراويز",
-    "subCategory": "أيقونات صغيرة"
+    "subCategory": "أيقونات صغيرة",
+    "slug": "صليب-يوتا-مادليه-موديل-5"
   },
   {
     "id": "custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699",
@@ -192,7 +1246,7 @@
     "stock": "متاح",
     "badge": "يوتا",
     "image": "assets/optimized/products/gallery/product-1-4-20260702154908-1f32ba.webp",
-    "url": "https://popekyrillos.store/?product=custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699",
+    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D9%85%D8%A7%D8%AF%D9%84%D9%8A%D9%87-%D9%85%D9%88%D8%AF%D9%8A%D9%84-4",
     "tags": [
       "يوتا",
       "مادليات",
@@ -223,7 +1277,8 @@
       }
     ],
     "mainCategory": "الأيقونات والبراويز",
-    "subCategory": "أيقونات صغيرة"
+    "subCategory": "أيقونات صغيرة",
+    "slug": "صليب-يوتا-مادليه-موديل-4"
   },
   {
     "id": "custom-1782980654479-copy-1782982056347-copy-1782986984554",
@@ -236,7 +1291,7 @@
     "stock": "متاح",
     "badge": "يوتا",
     "image": "assets/optimized/products/gallery/product-1-3-20260702101011-89b158.webp",
-    "url": "https://popekyrillos.store/?product=custom-1782980654479-copy-1782982056347-copy-1782986984554",
+    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D9%85%D8%A7%D8%AF%D9%84%D9%8A%D9%87-%D9%85%D9%88%D8%AF%D9%8A%D9%84-3",
     "tags": [
       "يوتا",
       "مادليات",
@@ -267,7 +1322,8 @@
       }
     ],
     "mainCategory": "الأيقونات والبراويز",
-    "subCategory": "أيقونات صغيرة"
+    "subCategory": "أيقونات صغيرة",
+    "slug": "صليب-يوتا-مادليه-موديل-3"
   },
   {
     "id": "custom-1782980654479-copy-1782982056347",
@@ -280,7 +1336,7 @@
     "stock": "متاح",
     "badge": "يوتا",
     "image": "assets/optimized/products/gallery/product-1-2-20260702085747-85666b.webp",
-    "url": "https://popekyrillos.store/?product=custom-1782980654479-copy-1782982056347",
+    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D9%85%D8%A7%D8%AF%D9%84%D9%8A%D9%87-%D9%85%D9%88%D8%AF%D9%8A%D9%84-2",
     "tags": [
       "يوتا",
       "مادليات",
@@ -311,7 +1367,8 @@
       }
     ],
     "mainCategory": "الأيقونات والبراويز",
-    "subCategory": "أيقونات صغيرة"
+    "subCategory": "أيقونات صغيرة",
+    "slug": "صليب-يوتا-مادليه-موديل-2"
   },
   {
     "id": "custom-1782980654479",
@@ -324,7 +1381,7 @@
     "stock": "متاح",
     "badge": "يوتا",
     "image": "assets/optimized/products/gallery/product-1-1-20260702084720-6a46f9.webp",
-    "url": "https://popekyrillos.store/?product=custom-1782980654479",
+    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D9%85%D8%A7%D8%AF%D9%84%D9%8A%D9%87-%D9%85%D9%88%D8%AF%D9%8A%D9%84-1",
     "tags": [
       "يوتا",
       "مادليات",
@@ -355,7 +1412,8 @@
       }
     ],
     "mainCategory": "الأيقونات والبراويز",
-    "subCategory": "أيقونات صغيرة"
+    "subCategory": "أيقونات صغيرة",
+    "slug": "صليب-يوتا-مادليه-موديل-1"
   },
   {
     "id": "custom-1782306615168-copy-1782306883366-copy-1782307173548-copy-1782307256776-copy-1782307341493-copy-1782310276272-copy-1782310382795-copy-1782310383710",
@@ -368,7 +1426,7 @@
     "stock": "متاح",
     "badge": "قطمارس",
     "image": "assets/optimized/products/gallery/baskha-araby.webp",
-    "url": "https://popekyrillos.store/?product=custom-1782306615168-copy-1782306883366-copy-1782307173548-copy-1782307256776-copy-1782307341493-copy-1782310276272-copy-1782310382795-copy-1782310383710",
+    "url": "https://popekyrillos.store/products/%D9%82%D8%B7%D9%85%D8%A7%D8%B1%D8%B3-%D8%A7%D9%84%D8%A8%D8%B5%D8%AE%D9%87-%D8%B9%D8%B1%D8%A8%D9%8A-%D8%AF%D9%8A%D8%B1-%D8%A7%D9%84%D8%B4%D9%87%D9%8A%D8%AF-%D8%A7%D9%84%D8%B9%D8%B8%D9%8A%D9%85-%D9%85%D8%A7%D8%B1%D9%85%D9%8A%D9%86%D8%A7-%D8%A7%D9%84%D8%B9%D8%AC%D8%A7%D9%8A%D8%A8%D9%8A-%D8%A8%D9%85%D8%B1%D9%8A%D9%88%D8%B7",
     "tags": [
       "كتب",
       "كتاب مقدس",
@@ -401,7 +1459,8 @@
       }
     ],
     "mainCategory": "الكتب والطقوس",
-    "subCategory": "قطمارس"
+    "subCategory": "قطمارس",
+    "slug": "قطمارس-البصخه-عربي-دير-الشهيد-العظيم-مارمينا-العجايبي-بمريوط"
   },
   {
     "id": "custom-1782306615168-copy-1782306883366-copy-1782307173548-copy-1782307256776-copy-1782307341493-copy-1782310276272-copy-1782310382795",
@@ -414,7 +1473,7 @@
     "stock": "متاح",
     "badge": "قطمارس",
     "image": "assets/optimized/products/gallery/som.araby.webp",
-    "url": "https://popekyrillos.store/?product=custom-1782306615168-copy-1782306883366-copy-1782307173548-copy-1782307256776-copy-1782307341493-copy-1782310276272-copy-1782310382795",
+    "url": "https://popekyrillos.store/products/%D9%82%D8%B7%D9%85%D8%A7%D8%B1%D8%B3-%D8%A7%D9%84%D8%B5%D9%88%D9%85-%D8%A7%D9%84%D9%83%D8%A8%D9%8A%D8%B1-%D8%B9%D8%B1%D8%A8%D9%8A-%D8%AF%D9%8A%D8%B1-%D8%A7%D9%84%D8%B4%D9%87%D9%8A%D8%AF-%D8%A7%D9%84%D8%B9%D8%B8%D9%8A%D9%85-%D9%85%D8%A7%D8%B1%D9%85%D9%8A%D9%86%D8%A7-%D8%A7%D9%84%D8%B9%D8%AC%D8%A7%D9%8A%D8%A8%D9%8A-%D8%A8%D9%85%D8%B1%D9%8A%D9%88%D8%B7-%D9%86%D8%B3%D8%AE%D9%87",
     "tags": [
       "كتب",
       "كتاب مقدس",
@@ -445,7 +1504,8 @@
       }
     ],
     "mainCategory": "الكتب والطقوس",
-    "subCategory": "قطمارس"
+    "subCategory": "قطمارس",
+    "slug": "قطمارس-الصوم-الكبير-عربي-دير-الشهيد-العظيم-مارمينا-العجايبي-بمريوط-نسخه"
   },
   {
     "id": "custom-1782306615168-copy-1782306883366-copy-1782307173548-copy-1782307256776-copy-1782307341493-copy-1782310276272",
@@ -458,7 +1518,7 @@
     "stock": "متاح",
     "badge": "قطمارس",
     "image": "assets/optimized/products/gallery/5amsin-2epty.webp",
-    "url": "https://popekyrillos.store/?product=custom-1782306615168-copy-1782306883366-copy-1782307173548-copy-1782307256776-copy-1782307341493-copy-1782310276272",
+    "url": "https://popekyrillos.store/products/%D9%82%D8%B7%D9%85%D8%A7%D8%B1%D8%B3-%D8%A7%D9%84%D8%AE%D9%85%D8%B3%D9%8A%D9%86-%D9%82%D8%A8%D8%B7%D9%8A-%D8%AF%D9%8A%D8%B1-%D8%A7%D9%84%D8%B4%D9%87%D9%8A%D8%AF-%D8%A7%D9%84%D8%B9%D8%B8%D9%8A%D9%85-%D9%85%D8%A7%D8%B1%D9%85%D9%8A%D9%86%D8%A7-%D8%A7%D9%84%D8%B9%D8%AC%D8%A7%D9%8A%D8%A8%D9%8A-%D8%A8%D9%85%D8%B1%D9%8A%D9%88%D8%B7",
     "tags": [
       "كتب",
       "كتاب مقدس",
@@ -487,7 +1547,8 @@
       }
     ],
     "mainCategory": "الكتب والطقوس",
-    "subCategory": "قطمارس"
+    "subCategory": "قطمارس",
+    "slug": "قطمارس-الخمسين-قبطي-دير-الشهيد-العظيم-مارمينا-العجايبي-بمريوط"
   },
   {
     "id": "custom-1782306615168-copy-1782306883366-copy-1782307173548-copy-1782307256776-copy-1782307341493",
@@ -500,7 +1561,7 @@
     "stock": "متاح",
     "badge": "قطمارس",
     "image": "assets/optimized/products/gallery/5amsin-araby.webp",
-    "url": "https://popekyrillos.store/?product=custom-1782306615168-copy-1782306883366-copy-1782307173548-copy-1782307256776-copy-1782307341493",
+    "url": "https://popekyrillos.store/products/%D9%82%D8%B7%D9%85%D8%A7%D8%B1%D8%B3-%D8%A7%D9%84%D8%AE%D9%85%D8%B3%D9%8A%D9%86-%D8%B9%D8%B1%D8%A8%D9%8A-%D8%AF%D9%8A%D8%B1-%D8%A7%D9%84%D8%B4%D9%87%D9%8A%D8%AF-%D8%A7%D9%84%D8%B9%D8%B8%D9%8A%D9%85-%D9%85%D8%A7%D8%B1%D9%85%D9%8A%D9%86%D8%A7-%D8%A7%D9%84%D8%B9%D8%AC%D8%A7%D9%8A%D8%A8%D9%8A-%D8%A8%D9%85%D8%B1%D9%8A%D9%88%D8%B7",
     "tags": [
       "كتب",
       "كتاب مقدس",
@@ -529,7 +1590,8 @@
       }
     ],
     "mainCategory": "الكتب والطقوس",
-    "subCategory": "قطمارس"
+    "subCategory": "قطمارس",
+    "slug": "قطمارس-الخمسين-عربي-دير-الشهيد-العظيم-مارمينا-العجايبي-بمريوط"
   },
   {
     "id": "custom-1782306615168-copy-1782306883366-copy-1782307173548-copy-1782307256776",
@@ -542,7 +1604,7 @@
     "stock": "متاح",
     "badge": "قطمارس",
     "image": "assets/optimized/products/gallery/ahad-araby.webp",
-    "url": "https://popekyrillos.store/?product=custom-1782306615168-copy-1782306883366-copy-1782307173548-copy-1782307256776",
+    "url": "https://popekyrillos.store/products/%D9%82%D8%B7%D9%85%D8%A7%D8%B1%D8%B3-%D8%A7%D9%84%D8%A7%D8%AD%D8%A7%D8%AF-%D8%B9%D8%B1%D8%A8%D9%8A-%D8%AF%D9%8A%D8%B1-%D8%A7%D9%84%D8%B4%D9%87%D9%8A%D8%AF-%D8%A7%D9%84%D8%B9%D8%B8%D9%8A%D9%85-%D9%85%D8%A7%D8%B1%D9%85%D9%8A%D9%86%D8%A7-%D8%A7%D9%84%D8%B9%D8%AC%D8%A7%D9%8A%D8%A8%D9%8A-%D8%A8%D9%85%D8%B1%D9%8A%D9%88%D8%B7",
     "tags": [
       "كتب",
       "كتاب مقدس",
@@ -571,7 +1633,8 @@
       }
     ],
     "mainCategory": "الكتب والطقوس",
-    "subCategory": "قطمارس"
+    "subCategory": "قطمارس",
+    "slug": "قطمارس-الاحاد-عربي-دير-الشهيد-العظيم-مارمينا-العجايبي-بمريوط"
   },
   {
     "id": "custom-1782306615168-copy-1782306883366-copy-1782307173548",
@@ -584,7 +1647,7 @@
     "stock": "متاح",
     "badge": "قطمارس",
     "image": "assets/optimized/products/gallery/ahad-epty.webp",
-    "url": "https://popekyrillos.store/?product=custom-1782306615168-copy-1782306883366-copy-1782307173548",
+    "url": "https://popekyrillos.store/products/%D9%82%D8%B7%D9%85%D8%A7%D8%B1%D8%B3-%D8%A7%D9%84%D8%A7%D8%AD%D8%A7%D8%AF-%D9%82%D8%A8%D8%B7%D9%8A-%D8%AF%D9%8A%D8%B1-%D8%A7%D9%84%D8%B4%D9%87%D9%8A%D8%AF-%D8%A7%D9%84%D8%B9%D8%B8%D9%8A%D9%85-%D9%85%D8%A7%D8%B1%D9%85%D9%8A%D9%86%D8%A7-%D8%A7%D9%84%D8%B9%D8%AC%D8%A7%D9%8A%D8%A8%D9%8A-%D8%A8%D9%85%D8%B1%D9%8A%D9%88%D8%B7",
     "tags": [
       "كتب",
       "كتاب مقدس",
@@ -615,7 +1678,8 @@
       }
     ],
     "mainCategory": "الكتب والطقوس",
-    "subCategory": "قطمارس"
+    "subCategory": "قطمارس",
+    "slug": "قطمارس-الاحاد-قبطي-دير-الشهيد-العظيم-مارمينا-العجايبي-بمريوط"
   },
   {
     "id": "custom-1782306615168-copy-1782306883366",
@@ -628,7 +1692,7 @@
     "stock": "متاح",
     "badge": "قطمارس",
     "image": "assets/optimized/products/gallery/ayam-sanawy-2epty.webp",
-    "url": "https://popekyrillos.store/?product=custom-1782306615168-copy-1782306883366",
+    "url": "https://popekyrillos.store/products/%D9%82%D8%B7%D9%85%D8%A7%D8%B1%D8%B3-%D8%A7%D9%84%D8%A7%D9%8A%D8%A7%D9%85-%D8%A7%D9%84%D8%B3%D9%86%D9%88%D9%8A-%D9%82%D8%A8%D8%B7%D9%8A-%D8%AF%D9%8A%D8%B1-%D8%A7%D9%84%D8%B4%D9%87%D9%8A%D8%AF-%D8%A7%D9%84%D8%B9%D8%B8%D9%8A%D9%85-%D9%85%D8%A7%D8%B1%D9%85%D9%8A%D9%86%D8%A7-%D8%A7%D9%84%D8%B9%D8%AC%D8%A7%D9%8A%D8%A8%D9%8A-%D8%A8%D9%85%D8%B1%D9%8A%D9%88%D8%B7",
     "tags": [
       "كتب",
       "كتاب مقدس",
@@ -657,7 +1721,8 @@
       }
     ],
     "mainCategory": "الكتب والطقوس",
-    "subCategory": "قطمارس"
+    "subCategory": "قطمارس",
+    "slug": "قطمارس-الايام-السنوي-قبطي-دير-الشهيد-العظيم-مارمينا-العجايبي-بمريوط"
   },
   {
     "id": "custom-1782306615168",
@@ -670,7 +1735,7 @@
     "stock": "متاح",
     "badge": "قطمارس",
     "image": "assets/optimized/products/gallery/ayam-sanawy-araby.webp",
-    "url": "https://popekyrillos.store/?product=custom-1782306615168",
+    "url": "https://popekyrillos.store/products/%D9%82%D8%B7%D9%85%D8%A7%D8%B1%D8%B3-%D8%A7%D9%84%D8%A7%D9%8A%D8%A7%D9%85-%D8%A7%D9%84%D8%B3%D9%86%D9%88%D9%8A-%D8%B9%D8%B1%D8%A8%D9%8A-%D9%86%D8%B3%D8%AE%D9%87-%D8%AF%D9%8A%D8%B1-%D8%A7%D9%84%D8%B4%D9%87%D9%8A%D8%AF-%D8%A7%D9%84%D8%B9%D8%B8%D9%8A%D9%85-%D9%85%D8%A7%D8%B1%D9%85%D9%8A%D9%86%D8%A7-%D8%A7%D9%84%D8%B9%D8%AC%D8%A7%D9%8A%D8%A8%D9%8A-%D8%A8%D9%85%D8%B1%D9%8A%D9%88%D8%B7",
     "tags": [
       "كتب",
       "كتاب مقدس",
@@ -699,7 +1764,8 @@
       }
     ],
     "mainCategory": "الكتب والطقوس",
-    "subCategory": "قطمارس"
+    "subCategory": "قطمارس",
+    "slug": "قطمارس-الايام-السنوي-عربي-نسخه-دير-الشهيد-العظيم-مارمينا-العجايبي-بمريوط"
   },
   {
     "id": "custom-1782079632185",
@@ -712,7 +1778,7 @@
     "stock": "متاح",
     "badge": "شمع",
     "image": "/assets/optimized/products/gallery/sham3.iconat.webp",
-    "url": "https://popekyrillos.store/?product=custom-1782079632185",
+    "url": "https://popekyrillos.store/products/%D8%B4%D9%85%D8%B9-%D8%A7%D9%8A%D9%82%D9%88%D9%86%D8%A7%D8%AA",
     "tags": [
       "شمع",
       "candles",
@@ -738,7 +1804,8 @@
       }
     ],
     "mainCategory": "الشمع والبخور",
-    "subCategory": "شموع"
+    "subCategory": "شموع",
+    "slug": "شمع-ايقونات"
   },
   {
     "id": "old-10123915690291",
@@ -751,7 +1818,7 @@
     "stock": "متاح",
     "badge": "علب بخور",
     "image": "assets/optimized/products/gallery/001-10123915690291-01.webp",
-    "url": "https://popekyrillos.store/en/products/علبة-بخور-نحاس-ذهبي-بصليب",
+    "url": "https://popekyrillos.store/products/%D8%B9%D9%84%D8%A8%D9%87-%D8%A8%D8%AE%D9%88%D8%B1-%D9%86%D8%AD%D8%A7%D8%B3-%D8%B0%D9%87%D8%A8%D9%8A-%D8%A8%D8%B5%D9%84%D9%8A%D8%A8",
     "tags": [
       "نحاسيات",
       "علب بخور",
@@ -780,7 +1847,8 @@
       }
     ],
     "mainCategory": "الشمع والبخور",
-    "subCategory": "أطقم بخور"
+    "subCategory": "أطقم بخور",
+    "slug": "علبه-بخور-نحاس-ذهبي-بصليب"
   },
   {
     "id": "old-10123914805555",
@@ -793,7 +1861,7 @@
     "stock": "متاح",
     "badge": "علب بخور",
     "image": "assets/optimized/products/gallery/002-10123914805555-01.webp",
-    "url": "https://popekyrillos.store/en/products/علبة-بخور-نحاس-فضي-بصليب",
+    "url": "https://popekyrillos.store/products/%D8%B9%D9%84%D8%A8%D9%87-%D8%A8%D8%AE%D9%88%D8%B1-%D9%86%D8%AD%D8%A7%D8%B3-%D9%81%D8%B6%D9%8A-%D8%A8%D8%B5%D9%84%D9%8A%D8%A8",
     "tags": [
       "نحاسيات",
       "علب بخور",
@@ -822,7 +1890,8 @@
       }
     ],
     "mainCategory": "الشمع والبخور",
-    "subCategory": "أطقم بخور"
+    "subCategory": "أطقم بخور",
+    "slug": "علبه-بخور-نحاس-فضي-بصليب"
   },
   {
     "id": "old-10123913003315",
@@ -835,7 +1904,7 @@
     "stock": "متاح",
     "badge": "علب بخور",
     "image": "assets/optimized/products/gallery/003-10123913003315-01.webp",
-    "url": "https://popekyrillos.store/en/products/علبة-بخور-نحاس-فضي-فص-ملون",
+    "url": "https://popekyrillos.store/products/%D8%B9%D9%84%D8%A8%D9%87-%D8%A8%D8%AE%D9%88%D8%B1-%D9%86%D8%AD%D8%A7%D8%B3-%D9%81%D8%B6%D9%8A-%D9%81%D8%B5-%D9%85%D9%84%D9%88%D9%86",
     "tags": [
       "نحاسيات",
       "علب بخور",
@@ -865,7 +1934,8 @@
       }
     ],
     "mainCategory": "الشمع والبخور",
-    "subCategory": "أطقم بخور"
+    "subCategory": "أطقم بخور",
+    "slug": "علبه-بخور-نحاس-فضي-فص-ملون"
   },
   {
     "id": "old-10121340551475",
@@ -878,7 +1948,7 @@
     "stock": "متاح",
     "badge": "دفوف وتريانتو",
     "image": "assets/optimized/products/gallery/004-10121340551475-01.webp",
-    "url": "https://popekyrillos.store/en/products/تريانتو-ستانلس",
+    "url": "https://popekyrillos.store/products/%D8%AA%D8%B1%D9%8A%D8%A7%D9%86%D8%AA%D9%88-%D8%B3%D8%AA%D8%A7%D9%86%D9%84%D8%B3",
     "tags": [
       "دفوف وتريانتو",
       "الحجم",
@@ -945,7 +2015,8 @@
       }
     ],
     "mainCategory": "أدوات المذبح",
-    "subCategory": "أدوات خدمة"
+    "subCategory": "أدوات خدمة",
+    "slug": "تريانتو-ستانلس"
   },
   {
     "id": "old-10121339568435",
@@ -958,7 +2029,7 @@
     "stock": "متاح",
     "badge": "دفوف وتريانتو",
     "image": "assets/optimized/products/gallery/005-10121339568435-03.webp",
-    "url": "https://popekyrillos.store/en/products/دف-18-سم-نحاس-ذهبي-تقيل",
+    "url": "https://popekyrillos.store/products/%D8%AF%D9%81-18-%D8%B3%D9%85-%D9%86%D8%AD%D8%A7%D8%B3-%D8%B0%D9%87%D8%A8%D9%8A-%D8%AA%D9%82%D9%8A%D9%84",
     "tags": [
       "دفوف وتريانتو",
       "الحجم",
@@ -1087,7 +2158,8 @@
       }
     ],
     "mainCategory": "أدوات المذبح",
-    "subCategory": "أدوات خدمة"
+    "subCategory": "أدوات خدمة",
+    "slug": "دف-18-سم-نحاس-ذهبي-تقيل"
   },
   {
     "id": "old-10121173303603",
@@ -1100,7 +2172,7 @@
     "stock": "متاح",
     "badge": "جرابات كتاب مقدس",
     "image": "assets/optimized/products/gallery/006-10121173303603-01.webp",
-    "url": "https://popekyrillos.store/en/products/جراب-للكتاب-المقدس",
+    "url": "https://popekyrillos.store/products/%D8%AC%D8%B1%D8%A7%D8%A8-%D9%84%D9%84%D9%83%D8%AA%D8%A7%D8%A8-%D8%A7%D9%84%D9%85%D9%82%D8%AF%D8%B3",
     "tags": [
       "كتب وطقوس",
       "جرابات كتاب مقدس",
@@ -1559,7 +2631,8 @@
       }
     ],
     "mainCategory": "الكتب والطقوس",
-    "subCategory": "كتب طقسية"
+    "subCategory": "كتب طقسية",
+    "slug": "جراب-للكتاب-المقدس"
   },
   {
     "id": "old-10120837660979",
@@ -1572,7 +2645,7 @@
     "stock": "متاح",
     "badge": "صلبان زفة",
     "image": "assets/optimized/products/gallery/007-10120837660979-01.webp",
-    "url": "https://popekyrillos.store/en/products/صليب-زفة-نحاس-طبقتين-بفصوص-ملونة",
+    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D8%B2%D9%81%D9%87-%D9%86%D8%AD%D8%A7%D8%B3-%D8%B7%D8%A8%D9%82%D8%AA%D9%8A%D9%86-%D8%A8%D9%81%D8%B5%D9%88%D8%B5-%D9%85%D9%84%D9%88%D9%86%D9%87",
     "tags": [
       "صلبان زفة",
       "brass",
@@ -1600,7 +2673,8 @@
       }
     ],
     "mainCategory": "أدوات المذبح",
-    "subCategory": "صلبان مذبح"
+    "subCategory": "صلبان مذبح",
+    "slug": "صليب-زفه-نحاس-طبقتين-بفصوص-ملونه"
   },
   {
     "id": "old-10120837300531",
@@ -1613,7 +2687,7 @@
     "stock": "متاح",
     "badge": "صلبان زفة",
     "image": "assets/optimized/products/gallery/008-10120837300531-01.webp",
-    "url": "https://popekyrillos.store/en/products/صليب-زفة-نحاس-طبقتين",
+    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D8%B2%D9%81%D9%87-%D9%86%D8%AD%D8%A7%D8%B3-%D8%B7%D8%A8%D9%82%D8%AA%D9%8A%D9%86",
     "tags": [
       "صلبان زفة",
       "brass",
@@ -1641,7 +2715,8 @@
       }
     ],
     "mainCategory": "أدوات المذبح",
-    "subCategory": "صلبان مذبح"
+    "subCategory": "صلبان مذبح",
+    "slug": "صليب-زفه-نحاس-طبقتين"
   },
   {
     "id": "old-10120836481331",
@@ -1654,7 +2729,7 @@
     "stock": "متاح",
     "badge": "صلبان زفة",
     "image": "assets/optimized/products/gallery/009-10120836481331-01.webp",
-    "url": "https://popekyrillos.store/en/products/صليب-زفة-نحاس-رفيع-بفص-ألوان",
+    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D8%B2%D9%81%D9%87-%D9%86%D8%AD%D8%A7%D8%B3-%D8%B1%D9%81%D9%8A%D8%B9-%D8%A8%D9%81%D8%B5-%D8%A7%D9%84%D9%88%D8%A7%D9%86",
     "tags": [
       "صلبان زفة",
       "brass",
@@ -1682,7 +2757,8 @@
       }
     ],
     "mainCategory": "أدوات المذبح",
-    "subCategory": "صلبان مذبح"
+    "subCategory": "صلبان مذبح",
+    "slug": "صليب-زفه-نحاس-رفيع-بفص-الوان"
   },
   {
     "id": "old-10120836317491",
@@ -1695,7 +2771,7 @@
     "stock": "متاح",
     "badge": "صلبان زفة",
     "image": "assets/optimized/products/gallery/010-10120836317491-01.webp",
-    "url": "https://popekyrillos.store/en/products/صليب-زفة-نحاس-أركت-بالمصلوب",
+    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D8%B2%D9%81%D9%87-%D9%86%D8%AD%D8%A7%D8%B3-%D8%A7%D8%B1%D9%83%D8%AA-%D8%A8%D8%A7%D9%84%D9%85%D8%B5%D9%84%D9%88%D8%A8",
     "tags": [
       "صلبان زفة",
       "brass",
@@ -1723,7 +2799,8 @@
       }
     ],
     "mainCategory": "أدوات المذبح",
-    "subCategory": "صلبان مذبح"
+    "subCategory": "صلبان مذبح",
+    "slug": "صليب-زفه-نحاس-اركت-بالمصلوب"
   },
   {
     "id": "old-10120834908467",
@@ -1736,7 +2813,7 @@
     "stock": "متاح",
     "badge": "صلبان زفة",
     "image": "assets/optimized/products/gallery/011-10120834908467-01.webp",
-    "url": "https://popekyrillos.store/en/products/صليب-زفة-نحاس-أركت-ذهبي",
+    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D8%B2%D9%81%D9%87-%D9%86%D8%AD%D8%A7%D8%B3-%D8%A7%D8%B1%D9%83%D8%AA-%D8%B0%D9%87%D8%A8%D9%8A",
     "tags": [
       "صلبان زفة",
       "brass",
@@ -1763,7 +2840,8 @@
       }
     ],
     "mainCategory": "أدوات المذبح",
-    "subCategory": "صلبان مذبح"
+    "subCategory": "صلبان مذبح",
+    "slug": "صليب-زفه-نحاس-اركت-ذهبي"
   },
   {
     "id": "old-10070727688499",
@@ -1776,7 +2854,7 @@
     "stock": "متاح",
     "badge": "شغل شحن",
     "image": "assets/optimized/products/gallery/012-10070727688499-01.webp",
-    "url": "https://popekyrillos.store/en/products/شمعدان-مذبح-كبير",
+    "url": "https://popekyrillos.store/products/%D8%B4%D9%85%D8%B9%D8%AF%D8%A7%D9%86-%D9%85%D8%B0%D8%A8%D8%AD-%D9%83%D8%A8%D9%8A%D8%B1",
     "tags": [
       "شموع وبخور",
       "شغل شحن",
@@ -1808,7 +2886,8 @@
       }
     ],
     "mainCategory": "أدوات المذبح",
-    "subCategory": "شمعدانات"
+    "subCategory": "شمعدانات",
+    "slug": "شمعدان-مذبح-كبير"
   },
   {
     "id": "old-10070727000371",
@@ -1821,7 +2900,7 @@
     "stock": "متاح",
     "badge": "شغل شحن",
     "image": "assets/optimized/products/gallery/013-10070727000371-01.webp",
-    "url": "https://popekyrillos.store/en/products/شمعة-شحن",
+    "url": "https://popekyrillos.store/products/%D8%B4%D9%85%D8%B9%D9%87-%D8%B4%D8%AD%D9%86",
     "tags": [
       "شغل شحن",
       "اللون",
@@ -1880,7 +2959,8 @@
       }
     ],
     "mainCategory": "الشمع والبخور",
-    "subCategory": "شموع"
+    "subCategory": "شموع",
+    "slug": "شمعه-شحن"
   },
   {
     "id": "old-10070726574387",
@@ -1893,7 +2973,7 @@
     "stock": "متاح",
     "badge": "شغل شحن",
     "image": "assets/optimized/products/gallery/014-10070726574387-01.webp",
-    "url": "https://popekyrillos.store/en/products/شمعة-شماس-شكل-صليب",
+    "url": "https://popekyrillos.store/products/%D8%B4%D9%85%D8%B9%D9%87-%D8%B4%D9%85%D8%A7%D8%B3-%D8%B4%D9%83%D9%84-%D8%B5%D9%84%D9%8A%D8%A8",
     "tags": [
       "شغل شحن",
       "brass",
@@ -1920,7 +3000,8 @@
       }
     ],
     "mainCategory": "الشمع والبخور",
-    "subCategory": "شموع"
+    "subCategory": "شموع",
+    "slug": "شمعه-شماس-شكل-صليب"
   },
   {
     "id": "old-10070704980275",
@@ -1933,7 +3014,7 @@
     "stock": "متاح",
     "badge": "شغل شحن",
     "image": "assets/optimized/products/gallery/015-10070704980275-01.webp",
-    "url": "https://popekyrillos.store/en/products/شمعدان-منجلية",
+    "url": "https://popekyrillos.store/products/%D8%B4%D9%85%D8%B9%D8%AF%D8%A7%D9%86-%D9%85%D9%86%D8%AC%D9%84%D9%8A%D9%87",
     "tags": [
       "شموع وبخور",
       "شغل شحن",
@@ -2006,7 +3087,8 @@
       }
     ],
     "mainCategory": "أدوات المذبح",
-    "subCategory": "شمعدانات"
+    "subCategory": "شمعدانات",
+    "slug": "شمعدان-منجليه"
   },
   {
     "id": "old-10070671687987",
@@ -2019,7 +3101,7 @@
     "stock": "متاح",
     "badge": "شغل شحن",
     "image": "assets/optimized/products/gallery/016-10070671687987-01.webp",
-    "url": "https://popekyrillos.store/en/products/صليب-إفنوتي-شحن-بالوصلة",
+    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D8%A7%D9%81%D9%86%D9%88%D8%AA%D9%8A-%D8%B4%D8%AD%D9%86-%D8%A8%D8%A7%D9%84%D9%88%D8%B5%D9%84%D9%87",
     "tags": [
       "شغل شحن",
       "color",
@@ -2097,7 +3179,8 @@
       }
     ],
     "mainCategory": "أدوات المذبح",
-    "subCategory": "صلبان مذبح"
+    "subCategory": "صلبان مذبح",
+    "slug": "صليب-افنوتي-شحن-بالوصله"
   },
   {
     "id": "old-10068218806579",
@@ -2110,7 +3193,7 @@
     "stock": "متاح",
     "badge": "حُق ذخيرة",
     "image": "assets/optimized/products/gallery/017-10068218806579-01.webp",
-    "url": "https://popekyrillos.store/en/products/حُق-ذخيرة-كبير-نحاس-مطلي-نيكل",
+    "url": "https://popekyrillos.store/products/%D8%AD%D9%82-%D8%B0%D8%AE%D9%8A%D8%B1%D9%87-%D9%83%D8%A8%D9%8A%D8%B1-%D9%86%D8%AD%D8%A7%D8%B3-%D9%85%D8%B7%D9%84%D9%8A-%D9%86%D9%8A%D9%83%D9%84",
     "tags": [
       "حُق ذخيرة",
       "brass",
@@ -2139,7 +3222,8 @@
       }
     ],
     "mainCategory": "أدوات المذبح",
-    "subCategory": "ذخائر وعلب"
+    "subCategory": "ذخائر وعلب",
+    "slug": "حق-ذخيره-كبير-نحاس-مطلي-نيكل"
   },
   {
     "id": "old-10068217561395",
@@ -2152,7 +3236,7 @@
     "stock": "متاح",
     "badge": "حُق ذخيرة",
     "image": "assets/optimized/products/gallery/018-10068217561395-01.webp",
-    "url": "https://popekyrillos.store/en/products/حُق-ذخيرة-صغير-نحاس-مطلي-نيكل",
+    "url": "https://popekyrillos.store/products/%D8%AD%D9%82-%D8%B0%D8%AE%D9%8A%D8%B1%D9%87-%D8%B5%D8%BA%D9%8A%D8%B1-%D9%86%D8%AD%D8%A7%D8%B3-%D9%85%D8%B7%D9%84%D9%8A-%D9%86%D9%8A%D9%83%D9%84",
     "tags": [
       "حُق ذخيرة",
       "brass",
@@ -2181,7 +3265,8 @@
       }
     ],
     "mainCategory": "أدوات المذبح",
-    "subCategory": "ذخائر وعلب"
+    "subCategory": "ذخائر وعلب",
+    "slug": "حق-ذخيره-صغير-نحاس-مطلي-نيكل"
   },
   {
     "id": "old-10068215628083",
@@ -2194,7 +3279,7 @@
     "stock": "متاح",
     "badge": "حُق ذخيرة",
     "image": "assets/optimized/products/gallery/019-10068215628083-01.webp",
-    "url": "https://popekyrillos.store/en/products/حُق-ذخيرة-استانلس-صغير-1",
+    "url": "https://popekyrillos.store/products/%D8%AD%D9%82-%D8%B0%D8%AE%D9%8A%D8%B1%D9%87-%D8%A7%D8%B3%D8%AA%D8%A7%D9%86%D9%84%D8%B3-%D8%B5%D8%BA%D9%8A%D8%B1",
     "tags": [
       "حُق ذخيرة",
       "brass",
@@ -2223,7 +3308,8 @@
       }
     ],
     "mainCategory": "أدوات المذبح",
-    "subCategory": "ذخائر وعلب"
+    "subCategory": "ذخائر وعلب",
+    "slug": "حق-ذخيره-استانلس-صغير"
   },
   {
     "id": "old-10068213006643",
@@ -2236,7 +3322,7 @@
     "stock": "متاح",
     "badge": "حُق ذخيرة",
     "image": "assets/optimized/products/gallery/020-10068213006643-01.webp",
-    "url": "https://popekyrillos.store/en/products/حُق-ذخيرة-استانلس-وسط",
+    "url": "https://popekyrillos.store/products/%D8%AD%D9%82-%D8%B0%D8%AE%D9%8A%D8%B1%D9%87-%D8%A7%D8%B3%D8%AA%D8%A7%D9%86%D9%84%D8%B3-%D9%88%D8%B3%D8%B7",
     "tags": [
       "حُق ذخيرة",
       "brass",
@@ -2266,7 +3352,8 @@
       }
     ],
     "mainCategory": "أدوات المذبح",
-    "subCategory": "ذخائر وعلب"
+    "subCategory": "ذخائر وعلب",
+    "slug": "حق-ذخيره-استانلس-وسط"
   },
   {
     "id": "old-10068212646195",
@@ -2279,7 +3366,7 @@
     "stock": "متاح",
     "badge": "حُق ذخيرة",
     "image": "assets/optimized/products/gallery/021-10068212646195-01.webp",
-    "url": "https://popekyrillos.store/en/products/حُق-ذخيرة-استانلس-صغير",
+    "url": "https://popekyrillos.store/products/%D8%AD%D9%82-%D8%B0%D8%AE%D9%8A%D8%B1%D9%87-%D8%A7%D8%B3%D8%AA%D8%A7%D9%86%D9%84%D8%B3-%D8%B5%D8%BA%D9%8A%D8%B1-old-10068212646195",
     "tags": [
       "حُق ذخيرة",
       "brass",
@@ -2308,7 +3395,8 @@
       }
     ],
     "mainCategory": "أدوات المذبح",
-    "subCategory": "ذخائر وعلب"
+    "subCategory": "ذخائر وعلب",
+    "slug": "حق-ذخيره-استانلس-صغير-old-10068212646195"
   },
   {
     "id": "old-10067794067763",
@@ -2321,7 +3409,7 @@
     "stock": "متاح",
     "badge": "إبريق نحاس",
     "image": "assets/optimized/products/gallery/022-10067794067763-01.webp",
-    "url": "https://popekyrillos.store/en/products/إبريق-نحاس-ذهبي",
+    "url": "https://popekyrillos.store/products/%D8%A7%D8%A8%D8%B1%D9%8A%D9%82-%D9%86%D8%AD%D8%A7%D8%B3-%D8%B0%D9%87%D8%A8%D9%8A",
     "tags": [
       "إبريق نحاس",
       "الحجم",
@@ -2392,7 +3480,8 @@
       }
     ],
     "mainCategory": "أدوات المذبح",
-    "subCategory": "أواني المذبح"
+    "subCategory": "أواني المذبح",
+    "slug": "ابريق-نحاس-ذهبي"
   },
   {
     "id": "old-10067690586419",
@@ -2405,7 +3494,7 @@
     "stock": "متاح",
     "badge": "علب بخور",
     "image": "assets/optimized/products/gallery/023-10067690586419-01.webp",
-    "url": "https://popekyrillos.store/en/products/علبة-بخور-من-النحاس-شكل-دائري",
+    "url": "https://popekyrillos.store/products/%D8%B9%D9%84%D8%A8%D9%87-%D8%A8%D8%AE%D9%88%D8%B1-%D9%85%D9%86-%D8%A7%D9%84%D9%86%D8%AD%D8%A7%D8%B3-%D8%B4%D9%83%D9%84-%D8%AF%D8%A7%D9%8A%D8%B1%D9%8A",
     "tags": [
       "نحاسيات",
       "علب بخور",
@@ -2435,7 +3524,8 @@
       }
     ],
     "mainCategory": "الشمع والبخور",
-    "subCategory": "أطقم بخور"
+    "subCategory": "أطقم بخور",
+    "slug": "علبه-بخور-من-النحاس-شكل-دايري"
   },
   {
     "id": "old-10067690225971",
@@ -2448,7 +3538,7 @@
     "stock": "متاح",
     "badge": "علب بخور",
     "image": "assets/optimized/products/gallery/024-10067690225971-01.webp",
-    "url": "https://popekyrillos.store/en/products/علبة-بخور-نحاس-علي-شكل-صليب",
+    "url": "https://popekyrillos.store/products/%D8%B9%D9%84%D8%A8%D9%87-%D8%A8%D8%AE%D9%88%D8%B1-%D9%86%D8%AD%D8%A7%D8%B3-%D8%B9%D9%84%D9%8A-%D8%B4%D9%83%D9%84-%D8%B5%D9%84%D9%8A%D8%A8",
     "tags": [
       "نحاسيات",
       "علب بخور",
@@ -2479,7 +3569,8 @@
       }
     ],
     "mainCategory": "الشمع والبخور",
-    "subCategory": "أطقم بخور"
+    "subCategory": "أطقم بخور",
+    "slug": "علبه-بخور-نحاس-علي-شكل-صليب"
   },
   {
     "id": "old-10067689472307",
@@ -2492,7 +3583,7 @@
     "stock": "متاح",
     "badge": "علب بخور",
     "image": "assets/optimized/products/gallery/025-10067689472307-01.webp",
-    "url": "https://popekyrillos.store/en/products/علبة-بخور-نحاس-علي-شكل-صندوق-كنز",
+    "url": "https://popekyrillos.store/products/%D8%B9%D9%84%D8%A8%D9%87-%D8%A8%D8%AE%D9%88%D8%B1-%D9%86%D8%AD%D8%A7%D8%B3-%D8%B9%D9%84%D9%8A-%D8%B4%D9%83%D9%84-%D8%B5%D9%86%D8%AF%D9%88%D9%82-%D9%83%D9%86%D8%B2",
     "tags": [
       "نحاسيات",
       "علب بخور",
@@ -2523,7 +3614,8 @@
       }
     ],
     "mainCategory": "الشمع والبخور",
-    "subCategory": "أطقم بخور"
+    "subCategory": "أطقم بخور",
+    "slug": "علبه-بخور-نحاس-علي-شكل-صندوق-كنز"
   },
   {
     "id": "old-10067686162739",
@@ -2536,7 +3628,7 @@
     "stock": "متاح",
     "badge": "علب بخور",
     "image": "assets/optimized/products/gallery/026-10067686162739-01.webp",
-    "url": "https://popekyrillos.store/en/products/علبة-بخور-نحاس-شكل-صندوق-عادي",
+    "url": "https://popekyrillos.store/products/%D8%B9%D9%84%D8%A8%D9%87-%D8%A8%D8%AE%D9%88%D8%B1-%D9%86%D8%AD%D8%A7%D8%B3-%D8%B4%D9%83%D9%84-%D8%B5%D9%86%D8%AF%D9%88%D9%82-%D8%B9%D8%A7%D8%AF%D9%8A",
     "tags": [
       "نحاسيات",
       "علب بخور",
@@ -2610,7 +3702,8 @@
       }
     ],
     "mainCategory": "الشمع والبخور",
-    "subCategory": "أطقم بخور"
+    "subCategory": "أطقم بخور",
+    "slug": "علبه-بخور-نحاس-شكل-صندوق-عادي"
   },
   {
     "id": "old-10062404354355",
@@ -2623,7 +3716,7 @@
     "stock": "متاح",
     "badge": "علب بخور",
     "image": "assets/optimized/products/gallery/027-10062404354355-01.webp",
-    "url": "https://popekyrillos.store/en/products/علبة-بخور-نحاس-صغيرة-شكل-مستطيل",
+    "url": "https://popekyrillos.store/products/%D8%B9%D9%84%D8%A8%D9%87-%D8%A8%D8%AE%D9%88%D8%B1-%D9%86%D8%AD%D8%A7%D8%B3-%D8%B5%D8%BA%D9%8A%D8%B1%D9%87-%D8%B4%D9%83%D9%84-%D9%85%D8%B3%D8%AA%D8%B7%D9%8A%D9%84",
     "tags": [
       "نحاسيات",
       "علب بخور",
@@ -2655,7 +3748,8 @@
       }
     ],
     "mainCategory": "الشمع والبخور",
-    "subCategory": "أطقم بخور"
+    "subCategory": "أطقم بخور",
+    "slug": "علبه-بخور-نحاس-صغيره-شكل-مستطيل"
   },
   {
     "id": "old-10062400258355",
@@ -2668,7 +3762,7 @@
     "stock": "متاح",
     "badge": "علب بخور",
     "image": "assets/optimized/products/gallery/028-10062400258355-01.webp",
-    "url": "https://popekyrillos.store/en/products/علبة-بخور-نحاس-كبيرة-شكل-مستطيل",
+    "url": "https://popekyrillos.store/products/%D8%B9%D9%84%D8%A8%D9%87-%D8%A8%D8%AE%D9%88%D8%B1-%D9%86%D8%AD%D8%A7%D8%B3-%D9%83%D8%A8%D9%8A%D8%B1%D9%87-%D8%B4%D9%83%D9%84-%D9%85%D8%B3%D8%AA%D8%B7%D9%8A%D9%84",
     "tags": [
       "نحاسيات",
       "علب بخور",
@@ -2699,7 +3793,8 @@
       }
     ],
     "mainCategory": "الشمع والبخور",
-    "subCategory": "أطقم بخور"
+    "subCategory": "أطقم بخور",
+    "slug": "علبه-بخور-نحاس-كبيره-شكل-مستطيل"
   },
   {
     "id": "reliquary-tubes-papa-kyrillos",
@@ -2712,7 +3807,7 @@
     "stock": "متاح",
     "badge": "نحاسيات",
     "image": "assets/optimized/products/reliquary-tubes-papa-kyrillos.jpg",
-    "url": "https://popekyrillos.store/products/reliquary-tubes-papa-kyrillos",
+    "url": "https://popekyrillos.store/products/%D8%A7%D9%86%D8%A7%D8%A8%D9%8A%D8%A8-%D8%B1%D9%81%D8%A7%D8%AA-%D9%82%D8%AF%D9%8A%D8%B3%D9%8A%D9%86-%D8%B2%D8%A7%D9%86",
     "tags": [
       "نحاسيات",
       "أنابيب",
@@ -2835,7 +3930,8 @@
       }
     ],
     "mainCategory": "أدوات المذبح",
-    "subCategory": "ذخائر وعلب"
+    "subCategory": "ذخائر وعلب",
+    "slug": "انابيب-رفات-قديسين-زان"
   },
   {
     "id": "incense-chat-1500-kg",
@@ -2848,7 +3944,7 @@
     "stock": "متاح",
     "badge": "بخور",
     "image": "assets/optimized/products/incense-chat-v2.webp",
-    "url": "https://popekyrillos.store/?product=incense-chat-1500-kg",
+    "url": "https://popekyrillos.store/products/%D8%A8%D8%AE%D9%88%D8%B1-%D9%83%D9%86%D8%B3%D9%8A-%D9%81%D8%A7%D8%AE%D8%B1",
     "tags": [
       "شموع وبخور",
       "الوزن",
@@ -2954,7 +4050,8 @@
       }
     ],
     "mainCategory": "الشمع والبخور",
-    "subCategory": "بخور"
+    "subCategory": "بخور",
+    "slug": "بخور-كنسي-فاخر"
   },
   {
     "id": "old-9840433955123",
@@ -2967,7 +4064,7 @@
     "stock": "غير متاح حاليا",
     "badge": "شموع وبخور",
     "image": "assets/optimized/products/gallery/034-9840433955123-01.webp",
-    "url": "https://popekyrillos.store/en/products/زوج-شمعدان-نحاس-ذهبي-كهرباء",
+    "url": "https://popekyrillos.store/products/%D8%B2%D9%88%D8%AC-%D8%B4%D9%85%D8%B9%D8%AF%D8%A7%D9%86-%D9%86%D8%AD%D8%A7%D8%B3-%D8%B0%D9%87%D8%A8%D9%8A-%D9%83%D9%87%D8%B1%D8%A8%D8%A7%D8%A1-%D8%B4%D9%83%D9%84-%D8%A7%D9%84%D9%88%D8%B1%D8%AF%D9%87-%D9%83%D8%A8%D9%8A%D8%B1",
     "tags": [
       "شموع وبخور",
       "candles",
@@ -2995,7 +4092,8 @@
       }
     ],
     "mainCategory": "أدوات المذبح",
-    "subCategory": "شمعدانات"
+    "subCategory": "شمعدانات",
+    "slug": "زوج-شمعدان-نحاس-ذهبي-كهرباء-شكل-الورده-كبير"
   },
   {
     "id": "old-9840425500979",
@@ -3008,7 +4106,7 @@
     "stock": "غير متاح حاليا",
     "badge": "شموع وبخور",
     "image": "assets/optimized/products/gallery/035-9840425500979-01.webp",
-    "url": "https://popekyrillos.store/en/products/شمعدان-نحاس-ذهبي-سوستة",
+    "url": "https://popekyrillos.store/products/%D8%B4%D9%85%D8%B9%D8%AF%D8%A7%D9%86-%D9%86%D8%AD%D8%A7%D8%B3-%D8%B0%D9%87%D8%A8%D9%8A-%D8%B3%D9%88%D8%B3%D8%AA%D9%87",
     "tags": [
       "شموع وبخور",
       "candles",
@@ -3037,7 +4135,8 @@
       }
     ],
     "mainCategory": "أدوات المذبح",
-    "subCategory": "شمعدانات"
+    "subCategory": "شمعدانات",
+    "slug": "شمعدان-نحاس-ذهبي-سوسته"
   },
   {
     "id": "old-9840420749619",
@@ -3050,7 +4149,7 @@
     "stock": "متاح",
     "badge": "شموع وبخور",
     "image": "assets/optimized/products/gallery/036-9840420749619-01.webp",
-    "url": "https://popekyrillos.store/en/products/زوج-شمعدان-نحاس-ذهبي-شكل-الوردة-صغير",
+    "url": "https://popekyrillos.store/products/%D8%B2%D9%88%D8%AC-%D8%B4%D9%85%D8%B9%D8%AF%D8%A7%D9%86-%D9%86%D8%AD%D8%A7%D8%B3-%D8%B0%D9%87%D8%A8%D9%8A-%D8%B4%D9%83%D9%84-%D8%A7%D9%84%D9%88%D8%B1%D8%AF%D9%87-%D8%B5%D8%BA%D9%8A%D8%B1",
     "tags": [
       "شموع وبخور",
       "candles",
@@ -3080,7 +4179,8 @@
       }
     ],
     "mainCategory": "أدوات المذبح",
-    "subCategory": "شمعدانات"
+    "subCategory": "شمعدانات",
+    "slug": "زوج-شمعدان-نحاس-ذهبي-شكل-الورده-صغير"
   },
   {
     "id": "old-9840413475123",
@@ -3093,7 +4193,7 @@
     "stock": "متاح",
     "badge": "شموع وبخور",
     "image": "assets/optimized/products/gallery/037-9840413475123-01.webp",
-    "url": "https://popekyrillos.store/en/products/زوج-شمعدان-نحاس-ذهبي-شكل-الخروف",
+    "url": "https://popekyrillos.store/products/%D8%B2%D9%88%D8%AC-%D8%B4%D9%85%D8%B9%D8%AF%D8%A7%D9%86-%D9%86%D8%AD%D8%A7%D8%B3-%D8%B0%D9%87%D8%A8%D9%8A-%D8%B4%D9%83%D9%84-%D8%A7%D9%84%D8%AE%D8%B1%D9%88%D9%81",
     "tags": [
       "شموع وبخور",
       "candles",
@@ -3123,7 +4223,8 @@
       }
     ],
     "mainCategory": "أدوات المذبح",
-    "subCategory": "شمعدانات"
+    "subCategory": "شمعدانات",
+    "slug": "زوج-شمعدان-نحاس-ذهبي-شكل-الخروف"
   },
   {
     "id": "old-9840407806259",
@@ -3136,7 +4237,7 @@
     "stock": "متاح",
     "badge": "شموع وبخور",
     "image": "assets/optimized/products/gallery/038-9840407806259-01.webp",
-    "url": "https://popekyrillos.store/en/products/زوج-شمعدان-برج-إيفل-نحاس-ذهبي-ثقيل",
+    "url": "https://popekyrillos.store/products/%D8%B2%D9%88%D8%AC-%D8%B4%D9%85%D8%B9%D8%AF%D8%A7%D9%86-%D8%A8%D8%B1%D8%AC-%D8%A7%D9%8A%D9%81%D9%84-%D9%86%D8%AD%D8%A7%D8%B3-%D8%B0%D9%87%D8%A8%D9%8A-%D8%AB%D9%82%D9%8A%D9%84",
     "tags": [
       "شموع وبخور",
       "candles",
@@ -3167,7 +4268,8 @@
       }
     ],
     "mainCategory": "أدوات المذبح",
-    "subCategory": "شمعدانات"
+    "subCategory": "شمعدانات",
+    "slug": "زوج-شمعدان-برج-ايفل-نحاس-ذهبي-ثقيل"
   },
   {
     "id": "old-9762774024499",
@@ -3180,7 +4282,7 @@
     "stock": "متاح",
     "badge": "نحاسيات",
     "image": "assets/optimized/products/gallery/039-9762774024499-01.webp",
-    "url": "https://popekyrillos.store/en/products/بشارة-ذهبي-يوناني",
+    "url": "https://popekyrillos.store/products/%D8%A8%D8%B4%D8%A7%D8%B1%D9%87-%D8%B0%D9%87%D8%A8%D9%8A-%D9%8A%D9%88%D9%86%D8%A7%D9%86%D9%8A",
     "tags": [
       "نحاسيات",
       "brass",
@@ -3209,7 +4311,8 @@
       }
     ],
     "mainCategory": "أدوات المذبح",
-    "subCategory": "أدوات خدمة"
+    "subCategory": "أدوات خدمة",
+    "slug": "بشاره-ذهبي-يوناني"
   },
   {
     "id": "old-9762760196403",
@@ -3222,7 +4325,7 @@
     "stock": "متاح",
     "badge": "شموع وبخور",
     "image": "assets/optimized/products/gallery/040-9762760196403-01.webp",
-    "url": "https://popekyrillos.store/en/products/شورية-نحاس-ذهبي-يوناني",
+    "url": "https://popekyrillos.store/products/%D8%B4%D9%88%D8%B1%D9%8A%D9%87-%D9%86%D8%AD%D8%A7%D8%B3-%D8%B0%D9%87%D8%A8%D9%8A-%D9%8A%D9%88%D9%86%D8%A7%D9%86%D9%8A",
     "tags": [
       "شموع وبخور",
       "الحجم",
@@ -3281,7 +4384,8 @@
       }
     ],
     "mainCategory": "الشمع والبخور",
-    "subCategory": "بخور"
+    "subCategory": "بخور",
+    "slug": "شوريه-نحاس-ذهبي-يوناني"
   },
   {
     "id": "old-9762682011955",
@@ -3294,7 +4398,7 @@
     "stock": "متاح",
     "badge": "نحاسيات",
     "image": "assets/optimized/products/gallery/041-9762682011955-01.webp",
-    "url": "https://popekyrillos.store/en/products/طقم-أواني-مذبح-ذهبي-يوناني",
+    "url": "https://popekyrillos.store/products/%D8%B7%D9%82%D9%85-%D8%A7%D9%88%D8%A7%D9%86%D9%8A-%D9%85%D8%B0%D8%A8%D8%AD-%D8%B0%D9%87%D8%A8%D9%8A-%D9%8A%D9%88%D9%86%D8%A7%D9%86%D9%8A",
     "tags": [
       "نحاسيات",
       "حجم الكأس",
@@ -3353,7 +4457,8 @@
       }
     ],
     "mainCategory": "أدوات المذبح",
-    "subCategory": "أواني المذبح"
+    "subCategory": "أواني المذبح",
+    "slug": "طقم-اواني-مذبح-ذهبي-يوناني"
   },
   {
     "id": "old-9757475930419",
@@ -3366,7 +4471,7 @@
     "stock": "متاح",
     "badge": "أيقونات وهدايا",
     "image": "assets/optimized/products/gallery/042-9757475930419-01.webp",
-    "url": "https://popekyrillos.store/en/products/أيقونة-صليب-صدر-يوناني-ذهبي",
+    "url": "https://popekyrillos.store/products/%D8%A7%D9%8A%D9%82%D9%88%D9%86%D9%87-%D8%B5%D9%84%D9%8A%D8%A8-%D8%B5%D8%AF%D8%B1-%D9%8A%D9%88%D9%86%D8%A7%D9%86%D9%8A-%D8%B0%D9%87%D8%A8%D9%8A",
     "tags": [
       "أيقونات وهدايا",
       "icons",
@@ -3392,7 +4497,8 @@
       }
     ],
     "mainCategory": "الأيقونات والبراويز",
-    "subCategory": "أيقونات صغيرة"
+    "subCategory": "أيقونات صغيرة",
+    "slug": "ايقونه-صليب-صدر-يوناني-ذهبي"
   },
   {
     "id": "stole-red-gold-01",
@@ -3405,7 +4511,7 @@
     "stock": "متاح",
     "badge": "بطرشيلات",
     "image": "assets/optimized/products/gallery/stole-01.webp",
-    "url": "https://popekyrillos.store/products/stole-red-gold-01",
+    "url": "https://popekyrillos.store/products/%D8%A8%D8%B7%D8%B1%D8%B4%D9%8A%D9%84-%D9%83%D9%86%D8%B3%D9%8A-%D8%A7%D8%AD%D9%85%D8%B1-%D8%B0%D9%87%D8%A8%D9%8A-%D9%85%D9%88%D8%AF%D9%8A%D9%84-1",
     "tags": [
       "أقمشة ومفارش",
       "الطول",
@@ -3680,7 +4786,8 @@
       }
     ],
     "mainCategory": "الملابس الكنسية",
-    "subCategory": "بطرشيلات"
+    "subCategory": "بطرشيلات",
+    "slug": "بطرشيل-كنسي-احمر-ذهبي-موديل-1"
   },
   {
     "id": "stole-red-gold-02",
@@ -3693,7 +4800,7 @@
     "stock": "متاح",
     "badge": "بطرشيلات",
     "image": "assets/optimized/products/gallery/stole-02.webp",
-    "url": "https://popekyrillos.store/products/stole-red-gold-02",
+    "url": "https://popekyrillos.store/products/%D8%A8%D8%B7%D8%B1%D8%B4%D9%8A%D9%84-%D9%83%D9%86%D8%B3%D9%8A-%D8%A7%D8%AD%D9%85%D8%B1-%D8%B0%D9%87%D8%A8%D9%8A-%D9%85%D9%88%D8%AF%D9%8A%D9%84-2",
     "tags": [
       "أقمشة ومفارش",
       "الطول",
@@ -3968,7 +5075,8 @@
       }
     ],
     "mainCategory": "الملابس الكنسية",
-    "subCategory": "بطرشيلات"
+    "subCategory": "بطرشيلات",
+    "slug": "بطرشيل-كنسي-احمر-ذهبي-موديل-2"
   },
   {
     "id": "stole-red-gold-03",
@@ -3981,7 +5089,7 @@
     "stock": "متاح",
     "badge": "بطرشيلات",
     "image": "assets/optimized/products/gallery/stole-03.webp",
-    "url": "https://popekyrillos.store/products/stole-red-gold-03",
+    "url": "https://popekyrillos.store/products/%D8%A8%D8%B7%D8%B1%D8%B4%D9%8A%D9%84-%D9%83%D9%86%D8%B3%D9%8A-%D8%A7%D8%AD%D9%85%D8%B1-%D8%B0%D9%87%D8%A8%D9%8A-%D9%85%D9%88%D8%AF%D9%8A%D9%84-3",
     "tags": [
       "أقمشة ومفارش",
       "الطول",
@@ -4256,7 +5364,8 @@
       }
     ],
     "mainCategory": "الملابس الكنسية",
-    "subCategory": "بطرشيلات"
+    "subCategory": "بطرشيلات",
+    "slug": "بطرشيل-كنسي-احمر-ذهبي-موديل-3"
   },
   {
     "id": "stole-red-gold-04",
@@ -4269,7 +5378,7 @@
     "stock": "متاح",
     "badge": "بطرشيلات",
     "image": "assets/optimized/products/gallery/stole-04.webp",
-    "url": "https://popekyrillos.store/products/stole-red-gold-04",
+    "url": "https://popekyrillos.store/products/%D8%A8%D8%B7%D8%B1%D8%B4%D9%8A%D9%84-%D9%83%D9%86%D8%B3%D9%8A-%D8%A7%D8%AD%D9%85%D8%B1-%D8%B0%D9%87%D8%A8%D9%8A-%D9%85%D9%88%D8%AF%D9%8A%D9%84-4",
     "tags": [
       "أقمشة ومفارش",
       "الطول",
@@ -4544,6 +5653,72 @@
       }
     ],
     "mainCategory": "الملابس الكنسية",
-    "subCategory": "بطرشيلات"
+    "subCategory": "بطرشيلات",
+    "slug": "بطرشيل-كنسي-احمر-ذهبي-موديل-4"
+  },
+  {
+    "id": "custom-1783272387022",
+    "name": "ألوان اليوطا",
+    "category": "brass",
+    "label": "نحاسيات",
+    "description": "وصف المنتج\n\nألوان تلوين صلبان اليوتا\nألوان جاهزة للاستخدام، مناسبة لتلوين صلبان وميداليات اليوتا خلال مدارس الأحد والخلوات والأنشطة الكنسية. تأتي كل عبوة بسن دقيق يساعد على التحكم في اللون وتنفيذ التفاصيل الصغيرة بسهولة، مع غطاء محكم للحفاظ على اللون.\n\nالألوان المتاحة:\nأحمر – أسود – أبيض – أصفر – أخضر – فضي – نبيتي – لبني – بني – بيج – برتقالي.\n\nمميزات المنتج:\n\nألوان واضحة وزاهية.\nسهلة الاستخدام للأطفال والخدام.\nسن دقيق للتلوين والتفاصيل.\nمناسبة للأنشطة والمسابقات والهدايا.\nتُباع العبوات بالألوان بصورة منفردة.\n\nتنبيه: يُفضّل رجّ العبوة جيدًا قبل الاستخدام وإغلاقها بإحكام بعد الانتهاء.",
+    "price": 70,
+    "priceNote": "",
+    "stock": "متاح",
+    "badge": "يوتا",
+    "image": "assets/optimized/products/gallery/product-1-image-20260705172724-e7fdfd.webp",
+    "url": "https://popekyrillos.store/products/%D8%A7%D9%84%D9%88%D8%A7%D9%86-%D8%A7%D9%84%D9%8A%D9%88%D8%B7%D8%A7",
+    "tags": [],
+    "images": [
+      "assets/optimized/products/gallery/product-1-image-20260705172724-e7fdfd.webp",
+      "assets/optimized/products/gallery/product-1-image-20260705172735-c0297e.webp",
+      "assets/optimized/products/gallery/product-1-image-20260705172741-9b13e8.webp"
+    ],
+    "options": [
+      {
+        "name": "الاختيار",
+        "values": [
+          "أبيض",
+          "أحمر"
+        ]
+      }
+    ],
+    "variants": [
+      {
+        "id": "custom-1783272387022-variant-1783272480728-2",
+        "title": "أبيض",
+        "options": {
+          "الاختيار": "أبيض"
+        },
+        "price": 70,
+        "compareAtPrice": null,
+        "available": true,
+        "image": "assets/optimized/products/gallery/product-1-image-20260705172735-c0297e.webp",
+        "images": [
+          "assets/optimized/products/gallery/product-1-image-20260705172735-c0297e.webp"
+        ],
+        "sku": "",
+        "quantity": 1000
+      },
+      {
+        "id": "custom-1783272387022-variant-1783272505128-3",
+        "title": "أحمر",
+        "options": {
+          "الاختيار": "أحمر"
+        },
+        "price": 70,
+        "compareAtPrice": null,
+        "available": true,
+        "image": "assets/optimized/products/gallery/product-1-image-20260705172741-9b13e8.webp",
+        "images": [
+          "assets/optimized/products/gallery/product-1-image-20260705172741-9b13e8.webp"
+        ],
+        "sku": "",
+        "quantity": 1000
+      }
+    ],
+    "mainCategory": "الصلبان والهدايا",
+    "subCategory": "هدايا اجتماعات",
+    "slug": "الوان-اليوطا"
   }
 ]
