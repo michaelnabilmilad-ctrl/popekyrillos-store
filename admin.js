@@ -341,16 +341,16 @@
 
     if (window.showOpenFilePicker) {
       try {
-        const [fileHandle] = await window.showOpenFilePicker({
+        const fileHandles = await window.showOpenFilePicker({
           types: [
             {
               description: "Images",
               accept: { "image/*": [".png", ".jpg", ".jpeg", ".webp", ".gif", ".avif"] }
             }
           ],
-          multiple: false
+          multiple: true
         });
-        await processProductImageFile(await fileHandle.getFile());
+        await processProductImageFiles(await Promise.all(fileHandles.map((fileHandle) => fileHandle.getFile())));
         return;
       } catch (error) {
         if (error.name === "AbortError") return;
@@ -358,21 +358,22 @@
       }
     }
 
+    getImageUploadInput().multiple = true;
     getImageUploadInput().click();
   }
 
   async function uploadProductImage(event) {
-    const file = event.target.files?.[0];
+    const files = Array.from(event.target.files || []);
     event.target.value = "";
 
-    if (!file) return;
+    if (!files.length) return;
     if (state.taxonomyImageUpload) {
       const uploadTarget = state.taxonomyImageUpload;
       state.taxonomyImageUpload = null;
-      await processTaxonomyImageFile(file, uploadTarget);
+      await processTaxonomyImageFile(files[0], uploadTarget);
       return;
     }
-    await processProductImageFile(file);
+    await processProductImageFiles(files);
   }
 
   async function publishTaxonomyToSite() {
@@ -452,6 +453,7 @@
     }
 
     state.taxonomyImageUpload = { mainId: category.id, subcategoryId: subcategory.id };
+    getImageUploadInput().multiple = false;
     getImageUploadInput().click();
   }
 
@@ -497,6 +499,22 @@
     } catch (error) {
       showToast(`تعذر رفع صورة القسم: ${friendlyUploadError(error.message)}`);
       console.error(error);
+    }
+  }
+
+  async function processProductImageFiles(files) {
+    const imageFiles = Array.from(files || []).filter(Boolean);
+    if (!imageFiles.length) return;
+
+    for (let index = 0; index < imageFiles.length; index += 1) {
+      if (imageFiles.length > 1) {
+        showToast(`جاري رفع الصورة ${index + 1} من ${imageFiles.length}...`);
+      }
+      await processProductImageFile(imageFiles[index]);
+    }
+
+    if (imageFiles.length > 1) {
+      showToast(`تم رفع ${imageFiles.length} صورة وإضافتها للمنتج. اضغط حفظ ونشر على الموقع لتحديث products.json.`);
     }
   }
 
@@ -553,6 +571,7 @@
     const input = document.createElement("input");
     input.type = "file";
     input.accept = "image/*";
+    input.multiple = true;
     input.hidden = true;
     input.dataset.imageUpload = "";
     document.body.append(input);
