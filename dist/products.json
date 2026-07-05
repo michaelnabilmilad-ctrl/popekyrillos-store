@@ -24,7 +24,8 @@
       "assets/optimized/products/gallery/product-1-image-20260705225949-f7ff38.webp",
       "assets/optimized/products/gallery/product-1-image-20260705225953-cc24fd.webp",
       "assets/optimized/products/gallery/product-1-image-20260705225957-b91fba.webp",
-      "assets/optimized/products/gallery/product-1-image-20260705230001-5400b2.webp"
+      "assets/optimized/products/gallery/product-1-image-20260705230001-5400b2.webp",
+      "assets/optimized/products/gallery/product-1-image-20260705230800-9d7e97.webp"
     ],
     "options": [
       {
@@ -40,7 +41,8 @@
           "بيج",
           "فضي",
           "لبني",
-          "نبيتي"
+          "نبيتي",
+          "أزرق"
         ]
       }
     ],
@@ -220,6 +222,22 @@
         ],
         "sku": "",
         "quantity": 1000
+      },
+      {
+        "id": "custom-1783272387022-variant-1783292858876-12",
+        "title": "أزرق",
+        "options": {
+          "الاختيار": "أزرق"
+        },
+        "price": 70,
+        "compareAtPrice": null,
+        "available": true,
+        "image": "assets/optimized/products/gallery/product-1-image-20260705230800-9d7e97.webp",
+        "images": [
+          "assets/optimized/products/gallery/product-1-image-20260705230800-9d7e97.webp"
+        ],
+        "sku": "",
+        "quantity": 1002
       }
     ],
     "mainCategory": "الصلبان والهدايا",
