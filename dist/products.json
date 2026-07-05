@@ -1047,7 +1047,7 @@
     "priceNote": "",
     "stock": "متاح",
     "badge": "يوتا",
-    "image": "assets/optimized/products/gallery/product-1-image-20260702224955-5f0f3a.webp",
+    "image": "assets/optimized/products/gallery/product-24-image-20260705133313-57551c.webp",
     "url": "https://popekyrillos.store/products/%D9%84%D9%88%D9%86-%D8%AA%D9%84%D9%88%D9%8A%D9%86-%D8%A7%D9%84%D9%8A%D9%88%D8%AA%D8%A7",
     "tags": [
       "يوتا",
@@ -1055,7 +1055,18 @@
       "يوطا"
     ],
     "images": [
-      "assets/optimized/products/gallery/product-1-image-20260702224955-5f0f3a.webp"
+      "assets/optimized/products/gallery/product-24-image-20260705133313-57551c.webp",
+      "assets/optimized/products/gallery/product-24-image-20260705133334-b7843a.webp",
+      "assets/optimized/products/gallery/product-24-image-20260705133340-ec6918.webp",
+      "assets/optimized/products/gallery/product-24-image-20260705133346-0509f1.webp",
+      "assets/optimized/products/gallery/product-24-image-20260705133351-6b1680.webp",
+      "assets/optimized/products/gallery/product-24-image-20260705133356-4c1f17.webp",
+      "assets/optimized/products/gallery/product-24-image-20260705133403-64dc41.webp",
+      "assets/optimized/products/gallery/product-24-image-20260705133409-509a55.webp",
+      "assets/optimized/products/gallery/product-24-image-20260705133415-0a8668.webp",
+      "assets/optimized/products/gallery/product-24-image-20260705133420-f54d61.webp",
+      "assets/optimized/products/gallery/product-24-image-20260705133424-805143.webp",
+      "assets/optimized/products/gallery/product-24-image-20260705133429-834591.webp"
     ],
     "options": [],
     "variants": [
@@ -1066,20 +1077,24 @@
         "price": 70,
         "compareAtPrice": null,
         "available": true,
-        "image": null,
-        "images": [],
+        "image": "assets/optimized/products/gallery/product-24-image-20260705133340-ec6918.webp",
+        "images": [
+          "assets/optimized/products/gallery/product-24-image-20260705133340-ec6918.webp"
+        ],
         "sku": "",
         "quantity": 1000
       },
       {
         "id": "custom-1783032232212-variant-1783032465055-2",
-        "title": "اختيار 2",
+        "title": "أبيض",
         "options": {},
         "price": 70,
         "compareAtPrice": null,
         "available": true,
-        "image": null,
-        "images": [],
+        "image": "assets/optimized/products/gallery/product-24-image-20260705133334-b7843a.webp",
+        "images": [
+          "assets/optimized/products/gallery/product-24-image-20260705133334-b7843a.webp"
+        ],
         "sku": "",
         "quantity": null
       }
