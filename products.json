@@ -17,24 +17,22 @@
       "assets/optimized/products/gallery/product-1-image-20260705172735-c0297e.webp",
       "assets/optimized/products/gallery/product-1-image-20260705172741-9b13e8.webp"
     ],
-    "options": [],
-    "variants": [
+    "options": [
       {
-        "id": "custom-1783272387022-variant-1783272387022-1",
-        "title": "الاختيار الافتراضي",
-        "options": {},
-        "price": 70,
-        "compareAtPrice": null,
-        "available": true,
-        "image": null,
-        "images": [],
-        "sku": "",
-        "quantity": null
-      },
+        "name": "الاختيار",
+        "values": [
+          "أبيض",
+          "أحمر"
+        ]
+      }
+    ],
+    "variants": [
       {
         "id": "custom-1783272387022-variant-1783272480728-2",
         "title": "أبيض",
-        "options": {},
+        "options": {
+          "الاختيار": "أبيض"
+        },
         "price": 70,
         "compareAtPrice": null,
         "available": true,
@@ -48,7 +46,9 @@
       {
         "id": "custom-1783272387022-variant-1783272505128-3",
         "title": "أحمر",
-        "options": {},
+        "options": {
+          "الاختيار": "أحمر"
+        },
         "price": 70,
         "compareAtPrice": null,
         "available": true,
