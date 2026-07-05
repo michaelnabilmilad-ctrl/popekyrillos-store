@@ -108,6 +108,7 @@ const state = {
     variantId: "",
     selectedOptions: {},
     image: "",
+    thumbScrollLeft: 0,
     quantity: 1
   }
 };
@@ -2703,6 +2704,8 @@ function isOptionValueEnabled(product, optionName, value) {
 function renderProductModal() {
   const product = getProduct(state.modal.productId);
   if (!product) return;
+  const currentThumbs = productModalBody.querySelector(".modal-thumbs");
+  const preservedThumbScrollLeft = currentThumbs ? currentThumbs.scrollLeft : state.modal.thumbScrollLeft || 0;
 
   const variant = selectedModalVariant(product);
   const images = getProductImages(product);
@@ -2907,6 +2910,14 @@ function renderProductModal() {
       </button>
     </div>
   `;
+  const nextThumbs = productModalBody.querySelector(".modal-thumbs");
+  if (nextThumbs) {
+    nextThumbs.scrollLeft = preservedThumbScrollLeft;
+    state.modal.thumbScrollLeft = preservedThumbScrollLeft;
+    requestAnimationFrame(() => {
+      nextThumbs.scrollLeft = preservedThumbScrollLeft;
+    });
+  }
 }
 
 function openProductModal(productId, { updateUrl = true, variantId = "" } = {}) {
@@ -2918,6 +2929,7 @@ function openProductModal(productId, { updateUrl = true, variantId = "" } = {}) 
   state.modal.variantId = variant?.id || "";
   state.modal.selectedOptions = { ...(variant?.options || {}) };
   state.modal.image = variant?.image || getProductImages(product)[0] || "";
+  state.modal.thumbScrollLeft = 0;
   state.modal.quantity = 1;
   renderProductModal();
   productModal.setAttribute("aria-hidden", "false");
@@ -4569,6 +4581,7 @@ productModal.addEventListener("keydown", (event) => {
 productModal.addEventListener("pointerover", (event) => {
   if (event.pointerType === "touch") return;
   const imageButton = event.target.closest("[data-modal-image]");
+  if (imageButton?.closest(".modal-thumbs")) return;
   if (imageButton?.contains(event.relatedTarget)) return;
   if (imageButton) setModalGalleryImage(imageButton);
 });
@@ -4577,6 +4590,12 @@ productModal.addEventListener("focusin", (event) => {
   const imageButton = event.target.closest("[data-modal-image]");
   if (imageButton) setModalGalleryImage(imageButton);
 });
+
+productModal.addEventListener("scroll", (event) => {
+  const thumbs = event.target.closest?.(".modal-thumbs");
+  if (!thumbs) return;
+  state.modal.thumbScrollLeft = thumbs.scrollLeft;
+}, true);
 
 productModal.addEventListener("pointerdown", (event) => {
   const frame = event.target.closest(".modal-photo-frame");
