@@ -43,7 +43,7 @@
               {
                   "id": "custom-subcategory-1783254888189",
                   "name": "شغل شحن",
-                  "subcategoryImage": "assets/optimized/hero-products-collage.webp"
+                  "subcategoryImage": "assets/optimized/products/gallery/taxonomy-custom-subcategory-17832548-image-20260705181059-455f25.webp"
               }
           ]
       },
