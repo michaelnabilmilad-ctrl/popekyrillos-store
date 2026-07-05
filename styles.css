@@ -1124,6 +1124,14 @@ body[data-lang="en"] .category-art {
   margin: 0 auto 24px;
 }
 
+.subcategory-card-grid[data-collapsible="true"][data-expanded="false"] {
+  grid-template-columns: repeat(5, minmax(120px, 1fr));
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  scrollbar-width: thin;
+  padding-bottom: 4px;
+}
+
 .subcategory-card-grid[hidden] {
   display: none;
 }
@@ -1170,6 +1178,38 @@ body[data-lang="en"] .category-art {
 
 .subcategory-card-all .subcategory-card-body strong {
   color: var(--teal-dark);
+}
+
+.subcategory-card-more {
+  align-content: center;
+  min-height: 148px;
+  border-style: dashed;
+  background:
+    radial-gradient(circle at 26% 18%, rgba(255, 255, 255, 0.92), transparent 34%),
+    linear-gradient(135deg, rgba(238, 246, 243, 0.98), rgba(255, 253, 247, 0.98));
+}
+
+.subcategory-card-more .subcategory-card-body {
+  place-items: center;
+  text-align: center;
+}
+
+.subcategory-card-more .subcategory-card-body strong {
+  color: var(--teal-dark);
+}
+
+.subcategory-card-more-icon {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  margin: 10px auto 2px;
+  border-radius: 999px;
+  background: var(--navy);
+  color: #fffaf1;
+  font-size: 28px;
+  font-weight: 900;
+  line-height: 1;
 }
 
 .subcategory-card-image {
@@ -3927,6 +3967,10 @@ body.account-open .scrim {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
+  .subcategory-card-grid[data-collapsible="true"][data-expanded="false"] {
+    grid-template-columns: repeat(5, minmax(118px, 1fr));
+  }
+
   .category-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
@@ -3974,8 +4018,22 @@ body.account-open .scrim {
     margin-bottom: 18px;
   }
 
+  .subcategory-card-grid[data-collapsible="true"][data-expanded="false"] {
+    grid-template-columns: repeat(5, minmax(108px, 1fr));
+  }
+
   .subcategory-card {
     padding: 8px;
+  }
+
+  .subcategory-card-more {
+    min-height: 126px;
+  }
+
+  .subcategory-card-more-icon {
+    width: 34px;
+    height: 34px;
+    font-size: 23px;
   }
 
   .subcategory-card-image img {

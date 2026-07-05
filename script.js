@@ -80,6 +80,8 @@ const state = {
   priceFilter: "all",
   sortFilter: "default",
   visibleProductCount: productBatchSize,
+  subcategoryCardsExpanded: false,
+  subcategoryCardsCategory: "",
   language: localStorage.getItem(languageStorageKey) === "en" ? "en" : "ar",
   cart: new Map(),
   paymentMethod: "instapay",
@@ -232,6 +234,8 @@ const translations = {
     mainAll: "كل الأقسام الرئيسية",
     filterLabelLabel: "القسم الفرعي",
     labelAll: "كل الأقسام الفرعية",
+    subcategoryMore: "المزيد",
+    subcategoryLess: "إخفاء",
     filterPriceLabel: "السعر",
     filterSortLabel: "الترتيب",
     resetFilters: "مسح الفلاتر",
@@ -488,6 +492,8 @@ const translations = {
     mainAll: "All main categories",
     filterLabelLabel: "Subcategory",
     labelAll: "All subcategories",
+    subcategoryMore: "More",
+    subcategoryLess: "Show less",
     filterPriceLabel: "Price",
     filterSortLabel: "Sort",
     resetFilters: "Clear filters",
@@ -1167,8 +1173,25 @@ function renderSubcategoryCards() {
     }))
   ].filter((card) => card.id === "" || card.count > 0);
 
-  subcategoryCards.hidden = false;
-  subcategoryCards.innerHTML = cards.map((card) => `
+  if (state.subcategoryCardsCategory !== categoryId) {
+    state.subcategoryCardsCategory = categoryId;
+    state.subcategoryCardsExpanded = false;
+  }
+
+  const collapsedCardCount = 4;
+  const needsMoreCard = cards.length > collapsedCardCount;
+  let visibleCards = cards;
+  if (needsMoreCard && !state.subcategoryCardsExpanded) {
+    visibleCards = cards.slice(0, collapsedCardCount);
+    const activeCard = activeLabel ? cards.find((card) => card.id === activeLabel) : null;
+    if (activeCard && !visibleCards.some((card) => card.id === activeCard.id)) {
+      visibleCards = [...visibleCards.slice(0, collapsedCardCount - 1), activeCard];
+    }
+  }
+  const visibleIds = new Set(visibleCards.map((card) => card.id));
+  const hiddenCount = cards.filter((card) => !visibleIds.has(card.id)).length;
+
+  const cardHtml = (card) => `
     <button
       class="subcategory-card ${card.id ? "" : "subcategory-card-all"} ${card.active ? "active" : ""}"
       type="button"
@@ -1185,7 +1208,27 @@ function renderSubcategoryCards() {
         <small>${escapeHtml(displayText(formatter.format(card.count)))} ${isEnglish() ? "products" : "منتج"}</small>
       </span>
     </button>
-  `).join("");
+  `;
+
+  const moreCardHtml = needsMoreCard ? `
+    <button
+      class="subcategory-card subcategory-card-more"
+      type="button"
+      data-subcategory-more="${state.subcategoryCardsExpanded ? "less" : "more"}"
+      aria-expanded="${state.subcategoryCardsExpanded ? "true" : "false"}"
+    >
+      <span class="subcategory-card-more-icon" aria-hidden="true">${state.subcategoryCardsExpanded ? "−" : "+"}</span>
+      <span class="subcategory-card-body">
+        <strong>${escapeHtml(t(state.subcategoryCardsExpanded ? "subcategoryLess" : "subcategoryMore"))}</strong>
+        <small>${state.subcategoryCardsExpanded ? escapeHtml(t("labelAll")) : `${escapeHtml(displayText(formatter.format(hiddenCount)))} ${isEnglish() ? "more" : "قسم إضافي"}`}</small>
+      </span>
+    </button>
+  ` : "";
+
+  subcategoryCards.hidden = false;
+  subcategoryCards.dataset.collapsible = needsMoreCard ? "true" : "false";
+  subcategoryCards.dataset.expanded = state.subcategoryCardsExpanded ? "true" : "false";
+  subcategoryCards.innerHTML = `${visibleCards.map(cardHtml).join("")}${moreCardHtml}`;
 }
 
 function updateFilterButtons() {
@@ -4179,8 +4222,16 @@ labelFilterSelect?.addEventListener("change", (event) => {
 });
 
 subcategoryCards?.addEventListener("click", (event) => {
+  const moreButton = event.target.closest("[data-subcategory-more]");
+  if (moreButton) {
+    state.subcategoryCardsExpanded = moreButton.dataset.subcategoryMore !== "less";
+    renderSubcategoryCards();
+    return;
+  }
+
   const card = event.target.closest("[data-subcategory-card]");
   if (!card) return;
+  state.subcategoryCardsExpanded = false;
   applyCatalogFilter(state.filter || "all", card.dataset.subcategoryCard || "", { scrollTarget: "products" });
 });
 
