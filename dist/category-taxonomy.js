@@ -28,7 +28,7 @@
               {
                   "id": "relic-boxes",
                   "name": "ذخائر وعلب",
-                  "subcategoryImage": "assets/optimized/products/reliquary-boxes.webp"
+                  "subcategoryImage": "assets/optimized/products/gallery/taxonomy-relic-boxes-image-20260705132616-bbdc0a.webp"
               },
               {
                   "id": "stands",
@@ -39,6 +39,11 @@
                   "id": "service-tools",
                   "name": "أدوات خدمة",
                   "subcategoryImage": "assets/optimized/products/acrylic-reliquary.webp"
+              },
+              {
+                  "id": "custom-subcategory-1783254888189",
+                  "name": "شغل شحن",
+                  "subcategoryImage": "assets/optimized/hero-products-collage.webp"
               }
           ]
       },
