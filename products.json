@@ -1112,7 +1112,8 @@
       "أيقونات وهدايا"
     ],
     "images": [
-      "assets/optimized/products/gallery/product-1-7-20260702155122-9f46d4.webp"
+      "assets/optimized/products/gallery/product-1-7-20260702155122-9f46d4.webp",
+      "assets/optimized/products/gallery/product-25-71-20260705044317-41c7bc.webp"
     ],
     "options": [],
     "variants": [
@@ -1129,8 +1130,8 @@
         "quantity": 1000
       }
     ],
-    "mainCategory": "الأيقونات والبراويز",
-    "subCategory": "أيقونات صغيرة",
+    "mainCategory": "الصلبان والهدايا",
+    "subCategory": "صلبان حائط",
     "slug": "صليب-يوتا-مادليه-موديل-7"
   },
   {
