@@ -1,5 +1,51 @@
 [
   {
+    "id": "custom-1783845396877-copy-1783846824668-copy-1783847655782-copy-1783847802907",
+    "name": "شورية نحاس كبيرة",
+    "category": "brass",
+    "label": "نحاسيات",
+    "description": "شورية كنسية مصنوعة من النحاس بتصميم قبطي فاخر وتشطيب ذهبي لامع، مزينة بنقوش بارزة وصلبان ملونة تضيف لها شكلًا مميزًا وأنيقًا. مزودة بسلاسل معدنية قوية وغطاء متحرك لسهولة وضع الفحم والبخور أثناء الاستخدام.\n\nتجمع الشورية بين الطابع الكنسي التقليدي والصناعة المصرية، وتناسب الاستخدام داخل الكنيسة أو المنزل، كما تُعد هدية قيمة للمناسبات الروحية والكنسية.\n\nالمميزات:\n\nمصنوعة من النحاس.\nصناعة مصرية.\nتشطيب ذهبي لامع.\nزخارف ونقوش كنسية بارزة.\nمزودة بصلبان وتفاصيل ملونة.\nسلاسل متينة لسهولة الحمل والاستخدام.\nغطاء متحرك لوضع الفحم والبخور.\n\nالعناية بالمنتج:\nتُنظف بقطعة قماش ناعمة وجافة، مع تجنب المنظفات القوية أو الأدوات الخشنة للحفاظ على اللمعان والتفاصيل الزخرفية.",
+    "price": 2700,
+    "priceNote": "",
+    "stock": "متاح",
+    "badge": "شورية",
+    "isBestSeller": false,
+    "image": "assets/optimized/products/gallery/product-1-1-20260712091730-31cc54.webp",
+    "url": "https://popekyrillos.store/?product=custom-1783845396877-copy-1783846824668-copy-1783847655782-copy-1783847802907",
+    "tags": [
+      "نحاس",
+      "شورية",
+      "بخور",
+      "مبخرة",
+      "مجمرة",
+      "فحم"
+    ],
+    "images": [
+      "assets/optimized/products/gallery/product-1-1-20260712091730-31cc54.webp",
+      "assets/optimized/products/gallery/product-1-2-20260712091735-daeaca.webp",
+      "assets/optimized/products/gallery/product-1-3-20260712091740-79d450.webp",
+      "assets/optimized/products/gallery/product-1-4-20260712091745-18b98b.webp",
+      "assets/optimized/products/gallery/product-1-5-20260712091750-f93f90.webp"
+    ],
+    "options": [],
+    "variants": [
+      {
+        "id": "custom-1783845396877-copy-1783846824668-copy-1783847655782-copy-1783847802907-variant-1",
+        "title": "الاختيار الافتراضي",
+        "options": {},
+        "price": 2700,
+        "compareAtPrice": null,
+        "available": true,
+        "image": null,
+        "images": [],
+        "sku": "",
+        "quantity": null
+      }
+    ],
+    "mainCategory": "أدوات المذبح",
+    "subCategory": "شورية ومباخر"
+  },
+  {
     "id": "custom-1783845396877-copy-1783846824668-copy-1783847655782",
     "name": "شورية نحاس وسط",
     "category": "brass",
