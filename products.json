@@ -1,5 +1,50 @@
 [
   {
+    "id": "custom-1783845396877-copy-1783846824668-copy-1783847655782",
+    "name": "شورية نحاس وسط",
+    "category": "brass",
+    "label": "نحاسيات",
+    "description": "شورية كنسية مصنوعة من النحاس بتصميم قبطي فاخر وتشطيب ذهبي لامع، مزينة بنقوش بارزة وصلبان ملونة تضيف لها شكلًا مميزًا وأنيقًا. مزودة بسلاسل معدنية قوية وغطاء متحرك لسهولة وضع الفحم والبخور أثناء الاستخدام.\n\nتجمع الشورية بين الطابع الكنسي التقليدي والصناعة المصرية، وتناسب الاستخدام داخل الكنيسة أو المنزل، كما تُعد هدية قيمة للمناسبات الروحية والكنسية.\n\nالمميزات:\n\nمصنوعة من النحاس.\nصناعة مصرية.\nتشطيب ذهبي لامع.\nزخارف ونقوش كنسية بارزة.\nمزودة بصلبان وتفاصيل ملونة.\nسلاسل متينة لسهولة الحمل والاستخدام.\nغطاء متحرك لوضع الفحم والبخور.\n\nالعناية بالمنتج:\nتُنظف بقطعة قماش ناعمة وجافة، مع تجنب المنظفات القوية أو الأدوات الخشنة للحفاظ على اللمعان والتفاصيل الزخرفية.",
+    "price": 2100,
+    "priceNote": "",
+    "stock": "متاح",
+    "badge": "شورية",
+    "isBestSeller": false,
+    "image": "assets/optimized/products/gallery/product-1-1-20260712091530-47ffa3.webp",
+    "url": "https://popekyrillos.store/?product=custom-1783845396877-copy-1783846824668-copy-1783847655782",
+    "tags": [
+      "نحاس",
+      "شورية",
+      "بخور",
+      "مبخرة",
+      "مجمرة",
+      "فحم"
+    ],
+    "images": [
+      "assets/optimized/products/gallery/product-1-1-20260712091530-47ffa3.webp",
+      "assets/optimized/products/gallery/product-1-2-20260712091535-f0e981.webp",
+      "assets/optimized/products/gallery/product-1-3-20260712091540-c4b286.webp",
+      "assets/optimized/products/gallery/product-1-4-20260712091546-6b90d5.webp"
+    ],
+    "options": [],
+    "variants": [
+      {
+        "id": "custom-1783845396877-copy-1783846824668-copy-1783847655782-variant-1",
+        "title": "الاختيار الافتراضي",
+        "options": {},
+        "price": 2100,
+        "compareAtPrice": null,
+        "available": true,
+        "image": null,
+        "images": [],
+        "sku": "",
+        "quantity": null
+      }
+    ],
+    "mainCategory": "أدوات المذبح",
+    "subCategory": "شورية ومباخر"
+  },
+  {
     "id": "custom-1783845396877-copy-1783846824668",
     "name": "شورية ستانلس وسط",
     "category": "brass",
