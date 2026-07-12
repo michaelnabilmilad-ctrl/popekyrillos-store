@@ -1,5 +1,50 @@
 [
   {
+    "id": "custom-1783845396877",
+    "name": "شورية ستانلس كبيرة",
+    "category": "brass",
+    "label": "نحاسيات",
+    "description": "شورية أنيقة مصنوعة من الستانلس ستيل اللامع، بتصميم كنسي مميز يجمع بين الشكل التقليدي والمتانة. مزودة بغطاء متحرك وسلاسل قوية لتسهيل الحمل والاستخدام أثناء الصلاة والتبخير.\n\nتتميز بسطح فضي لامع سهل التنظيف ومقاوم للصدأ، ما يجعلها مناسبة للاستخدام في الكنيسة أو المنزل، كما تصلح كهدية قيمة للمناسبات الكنسية.\n\nالمميزات:\n\nمصنوعة من الستانلس ستيل.\nلون فضي لامع.\nسلاسل معدنية متينة.\nغطاء متحرك لسهولة وضع الفحم والبخور.\nتصميم كنسي أنيق وعملي.\nسهلة التنظيف والحفاظ عليها.\n\nالعناية بالمنتج:\nتُنظف بقطعة قماش ناعمة، ويُفضل تجنب المنظفات الخشنة للحفاظ على لمعان الستانلس.",
+    "price": 960,
+    "priceNote": "",
+    "stock": "متاح",
+    "badge": "شورية",
+    "isBestSeller": false,
+    "image": "assets/optimized/products/gallery/product-1-1-20260712085718-f59b28.webp",
+    "url": "https://popekyrillos.store/?product=custom-1783845396877",
+    "tags": [
+      "ستانلس",
+      "شورية",
+      "بخور",
+      "مبخرة",
+      "مجمرة",
+      "فحم"
+    ],
+    "images": [
+      "assets/optimized/products/gallery/product-1-1-20260712085718-f59b28.webp",
+      "assets/optimized/products/gallery/product-1-2-20260712085734-2a7467.webp",
+      "assets/optimized/products/gallery/product-1-3-20260712085740-cc1e54.webp",
+      "assets/optimized/products/gallery/product-1-4-20260712085745-ac5662.webp"
+    ],
+    "options": [],
+    "variants": [
+      {
+        "id": "custom-1783845396877-variant-1783845396877-1",
+        "title": "الاختيار الافتراضي",
+        "options": {},
+        "price": 960,
+        "compareAtPrice": null,
+        "available": true,
+        "image": null,
+        "images": [],
+        "sku": "",
+        "quantity": null
+      }
+    ],
+    "mainCategory": "أدوات المذبح",
+    "subCategory": "شورية ومباخر"
+  },
+  {
     "id": "custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642-copy-1783007465321-copy-1783296428133-copy-1783296505870-copy-1783296547191-copy-1783296594080-copy-1783296672538-copy-1783296711318",
     "name": "صليب يوتا مادلية موديل 13",
     "category": "icons",
@@ -43,7 +88,8 @@
     ],
     "mainCategory": "الصلبان والهدايا",
     "subCategory": "ميداليات",
-    "slug": "صليب-يوتا-مادليه-موديل-7"
+    "slug": "صليب-يوتا-مادليه-موديل-7",
+    "isBestSeller": false
   },
   {
     "id": "custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642-copy-1783007465321-copy-1783296428133-copy-1783296505870-copy-1783296547191-copy-1783296594080-copy-1783296672538",
@@ -89,7 +135,8 @@
     ],
     "mainCategory": "الصلبان والهدايا",
     "subCategory": "ميداليات",
-    "slug": "صليب-يوتا-مادليه-موديل-7"
+    "slug": "صليب-يوتا-مادليه-موديل-7",
+    "isBestSeller": false
   },
   {
     "id": "custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642-copy-1783007465321-copy-1783296428133-copy-1783296505870-copy-1783296547191-copy-1783296594080",
@@ -135,7 +182,8 @@
     ],
     "mainCategory": "الصلبان والهدايا",
     "subCategory": "ميداليات",
-    "slug": "صليب-يوتا-مادليه-موديل-7"
+    "slug": "صليب-يوتا-مادليه-موديل-7",
+    "isBestSeller": false
   },
   {
     "id": "custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642-copy-1783007465321-copy-1783296428133-copy-1783296505870-copy-1783296547191",
@@ -181,7 +229,8 @@
     ],
     "mainCategory": "الصلبان والهدايا",
     "subCategory": "ميداليات",
-    "slug": "صليب-يوتا-مادليه-موديل-7"
+    "slug": "صليب-يوتا-مادليه-موديل-7",
+    "isBestSeller": false
   },
   {
     "id": "custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642-copy-1783007465321-copy-1783296428133-copy-1783296505870",
@@ -227,7 +276,8 @@
     ],
     "mainCategory": "الصلبان والهدايا",
     "subCategory": "ميداليات",
-    "slug": "صليب-يوتا-مادليه-موديل-7"
+    "slug": "صليب-يوتا-مادليه-موديل-7",
+    "isBestSeller": false
   },
   {
     "id": "custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642-copy-1783007465321-copy-1783296428133",
@@ -273,7 +323,8 @@
     ],
     "mainCategory": "الصلبان والهدايا",
     "subCategory": "ميداليات",
-    "slug": "صليب-يوتا-مادليه-موديل-7"
+    "slug": "صليب-يوتا-مادليه-موديل-7",
+    "isBestSeller": false
   },
   {
     "id": "custom-1783272387022",
@@ -517,7 +568,8 @@
       }
     ],
     "mainCategory": "الصلبان والهدايا",
-    "subCategory": "هدايا اجتماعات"
+    "subCategory": "هدايا اجتماعات",
+    "isBestSeller": false
   },
   {
     "id": "atb3ho-10618130956453",
@@ -559,7 +611,8 @@
     "mainCategory": "منتجات أتبعه",
     "subCategory": "شنط ومستلزمات روحية",
     "updatedAt": "2026-07-04T18:38:24+03:00",
-    "slug": "شنطه-اتبعه"
+    "slug": "شنطه-اتبعه",
+    "isBestSeller": false
   },
   {
     "id": "atb3ho-10618127974565",
@@ -601,7 +654,8 @@
     "mainCategory": "منتجات أتبعه",
     "subCategory": "شنط ومستلزمات روحية",
     "updatedAt": "2026-07-04T18:38:24+03:00",
-    "slug": "شنطه-اتبعه-3ho-10618127974565"
+    "slug": "شنطه-اتبعه-3ho-10618127974565",
+    "isBestSeller": false
   },
   {
     "id": "atb3ho-10558435197093",
@@ -690,7 +744,8 @@
     "mainCategory": "منتجات أتبعه",
     "subCategory": "شنط ومستلزمات روحية",
     "updatedAt": "2026-07-04T18:38:24+03:00",
-    "slug": "كافر-كتاب-مقدس-وشنطه-مستلزمات-روحيه"
+    "slug": "كافر-كتاب-مقدس-وشنطه-مستلزمات-روحيه",
+    "isBestSeller": false
   },
   {
     "id": "atb3ho-10555319877797",
@@ -732,7 +787,8 @@
     "mainCategory": "منتجات أتبعه",
     "subCategory": "كروت",
     "updatedAt": "2026-07-04T18:38:24+03:00",
-    "slug": "تحدي-التغيير"
+    "slug": "تحدي-التغيير",
+    "isBestSeller": false
   },
   {
     "id": "atb3ho-10547044876453",
@@ -774,7 +830,8 @@
     "mainCategory": "منتجات أتبعه",
     "subCategory": "بوك مارك",
     "updatedAt": "2026-07-04T18:38:24+03:00",
-    "slug": "٥-بوك-مارك-٥-free"
+    "slug": "٥-بوك-مارك-٥-free",
+    "isBestSeller": false
   },
   {
     "id": "atb3ho-10547041829029",
@@ -816,7 +873,8 @@
     "mainCategory": "منتجات أتبعه",
     "subCategory": "جورنالينج",
     "updatedAt": "2026-07-04T18:38:24+03:00",
-    "slug": "جورنالينج-اتبعه-٣٦٥-يوم"
+    "slug": "جورنالينج-اتبعه-٣٦٥-يوم",
+    "isBestSeller": false
   },
   {
     "id": "atb3ho-10545390780581",
@@ -858,7 +916,8 @@
     "mainCategory": "منتجات أتبعه",
     "subCategory": "بوك مارك",
     "updatedAt": "2026-07-04T18:38:24+03:00",
-    "slug": "بوك-مارك"
+    "slug": "بوك-مارك",
+    "isBestSeller": false
   },
   {
     "id": "atb3ho-10545390354597",
@@ -900,7 +959,8 @@
     "mainCategory": "منتجات أتبعه",
     "subCategory": "بوك مارك",
     "updatedAt": "2026-07-04T18:38:24+03:00",
-    "slug": "بوك-مارك-داود"
+    "slug": "بوك-مارك-داود",
+    "isBestSeller": false
   },
   {
     "id": "atb3ho-10545389863077",
@@ -942,7 +1002,8 @@
     "mainCategory": "منتجات أتبعه",
     "subCategory": "بوك مارك",
     "updatedAt": "2026-07-04T18:38:24+03:00",
-    "slug": "بوك-مارك-بالاسم"
+    "slug": "بوك-مارك-بالاسم",
+    "isBestSeller": false
   },
   {
     "id": "atb3ho-10545388912805",
@@ -984,7 +1045,8 @@
     "mainCategory": "منتجات أتبعه",
     "subCategory": "بوك مارك",
     "updatedAt": "2026-07-04T18:38:24+03:00",
-    "slug": "بوك-مارك-بالاسم-اتبعه"
+    "slug": "بوك-مارك-بالاسم-اتبعه",
+    "isBestSeller": false
   },
   {
     "id": "atb3ho-10545388191909",
@@ -1026,7 +1088,8 @@
     "mainCategory": "منتجات أتبعه",
     "subCategory": "بوك مارك",
     "updatedAt": "2026-07-04T18:38:24+03:00",
-    "slug": "بوك-مارك-بالاسم-3ho-10545388191909"
+    "slug": "بوك-مارك-بالاسم-3ho-10545388191909",
+    "isBestSeller": false
   },
   {
     "id": "atb3ho-10545386553509",
@@ -1068,7 +1131,8 @@
     "mainCategory": "منتجات أتبعه",
     "subCategory": "بوك مارك",
     "updatedAt": "2026-07-04T18:38:24+03:00",
-    "slug": "بوك-مارك-مزمور-١١٧"
+    "slug": "بوك-مارك-مزمور-١١٧",
+    "isBestSeller": false
   },
   {
     "id": "atb3ho-10545385636005",
@@ -1110,7 +1174,8 @@
     "mainCategory": "منتجات أتبعه",
     "subCategory": "بوك مارك",
     "updatedAt": "2026-07-04T18:38:24+03:00",
-    "slug": "بوك-مارك-رحلتك"
+    "slug": "بوك-مارك-رحلتك",
+    "isBestSeller": false
   },
   {
     "id": "atb3ho-10545382686885",
@@ -1152,7 +1217,8 @@
     "mainCategory": "منتجات أتبعه",
     "subCategory": "بوك مارك",
     "updatedAt": "2026-07-04T18:38:24+03:00",
-    "slug": "بوك-مارك-الصليب"
+    "slug": "بوك-مارك-الصليب",
+    "isBestSeller": false
   },
   {
     "id": "atb3ho-10545381474469",
@@ -1194,7 +1260,8 @@
     "mainCategory": "منتجات أتبعه",
     "subCategory": "بوك مارك",
     "updatedAt": "2026-07-04T18:38:24+03:00",
-    "slug": "بوك-مارك-اتبعه"
+    "slug": "بوك-مارك-اتبعه",
+    "isBestSeller": false
   },
   {
     "id": "atb3ho-10545380884645",
@@ -1236,7 +1303,8 @@
     "mainCategory": "منتجات أتبعه",
     "subCategory": "بوك مارك",
     "updatedAt": "2026-07-04T18:38:24+03:00",
-    "slug": "بوك-مارك-صلاه-يسوع"
+    "slug": "بوك-مارك-صلاه-يسوع",
+    "isBestSeller": false
   },
   {
     "id": "atb3ho-10545379934373",
@@ -1278,7 +1346,8 @@
     "mainCategory": "منتجات أتبعه",
     "subCategory": "بوك مارك",
     "updatedAt": "2026-07-04T18:38:24+03:00",
-    "slug": "بوك-مارك-بابا-يسوع"
+    "slug": "بوك-مارك-بابا-يسوع",
+    "isBestSeller": false
   },
   {
     "id": "atb3ho-10545379836069",
@@ -1320,7 +1389,8 @@
     "mainCategory": "منتجات أتبعه",
     "subCategory": "نوت بوك",
     "updatedAt": "2026-07-04T18:38:24+03:00",
-    "slug": "نوت-بوك-اتبعه-في-صلاتي-اجنده"
+    "slug": "نوت-بوك-اتبعه-في-صلاتي-اجنده",
+    "isBestSeller": false
   },
   {
     "id": "atb3ho-10545378001061",
@@ -1362,7 +1432,8 @@
     "mainCategory": "منتجات أتبعه",
     "subCategory": "نوت بوك",
     "updatedAt": "2026-07-04T18:38:24+03:00",
-    "slug": "نوت-بوك-اتبعه-في-صلاه-سلك"
+    "slug": "نوت-بوك-اتبعه-في-صلاه-سلك",
+    "isBestSeller": false
   },
   {
     "id": "atb3ho-10545377149093",
@@ -1404,7 +1475,8 @@
     "mainCategory": "منتجات أتبعه",
     "subCategory": "كروت",
     "updatedAt": "2026-07-04T18:38:24+03:00",
-    "slug": "اتبعه-في-تحدياتي"
+    "slug": "اتبعه-في-تحدياتي",
+    "isBestSeller": false
   },
   {
     "id": "atb3ho-10545374298277",
@@ -1446,7 +1518,8 @@
     "mainCategory": "منتجات أتبعه",
     "subCategory": "باكيدج",
     "updatedAt": "2026-07-04T18:38:24+03:00",
-    "slug": "باكدج-اتبعه"
+    "slug": "باكدج-اتبعه",
+    "isBestSeller": false
   },
   {
     "id": "atb3ho-10545373839525",
@@ -1488,7 +1561,8 @@
     "mainCategory": "منتجات أتبعه",
     "subCategory": "كروت",
     "updatedAt": "2026-07-04T18:38:24+03:00",
-    "slug": "كارت-منظم-لمواعيد-سر-الاعتراف"
+    "slug": "كارت-منظم-لمواعيد-سر-الاعتراف",
+    "isBestSeller": false
   },
   {
     "id": "atb3ho-10545371218085",
@@ -1555,7 +1629,8 @@
     "mainCategory": "منتجات أتبعه",
     "subCategory": "جورنالينج",
     "updatedAt": "2026-07-04T18:38:24+03:00",
-    "slug": "اتبعه-رحله-٢١٤-يوم"
+    "slug": "اتبعه-رحله-٢١٤-يوم",
+    "isBestSeller": false
   },
   {
     "id": "custom-1783032232212",
@@ -1633,7 +1708,8 @@
     ],
     "mainCategory": "الصلبان والهدايا",
     "subCategory": "هدايا اجتماعات",
-    "slug": "لون-تلوين-اليوتا"
+    "slug": "لون-تلوين-اليوتا",
+    "isBestSeller": false
   },
   {
     "id": "custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642-copy-1783007465321",
@@ -1679,7 +1755,8 @@
     ],
     "mainCategory": "الصلبان والهدايا",
     "subCategory": "ميداليات",
-    "slug": "صليب-يوتا-مادليه-موديل-7"
+    "slug": "صليب-يوتا-مادليه-موديل-7",
+    "isBestSeller": false
   },
   {
     "id": "custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642",
@@ -1725,7 +1802,8 @@
     ],
     "mainCategory": "الصلبان والهدايا",
     "subCategory": "ميداليات",
-    "slug": "صليب-يوتا-مادليه-موديل-6"
+    "slug": "صليب-يوتا-مادليه-موديل-6",
+    "isBestSeller": false
   },
   {
     "id": "custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119",
@@ -1771,7 +1849,8 @@
     ],
     "mainCategory": "الصلبان والهدايا",
     "subCategory": "ميداليات",
-    "slug": "صليب-يوتا-مادليه-موديل-5"
+    "slug": "صليب-يوتا-مادليه-موديل-5",
+    "isBestSeller": false
   },
   {
     "id": "custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699",
@@ -1817,7 +1896,8 @@
     ],
     "mainCategory": "الصلبان والهدايا",
     "subCategory": "ميداليات",
-    "slug": "صليب-يوتا-مادليه-موديل-4"
+    "slug": "صليب-يوتا-مادليه-موديل-4",
+    "isBestSeller": false
   },
   {
     "id": "custom-1782980654479-copy-1782982056347-copy-1782986984554",
@@ -1863,7 +1943,8 @@
     ],
     "mainCategory": "الصلبان والهدايا",
     "subCategory": "ميداليات",
-    "slug": "صليب-يوتا-مادليه-موديل-3"
+    "slug": "صليب-يوتا-مادليه-موديل-3",
+    "isBestSeller": false
   },
   {
     "id": "custom-1782980654479-copy-1782982056347",
@@ -1909,7 +1990,8 @@
     ],
     "mainCategory": "الصلبان والهدايا",
     "subCategory": "ميداليات",
-    "slug": "صليب-يوتا-مادليه-موديل-2"
+    "slug": "صليب-يوتا-مادليه-موديل-2",
+    "isBestSeller": false
   },
   {
     "id": "custom-1782980654479",
@@ -1955,7 +2037,8 @@
     ],
     "mainCategory": "الصلبان والهدايا",
     "subCategory": "ميداليات",
-    "slug": "صليب-يوتا-مادليه-موديل-1"
+    "slug": "صليب-يوتا-مادليه-موديل-1",
+    "isBestSeller": false
   },
   {
     "id": "custom-1782306615168-copy-1782306883366-copy-1782307173548-copy-1782307256776-copy-1782307341493-copy-1782310276272-copy-1782310382795-copy-1782310383710",
@@ -2002,7 +2085,8 @@
     ],
     "mainCategory": "الكتب والطقوس",
     "subCategory": "قطمارس",
-    "slug": "قطمارس-البصخه-عربي-دير-الشهيد-العظيم-مارمينا-العجايبي-بمريوط"
+    "slug": "قطمارس-البصخه-عربي-دير-الشهيد-العظيم-مارمينا-العجايبي-بمريوط",
+    "isBestSeller": false
   },
   {
     "id": "custom-1782306615168-copy-1782306883366-copy-1782307173548-copy-1782307256776-copy-1782307341493-copy-1782310276272-copy-1782310382795",
@@ -2047,7 +2131,8 @@
     ],
     "mainCategory": "الكتب والطقوس",
     "subCategory": "قطمارس",
-    "slug": "قطمارس-الصوم-الكبير-عربي-دير-الشهيد-العظيم-مارمينا-العجايبي-بمريوط-نسخه"
+    "slug": "قطمارس-الصوم-الكبير-عربي-دير-الشهيد-العظيم-مارمينا-العجايبي-بمريوط-نسخه",
+    "isBestSeller": false
   },
   {
     "id": "custom-1782306615168-copy-1782306883366-copy-1782307173548-copy-1782307256776-copy-1782307341493-copy-1782310276272",
@@ -2090,7 +2175,8 @@
     ],
     "mainCategory": "الكتب والطقوس",
     "subCategory": "قطمارس",
-    "slug": "قطمارس-الخمسين-قبطي-دير-الشهيد-العظيم-مارمينا-العجايبي-بمريوط"
+    "slug": "قطمارس-الخمسين-قبطي-دير-الشهيد-العظيم-مارمينا-العجايبي-بمريوط",
+    "isBestSeller": false
   },
   {
     "id": "custom-1782306615168-copy-1782306883366-copy-1782307173548-copy-1782307256776-copy-1782307341493",
@@ -2133,7 +2219,8 @@
     ],
     "mainCategory": "الكتب والطقوس",
     "subCategory": "قطمارس",
-    "slug": "قطمارس-الخمسين-عربي-دير-الشهيد-العظيم-مارمينا-العجايبي-بمريوط"
+    "slug": "قطمارس-الخمسين-عربي-دير-الشهيد-العظيم-مارمينا-العجايبي-بمريوط",
+    "isBestSeller": false
   },
   {
     "id": "custom-1782306615168-copy-1782306883366-copy-1782307173548-copy-1782307256776",
@@ -2176,7 +2263,8 @@
     ],
     "mainCategory": "الكتب والطقوس",
     "subCategory": "قطمارس",
-    "slug": "قطمارس-الاحاد-عربي-دير-الشهيد-العظيم-مارمينا-العجايبي-بمريوط"
+    "slug": "قطمارس-الاحاد-عربي-دير-الشهيد-العظيم-مارمينا-العجايبي-بمريوط",
+    "isBestSeller": false
   },
   {
     "id": "custom-1782306615168-copy-1782306883366-copy-1782307173548",
@@ -2221,7 +2309,8 @@
     ],
     "mainCategory": "الكتب والطقوس",
     "subCategory": "قطمارس",
-    "slug": "قطمارس-الاحاد-قبطي-دير-الشهيد-العظيم-مارمينا-العجايبي-بمريوط"
+    "slug": "قطمارس-الاحاد-قبطي-دير-الشهيد-العظيم-مارمينا-العجايبي-بمريوط",
+    "isBestSeller": false
   },
   {
     "id": "custom-1782306615168-copy-1782306883366",
@@ -2264,7 +2353,8 @@
     ],
     "mainCategory": "الكتب والطقوس",
     "subCategory": "قطمارس",
-    "slug": "قطمارس-الايام-السنوي-قبطي-دير-الشهيد-العظيم-مارمينا-العجايبي-بمريوط"
+    "slug": "قطمارس-الايام-السنوي-قبطي-دير-الشهيد-العظيم-مارمينا-العجايبي-بمريوط",
+    "isBestSeller": false
   },
   {
     "id": "custom-1782306615168",
@@ -2307,7 +2397,8 @@
     ],
     "mainCategory": "الكتب والطقوس",
     "subCategory": "قطمارس",
-    "slug": "قطمارس-الايام-السنوي-عربي-نسخه-دير-الشهيد-العظيم-مارمينا-العجايبي-بمريوط"
+    "slug": "قطمارس-الايام-السنوي-عربي-نسخه-دير-الشهيد-العظيم-مارمينا-العجايبي-بمريوط",
+    "isBestSeller": false
   },
   {
     "id": "custom-1782079632185",
@@ -2347,7 +2438,8 @@
     ],
     "mainCategory": "الشمع والبخور",
     "subCategory": "شموع",
-    "slug": "شمع-ايقونات"
+    "slug": "شمع-ايقونات",
+    "isBestSeller": false
   },
   {
     "id": "old-10123915690291",
@@ -2390,7 +2482,8 @@
     ],
     "mainCategory": "أدوات المذبح",
     "subCategory": "ذخائر وعلب",
-    "slug": "علبه-بخور-نحاس-ذهبي-بصليب"
+    "slug": "علبه-بخور-نحاس-ذهبي-بصليب",
+    "isBestSeller": false
   },
   {
     "id": "old-10123914805555",
@@ -2433,7 +2526,8 @@
     ],
     "mainCategory": "أدوات المذبح",
     "subCategory": "ذخائر وعلب",
-    "slug": "علبه-بخور-نحاس-فضي-بصليب"
+    "slug": "علبه-بخور-نحاس-فضي-بصليب",
+    "isBestSeller": false
   },
   {
     "id": "old-10123913003315",
@@ -2477,7 +2571,8 @@
     ],
     "mainCategory": "أدوات المذبح",
     "subCategory": "ذخائر وعلب",
-    "slug": "علبه-بخور-نحاس-فضي-فص-ملون"
+    "slug": "علبه-بخور-نحاس-فضي-فص-ملون",
+    "isBestSeller": false
   },
   {
     "id": "old-10121340551475",
@@ -2558,7 +2653,8 @@
     ],
     "mainCategory": "أدوات المذبح",
     "subCategory": "أدوات خدمة",
-    "slug": "تريانتو-ستانلس"
+    "slug": "تريانتو-ستانلس",
+    "isBestSeller": false
   },
   {
     "id": "old-10121339568435",
@@ -2701,7 +2797,8 @@
     ],
     "mainCategory": "أدوات المذبح",
     "subCategory": "أدوات خدمة",
-    "slug": "دف-18-سم-نحاس-ذهبي-تقيل"
+    "slug": "دف-18-سم-نحاس-ذهبي-تقيل",
+    "isBestSeller": false
   },
   {
     "id": "old-10121173303603",
@@ -3174,7 +3271,8 @@
     ],
     "mainCategory": "الكتب والطقوس",
     "subCategory": "كتب طقسية",
-    "slug": "جراب-للكتاب-المقدس"
+    "slug": "جراب-للكتاب-المقدس",
+    "isBestSeller": false
   },
   {
     "id": "old-10120837660979",
@@ -3216,7 +3314,8 @@
     ],
     "mainCategory": "أدوات المذبح",
     "subCategory": "صلبان زفة",
-    "slug": "صليب-زفه-نحاس-طبقتين-بفصوص-ملونه"
+    "slug": "صليب-زفه-نحاس-طبقتين-بفصوص-ملونه",
+    "isBestSeller": false
   },
   {
     "id": "old-10120837300531",
@@ -3258,7 +3357,8 @@
     ],
     "mainCategory": "أدوات المذبح",
     "subCategory": "صلبان زفة",
-    "slug": "صليب-زفه-نحاس-طبقتين"
+    "slug": "صليب-زفه-نحاس-طبقتين",
+    "isBestSeller": false
   },
   {
     "id": "old-10120836481331",
@@ -3300,7 +3400,8 @@
     ],
     "mainCategory": "أدوات المذبح",
     "subCategory": "صلبان زفة",
-    "slug": "صليب-زفه-نحاس-رفيع-بفص-الوان"
+    "slug": "صليب-زفه-نحاس-رفيع-بفص-الوان",
+    "isBestSeller": false
   },
   {
     "id": "old-10120836317491",
@@ -3342,7 +3443,8 @@
     ],
     "mainCategory": "أدوات المذبح",
     "subCategory": "صلبان زفة",
-    "slug": "صليب-زفه-نحاس-اركت-بالمصلوب"
+    "slug": "صليب-زفه-نحاس-اركت-بالمصلوب",
+    "isBestSeller": false
   },
   {
     "id": "old-10120834908467",
@@ -3383,7 +3485,8 @@
     ],
     "mainCategory": "أدوات المذبح",
     "subCategory": "صلبان زفة",
-    "slug": "صليب-زفه-نحاس-اركت-ذهبي"
+    "slug": "صليب-زفه-نحاس-اركت-ذهبي",
+    "isBestSeller": false
   },
   {
     "id": "old-10070727688499",
@@ -3429,7 +3532,8 @@
     ],
     "mainCategory": "أدوات المذبح",
     "subCategory": "شمعدانات",
-    "slug": "شمعدان-مذبح-كبير"
+    "slug": "شمعدان-مذبح-كبير",
+    "isBestSeller": false
   },
   {
     "id": "old-10070727000371",
@@ -3502,7 +3606,8 @@
     ],
     "mainCategory": "الشمع والبخور",
     "subCategory": "شموع",
-    "slug": "شمعه-شحن"
+    "slug": "شمعه-شحن",
+    "isBestSeller": false
   },
   {
     "id": "old-10070726574387",
@@ -3543,7 +3648,8 @@
     ],
     "mainCategory": "الشمع والبخور",
     "subCategory": "شموع",
-    "slug": "شمعه-شماس-شكل-صليب"
+    "slug": "شمعه-شماس-شكل-صليب",
+    "isBestSeller": false
   },
   {
     "id": "old-10070704980275",
@@ -3630,7 +3736,8 @@
     ],
     "mainCategory": "أدوات المذبح",
     "subCategory": "شمعدانات",
-    "slug": "شمعدان-منجليه"
+    "slug": "شمعدان-منجليه",
+    "isBestSeller": false
   },
   {
     "id": "old-10070671687987",
@@ -3722,7 +3829,8 @@
     ],
     "mainCategory": "أدوات المذبح",
     "subCategory": "شمعدانات",
-    "slug": "صليب-افنوتي-شحن-بالوصله"
+    "slug": "صليب-افنوتي-شحن-بالوصله",
+    "isBestSeller": false
   },
   {
     "id": "old-10068218806579",
@@ -3765,7 +3873,8 @@
     ],
     "mainCategory": "أدوات المذبح",
     "subCategory": "ذخائر وعلب",
-    "slug": "حق-ذخيره-كبير-نحاس-مطلي-نيكل"
+    "slug": "حق-ذخيره-كبير-نحاس-مطلي-نيكل",
+    "isBestSeller": false
   },
   {
     "id": "old-10068217561395",
@@ -3808,7 +3917,8 @@
     ],
     "mainCategory": "أدوات المذبح",
     "subCategory": "ذخائر وعلب",
-    "slug": "حق-ذخيره-صغير-نحاس-مطلي-نيكل"
+    "slug": "حق-ذخيره-صغير-نحاس-مطلي-نيكل",
+    "isBestSeller": false
   },
   {
     "id": "old-10068215628083",
@@ -3851,7 +3961,8 @@
     ],
     "mainCategory": "أدوات المذبح",
     "subCategory": "ذخائر وعلب",
-    "slug": "حق-ذخيره-استانلس-صغير"
+    "slug": "حق-ذخيره-استانلس-صغير",
+    "isBestSeller": false
   },
   {
     "id": "old-10068213006643",
@@ -3895,7 +4006,8 @@
     ],
     "mainCategory": "أدوات المذبح",
     "subCategory": "ذخائر وعلب",
-    "slug": "حق-ذخيره-استانلس-وسط"
+    "slug": "حق-ذخيره-استانلس-وسط",
+    "isBestSeller": false
   },
   {
     "id": "old-10068212646195",
@@ -3938,7 +4050,8 @@
     ],
     "mainCategory": "أدوات المذبح",
     "subCategory": "ذخائر وعلب",
-    "slug": "حق-ذخيره-استانلس-صغير-old-10068212646195"
+    "slug": "حق-ذخيره-استانلس-صغير-old-10068212646195",
+    "isBestSeller": false
   },
   {
     "id": "old-10067794067763",
@@ -4023,7 +4136,8 @@
     ],
     "mainCategory": "أدوات المذبح",
     "subCategory": "أدوات خدمة",
-    "slug": "ابريق-نحاس-ذهبي"
+    "slug": "ابريق-نحاس-ذهبي",
+    "isBestSeller": false
   },
   {
     "id": "old-10067690586419",
@@ -4067,7 +4181,8 @@
     ],
     "mainCategory": "أدوات المذبح",
     "subCategory": "ذخائر وعلب",
-    "slug": "علبه-بخور-من-النحاس-شكل-دايري"
+    "slug": "علبه-بخور-من-النحاس-شكل-دايري",
+    "isBestSeller": false
   },
   {
     "id": "old-10067690225971",
@@ -4112,7 +4227,8 @@
     ],
     "mainCategory": "أدوات المذبح",
     "subCategory": "ذخائر وعلب",
-    "slug": "علبه-بخور-نحاس-علي-شكل-صليب"
+    "slug": "علبه-بخور-نحاس-علي-شكل-صليب",
+    "isBestSeller": false
   },
   {
     "id": "old-10067689472307",
@@ -4157,7 +4273,8 @@
     ],
     "mainCategory": "أدوات المذبح",
     "subCategory": "ذخائر وعلب",
-    "slug": "علبه-بخور-نحاس-علي-شكل-صندوق-كنز"
+    "slug": "علبه-بخور-نحاس-علي-شكل-صندوق-كنز",
+    "isBestSeller": false
   },
   {
     "id": "old-10067686162739",
@@ -4245,7 +4362,8 @@
     ],
     "mainCategory": "أدوات المذبح",
     "subCategory": "ذخائر وعلب",
-    "slug": "علبه-بخور-نحاس-شكل-صندوق-عادي"
+    "slug": "علبه-بخور-نحاس-شكل-صندوق-عادي",
+    "isBestSeller": false
   },
   {
     "id": "old-10062404354355",
@@ -4291,7 +4409,8 @@
     ],
     "mainCategory": "أدوات المذبح",
     "subCategory": "ذخائر وعلب",
-    "slug": "علبه-بخور-نحاس-صغيره-شكل-مستطيل"
+    "slug": "علبه-بخور-نحاس-صغيره-شكل-مستطيل",
+    "isBestSeller": false
   },
   {
     "id": "old-10062400258355",
@@ -4336,7 +4455,8 @@
     ],
     "mainCategory": "أدوات المذبح",
     "subCategory": "ذخائر وعلب",
-    "slug": "علبه-بخور-نحاس-كبيره-شكل-مستطيل"
+    "slug": "علبه-بخور-نحاس-كبيره-شكل-مستطيل",
+    "isBestSeller": false
   },
   {
     "id": "reliquary-tubes-papa-kyrillos",
@@ -4383,7 +4503,7 @@
         },
         "price": 462,
         "compareAtPrice": null,
-        "available": true,
+        "available": false,
         "image": "assets/optimized/products/gallery/029-9841772396851-01.webp",
         "images": [
           "assets/optimized/products/gallery/029-9841772396851-01.webp",
@@ -4402,7 +4522,7 @@
         },
         "price": 330,
         "compareAtPrice": null,
-        "available": true,
+        "available": false,
         "image": "assets/optimized/products/gallery/030-9841770725683-01.webp",
         "images": [
           "assets/optimized/products/gallery/030-9841770725683-01.webp",
@@ -4421,7 +4541,7 @@
         },
         "price": 234,
         "compareAtPrice": null,
-        "available": true,
+        "available": false,
         "image": "assets/optimized/products/gallery/031-9841769054515-01.webp",
         "images": [
           "assets/optimized/products/gallery/031-9841769054515-01.webp",
@@ -4440,7 +4560,7 @@
         },
         "price": 180,
         "compareAtPrice": null,
-        "available": true,
+        "available": false,
         "image": "assets/optimized/products/gallery/032-9841765515571-01.webp",
         "images": [
           "assets/optimized/products/gallery/032-9841765515571-01.webp",
@@ -4459,7 +4579,7 @@
         },
         "price": 144,
         "compareAtPrice": null,
-        "available": true,
+        "available": false,
         "image": "assets/optimized/products/gallery/033-9841763516723-01.webp",
         "images": [
           "assets/optimized/products/gallery/033-9841763516723-01.webp",
@@ -4473,7 +4593,8 @@
     ],
     "mainCategory": "أدوات المذبح",
     "subCategory": "ذخائر وعلب",
-    "slug": "انابيب-رفات-قديسين-زان"
+    "slug": "انابيب-رفات-قديسين-زان",
+    "isBestSeller": false
   },
   {
     "id": "incense-chat-1500-kg",
@@ -4518,7 +4639,7 @@
         },
         "price": 188,
         "compareAtPrice": null,
-        "available": true,
+        "available": false,
         "image": "assets/optimized/products/incense-chat-v2.webp",
         "images": [
           "assets/optimized/products/incense-chat-v2.webp"
@@ -4534,7 +4655,7 @@
         },
         "price": 375,
         "compareAtPrice": null,
-        "available": true,
+        "available": false,
         "image": "assets/optimized/products/incense-chat-v2.webp",
         "images": [
           "assets/optimized/products/incense-chat-v2.webp"
@@ -4550,7 +4671,7 @@
         },
         "price": 750,
         "compareAtPrice": null,
-        "available": true,
+        "available": false,
         "image": "assets/optimized/products/incense-chat-v2.webp",
         "images": [
           "assets/optimized/products/incense-chat-v2.webp"
@@ -4566,7 +4687,7 @@
         },
         "price": 1125,
         "compareAtPrice": null,
-        "available": true,
+        "available": false,
         "image": "assets/optimized/products/incense-chat-v2.webp",
         "images": [
           "assets/optimized/products/incense-chat-v2.webp"
@@ -4582,7 +4703,7 @@
         },
         "price": 1500,
         "compareAtPrice": null,
-        "available": true,
+        "available": false,
         "image": "assets/optimized/products/incense-chat-v2.webp",
         "images": [
           "assets/optimized/products/incense-chat-v2.webp"
@@ -4593,7 +4714,8 @@
     ],
     "mainCategory": "الشمع والبخور",
     "subCategory": "بخور",
-    "slug": "بخور-كنسي-فاخر"
+    "slug": "بخور-كنسي-فاخر",
+    "isBestSeller": false
   },
   {
     "id": "old-9840433955123",
@@ -4635,7 +4757,8 @@
     ],
     "mainCategory": "أدوات المذبح",
     "subCategory": "شمعدانات",
-    "slug": "زوج-شمعدان-نحاس-ذهبي-كهرباء-شكل-الورده-كبير"
+    "slug": "زوج-شمعدان-نحاس-ذهبي-كهرباء-شكل-الورده-كبير",
+    "isBestSeller": false
   },
   {
     "id": "old-9840425500979",
@@ -4678,7 +4801,8 @@
     ],
     "mainCategory": "أدوات المذبح",
     "subCategory": "شمعدانات",
-    "slug": "شمعدان-نحاس-ذهبي-سوسته"
+    "slug": "شمعدان-نحاس-ذهبي-سوسته",
+    "isBestSeller": false
   },
   {
     "id": "old-9840420749619",
@@ -4722,7 +4846,8 @@
     ],
     "mainCategory": "أدوات المذبح",
     "subCategory": "شمعدانات",
-    "slug": "زوج-شمعدان-نحاس-ذهبي-شكل-الورده-صغير"
+    "slug": "زوج-شمعدان-نحاس-ذهبي-شكل-الورده-صغير",
+    "isBestSeller": false
   },
   {
     "id": "old-9840413475123",
@@ -4766,7 +4891,8 @@
     ],
     "mainCategory": "أدوات المذبح",
     "subCategory": "شمعدانات",
-    "slug": "زوج-شمعدان-نحاس-ذهبي-شكل-الخروف"
+    "slug": "زوج-شمعدان-نحاس-ذهبي-شكل-الخروف",
+    "isBestSeller": false
   },
   {
     "id": "old-9840407806259",
@@ -4811,7 +4937,8 @@
     ],
     "mainCategory": "أدوات المذبح",
     "subCategory": "شمعدانات",
-    "slug": "زوج-شمعدان-برج-ايفل-نحاس-ذهبي-ثقيل"
+    "slug": "زوج-شمعدان-برج-ايفل-نحاس-ذهبي-ثقيل",
+    "isBestSeller": false
   },
   {
     "id": "old-9762774024499",
@@ -4854,7 +4981,8 @@
     ],
     "mainCategory": "أدوات المذبح",
     "subCategory": "أدوات خدمة",
-    "slug": "بشاره-ذهبي-يوناني"
+    "slug": "بشاره-ذهبي-يوناني",
+    "isBestSeller": false
   },
   {
     "id": "old-9762760196403",
@@ -4927,7 +5055,8 @@
     ],
     "mainCategory": "أدوات المذبح",
     "subCategory": "شورية ومباخر",
-    "slug": "شوريه-نحاس-ذهبي-يوناني"
+    "slug": "شوريه-نحاس-ذهبي-يوناني",
+    "isBestSeller": false
   },
   {
     "id": "old-9762682011955",
@@ -4999,7 +5128,8 @@
     ],
     "mainCategory": "أدوات المذبح",
     "subCategory": "أواني المذبح",
-    "slug": "طقم-اواني-مذبح-ذهبي-يوناني"
+    "slug": "طقم-اواني-مذبح-ذهبي-يوناني",
+    "isBestSeller": false
   },
   {
     "id": "old-9757475930419",
@@ -5039,7 +5169,8 @@
     ],
     "mainCategory": "الأيقونات والبراويز",
     "subCategory": "أيقونات صغيرة",
-    "slug": "ايقونه-صليب-صدر-يوناني-ذهبي"
+    "slug": "ايقونه-صليب-صدر-يوناني-ذهبي",
+    "isBestSeller": false
   },
   {
     "id": "stole-red-gold-01",
@@ -5328,7 +5459,8 @@
     ],
     "mainCategory": "الملابس الكنسية",
     "subCategory": "بطرشيلات",
-    "slug": "بطرشيل-كنسي-احمر-ذهبي-موديل-1"
+    "slug": "بطرشيل-كنسي-احمر-ذهبي-موديل-1",
+    "isBestSeller": false
   },
   {
     "id": "stole-red-gold-02",
@@ -5617,7 +5749,8 @@
     ],
     "mainCategory": "الملابس الكنسية",
     "subCategory": "بطرشيلات",
-    "slug": "بطرشيل-كنسي-احمر-ذهبي-موديل-2"
+    "slug": "بطرشيل-كنسي-احمر-ذهبي-موديل-2",
+    "isBestSeller": false
   },
   {
     "id": "stole-red-gold-03",
@@ -5906,7 +6039,8 @@
     ],
     "mainCategory": "الملابس الكنسية",
     "subCategory": "بطرشيلات",
-    "slug": "بطرشيل-كنسي-احمر-ذهبي-موديل-3"
+    "slug": "بطرشيل-كنسي-احمر-ذهبي-موديل-3",
+    "isBestSeller": false
   },
   {
     "id": "stole-red-gold-04",
@@ -6195,6 +6329,7 @@
     ],
     "mainCategory": "الملابس الكنسية",
     "subCategory": "بطرشيلات",
-    "slug": "بطرشيل-كنسي-احمر-ذهبي-موديل-4"
+    "slug": "بطرشيل-كنسي-احمر-ذهبي-موديل-4",
+    "isBestSeller": false
   }
 ]
