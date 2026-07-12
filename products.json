@@ -1,5 +1,49 @@
 [
   {
+    "id": "custom-1783845396877-copy-1783846824668",
+    "name": "شورية ستانلس وسط",
+    "category": "brass",
+    "label": "نحاسيات",
+    "description": "شورية أنيقة مصنوعة من الستانلس ستيل اللامع، بتصميم كنسي مميز يجمع بين الشكل التقليدي والمتانة. مزودة بغطاء متحرك وسلاسل قوية لتسهيل الحمل والاستخدام أثناء الصلاة والتبخير.\n\nتتميز بسطح فضي لامع سهل التنظيف ومقاوم للصدأ، ما يجعلها مناسبة للاستخدام في الكنيسة أو المنزل، كما تصلح كهدية قيمة للمناسبات الكنسية.\n\nالمميزات:\n\nمصنوعة من الستانلس ستيل.\nلون فضي لامع.\nسلاسل معدنية متينة.\nغطاء متحرك لسهولة وضع الفحم والبخور.\nتصميم كنسي أنيق وعملي.\nسهلة التنظيف والحفاظ عليها.\n\nالعناية بالمنتج:\nتُنظف بقطعة قماش ناعمة، ويُفضل تجنب المنظفات الخشنة للحفاظ على لمعان الستانلس.",
+    "price": 837,
+    "priceNote": "",
+    "stock": "متاح",
+    "badge": "شورية",
+    "isBestSeller": false,
+    "image": "assets/optimized/products/gallery/product-1-2-20260712090103-704d2d.webp",
+    "url": "https://popekyrillos.store/?product=custom-1783845396877-copy-1783846824668",
+    "tags": [
+      "ستانلس",
+      "شورية",
+      "بخور",
+      "مبخرة",
+      "مجمرة",
+      "فحم"
+    ],
+    "images": [
+      "assets/optimized/products/gallery/product-1-2-20260712090103-704d2d.webp",
+      "assets/optimized/products/gallery/product-1-1-20260712090058-a21ee6.webp",
+      "assets/optimized/products/gallery/product-1-3-20260712090108-9d97ff.webp"
+    ],
+    "options": [],
+    "variants": [
+      {
+        "id": "custom-1783845396877-copy-1783846824668-variant-1",
+        "title": "الاختيار الافتراضي",
+        "options": {},
+        "price": 837,
+        "compareAtPrice": null,
+        "available": true,
+        "image": null,
+        "images": [],
+        "sku": "",
+        "quantity": null
+      }
+    ],
+    "mainCategory": "أدوات المذبح",
+    "subCategory": "شورية ومباخر"
+  },
+  {
     "id": "custom-1783845396877",
     "name": "شورية ستانلس كبيرة",
     "category": "brass",
