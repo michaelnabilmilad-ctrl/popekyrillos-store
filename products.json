@@ -42,8 +42,25 @@
         "quantity": null
       }
     ],
-    "mainCategory": "أدوات المذبح",
-    "subCategory": "شورية ومباخر"
+    "mainCategory": "altar-tools",
+    "subCategory": "service-tools",
+    "subcategory": "service-tools",
+    "collections": [
+      "مستلزمات المذبح"
+    ],
+    "searchKeywords": [
+      "شورية نحاس كبيرة",
+      "نحاسيات",
+      "نحاس",
+      "شورية",
+      "بخور",
+      "مبخرة",
+      "مجمرة",
+      "فحم",
+      "altar-tools",
+      "service-tools",
+      "مستلزمات المذبح"
+    ]
   },
   {
     "id": "custom-1783845396877-copy-1783846824668-copy-1783847655782",
@@ -87,8 +104,25 @@
         "quantity": null
       }
     ],
-    "mainCategory": "أدوات المذبح",
-    "subCategory": "شورية ومباخر"
+    "mainCategory": "altar-tools",
+    "subCategory": "service-tools",
+    "subcategory": "service-tools",
+    "collections": [
+      "مستلزمات المذبح"
+    ],
+    "searchKeywords": [
+      "شورية نحاس وسط",
+      "نحاسيات",
+      "نحاس",
+      "شورية",
+      "بخور",
+      "مبخرة",
+      "مجمرة",
+      "فحم",
+      "altar-tools",
+      "service-tools",
+      "مستلزمات المذبح"
+    ]
   },
   {
     "id": "custom-1783845396877-copy-1783846824668",
@@ -131,8 +165,25 @@
         "quantity": null
       }
     ],
-    "mainCategory": "أدوات المذبح",
-    "subCategory": "شورية ومباخر"
+    "mainCategory": "altar-tools",
+    "subCategory": "service-tools",
+    "subcategory": "service-tools",
+    "collections": [
+      "مستلزمات المذبح"
+    ],
+    "searchKeywords": [
+      "شورية ستانلس وسط",
+      "نحاسيات",
+      "ستانلس",
+      "شورية",
+      "بخور",
+      "مبخرة",
+      "مجمرة",
+      "فحم",
+      "altar-tools",
+      "service-tools",
+      "مستلزمات المذبح"
+    ]
   },
   {
     "id": "custom-1783845396877",
@@ -176,8 +227,25 @@
         "quantity": null
       }
     ],
-    "mainCategory": "أدوات المذبح",
-    "subCategory": "شورية ومباخر"
+    "mainCategory": "altar-tools",
+    "subCategory": "service-tools",
+    "subcategory": "service-tools",
+    "collections": [
+      "مستلزمات المذبح"
+    ],
+    "searchKeywords": [
+      "شورية ستانلس كبيرة",
+      "نحاسيات",
+      "ستانلس",
+      "شورية",
+      "بخور",
+      "مبخرة",
+      "مجمرة",
+      "فحم",
+      "altar-tools",
+      "service-tools",
+      "مستلزمات المذبح"
+    ]
   },
   {
     "id": "iota-plain-cross-20cm-1",
@@ -218,9 +286,29 @@
         "quantity": 1000
       }
     ],
-    "mainCategory": "الأيقونات والبراويز",
-    "subCategory": "أيقونات صغيرة",
-    "slug": "صليب-يوتا-سادة-20-سم-موديل-1"
+    "mainCategory": "crosses",
+    "subCategory": "wooden-crosses",
+    "slug": "صليب-يوتا-سادة-20-سم-موديل-1",
+    "subcategory": "wooden-crosses",
+    "collections": [
+      "هدايا الخدمة",
+      "منتجات الأطفال"
+    ],
+    "searchKeywords": [
+      "صليب يوتا سادة 20 سم - موديل 1",
+      "يوتا",
+      "صلبان يوتا",
+      "صليب سادة",
+      "خشب زان",
+      "20 سم",
+      "أيقونات صغيرة",
+      "أيقونات وهدايا",
+      "crosses",
+      "wooden-crosses",
+      "هدايا الخدمة",
+      "منتجات الأطفال",
+      "صليب صلبان"
+    ]
   },
   {
     "id": "iota-plain-cross-20cm-2",
@@ -261,9 +349,29 @@
         "quantity": 1000
       }
     ],
-    "mainCategory": "الأيقونات والبراويز",
-    "subCategory": "أيقونات صغيرة",
-    "slug": "صليب-يوتا-سادة-20-سم-موديل-2"
+    "mainCategory": "crosses",
+    "subCategory": "wooden-crosses",
+    "slug": "صليب-يوتا-سادة-20-سم-موديل-2",
+    "subcategory": "wooden-crosses",
+    "collections": [
+      "هدايا الخدمة",
+      "منتجات الأطفال"
+    ],
+    "searchKeywords": [
+      "صليب يوتا سادة 20 سم - موديل 2",
+      "يوتا",
+      "صلبان يوتا",
+      "صليب سادة",
+      "خشب زان",
+      "20 سم",
+      "أيقونات صغيرة",
+      "أيقونات وهدايا",
+      "crosses",
+      "wooden-crosses",
+      "هدايا الخدمة",
+      "منتجات الأطفال",
+      "صليب صلبان"
+    ]
   },
   {
     "id": "iota-plain-cross-20cm-3",
@@ -304,9 +412,29 @@
         "quantity": 1000
       }
     ],
-    "mainCategory": "الأيقونات والبراويز",
-    "subCategory": "أيقونات صغيرة",
-    "slug": "صليب-يوتا-سادة-20-سم-موديل-3"
+    "mainCategory": "crosses",
+    "subCategory": "wooden-crosses",
+    "slug": "صليب-يوتا-سادة-20-سم-موديل-3",
+    "subcategory": "wooden-crosses",
+    "collections": [
+      "هدايا الخدمة",
+      "منتجات الأطفال"
+    ],
+    "searchKeywords": [
+      "صليب يوتا سادة 20 سم - موديل 3",
+      "يوتا",
+      "صلبان يوتا",
+      "صليب سادة",
+      "خشب زان",
+      "20 سم",
+      "أيقونات صغيرة",
+      "أيقونات وهدايا",
+      "crosses",
+      "wooden-crosses",
+      "هدايا الخدمة",
+      "منتجات الأطفال",
+      "صليب صلبان"
+    ]
   },
   {
     "id": "iota-plain-cross-20cm-4",
@@ -347,9 +475,29 @@
         "quantity": 1000
       }
     ],
-    "mainCategory": "الأيقونات والبراويز",
-    "subCategory": "أيقونات صغيرة",
-    "slug": "صليب-يوتا-سادة-20-سم-موديل-4"
+    "mainCategory": "crosses",
+    "subCategory": "wooden-crosses",
+    "slug": "صليب-يوتا-سادة-20-سم-موديل-4",
+    "subcategory": "wooden-crosses",
+    "collections": [
+      "هدايا الخدمة",
+      "منتجات الأطفال"
+    ],
+    "searchKeywords": [
+      "صليب يوتا سادة 20 سم - موديل 4",
+      "يوتا",
+      "صلبان يوتا",
+      "صليب سادة",
+      "خشب زان",
+      "20 سم",
+      "أيقونات صغيرة",
+      "أيقونات وهدايا",
+      "crosses",
+      "wooden-crosses",
+      "هدايا الخدمة",
+      "منتجات الأطفال",
+      "صليب صلبان"
+    ]
   },
   {
     "id": "iota-plain-cross-20cm-5",
@@ -390,9 +538,29 @@
         "quantity": 1000
       }
     ],
-    "mainCategory": "الأيقونات والبراويز",
-    "subCategory": "أيقونات صغيرة",
-    "slug": "صليب-يوتا-سادة-20-سم-موديل-5"
+    "mainCategory": "crosses",
+    "subCategory": "wooden-crosses",
+    "slug": "صليب-يوتا-سادة-20-سم-موديل-5",
+    "subcategory": "wooden-crosses",
+    "collections": [
+      "هدايا الخدمة",
+      "منتجات الأطفال"
+    ],
+    "searchKeywords": [
+      "صليب يوتا سادة 20 سم - موديل 5",
+      "يوتا",
+      "صلبان يوتا",
+      "صليب سادة",
+      "خشب زان",
+      "20 سم",
+      "أيقونات صغيرة",
+      "أيقونات وهدايا",
+      "crosses",
+      "wooden-crosses",
+      "هدايا الخدمة",
+      "منتجات الأطفال",
+      "صليب صلبان"
+    ]
   },
   {
     "id": "iota-plain-cross-20cm-6",
@@ -433,9 +601,29 @@
         "quantity": 1000
       }
     ],
-    "mainCategory": "الأيقونات والبراويز",
-    "subCategory": "أيقونات صغيرة",
-    "slug": "صليب-يوتا-سادة-20-سم-موديل-6"
+    "mainCategory": "crosses",
+    "subCategory": "wooden-crosses",
+    "slug": "صليب-يوتا-سادة-20-سم-موديل-6",
+    "subcategory": "wooden-crosses",
+    "collections": [
+      "هدايا الخدمة",
+      "منتجات الأطفال"
+    ],
+    "searchKeywords": [
+      "صليب يوتا سادة 20 سم - موديل 6",
+      "يوتا",
+      "صلبان يوتا",
+      "صليب سادة",
+      "خشب زان",
+      "20 سم",
+      "أيقونات صغيرة",
+      "أيقونات وهدايا",
+      "crosses",
+      "wooden-crosses",
+      "هدايا الخدمة",
+      "منتجات الأطفال",
+      "صليب صلبان"
+    ]
   },
   {
     "id": "iota-plain-cross-20cm-7",
@@ -476,9 +664,29 @@
         "quantity": 1000
       }
     ],
-    "mainCategory": "الأيقونات والبراويز",
-    "subCategory": "أيقونات صغيرة",
-    "slug": "صليب-يوتا-سادة-20-سم-موديل-7"
+    "mainCategory": "crosses",
+    "subCategory": "wooden-crosses",
+    "slug": "صليب-يوتا-سادة-20-سم-موديل-7",
+    "subcategory": "wooden-crosses",
+    "collections": [
+      "هدايا الخدمة",
+      "منتجات الأطفال"
+    ],
+    "searchKeywords": [
+      "صليب يوتا سادة 20 سم - موديل 7",
+      "يوتا",
+      "صلبان يوتا",
+      "صليب سادة",
+      "خشب زان",
+      "20 سم",
+      "أيقونات صغيرة",
+      "أيقونات وهدايا",
+      "crosses",
+      "wooden-crosses",
+      "هدايا الخدمة",
+      "منتجات الأطفال",
+      "صليب صلبان"
+    ]
   },
   {
     "id": "iota-plain-cross-20cm-8",
@@ -519,9 +727,29 @@
         "quantity": 1000
       }
     ],
-    "mainCategory": "الأيقونات والبراويز",
-    "subCategory": "أيقونات صغيرة",
-    "slug": "صليب-يوتا-سادة-20-سم-موديل-8"
+    "mainCategory": "crosses",
+    "subCategory": "wooden-crosses",
+    "slug": "صليب-يوتا-سادة-20-سم-موديل-8",
+    "subcategory": "wooden-crosses",
+    "collections": [
+      "هدايا الخدمة",
+      "منتجات الأطفال"
+    ],
+    "searchKeywords": [
+      "صليب يوتا سادة 20 سم - موديل 8",
+      "يوتا",
+      "صلبان يوتا",
+      "صليب سادة",
+      "خشب زان",
+      "20 سم",
+      "أيقونات صغيرة",
+      "أيقونات وهدايا",
+      "crosses",
+      "wooden-crosses",
+      "هدايا الخدمة",
+      "منتجات الأطفال",
+      "صليب صلبان"
+    ]
   },
   {
     "id": "iota-plain-cross-20cm-9",
@@ -562,9 +790,29 @@
         "quantity": 1000
       }
     ],
-    "mainCategory": "الأيقونات والبراويز",
-    "subCategory": "أيقونات صغيرة",
-    "slug": "صليب-يوتا-سادة-20-سم-موديل-9"
+    "mainCategory": "crosses",
+    "subCategory": "wooden-crosses",
+    "slug": "صليب-يوتا-سادة-20-سم-موديل-9",
+    "subcategory": "wooden-crosses",
+    "collections": [
+      "هدايا الخدمة",
+      "منتجات الأطفال"
+    ],
+    "searchKeywords": [
+      "صليب يوتا سادة 20 سم - موديل 9",
+      "يوتا",
+      "صلبان يوتا",
+      "صليب سادة",
+      "خشب زان",
+      "20 سم",
+      "أيقونات صغيرة",
+      "أيقونات وهدايا",
+      "crosses",
+      "wooden-crosses",
+      "هدايا الخدمة",
+      "منتجات الأطفال",
+      "صليب صلبان"
+    ]
   },
   {
     "id": "iota-plain-cross-20cm-10",
@@ -605,9 +853,29 @@
         "quantity": 1000
       }
     ],
-    "mainCategory": "الأيقونات والبراويز",
-    "subCategory": "أيقونات صغيرة",
-    "slug": "صليب-يوتا-سادة-20-سم-موديل-10"
+    "mainCategory": "crosses",
+    "subCategory": "wooden-crosses",
+    "slug": "صليب-يوتا-سادة-20-سم-موديل-10",
+    "subcategory": "wooden-crosses",
+    "collections": [
+      "هدايا الخدمة",
+      "منتجات الأطفال"
+    ],
+    "searchKeywords": [
+      "صليب يوتا سادة 20 سم - موديل 10",
+      "يوتا",
+      "صلبان يوتا",
+      "صليب سادة",
+      "خشب زان",
+      "20 سم",
+      "أيقونات صغيرة",
+      "أيقونات وهدايا",
+      "crosses",
+      "wooden-crosses",
+      "هدايا الخدمة",
+      "منتجات الأطفال",
+      "صليب صلبان"
+    ]
   },
   {
     "id": "iota-plain-cross-20cm-11",
@@ -648,9 +916,29 @@
         "quantity": 1000
       }
     ],
-    "mainCategory": "الأيقونات والبراويز",
-    "subCategory": "أيقونات صغيرة",
-    "slug": "صليب-يوتا-سادة-20-سم-موديل-11"
+    "mainCategory": "crosses",
+    "subCategory": "wooden-crosses",
+    "slug": "صليب-يوتا-سادة-20-سم-موديل-11",
+    "subcategory": "wooden-crosses",
+    "collections": [
+      "هدايا الخدمة",
+      "منتجات الأطفال"
+    ],
+    "searchKeywords": [
+      "صليب يوتا سادة 20 سم - موديل 11",
+      "يوتا",
+      "صلبان يوتا",
+      "صليب سادة",
+      "خشب زان",
+      "20 سم",
+      "أيقونات صغيرة",
+      "أيقونات وهدايا",
+      "crosses",
+      "wooden-crosses",
+      "هدايا الخدمة",
+      "منتجات الأطفال",
+      "صليب صلبان"
+    ]
   },
   {
     "id": "iota-plain-cross-20cm-12",
@@ -691,9 +979,29 @@
         "quantity": 1000
       }
     ],
-    "mainCategory": "الأيقونات والبراويز",
-    "subCategory": "أيقونات صغيرة",
-    "slug": "صليب-يوتا-سادة-20-سم-موديل-12"
+    "mainCategory": "crosses",
+    "subCategory": "wooden-crosses",
+    "slug": "صليب-يوتا-سادة-20-سم-موديل-12",
+    "subcategory": "wooden-crosses",
+    "collections": [
+      "هدايا الخدمة",
+      "منتجات الأطفال"
+    ],
+    "searchKeywords": [
+      "صليب يوتا سادة 20 سم - موديل 12",
+      "يوتا",
+      "صلبان يوتا",
+      "صليب سادة",
+      "خشب زان",
+      "20 سم",
+      "أيقونات صغيرة",
+      "أيقونات وهدايا",
+      "crosses",
+      "wooden-crosses",
+      "هدايا الخدمة",
+      "منتجات الأطفال",
+      "صليب صلبان"
+    ]
   },
   {
     "id": "iota-plain-cross-20cm-13",
@@ -734,9 +1042,29 @@
         "quantity": 1000
       }
     ],
-    "mainCategory": "الأيقونات والبراويز",
-    "subCategory": "أيقونات صغيرة",
-    "slug": "صليب-يوتا-سادة-20-سم-موديل-13"
+    "mainCategory": "crosses",
+    "subCategory": "wooden-crosses",
+    "slug": "صليب-يوتا-سادة-20-سم-موديل-13",
+    "subcategory": "wooden-crosses",
+    "collections": [
+      "هدايا الخدمة",
+      "منتجات الأطفال"
+    ],
+    "searchKeywords": [
+      "صليب يوتا سادة 20 سم - موديل 13",
+      "يوتا",
+      "صلبان يوتا",
+      "صليب سادة",
+      "خشب زان",
+      "20 سم",
+      "أيقونات صغيرة",
+      "أيقونات وهدايا",
+      "crosses",
+      "wooden-crosses",
+      "هدايا الخدمة",
+      "منتجات الأطفال",
+      "صليب صلبان"
+    ]
   },
   {
     "id": "iota-plain-cross-20cm-14",
@@ -777,9 +1105,29 @@
         "quantity": 1000
       }
     ],
-    "mainCategory": "الأيقونات والبراويز",
-    "subCategory": "أيقونات صغيرة",
-    "slug": "صليب-يوتا-سادة-20-سم-موديل-14"
+    "mainCategory": "crosses",
+    "subCategory": "wooden-crosses",
+    "slug": "صليب-يوتا-سادة-20-سم-موديل-14",
+    "subcategory": "wooden-crosses",
+    "collections": [
+      "هدايا الخدمة",
+      "منتجات الأطفال"
+    ],
+    "searchKeywords": [
+      "صليب يوتا سادة 20 سم - موديل 14",
+      "يوتا",
+      "صلبان يوتا",
+      "صليب سادة",
+      "خشب زان",
+      "20 سم",
+      "أيقونات صغيرة",
+      "أيقونات وهدايا",
+      "crosses",
+      "wooden-crosses",
+      "هدايا الخدمة",
+      "منتجات الأطفال",
+      "صليب صلبان"
+    ]
   },
   {
     "id": "iota-plain-cross-20cm-15",
@@ -820,9 +1168,29 @@
         "quantity": 1000
       }
     ],
-    "mainCategory": "الأيقونات والبراويز",
-    "subCategory": "أيقونات صغيرة",
-    "slug": "صليب-يوتا-سادة-20-سم-موديل-15"
+    "mainCategory": "crosses",
+    "subCategory": "wooden-crosses",
+    "slug": "صليب-يوتا-سادة-20-سم-موديل-15",
+    "subcategory": "wooden-crosses",
+    "collections": [
+      "هدايا الخدمة",
+      "منتجات الأطفال"
+    ],
+    "searchKeywords": [
+      "صليب يوتا سادة 20 سم - موديل 15",
+      "يوتا",
+      "صلبان يوتا",
+      "صليب سادة",
+      "خشب زان",
+      "20 سم",
+      "أيقونات صغيرة",
+      "أيقونات وهدايا",
+      "crosses",
+      "wooden-crosses",
+      "هدايا الخدمة",
+      "منتجات الأطفال",
+      "صليب صلبان"
+    ]
   },
   {
     "id": "iota-plain-cross-20cm-16",
@@ -863,9 +1231,29 @@
         "quantity": 1000
       }
     ],
-    "mainCategory": "الأيقونات والبراويز",
-    "subCategory": "أيقونات صغيرة",
-    "slug": "صليب-يوتا-سادة-20-سم-موديل-16"
+    "mainCategory": "crosses",
+    "subCategory": "wooden-crosses",
+    "slug": "صليب-يوتا-سادة-20-سم-موديل-16",
+    "subcategory": "wooden-crosses",
+    "collections": [
+      "هدايا الخدمة",
+      "منتجات الأطفال"
+    ],
+    "searchKeywords": [
+      "صليب يوتا سادة 20 سم - موديل 16",
+      "يوتا",
+      "صلبان يوتا",
+      "صليب سادة",
+      "خشب زان",
+      "20 سم",
+      "أيقونات صغيرة",
+      "أيقونات وهدايا",
+      "crosses",
+      "wooden-crosses",
+      "هدايا الخدمة",
+      "منتجات الأطفال",
+      "صليب صلبان"
+    ]
   },
   {
     "id": "iota-plain-cross-20cm-17",
@@ -906,9 +1294,29 @@
         "quantity": 1000
       }
     ],
-    "mainCategory": "الأيقونات والبراويز",
-    "subCategory": "أيقونات صغيرة",
-    "slug": "صليب-يوتا-سادة-20-سم-موديل-17"
+    "mainCategory": "crosses",
+    "subCategory": "wooden-crosses",
+    "slug": "صليب-يوتا-سادة-20-سم-موديل-17",
+    "subcategory": "wooden-crosses",
+    "collections": [
+      "هدايا الخدمة",
+      "منتجات الأطفال"
+    ],
+    "searchKeywords": [
+      "صليب يوتا سادة 20 سم - موديل 17",
+      "يوتا",
+      "صلبان يوتا",
+      "صليب سادة",
+      "خشب زان",
+      "20 سم",
+      "أيقونات صغيرة",
+      "أيقونات وهدايا",
+      "crosses",
+      "wooden-crosses",
+      "هدايا الخدمة",
+      "منتجات الأطفال",
+      "صليب صلبان"
+    ]
   },
   {
     "id": "custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642-copy-1783007465321-copy-1783296428133-copy-1783296505870-copy-1783296547191-copy-1783296594080-copy-1783296672538-copy-1783296711318",
@@ -952,10 +1360,31 @@
         "quantity": 1000
       }
     ],
-    "mainCategory": "الصلبان والهدايا",
-    "subCategory": "ميداليات",
+    "mainCategory": "crosses",
+    "subCategory": "wooden-crosses",
     "slug": "صليب-يوتا-مادليه-موديل-7",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "subcategory": "wooden-crosses",
+    "collections": [
+      "هدايا الخدمة",
+      "منتجات الأطفال"
+    ],
+    "searchKeywords": [
+      "صليب يوتا مادلية موديل 13",
+      "يوتا",
+      "مادليات",
+      "خشب طبقات",
+      "فن",
+      "تلوين",
+      "يوطا",
+      "الأيقونات والبراويز",
+      "أيقونات صغيرة",
+      "أيقونات وهدايا",
+      "crosses",
+      "wooden-crosses",
+      "هدايا الخدمة",
+      "منتجات الأطفال"
+    ]
   },
   {
     "id": "custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642-copy-1783007465321-copy-1783296428133-copy-1783296505870-copy-1783296547191-copy-1783296594080-copy-1783296672538",
@@ -999,10 +1428,31 @@
         "quantity": 1000
       }
     ],
-    "mainCategory": "الصلبان والهدايا",
-    "subCategory": "ميداليات",
+    "mainCategory": "crosses",
+    "subCategory": "wooden-crosses",
     "slug": "صليب-يوتا-مادليه-موديل-7",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "subcategory": "wooden-crosses",
+    "collections": [
+      "هدايا الخدمة",
+      "منتجات الأطفال"
+    ],
+    "searchKeywords": [
+      "صليب يوتا مادلية موديل 12",
+      "يوتا",
+      "مادليات",
+      "خشب طبقات",
+      "فن",
+      "تلوين",
+      "يوطا",
+      "الأيقونات والبراويز",
+      "أيقونات صغيرة",
+      "أيقونات وهدايا",
+      "crosses",
+      "wooden-crosses",
+      "هدايا الخدمة",
+      "منتجات الأطفال"
+    ]
   },
   {
     "id": "custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642-copy-1783007465321-copy-1783296428133-copy-1783296505870-copy-1783296547191-copy-1783296594080",
@@ -1046,10 +1496,31 @@
         "quantity": 1000
       }
     ],
-    "mainCategory": "الصلبان والهدايا",
-    "subCategory": "ميداليات",
+    "mainCategory": "crosses",
+    "subCategory": "wooden-crosses",
     "slug": "صليب-يوتا-مادليه-موديل-7",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "subcategory": "wooden-crosses",
+    "collections": [
+      "هدايا الخدمة",
+      "منتجات الأطفال"
+    ],
+    "searchKeywords": [
+      "صليب يوتا مادلية موديل 11",
+      "يوتا",
+      "مادليات",
+      "خشب طبقات",
+      "فن",
+      "تلوين",
+      "يوطا",
+      "الأيقونات والبراويز",
+      "أيقونات صغيرة",
+      "أيقونات وهدايا",
+      "crosses",
+      "wooden-crosses",
+      "هدايا الخدمة",
+      "منتجات الأطفال"
+    ]
   },
   {
     "id": "custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642-copy-1783007465321-copy-1783296428133-copy-1783296505870-copy-1783296547191",
@@ -1093,10 +1564,31 @@
         "quantity": 1000
       }
     ],
-    "mainCategory": "الصلبان والهدايا",
-    "subCategory": "ميداليات",
+    "mainCategory": "crosses",
+    "subCategory": "wooden-crosses",
     "slug": "صليب-يوتا-مادليه-موديل-7",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "subcategory": "wooden-crosses",
+    "collections": [
+      "هدايا الخدمة",
+      "منتجات الأطفال"
+    ],
+    "searchKeywords": [
+      "صليب يوتا مادلية موديل 10",
+      "يوتا",
+      "مادليات",
+      "خشب طبقات",
+      "فن",
+      "تلوين",
+      "يوطا",
+      "الأيقونات والبراويز",
+      "أيقونات صغيرة",
+      "أيقونات وهدايا",
+      "crosses",
+      "wooden-crosses",
+      "هدايا الخدمة",
+      "منتجات الأطفال"
+    ]
   },
   {
     "id": "custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642-copy-1783007465321-copy-1783296428133-copy-1783296505870",
@@ -1140,10 +1632,31 @@
         "quantity": 1000
       }
     ],
-    "mainCategory": "الصلبان والهدايا",
-    "subCategory": "ميداليات",
+    "mainCategory": "crosses",
+    "subCategory": "wooden-crosses",
     "slug": "صليب-يوتا-مادليه-موديل-7",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "subcategory": "wooden-crosses",
+    "collections": [
+      "هدايا الخدمة",
+      "منتجات الأطفال"
+    ],
+    "searchKeywords": [
+      "صليب يوتا مادلية موديل 9",
+      "يوتا",
+      "مادليات",
+      "خشب طبقات",
+      "فن",
+      "تلوين",
+      "يوطا",
+      "الأيقونات والبراويز",
+      "أيقونات صغيرة",
+      "أيقونات وهدايا",
+      "crosses",
+      "wooden-crosses",
+      "هدايا الخدمة",
+      "منتجات الأطفال"
+    ]
   },
   {
     "id": "custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642-copy-1783007465321-copy-1783296428133",
@@ -1187,10 +1700,31 @@
         "quantity": 1000
       }
     ],
-    "mainCategory": "الصلبان والهدايا",
-    "subCategory": "ميداليات",
+    "mainCategory": "crosses",
+    "subCategory": "wooden-crosses",
     "slug": "صليب-يوتا-مادليه-موديل-7",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "subcategory": "wooden-crosses",
+    "collections": [
+      "هدايا الخدمة",
+      "منتجات الأطفال"
+    ],
+    "searchKeywords": [
+      "صليب يوتا مادلية موديل 8",
+      "يوتا",
+      "مادليات",
+      "خشب طبقات",
+      "فن",
+      "تلوين",
+      "يوطا",
+      "الأيقونات والبراويز",
+      "أيقونات صغيرة",
+      "أيقونات وهدايا",
+      "crosses",
+      "wooden-crosses",
+      "هدايا الخدمة",
+      "منتجات الأطفال"
+    ]
   },
   {
     "id": "custom-1783272387022",
@@ -1433,9 +1967,24 @@
         "quantity": 1000
       }
     ],
-    "mainCategory": "الصلبان والهدايا",
-    "subCategory": "هدايا اجتماعات",
-    "isBestSeller": false
+    "mainCategory": "gifts-accessories",
+    "subCategory": "meeting-games",
+    "isBestSeller": false,
+    "subcategory": "meeting-games",
+    "collections": [
+      "هدايا الخدمة",
+      "منتجات الأطفال"
+    ],
+    "searchKeywords": [
+      "ألوان اليوطا",
+      "نحاسيات",
+      "يوتا",
+      "gifts-accessories",
+      "meeting-games",
+      "هدايا الخدمة",
+      "منتجات الأطفال",
+      "هدايا اكسسوارات إكسسوارات"
+    ]
   },
   {
     "id": "atb3ho-10618130956453",
@@ -1474,11 +2023,25 @@
         "quantity": null
       }
     ],
-    "mainCategory": "منتجات أتبعه",
-    "subCategory": "شنط ومستلزمات روحية",
+    "mainCategory": "gifts-accessories",
+    "subCategory": "tote-bags",
     "updatedAt": "2026-07-04T18:38:24+03:00",
     "slug": "شنطه-اتبعه",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "subcategory": "tote-bags",
+    "collections": [
+      "هدايا الخدمة"
+    ],
+    "searchKeywords": [
+      "شنطه اتبعه",
+      "شنط ومستلزمات روحية",
+      "أتبعه",
+      "Atb3ho",
+      "gifts-accessories",
+      "tote-bags",
+      "هدايا الخدمة",
+      "هدايا اكسسوارات إكسسوارات"
+    ]
   },
   {
     "id": "atb3ho-10618127974565",
@@ -1517,11 +2080,25 @@
         "quantity": null
       }
     ],
-    "mainCategory": "منتجات أتبعه",
-    "subCategory": "شنط ومستلزمات روحية",
+    "mainCategory": "gifts-accessories",
+    "subCategory": "tote-bags",
     "updatedAt": "2026-07-04T18:38:24+03:00",
     "slug": "شنطه-اتبعه-3ho-10618127974565",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "subcategory": "tote-bags",
+    "collections": [
+      "هدايا الخدمة"
+    ],
+    "searchKeywords": [
+      "شنطه اتبعه",
+      "شنط ومستلزمات روحية",
+      "أتبعه",
+      "Atb3ho",
+      "gifts-accessories",
+      "tote-bags",
+      "هدايا الخدمة",
+      "هدايا اكسسوارات إكسسوارات"
+    ]
   },
   {
     "id": "atb3ho-10558435197093",
@@ -1607,11 +2184,26 @@
         "quantity": null
       }
     ],
-    "mainCategory": "منتجات أتبعه",
-    "subCategory": "شنط ومستلزمات روحية",
+    "mainCategory": "gifts-accessories",
+    "subCategory": "tote-bags",
     "updatedAt": "2026-07-04T18:38:24+03:00",
     "slug": "كافر-كتاب-مقدس-وشنطه-مستلزمات-روحيه",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "subcategory": "tote-bags",
+    "collections": [
+      "هدايا الخدمة"
+    ],
+    "searchKeywords": [
+      "كافر كتاب مقدس وشنطه مستلزمات روحيه",
+      "شنط ومستلزمات روحية",
+      "خصم",
+      "أتبعه",
+      "Atb3ho",
+      "gifts-accessories",
+      "tote-bags",
+      "هدايا الخدمة",
+      "هدايا اكسسوارات إكسسوارات"
+    ]
   },
   {
     "id": "atb3ho-10555319877797",
@@ -1650,11 +2242,27 @@
         "quantity": null
       }
     ],
-    "mainCategory": "منتجات أتبعه",
-    "subCategory": "كروت",
+    "mainCategory": "gifts-accessories",
+    "subCategory": "meeting-games",
     "updatedAt": "2026-07-04T18:38:24+03:00",
     "slug": "تحدي-التغيير",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "subcategory": "meeting-games",
+    "collections": [
+      "هدايا الخدمة",
+      "منتجات الأطفال"
+    ],
+    "searchKeywords": [
+      "تحدي التغيير",
+      "كروت",
+      "أتبعه",
+      "Atb3ho",
+      "gifts-accessories",
+      "meeting-games",
+      "هدايا الخدمة",
+      "منتجات الأطفال",
+      "هدايا اكسسوارات إكسسوارات"
+    ]
   },
   {
     "id": "atb3ho-10547044876453",
@@ -1693,11 +2301,28 @@
         "quantity": null
       }
     ],
-    "mainCategory": "منتجات أتبعه",
-    "subCategory": "بوك مارك",
+    "mainCategory": "gifts-accessories",
+    "subCategory": "bookmarks",
     "updatedAt": "2026-07-04T18:38:24+03:00",
     "slug": "٥-بوك-مارك-٥-free",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "subcategory": "bookmarks",
+    "collections": [
+      "هدايا الخدمة",
+      "منتجات الأطفال"
+    ],
+    "searchKeywords": [
+      "٥ بوك مارك + ٥ FREE",
+      "بوك مارك",
+      "خصم",
+      "أتبعه",
+      "Atb3ho",
+      "gifts-accessories",
+      "bookmarks",
+      "هدايا الخدمة",
+      "منتجات الأطفال",
+      "هدايا اكسسوارات إكسسوارات"
+    ]
   },
   {
     "id": "atb3ho-10547041829029",
@@ -1736,11 +2361,26 @@
         "quantity": null
       }
     ],
-    "mainCategory": "منتجات أتبعه",
-    "subCategory": "جورنالينج",
+    "mainCategory": "gifts-accessories",
+    "subCategory": "planners",
     "updatedAt": "2026-07-04T18:38:24+03:00",
     "slug": "جورنالينج-اتبعه-٣٦٥-يوم",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "subcategory": "planners",
+    "collections": [
+      "هدايا الخدمة"
+    ],
+    "searchKeywords": [
+      "جورنالينج اتبعه ٣٦٥ يوم",
+      "جورنالينج",
+      "خصم",
+      "أتبعه",
+      "Atb3ho",
+      "gifts-accessories",
+      "planners",
+      "هدايا الخدمة",
+      "هدايا اكسسوارات إكسسوارات"
+    ]
   },
   {
     "id": "atb3ho-10545390780581",
@@ -1779,11 +2419,26 @@
         "quantity": null
       }
     ],
-    "mainCategory": "منتجات أتبعه",
-    "subCategory": "بوك مارك",
+    "mainCategory": "gifts-accessories",
+    "subCategory": "bookmarks",
     "updatedAt": "2026-07-04T18:38:24+03:00",
     "slug": "بوك-مارك",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "subcategory": "bookmarks",
+    "collections": [
+      "هدايا الخدمة",
+      "منتجات الأطفال"
+    ],
+    "searchKeywords": [
+      "بوك مارك",
+      "أتبعه",
+      "Atb3ho",
+      "gifts-accessories",
+      "bookmarks",
+      "هدايا الخدمة",
+      "منتجات الأطفال",
+      "هدايا اكسسوارات إكسسوارات"
+    ]
   },
   {
     "id": "atb3ho-10545390354597",
@@ -1822,11 +2477,27 @@
         "quantity": null
       }
     ],
-    "mainCategory": "منتجات أتبعه",
-    "subCategory": "بوك مارك",
+    "mainCategory": "gifts-accessories",
+    "subCategory": "bookmarks",
     "updatedAt": "2026-07-04T18:38:24+03:00",
     "slug": "بوك-مارك-داود",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "subcategory": "bookmarks",
+    "collections": [
+      "هدايا الخدمة",
+      "منتجات الأطفال"
+    ],
+    "searchKeywords": [
+      "بوك مارك داود",
+      "بوك مارك",
+      "أتبعه",
+      "Atb3ho",
+      "gifts-accessories",
+      "bookmarks",
+      "هدايا الخدمة",
+      "منتجات الأطفال",
+      "هدايا اكسسوارات إكسسوارات"
+    ]
   },
   {
     "id": "atb3ho-10545389863077",
@@ -1865,11 +2536,27 @@
         "quantity": null
       }
     ],
-    "mainCategory": "منتجات أتبعه",
-    "subCategory": "بوك مارك",
+    "mainCategory": "gifts-accessories",
+    "subCategory": "personalized",
     "updatedAt": "2026-07-04T18:38:24+03:00",
     "slug": "بوك-مارك-بالاسم",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "subcategory": "personalized",
+    "collections": [
+      "هدايا الخدمة",
+      "منتجات بالاسم"
+    ],
+    "searchKeywords": [
+      "بوك مارك (بالإسم)",
+      "بوك مارك",
+      "أتبعه",
+      "Atb3ho",
+      "gifts-accessories",
+      "personalized",
+      "هدايا الخدمة",
+      "منتجات بالاسم",
+      "هدايا اكسسوارات إكسسوارات"
+    ]
   },
   {
     "id": "atb3ho-10545388912805",
@@ -1908,11 +2595,27 @@
         "quantity": null
       }
     ],
-    "mainCategory": "منتجات أتبعه",
-    "subCategory": "بوك مارك",
+    "mainCategory": "gifts-accessories",
+    "subCategory": "personalized",
     "updatedAt": "2026-07-04T18:38:24+03:00",
     "slug": "بوك-مارك-بالاسم-اتبعه",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "subcategory": "personalized",
+    "collections": [
+      "هدايا الخدمة",
+      "منتجات بالاسم"
+    ],
+    "searchKeywords": [
+      "بوك مارك بالإسم اتبعه",
+      "بوك مارك",
+      "أتبعه",
+      "Atb3ho",
+      "gifts-accessories",
+      "personalized",
+      "هدايا الخدمة",
+      "منتجات بالاسم",
+      "هدايا اكسسوارات إكسسوارات"
+    ]
   },
   {
     "id": "atb3ho-10545388191909",
@@ -1951,11 +2654,27 @@
         "quantity": null
       }
     ],
-    "mainCategory": "منتجات أتبعه",
-    "subCategory": "بوك مارك",
+    "mainCategory": "gifts-accessories",
+    "subCategory": "personalized",
     "updatedAt": "2026-07-04T18:38:24+03:00",
     "slug": "بوك-مارك-بالاسم-3ho-10545388191909",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "subcategory": "personalized",
+    "collections": [
+      "هدايا الخدمة",
+      "منتجات بالاسم"
+    ],
+    "searchKeywords": [
+      "بوك مارك (بالإسم)",
+      "بوك مارك",
+      "أتبعه",
+      "Atb3ho",
+      "gifts-accessories",
+      "personalized",
+      "هدايا الخدمة",
+      "منتجات بالاسم",
+      "هدايا اكسسوارات إكسسوارات"
+    ]
   },
   {
     "id": "atb3ho-10545386553509",
@@ -1994,11 +2713,27 @@
         "quantity": null
       }
     ],
-    "mainCategory": "منتجات أتبعه",
-    "subCategory": "بوك مارك",
+    "mainCategory": "gifts-accessories",
+    "subCategory": "bookmarks",
     "updatedAt": "2026-07-04T18:38:24+03:00",
     "slug": "بوك-مارك-مزمور-١١٧",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "subcategory": "bookmarks",
+    "collections": [
+      "هدايا الخدمة",
+      "منتجات الأطفال"
+    ],
+    "searchKeywords": [
+      "بوك مارك مزمور ١١٧",
+      "بوك مارك",
+      "أتبعه",
+      "Atb3ho",
+      "gifts-accessories",
+      "bookmarks",
+      "هدايا الخدمة",
+      "منتجات الأطفال",
+      "هدايا اكسسوارات إكسسوارات"
+    ]
   },
   {
     "id": "atb3ho-10545385636005",
@@ -2037,11 +2772,27 @@
         "quantity": null
       }
     ],
-    "mainCategory": "منتجات أتبعه",
-    "subCategory": "بوك مارك",
+    "mainCategory": "gifts-accessories",
+    "subCategory": "bookmarks",
     "updatedAt": "2026-07-04T18:38:24+03:00",
     "slug": "بوك-مارك-رحلتك",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "subcategory": "bookmarks",
+    "collections": [
+      "هدايا الخدمة",
+      "منتجات الأطفال"
+    ],
+    "searchKeywords": [
+      "بوك مارك رحلتك",
+      "بوك مارك",
+      "أتبعه",
+      "Atb3ho",
+      "gifts-accessories",
+      "bookmarks",
+      "هدايا الخدمة",
+      "منتجات الأطفال",
+      "هدايا اكسسوارات إكسسوارات"
+    ]
   },
   {
     "id": "atb3ho-10545382686885",
@@ -2080,11 +2831,27 @@
         "quantity": null
       }
     ],
-    "mainCategory": "منتجات أتبعه",
-    "subCategory": "بوك مارك",
+    "mainCategory": "gifts-accessories",
+    "subCategory": "bookmarks",
     "updatedAt": "2026-07-04T18:38:24+03:00",
     "slug": "بوك-مارك-الصليب",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "subcategory": "bookmarks",
+    "collections": [
+      "هدايا الخدمة",
+      "منتجات الأطفال"
+    ],
+    "searchKeywords": [
+      "بوك مارك الصليب",
+      "بوك مارك",
+      "أتبعه",
+      "Atb3ho",
+      "gifts-accessories",
+      "bookmarks",
+      "هدايا الخدمة",
+      "منتجات الأطفال",
+      "هدايا اكسسوارات إكسسوارات"
+    ]
   },
   {
     "id": "atb3ho-10545381474469",
@@ -2123,11 +2890,28 @@
         "quantity": null
       }
     ],
-    "mainCategory": "منتجات أتبعه",
-    "subCategory": "بوك مارك",
+    "mainCategory": "gifts-accessories",
+    "subCategory": "bookmarks",
     "updatedAt": "2026-07-04T18:38:24+03:00",
     "slug": "بوك-مارك-اتبعه",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "subcategory": "bookmarks",
+    "collections": [
+      "هدايا الخدمة",
+      "منتجات الأطفال"
+    ],
+    "searchKeywords": [
+      "بوك مارك اتبعه",
+      "بوك مارك",
+      "خصم",
+      "أتبعه",
+      "Atb3ho",
+      "gifts-accessories",
+      "bookmarks",
+      "هدايا الخدمة",
+      "منتجات الأطفال",
+      "هدايا اكسسوارات إكسسوارات"
+    ]
   },
   {
     "id": "atb3ho-10545380884645",
@@ -2166,11 +2950,27 @@
         "quantity": null
       }
     ],
-    "mainCategory": "منتجات أتبعه",
-    "subCategory": "بوك مارك",
+    "mainCategory": "gifts-accessories",
+    "subCategory": "bookmarks",
     "updatedAt": "2026-07-04T18:38:24+03:00",
     "slug": "بوك-مارك-صلاه-يسوع",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "subcategory": "bookmarks",
+    "collections": [
+      "هدايا الخدمة",
+      "منتجات الأطفال"
+    ],
+    "searchKeywords": [
+      "بوك مارك صلاة يسوع",
+      "بوك مارك",
+      "أتبعه",
+      "Atb3ho",
+      "gifts-accessories",
+      "bookmarks",
+      "هدايا الخدمة",
+      "منتجات الأطفال",
+      "هدايا اكسسوارات إكسسوارات"
+    ]
   },
   {
     "id": "atb3ho-10545379934373",
@@ -2209,11 +3009,27 @@
         "quantity": null
       }
     ],
-    "mainCategory": "منتجات أتبعه",
-    "subCategory": "بوك مارك",
+    "mainCategory": "gifts-accessories",
+    "subCategory": "bookmarks",
     "updatedAt": "2026-07-04T18:38:24+03:00",
     "slug": "بوك-مارك-بابا-يسوع",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "subcategory": "bookmarks",
+    "collections": [
+      "هدايا الخدمة",
+      "منتجات الأطفال"
+    ],
+    "searchKeywords": [
+      "بوك مارك بابا يسوع",
+      "بوك مارك",
+      "أتبعه",
+      "Atb3ho",
+      "gifts-accessories",
+      "bookmarks",
+      "هدايا الخدمة",
+      "منتجات الأطفال",
+      "هدايا اكسسوارات إكسسوارات"
+    ]
   },
   {
     "id": "atb3ho-10545379836069",
@@ -2252,11 +3068,25 @@
         "quantity": null
       }
     ],
-    "mainCategory": "منتجات أتبعه",
-    "subCategory": "نوت بوك",
+    "mainCategory": "gifts-accessories",
+    "subCategory": "notebooks",
     "updatedAt": "2026-07-04T18:38:24+03:00",
     "slug": "نوت-بوك-اتبعه-في-صلاتي-اجنده",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "subcategory": "notebooks",
+    "collections": [
+      "هدايا الخدمة"
+    ],
+    "searchKeywords": [
+      "نوت بوك اتبعه في صلاتي (اجندة)",
+      "نوت بوك",
+      "أتبعه",
+      "Atb3ho",
+      "gifts-accessories",
+      "notebooks",
+      "هدايا الخدمة",
+      "هدايا اكسسوارات إكسسوارات"
+    ]
   },
   {
     "id": "atb3ho-10545378001061",
@@ -2295,11 +3125,25 @@
         "quantity": null
       }
     ],
-    "mainCategory": "منتجات أتبعه",
-    "subCategory": "نوت بوك",
+    "mainCategory": "gifts-accessories",
+    "subCategory": "notebooks",
     "updatedAt": "2026-07-04T18:38:24+03:00",
     "slug": "نوت-بوك-اتبعه-في-صلاه-سلك",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "subcategory": "notebooks",
+    "collections": [
+      "هدايا الخدمة"
+    ],
+    "searchKeywords": [
+      "نوت بوك اتبعه في صلاة (سلك)",
+      "نوت بوك",
+      "أتبعه",
+      "Atb3ho",
+      "gifts-accessories",
+      "notebooks",
+      "هدايا الخدمة",
+      "هدايا اكسسوارات إكسسوارات"
+    ]
   },
   {
     "id": "atb3ho-10545377149093",
@@ -2338,11 +3182,28 @@
         "quantity": null
       }
     ],
-    "mainCategory": "منتجات أتبعه",
-    "subCategory": "كروت",
+    "mainCategory": "gifts-accessories",
+    "subCategory": "meeting-games",
     "updatedAt": "2026-07-04T18:38:24+03:00",
     "slug": "اتبعه-في-تحدياتي",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "subcategory": "meeting-games",
+    "collections": [
+      "هدايا الخدمة",
+      "منتجات الأطفال"
+    ],
+    "searchKeywords": [
+      "اتبعه في تحدياتي",
+      "كروت",
+      "خصم",
+      "أتبعه",
+      "Atb3ho",
+      "gifts-accessories",
+      "meeting-games",
+      "هدايا الخدمة",
+      "منتجات الأطفال",
+      "هدايا اكسسوارات إكسسوارات"
+    ]
   },
   {
     "id": "atb3ho-10545374298277",
@@ -2381,11 +3242,28 @@
         "quantity": null
       }
     ],
-    "mainCategory": "منتجات أتبعه",
-    "subCategory": "باكيدج",
+    "mainCategory": "gifts-accessories",
+    "subCategory": "meeting-games",
     "updatedAt": "2026-07-04T18:38:24+03:00",
     "slug": "باكدج-اتبعه",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "subcategory": "meeting-games",
+    "collections": [
+      "هدايا الخدمة",
+      "منتجات الأطفال"
+    ],
+    "searchKeywords": [
+      "باكدج اتبعه",
+      "باكيدج",
+      "خصم",
+      "أتبعه",
+      "Atb3ho",
+      "gifts-accessories",
+      "meeting-games",
+      "هدايا الخدمة",
+      "منتجات الأطفال",
+      "هدايا اكسسوارات إكسسوارات"
+    ]
   },
   {
     "id": "atb3ho-10545373839525",
@@ -2424,11 +3302,27 @@
         "quantity": null
       }
     ],
-    "mainCategory": "منتجات أتبعه",
-    "subCategory": "كروت",
+    "mainCategory": "gifts-accessories",
+    "subCategory": "cards",
     "updatedAt": "2026-07-04T18:38:24+03:00",
     "slug": "كارت-منظم-لمواعيد-سر-الاعتراف",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "subcategory": "cards",
+    "collections": [
+      "هدايا الخدمة",
+      "منتجات الأطفال"
+    ],
+    "searchKeywords": [
+      "كارت منظم لمواعيد سر الاعتراف",
+      "كروت",
+      "أتبعه",
+      "Atb3ho",
+      "gifts-accessories",
+      "cards",
+      "هدايا الخدمة",
+      "منتجات الأطفال",
+      "هدايا اكسسوارات إكسسوارات"
+    ]
   },
   {
     "id": "atb3ho-10545371218085",
@@ -2492,11 +3386,26 @@
         "quantity": null
       }
     ],
-    "mainCategory": "منتجات أتبعه",
-    "subCategory": "جورنالينج",
+    "mainCategory": "gifts-accessories",
+    "subCategory": "planners",
     "updatedAt": "2026-07-04T18:38:24+03:00",
     "slug": "اتبعه-رحله-٢١٤-يوم",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "subcategory": "planners",
+    "collections": [
+      "هدايا الخدمة"
+    ],
+    "searchKeywords": [
+      "اتبعُه رحلة ٢١٤ يوم",
+      "جورنالينج",
+      "خصم",
+      "أتبعه",
+      "Atb3ho",
+      "gifts-accessories",
+      "planners",
+      "هدايا الخدمة",
+      "هدايا اكسسوارات إكسسوارات"
+    ]
   },
   {
     "id": "custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642-copy-1783007465321",
@@ -2540,10 +3449,32 @@
         "quantity": 1000
       }
     ],
-    "mainCategory": "الصلبان والهدايا",
-    "subCategory": "ميداليات",
+    "mainCategory": "crosses",
+    "subCategory": "wooden-crosses",
     "slug": "صليب-يوتا-مادليه-موديل-7",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "subcategory": "wooden-crosses",
+    "collections": [
+      "هدايا الخدمة",
+      "منتجات الأطفال"
+    ],
+    "searchKeywords": [
+      "صليب يوتا مادلية موديل 7",
+      "يوتا",
+      "مادليات",
+      "خشب طبقات",
+      "فن",
+      "تلوين",
+      "يوطا",
+      "الأيقونات والبراويز",
+      "أيقونات صغيرة",
+      "أيقونات وهدايا",
+      "crosses",
+      "wooden-crosses",
+      "هدايا الخدمة",
+      "منتجات الأطفال",
+      "صليب صلبان"
+    ]
   },
   {
     "id": "custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642",
@@ -2587,10 +3518,32 @@
         "quantity": 1000
       }
     ],
-    "mainCategory": "الصلبان والهدايا",
-    "subCategory": "ميداليات",
+    "mainCategory": "crosses",
+    "subCategory": "wooden-crosses",
     "slug": "صليب-يوتا-مادليه-موديل-6",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "subcategory": "wooden-crosses",
+    "collections": [
+      "هدايا الخدمة",
+      "منتجات الأطفال"
+    ],
+    "searchKeywords": [
+      "صليب يوتا مادلية موديل 6",
+      "يوتا",
+      "مادليات",
+      "خشب طبقات",
+      "فن",
+      "تلوين",
+      "يوطا",
+      "الأيقونات والبراويز",
+      "أيقونات صغيرة",
+      "أيقونات وهدايا",
+      "crosses",
+      "wooden-crosses",
+      "هدايا الخدمة",
+      "منتجات الأطفال",
+      "صليب صلبان"
+    ]
   },
   {
     "id": "custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119",
@@ -2634,10 +3587,32 @@
         "quantity": 1000
       }
     ],
-    "mainCategory": "الصلبان والهدايا",
-    "subCategory": "ميداليات",
+    "mainCategory": "crosses",
+    "subCategory": "wooden-crosses",
     "slug": "صليب-يوتا-مادليه-موديل-5",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "subcategory": "wooden-crosses",
+    "collections": [
+      "هدايا الخدمة",
+      "منتجات الأطفال"
+    ],
+    "searchKeywords": [
+      "صليب يوتا مادلية موديل 5",
+      "يوتا",
+      "مادليات",
+      "خشب طبقات",
+      "فن",
+      "تلوين",
+      "يوطا",
+      "الأيقونات والبراويز",
+      "أيقونات صغيرة",
+      "أيقونات وهدايا",
+      "crosses",
+      "wooden-crosses",
+      "هدايا الخدمة",
+      "منتجات الأطفال",
+      "صليب صلبان"
+    ]
   },
   {
     "id": "custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699",
@@ -2681,10 +3656,32 @@
         "quantity": 1000
       }
     ],
-    "mainCategory": "الصلبان والهدايا",
-    "subCategory": "ميداليات",
+    "mainCategory": "crosses",
+    "subCategory": "wooden-crosses",
     "slug": "صليب-يوتا-مادليه-موديل-4",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "subcategory": "wooden-crosses",
+    "collections": [
+      "هدايا الخدمة",
+      "منتجات الأطفال"
+    ],
+    "searchKeywords": [
+      "صليب يوتا مادلية موديل 4",
+      "يوتا",
+      "مادليات",
+      "خشب طبقات",
+      "فن",
+      "تلوين",
+      "يوطا",
+      "الأيقونات والبراويز",
+      "أيقونات صغيرة",
+      "أيقونات وهدايا",
+      "crosses",
+      "wooden-crosses",
+      "هدايا الخدمة",
+      "منتجات الأطفال",
+      "صليب صلبان"
+    ]
   },
   {
     "id": "custom-1782980654479-copy-1782982056347-copy-1782986984554",
@@ -2728,10 +3725,32 @@
         "quantity": 1000
       }
     ],
-    "mainCategory": "الصلبان والهدايا",
-    "subCategory": "ميداليات",
+    "mainCategory": "crosses",
+    "subCategory": "wooden-crosses",
     "slug": "صليب-يوتا-مادليه-موديل-3",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "subcategory": "wooden-crosses",
+    "collections": [
+      "هدايا الخدمة",
+      "منتجات الأطفال"
+    ],
+    "searchKeywords": [
+      "صليب يوتا مادلية موديل 3",
+      "يوتا",
+      "مادليات",
+      "خشب طبقات",
+      "فن",
+      "تلوين",
+      "يوطا",
+      "الأيقونات والبراويز",
+      "أيقونات صغيرة",
+      "أيقونات وهدايا",
+      "crosses",
+      "wooden-crosses",
+      "هدايا الخدمة",
+      "منتجات الأطفال",
+      "صليب صلبان"
+    ]
   },
   {
     "id": "custom-1782980654479-copy-1782982056347",
@@ -2775,10 +3794,32 @@
         "quantity": 1000
       }
     ],
-    "mainCategory": "الصلبان والهدايا",
-    "subCategory": "ميداليات",
+    "mainCategory": "crosses",
+    "subCategory": "wooden-crosses",
     "slug": "صليب-يوتا-مادليه-موديل-2",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "subcategory": "wooden-crosses",
+    "collections": [
+      "هدايا الخدمة",
+      "منتجات الأطفال"
+    ],
+    "searchKeywords": [
+      "صليب يوتا مادلية موديل 2",
+      "يوتا",
+      "مادليات",
+      "خشب طبقات",
+      "فن",
+      "تلوين",
+      "يوطا",
+      "الأيقونات والبراويز",
+      "أيقونات صغيرة",
+      "أيقونات وهدايا",
+      "crosses",
+      "wooden-crosses",
+      "هدايا الخدمة",
+      "منتجات الأطفال",
+      "صليب صلبان"
+    ]
   },
   {
     "id": "custom-1782980654479",
@@ -2822,10 +3863,32 @@
         "quantity": 1000
       }
     ],
-    "mainCategory": "الصلبان والهدايا",
-    "subCategory": "ميداليات",
+    "mainCategory": "crosses",
+    "subCategory": "wooden-crosses",
     "slug": "صليب-يوتا-مادليه-موديل-1",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "subcategory": "wooden-crosses",
+    "collections": [
+      "هدايا الخدمة",
+      "منتجات الأطفال"
+    ],
+    "searchKeywords": [
+      "صليب يوتا مادلية موديل 1",
+      "يوتا",
+      "مادليات",
+      "خشب طبقات",
+      "فن",
+      "تلوين",
+      "يوطا",
+      "الأيقونات والبراويز",
+      "أيقونات صغيرة",
+      "أيقونات وهدايا",
+      "crosses",
+      "wooden-crosses",
+      "هدايا الخدمة",
+      "منتجات الأطفال",
+      "صليب صلبان"
+    ]
   },
   {
     "id": "custom-1782306615168-copy-1782306883366-copy-1782307173548-copy-1782307256776-copy-1782307341493-copy-1782310276272-copy-1782310382795-copy-1782310383710",
@@ -2870,10 +3933,24 @@
         "quantity": 10
       }
     ],
-    "mainCategory": "الكتب والطقوس",
-    "subCategory": "قطمارس",
+    "mainCategory": "books-rituals",
+    "subCategory": "katameros",
     "slug": "قطمارس-البصخه-عربي-دير-الشهيد-العظيم-مارمينا-العجايبي-بمريوط",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "subcategory": "katameros",
+    "collections": [],
+    "searchKeywords": [
+      "قطمارس البصخة – عربي – دير الشهيد العظيم مارمينا العجائبي بمريوط",
+      "قطمارس",
+      "كتب",
+      "كتاب مقدس",
+      "إنجيل",
+      "قراءات",
+      "books",
+      "الكتب والطقوس",
+      "books-rituals",
+      "katameros"
+    ]
   },
   {
     "id": "custom-1782306615168-copy-1782306883366-copy-1782307173548-copy-1782307256776-copy-1782307341493-copy-1782310276272-copy-1782310382795",
@@ -2916,10 +3993,24 @@
         "quantity": 10
       }
     ],
-    "mainCategory": "الكتب والطقوس",
-    "subCategory": "قطمارس",
+    "mainCategory": "books-rituals",
+    "subCategory": "katameros",
     "slug": "قطمارس-الصوم-الكبير-عربي-دير-الشهيد-العظيم-مارمينا-العجايبي-بمريوط-نسخه",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "subcategory": "katameros",
+    "collections": [],
+    "searchKeywords": [
+      "قطمارس الصوم الكبير – عربي– دير الشهيد العظيم مارمينا العجائبي بمريوط - نسخة",
+      "قطمارس",
+      "كتب",
+      "كتاب مقدس",
+      "إنجيل",
+      "قراءات",
+      "books",
+      "الكتب والطقوس",
+      "books-rituals",
+      "katameros"
+    ]
   },
   {
     "id": "custom-1782306615168-copy-1782306883366-copy-1782307173548-copy-1782307256776-copy-1782307341493-copy-1782310276272",
@@ -2960,10 +4051,24 @@
         "quantity": 10
       }
     ],
-    "mainCategory": "الكتب والطقوس",
-    "subCategory": "قطمارس",
+    "mainCategory": "books-rituals",
+    "subCategory": "katameros",
     "slug": "قطمارس-الخمسين-قبطي-دير-الشهيد-العظيم-مارمينا-العجايبي-بمريوط",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "subcategory": "katameros",
+    "collections": [],
+    "searchKeywords": [
+      "قطمارس الخمسين – قبطي – دير الشهيد العظيم مارمينا العجائبي بمريوط",
+      "قطمارس",
+      "كتب",
+      "كتاب مقدس",
+      "إنجيل",
+      "قراءات",
+      "books",
+      "الكتب والطقوس",
+      "books-rituals",
+      "katameros"
+    ]
   },
   {
     "id": "custom-1782306615168-copy-1782306883366-copy-1782307173548-copy-1782307256776-copy-1782307341493",
@@ -3004,10 +4109,24 @@
         "quantity": 10
       }
     ],
-    "mainCategory": "الكتب والطقوس",
-    "subCategory": "قطمارس",
+    "mainCategory": "books-rituals",
+    "subCategory": "katameros",
     "slug": "قطمارس-الخمسين-عربي-دير-الشهيد-العظيم-مارمينا-العجايبي-بمريوط",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "subcategory": "katameros",
+    "collections": [],
+    "searchKeywords": [
+      "قطمارس الخمسين – عربي – دير الشهيد العظيم مارمينا العجائبي بمريوط",
+      "قطمارس",
+      "كتب",
+      "كتاب مقدس",
+      "إنجيل",
+      "قراءات",
+      "books",
+      "الكتب والطقوس",
+      "books-rituals",
+      "katameros"
+    ]
   },
   {
     "id": "custom-1782306615168-copy-1782306883366-copy-1782307173548-copy-1782307256776",
@@ -3048,10 +4167,24 @@
         "quantity": 10
       }
     ],
-    "mainCategory": "الكتب والطقوس",
-    "subCategory": "قطمارس",
+    "mainCategory": "books-rituals",
+    "subCategory": "katameros",
     "slug": "قطمارس-الاحاد-عربي-دير-الشهيد-العظيم-مارمينا-العجايبي-بمريوط",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "subcategory": "katameros",
+    "collections": [],
+    "searchKeywords": [
+      "قطمارس الآحاد – عربي – دير الشهيد العظيم مارمينا العجائبي بمريوط",
+      "قطمارس",
+      "كتب",
+      "كتاب مقدس",
+      "إنجيل",
+      "قراءات",
+      "books",
+      "الكتب والطقوس",
+      "books-rituals",
+      "katameros"
+    ]
   },
   {
     "id": "custom-1782306615168-copy-1782306883366-copy-1782307173548",
@@ -3094,10 +4227,24 @@
         "quantity": 10
       }
     ],
-    "mainCategory": "الكتب والطقوس",
-    "subCategory": "قطمارس",
+    "mainCategory": "books-rituals",
+    "subCategory": "katameros",
     "slug": "قطمارس-الاحاد-قبطي-دير-الشهيد-العظيم-مارمينا-العجايبي-بمريوط",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "subcategory": "katameros",
+    "collections": [],
+    "searchKeywords": [
+      "قطمارس الآحاد – قبطي – دير الشهيد العظيم مارمينا العجائبي بمريوط",
+      "قطمارس",
+      "كتب",
+      "كتاب مقدس",
+      "إنجيل",
+      "قراءات",
+      "books",
+      "الكتب والطقوس",
+      "books-rituals",
+      "katameros"
+    ]
   },
   {
     "id": "custom-1782306615168-copy-1782306883366",
@@ -3138,10 +4285,24 @@
         "quantity": 10
       }
     ],
-    "mainCategory": "الكتب والطقوس",
-    "subCategory": "قطمارس",
+    "mainCategory": "books-rituals",
+    "subCategory": "katameros",
     "slug": "قطمارس-الايام-السنوي-قبطي-دير-الشهيد-العظيم-مارمينا-العجايبي-بمريوط",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "subcategory": "katameros",
+    "collections": [],
+    "searchKeywords": [
+      "قطمارس الأيام السنوي – قبطي – دير الشهيد العظيم مارمينا العجائبي بمريوط",
+      "قطمارس",
+      "كتب",
+      "كتاب مقدس",
+      "إنجيل",
+      "قراءات",
+      "books",
+      "الكتب والطقوس",
+      "books-rituals",
+      "katameros"
+    ]
   },
   {
     "id": "custom-1782306615168",
@@ -3182,10 +4343,24 @@
         "quantity": 10
       }
     ],
-    "mainCategory": "الكتب والطقوس",
-    "subCategory": "قطمارس",
+    "mainCategory": "books-rituals",
+    "subCategory": "katameros",
     "slug": "قطمارس-الايام-السنوي-عربي-نسخه-دير-الشهيد-العظيم-مارمينا-العجايبي-بمريوط",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "subcategory": "katameros",
+    "collections": [],
+    "searchKeywords": [
+      "قطمارس الأيام السنوي – عربي – نسخة دير الشهيد العظيم مارمينا العجائبي بمريوط",
+      "قطمارس",
+      "كتب",
+      "كتاب مقدس",
+      "إنجيل",
+      "قراءات",
+      "books",
+      "الكتب والطقوس",
+      "books-rituals",
+      "katameros"
+    ]
   },
   {
     "id": "custom-1782079632185",
@@ -3223,10 +4398,20 @@
         "quantity": 1
       }
     ],
-    "mainCategory": "الشمع والبخور",
-    "subCategory": "شموع",
+    "mainCategory": "candles-incense",
+    "subCategory": "candles",
     "slug": "شمع-ايقونات",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "subcategory": "candles",
+    "collections": [],
+    "searchKeywords": [
+      "شمع أيقونات",
+      "شمع",
+      "candles",
+      "الشمع والبخور",
+      "شموع",
+      "candles-incense"
+    ]
   },
   {
     "id": "old-10123915690291",
@@ -3267,10 +4452,22 @@
         "quantity": 10
       }
     ],
-    "mainCategory": "أدوات المذبح",
-    "subCategory": "ذخائر وعلب",
+    "mainCategory": "candles-incense",
+    "subCategory": "incense-sets",
     "slug": "علبه-بخور-نحاس-ذهبي-بصليب",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "subcategory": "incense-sets",
+    "collections": [],
+    "searchKeywords": [
+      "علبة بخور نحاس ذهبي بصليب",
+      "نحاسيات",
+      "علب بخور",
+      "brass",
+      "الشمع والبخور",
+      "أطقم بخور",
+      "candles-incense",
+      "incense-sets"
+    ]
   },
   {
     "id": "old-10123914805555",
@@ -3311,10 +4508,22 @@
         "quantity": 10
       }
     ],
-    "mainCategory": "أدوات المذبح",
-    "subCategory": "ذخائر وعلب",
+    "mainCategory": "candles-incense",
+    "subCategory": "incense-sets",
     "slug": "علبه-بخور-نحاس-فضي-بصليب",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "subcategory": "incense-sets",
+    "collections": [],
+    "searchKeywords": [
+      "علبة بخور نحاس فضي بصليب",
+      "نحاسيات",
+      "علب بخور",
+      "brass",
+      "الشمع والبخور",
+      "أطقم بخور",
+      "candles-incense",
+      "incense-sets"
+    ]
   },
   {
     "id": "old-10123913003315",
@@ -3356,10 +4565,22 @@
         "quantity": 10
       }
     ],
-    "mainCategory": "أدوات المذبح",
-    "subCategory": "ذخائر وعلب",
+    "mainCategory": "candles-incense",
+    "subCategory": "incense-sets",
     "slug": "علبه-بخور-نحاس-فضي-فص-ملون",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "subcategory": "incense-sets",
+    "collections": [],
+    "searchKeywords": [
+      "علبة بخور نحاس فضي فص ملون",
+      "نحاسيات",
+      "علب بخور",
+      "brass",
+      "الشمع والبخور",
+      "أطقم بخور",
+      "candles-incense",
+      "incense-sets"
+    ]
   },
   {
     "id": "old-10121340551475",
@@ -3438,10 +4659,26 @@
         "quantity": 11
       }
     ],
-    "mainCategory": "أدوات المذبح",
-    "subCategory": "أدوات خدمة",
+    "mainCategory": "altar-tools",
+    "subCategory": "service-tools",
     "slug": "تريانتو-ستانلس",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "subcategory": "service-tools",
+    "collections": [
+      "مستلزمات المذبح"
+    ],
+    "searchKeywords": [
+      "تريانتو ستانلس",
+      "دفوف وتريانتو",
+      "الحجم",
+      "المقاس",
+      "brass",
+      "أدوات المذبح",
+      "أدوات خدمة",
+      "altar-tools",
+      "service-tools",
+      "مستلزمات المذبح"
+    ]
   },
   {
     "id": "old-10121339568435",
@@ -3582,10 +4819,26 @@
         "quantity": 10
       }
     ],
-    "mainCategory": "أدوات المذبح",
-    "subCategory": "أدوات خدمة",
+    "mainCategory": "altar-tools",
+    "subCategory": "service-tools",
     "slug": "دف-18-سم-نحاس-ذهبي-تقيل",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "subcategory": "service-tools",
+    "collections": [
+      "مستلزمات المذبح"
+    ],
+    "searchKeywords": [
+      "دف 18 سم نحاس ذهبي تقيل",
+      "دفوف وتريانتو",
+      "الحجم",
+      "المقاس",
+      "brass",
+      "أدوات المذبح",
+      "أدوات خدمة",
+      "altar-tools",
+      "service-tools",
+      "مستلزمات المذبح"
+    ]
   },
   {
     "id": "old-10121173303603",
@@ -4056,10 +5309,25 @@
         "quantity": null
       }
     ],
-    "mainCategory": "الكتب والطقوس",
-    "subCategory": "كتب طقسية",
+    "mainCategory": "books-rituals",
+    "subCategory": "liturgical-books",
     "slug": "جراب-للكتاب-المقدس",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "subcategory": "liturgical-books",
+    "collections": [],
+    "searchKeywords": [
+      "جراب للكتاب المقدس",
+      "كتب وطقوس",
+      "جرابات كتاب مقدس",
+      "الحجم",
+      "اللون",
+      "المقاس",
+      "books",
+      "الكتب والطقوس",
+      "كتب طقسية",
+      "books-rituals",
+      "liturgical-books"
+    ]
   },
   {
     "id": "old-10120837660979",
@@ -4099,10 +5367,27 @@
         "quantity": 12
       }
     ],
-    "mainCategory": "أدوات المذبح",
-    "subCategory": "صلبان زفة",
+    "mainCategory": "crosses",
+    "subCategory": "processional-crosses",
     "slug": "صليب-زفه-نحاس-طبقتين-بفصوص-ملونه",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "subcategory": "processional-crosses",
+    "collections": [
+      "مستلزمات المذبح",
+      "هدايا الخدمة"
+    ],
+    "searchKeywords": [
+      "صليب زفة نحاس طبقتين بفصوص ملونة",
+      "صلبان زفة",
+      "brass",
+      "أدوات المذبح",
+      "صلبان مذبح",
+      "crosses",
+      "processional-crosses",
+      "مستلزمات المذبح",
+      "هدايا الخدمة",
+      "صليب صلبان"
+    ]
   },
   {
     "id": "old-10120837300531",
@@ -4142,10 +5427,27 @@
         "quantity": 12
       }
     ],
-    "mainCategory": "أدوات المذبح",
-    "subCategory": "صلبان زفة",
+    "mainCategory": "crosses",
+    "subCategory": "processional-crosses",
     "slug": "صليب-زفه-نحاس-طبقتين",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "subcategory": "processional-crosses",
+    "collections": [
+      "مستلزمات المذبح",
+      "هدايا الخدمة"
+    ],
+    "searchKeywords": [
+      "صليب زفة نحاس طبقتين",
+      "صلبان زفة",
+      "brass",
+      "أدوات المذبح",
+      "صلبان مذبح",
+      "crosses",
+      "processional-crosses",
+      "مستلزمات المذبح",
+      "هدايا الخدمة",
+      "صليب صلبان"
+    ]
   },
   {
     "id": "old-10120836481331",
@@ -4185,10 +5487,27 @@
         "quantity": 12
       }
     ],
-    "mainCategory": "أدوات المذبح",
-    "subCategory": "صلبان زفة",
+    "mainCategory": "crosses",
+    "subCategory": "processional-crosses",
     "slug": "صليب-زفه-نحاس-رفيع-بفص-الوان",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "subcategory": "processional-crosses",
+    "collections": [
+      "مستلزمات المذبح",
+      "هدايا الخدمة"
+    ],
+    "searchKeywords": [
+      "صليب زفة نحاس رفيع بفص ألوان",
+      "صلبان زفة",
+      "brass",
+      "أدوات المذبح",
+      "صلبان مذبح",
+      "crosses",
+      "processional-crosses",
+      "مستلزمات المذبح",
+      "هدايا الخدمة",
+      "صليب صلبان"
+    ]
   },
   {
     "id": "old-10120836317491",
@@ -4228,10 +5547,27 @@
         "quantity": 12
       }
     ],
-    "mainCategory": "أدوات المذبح",
-    "subCategory": "صلبان زفة",
+    "mainCategory": "crosses",
+    "subCategory": "processional-crosses",
     "slug": "صليب-زفه-نحاس-اركت-بالمصلوب",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "subcategory": "processional-crosses",
+    "collections": [
+      "مستلزمات المذبح",
+      "هدايا الخدمة"
+    ],
+    "searchKeywords": [
+      "صليب زفة نحاس أركت بالمصلوب",
+      "صلبان زفة",
+      "brass",
+      "أدوات المذبح",
+      "صلبان مذبح",
+      "crosses",
+      "processional-crosses",
+      "مستلزمات المذبح",
+      "هدايا الخدمة",
+      "صليب صلبان"
+    ]
   },
   {
     "id": "old-10120834908467",
@@ -4270,10 +5606,27 @@
         "quantity": 12
       }
     ],
-    "mainCategory": "أدوات المذبح",
-    "subCategory": "صلبان زفة",
+    "mainCategory": "crosses",
+    "subCategory": "processional-crosses",
     "slug": "صليب-زفه-نحاس-اركت-ذهبي",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "subcategory": "processional-crosses",
+    "collections": [
+      "مستلزمات المذبح",
+      "هدايا الخدمة"
+    ],
+    "searchKeywords": [
+      "صليب زفة نحاس أركت ذهبي",
+      "صلبان زفة",
+      "brass",
+      "أدوات المذبح",
+      "صلبان مذبح",
+      "crosses",
+      "processional-crosses",
+      "مستلزمات المذبح",
+      "هدايا الخدمة",
+      "صليب صلبان"
+    ]
   },
   {
     "id": "old-10070727688499",
@@ -4317,10 +5670,25 @@
         "quantity": 12
       }
     ],
-    "mainCategory": "أدوات المذبح",
-    "subCategory": "شمعدانات",
+    "mainCategory": "altar-tools",
+    "subCategory": "candlesticks",
     "slug": "شمعدان-مذبح-كبير",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "subcategory": "candlesticks",
+    "collections": [
+      "مستلزمات المذبح"
+    ],
+    "searchKeywords": [
+      "شمعدان مذبح كبير",
+      "شمعدانات",
+      "شغل شحن",
+      "شموع وبخور",
+      "candles",
+      "أدوات المذبح",
+      "altar-tools",
+      "candlesticks",
+      "مستلزمات المذبح"
+    ]
   },
   {
     "id": "old-10070727000371",
@@ -4391,10 +5759,22 @@
         "quantity": null
       }
     ],
-    "mainCategory": "الشمع والبخور",
-    "subCategory": "شموع",
+    "mainCategory": "candles-incense",
+    "subCategory": "candles",
     "slug": "شمعه-شحن",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "subcategory": "candles",
+    "collections": [],
+    "searchKeywords": [
+      "شمعة شحن",
+      "شغل شحن",
+      "اللون",
+      "brass",
+      "الشمع والبخور",
+      "شموع",
+      "candles-incense",
+      "candles"
+    ]
   },
   {
     "id": "old-10070726574387",
@@ -4433,10 +5813,21 @@
         "quantity": 12
       }
     ],
-    "mainCategory": "الشمع والبخور",
-    "subCategory": "شموع",
+    "mainCategory": "candles-incense",
+    "subCategory": "candles",
     "slug": "شمعه-شماس-شكل-صليب",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "subcategory": "candles",
+    "collections": [],
+    "searchKeywords": [
+      "شمعة شماس شكل صليب",
+      "شغل شحن",
+      "brass",
+      "الشمع والبخور",
+      "شموع",
+      "candles-incense",
+      "candles"
+    ]
   },
   {
     "id": "old-10070704980275",
@@ -4521,10 +5912,26 @@
         "quantity": null
       }
     ],
-    "mainCategory": "أدوات المذبح",
-    "subCategory": "شمعدانات",
+    "mainCategory": "altar-tools",
+    "subCategory": "candlesticks",
     "slug": "شمعدان-منجليه",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "subcategory": "candlesticks",
+    "collections": [
+      "مستلزمات المذبح"
+    ],
+    "searchKeywords": [
+      "شمعدان منجلية",
+      "شموع وبخور",
+      "شغل شحن",
+      "اللون",
+      "candles",
+      "أدوات المذبح",
+      "شمعدانات",
+      "altar-tools",
+      "candlesticks",
+      "مستلزمات المذبح"
+    ]
   },
   {
     "id": "old-10070671687987",
@@ -4614,10 +6021,29 @@
         "quantity": null
       }
     ],
-    "mainCategory": "أدوات المذبح",
-    "subCategory": "شمعدانات",
+    "mainCategory": "crosses",
+    "subCategory": "altar-crosses",
     "slug": "صليب-افنوتي-شحن-بالوصله",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "subcategory": "altar-crosses",
+    "collections": [
+      "مستلزمات المذبح",
+      "هدايا الخدمة"
+    ],
+    "searchKeywords": [
+      "صليب إفنوتي شحن بالوصلة",
+      "شغل شحن",
+      "color",
+      "اللون",
+      "brass",
+      "أدوات المذبح",
+      "صلبان مذبح",
+      "crosses",
+      "altar-crosses",
+      "مستلزمات المذبح",
+      "هدايا الخدمة",
+      "صليب صلبان"
+    ]
   },
   {
     "id": "old-10068218806579",
@@ -4658,10 +6084,24 @@
         "quantity": null
       }
     ],
-    "mainCategory": "أدوات المذبح",
-    "subCategory": "ذخائر وعلب",
+    "mainCategory": "altar-tools",
+    "subCategory": "relic-boxes",
     "slug": "حق-ذخيره-كبير-نحاس-مطلي-نيكل",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "subcategory": "relic-boxes",
+    "collections": [
+      "مستلزمات المذبح"
+    ],
+    "searchKeywords": [
+      "حُق ذخيرة كبير نحاس مطلي نيكل",
+      "حُق ذخيرة",
+      "brass",
+      "أدوات المذبح",
+      "ذخائر وعلب",
+      "altar-tools",
+      "relic-boxes",
+      "مستلزمات المذبح"
+    ]
   },
   {
     "id": "old-10068217561395",
@@ -4702,10 +6142,24 @@
         "quantity": null
       }
     ],
-    "mainCategory": "أدوات المذبح",
-    "subCategory": "ذخائر وعلب",
+    "mainCategory": "altar-tools",
+    "subCategory": "relic-boxes",
     "slug": "حق-ذخيره-صغير-نحاس-مطلي-نيكل",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "subcategory": "relic-boxes",
+    "collections": [
+      "مستلزمات المذبح"
+    ],
+    "searchKeywords": [
+      "حُق ذخيرة صغير نحاس مطلي نيكل",
+      "حُق ذخيرة",
+      "brass",
+      "أدوات المذبح",
+      "ذخائر وعلب",
+      "altar-tools",
+      "relic-boxes",
+      "مستلزمات المذبح"
+    ]
   },
   {
     "id": "old-10068215628083",
@@ -4746,10 +6200,24 @@
         "quantity": null
       }
     ],
-    "mainCategory": "أدوات المذبح",
-    "subCategory": "ذخائر وعلب",
+    "mainCategory": "altar-tools",
+    "subCategory": "relic-boxes",
     "slug": "حق-ذخيره-استانلس-صغير",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "subcategory": "relic-boxes",
+    "collections": [
+      "مستلزمات المذبح"
+    ],
+    "searchKeywords": [
+      "حُق ذخيرة استانلس صغير",
+      "حُق ذخيرة",
+      "brass",
+      "أدوات المذبح",
+      "ذخائر وعلب",
+      "altar-tools",
+      "relic-boxes",
+      "مستلزمات المذبح"
+    ]
   },
   {
     "id": "old-10068213006643",
@@ -4791,10 +6259,24 @@
         "quantity": null
       }
     ],
-    "mainCategory": "أدوات المذبح",
-    "subCategory": "ذخائر وعلب",
+    "mainCategory": "altar-tools",
+    "subCategory": "relic-boxes",
     "slug": "حق-ذخيره-استانلس-وسط",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "subcategory": "relic-boxes",
+    "collections": [
+      "مستلزمات المذبح"
+    ],
+    "searchKeywords": [
+      "حُق ذخيرة استانلس وسط",
+      "حُق ذخيرة",
+      "brass",
+      "أدوات المذبح",
+      "ذخائر وعلب",
+      "altar-tools",
+      "relic-boxes",
+      "مستلزمات المذبح"
+    ]
   },
   {
     "id": "old-10068212646195",
@@ -4835,10 +6317,24 @@
         "quantity": null
       }
     ],
-    "mainCategory": "أدوات المذبح",
-    "subCategory": "ذخائر وعلب",
+    "mainCategory": "altar-tools",
+    "subCategory": "relic-boxes",
     "slug": "حق-ذخيره-استانلس-صغير-old-10068212646195",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "subcategory": "relic-boxes",
+    "collections": [
+      "مستلزمات المذبح"
+    ],
+    "searchKeywords": [
+      "حُق ذخيرة استانلس صغير",
+      "حُق ذخيرة",
+      "brass",
+      "أدوات المذبح",
+      "ذخائر وعلب",
+      "altar-tools",
+      "relic-boxes",
+      "مستلزمات المذبح"
+    ]
   },
   {
     "id": "old-10067794067763",
@@ -4921,10 +6417,26 @@
         "quantity": 10
       }
     ],
-    "mainCategory": "أدوات المذبح",
-    "subCategory": "أدوات خدمة",
+    "mainCategory": "altar-tools",
+    "subCategory": "altar-vessels",
     "slug": "ابريق-نحاس-ذهبي",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "subcategory": "altar-vessels",
+    "collections": [
+      "مستلزمات المذبح"
+    ],
+    "searchKeywords": [
+      "إبريق نحاس ذهبي",
+      "إبريق نحاس",
+      "الحجم",
+      "المقاس",
+      "brass",
+      "أدوات المذبح",
+      "أواني المذبح",
+      "altar-tools",
+      "altar-vessels",
+      "مستلزمات المذبح"
+    ]
   },
   {
     "id": "old-10067690586419",
@@ -4966,10 +6478,22 @@
         "quantity": 10
       }
     ],
-    "mainCategory": "أدوات المذبح",
-    "subCategory": "ذخائر وعلب",
+    "mainCategory": "candles-incense",
+    "subCategory": "incense-sets",
     "slug": "علبه-بخور-من-النحاس-شكل-دايري",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "subcategory": "incense-sets",
+    "collections": [],
+    "searchKeywords": [
+      "علبة بخور من النحاس شكل دائري",
+      "نحاسيات",
+      "علب بخور",
+      "brass",
+      "الشمع والبخور",
+      "أطقم بخور",
+      "candles-incense",
+      "incense-sets"
+    ]
   },
   {
     "id": "old-10067690225971",
@@ -5012,10 +6536,22 @@
         "quantity": 10
       }
     ],
-    "mainCategory": "أدوات المذبح",
-    "subCategory": "ذخائر وعلب",
+    "mainCategory": "candles-incense",
+    "subCategory": "incense-sets",
     "slug": "علبه-بخور-نحاس-علي-شكل-صليب",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "subcategory": "incense-sets",
+    "collections": [],
+    "searchKeywords": [
+      "علبة بخور نحاس علي شكل صليب",
+      "نحاسيات",
+      "علب بخور",
+      "brass",
+      "الشمع والبخور",
+      "أطقم بخور",
+      "candles-incense",
+      "incense-sets"
+    ]
   },
   {
     "id": "old-10067689472307",
@@ -5058,10 +6594,22 @@
         "quantity": 10
       }
     ],
-    "mainCategory": "أدوات المذبح",
-    "subCategory": "ذخائر وعلب",
+    "mainCategory": "candles-incense",
+    "subCategory": "incense-sets",
     "slug": "علبه-بخور-نحاس-علي-شكل-صندوق-كنز",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "subcategory": "incense-sets",
+    "collections": [],
+    "searchKeywords": [
+      "علبة بخور نحاس علي شكل صندوق كنز",
+      "نحاسيات",
+      "علب بخور",
+      "brass",
+      "الشمع والبخور",
+      "أطقم بخور",
+      "candles-incense",
+      "incense-sets"
+    ]
   },
   {
     "id": "old-10067686162739",
@@ -5147,10 +6695,24 @@
         "quantity": null
       }
     ],
-    "mainCategory": "أدوات المذبح",
-    "subCategory": "ذخائر وعلب",
+    "mainCategory": "candles-incense",
+    "subCategory": "incense-sets",
     "slug": "علبه-بخور-نحاس-شكل-صندوق-عادي",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "subcategory": "incense-sets",
+    "collections": [],
+    "searchKeywords": [
+      "علبة بخور نحاس شكل صندوق عادي",
+      "نحاسيات",
+      "علب بخور",
+      "الحجم",
+      "المقاس",
+      "brass",
+      "الشمع والبخور",
+      "أطقم بخور",
+      "candles-incense",
+      "incense-sets"
+    ]
   },
   {
     "id": "old-10062404354355",
@@ -5194,10 +6756,22 @@
         "quantity": 12
       }
     ],
-    "mainCategory": "أدوات المذبح",
-    "subCategory": "ذخائر وعلب",
+    "mainCategory": "candles-incense",
+    "subCategory": "incense-sets",
     "slug": "علبه-بخور-نحاس-صغيره-شكل-مستطيل",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "subcategory": "incense-sets",
+    "collections": [],
+    "searchKeywords": [
+      "علبة بخور نحاس صغيرة شكل مستطيل",
+      "نحاسيات",
+      "علب بخور",
+      "brass",
+      "الشمع والبخور",
+      "أطقم بخور",
+      "candles-incense",
+      "incense-sets"
+    ]
   },
   {
     "id": "old-10062400258355",
@@ -5240,10 +6814,22 @@
         "quantity": 12
       }
     ],
-    "mainCategory": "أدوات المذبح",
-    "subCategory": "ذخائر وعلب",
+    "mainCategory": "candles-incense",
+    "subCategory": "incense-sets",
     "slug": "علبه-بخور-نحاس-كبيره-شكل-مستطيل",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "subcategory": "incense-sets",
+    "collections": [],
+    "searchKeywords": [
+      "علبة بخور نحاس كبيرة شكل مستطيل",
+      "نحاسيات",
+      "علب بخور",
+      "brass",
+      "الشمع والبخور",
+      "أطقم بخور",
+      "candles-incense",
+      "incense-sets"
+    ]
   },
   {
     "id": "reliquary-tubes-papa-kyrillos",
@@ -5378,10 +6964,27 @@
         "quantity": null
       }
     ],
-    "mainCategory": "أدوات المذبح",
-    "subCategory": "ذخائر وعلب",
+    "mainCategory": "altar-tools",
+    "subCategory": "relic-boxes",
     "slug": "انابيب-رفات-قديسين-زان",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "subcategory": "relic-boxes",
+    "collections": [
+      "مستلزمات المذبح"
+    ],
+    "searchKeywords": [
+      "أنابيب رفات قديسين زان",
+      "نحاسيات",
+      "أنابيب",
+      "رفات",
+      "خشب زان",
+      "brass",
+      "أدوات المذبح",
+      "ذخائر وعلب",
+      "altar-tools",
+      "relic-boxes",
+      "مستلزمات المذبح"
+    ]
   },
   {
     "id": "incense-chat-1500-kg",
@@ -5499,10 +7102,22 @@
         "quantity": null
       }
     ],
-    "mainCategory": "الشمع والبخور",
-    "subCategory": "بخور",
+    "mainCategory": "candles-incense",
+    "subCategory": "incense",
     "slug": "بخور-كنسي-فاخر",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "subcategory": "incense",
+    "collections": [],
+    "searchKeywords": [
+      "بخور كنسي فاخر",
+      "شموع وبخور",
+      "بخور",
+      "الوزن",
+      "candles",
+      "الشمع والبخور",
+      "candles-incense",
+      "incense"
+    ]
   },
   {
     "id": "old-9840433955123",
@@ -5542,10 +7157,25 @@
         "quantity": 12
       }
     ],
-    "mainCategory": "أدوات المذبح",
-    "subCategory": "شمعدانات",
+    "mainCategory": "altar-tools",
+    "subCategory": "candlesticks",
     "slug": "زوج-شمعدان-نحاس-ذهبي-كهرباء-شكل-الورده-كبير",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "subcategory": "candlesticks",
+    "collections": [
+      "مستلزمات المذبح"
+    ],
+    "searchKeywords": [
+      "زوج شمعدان نحاس ذهبي كهرباء شكل الوردة كبير",
+      "شمعدان",
+      "شموع وبخور",
+      "candles",
+      "أدوات المذبح",
+      "شمعدانات",
+      "altar-tools",
+      "candlesticks",
+      "مستلزمات المذبح"
+    ]
   },
   {
     "id": "old-9840425500979",
@@ -5586,10 +7216,25 @@
         "quantity": 12
       }
     ],
-    "mainCategory": "أدوات المذبح",
-    "subCategory": "شمعدانات",
+    "mainCategory": "altar-tools",
+    "subCategory": "candlesticks",
     "slug": "شمعدان-نحاس-ذهبي-سوسته",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "subcategory": "candlesticks",
+    "collections": [
+      "مستلزمات المذبح"
+    ],
+    "searchKeywords": [
+      "شمعدان نحاس ذهبي سوستة",
+      "شمعدان",
+      "شموع وبخور",
+      "candles",
+      "أدوات المذبح",
+      "شمعدانات",
+      "altar-tools",
+      "candlesticks",
+      "مستلزمات المذبح"
+    ]
   },
   {
     "id": "old-9840420749619",
@@ -5631,10 +7276,24 @@
         "quantity": 12
       }
     ],
-    "mainCategory": "أدوات المذبح",
-    "subCategory": "شمعدانات",
+    "mainCategory": "altar-tools",
+    "subCategory": "candlesticks",
     "slug": "زوج-شمعدان-نحاس-ذهبي-شكل-الورده-صغير",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "subcategory": "candlesticks",
+    "collections": [
+      "مستلزمات المذبح"
+    ],
+    "searchKeywords": [
+      "زوج شمعدان نحاس ذهبي شكل الوردة صغير",
+      "شموع وبخور",
+      "candles",
+      "أدوات المذبح",
+      "شمعدانات",
+      "altar-tools",
+      "candlesticks",
+      "مستلزمات المذبح"
+    ]
   },
   {
     "id": "old-9840413475123",
@@ -5676,10 +7335,24 @@
         "quantity": 12
       }
     ],
-    "mainCategory": "أدوات المذبح",
-    "subCategory": "شمعدانات",
+    "mainCategory": "altar-tools",
+    "subCategory": "candlesticks",
     "slug": "زوج-شمعدان-نحاس-ذهبي-شكل-الخروف",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "subcategory": "candlesticks",
+    "collections": [
+      "مستلزمات المذبح"
+    ],
+    "searchKeywords": [
+      "زوج شمعدان نحاس ذهبي شكل الخروف",
+      "شمعدانات",
+      "شموع وبخور",
+      "candles",
+      "أدوات المذبح",
+      "altar-tools",
+      "candlesticks",
+      "مستلزمات المذبح"
+    ]
   },
   {
     "id": "old-9840407806259",
@@ -5722,10 +7395,24 @@
         "quantity": 12
       }
     ],
-    "mainCategory": "أدوات المذبح",
-    "subCategory": "شمعدانات",
+    "mainCategory": "altar-tools",
+    "subCategory": "candlesticks",
     "slug": "زوج-شمعدان-برج-ايفل-نحاس-ذهبي-ثقيل",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "subcategory": "candlesticks",
+    "collections": [
+      "مستلزمات المذبح"
+    ],
+    "searchKeywords": [
+      "زوج شمعدان برج إيفل نحاس ذهبي ثقيل",
+      "شموع وبخور",
+      "candles",
+      "أدوات المذبح",
+      "شمعدانات",
+      "altar-tools",
+      "candlesticks",
+      "مستلزمات المذبح"
+    ]
   },
   {
     "id": "old-9762774024499",
@@ -5766,10 +7453,24 @@
         "quantity": 1
       }
     ],
-    "mainCategory": "أدوات المذبح",
-    "subCategory": "أدوات خدمة",
+    "mainCategory": "altar-tools",
+    "subCategory": "service-tools",
     "slug": "بشاره-ذهبي-يوناني",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "subcategory": "service-tools",
+    "collections": [
+      "مستلزمات المذبح"
+    ],
+    "searchKeywords": [
+      "بشارة ذهبي يوناني",
+      "نحاسيات",
+      "brass",
+      "أدوات المذبح",
+      "أدوات خدمة",
+      "altar-tools",
+      "service-tools",
+      "مستلزمات المذبح"
+    ]
   },
   {
     "id": "old-9762760196403",
@@ -5840,10 +7541,24 @@
         "quantity": null
       }
     ],
-    "mainCategory": "أدوات المذبح",
-    "subCategory": "شورية ومباخر",
+    "mainCategory": "candles-incense",
+    "subCategory": "incense",
     "slug": "شوريه-نحاس-ذهبي-يوناني",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "subcategory": "incense",
+    "collections": [],
+    "searchKeywords": [
+      "شورية نحاس ذهبي يوناني",
+      "شواري",
+      "شموع وبخور",
+      "الحجم",
+      "المقاس",
+      "candles",
+      "الشمع والبخور",
+      "بخور",
+      "candles-incense",
+      "incense"
+    ]
   },
   {
     "id": "old-9762682011955",
@@ -5913,10 +7628,25 @@
         "quantity": 1
       }
     ],
-    "mainCategory": "أدوات المذبح",
-    "subCategory": "أواني المذبح",
+    "mainCategory": "altar-tools",
+    "subCategory": "altar-vessels",
     "slug": "طقم-اواني-مذبح-ذهبي-يوناني",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "subcategory": "altar-vessels",
+    "collections": [
+      "مستلزمات المذبح"
+    ],
+    "searchKeywords": [
+      "طقم أواني مذبح ذهبي يوناني",
+      "نحاسيات",
+      "حجم الكأس",
+      "brass",
+      "أدوات المذبح",
+      "أواني المذبح",
+      "altar-tools",
+      "altar-vessels",
+      "مستلزمات المذبح"
+    ]
   },
   {
     "id": "old-9757475930419",
@@ -5954,10 +7684,25 @@
         "quantity": null
       }
     ],
-    "mainCategory": "الأيقونات والبراويز",
-    "subCategory": "أيقونات صغيرة",
+    "mainCategory": "crosses",
+    "subCategory": "pectoral-crosses",
     "slug": "ايقونه-صليب-صدر-يوناني-ذهبي",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "subcategory": "pectoral-crosses",
+    "collections": [
+      "هدايا الخدمة"
+    ],
+    "searchKeywords": [
+      "أيقونة صليب صدر يوناني ذهبي",
+      "أيقونات وهدايا",
+      "icons",
+      "الأيقونات والبراويز",
+      "أيقونات صغيرة",
+      "crosses",
+      "pectoral-crosses",
+      "هدايا الخدمة",
+      "صليب صلبان"
+    ]
   },
   {
     "id": "stole-red-gold-01",
@@ -6244,10 +7989,23 @@
         "quantity": 100
       }
     ],
-    "mainCategory": "الملابس الكنسية",
-    "subCategory": "بطرشيلات",
+    "mainCategory": "church-vestments",
+    "subCategory": "stoles",
     "slug": "بطرشيل-كنسي-احمر-ذهبي-موديل-1",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "subcategory": "stoles",
+    "collections": [],
+    "searchKeywords": [
+      "بطرشيل كنسي أحمر ذهبي - موديل 1",
+      "بطرشيلات",
+      "أقمشة ومفارش",
+      "الطول",
+      "التفصيل",
+      "vestments",
+      "الملابس الكنسية",
+      "church-vestments",
+      "stoles"
+    ]
   },
   {
     "id": "stole-red-gold-02",
@@ -6534,10 +8292,23 @@
         "quantity": 100
       }
     ],
-    "mainCategory": "الملابس الكنسية",
-    "subCategory": "بطرشيلات",
+    "mainCategory": "church-vestments",
+    "subCategory": "stoles",
     "slug": "بطرشيل-كنسي-احمر-ذهبي-موديل-2",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "subcategory": "stoles",
+    "collections": [],
+    "searchKeywords": [
+      "بطرشيل كنسي أحمر ذهبي - موديل 2",
+      "بطرشيلات",
+      "أقمشة ومفارش",
+      "الطول",
+      "التفصيل",
+      "vestments",
+      "الملابس الكنسية",
+      "church-vestments",
+      "stoles"
+    ]
   },
   {
     "id": "stole-red-gold-03",
@@ -6824,10 +8595,23 @@
         "quantity": 100
       }
     ],
-    "mainCategory": "الملابس الكنسية",
-    "subCategory": "بطرشيلات",
+    "mainCategory": "church-vestments",
+    "subCategory": "stoles",
     "slug": "بطرشيل-كنسي-احمر-ذهبي-موديل-3",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "subcategory": "stoles",
+    "collections": [],
+    "searchKeywords": [
+      "بطرشيل كنسي أحمر ذهبي - موديل 3",
+      "بطرشيلات",
+      "أقمشة ومفارش",
+      "الطول",
+      "التفصيل",
+      "vestments",
+      "الملابس الكنسية",
+      "church-vestments",
+      "stoles"
+    ]
   },
   {
     "id": "stole-red-gold-04",
@@ -7114,9 +8898,22 @@
         "quantity": 100
       }
     ],
-    "mainCategory": "الملابس الكنسية",
-    "subCategory": "بطرشيلات",
+    "mainCategory": "church-vestments",
+    "subCategory": "stoles",
     "slug": "بطرشيل-كنسي-احمر-ذهبي-موديل-4",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "subcategory": "stoles",
+    "collections": [],
+    "searchKeywords": [
+      "بطرشيل كنسي أحمر ذهبي - موديل 4",
+      "بطرشيلات",
+      "أقمشة ومفارش",
+      "الطول",
+      "التفصيل",
+      "vestments",
+      "الملابس الكنسية",
+      "church-vestments",
+      "stoles"
+    ]
   }
 ]
