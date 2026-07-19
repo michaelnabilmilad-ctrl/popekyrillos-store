@@ -21,6 +21,7 @@ const FIELD_ALIASES = {
   stock: ["Stock", "Inventory", "Quantity Available", "المخزون"],
   url: ["URL", "Product URL", "Link", "الرابط"],
   slug: ["Slug", "slug"],
+  category: ["Main Category", "Category", "mainCategory", "category", "القسم الرئيسي", "القسم"],
   published: ["Published", "Is Published", "Active", "منشور"],
   deleted: ["Deleted", "Is Deleted", "محذوف"],
   created: ["Created", "Created At", "Created Time", "تاريخ الإنشاء"]
@@ -206,6 +207,7 @@ function serializeProduct(record, totalQuantity = 0) {
   const rawUrl = clean(values(firstField(fields, FIELD_ALIASES.url))[0]);
   const price = numeric(firstField(fields, FIELD_ALIASES.price));
   const salePrice = numeric(firstField(fields, FIELD_ALIASES.salePrice));
+  const category = clean(values(firstField(fields, FIELD_ALIASES.category))[0]);
   return {
     id: identity.id,
     sku: identity.sku,
@@ -219,38 +221,14 @@ function serializeProduct(record, totalQuantity = 0) {
     available: !unavailableStock(stockValue),
     url: rawUrl || (slug ? `/products/${encodeURIComponent(slug)}` : ""),
     slug,
+    category,
     totalQuantity,
     createdAt: clean(values(firstField(fields, FIELD_ALIASES.created))[0] || record.createdTime),
     published: isPublished(fields)
   };
 }
 
-function catalogFallback(products, limit) {
-  return products
-    .filter((product) => {
-      const image = clean(product.image || product.images?.[0]);
-      const stock = normalized(product.stock);
-      return image && !["غير متاح", "غير متاح حاليا", "نفد", "out of stock"].includes(stock) && product.published !== false && product.deleted !== true;
-    })
-    .map((product, index) => ({ product, index }))
-    .sort((a, b) => {
-      const firstDate = Date.parse(a.product.updatedAt || a.product.createdAt || "") || 0;
-      const secondDate = Date.parse(b.product.updatedAt || b.product.createdAt || "") || 0;
-      return secondDate - firstDate || a.index - b.index;
-    })
-    .slice(0, limit)
-    .map(({ product }) => ({ ...product, totalQuantity: 0 }));
-}
-
-function fallbackFromAirtable(records, limit) {
-  return records
-    .map((record) => serializeProduct(record, 0))
-    .filter((product) => product.published && product.available && product.image)
-    .sort((a, b) => (Date.parse(b.createdAt) || 0) - (Date.parse(a.createdAt) || 0))
-    .slice(0, limit);
-}
-
-export function calculateBestSellers({ orders, orderItems, products, limit = 8 }) {
+export function calculateBestSellers({ orders, orderItems, products, limit = 9 }) {
   const ordersLookup = orderLookups(orders);
   const productsLookup = productLookups(products);
   const totals = new Map();
@@ -270,20 +248,19 @@ export function calculateBestSellers({ orders, orderItems, products, limit = 8 }
     totals.set(key, { product, quantity: (totals.get(key)?.quantity || 0) + quantity });
   }
 
-  const ranked = [...totals.values()]
+  const candidates = [...totals.values()]
     .map(({ product, quantity }) => serializeProduct(product, quantity))
     .filter((product) => product.published && product.image)
-    .sort((a, b) => b.totalQuantity - a.totalQuantity || a.id.localeCompare(b.id))
-    .slice(0, limit);
+    .sort((a, b) => b.totalQuantity - a.totalQuantity || a.id.localeCompare(b.id));
 
-  if (ranked.length < limit) {
-    const seen = new Set(ranked.map((product) => product.id));
-    for (const product of fallbackFromAirtable(products, limit)) {
-      if (seen.has(product.id)) continue;
-      ranked.push(product);
-      seen.add(product.id);
-      if (ranked.length >= limit) break;
-    }
+  const ranked = [];
+  const seenCategories = new Set();
+  for (const product of candidates) {
+    const categoryKey = normalized(product.category) || `uncategorized:${product.id}`;
+    if (seenCategories.has(categoryKey)) continue;
+    ranked.push(product);
+    seenCategories.add(categoryKey);
+    if (ranked.length >= limit) break;
   }
   return ranked;
 }
@@ -300,7 +277,7 @@ export async function bestSellersResponse(context, catalogProducts = []) {
   const { request, env, waitUntil } = context;
   if (request.method !== "GET") return responseJson({ error: "method_not_allowed" }, { status: 405, headers: { Allow: "GET" } });
   const cache = globalThis.caches?.default;
-  const cacheKey = new Request(new URL("/api/best-sellers?v=8", request.url), { method: "GET" });
+  const cacheKey = new Request(new URL("/api/best-sellers?v=9", request.url), { method: "GET" });
   const cached = cache ? await cache.match(cacheKey) : null;
   if (cached) return cached;
 
@@ -324,7 +301,7 @@ export async function bestSellersResponse(context, catalogProducts = []) {
     names.orderItems = orderItemsTable.name;
     names.products = productsTable.name;
     payload = {
-      products: calculateBestSellers({ orders, orderItems, products, limit: 8 }),
+      products: calculateBestSellers({ orders, orderItems, products, limit: 9 }),
       source: "airtable-sales",
       tables: names,
       counts: { orders: orders.length, orderItems: orderItems.length, products: products.length },
@@ -334,8 +311,8 @@ export async function bestSellersResponse(context, catalogProducts = []) {
   } catch (error) {
     console.error("Best sellers Airtable read failed", { message: error.message, tables: names });
     payload = {
-      products: catalogFallback(catalogProducts, 8),
-      source: "latest-products-fallback",
+      products: [],
+      source: "sales-data-unavailable",
       tables: names,
       generatedAt: new Date().toISOString(),
       cacheSeconds: CACHE_SECONDS

@@ -46,10 +46,10 @@ test("excludes cancelled, refunded and test orders even if another accepted stat
   ];
   const orderItems = orders.map((entry, index) => item(`recI${index}`, entry.id, "recP1", 10));
   const result = calculateBestSellers({ orders, orderItems, products });
-  assert.equal(result[0].totalQuantity, 0);
+  assert.deepEqual(result, []);
 });
 
-test("removes unpublished or imageless sold products and fills with newest available products", () => {
+test("removes unpublished or imageless sold products without inventing fallback sales", () => {
   const products = [
     product("recP1", "p-1", "محذوف", { Published: false }),
     product("recP2", "p-2", "بدون صورة", { Image: [] }),
@@ -58,6 +58,24 @@ test("removes unpublished or imageless sold products and fills with newest avail
   const orders = [order("recO1", "A-1", "Completed")];
   const orderItems = [item("recI1", "recO1", "recP1", 20), item("recI2", "recO1", "recP2", 10)];
   const result = calculateBestSellers({ orders, orderItems, products });
-  assert.deepEqual(result.map((entry) => entry.id), ["p-3"]);
-  assert.equal(result[0].totalQuantity, 0);
+  assert.deepEqual(result, []);
+});
+
+test("returns only the highest-selling product from each main category", () => {
+  const products = [
+    product("recP1", "p-1", "صليب أول", { "Main Category": "الصلبان والهدايا" }),
+    product("recP2", "p-2", "صليب ثان", { "Main Category": "الصلبان والهدايا" }),
+    product("recP3", "p-3", "كتاب", { "Main Category": "الكتب والطقوس" })
+  ];
+  const orders = [order("recO1", "A-1", "Completed")];
+  const orderItems = [
+    item("recI1", "recO1", "recP1", 4),
+    item("recI2", "recO1", "recP2", 9),
+    item("recI3", "recO1", "recP3", 6)
+  ];
+  const result = calculateBestSellers({ orders, orderItems, products });
+  assert.deepEqual(result.map((entry) => [entry.id, entry.category, entry.totalQuantity]), [
+    ["p-2", "الصلبان والهدايا", 9],
+    ["p-3", "الكتب والطقوس", 6]
+  ]);
 });

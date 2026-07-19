@@ -2147,7 +2147,7 @@ function shouldShowPopularProducts() {
   return isHomePath && normalizeCategoryFilter(state.filter || "all") === "all" && !state.search.trim() && !productIdFromUrl();
 }
 
-function getPopularProducts(limit = 8) {
+function getPopularProducts(limit = 9) {
   return bestSellerProducts.slice(0, limit);
 }
 
@@ -2202,7 +2202,7 @@ function renderPopularProductsSkeleton() {
       </div>
     </div>
     <div class="popular-products-grid" aria-hidden="true">
-      ${Array.from({ length: 8 }).map(() => `
+      ${Array.from({ length: 9 }).map(() => `
         <article class="popular-product-card popular-product-skeleton">
           <div class="popular-product-media"></div>
           <div class="popular-skeleton-line short"></div>
@@ -2224,7 +2224,7 @@ function renderPopularProducts() {
     return;
   }
 
-  const popularProducts = getPopularProducts(8);
+  const popularProducts = getPopularProducts(9);
   if (!popularProducts.length) {
     popularProductsSection.hidden = true;
     popularProductsSection.innerHTML = "";
