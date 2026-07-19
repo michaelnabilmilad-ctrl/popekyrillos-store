@@ -4583,6 +4583,10 @@ function openProductFromUrl() {
 async function loadProducts() {
   applyCatalogFilterFromUrl({ render: false });
   await loadCatalogPage({ reset: true });
+  if (shouldShowPopularProducts()) {
+    renderPopularProductsSkeleton();
+    void loadBestSellerProducts().then(renderPopularProducts);
+  }
   const cartBeforeProducts = cartFingerprint(state.cart);
   state.cart = clampCartMap(state.cart);
   if (cartFingerprint(state.cart) !== cartBeforeProducts) saveCartToLocal(currentCartStorageKey(), state.cart);
