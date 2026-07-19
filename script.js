@@ -87,6 +87,8 @@ let catalogTotal = 0;
 let catalogHasMore = false;
 let catalogRequestController = null;
 let bestSellerProducts = [];
+const productDetailsCache = new Map();
+const productDetailsRequests = new Map();
 let authInitPromise = null;
 let authConfigPromise = null;
 let productsAssetVersion = "";
@@ -2393,7 +2395,32 @@ function variantQuantity(variant) {
 }
 
 function getProduct(id) {
-  return products.find((item) => item.id === id);
+  return productDetailsCache.get(id)
+    || products.find((item) => item.id === id)
+    || bestSellerProducts.find((item) => item.id === id);
+}
+
+function hasProductDetails(product) {
+  return Boolean(product && (Array.isArray(product.variants) || Array.isArray(product.options) || product.description));
+}
+
+async function loadProductDetails(productId) {
+  const cached = productDetailsCache.get(productId);
+  if (cached) return cached;
+  if (productDetailsRequests.has(productId)) return productDetailsRequests.get(productId);
+  const request = fetch(`/api/products/${encodeURIComponent(productId)}`, { cache: "default" })
+    .then((response) => {
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      return response.json();
+    })
+    .then((product) => {
+      productDetailsCache.set(product.id || productId, product);
+      if (product.id && product.id !== productId) productDetailsCache.set(productId, product);
+      return product;
+    })
+    .finally(() => productDetailsRequests.delete(productId));
+  productDetailsRequests.set(productId, request);
+  return request;
 }
 
 function getProductImages(product) {
@@ -2951,7 +2978,7 @@ function renderProducts() {
         ? `
           <div class="product-gallery ${galleryImages.length > 1 ? "has-thumbs" : ""}">
             <div class="product-gallery-main">
-              <a class="product-photo-link" href="${productPath}" aria-label="${productName}">
+              <a class="product-photo-link" href="${productPath}" data-view-product="${productId}" aria-label="${productName}">
                 <img class="product-photo" data-main-image="${productId}" data-main-raw-image="${escapeHtml(galleryImages[0])}" src="${escapeHtml(mainCardImage)}" ${mainCardSrcset ? `srcset="${mainCardSrcset}" sizes="(max-width: 720px) 92vw, (max-width: 1100px) 44vw, 360px"` : ""} alt="${productName}" width="600" height="600" loading="${imageLoading}" decoding="async"${imagePriority} draggable="false" />
               </a>
             </div>
@@ -2971,14 +2998,14 @@ function renderProducts() {
               <span>${escapeHtml(localized(product.label || "منتج"))}</span>
               <span class="stock">${escapeHtml(stockText)}</span>
             </div>
-            <h3><a href="${productPath}">${productName}</a></h3>
+            <h3><a href="${productPath}" data-view-product="${productId}">${productName}</a></h3>
             ${cardChoices}
-            <a class="product-details" href="${productPath}">
+            <a class="product-details" href="${productPath}" data-view-product="${productId}">
               <span>${t("detailsAndPrices")}</span>
             </a>
             <div class="product-bottom">
               <span class="price">${priceHtml}</span>
-              <a class="button primary add-button" href="${productPath}" ${disabledAttribute}>
+              <a class="button primary add-button" href="${productPath}" data-view-product="${productId}" ${disabledAttribute}>
                 <svg viewBox="0 0 24 24" aria-hidden="true">
                   <path d="M12 5v14M5 12h14" />
                 </svg>
@@ -3274,9 +3301,18 @@ function renderProductModal() {
   }
 }
 
-function openProductModal(productId, { updateUrl = true, variantId = "" } = {}) {
-  const product = getProduct(productId);
+async function openProductModal(productId, { updateUrl = true, variantId = "" } = {}) {
+  let product = getProduct(productId);
   if (!product) return;
+  if (!hasProductDetails(product)) {
+    try {
+      product = await loadProductDetails(productId);
+    } catch (error) {
+      console.warn("Could not load product details for the quick view.", error);
+      window.location.assign(canonicalProductPath(product));
+      return;
+    }
+  }
 
   const variant = variantId ? findVariant(product, variantId) : defaultVariant(product);
   state.modal.productId = product.id;
