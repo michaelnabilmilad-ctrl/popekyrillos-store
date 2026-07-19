@@ -1071,9 +1071,8 @@ function ensureMainCategoryTiles() {
     ${mainCategoryTileArt("all")}<strong>${escapeHtml(t("shopMenuAll"))}</strong><small>${escapeHtml(categoryCopy.all[state.language][1])}</small></a>`;
   const tiles = taxonomyCategories.map((category) => {
     const count = availableProducts().filter((product) => productMainCategoryId(product) === category.id).length;
-    const src = category.subcategoryImage || "assets/optimized/hero-products-collage.webp";
     return `<a class="category-tile ${normalizeCategoryFilter(state.filter) === category.id ? "active" : ""}" href="/category/${escapeHtml(category.id)}#catalog" data-filter="${escapeHtml(category.id)}">
-      <span class="category-art category-art--photo"><img src="${escapeHtml(versionedAssetUrl(src, productsAssetVersion || "1"))}" alt="" width="320" height="320" loading="lazy" decoding="async"></span>
+      ${mainCategoryTileArt(category.id)}
       <strong>${escapeHtml(localized(category.name))}</strong><small>${displayText(formatter.format(count))} ${isEnglish() ? "products" : "منتج"}</small></a>`;
   }).join("");
   categoryGrid.innerHTML = allTile + tiles;

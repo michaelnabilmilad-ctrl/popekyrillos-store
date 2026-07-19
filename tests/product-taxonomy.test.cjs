@@ -43,3 +43,12 @@ test("legacy gifts URL maps to occasions and tote bag card uses the stable meeti
   assert.equal(taxonomy.categoryById.get("occasions-service").subcategories.find((item) => item.id === "meeting-gifts").name, "توتي باج وشنط");
   assert.match(fs.readFileSync("script.js", "utf8"), /"gifts-accessories": "occasions-service"/);
 });
+
+test("main category cards render symbols instead of product photos", () => {
+  const source = fs.readFileSync("script.js", "utf8");
+  const start = source.indexOf("function ensureMainCategoryTiles()");
+  const end = source.indexOf("function mainCategoryTileArt", start);
+  const renderer = source.slice(start, end);
+  assert.match(renderer, /mainCategoryTileArt\(category\.id\)/);
+  assert.doesNotMatch(renderer, /category-art--photo|<img/);
+});
