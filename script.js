@@ -19,6 +19,7 @@ const vodafoneCashNumber = "01016125589";
 const paymobIntentionEndpointPath = "/api/create-paymob-intention";
 const firebaseSdkVersion = "10.14.1";
 const productBatchSize = 12;
+const catalogSchemaVersion = "4";
 const catalogVersion = Date.now().toString(36);
 const canonicalOrigin = "https://popekyrillos.store";
 const guestCartStorageKey = "pope-kyrillos-cart:guest";
@@ -81,8 +82,13 @@ const fallbackProducts = [
 ];
 
 let products = [];
+let catalogPage = 1;
+let catalogTotal = 0;
+let catalogHasMore = false;
+let catalogRequestController = null;
 let bestSellerProducts = [];
 let authInitPromise = null;
+let authConfigPromise = null;
 let productsAssetVersion = "";
 let galleryPointerStart = null;
 let gallerySwipeSuppressUntil = 0;
@@ -2459,11 +2465,19 @@ function resizedRemoteImageUrl(src = "", width = 600) {
 }
 
 function productCardImageUrl(image, product, width = 600) {
-  return resizedRemoteImageUrl(productImageUrl(image, product), width);
+  const source = productImageUrl(image, product);
+  if (source.includes("/assets/thumbnails/320/")) {
+    const size = width <= 320 ? 320 : width <= 480 ? 480 : 640;
+    return source.replace("/assets/thumbnails/320/", `/assets/thumbnails/${size}/`);
+  }
+  return resizedRemoteImageUrl(source, width);
 }
 
 function productCardSrcset(image, product, widths = [320, 480, 600]) {
   const source = productImageUrl(image, product);
+  if (source.includes("/assets/thumbnails/320/")) {
+    return [320, 480, 640].map((width) => `${escapeHtml(source.replace("/assets/thumbnails/320/", `/assets/thumbnails/${width}/`))} ${width}w`).join(", ");
+  }
   if (!/^https?:\/\//i.test(source) || !source.includes("cdn.shopify.com")) return "";
   return widths.map((width) => `${escapeHtml(resizedRemoteImageUrl(source, width))} ${width}w`).join(", ");
 }
@@ -2892,7 +2906,6 @@ function renderProducts() {
     .map((product, cardIndex) => {
       const galleryImages = getProductImages(product);
       const hasImage = galleryImages.length > 0;
-      const hasChoices = hasProductChoices(product);
       const isAvailable = hasAvailableVariant(product);
       const priceHtml = productPriceHtml(product);
       const stockText = productStockText(product);
@@ -2900,12 +2913,11 @@ function renderProducts() {
       const productName = escapeHtml(productDisplayName);
       const productId = escapeHtml(product.id);
       const productPath = escapeHtml(canonicalProductPath(product));
-      const cardChoices = productCardChoicesHtml(product);
-      const actionLabel = !isAvailable ? t("unavailable") : hasChoices ? t("choose") : t("add");
-      const actionAttribute = hasChoices ? `data-view-product="${productId}"` : `data-add="${productId}"`;
-      const disabledAttribute = isAvailable ? "" : "disabled aria-disabled=\"true\"";
-      const imageLoading = cardIndex === 0 ? "eager" : "lazy";
-      const imagePriority = cardIndex === 0 ? " fetchpriority=\"high\"" : "";
+      const cardChoices = "";
+      const actionLabel = !isAvailable ? t("unavailable") : t("detailsAndPrices");
+      const disabledAttribute = isAvailable ? "" : "aria-disabled=\"true\"";
+      const imageLoading = "lazy";
+      const imagePriority = "";
       const thumbnails = galleryImages.length > 1
         ? `
           <div class="product-thumbs" aria-label="${escapeHtml(t("galleryLabel", { name: productDisplayName }))}">
@@ -2939,7 +2951,7 @@ function renderProducts() {
         ? `
           <div class="product-gallery ${galleryImages.length > 1 ? "has-thumbs" : ""}">
             <div class="product-gallery-main">
-              <a class="product-photo-link" href="${productPath}" data-view-product="${productId}" aria-label="${productName}">
+              <a class="product-photo-link" href="${productPath}" aria-label="${productName}">
                 <img class="product-photo" data-main-image="${productId}" data-main-raw-image="${escapeHtml(galleryImages[0])}" src="${escapeHtml(mainCardImage)}" ${mainCardSrcset ? `srcset="${mainCardSrcset}" sizes="(max-width: 720px) 92vw, (max-width: 1100px) 44vw, 360px"` : ""} alt="${productName}" width="600" height="600" loading="${imageLoading}" decoding="async"${imagePriority} draggable="false" />
               </a>
             </div>
@@ -2959,19 +2971,19 @@ function renderProducts() {
               <span>${escapeHtml(localized(product.label || "منتج"))}</span>
               <span class="stock">${escapeHtml(stockText)}</span>
             </div>
-            <h3><a href="${productPath}" data-view-product="${productId}">${productName}</a></h3>
+            <h3><a href="${productPath}">${productName}</a></h3>
             ${cardChoices}
-            <a class="product-details" href="${productPath}" data-view-product="${productId}">
+            <a class="product-details" href="${productPath}">
               <span>${t("detailsAndPrices")}</span>
             </a>
             <div class="product-bottom">
               <span class="price">${priceHtml}</span>
-              <button class="button primary add-button" type="button" ${actionAttribute} ${disabledAttribute}>
+              <a class="button primary add-button" href="${productPath}" ${disabledAttribute}>
                 <svg viewBox="0 0 24 24" aria-hidden="true">
                   <path d="M12 5v14M5 12h14" />
                 </svg>
                 ${actionLabel}
-              </button>
+              </a>
             </div>
           </div>
         </article>
@@ -2980,7 +2992,7 @@ function renderProducts() {
     .join("");
 
   if (loadMoreButton) {
-    loadMoreButton.hidden = filteredItems.length <= state.visibleProductCount;
+    loadMoreButton.hidden = !catalogHasMore;
   }
 }
 
@@ -4021,7 +4033,20 @@ function renderAuthState() {
   }
 }
 
-function openAccountModal() {
+function loadAuthConfig() {
+  if (window.FIREBASE_CONFIG) return Promise.resolve();
+  if (!authConfigPromise) authConfigPromise = new Promise((resolve, reject) => {
+    const script = document.createElement("script");
+    script.src = "/firebase-config.min.js?v=secure-orders-20260612";
+    script.onload = resolve;
+    script.onerror = reject;
+    document.head.append(script);
+  });
+  return authConfigPromise;
+}
+
+async function openAccountModal() {
+  await loadAuthConfig().catch(() => {});
   state.auth.configured = hasFirebaseConfig();
   renderAuthState();
   accountModal.setAttribute("aria-hidden", "false");
@@ -4510,7 +4535,7 @@ function applyCatalogFilter(category = "all", label = "", { updateUrl = true, sc
   state.visibleProductCount = productBatchSize;
   trackStoreEvent("view_category", { category: label || state.filter || "all" });
   updateFilterButtons();
-  renderProducts();
+  void loadCatalogPage({ reset: true });
   renderShopMenu();
   closeShopMenu();
   if (updateUrl) setCatalogUrl(state.filter, label, { replace: replaceUrl });
@@ -4556,29 +4581,54 @@ function openProductFromUrl() {
 }
 
 async function loadProducts() {
-  try {
-    const response = await fetch("/products.json", { cache: "default" });
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-    products = await response.json();
-    productsAssetVersion = response.headers.get("ETag") || response.headers.get("Last-Modified") || "products";
-  } catch (error) {
-    console.warn("Could not load products.json, using fallback products.", error);
-    products = fallbackProducts;
-    productsAssetVersion = "fallback";
-  }
+  applyCatalogFilterFromUrl({ render: false });
+  await loadCatalogPage({ reset: true });
   const cartBeforeProducts = cartFingerprint(state.cart);
   state.cart = clampCartMap(state.cart);
-  if (cartFingerprint(state.cart) !== cartBeforeProducts) {
-    saveCartToLocal(currentCartStorageKey(), state.cart);
-  }
-  applyCatalogFilterFromUrl({ render: false });
+  if (cartFingerprint(state.cart) !== cartBeforeProducts) saveCartToLocal(currentCartStorageKey(), state.cart);
   if (state.filter !== "all" || state.labelFilter) trackStoreEvent("view_category", { category: state.labelFilter || state.filter });
   if (state.search.trim().length >= 2) trackStoreEvent("search", { searchTerm: state.search.trim() });
-  await loadBestSellerProducts();
-  renderProducts();
   renderShopMenu();
   renderCart();
-  if (!openProductFromUrl()) updatePageMeta();
+  updatePageMeta();
+}
+
+function catalogApiUrl(page = 1) {
+  const params = new URLSearchParams({ page: String(page), limit: String(productBatchSize), v: catalogSchemaVersion });
+  if (state.filter && state.filter !== "all") params.set("category", state.filter);
+  if (state.labelFilter) params.set("subcategory", state.labelFilter);
+  if (state.search.trim()) params.set("search", state.search.trim());
+  if (state.priceFilter && state.priceFilter !== "all") params.set("price", state.priceFilter);
+  if (state.sortFilter && state.sortFilter !== "default") params.set("sort", state.sortFilter);
+  return `/api/catalog?${params.toString()}`;
+}
+
+async function loadCatalogPage({ reset = false } = {}) {
+  const nextPage = reset ? 1 : catalogPage + 1;
+  catalogRequestController?.abort();
+  catalogRequestController = new AbortController();
+  try {
+    if (loadMoreButton) loadMoreButton.disabled = true;
+    const response = await fetch(catalogApiUrl(nextPage), { cache: "default", signal: catalogRequestController.signal });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const payload = await response.json();
+    const received = (Array.isArray(payload.items) ? payload.items : []).map((item) => ({ ...item, image: item.thumbnail, stock: item.availability === "available" ? "متاح" : "غير متاح حاليا", mainCategory: item.category, subCategory: item.subcategory, label: item.subcategory }));
+    products = reset ? received : [...products, ...received];
+    catalogPage = Number(payload.page) || nextPage;
+    catalogTotal = Number(payload.total) || products.length;
+    catalogHasMore = Boolean(payload.hasMore);
+    state.visibleProductCount = products.length;
+    productsAssetVersion = response.headers.get("ETag") || response.headers.get("Last-Modified") || "products";
+  } catch (error) {
+    if (error?.name === "AbortError") return;
+    console.warn("Could not load products.json, using fallback products.", error);
+    if (reset) products = fallbackProducts.slice(0, productBatchSize);
+    catalogHasMore = false;
+    productsAssetVersion = "fallback";
+  } finally {
+    if (loadMoreButton) loadMoreButton.disabled = false;
+  }
+  renderProducts();
 }
 
 function openHeaderSearch(focusInput = true) {
@@ -4638,7 +4688,7 @@ searchInput?.addEventListener("input", (event) => {
   window.clearTimeout(searchRenderTimer);
   searchRenderTimer = window.setTimeout(() => {
     setCatalogSearchUrl(state.search, { replace: true });
-    renderProducts();
+    void loadCatalogPage({ reset: true });
     if (state.search.trim().length >= 2) trackStoreEvent("search", { searchTerm: state.search.trim() });
   }, 180);
   if (state.search.trim()) openHeaderSearch(false);
@@ -4647,7 +4697,7 @@ searchInput?.addEventListener("input", (event) => {
 priceFilterSelect?.addEventListener("change", (event) => {
   state.priceFilter = event.target.value || "all";
   state.visibleProductCount = productBatchSize;
-  renderProducts();
+  void loadCatalogPage({ reset: true });
 });
 
 mainFilterSelect?.addEventListener("change", (event) => {
@@ -4657,7 +4707,7 @@ mainFilterSelect?.addEventListener("change", (event) => {
 labelFilterSelect?.addEventListener("change", (event) => {
   state.labelFilter = event.target.value || "";
   state.visibleProductCount = productBatchSize;
-  renderProducts();
+  void loadCatalogPage({ reset: true });
   renderShopMenu();
   setCatalogUrl(state.filter || "all", state.labelFilter, { replace: true });
   scrollToFirstCatalogProduct();
@@ -4680,7 +4730,7 @@ subcategoryCards?.addEventListener("click", (event) => {
 sortFilterSelect?.addEventListener("change", (event) => {
   state.sortFilter = event.target.value || "default";
   state.visibleProductCount = productBatchSize;
-  renderProducts();
+  void loadCatalogPage({ reset: true });
 });
 
 resetCatalogFilters?.addEventListener("click", () => {
@@ -4695,15 +4745,12 @@ resetCatalogFilters?.addEventListener("click", () => {
   if (priceFilterSelect) priceFilterSelect.value = "all";
   if (sortFilterSelect) sortFilterSelect.value = "default";
   closeHeaderSearch(true);
-  renderProducts();
+  void loadCatalogPage({ reset: true });
   renderShopMenu();
   setCatalogUrl(currentCategory, "", { replace: true });
 });
 
-loadMoreButton?.addEventListener("click", () => {
-  state.visibleProductCount += productBatchSize;
-  renderProducts();
-});
+loadMoreButton?.addEventListener("click", () => void loadCatalogPage({ reset: false }));
 
 document.addEventListener("click", (event) => {
   if (!headerSearch?.classList.contains("is-open")) return;
@@ -5392,8 +5439,6 @@ clearCorruptedBrowserStorage();
 loadGuestCart();
 applyLanguage();
 updateFloatingShopButton();
-state.auth.configured = hasFirebaseConfig();
+state.auth.configured = false;
 renderAuthState();
-ensureAuthServices();
-renderPopularProductsSkeleton();
 loadProducts();

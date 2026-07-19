@@ -120,3 +120,13 @@ Bosta delivery creation should use:
 ```text
 https://popekyrillos.store/api/create-bosta-delivery
 ```
+# إعدادات الأداء المطلوبة على Cloudflare
+
+بعد نشر الـ Worker، فعّل من لوحة Cloudflare:
+
+- Speed > Optimization: فعّل Brotli وEarly Hints.
+- Network: فعّل HTTP/3 (QUIC).
+- Cache Rules: اسمح بكاش `/assets/*`، واجعل Edge TTL للصور 30 يومًا.
+- Cache Rules: اجعل الأصول ذات hash في الاسم immutable لمدة سنة.
+- Bypass cache للمسارات `/admin*`, `/account*`, `/cart*`, `/checkout*`, `/orders*`, `/auth*`, `/payment*` ولكل API شخصية أو خاصة بالطلبات.
+- اترك `/api/catalog` على احترام `Cache-Control` الصادر من Worker (10 دقائق)، ولا تستخدم Cache Everything على `/api/*` عمومًا.

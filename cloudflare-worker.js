@@ -29,6 +29,7 @@ let productsCacheSha = "";
 let taxonomyCache = "";
 let taxonomyCacheTime = 0;
 let taxonomyCacheSha = "";
+let thumbnailManifestCache = null;
 
 function githubConfig(env = {}) {
   return {
@@ -320,6 +321,96 @@ async function productsJsonResponse(request, env) {
       "Cache-Control": "public, max-age=60, stale-while-revalidate=300",
       ...(productsCacheSha ? { ETag: productsCacheSha } : {})
     }
+  });
+}
+
+function catalogThumbnail(product, manifest = {}) {
+  const generated = manifest[String(product?.id || "")] || "";
+  const source = generated || productImages(product)[0] || product?.image || "";
+  return String(source || "");
+}
+
+function catalogDto(product, thumbnailManifest) {
+  return {
+    id: String(product?.id || ""),
+    slug: productSlug(product),
+    name: product?.name || "",
+    price: productPrice(product),
+    thumbnail: catalogThumbnail(product, thumbnailManifest),
+    availability: hasAvailableVariant(product) ? "available" : "unavailable",
+    category: product?.mainCategory || product?.category || "",
+    subcategory: product?.subcategory || product?.subCategory || ""
+  };
+}
+
+async function loadThumbnailManifest(env, request) {
+  if (thumbnailManifestCache) return thumbnailManifestCache;
+  const response = await env.ASSETS.fetch(rewriteRequest(request, "/thumbnail-manifest.json"));
+  if (!response.ok) return {};
+  try { thumbnailManifestCache = await response.json(); } catch { thumbnailManifestCache = {}; }
+  return thumbnailManifestCache;
+}
+
+function normalizedSearch(value = "") {
+  return String(value).normalize("NFKD").toLocaleLowerCase("ar").replace(/\s+/g, " ").trim();
+}
+
+function catalogProductMatches(product, params) {
+  if (!hasAvailableVariant(product)) return false;
+  const category = params.get("category") || "all";
+  const subcategory = params.get("subcategory") || "";
+  const search = normalizedSearch(params.get("search") || "");
+  const price = params.get("price") || "all";
+  const productCategory = String(product?.mainCategory || product?.category || "");
+  const productSubcategory = String(product?.subcategory || product?.subCategory || "");
+  const amount = productPrice(product);
+  if (category !== "all" && productCategory !== category && String(product?.category || "") !== category) return false;
+  if (subcategory && productSubcategory !== subcategory && String(product?.label || "") !== subcategory) return false;
+  if (price === "under-1000" && !(amount !== null && amount < 1000)) return false;
+  if (price === "1000-5000" && !(amount !== null && amount >= 1000 && amount <= 5000)) return false;
+  if (price === "over-5000" && !(amount !== null && amount > 5000)) return false;
+  if (search) {
+    const haystack = normalizedSearch([
+      localized(product?.name), product?.label, product?.description, productCategory, productSubcategory,
+      ...(Array.isArray(product?.tags) ? product.tags : []),
+      ...(Array.isArray(product?.searchKeywords) ? product.searchKeywords : [])
+    ].join(" "));
+    if (!haystack.includes(search)) return false;
+  }
+  return true;
+}
+
+function sortCatalogProducts(products, sort = "default") {
+  if (sort !== "price-asc" && sort !== "price-desc") return products;
+  const direction = sort === "price-desc" ? -1 : 1;
+  return products.sort((a, b) => direction * ((productPrice(a) ?? Number.MAX_SAFE_INTEGER) - (productPrice(b) ?? Number.MAX_SAFE_INTEGER)));
+}
+
+async function catalogApiResponse(request, env, ctx) {
+  const url = new URL(request.url);
+  const page = Math.max(1, Math.trunc(Number(url.searchParams.get("page"))) || 1);
+  const limit = Math.min(48, Math.max(1, Math.trunc(Number(url.searchParams.get("limit"))) || 12));
+  const cacheUrl = new URL(url.origin + url.pathname);
+  cacheUrl.searchParams.set("schema", "4");
+  [...url.searchParams.entries()].sort(([a], [b]) => a.localeCompare(b)).forEach(([key, value]) => cacheUrl.searchParams.append(key, value));
+  const allProducts = await loadProducts(env, request, { maxAgeMs: 600000 });
+  const thumbnailManifest = await loadThumbnailManifest(env, request);
+  if (productsCacheSha) cacheUrl.searchParams.set("v", productsCacheSha);
+  const cacheKey = new Request(cacheUrl.toString(), { method: "GET" });
+  const edgeCache = caches.default;
+  const cached = await edgeCache.match(cacheKey);
+  if (cached) return cached;
+  const matched = sortCatalogProducts(allProducts.filter((product) => catalogProductMatches(product, url.searchParams)), url.searchParams.get("sort") || "default");
+  const start = (page - 1) * limit;
+  const body = JSON.stringify({ items: matched.slice(start, start + limit).map((product) => catalogDto(product, thumbnailManifest)), page, limit, total: matched.length, hasMore: start + limit < matched.length });
+  const response = new Response(body, { headers: { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "public, max-age=0, must-revalidate", "CDN-Cache-Control": "public, max-age=600, stale-while-revalidate=300" } });
+  ctx.waitUntil(edgeCache.put(cacheKey, response.clone()));
+  return response;
+}
+
+async function productApiResponse(request, env, product) {
+  return new Response(JSON.stringify(product), {
+    headers: { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "public, max-age=600, stale-while-revalidate=300" }
   });
 }
 
@@ -719,7 +810,7 @@ async function htmlResponse(request, env, pathname = "/index.html", init = {}) {
   const response = await env.ASSETS.fetch(rewriteGetRequest(request, assetPath));
   const headers = new Headers(response.headers);
   ensureUtf8ContentType(headers, pathname);
-  headers.set("Cache-Control", "no-store");
+  headers.set("Cache-Control", init.private ? "private, no-store" : "public, max-age=60, stale-while-revalidate=300");
   headers.set("X-Content-Type-Options", "nosniff");
   if (request.method === "HEAD") return new Response(null, { status: init.status || response.status, headers });
   if (headers.get("Content-Type")?.includes("text/html") && init.canonicalUrl) {
@@ -729,26 +820,34 @@ async function htmlResponse(request, env, pathname = "/index.html", init = {}) {
 }
 
 async function productPageResponse(request, env, product) {
-  const response = await env.ASSETS.fetch(rewriteGetRequest(request, "/"));
   if (request.method === "HEAD") {
     return new Response(null, {
       status: 200,
       headers: {
         "Content-Type": "text/html; charset=utf-8",
-        "Cache-Control": "no-store",
+        "Cache-Control": "public, max-age=60, stale-while-revalidate=300",
         "X-Content-Type-Options": "nosniff"
       }
     });
   }
-  let html = await response.text();
   const tags = productMetaTags(product);
-  html = injectHead(html, { ...tags, extra: `${tags.extra}\n    ${productSsrStyles()}` });
-  html = html.replace(/<main\s+id="top">/i, `${productSsrHtml(product)}\n  <main id="top">`);
+  const safeProduct = JSON.stringify(product).replace(/</g, "\\u003c");
+  const name = escapeHtml(localized(product?.name));
+  const html = `<!doctype html>
+<html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+${tags.title}${tags.description}${tags.extra}
+<link rel="preload" href="/assets/fonts/ge-ss-two-bold.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/styles.min.css"><link rel="stylesheet" href="/product-page.css?v=4">
+</head><body class="standalone-product-page">
+<header class="site-header" data-elevated="false"><div class="brand-cluster"><a class="brand" href="/" aria-label="مكتبة البابا كيرلس"><span class="brand-logo-wrap"><img src="/assets/optimized/logo-papa-kyrillos-original.webp" alt="" width="160" height="160" decoding="async"></span><span><strong>مكتبة البابا كيرلس</strong><small>مستلزمات الكنائس والخدمة</small></span></a></div><nav class="main-nav" aria-label="التنقل الرئيسي"><a href="/#categories">الأقسام</a><a href="/#catalog">المنتجات</a></nav><div class="header-actions"><a class="cart-toggle" href="/cart" aria-label="فتح السلة"><span>السلة</span><span class="cart-count" data-cart-count>0</span></a></div></header>
+<main class="product-route-main"><a class="product-route-back" href="/#catalog">العودة إلى المنتجات</a><div id="product-detail" aria-label="${name}"></div><section class="product-route-related" aria-labelledby="related-title"><h2 id="related-title">منتجات مشابهة</h2><div class="product-grid" data-related-products></div></section></main>
+<footer class="product-route-footer"><strong>مكتبة البابا كيرلس</strong><span>مستلزمات الكنائس والخدمة</span><a href="/policies">السياسات</a><a href="https://wa.me/201016125589">تواصل معنا</a></footer>
+<div class="toast" data-toast role="status" aria-live="polite"></div><script id="product-data" type="application/json">${safeProduct}</script><script src="/product-page.js?v=4" defer></script></body></html>`;
   return new Response(html, {
     status: 200,
     headers: {
       "Content-Type": "text/html; charset=utf-8",
-      "Cache-Control": "no-store",
+      "Cache-Control": "public, max-age=60, stale-while-revalidate=300",
       "X-Content-Type-Options": "nosniff"
     }
   });
@@ -797,6 +896,12 @@ function withAssetCacheHeaders(response, pathname) {
     headers.set("Cache-Control", "public, max-age=300, stale-while-revalidate=600");
   } else if (pathname === "/sitemap.xml" || pathname === "/robots.txt") {
     headers.set("Cache-Control", "no-store");
+  } else if (/\/assets\/thumbnails\/(?:320|480|640)\//.test(pathname) || /\/assets\/(?:optimized|detail|products)\//.test(pathname)) {
+    headers.set("Cache-Control", "public, max-age=2592000, stale-while-revalidate=86400");
+  } else if (/\.[a-f0-9]{8,}\.(?:js|css|woff2|webp|avif)$/i.test(pathname)) {
+    headers.set("Cache-Control", "public, max-age=31536000, immutable");
+  } else if (/\.(?:js|css|woff2)$/i.test(pathname)) {
+    headers.set("Cache-Control", "public, max-age=3600, stale-while-revalidate=86400");
   }
   return new Response(response.body, { status: response.status, headers });
 }
@@ -1002,7 +1107,7 @@ function adminOrdersJson(payload, init = {}) {
   return Response.json(payload, {
     ...init,
     headers: {
-      "Cache-Control": "no-store",
+      "Cache-Control": "public, max-age=60, stale-while-revalidate=300",
       "X-Content-Type-Options": "nosniff",
       ...(init.headers || {})
     }
@@ -1256,7 +1361,7 @@ const analyticsEventNames = new Set([
 function analyticsJson(payload, init = {}) {
   const headers = new Headers(init.headers || {});
   headers.set("Content-Type", "application/json; charset=UTF-8");
-  headers.set("Cache-Control", "no-store");
+  headers.set("Cache-Control", init.private ? "private, no-store" : "public, max-age=60, stale-while-revalidate=300");
   headers.set("X-Content-Type-Options", "nosniff");
   return new Response(JSON.stringify(payload), { ...init, headers });
 }
@@ -1410,7 +1515,7 @@ async function handleRequest(request, env, ctx) {
 
     const forwardedProto = request.headers.get("X-Forwarded-Proto") || "";
     const isHttps = url.protocol === "https:" || forwardedProto === "https";
-    const allowAnalyticsLocalTest = ["127.0.0.1", "localhost"].includes(url.hostname);
+    const allowAnalyticsLocalTest = env.LOCAL_DEV === "1" || ["127.0.0.1", "localhost"].includes(url.hostname);
     if (!allowAnalyticsLocalTest && (!isHttps || url.hostname !== canonicalHostname)) {
       url.protocol = "https:";
       url.hostname = canonicalHostname;
@@ -1433,13 +1538,23 @@ async function handleRequest(request, env, ctx) {
         return env.ASSETS.fetch(rewriteGetRequest(request, "/admin/analytics/index.html"));
       }
 
-      if (url.pathname === "/admin/api/update-products") return updateProducts(context);
+      if (url.pathname === "/admin/api/update-products") {
+        const response = await updateProducts(context);
+        if (response.ok) { productsCache = null; productsCacheTime = 0; productsCacheSha = ""; }
+        return response;
+      }
       if (url.pathname === "/admin/api/update-taxonomy") return updateTaxonomy(context);
       if (url.pathname === "/admin/api/upload-product-image") return uploadProductImage(context);
       if (url.pathname === "/admin/api/orders" || url.pathname.startsWith("/admin/api/orders/")) return adminOrdersResponse(context, url.pathname);
       if (url.pathname === "/admin/api/analytics") return analyticsDashboardResponse(request, env);
     }
 
+    if (url.pathname === "/api/catalog") return catalogApiResponse(request, env, ctx);
+    if (url.pathname.startsWith("/api/products/")) {
+      const products = await loadProducts(env, request, { maxAgeMs: 600000 });
+      const product = productByIdOrSlug(products, url.pathname.slice("/api/products/".length));
+      return product ? productApiResponse(request, env, product) : new Response(JSON.stringify({ error: "not_found" }), { status: 404, headers: { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" } });
+    }
     if (url.pathname === "/api/meta-catalog-feed.xml") return catalogFeedResponse(request, env, { includePrice: true });
     if (url.pathname === "/api/product-feed-no-price.xml") return catalogFeedResponse(request, env, { includePrice: false });
     if (url.pathname === "/api/create-paymob-intention") return createPaymobIntention(context);
@@ -1466,7 +1581,7 @@ async function handleRequest(request, env, ctx) {
 
     if (staticRewrites[url.pathname]) {
       const isPrivate = ["/cart", "/checkout", "/payment", "/payment-success", "/payment-failed", "/payment-pending"].includes(url.pathname);
-      return htmlResponse(request, env, staticRewrites[url.pathname], isPrivate ? {} : { canonicalUrl: `${canonicalOrigin}${url.pathname}` });
+      return htmlResponse(request, env, staticRewrites[url.pathname], isPrivate ? { private: true } : { canonicalUrl: `${canonicalOrigin}${url.pathname}` });
     }
 
     if (htmlRoutePaths.has(url.pathname) || url.pathname.startsWith("/category/")) {

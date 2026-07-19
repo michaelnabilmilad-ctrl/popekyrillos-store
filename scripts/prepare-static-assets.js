@@ -15,6 +15,8 @@ const cacheableAssets = [
   "checkout-flow.min.js",
   "styles.min.css",
   "script.min.js",
+  "product-page.css",
+  "product-page.js",
   "category-taxonomy.js",
   "subcategory-image-policy.js"
 ];
@@ -71,7 +73,7 @@ function updateHtmlAssetVersions(version) {
     .filter((name) => name.endsWith(".html"))
     .map((name) => path.join(root, name));
 
-  const assetPattern = /(href|src)=("|')([^"']*\/?(?:admin\.css|admin\.js|admin-orders\.js|admin-analytics\.js|analytics\.js|analytics-config\.js|styles\.min\.css|script\.min\.js|checkout-flow\.min\.js|category-taxonomy\.js|subcategory-image-policy\.js))(?:\?v=[^"']*)?(\2)/g;
+  const assetPattern = /(href|src)=("|')([^"']*\/?(?:admin\.css|admin\.js|admin-orders\.js|admin-analytics\.js|analytics\.js|analytics-config\.js|styles\.min\.css|script\.min\.js|product-page\.css|product-page\.js|checkout-flow\.min\.js|category-taxonomy\.js|subcategory-image-policy\.js))(?:\?v=[^"']*)?(\2)/g;
 
   htmlFiles.forEach((filePath) => {
     const before = fs.readFileSync(filePath, "utf8");
