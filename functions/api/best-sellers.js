@@ -1,6 +1,6 @@
 const CACHE_SECONDS = 12 * 60;
 const INCLUDED_STATUSES = new Set([
-  "confirmed", "paid", "completed", "تم التأكيد", "تم الدفع", "تم التسليم"
+  "confirmed", "paid", "completed", "تم التأكيد", "تم الدفع", "تم التسليم", "مدفوع"
 ]);
 const EXCLUDED_STATUSES = new Set([
   "cancelled", "canceled", "refunded", "test", "ملغي", "ملغى", "مرتجع", "تجريبي"
@@ -10,6 +10,7 @@ const FIELD_ALIASES = {
   orderLink: ["Order", "Order ID", "Order Record", "الطلب", "رقم الطلب"],
   orderStatus: ["Order Status", "Status", "حالة الطلب"],
   paymentStatus: ["Payment Status", "حالة الدفع"],
+  orderProducts: ["Products", "Order Products", "Items", "المنتجات", "منتجات الطلب"],
   productLink: ["Product", "Product Record", "المنتج"],
   productId: ["Product ID", "Product Id", "productId", "ProductID", "معرف المنتج"],
   sku: ["SKU", "Sku", "sku", "كود المنتج"],
@@ -265,6 +266,75 @@ export function calculateBestSellers({ orders, orderItems, products, limit = 9 }
   return ranked;
 }
 
+function catalogProduct(product, totalQuantity) {
+  const image = clean(product.thumbnail || product.image || product.images?.[0]);
+  return {
+    ...product,
+    image,
+    images: image ? [image] : [],
+    category: clean(product.mainCategory || product.category),
+    totalQuantity
+  };
+}
+
+function parseOrderProducts(value, catalogProducts) {
+  const text = clean(value);
+  if (!text) return [];
+  let parsed;
+  try { parsed = JSON.parse(text); } catch {}
+  const rawItems = Array.isArray(parsed) ? parsed : (parsed && typeof parsed === "object" ? [parsed] : []);
+  const byId = new Map(catalogProducts.flatMap((product) => [product.id, product.sku].filter(Boolean).map((key) => [clean(key), product])));
+  const byName = new Map(catalogProducts.filter((product) => clean(product.name)).map((product) => [normalized(product.name), product]));
+  if (rawItems.length) {
+    return rawItems.flatMap((item) => {
+      const product = byId.get(clean(item.productId || item.id || item.sku)) || byName.get(normalized(item.name));
+      const quantity = numeric(item.quantity ?? item.qty) || 0;
+      return product && quantity > 0 ? [{ product, quantity }] : [];
+    });
+  }
+
+  const matches = [];
+  const orderedProducts = catalogProducts
+    .filter((product) => clean(product.name))
+    .sort((a, b) => clean(b.name).length - clean(a.name).length);
+  for (const product of orderedProducts) {
+    const name = clean(product.name);
+    const escaped = name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const afterName = new RegExp(`${escaped}\\s*(?:\\||[-–—])?\\s*(?:الكمية|quantity|qty)\\s*[:：]?\\s*(\\d+)`, "giu");
+    const beforeName = new RegExp(`(\\d+)\\s*[x×*]\\s*${escaped}`, "giu");
+    for (const match of text.matchAll(afterName)) matches.push({ product, quantity: Number(match[1]) });
+    for (const match of text.matchAll(beforeName)) matches.push({ product, quantity: Number(match[1]) });
+  }
+  return matches;
+}
+
+export function calculateBestSellersFromOrders({ orders, catalogProducts, limit = 9 }) {
+  const totals = new Map();
+  for (const order of orders) {
+    const fields = order.fields || {};
+    if (statusDecision(statusValues(fields)) !== "included") continue;
+    for (const { product, quantity } of parseOrderProducts(firstField(fields, FIELD_ALIASES.orderProducts), catalogProducts)) {
+      const key = clean(product.id || product.sku);
+      if (!key) continue;
+      totals.set(key, { product, quantity: (totals.get(key)?.quantity || 0) + quantity });
+    }
+  }
+  const candidates = [...totals.values()]
+    .map(({ product, quantity }) => catalogProduct(product, quantity))
+    .filter((product) => product.image && product.published !== false && product.deleted !== true)
+    .sort((a, b) => b.totalQuantity - a.totalQuantity || clean(a.id).localeCompare(clean(b.id)));
+  const result = [];
+  const categories = new Set();
+  for (const product of candidates) {
+    const category = normalized(product.category);
+    if (!category || categories.has(category)) continue;
+    categories.add(category);
+    result.push(product);
+    if (result.length >= limit) break;
+  }
+  return result;
+}
+
 function responseJson(payload, init = {}) {
   const headers = new Headers(init.headers || {});
   headers.set("Content-Type", "application/json; charset=utf-8");
@@ -277,7 +347,7 @@ export async function bestSellersResponse(context, catalogProducts = []) {
   const { request, env, waitUntil } = context;
   if (request.method !== "GET") return responseJson({ error: "method_not_allowed" }, { status: 405, headers: { Allow: "GET" } });
   const cache = globalThis.caches?.default;
-  const cacheKey = new Request(new URL("/api/best-sellers?v=9", request.url), { method: "GET" });
+  const cacheKey = new Request(new URL("/api/best-sellers?v=11", request.url), { method: "GET" });
   const cached = cache ? await cache.match(cacheKey) : null;
   if (cached) return cached;
 
@@ -286,25 +356,12 @@ export async function bestSellersResponse(context, catalogProducts = []) {
   try {
     if (!env.AIRTABLE_TOKEN || !env.AIRTABLE_BASE_ID) throw new Error("Airtable configuration is incomplete");
     let orders;
-    let orderItemsTable;
-    let productsTable;
     try { orders = await readAllRecords(env, names.orders); } catch (error) { throw new Error(`${names.orders}: ${error.message}`); }
-    productsTable = await readFirstAvailableTable(env, names.products, [
-      "Product", "Catalog", "Inventory", "المنتجات"
-    ]);
-    orderItemsTable = await readFirstAvailableTable(env, names.orderItems, [
-      "OrderItems", "Order Line Items", "Line Items", "Items", "Order Products",
-      "عناصر الطلب", "تفاصيل الطلبات", "منتجات الطلبات"
-    ]);
-    const orderItems = orderItemsTable.records;
-    const products = productsTable.records;
-    names.orderItems = orderItemsTable.name;
-    names.products = productsTable.name;
     payload = {
-      products: calculateBestSellers({ orders, orderItems, products, limit: 9 }),
+      products: calculateBestSellersFromOrders({ orders, catalogProducts, limit: 9 }),
       source: "airtable-sales",
       tables: names,
-      counts: { orders: orders.length, orderItems: orderItems.length, products: products.length },
+      counts: { orders: orders.length, products: catalogProducts.length },
       generatedAt: new Date().toISOString(),
       cacheSeconds: CACHE_SECONDS
     };

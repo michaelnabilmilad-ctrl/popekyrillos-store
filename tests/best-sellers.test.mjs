@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { calculateBestSellers } from "../functions/api/best-sellers.js";
+import { calculateBestSellers, calculateBestSellersFromOrders } from "../functions/api/best-sellers.js";
 
 const product = (recordId, id, name, extra = {}) => ({
   id: recordId,
@@ -77,5 +77,23 @@ test("returns only the highest-selling product from each main category", () => {
   assert.deepEqual(result.map((entry) => [entry.id, entry.category, entry.totalQuantity]), [
     ["p-2", "الصلبان والهدايا", 9],
     ["p-3", "الكتب والطقوس", 6]
+  ]);
+});
+
+test("reads real order product lines and selects one winner per catalog category", () => {
+  const catalogProducts = [
+    { id: "p-1", name: "صليب أول", mainCategory: "الصلبان", image: "/p1.webp" },
+    { id: "p-2", name: "صليب ثان", mainCategory: "الصلبان", image: "/p2.webp" },
+    { id: "p-3", name: "كتاب طقسي", mainCategory: "الكتب", image: "/p3.webp" }
+  ];
+  const orders = [
+    { id: "o-1", fields: { "Payment Status": "مدفوع", Products: '[{"productId":"p-1","name":"صليب أول","quantity":2},{"productId":"p-3","name":"كتاب طقسي","quantity":4}]' } },
+    { id: "o-2", fields: { "Order Status": "Completed", Products: "صليب ثان | الكمية: 7 | السعر: 100 ج.م" } },
+    { id: "o-3", fields: { "Payment Status": "غير مدفوع", Products: '[{"productId":"p-1","quantity":100}]' } }
+  ];
+  const result = calculateBestSellersFromOrders({ orders, catalogProducts });
+  assert.deepEqual(result.map((entry) => [entry.id, entry.category, entry.totalQuantity]), [
+    ["p-2", "الصلبان", 7],
+    ["p-3", "الكتب", 4]
   ]);
 });
