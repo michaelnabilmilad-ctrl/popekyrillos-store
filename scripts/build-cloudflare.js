@@ -18,13 +18,20 @@ const files = [
   "firebase-config.min.js",
   "firebase-config.js",
   "category-taxonomy.js",
+  "subcategory-image-policy.js",
   "products.json",
   "sitemap.xml",
   "robots.txt",
   "policies.html",
   "admin.html",
+  "admin-orders.html",
+  "admin-analytics.html",
   "admin.css",
   "admin.js",
+  "admin-orders.js",
+  "admin-analytics.js",
+  "analytics-config.js",
+  "analytics.js",
   "payment-success.html",
   "payment-failed.html",
   "payment-pending.html",
@@ -90,8 +97,12 @@ copyFileAs("public/favicon.png", "favicon.png", null);
 copyFileAs("admin.html", "admin/index.html", (content) =>
   content.replace('href="index.html"', 'href="/"')
 );
+copyFileAs("admin-orders.html", "admin/orders/index.html", null);
+copyFileAs("admin-analytics.html", "admin/analytics/index.html", null);
 copyFileAs("admin.css", "admin/admin.css", null);
 copyFileAs("admin.js", "admin/admin.js", null);
+copyFileAs("admin-orders.js", "admin/admin-orders.js", null);
+copyFileAs("admin-analytics.js", "admin/admin-analytics.js", null);
 copyFileAs("category-taxonomy.js", "admin/category-taxonomy.js", null);
 
 console.log(`Cloudflare build ready: ${path.relative(root, dist)}`);

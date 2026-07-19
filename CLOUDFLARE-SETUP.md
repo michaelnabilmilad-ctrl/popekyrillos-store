@@ -20,6 +20,9 @@ PAYMOB_INTEGRATION_IDS=<card integration id from the same Paymob account>
 PAYMOB_ACCEPT_BASE_URL=https://accept.paymob.com
 PAYMOB_HMAC_SECRET=...
 BOSTA_API_KEY=...
+AIRTABLE_TOKEN=...
+AIRTABLE_BASE_ID=...
+AIRTABLE_TABLE_NAME=Orders
 SITE_URL=https://popekyrillos.store
 ADMIN_USERNAME=...
 ADMIN_PASSWORD=...
@@ -33,7 +36,27 @@ PAYMOB_API_KEY=...
 PAYMOB_IFRAME_ID=<Paymob iframe id>
 ```
 
-Keep `PAYMOB_SECRET_KEY`, `PAYMOB_API_KEY`, `PAYMOB_HMAC_SECRET`, `BOSTA_API_KEY`, `ADMIN_PASSWORD`, and `GITHUB_TOKEN` secret. `PAYMOB_PUBLIC_KEY`, `PAYMOB_INTEGRATION_IDS`, `SITE_URL`, `ADMIN_USERNAME`, `GITHUB_OWNER`, `GITHUB_REPO`, and `GITHUB_BRANCH` can be plaintext.
+Keep `PAYMOB_SECRET_KEY`, `PAYMOB_API_KEY`, `PAYMOB_HMAC_SECRET`, `BOSTA_API_KEY`, `AIRTABLE_TOKEN`, `AIRTABLE_BASE_ID`, `AIRTABLE_TABLE_NAME`, `ADMIN_PASSWORD`, and `GITHUB_TOKEN` secret. `PAYMOB_PUBLIC_KEY`, `PAYMOB_INTEGRATION_IDS`, `SITE_URL`, `ADMIN_USERNAME`, `GITHUB_OWNER`, `GITHUB_REPO`, and `GITHUB_BRANCH` can be plaintext.
+
+## Airtable orders
+
+Checkout order creation uses the Worker endpoint:
+
+```text
+POST https://popekyrillos.store/api/orders
+```
+
+The Airtable Personal Access Token must stay server-side only. Do not add it to frontend JavaScript, HTML, or public config files.
+
+Set the required secrets locally and in production with:
+
+```bash
+npx wrangler secret put AIRTABLE_TOKEN
+npx wrangler secret put AIRTABLE_BASE_ID
+npx wrangler secret put AIRTABLE_TABLE_NAME
+```
+
+Use `Orders` for `AIRTABLE_TABLE_NAME`. The Worker writes to the Airtable fields `Customer Name`, `Phone`, `Source`, `Products`, `Total`, `Payment Status`, `Payment Method`, `Payment Proof`, `Pickup Date`, `Delivery Type`, `Order Status`, `Missing Info`, and `Notes`.
 
 The admin page is protected by the Cloudflare Worker. Add `ADMIN_USERNAME` and `ADMIN_PASSWORD` under **Settings -> Variables and secrets**, then deploy. Opening `/admin`, `/admin.html`, `/admin.css`, or `/admin.js` will require these credentials before any admin files load.
 

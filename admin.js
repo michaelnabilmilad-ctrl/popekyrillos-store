@@ -32,7 +32,10 @@
     mainCategoryFilter: "all",
     subCategoryFilter: "all",
     needsReviewOnly: false,
-    assetPreviewVersion: String(Date.now())
+    assetPreviewVersion: String(Date.now()),
+    productImageUploadMode: "append",
+    imagePreviewLimit: 6,
+    imagePreviewProductId: ""
   };
 
   const elements = {
@@ -49,18 +52,22 @@
     editorTitle: document.querySelector("[data-editor-title]"),
     editorId: document.querySelector("[data-editor-id]"),
     imagePreview: document.querySelector("[data-image-preview]"),
+    imageSection: document.querySelector('[data-editor-section="images"]'),
     variantList: document.querySelector("[data-variant-list]"),
     importFallback: document.querySelector("[data-import-fallback]"),
     imageUpload: document.querySelector("[data-image-upload]"),
     taxonomyMain: document.querySelector("[data-taxonomy-main]"),
     taxonomyList: document.querySelector("[data-taxonomy-list]"),
     toast: document.querySelector("[data-toast]"),
+    actionsProductName: document.querySelector("[data-actions-product-name]"),
     saveFileButton: document.querySelector("[data-action='save-file']"),
     publishProductsButton: document.querySelector("[data-action='publish-products']"),
     publishTaxonomyButton: document.querySelector("[data-action='publish-taxonomy']")
   };
 
   document.addEventListener("click", handleActionClick);
+  document.querySelectorAll("[data-ui-action='toggle-sidebar']").forEach((control) => control.addEventListener("click", toggleProductSidebar));
+  elements.editor.addEventListener("invalid", openInvalidEditorSection, true);
   elements.search.addEventListener("input", (event) => {
     state.search = event.target.value.trim().toLowerCase();
     renderProductList();
@@ -93,9 +100,26 @@
   getImageUploadInput().addEventListener("change", uploadProductImage);
   elements.editor.addEventListener("input", handleEditorInput);
   elements.editor.addEventListener("change", handleEditorInput);
+  elements.imageSection?.addEventListener("toggle", () => {
+    state.imagePreviewLimit = 6;
+    renderImagePreview(currentProduct()?.images || []);
+  });
 
   fillCategorySelects();
   loadProductsFromSite();
+
+  function toggleProductSidebar() {
+    if (window.matchMedia("(max-width: 820px)").matches) {
+      document.body.classList.toggle("sidebar-mobile-open");
+    } else {
+      document.body.classList.toggle("sidebar-collapsed");
+    }
+  }
+
+  function openInvalidEditorSection(event) {
+    const section = event.target.closest("details[data-editor-section]");
+    if (section) section.open = true;
+  }
 
   async function handleActionClick(event) {
     const button = event.target.closest("[data-action]");
@@ -124,7 +148,14 @@
     }
 
     if (action === "upload-image") {
-      await openImageUpload();
+      await openImageUpload("append");
+    }
+
+    if (action === "replace-product-images") {
+      const product = currentProduct();
+      if (!product) return;
+      const confirmed = window.confirm("سيتم استبدال جميع صور المنتج الحالية بالصور الجديدة، وإزالة الصور القديمة من اختيارات المنتج أيضًا. هل تريد المتابعة؟");
+      if (confirmed) await openImageUpload("replace");
     }
 
     if (action === "make-primary-image") {
@@ -137,6 +168,15 @@
 
     if (action === "move-image-after") {
       moveProductImage(Number(button.closest("[data-image-index]")?.dataset.imageIndex), 1);
+    }
+
+    if (action === "remove-product-image") {
+      removeProductImage(Number(button.closest("[data-image-index]")?.dataset.imageIndex));
+    }
+
+    if (action === "show-more-product-images") {
+      state.imagePreviewLimit += 6;
+      renderImagePreview(currentProduct()?.images || []);
     }
 
     if (action === "download-products") {
@@ -158,6 +198,10 @@
     if (action === "add-subcategory") {
       addSubcategory();
     }
+
+    if (action === "add-main-category") addMainCategory();
+    if (action === "move-main-before") moveMainCategory(-1);
+    if (action === "move-main-after") moveMainCategory(1);
 
     if (action === "upload-taxonomy-image") {
       await openTaxonomyImageUpload(Number(button.closest("[data-taxonomy-sub-index]")?.dataset.taxonomySubIndex));
@@ -340,8 +384,9 @@
     }
   }
 
-  async function openImageUpload() {
+  async function openImageUpload(mode = "append") {
     state.taxonomyImageUpload = null;
+    state.productImageUploadMode = mode === "replace" ? "replace" : "append";
     if (!currentProduct()) {
       showToast("اختر منتجاً أولاً قبل رفع الصورة.");
       return;
@@ -358,7 +403,7 @@
           ],
           multiple: true
         });
-        await processProductImageFiles(await Promise.all(fileHandles.map((fileHandle) => fileHandle.getFile())));
+        await processProductImageFiles(await Promise.all(fileHandles.map((fileHandle) => fileHandle.getFile())), state.productImageUploadMode);
         return;
       } catch (error) {
         if (error.name === "AbortError") return;
@@ -381,7 +426,9 @@
       await processTaxonomyImageFile(files[0], uploadTarget);
       return;
     }
-    await processProductImageFiles(files);
+    const mode = state.productImageUploadMode;
+    state.productImageUploadMode = "append";
+    await processProductImageFiles(files, mode);
   }
 
   async function publishTaxonomyToSite() {
@@ -499,29 +546,57 @@
         throw new Error(result.error || result.message || `HTTP ${response.status}`);
       }
 
-      subcategory.subcategoryImage = result.path;
+      subcategory.manualImage = result.path;
       state.assetPreviewVersion = String(Date.now());
       renderTaxonomyManager();
       refreshTaxonomyDependentUi();
-      showToast("تم رفع الصورة واستبدال صورة القسم. اضغط حفظ ونشر الأقسام حتى تظهر على الموقع.");
+      showToast("تم رفع الصورة اليدوية للقسم. اضغط حفظ ونشر الأقسام حتى تظهر على الموقع.");
     } catch (error) {
       showToast(`تعذر رفع صورة القسم: ${friendlyUploadError(error.message)}`);
       console.error(error);
     }
   }
 
-  async function processProductImageFiles(files) {
+  async function processProductImageFiles(files, mode = "append") {
     const imageFiles = Array.from(files || []).filter(Boolean);
     if (!imageFiles.length) return;
+
+    const product = currentProduct();
+    if (!product) return;
+    ensureProductShape(product);
+    const replaceExisting = mode === "replace";
+    const previousImages = [...(product.images || [])];
+    let uploadedCount = 0;
+
+    if (replaceExisting) {
+      product.images = [];
+      product.image = "";
+    }
 
     for (let index = 0; index < imageFiles.length; index += 1) {
       if (imageFiles.length > 1) {
         showToast(`جاري رفع الصورة ${index + 1} من ${imageFiles.length}...`);
       }
-      await processProductImageFile(imageFiles[index]);
+      if (await processProductImageFile(imageFiles[index])) uploadedCount += 1;
     }
 
-    if (imageFiles.length > 1) {
+    if (replaceExisting && uploadedCount === 0) {
+      product.images = previousImages;
+      product.image = previousImages[0] || "";
+      setValue("images", arrayToLines(product.images));
+      renderImagePreview(product.images);
+      showToast("لم يتم رفع أي صورة جديدة؛ تم الاحتفاظ بالصور القديمة.");
+      return;
+    }
+
+    if (replaceExisting) {
+      removeImagesFromVariants(product, previousImages);
+      renderVariants(product);
+      setValue("images", arrayToLines(product.images));
+      renderImagePreview(product.images);
+      markDirty();
+      showToast(`تم استبدال الصور القديمة ورفع ${uploadedCount} صورة جديدة. اضغط حفظ ونشر على الموقع لتطبيق التغيير.`);
+    } else if (imageFiles.length > 1) {
       showToast(`تم رفع ${imageFiles.length} صورة وإضافتها للمنتج. اضغط حفظ ونشر على الموقع لتحديث products.json.`);
     }
   }
@@ -567,9 +642,11 @@
       renderImagePreview(product.images);
       markDirty();
       showToast("تم رفع الصورة وإضافتها للمنتج. اضغط حفظ ونشر على الموقع لتحديث products.json.");
+      return true;
     } catch (error) {
       showToast(`تعذر رفع الصورة: ${friendlyUploadError(error.message)}`);
       console.error(error);
+      return false;
     }
   }
 
@@ -889,6 +966,17 @@
     return findTaxonomyCategory(state.taxonomyMain) || taxonomyCategoriesForAdmin()[0] || null;
   }
 
+  function representativeProductOptions(categoryId, subcategory) {
+    const options = state.products.filter((product) => normalizeMainCategoryValue(product.mainCategory, product.category) === categoryId
+      && normalizeSubCategoryValue(product.subcategory || product.subCategory) === subcategory.id
+      && product.published !== false && product.deleted !== true
+      && Boolean((product.images || [])[0] || product.image));
+    return [`<option value="">تلقائي: أول منتج صالح من نفس القسم</option>`, ...options.map((product) => {
+      const selected = String(product.id) === String(subcategory.representativeProductId || "") ? " selected" : "";
+      return `<option value="${escapeAttribute(product.id)}"${selected}>${escapeHtml(product.name)} — ${escapeHtml(product.id)}</option>`;
+    })].join("");
+  }
+
   function renderTaxonomyManager() {
     if (!elements.taxonomyMain || !elements.taxonomyList) return;
     const categoriesList = taxonomyCategoriesForAdmin();
@@ -905,7 +993,13 @@
     elements.taxonomyMain.value = state.taxonomyMain;
 
     const category = selectedTaxonomyCategory();
-    const subcategories = category?.subcategories || [];
+    document.querySelectorAll("[data-taxonomy-main-field]").forEach((field) => {
+      const key = field.dataset.taxonomyMainField;
+      if (field.type === "checkbox") field.checked = category?.[key] !== false;
+      else field.value = category?.[key] || "";
+    });
+    const allSubcategories = category?.subcategories || [];
+    const subcategories = allSubcategories.map((subcategory, index) => ({ subcategory, index }));
     if (!subcategories.length) {
       elements.taxonomyList.innerHTML = `<div class="empty-state">لا توجد أقسام فرعية هنا.</div>`;
       return;
@@ -915,10 +1009,10 @@
       .map((item) => `<option value="${escapeAttribute(item.id)}">${escapeHtml(item.name)}</option>`)
       .join("");
 
-    elements.taxonomyList.innerHTML = subcategories.map((subcategory, index) => `
+    elements.taxonomyList.innerHTML = subcategories.map(({ subcategory, index }) => `
       <article class="taxonomy-card" data-taxonomy-sub-index="${index}">
         <div class="taxonomy-preview">
-          <img src="${escapeAttribute(previewAssetUrl(subcategory.subcategoryImage || ""))}" alt="" loading="lazy" decoding="async" onerror="this.closest('.taxonomy-preview').classList.add('image-missing')">
+          ${subcategory.manualImage ? `<img src="${escapeAttribute(previewAssetUrl(subcategory.manualImage))}" alt="" loading="lazy" decoding="async" onerror="this.remove()">` : ""}
         </div>
         <div class="taxonomy-fields">
           <label>
@@ -930,8 +1024,12 @@
             <input type="text" dir="ltr" data-taxonomy-field="id" value="${escapeAttribute(subcategory.id || "")}">
           </label>
           <label>
-            <span>مسار الصورة</span>
-            <input type="text" dir="ltr" data-taxonomy-field="subcategoryImage" value="${escapeAttribute(subcategory.subcategoryImage || "")}" placeholder="assets/optimized/products/example.webp">
+            <span>صورة القسم اليدوية</span>
+            <input type="text" dir="ltr" data-taxonomy-field="manualImage" value="${escapeAttribute(subcategory.manualImage || "")}" placeholder="اتركه فارغًا لاستخدام منتج من نفس القسم">
+          </label>
+          <label>
+            <span>المنتج الممثل للقسم</span>
+            <select data-taxonomy-field="representativeProductId">${representativeProductOptions(category.id, subcategory)}</select>
           </label>
           <label>
             <span>نقل إلى قسم رئيسي</span>
@@ -939,9 +1037,9 @@
           </label>
         </div>
         <div class="taxonomy-card-actions">
-          <button class="button small secondary" type="button" data-action="upload-taxonomy-image">رفع صورة</button>
+          <button class="button small secondary" type="button" data-action="upload-taxonomy-image">رفع/استبدال الصورة اليدوية</button>
           <button class="button small ghost" type="button" data-action="move-subcategory-before" ${index === 0 ? "disabled" : ""}>فوق</button>
-          <button class="button small ghost" type="button" data-action="move-subcategory-after" ${index === subcategories.length - 1 ? "disabled" : ""}>تحت</button>
+          <button class="button small ghost" type="button" data-action="move-subcategory-after" ${index === allSubcategories.length - 1 ? "disabled" : ""}>تحت</button>
           <button class="button small danger" type="button" data-action="remove-subcategory">حذف</button>
         </div>
       </article>
@@ -951,6 +1049,30 @@
       select.value = category.id;
     });
   }
+
+  function addMainCategory() {
+    const id = `custom-category-${Date.now()}`;
+    state.taxonomy.push({ id, name: "قسم رئيسي جديد", description: "", subcategoryImage: "assets/optimized/hero-products-collage.webp", visible: true, homeVisible: true, subcategories: [] });
+    state.taxonomyMain = id; renderTaxonomyManager(); refreshTaxonomyDependentUi(); showToast("تم إضافة قسم رئيسي جديد.");
+  }
+
+  function moveMainCategory(direction) {
+    const index = state.taxonomy.findIndex((item) => item.id === state.taxonomyMain);
+    const next = index + direction;
+    if (index < 0 || next < 0 || next >= state.taxonomy.length) return;
+    [state.taxonomy[index], state.taxonomy[next]] = [state.taxonomy[next], state.taxonomy[index]];
+    renderTaxonomyManager(); refreshTaxonomyDependentUi();
+  }
+
+  document.querySelector(".taxonomy-main-fields")?.addEventListener("input", (event) => {
+    const field = event.target.closest("[data-taxonomy-main-field]");
+    const category = selectedTaxonomyCategory();
+    if (!field || !category) return;
+    const key = field.dataset.taxonomyMainField;
+    category[key] = field.type === "checkbox" ? field.checked : field.value.trim();
+    if (key === "name") renderTaxonomyManager();
+    refreshTaxonomyDependentUi();
+  });
 
   function handleTaxonomyInput(event) {
     const element = event.target.closest("[data-taxonomy-field]");
@@ -969,13 +1091,13 @@
     if (field === "id") {
       subcategory.id = uniqueTaxonomySubcategoryId(slugLike(element.value) || `subcategory-${Date.now()}`, subcategory);
       if (element.value !== subcategory.id) element.value = subcategory.id;
-    } else if (field === "subcategoryImage") {
-      subcategory.subcategoryImage = normalizeImagePath(element.value);
+    } else if (field === "manualImage") {
+      subcategory.manualImage = normalizeImagePath(element.value);
       const image = card.querySelector(".taxonomy-preview img");
       const preview = card.querySelector(".taxonomy-preview");
       preview?.classList.remove("image-missing");
-      if (image) image.src = previewAssetUrl(subcategory.subcategoryImage);
-      if (element.value !== subcategory.subcategoryImage) element.value = subcategory.subcategoryImage;
+      if (image) image.src = previewAssetUrl(subcategory.manualImage);
+      if (element.value !== subcategory.manualImage) element.value = subcategory.manualImage;
     } else {
       subcategory[field] = element.value.trim();
     }
@@ -1007,7 +1129,8 @@
     category.subcategories.push({
       id: uniqueTaxonomySubcategoryId(`custom-subcategory-${Date.now()}`),
       name: "قسم فرعي جديد",
-      subcategoryImage: "assets/optimized/hero-products-collage.webp"
+      manualImage: "",
+      representativeProductId: ""
     });
     renderTaxonomyManager();
     refreshTaxonomyDependentUi();
@@ -1102,6 +1225,7 @@
       state.selectedId = button.dataset.selectProduct;
       renderProductList();
       renderEditor();
+      if (window.matchMedia("(max-width: 820px)").matches) document.body.classList.remove("sidebar-mobile-open");
     });
   });
 }
@@ -1125,10 +1249,15 @@
     const product = currentProduct();
     elements.editor.hidden = !product;
     elements.editorEmpty.hidden = Boolean(product);
+    if (elements.actionsProductName) elements.actionsProductName.textContent = product?.name || "اختر منتجًا للتعديل";
 
     if (!product) return;
 
     ensureProductShape(product);
+    if (state.imagePreviewProductId !== product.id) {
+      state.imagePreviewProductId = product.id;
+      state.imagePreviewLimit = 6;
+    }
     elements.editorTitle.textContent = product.name || "منتج بدون اسم";
     elements.editorId.textContent = `الكود: ${product.id}`;
 
@@ -1143,6 +1272,7 @@
     setValue("stock", product.stock || "متاح");
     setValue("price", product.price ?? "");
     setValue("priceNote", product.priceNote);
+    setValue("isBestSeller", Boolean(product.isBestSeller));
     setValue("description", product.description);
     setValue("tags", arrayToLines(product.tags));
     setValue("images", arrayToLines(product.images?.length ? product.images : [product.image].filter(Boolean)));
@@ -1154,23 +1284,31 @@
 
   function renderImagePreview(images) {
     const visibleImages = (images || []).filter(Boolean);
+    if (elements.imageSection && !elements.imageSection.open) {
+      elements.imagePreview.innerHTML = `<div class="image-preview-placeholder">${visibleImages.length ? `${visibleImages.length} صورة — افتح قسم الصور للمعاينة والحذف والترتيب.` : "لا توجد صور بعد."}</div>`;
+      return;
+    }
     if (!visibleImages.length) {
       elements.imagePreview.innerHTML = `<div class="empty-state">لا توجد صور بعد.</div>`;
       return;
     }
 
-    elements.imagePreview.innerHTML = visibleImages.map((image, index) => `
+    const renderedImages = visibleImages.slice(0, state.imagePreviewLimit);
+    elements.imagePreview.innerHTML = renderedImages.map((image, index) => `
       <figure class="${index === 0 ? "image-primary" : ""}" data-image-index="${index}">
-        <img src="${escapeAttribute(previewAssetUrl(image))}" alt="صورة ${index + 1}" loading="lazy" decoding="async" onload="this.closest('figure').classList.remove('image-missing')" onerror="this.closest('figure').classList.add('image-missing')">
+        <img src="${escapeAttribute(previewAssetUrl(image))}" alt="صورة ${index + 1}" loading="lazy" decoding="async" fetchpriority="low" onload="this.closest('figure').classList.remove('image-missing')" onerror="this.closest('figure').classList.add('image-missing')">
         <div class="image-preview-actions" aria-label="ترتيب الصورة">
           <button type="button" data-action="move-image-before" ${index === 0 ? "disabled" : ""} title="انقل الصورة قبل اللي قبلها">قبلها</button>
           <button type="button" data-action="make-primary-image" ${index === 0 ? "disabled" : ""} title="اجعل الصورة هي الصورة الأساسية">الأولى</button>
           <button type="button" data-action="move-image-after" ${index === visibleImages.length - 1 ? "disabled" : ""} title="انقل الصورة بعد اللي بعدها">بعدها</button>
+          <button class="image-action-delete" type="button" data-action="remove-product-image" title="احذف الصورة القديمة من المنتج">حذف</button>
         </div>
         ${index === 0 ? `<span class="image-primary-badge">الصورة الأساسية</span>` : ""}
         <figcaption>${escapeHtml(image)}</figcaption>
       </figure>
-    `).join("");
+    `).join("") + (renderedImages.length < visibleImages.length
+      ? `<button class="button secondary image-preview-more" type="button" data-action="show-more-product-images">عرض ${Math.min(6, visibleImages.length - renderedImages.length)} صور إضافية</button>`
+      : "");
   }
 
   function makeProductImagePrimary(index) {
@@ -1193,6 +1331,29 @@
     [nextImages[index], nextImages[nextIndex]] = [nextImages[nextIndex], nextImages[index]];
     updateProductImages(product, nextImages);
     showToast("تم تعديل ترتيب الصور.");
+  }
+
+  function removeProductImage(index) {
+    const product = currentProduct();
+    if (!product || !Number.isInteger(index) || index < 0 || index >= product.images.length) return;
+    const image = product.images[index];
+
+    removeImagesFromVariants(product, [image]);
+    updateProductImages(product, product.images.filter((_, imageIndex) => imageIndex !== index));
+    renderVariants(product);
+    showToast("تم حذف الصورة القديمة من المنتج. اضغط حفظ ونشر لتطبيق التغيير على الموقع.");
+  }
+
+  function removeImagesFromVariants(product, imagesToRemove) {
+    const removed = new Set(imagesToRemove.map(normalizeImagePath).filter(Boolean));
+    if (!removed.size) return;
+
+    (product.variants || []).forEach((variant) => {
+      variant.images = unique((variant.images || [variant.image].filter(Boolean))
+        .map(normalizeImagePath)
+        .filter((image) => image && !removed.has(image)));
+      variant.image = variant.images[0] || null;
+    });
   }
 
   function updateProductImages(product, images) {
@@ -1271,8 +1432,14 @@
     markDirty();
   }
 
-  function updateProductField(product, element) {
+function updateProductField(product, element) {
   const field = element.dataset.field;
+  if (field === "isBestSeller") {
+    product.isBestSeller = element.checked === true;
+    renderProductList();
+    return;
+  }
+
   const value = element.value;
 
   if (field === "id") {
@@ -1347,7 +1514,7 @@
   if (field === "stock") {
     const available = value !== "غير متاح حاليا";
     product.variants.forEach((variant) => {
-      if (variant.available !== available && product.variants.length === 1) variant.available = available;
+      variant.available = available;
     });
     renderVariants(product);
   }
@@ -1411,6 +1578,7 @@
       priceNote: "",
       stock: "متاح",
       badge: "",
+      isBestSeller: false,
       image: "",
       url: `https://popekyrillos.store/?product=${id}`,
       tags: [],
@@ -1580,6 +1748,7 @@
   product.tags = Array.isArray(product.tags) ? product.tags : [];
   product.options = Array.isArray(product.options) ? product.options : [];
   product.variants = Array.isArray(product.variants) ? product.variants : [];
+  product.isBestSeller = product.isBestSeller === true;
   product.mainCategory = mainCategoryName(product);
   product.subCategory = subCategoryName(product);
 }
@@ -1620,6 +1789,7 @@
     product.priceNote = product.priceNote || "";
     product.stock = product.stock || "متاح";
     product.badge = product.badge || product.label || product.subCategory || "";
+    product.isBestSeller = product.isBestSeller === true;
     product.tags = unique(product.tags || []);
     product.images = unique((product.images || []).map(normalizeImagePath).filter(Boolean));
     product.image = product.images[0] || normalizeImagePath(product.image) || "";
@@ -1681,13 +1851,14 @@
 
   function normalizeVariant(product, variant, index) {
     const images = unique((variant.images || [variant.image].filter(Boolean)).map(normalizeImagePath).filter(Boolean));
+    const productAvailable = product.stock !== "غير متاح حاليا";
     return {
       id: variant.id || `${product.id}-variant-${index + 1}`,
       title: variant.title || `اختيار ${index + 1}`,
       options: variant.options || {},
       price: numberOrNull(variant.price) ?? product.price ?? 0,
       compareAtPrice: numberOrNull(variant.compareAtPrice),
-      available: variant.available !== false,
+      available: productAvailable && variant.available !== false,
       image: images[0] || normalizeImagePath(variant.image) || null,
       images,
       sku: variant.sku || "",
@@ -1840,6 +2011,10 @@
   function setValue(field, value) {
     const element = elements.editor.querySelector(`[data-field="${field}"]`);
     if (!element) return;
+    if (element.type === "checkbox") {
+      element.checked = value === true;
+      return;
+    }
     element.value = value ?? "";
     if (element.tagName === "SELECT" && element.options.length && element.selectedIndex === -1) {
       element.value = element.options[0].value;

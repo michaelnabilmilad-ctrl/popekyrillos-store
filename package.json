@@ -3,6 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "scripts": {
+    "migrate:taxonomy": "node scripts/build-taxonomy-v3.mjs",
     "prepare:static": "node scripts/prepare-static-assets.js",
     "build:cloudflare": "node scripts/prepare-static-assets.js && node scripts/generate-seo-assets.js && node scripts/build-cloudflare.js",
     "generate:seo": "node scripts/generate-seo-assets.js",

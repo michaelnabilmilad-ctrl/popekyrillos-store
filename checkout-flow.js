@@ -1,7 +1,26 @@
 const whatsappNumber = "201016125589";
+
+function trackCheckoutEvent(name, data = {}) {
+  window.StoreAnalytics?.track?.(name, data);
+  if ((name === "checkout_error" || name === "order_failed") && data.errorMessage) {
+    window.Sentry?.captureMessage?.(String(data.errorMessage).slice(0, 300), "error");
+  }
+}
+
+function checkoutAnalyticsItem(item, quantity = item?.qty || 1) {
+  return {
+    productId: item?.product?.id || item?.id || "",
+    productName: item?.product?.name || "",
+    category: item?.product?.mainCategory || item?.product?.category || "",
+    price: item?.price,
+    quantity,
+    currency: "EGP"
+  };
+}
 const firebaseSdkVersion = "10.14.1";
 const paymobIntentionEndpointPath = "/api/create-paymob-intention";
 const bostaDeliveryEndpointPath = "/api/create-bosta-delivery";
+const ordersEndpointPath = "/api/orders";
 const guestCartStorageKey = "pope-kyrillos-cart:guest";
 const userCartStoragePrefix = "pope-kyrillos-cart:user:";
 const activeCartStorageKey = "pope-kyrillos-cart:active";
@@ -57,6 +76,12 @@ function t(key) {
 function text(key, values = {}) {
   return Object.entries(values).reduce((message, [name, value]) => message.replaceAll(`{${name}}`, value), t(key));
 }
+
+Object.assign(translations, {
+  orderSubmitBusy: "\u062c\u0627\u0631\u064a \u062a\u0633\u062c\u064a\u0644 \u0627\u0644\u0637\u0644\u0628...",
+  orderSubmitFailed: "\u062a\u0639\u0630\u0631 \u062a\u0633\u062c\u064a\u0644 \u0627\u0644\u0637\u0644\u0628. \u0645\u0646 \u0641\u0636\u0644\u0643 \u062d\u0627\u0648\u0644 \u0645\u0631\u0629 \u0623\u062e\u0631\u0649 \u0623\u0648 \u062a\u0648\u0627\u0635\u0644 \u0645\u0639\u0646\u0627.",
+  orderSubmitReady: "\u062a\u0645 \u062a\u0633\u062c\u064a\u0644 \u0627\u0644\u0637\u0644\u0628. \u0633\u064a\u062a\u0645 \u0641\u062a\u062d \u0648\u0627\u062a\u0633\u0627\u0628 \u0644\u0625\u0631\u0633\u0627\u0644 \u0627\u0644\u062a\u0641\u0627\u0635\u064a\u0644."
+});
 
 function money(value) {
   const amount = Number(value);
@@ -614,11 +639,19 @@ function bindCartPage() {
     const removeButton = event.target.closest("[data-cart-remove]");
     if (deltaButton) {
       const key = deltaButton.dataset.cartKey;
+      const previous = cartEntries().find((item) => item.key === key);
       const next = (cart.get(key) || 0) + Number(deltaButton.dataset.cartDelta || 0);
       if (next <= 0) cart.delete(key);
       else cart.set(key, next);
+      if (previous && Number(deltaButton.dataset.cartDelta || 0) < 0) {
+        trackCheckoutEvent("remove_from_cart", checkoutAnalyticsItem(previous, Math.min(previous.qty, Math.abs(Number(deltaButton.dataset.cartDelta || 0)))));
+      }
     }
-    if (removeButton) cart.delete(removeButton.dataset.cartRemove);
+    if (removeButton) {
+      const removed = cartEntries().find((item) => item.key === removeButton.dataset.cartRemove);
+      if (removed) trackCheckoutEvent("remove_from_cart", checkoutAnalyticsItem(removed));
+      cart.delete(removeButton.dataset.cartRemove);
+    }
     saveCart();
     renderCartPage();
     setCartCount();
@@ -681,7 +714,12 @@ function updateShippingFields() {
 function bindCheckoutPage() {
   const form = document.querySelector("[data-checkout-form]");
   if (!form) return;
-  form.addEventListener("change", updateShippingFields);
+  form.addEventListener("change", (event) => {
+    updateShippingFields();
+    if (event.target.matches("[name='deliveryMethod']")) {
+      trackCheckoutEvent("select_delivery", { deliveryMethod: event.target.value || "unknown" });
+    }
+  });
   form.addEventListener("submit", (event) => {
     event.preventDefault();
     const next = checkoutFormValues();
@@ -692,6 +730,7 @@ function bindCheckoutPage() {
       return;
     }
     saveCustomer(next);
+    trackCheckoutEvent("begin_checkout", { quantity: cartEntries().reduce((sum, item) => sum + item.qty, 0), price: cartTotal(), currency: "EGP" });
     window.location.href = "/payment";
   });
 }
@@ -758,6 +797,76 @@ function orderLines() {
     .join("\n");
 }
 
+function orderProductsPayload() {
+  return JSON.stringify(
+    cartEntries().map((item) => ({
+      productId: item.product.id || item.id || "",
+      name: item.product.name || "",
+      variantId: item.variantId || "",
+      option: item.optionText || "",
+      quantity: item.qty,
+      price: item.price,
+      lineTotal: item.price === null ? null : (item.price || 0) * item.qty
+    }))
+  );
+}
+
+function paymentStatusForOrder(paymentMethod) {
+  if (["instapay", "vodafoneCash", "fawry"].includes(paymentMethod)) return "\u062a\u062d\u0648\u064a\u0644 \u0644\u0644\u0645\u0631\u0627\u062c\u0639\u0629";
+  return "\u063a\u064a\u0631 \u0645\u062f\u0641\u0648\u0639";
+}
+
+function paymentMethodForOrder(paymentMethod) {
+  if (paymentMethod === "vodafoneCash") return "Vodafone Cash";
+  if (paymentMethod === "fawry") return "Online Payment";
+  if (paymentMethod === "pickupCash") return "Cash";
+  if (paymentMethod === "paymob") return "Online Payment";
+  return "InstaPay";
+}
+
+function deliveryTypeForOrder() {
+  return customer.deliveryMethod === "pickup" ? "\u0627\u0633\u062a\u0644\u0627\u0645 \u0645\u0646 \u0627\u0644\u0645\u0643\u062a\u0628\u0629" : "\u0634\u062d\u0646";
+}
+
+function orderMissingInfo() {
+  const missing = validateCustomer(customer);
+  return missing ? missing : "\u0644\u0627 \u064a\u0648\u062c\u062f";
+}
+
+function createRequestId() {
+  if (window.crypto?.randomUUID) return window.crypto.randomUUID();
+  return `web-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+}
+
+async function createWebsiteOrder(paymentMethod, requestId) {
+  const response = await fetch(ordersEndpointPath, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-Request-Id": requestId
+    },
+    body: JSON.stringify({
+      requestId,
+      customerName: customer.name,
+      phone: customer.phone,
+      source: "Website",
+      products: orderProductsPayload(),
+      total: cartTotal(),
+      paymentStatus: paymentStatusForOrder(paymentMethod),
+      paymentMethod: paymentMethodForOrder(paymentMethod),
+      paymentProof: "",
+      pickupDate: "",
+      deliveryType: deliveryTypeForOrder(),
+      orderStatus: "\u062c\u062f\u064a\u062f",
+      missingInfo: orderMissingInfo(),
+      notes: customer.notes || ""
+    })
+  });
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok || data.error) throw new Error(data.message || t("orderSubmitFailed"));
+  return data;
+}
+
 function whatsappOrderUrl(paymentMethod, extra = "") {
   const note = customer.deliveryMethod === "bosta" ? t("bostaNote") : t("pickupNote");
   const body = `مرحباً، أريد طلب المنتجات التالية من مكتبة البابا كيرلس:\n${orderLines()}\nإجمالي المنتجات المسعرة: ${money(cartTotal())}\n${note}\n${shippingMessageLine()}${extra ? `\n${extra}` : ""}\n${paymentMessageLine(paymentMethod)}`;
@@ -805,30 +914,48 @@ function bindPaymentPage() {
       button.closest("article")?.classList.add("payment-option-disabled");
       return;
     }
+    let isSubmittingOrder = false;
     button.addEventListener("click", () => {
       const method = button.dataset.paymentAction;
+      trackCheckoutEvent("select_payment_method", { paymentMethod: method || "unknown", price: cartTotal(), currency: "EGP" });
       if (method === "paymob") {
         startPaymob(button);
         return;
       }
       const sendOrder = async () => {
+        if (isSubmittingOrder) return;
         const status = document.querySelector("[data-payment-status]");
+        const originalText = button.textContent;
+        const requestId = createRequestId();
         let extraLine = "";
+        isSubmittingOrder = true;
         button.disabled = true;
         try {
           if (customer.deliveryMethod === "bosta") {
-            if (status) status.textContent = t("bostaBusy");
-            const result = await createBostaDelivery(method);
-            extraLine = bostaReferenceLine(result) || bostaReferenceLine(result.delivery);
-            if (status) status.textContent = extraLine ? `${t("bostaReady")} - ${extraLine}` : t("bostaReady");
+            try {
+              if (status) status.textContent = t("bostaBusy");
+              const result = await createBostaDelivery(method);
+              extraLine = bostaReferenceLine(result) || bostaReferenceLine(result.delivery);
+              if (status) status.textContent = extraLine ? `${t("bostaReady")} - ${extraLine}` : t("bostaReady");
+            } catch (error) {
+              if (status) status.textContent = error.message || t("bostaFailed");
+              extraLine = t("bostaFailed");
+            }
           }
+          if (status) status.textContent = t("orderSubmitBusy");
+          trackCheckoutEvent("place_order", { eventId: requestId, quantity: cartEntries().reduce((sum, item) => sum + item.qty, 0), price: cartTotal(), currency: "EGP", paymentMethod: method });
+          await createWebsiteOrder(method, requestId);
+          cartEntries().forEach((item) => trackCheckoutEvent("order_success", { ...checkoutAnalyticsItem(item), eventId: requestId }));
+          if (status) status.textContent = t("orderSubmitReady");
+          window.open(whatsappOrderUrl(method, extraLine), "_blank", "noopener");
         } catch (error) {
-          if (status) status.textContent = error.message || t("bostaFailed");
-          extraLine = t("bostaFailed");
-        } finally {
+          trackCheckoutEvent("order_failed", { eventId: requestId, errorType: "checkout", errorMessage: error?.message || "Order failed", paymentMethod: method });
+          trackCheckoutEvent("checkout_error", { errorType: "checkout", errorMessage: error?.message || "Order failed" });
+          if (status) status.textContent = error.message || t("orderSubmitFailed");
+          isSubmittingOrder = false;
           button.disabled = false;
+          button.textContent = originalText;
         }
-        window.open(whatsappOrderUrl(method, extraLine), "_blank", "noopener");
       };
       sendOrder();
     });
@@ -863,6 +990,7 @@ async function initCheckoutFlow() {
     return;
   }
   renderCartPage();
+  if (isCartPage()) trackCheckoutEvent("view_cart", { quantity: cartEntries().reduce((sum, item) => sum + item.qty, 0), price: cartTotal(), currency: "EGP" });
   renderOrderSummary();
   fillCheckoutForm();
   bindCartPage();

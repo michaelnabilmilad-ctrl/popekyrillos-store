@@ -4,7 +4,26 @@ compatibility_date = "2026-06-19"
 compatibility_flags = ["nodejs_compat"]
 keep_vars = true
 
+[vars]
+ADMIN_USERNAME = "Michael"
+SITE_URL = "https://popekyrillos.store"
+
+[[routes]]
+pattern = "popekyrillos.store"
+zone_name = "popekyrillos.store"
+custom_domain = true
+
+[[routes]]
+pattern = "www.popekyrillos.store"
+zone_name = "popekyrillos.store"
+custom_domain = true
+
 [assets]
 directory = "./dist"
 binding = "ASSETS"
 run_worker_first = true
+
+[[d1_databases]]
+binding = "ANALYTICS_DB"
+database_name = "popekyrillos-analytics"
+database_id = "57b6dbf7-7266-47c4-a24d-9a1f18e97fce"

@@ -8,9 +8,15 @@ const root = path.resolve(__dirname, "..");
 const cacheableAssets = [
   "admin.css",
   "admin.js",
+  "admin-orders.js",
+  "admin-analytics.js",
+  "analytics.js",
+  "analytics-config.js",
+  "checkout-flow.min.js",
   "styles.min.css",
   "script.min.js",
-  "category-taxonomy.js"
+  "category-taxonomy.js",
+  "subcategory-image-policy.js"
 ];
 
 function read(relativePath) {
@@ -21,16 +27,21 @@ function write(relativePath, content) {
   fs.writeFileSync(path.join(root, relativePath), content);
 }
 
-async function minifyScript() {
-  const source = read("script.js");
+async function minifyFile(sourcePath, targetPath) {
+  const source = read(sourcePath);
   const result = await terser.minify(source, {
     compress: true,
     mangle: true
   });
 
   if (result.error) throw result.error;
-  if (!result.code) throw new Error("Terser did not produce script.min.js content.");
-  write("script.min.js", `${result.code}\n`);
+  if (!result.code) throw new Error(`Terser did not produce ${targetPath} content.`);
+  write(targetPath, `${result.code}\n`);
+}
+
+async function minifyScripts() {
+  await minifyFile("script.js", "script.min.js");
+  await minifyFile("checkout-flow.js", "checkout-flow.min.js");
 }
 
 function syncStylesheet() {
@@ -60,7 +71,7 @@ function updateHtmlAssetVersions(version) {
     .filter((name) => name.endsWith(".html"))
     .map((name) => path.join(root, name));
 
-  const assetPattern = /(href|src)=("|')([^"']*\/?(?:admin\.css|admin\.js|styles\.min\.css|script\.min\.js|category-taxonomy\.js))(?:\?v=[^"']*)?(\2)/g;
+  const assetPattern = /(href|src)=("|')([^"']*\/?(?:admin\.css|admin\.js|admin-orders\.js|admin-analytics\.js|analytics\.js|analytics-config\.js|styles\.min\.css|script\.min\.js|checkout-flow\.min\.js|category-taxonomy\.js|subcategory-image-policy\.js))(?:\?v=[^"']*)?(\2)/g;
 
   htmlFiles.forEach((filePath) => {
     const before = fs.readFileSync(filePath, "utf8");
@@ -72,7 +83,7 @@ function updateHtmlAssetVersions(version) {
 }
 
 async function main() {
-  await minifyScript();
+  await minifyScripts();
   syncStylesheet();
   const version = assetVersion();
   updateHtmlAssetVersions(version);

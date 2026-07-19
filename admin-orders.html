@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex, nofollow">
+    <title>إدارة الأوردرات | مكتبة البابا كيرلس</title>
+    <link rel="icon" href="data:,">
+    <link rel="stylesheet" href="/admin.css?v=asset-02385d893f8d">
+  </head>
+  <body>
+    <header class="admin-topbar orders-topbar">
+      <div>
+        <p class="eyebrow">لوحة الإدارة</p>
+        <h1>إدارة أوردرات مكتبة البابا كيرلس</h1>
+        <p class="topbar-note">تابع الدفع والتجهيز والاستلام، وحدّث بيانات الأوردر مباشرة من مكان واحد.</p>
+      </div>
+      <div class="topbar-actions">
+        <a class="button ghost" href="/">عرض الموقع</a>
+        <a class="button secondary" href="/admin/">إدارة المنتجات</a>
+      </div>
+    </header>
+
+    <nav class="admin-section-tabs" aria-label="أقسام لوحة الإدارة">
+      <a class="admin-tab" href="/admin/">إدارة المنتجات</a>
+      <a class="admin-tab is-active" href="/admin/orders" aria-current="page">إدارة الأوردرات</a>
+      <a class="admin-tab" href="/admin/analytics">Analytics</a>
+    </nav>
+
+    <main class="orders-dashboard orders-dashboard-page">
+      <section class="orders-heading">
+        <div>
+          <p class="eyebrow">متابعة الطلبات</p>
+          <h2>كل الأوردرات</h2>
+          <p class="muted">ابحث وفلتر واعرض التفاصيل، ثم احفظ تحديثات حالة الطلب والدفع والاستلام.</p>
+        </div>
+        <button class="button secondary" type="button" data-orders-refresh>تحديث البيانات</button>
+      </section>
+
+      <section class="order-stats" aria-label="إحصائيات الأوردرات" data-order-stats></section>
+
+      <section class="orders-tools">
+        <label class="orders-search"><span>بحث</span><input type="search" data-orders-search placeholder="اسم العميل، الموبايل، رقم الأوردر أو المنتج"></label>
+        <label><span>حالة الدفع</span><select data-orders-payment-filter>
+          <option value="all">كل حالات الدفع</option><option value="غير مدفوع">غير مدفوع</option><option value="تحويل للمراجعة">تحويل للمراجعة</option><option value="مدفوع">مدفوع</option><option value="دفع عند الاستلام">دفع عند الاستلام</option>
+        </select></label>
+        <label><span>حالة الأوردر</span><select data-orders-status-filter>
+          <option value="all">كل حالات الأوردر</option><option value="جديد">جديد</option><option value="انتظار بيانات">انتظار بيانات</option><option value="انتظار الدفع">انتظار الدفع</option><option value="قيد التجهيز">قيد التجهيز</option><option value="جاهز للاستلام / الشحن">جاهز للاستلام / الشحن</option><option value="تم التسليم">تم التسليم</option><option value="ملغي">ملغي</option>
+        </select></label>
+        <label><span>طريقة الاستلام</span><select data-orders-delivery-filter>
+          <option value="all">الكل</option><option value="استلام من المكتبة">استلام من المكتبة</option><option value="شحن">شحن</option>
+        </select></label>
+      </section>
+
+      <section class="orders-content">
+        <div class="orders-list-panel">
+          <div class="orders-result-head"><strong data-orders-count>0 أوردر</strong><span class="muted" data-orders-updated></span></div>
+          <div class="orders-list" data-orders-list><div class="empty-state">جارٍ تحميل الأوردرات...</div></div>
+        </div>
+        <aside class="order-details" data-order-details><div class="empty-state">اختر أوردر لعرض التفاصيل وتحديث حالته.</div></aside>
+      </section>
+    </main>
+
+    <div class="toast" data-toast hidden></div>
+    <script src="/admin-orders.js?v=asset-02385d893f8d" defer></script>
+  </body>
+</html>

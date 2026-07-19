@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Analytics | مكتبة البابا كيرلس</title>
+    <link rel="icon" href="data:,">
+    <link rel="stylesheet" href="/admin.css?v=asset-02385d893f8d">
+  </head>
+  <body data-clarity-mask="true">
+    <header class="admin-topbar analytics-topbar">
+      <div>
+        <p class="eyebrow">لوحة الإدارة</p>
+        <h1>Analytics</h1>
+        <p class="topbar-note">متابعة الزيارات والتحويلات وأداء المنتجات والأخطاء بدون تخزين بيانات شخصية.</p>
+      </div>
+      <div class="topbar-actions">
+        <a class="button ghost" href="/">عرض الموقع</a>
+        <button class="button secondary" type="button" data-analytics-refresh>تحديث البيانات</button>
+      </div>
+    </header>
+
+    <nav class="admin-section-tabs" aria-label="أقسام لوحة الإدارة">
+      <a class="admin-tab" href="/admin/">إدارة المنتجات</a>
+      <a class="admin-tab" href="/admin/orders">إدارة الأوردرات</a>
+      <a class="admin-tab is-active" href="/admin/analytics" aria-current="page">Analytics</a>
+    </nav>
+
+    <main class="analytics-dashboard">
+      <section class="analytics-heading">
+        <div>
+          <p class="eyebrow">نظرة عامة</p>
+          <h2>أداء المتجر</h2>
+          <p class="muted" data-analytics-updated>جارٍ تحميل البيانات...</p>
+        </div>
+        <label class="analytics-range"><span>الفترة</span><select data-analytics-days><option value="7">آخر 7 أيام</option><option value="30">آخر 30 يومًا</option><option value="90">آخر 90 يومًا</option></select></label>
+      </section>
+
+      <section class="analytics-kpis" data-analytics-kpis aria-label="مؤشرات الأداء"></section>
+
+      <section class="analytics-grid">
+        <article class="analytics-card"><h3>أكثر المنتجات مشاهدة</h3><div data-analytics-list="viewedProducts"></div></article>
+        <article class="analytics-card"><h3>أكثر المنتجات إضافة للسلة</h3><div data-analytics-list="cartProducts"></div></article>
+        <article class="analytics-card"><h3>أكثر المنتجات مبيعًا</h3><div data-analytics-list="soldProducts"></div></article>
+        <article class="analytics-card"><h3>أكثر كلمات البحث</h3><div data-analytics-list="searchTerms"></div></article>
+        <article class="analytics-card"><h3>أكثر الصفحات زيارة</h3><div data-analytics-list="pages"></div></article>
+        <article class="analytics-card"><h3>الأجهزة</h3><div data-analytics-list="devices"></div></article>
+        <article class="analytics-card"><h3>المتصفحات</h3><div data-analytics-list="browsers"></div></article>
+        <article class="analytics-card"><h3>مصادر الزيارات</h3><div data-analytics-list="sources"></div></article>
+      </section>
+
+      <section class="analytics-debug">
+        <div class="analytics-section-title"><div><p class="eyebrow">Debug Panel</p><h2>آخر الأخطاء</h2></div><span class="muted">الرسائل منزوعة البيانات الشخصية تلقائيًا</span></div>
+        <div class="analytics-debug-grid">
+          <article class="analytics-card"><h3>JavaScript Errors</h3><div data-analytics-errors="javascript"></div></article>
+          <article class="analytics-card"><h3>API Errors</h3><div data-analytics-errors="api"></div></article>
+          <article class="analytics-card"><h3>Checkout Errors</h3><div data-analytics-errors="checkout"></div></article>
+          <article class="analytics-card"><h3>Worker Errors</h3><div data-analytics-errors="worker"></div></article>
+        </div>
+      </section>
+    </main>
+
+    <div class="toast" data-toast hidden></div>
+    <script src="/admin-analytics.js?v=asset-02385d893f8d" defer></script>
+  </body>
+</html>

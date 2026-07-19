@@ -4,9 +4,11 @@ import { onRequest as paymobWebhook } from "./functions/api/paymob-webhook.js";
 import { onRequest as uploadProductImage } from "./functions/api/upload-product-image.js";
 import { onRequest as updateProducts } from "./functions/api/update-products.js";
 import { onRequest as updateTaxonomy } from "./functions/api/update-taxonomy.js";
+import { bestSellersResponse } from "./functions/api/best-sellers.js";
 
 const canonicalOrigin = "https://popekyrillos.store";
 const canonicalHostname = "popekyrillos.store";
+const allowedOrdersOrigin = "https://popekyrillos.store";
 const staticRewrites = {
   "/cart": "/cart.html",
   "/checkout": "/checkout.html",
@@ -138,7 +140,7 @@ function isAdminAuthorized(request, env) {
 }
 
 function isProtectedAdminPath(pathname) {
-  return pathname === "/admin" || pathname === "/admin.html" || pathname === "/admin.css" || pathname === "/admin.js" || pathname.startsWith("/admin/");
+  return pathname === "/admin" || pathname === "/admin.html" || pathname === "/admin.css" || pathname === "/admin.js" || pathname === "/admin-orders.js" || pathname.startsWith("/admin/");
 }
 
 function requestContext(request, env, ctx) {
@@ -217,6 +219,11 @@ function productPrice(product) {
   return Number.isFinite(price) && price > 0 ? price : null;
 }
 
+function productPriceText(product) {
+  const price = productPrice(product);
+  return price === null ? "" : `${price} ج.م`;
+}
+
 function isVariantAvailable(variant) {
   const quantity = Number(variant?.quantity);
   if (Number.isInteger(quantity) && quantity >= 0) return quantity > 0;
@@ -226,6 +233,58 @@ function isVariantAvailable(variant) {
 function hasAvailableVariant(product) {
   if (Array.isArray(product?.variants) && product.variants.length) return product.variants.some(isVariantAvailable);
   return product?.stock !== "غير متاح حاليا" && product?.available !== false;
+}
+
+function productDescription(product) {
+  return cleanDescription(localized(product?.description)) || "تفاصيل المنتج من مكتبة البابا كيرلس.";
+}
+
+function productSsrHtml(product) {
+  const name = localized(product.name);
+  const description = productDescription(product);
+  const image = absoluteAssetUrl(productImages(product)[0] || "assets/optimized/hero-papa-kyrillos-products.webp");
+  const price = productPriceText(product);
+  const canonical = canonicalProductUrl(product);
+  const availability = hasAvailableVariant(product) ? "متاح" : "غير متاح حاليا";
+  return `
+    <section class="ssr-product-page" aria-labelledby="ssr-product-title" dir="rtl">
+      <div class="ssr-product-shell">
+        <a class="ssr-product-back" href="/#catalog">العودة إلى المنتجات</a>
+        <div class="ssr-product-grid">
+          <figure class="ssr-product-media">
+            <img src="${escapeHtml(image)}" alt="${escapeHtml(name)}" width="900" height="900" />
+          </figure>
+          <article class="ssr-product-copy">
+            <p class="ssr-product-label">${escapeHtml(localized(product.label || product.badge || "منتج"))}</p>
+            <h1 id="ssr-product-title">${escapeHtml(name)}</h1>
+            <p class="ssr-product-description">${escapeHtml(description)}</p>
+            ${price ? `<p class="ssr-product-price">${escapeHtml(price)}</p>` : ""}
+            <p class="ssr-product-stock">${escapeHtml(availability)}</p>
+            <a class="ssr-product-action" href="${escapeHtml(canonical)}">عرض المنتج</a>
+          </article>
+        </div>
+      </div>
+    </section>`;
+}
+
+function productSsrStyles() {
+  return `<style>
+    .js-product-route .ssr-product-page{display:none}
+    .ssr-product-page{padding:112px clamp(18px,5vw,74px) 64px;background:#faf6ed;color:#10212a}
+    .ssr-product-shell{max-width:1180px;margin:0 auto}
+    .ssr-product-back{display:inline-flex;margin-bottom:18px;color:#073d42;font-weight:800;text-decoration:none}
+    .ssr-product-grid{display:grid;grid-template-columns:minmax(280px,.9fr) minmax(280px,1.1fr);gap:28px;align-items:center}
+    .ssr-product-media{display:grid;place-items:center;aspect-ratio:1/1;margin:0;border:1px solid #ded8cb;border-radius:8px;background:#fff;overflow:hidden}
+    .ssr-product-media img{display:block;width:100%;height:100%;object-fit:contain;padding:20px}
+    .ssr-product-label{margin:0 0 8px;color:#c69245;font-weight:800}
+    .ssr-product-copy h1{margin:0;font-size:clamp(30px,4vw,50px);line-height:1.2}
+    .ssr-product-description{margin:18px 0 0;color:#65747a;line-height:1.9}
+    .ssr-product-price{margin:20px 0 0;color:#85243c;font-size:26px;font-weight:900}
+    .ssr-product-stock{margin:8px 0 0;color:#073d42;font-weight:800}
+    .ssr-product-action{display:inline-flex;align-items:center;justify-content:center;min-height:48px;margin-top:24px;padding:0 18px;border-radius:8px;background:#1a2751;color:#fff;text-decoration:none;font-weight:900}
+    @media (max-width:760px){.ssr-product-page{padding:92px 18px 44px}.ssr-product-grid{grid-template-columns:1fr}.ssr-product-copy h1{font-size:28px}}
+  </style>
+  <script>document.documentElement.classList.add("js-product-route");</script>`;
 }
 
 async function loadProducts(env, request, { maxAgeMs = 5000 } = {}) {
@@ -253,12 +312,12 @@ async function loadProducts(env, request, { maxAgeMs = 5000 } = {}) {
 }
 
 async function productsJsonResponse(request, env) {
-  const products = await loadProducts(env, request, { maxAgeMs: 5000 });
-  return new Response(JSON.stringify(products, null, 2), {
+  const products = await loadProducts(env, request, { maxAgeMs: 60000 });
+  return new Response(JSON.stringify(products), {
     status: 200,
     headers: {
       "Content-Type": "application/json; charset=utf-8",
-      "Cache-Control": "no-store",
+      "Cache-Control": "public, max-age=60, stale-while-revalidate=300",
       ...(productsCacheSha ? { ETag: productsCacheSha } : {})
     }
   });
@@ -288,12 +347,12 @@ async function loadTaxonomySource(env, request, { maxAgeMs = 5000 } = {}) {
 }
 
 async function taxonomyJsResponse(request, env) {
-  const source = await loadTaxonomySource(env, request, { maxAgeMs: 5000 });
+  const source = await loadTaxonomySource(env, request, { maxAgeMs: 300000 });
   return new Response(source, {
     status: 200,
     headers: {
       "Content-Type": "application/javascript; charset=utf-8",
-      "Cache-Control": "no-store",
+      "Cache-Control": "public, max-age=300, stale-while-revalidate=600",
       ...(taxonomyCacheSha ? { ETag: taxonomyCacheSha } : {})
     }
   });
@@ -376,8 +435,198 @@ function absoluteAssetUrl(value = "") {
   return new URL(value.startsWith("/") ? value : `/${value}`, canonicalOrigin).toString();
 }
 
+function absoluteCatalogUrl(value = "") {
+  const rawValue = String(value || "").trim();
+  if (!rawValue || /^(?:data|blob):/i.test(rawValue)) return "";
+  try {
+    return new URL(rawValue, canonicalOrigin).toString();
+  } catch {
+    return "";
+  }
+}
+
+function stripHtml(value = "") {
+  return String(value)
+    .replace(/<script[\s\S]*?<\/script>/gi, " ")
+    .replace(/<style[\s\S]*?<\/style>/gi, " ")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function xmlEscape(value = "") {
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&apos;");
+}
+
+function feedText(value = "", fallback = "") {
+  const text = stripHtml(localized(value));
+  return text || fallback;
+}
+
+function feedProductType(product) {
+  return feedText(product?.subCategory || product?.label || product?.mainCategory || product?.category, "منتجات كنسية");
+}
+
+function isVisibleCatalogProduct(product) {
+  return Boolean(product) && product.active !== false && product.hidden !== true && product.deleted !== true && product.published !== false;
+}
+
+function feedImages(product) {
+  const seen = new Set();
+  return productImages(product)
+    .map(absoluteCatalogUrl)
+    .filter((url) => url && /^https?:\/\//i.test(url))
+    .filter((url) => {
+      const key = url.replace(/#.*$/, "");
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+}
+
+function feedPricing(product) {
+  const variants = Array.isArray(product?.variants) ? product.variants : [];
+  const candidates = variants.length
+    ? variants
+        .map((variant) => ({
+          price: Number(variant.price),
+          compareAtPrice: Number(variant.compareAtPrice)
+        }))
+        .filter((entry) => Number.isFinite(entry.price) && entry.price > 0)
+    : [{ price: Number(product?.price), compareAtPrice: Number(product?.compareAtPrice) }];
+
+  if (!candidates.length || !Number.isFinite(candidates[0].price)) return null;
+  const selected = candidates.reduce((best, entry) => (entry.price < best.price ? entry : best), candidates[0]);
+  const hasSale = Number.isFinite(selected.compareAtPrice) && selected.compareAtPrice > selected.price;
+  return {
+    price: hasSale ? selected.compareAtPrice : selected.price,
+    salePrice: hasSale ? selected.price : null
+  };
+}
+
+function feedMoney(value) {
+  return `${Number(value).toFixed(2)} EGP`;
+}
+
+function catalogFeedItem(product, { includePrice = true } = {}) {
+  const id = feedText(product.id);
+  const title = feedText(product.name, id);
+  const images = feedImages(product);
+  const pricing = feedPricing(product);
+  const excludedReasons = [];
+
+  if (!id) excludedReasons.push("missing id");
+  if (!title) excludedReasons.push("missing title");
+  if (!images.length) excludedReasons.push("missing valid image");
+  if (includePrice && !pricing) excludedReasons.push("missing valid price");
+  if (excludedReasons.length) return { item: "", excludedReasons };
+
+  const description = feedText(product.description, title);
+  const availability = hasAvailableVariant(product) ? "in stock" : "out of stock";
+  const productType = feedProductType(product);
+  const additionalImages = images.slice(1, 11);
+  const lines = [
+    "    <item>",
+    `      <g:id>${xmlEscape(id)}</g:id>`,
+    `      <g:title>${xmlEscape(title)}</g:title>`,
+    `      <g:description>${xmlEscape(description)}</g:description>`,
+    `      <g:availability>${availability}</g:availability>`,
+    "      <g:condition>new</g:condition>"
+  ];
+
+  if (includePrice && pricing) {
+    lines.push(`      <g:price>${xmlEscape(feedMoney(pricing.price))}</g:price>`);
+    if (pricing.salePrice !== null) lines.push(`      <g:sale_price>${xmlEscape(feedMoney(pricing.salePrice))}</g:sale_price>`);
+  }
+
+  lines.push(
+    `      <g:link>${xmlEscape(canonicalProductUrl(product))}</g:link>`,
+    `      <g:image_link>${xmlEscape(images[0])}</g:image_link>`,
+    ...additionalImages.map((image) => `      <g:additional_image_link>${xmlEscape(image)}</g:additional_image_link>`),
+    "      <g:brand>مكتبة البابا كيرلس</g:brand>",
+    `      <g:product_type>${xmlEscape(productType)}</g:product_type>`,
+    "    </item>"
+  );
+
+  return { item: lines.join("\n"), excludedReasons: [] };
+}
+
+function catalogFeedXml(products, { includePrice = true, requestPath = "/api/meta-catalog-feed.xml" } = {}) {
+  const items = [];
+  const excluded = [];
+
+  products.filter(isVisibleCatalogProduct).forEach((product) => {
+    try {
+      const result = catalogFeedItem(product, { includePrice });
+      if (result.item) {
+        items.push(result.item);
+      } else {
+        excluded.push({ id: product?.id || "", reasons: result.excludedReasons });
+        console.warn(`Catalog feed skipped product ${product?.id || "(missing id)"}: ${result.excludedReasons.join(", ")}`);
+      }
+    } catch (error) {
+      excluded.push({ id: product?.id || "", reasons: [error?.message || "unknown error"] });
+      console.warn(`Catalog feed failed product ${product?.id || "(missing id)"}`, error);
+    }
+  });
+
+  const generatedAt = new Date().toISOString();
+  return {
+    xml: [
+      '<?xml version="1.0" encoding="UTF-8"?>',
+      '<rss version="2.0" xmlns:g="http://base.google.com/ns/1.0">',
+      "  <channel>",
+      "    <title>مكتبة البابا كيرلس Product Feed</title>",
+      `    <link>${xmlEscape(`${canonicalOrigin}${requestPath}`)}</link>`,
+      "    <description>Product catalog feed generated from popekyrillos.store products.</description>",
+      `    <lastBuildDate>${xmlEscape(generatedAt)}</lastBuildDate>`,
+      `    <!-- included=${items.length}; excluded=${excluded.length}; includePrice=${includePrice ? "true" : "false"} -->`,
+      ...items,
+      "  </channel>",
+      "</rss>"
+    ].join("\n"),
+    includedCount: items.length,
+    excluded
+  };
+}
+
+async function catalogFeedResponse(request, env, { includePrice = true } = {}) {
+  const products = await loadProducts(env, request, { maxAgeMs: 60000 });
+  const url = new URL(request.url);
+  const result = catalogFeedXml(products, { includePrice, requestPath: url.pathname });
+  return new Response(result.xml, {
+    status: 200,
+    headers: {
+      "Content-Type": "application/xml; charset=utf-8",
+      "Cache-Control": "public, max-age=3600, stale-while-revalidate=300",
+      "X-Content-Type-Options": "nosniff",
+      "X-Catalog-Feed-Included": String(result.includedCount),
+      "X-Catalog-Feed-Excluded": String(result.excluded.length)
+    }
+  });
+}
+
 function injectHead(html, tags) {
-  return html.replace(/<title>[\s\S]*?<\/title>/i, tags.title).replace(/<meta\s+name="description"[\s\S]*?>/i, tags.description).replace("</head>", `${tags.extra}\n  </head>`);
+  let nextHtml = html
+    .replace(/<title>[\s\S]*?<\/title>/i, tags.title)
+    .replace(/<meta\s+name="description"[\s\S]*?>/i, tags.description);
+
+  [
+    /<link\s+rel="canonical"[\s\S]*?>/gi,
+    /<meta\s+name="robots"[\s\S]*?>/gi,
+    /<meta\s+property="og:[^"]+"[\s\S]*?>/gi,
+    /<meta\s+name="twitter:[^"]+"[\s\S]*?>/gi,
+    /<script\s+type="application\/ld\+json"[\s\S]*?<\/script>/gi
+  ].forEach((pattern) => {
+    nextHtml = nextHtml.replace(pattern, "");
+  });
+
+  return nextHtml.replace("</head>", `${tags.extra}\n  </head>`);
 }
 
 function injectCanonical(html, url) {
@@ -419,7 +668,7 @@ function ensureUtf8ContentType(headers, pathname = "") {
 
 function productMetaTags(product) {
   const titleText = `${localized(product.name)} | مكتبة البابا كيرلس`;
-  const descriptionText = cleanDescription(localized(product.description)) || "تفاصيل المنتج من مكتبة البابا كيرلس.";
+  const descriptionText = productDescription(product);
   const canonical = canonicalProductUrl(product);
   const image = absoluteAssetUrl(productImages(product)[0] || "assets/optimized/hero-papa-kyrillos-products.webp");
   const price = productPrice(product);
@@ -431,6 +680,10 @@ function productMetaTags(product) {
     description: descriptionText,
     image: image ? [image] : undefined,
     sku: product.sku || product.id,
+    brand: {
+      "@type": "Brand",
+      name: "مكتبة البابا كيرلس"
+    },
     url: canonical,
     offers: {
       "@type": "Offer",
@@ -488,7 +741,9 @@ async function productPageResponse(request, env, product) {
     });
   }
   let html = await response.text();
-  html = injectHead(html, productMetaTags(product));
+  const tags = productMetaTags(product);
+  html = injectHead(html, { ...tags, extra: `${tags.extra}\n    ${productSsrStyles()}` });
+  html = html.replace(/<main\s+id="top">/i, `${productSsrHtml(product)}\n  <main id="top">`);
   return new Response(html, {
     status: 200,
     headers: {
@@ -536,20 +791,627 @@ function notFoundResponse() {
 function withAssetCacheHeaders(response, pathname) {
   const headers = new Headers(response.headers);
   ensureUtf8ContentType(headers, pathname);
-  if (pathname === "/products.json" || pathname === "/category-taxonomy.js" || pathname === "/sitemap.xml" || pathname === "/robots.txt") {
+  if (pathname === "/products.json") {
+    headers.set("Cache-Control", "public, max-age=60, stale-while-revalidate=300");
+  } else if (pathname === "/category-taxonomy.js") {
+    headers.set("Cache-Control", "public, max-age=300, stale-while-revalidate=600");
+  } else if (pathname === "/sitemap.xml" || pathname === "/robots.txt") {
     headers.set("Cache-Control", "no-store");
   }
   return new Response(response.body, { status: response.status, headers });
 }
 
-export default {
-  async fetch(request, env, ctx) {
+function orderCorsHeaders(request) {
+  const origin = request.headers.get("Origin") || "";
+  const headers = new Headers({
+    "Cache-Control": "no-store",
+    Vary: "Origin"
+  });
+  if (origin === allowedOrdersOrigin) {
+    headers.set("Access-Control-Allow-Origin", allowedOrdersOrigin);
+    headers.set("Access-Control-Allow-Methods", "POST, OPTIONS");
+    headers.set("Access-Control-Allow-Headers", "Content-Type, X-Request-Id");
+    headers.set("Access-Control-Max-Age", "86400");
+  }
+  return headers;
+}
+
+function orderJsonResponse(request, body, init = {}) {
+  const headers = orderCorsHeaders(request);
+  headers.set("Content-Type", "application/json; charset=utf-8");
+  return new Response(JSON.stringify(body), {
+    status: init.status || 200,
+    headers
+  });
+}
+
+function orderCorsAllowed(request) {
+  const origin = request.headers.get("Origin") || "";
+  return !origin || origin === allowedOrdersOrigin;
+}
+
+function cleanOrderString(value) {
+  return String(value || "").trim();
+}
+
+function airtableValue(value) {
+  if (value === undefined || value === null) return "";
+  if (typeof value === "string" || typeof value === "number" || typeof value === "boolean") return value;
+  return JSON.stringify(value);
+}
+
+function parseOrderProducts(value) {
+  if (Array.isArray(value)) return value;
+  if (typeof value !== "string") return null;
+  const trimmed = value.trim();
+  if (!trimmed.startsWith("[") && !trimmed.startsWith("{")) return null;
+  try {
+    const parsed = JSON.parse(trimmed);
+    return Array.isArray(parsed) ? parsed : null;
+  } catch {
+    return null;
+  }
+}
+
+function productLinePrice(product, quantity) {
+  const price = Number(product?.price);
+  if (Number.isFinite(price)) return price;
+  const lineTotal = Number(product?.lineTotal);
+  if (Number.isFinite(lineTotal) && Number.isFinite(quantity) && quantity > 0) return lineTotal / quantity;
+  return null;
+}
+
+function formatOrderPrice(value) {
+  return Number(value).toLocaleString("en-US", {
+    maximumFractionDigits: 2
+  });
+}
+
+function formatOrderProductsForAirtable(value) {
+  const parsed = parseOrderProducts(value);
+  if (!parsed) return airtableValue(value);
+
+  const lines = parsed
+    .map((product) => {
+      const name = cleanOrderString(product?.name) || cleanOrderString(product?.productId);
+      if (!name) return "";
+      const quantity = Number(product?.quantity ?? product?.qty ?? 1);
+      const safeQuantity = Number.isFinite(quantity) && quantity > 0 ? quantity : 1;
+      const price = productLinePrice(product, safeQuantity);
+      const priceText = price === null ? "" : formatOrderPrice(price);
+      return `${name} | \u0627\u0644\u0643\u0645\u064a\u0629: ${safeQuantity} | \u0627\u0644\u0633\u0639\u0631: ${priceText} \u062c.\u0645`;
+    })
+    .filter(Boolean);
+
+  return lines.length ? lines.join("\n") : airtableValue(value);
+}
+
+function normalizePaymentMethod(value) {
+  const method = cleanOrderString(value);
+  const mapping = {
+    instapay: "InstaPay",
+    "Instapay / Bank transfer": "InstaPay",
+    "InstaPay / Bank transfer": "InstaPay",
+    vodafoneCash: "Vodafone Cash",
+    "Vodafone Cash": "Vodafone Cash",
+    fawry: "Online Payment",
+    Fawry: "Online Payment",
+    pickupCash: "Cash",
+    "Cash on pickup": "Cash",
+    Cash: "Cash",
+    paymob: "Online Payment",
+    Paymob: "Online Payment",
+    "Online Payment": "Online Payment",
+    "Bank Transfer": "Bank Transfer"
+  };
+  return mapping[method] || method;
+}
+
+function normalizeDeliveryType(value) {
+  const deliveryType = cleanOrderString(value);
+  const mapping = {
+    pickup: "\u0627\u0633\u062a\u0644\u0627\u0645 \u0645\u0646 \u0627\u0644\u0645\u0643\u062a\u0628\u0629",
+    Pickup: "\u0627\u0633\u062a\u0644\u0627\u0645 \u0645\u0646 \u0627\u0644\u0645\u0643\u062a\u0628\u0629",
+    "Cash on pickup": "\u0627\u0633\u062a\u0644\u0627\u0645 \u0645\u0646 \u0627\u0644\u0645\u0643\u062a\u0628\u0629",
+    "Bosta delivery": "\u0634\u062d\u0646",
+    bosta: "\u0634\u062d\u0646",
+    Shipping: "\u0634\u062d\u0646"
+  };
+  return mapping[deliveryType] || deliveryType;
+}
+
+function normalizeOrderPayload(payload = {}) {
+  return {
+    customerName: cleanOrderString(payload.customerName),
+    phone: cleanOrderString(payload.phone),
+    source: cleanOrderString(payload.source) || "Website",
+    products: formatOrderProductsForAirtable(payload.products),
+    total: Number(payload.total),
+    paymentStatus: cleanOrderString(payload.paymentStatus) || "\u063a\u064a\u0631 \u0645\u062f\u0641\u0648\u0639",
+    paymentMethod: normalizePaymentMethod(payload.paymentMethod),
+    paymentProof: cleanOrderString(payload.paymentProof),
+    pickupDate: cleanOrderString(payload.pickupDate),
+    deliveryType: normalizeDeliveryType(payload.deliveryType),
+    orderStatus: cleanOrderString(payload.orderStatus) || "\u062c\u062f\u064a\u062f",
+    missingInfo: cleanOrderString(payload.missingInfo) || "\u0644\u0627 \u064a\u0648\u062c\u062f",
+    notes: cleanOrderString(payload.notes)
+  };
+}
+
+function validateOrderPayload(order) {
+  const missing = [];
+  if (!order.customerName) missing.push("customerName");
+  if (!order.phone) missing.push("phone");
+  if (!order.products || order.products === "[]") missing.push("products");
+  if (!Number.isFinite(order.total)) missing.push("total");
+  return missing;
+}
+
+function airtableOrderFields(order) {
+  const fields = {
+    "Customer Name": order.customerName,
+    Phone: order.phone,
+    Source: order.source,
+    Products: order.products,
+    Total: order.total,
+    "Payment Status": order.paymentStatus,
+    "Payment Method": order.paymentMethod,
+    "Delivery Type": order.deliveryType,
+    "Order Status": order.orderStatus,
+    "Missing Info": order.missingInfo,
+    Notes: order.notes
+  };
+  if (order.pickupDate) fields["Pickup Date"] = order.pickupDate;
+  if (order.paymentProof) fields["Payment Proof"] = [{ url: order.paymentProof }];
+  return fields;
+}
+
+function safeAirtableError(responseText = "") {
+  try {
+    const data = JSON.parse(responseText);
+    return {
+      type: String(data?.error?.type || data?.type || ""),
+      message: String(data?.error?.message || data?.message || "")
+    };
+  } catch {
+    return {
+      type: "",
+      message: responseText.slice(0, 500)
+    };
+  }
+}
+
+const editableOrderFields = {
+  paymentStatus: "Payment Status",
+  orderStatus: "Order Status",
+  pickupDate: "Pickup Date",
+  notes: "Notes"
+};
+
+const allowedPaymentStatuses = new Set(["غير مدفوع", "تحويل للمراجعة", "مدفوع", "دفع عند الاستلام"]);
+const allowedOrderStatuses = new Set(["جديد", "انتظار بيانات", "انتظار الدفع", "قيد التجهيز", "جاهز للاستلام / الشحن", "تم التسليم", "ملغي"]);
+
+function airtableOrdersUrl(env, recordId = "") {
+  const baseId = encodeURIComponent(String(env.AIRTABLE_BASE_ID || "").trim());
+  const tableName = encodeURIComponent(String(env.AIRTABLE_TABLE_NAME || "").trim());
+  const suffix = recordId ? `/${encodeURIComponent(recordId)}` : "";
+  return `https://api.airtable.com/v0/${baseId}/${tableName}${suffix}`;
+}
+
+function adminOrdersJson(payload, init = {}) {
+  return Response.json(payload, {
+    ...init,
+    headers: {
+      "Cache-Control": "no-store",
+      "X-Content-Type-Options": "nosniff",
+      ...(init.headers || {})
+    }
+  });
+}
+
+function hasAirtableConfig(env) {
+  return Boolean(env.AIRTABLE_TOKEN && env.AIRTABLE_BASE_ID && env.AIRTABLE_TABLE_NAME);
+}
+
+function serializeOrderRecord(record = {}) {
+  const fields = record.fields || {};
+  return {
+    id: record.id || "",
+    createdTime: record.createdTime || "",
+    orderId: fields["Order ID"] ?? "",
+    customerName: fields["Customer Name"] || "",
+    phone: fields.Phone || "",
+    source: fields.Source || "",
+    products: fields.Products || "",
+    total: Number(fields.Total) || 0,
+    paymentStatus: fields["Payment Status"] || "",
+    paymentMethod: fields["Payment Method"] || "",
+    paymentProof: Array.isArray(fields["Payment Proof"]) ? fields["Payment Proof"].map((item) => ({ url: item.url || "", filename: item.filename || "" })) : [],
+    pickupDate: fields["Pickup Date"] || "",
+    deliveryType: fields["Delivery Type"] || "",
+    orderStatus: fields["Order Status"] || "",
+    missingInfo: fields["Missing Info"] || "",
+    notes: fields.Notes || ""
+  };
+}
+
+async function listAdminOrders(context) {
+  const { env } = context;
+  if (!hasAirtableConfig(env)) return adminOrdersJson({ error: "server_not_configured", message: "إعدادات Airtable غير مكتملة." }, { status: 500 });
+
+  const records = [];
+  let offset = "";
+  try {
+    do {
+      const url = new URL(airtableOrdersUrl(env));
+      url.searchParams.set("pageSize", "100");
+      url.searchParams.set("sort[0][field]", "Order ID");
+      url.searchParams.set("sort[0][direction]", "desc");
+      if (offset) url.searchParams.set("offset", offset);
+      const response = await fetch(url.toString(), { headers: { Authorization: `Bearer ${env.AIRTABLE_TOKEN}` } });
+      const text = await response.text();
+      if (!response.ok) {
+        const error = safeAirtableError(text);
+        console.error("Airtable admin orders read failed", { status: response.status, errorType: error.type, errorMessage: error.message });
+        return adminOrdersJson({ error: "airtable_read_failed", message: "تعذر تحميل الأوردرات من Airtable." }, { status: 502 });
+      }
+      const data = text ? JSON.parse(text) : {};
+      records.push(...(data.records || []).map(serializeOrderRecord));
+      offset = data.offset || "";
+    } while (offset);
+    return adminOrdersJson({ orders: records });
+  } catch (error) {
+    console.error("Unexpected admin orders read failure", { message: error.message });
+    return adminOrdersJson({ error: "orders_read_failed", message: "تعذر تحميل الأوردرات حاليًا." }, { status: 500 });
+  }
+}
+
+function validateAdminOrderPatch(payload = {}) {
+  const fields = {};
+  const errors = [];
+  for (const [key, airtableField] of Object.entries(editableOrderFields)) {
+    if (!Object.prototype.hasOwnProperty.call(payload, key)) continue;
+    const value = cleanOrderString(payload[key]);
+    if (key === "paymentStatus" && !allowedPaymentStatuses.has(value)) errors.push(key);
+    else if (key === "orderStatus" && !allowedOrderStatuses.has(value)) errors.push(key);
+    else if (key === "pickupDate" && value && !/^\d{4}-\d{2}-\d{2}$/.test(value)) errors.push(key);
+    else if (key === "notes" && value.length > 10000) errors.push(key);
+    else fields[airtableField] = value || null;
+  }
+  return { fields, errors };
+}
+
+async function updateAdminOrder(context, recordId) {
+  const { request, env } = context;
+  if (!hasAirtableConfig(env)) return adminOrdersJson({ error: "server_not_configured", message: "إعدادات Airtable غير مكتملة." }, { status: 500 });
+  if (!/^rec[a-zA-Z0-9]+$/.test(recordId)) return adminOrdersJson({ error: "invalid_record_id", message: "رقم الأوردر غير صالح." }, { status: 400 });
+
+  let payload;
+  try { payload = await request.json(); } catch { return adminOrdersJson({ error: "invalid_json", message: "بيانات التحديث غير صحيحة." }, { status: 400 }); }
+  const { fields, errors } = validateAdminOrderPatch(payload);
+  if (errors.length || !Object.keys(fields).length) return adminOrdersJson({ error: "invalid_fields", fields: errors, message: "قيم التحديث غير صالحة." }, { status: 400 });
+
+  try {
+    const response = await fetch(airtableOrdersUrl(env, recordId), {
+      method: "PATCH",
+      headers: { Authorization: `Bearer ${env.AIRTABLE_TOKEN}`, "Content-Type": "application/json" },
+      body: JSON.stringify({ fields, typecast: false })
+    });
+    const text = await response.text();
+    if (!response.ok) {
+      const error = safeAirtableError(text);
+      console.error("Airtable admin order update failed", { recordId, status: response.status, errorType: error.type, errorMessage: error.message });
+      return adminOrdersJson({ error: "airtable_update_failed", message: "تعذر حفظ تعديلات الأوردر." }, { status: 502 });
+    }
+    return adminOrdersJson({ order: serializeOrderRecord(text ? JSON.parse(text) : {}) });
+  } catch (error) {
+    console.error("Unexpected admin order update failure", { recordId, message: error.message });
+    return adminOrdersJson({ error: "order_update_failed", message: "تعذر حفظ التعديلات حاليًا." }, { status: 500 });
+  }
+}
+
+async function adminOrdersResponse(context, pathname) {
+  if (pathname === "/admin/api/orders") {
+    if (context.request.method !== "GET") return adminOrdersJson({ error: "method_not_allowed" }, { status: 405, headers: { Allow: "GET" } });
+    return listAdminOrders(context);
+  }
+  const match = pathname.match(/^\/admin\/api\/orders\/(rec[a-zA-Z0-9]+)$/);
+  if (!match) return adminOrdersJson({ error: "not_found" }, { status: 404 });
+  if (context.request.method !== "PATCH") return adminOrdersJson({ error: "method_not_allowed" }, { status: 405, headers: { Allow: "PATCH" } });
+  return updateAdminOrder(context, match[1]);
+}
+
+async function createOrderResponse(context) {
+  const { request, env } = context;
+  const requestId = request.headers.get("X-Request-Id") || "";
+
+  if (request.method === "OPTIONS") {
+    if (!orderCorsAllowed(request)) return new Response(null, { status: 403, headers: orderCorsHeaders(request) });
+    return new Response(null, { status: 204, headers: orderCorsHeaders(request) });
+  }
+
+  if (request.method !== "POST") {
+    return orderJsonResponse(request, { error: "method_not_allowed", message: "Method not allowed" }, { status: 405 });
+  }
+
+  if (!orderCorsAllowed(request)) {
+    console.warn("Blocked /api/orders CORS origin", {
+      requestId,
+      origin: request.headers.get("Origin") || ""
+    });
+    return orderJsonResponse(request, { error: "forbidden", message: "Forbidden origin" }, { status: 403 });
+  }
+
+  if (!env.AIRTABLE_TOKEN || !env.AIRTABLE_BASE_ID || !env.AIRTABLE_TABLE_NAME) {
+    console.error("Airtable order configuration is missing", {
+      requestId,
+      hasToken: Boolean(env.AIRTABLE_TOKEN),
+      hasBaseId: Boolean(env.AIRTABLE_BASE_ID),
+      hasTableName: Boolean(env.AIRTABLE_TABLE_NAME)
+    });
+    return orderJsonResponse(
+      request,
+      {
+        error: "server_not_configured",
+        message: "\u062a\u0639\u0630\u0631 \u062a\u0633\u062c\u064a\u0644 \u0627\u0644\u0637\u0644\u0628 \u062d\u0627\u0644\u064a\u0627. \u0645\u0646 \u0641\u0636\u0644\u0643 \u062d\u0627\u0648\u0644 \u0644\u0627\u062d\u0642\u0627."
+      },
+      { status: 500 }
+    );
+  }
+
+  let payload;
+  try {
+    payload = await request.json();
+  } catch (error) {
+    console.warn("Invalid /api/orders JSON", { requestId, message: error.message });
+    return orderJsonResponse(
+      request,
+      { error: "invalid_json", message: "\u0628\u064a\u0627\u0646\u0627\u062a \u0627\u0644\u0637\u0644\u0628 \u063a\u064a\u0631 \u0635\u062d\u064a\u062d\u0629." },
+      { status: 400 }
+    );
+  }
+
+  const order = normalizeOrderPayload(payload);
+  const missing = validateOrderPayload(order);
+  if (missing.length) {
+    console.warn("Invalid /api/orders payload", { requestId, missing });
+    return orderJsonResponse(
+      request,
+      {
+        error: "missing_required_fields",
+        fields: missing,
+        message: "\u0627\u0643\u062a\u0628 \u0627\u0644\u0627\u0633\u0645 \u0648\u0631\u0642\u0645 \u0627\u0644\u0645\u0648\u0628\u0627\u064a\u0644 \u0648\u062a\u0623\u0643\u062f \u0623\u0646 \u0627\u0644\u0633\u0644\u0629 \u0628\u0647\u0627 \u0645\u0646\u062a\u062c\u0627\u062a."
+      },
+      { status: 400 }
+    );
+  }
+
+  const tableName = encodeURIComponent(String(env.AIRTABLE_TABLE_NAME).trim());
+  const airtableUrl = `https://api.airtable.com/v0/${encodeURIComponent(String(env.AIRTABLE_BASE_ID).trim())}/${tableName}`;
+
+  try {
+    const airtableResponse = await fetch(airtableUrl, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${env.AIRTABLE_TOKEN}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        records: [
+          {
+            fields: airtableOrderFields(order)
+          }
+        ]
+      })
+    });
+    const responseText = await airtableResponse.text();
+    let airtableData = {};
+    try {
+      airtableData = responseText ? JSON.parse(responseText) : {};
+    } catch {
+      airtableData = {};
+    }
+
+    if (!airtableResponse.ok) {
+      const airtableError = safeAirtableError(responseText);
+      console.error("Airtable order creation failed", {
+        requestId,
+        status: airtableResponse.status,
+        errorType: airtableError.type,
+        errorMessage: airtableError.message
+      });
+      return orderJsonResponse(
+        request,
+        {
+          error: "airtable_create_failed",
+          message: "\u062a\u0639\u0630\u0631 \u062a\u0633\u062c\u064a\u0644 \u0627\u0644\u0637\u0644\u0628. \u0645\u0646 \u0641\u0636\u0644\u0643 \u062d\u0627\u0648\u0644 \u0645\u0631\u0629 \u0623\u062e\u0631\u0649."
+        },
+        { status: 502 }
+      );
+    }
+
+    const recordId = airtableData.records?.[0]?.id || "";
+    console.log("Airtable order created", { requestId, recordId });
+    return orderJsonResponse(request, { ok: true, requestId, recordId });
+  } catch (error) {
+    console.error("Unexpected /api/orders failure", { requestId, message: error.message });
+    return orderJsonResponse(
+      request,
+      {
+        error: "order_create_failed",
+        message: "\u062a\u0639\u0630\u0631 \u062a\u0633\u062c\u064a\u0644 \u0627\u0644\u0637\u0644\u0628. \u0645\u0646 \u0641\u0636\u0644\u0643 \u062d\u0627\u0648\u0644 \u0645\u0631\u0629 \u0623\u062e\u0631\u0649."
+      },
+      { status: 500 }
+    );
+  }
+}
+
+const analyticsEventNames = new Set([
+  "page_view", "view_category", "view_product", "search", "add_to_cart", "remove_from_cart",
+  "view_cart", "begin_checkout", "select_delivery", "select_payment_method", "place_order",
+  "order_success", "order_failed", "open_whatsapp", "click_phone", "click_facebook", "click_instagram",
+  "javascript_error", "api_error", "checkout_error", "worker_error"
+]);
+
+function analyticsJson(payload, init = {}) {
+  const headers = new Headers(init.headers || {});
+  headers.set("Content-Type", "application/json; charset=UTF-8");
+  headers.set("Cache-Control", "no-store");
+  headers.set("X-Content-Type-Options", "nosniff");
+  return new Response(JSON.stringify(payload), { ...init, headers });
+}
+
+function analyticsText(value, max = 160) {
+  return String(value == null ? "" : value)
+    .replace(/[\w.+-]+@[\w.-]+\.[A-Za-z]{2,}/g, "[email]")
+    .replace(/(?:\+?20)?01\d{9}/g, "[phone]")
+    .replace(/\b\d{12,19}\b/g, "[number]")
+    .replace(/[\r\n\t]+/g, " ")
+    .trim()
+    .slice(0, max);
+}
+
+function analyticsPage(value) {
+  try { return new URL(String(value || "/"), canonicalOrigin).pathname.slice(0, 180); }
+  catch { return "/"; }
+}
+
+function analyticsIdentifier(value, max = 100) {
+  return String(value == null ? "" : value).trim().replace(/[^A-Za-z0-9._:-]/g, "").slice(0, max);
+}
+
+function cairoDay(date = new Date()) {
+  return new Intl.DateTimeFormat("en-CA", { timeZone: "Africa/Cairo", year: "numeric", month: "2-digit", day: "2-digit" }).format(date);
+}
+
+async function analyticsVisitorHash(visitorId, env) {
+  const raw = `${analyticsText(visitorId, 100)}:${String(env.ANALYTICS_HASH_SALT || "pope-kyrillos-analytics")}`;
+  const bytes = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(raw));
+  return [...new Uint8Array(bytes)].map((byte) => byte.toString(16).padStart(2, "0")).join("");
+}
+
+async function storeAnalyticsEvent(env, payload = {}, overrides = {}) {
+  if (!env.ANALYTICS_DB) return false;
+  const eventName = analyticsEventNames.has(overrides.event || payload.event) ? (overrides.event || payload.event) : "";
+  if (!eventName) return false;
+  const occurredAt = new Date().toISOString();
+  const visitorHash = overrides.visitorHash || await analyticsVisitorHash(payload.visitorId || crypto.randomUUID(), env);
+  const price = payload.price == null || payload.price === "" ? null : (Number.isFinite(Number(payload.price)) ? Number(payload.price) : null);
+  const quantity = payload.quantity == null || payload.quantity === "" ? null : (Number.isFinite(Number(payload.quantity)) ? Math.max(0, Math.min(10000, Math.round(Number(payload.quantity)))) : null);
+  const statusCode = payload.statusCode == null || payload.statusCode === "" ? null : (Number.isFinite(Number(payload.statusCode)) ? Math.round(Number(payload.statusCode)) : null);
+  const source = ["Google", "Facebook", "WhatsApp", "Direct", "Instagram", "Other"].includes(payload.source) ? payload.source : analyticsText(payload.source || "Direct", 40);
+  const eventErrorType = eventName === "javascript_error" ? "javascript"
+    : eventName === "api_error" ? "api"
+      : eventName === "checkout_error" || eventName === "order_failed" ? "checkout"
+        : eventName === "worker_error" ? "worker" : "";
+  await env.ANALYTICS_DB.prepare(`
+    INSERT INTO analytics_events (
+      occurred_at, day, event_name, event_id, visitor_hash, page, product_id, product_name, category,
+      price, quantity, currency, source, search_term, device, browser, error_type, error_message, status_code
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `).bind(
+    occurredAt, cairoDay(), eventName, analyticsIdentifier(payload.eventId, 100), visitorHash, analyticsPage(payload.page),
+    analyticsIdentifier(payload.productId, 100), analyticsText(payload.productName, 160), analyticsText(payload.category, 100),
+    price, quantity, /^[A-Z]{3}$/.test(String(payload.currency || "EGP")) ? String(payload.currency || "EGP") : "EGP",
+    source || "Direct", eventName === "search" ? analyticsText(payload.searchTerm, 80) : "", analyticsText(payload.device, 30),
+    analyticsText(payload.browser, 30), analyticsText(overrides.errorType || eventErrorType || payload.errorType, 40),
+    analyticsText(overrides.errorMessage || payload.errorMessage, 500), statusCode
+  ).run();
+  return true;
+}
+
+async function analyticsIngestResponse(request, env) {
+  if (request.method !== "POST") return analyticsJson({ error: "method_not_allowed" }, { status: 405, headers: { Allow: "POST" } });
+  if (!env.ANALYTICS_DB) return analyticsJson({ error: "analytics_not_configured" }, { status: 503 });
+  const origin = request.headers.get("Origin");
+  if (origin && origin !== canonicalOrigin) return analyticsJson({ error: "origin_not_allowed" }, { status: 403 });
+  if (request.headers.get("Sec-Fetch-Site") === "cross-site") return analyticsJson({ error: "origin_not_allowed" }, { status: 403 });
+  const length = Number(request.headers.get("Content-Length") || 0);
+  if (length > 12000) return analyticsJson({ error: "payload_too_large" }, { status: 413 });
+  let payload;
+  try { payload = await request.json(); }
+  catch { return analyticsJson({ error: "invalid_json" }, { status: 400 }); }
+  if (!analyticsEventNames.has(payload?.event) || payload.event === "worker_error") return analyticsJson({ error: "invalid_event" }, { status: 400 });
+  try {
+    await storeAnalyticsEvent(env, payload);
+    return new Response(null, { status: 204, headers: { "Cache-Control": "no-store" } });
+  } catch (error) {
+    console.error("Analytics ingest failed", { message: analyticsText(error.message, 200) });
+    return analyticsJson({ error: "analytics_store_failed" }, { status: 500 });
+  }
+}
+
+function analyticsRows(result = { results: [] }) {
+  return (result.results || []).map((row) => ({ label: String(row.label || "غير محدد"), value: Number(row.value || 0) }));
+}
+
+async function analyticsDashboardResponse(request, env) {
+  if (request.method !== "GET") return analyticsJson({ error: "method_not_allowed" }, { status: 405, headers: { Allow: "GET" } });
+  if (!env.ANALYTICS_DB) return analyticsJson({ error: "analytics_not_configured", message: "قاعدة Analytics غير مربوطة بعد." }, { status: 503 });
+  const url = new URL(request.url);
+  const days = [7, 30, 90].includes(Number(url.searchParams.get("days"))) ? Number(url.searchParams.get("days")) : 7;
+  const today = cairoDay();
+  const start = new Date();
+  start.setUTCDate(start.getUTCDate() - (days - 1));
+  const startDay = cairoDay(start);
+  const weekStart = new Date();
+  weekStart.setUTCDate(weekStart.getUTCDate() - 6);
+  const weekDay = cairoDay(weekStart);
+
+  const metricStatements = [
+    env.ANALYTICS_DB.prepare("SELECT COUNT(DISTINCT visitor_hash) value FROM analytics_events WHERE event_name = 'page_view' AND day = ?").bind(today),
+    env.ANALYTICS_DB.prepare("SELECT COUNT(DISTINCT visitor_hash) value FROM analytics_events WHERE event_name = 'page_view' AND day >= ?").bind(weekDay),
+    env.ANALYTICS_DB.prepare("SELECT COUNT(DISTINCT CASE WHEN event_id <> '' THEN event_id ELSE CAST(id AS TEXT) END) value FROM analytics_events WHERE event_name = 'place_order' AND day >= ?").bind(startDay),
+    env.ANALYTICS_DB.prepare("SELECT COALESCE(SUM(COALESCE(quantity, 1)), 0) value FROM analytics_events WHERE event_name = 'add_to_cart' AND day >= ?").bind(startDay),
+    env.ANALYTICS_DB.prepare("SELECT COUNT(*) value FROM analytics_events WHERE event_name = 'begin_checkout' AND day >= ?").bind(startDay),
+    env.ANALYTICS_DB.prepare("SELECT COUNT(DISTINCT CASE WHEN event_id <> '' THEN event_id ELSE CAST(id AS TEXT) END) value FROM analytics_events WHERE event_name = 'order_success' AND day >= ?").bind(startDay)
+  ];
+  const metricResults = await env.ANALYTICS_DB.batch(metricStatements);
+  const values = metricResults.map((result) => Number(result.results?.[0]?.value || 0));
+  const metrics = {
+    visitorsToday: values[0], visitorsWeek: values[1], orders: values[2], addToCart: values[3],
+    beginCheckout: values[4], successfulOrders: values[5], conversionRate: values[1] ? values[5] / values[1] : 0
+  };
+
+  const listQueries = {
+    viewedProducts: ["SELECT COALESCE(NULLIF(product_name, ''), product_id) label, COUNT(*) value FROM analytics_events WHERE event_name = 'view_product' AND day >= ? AND (product_name <> '' OR product_id <> '') GROUP BY label ORDER BY value DESC LIMIT 10", startDay],
+    cartProducts: ["SELECT COALESCE(NULLIF(product_name, ''), product_id) label, SUM(COALESCE(quantity, 1)) value FROM analytics_events WHERE event_name = 'add_to_cart' AND day >= ? AND (product_name <> '' OR product_id <> '') GROUP BY label ORDER BY value DESC LIMIT 10", startDay],
+    soldProducts: ["SELECT COALESCE(NULLIF(product_name, ''), product_id) label, SUM(COALESCE(quantity, 1)) value FROM analytics_events WHERE event_name = 'order_success' AND day >= ? AND (product_name <> '' OR product_id <> '') GROUP BY label ORDER BY value DESC LIMIT 10", startDay],
+    searchTerms: ["SELECT search_term label, COUNT(*) value FROM analytics_events WHERE event_name = 'search' AND day >= ? AND search_term <> '' GROUP BY search_term ORDER BY value DESC LIMIT 10", startDay],
+    pages: ["SELECT page label, COUNT(*) value FROM analytics_events WHERE event_name = 'page_view' AND day >= ? GROUP BY page ORDER BY value DESC LIMIT 10", startDay],
+    devices: ["SELECT COALESCE(NULLIF(device, ''), 'Other') label, COUNT(*) value FROM analytics_events WHERE event_name = 'page_view' AND day >= ? GROUP BY label ORDER BY value DESC", startDay],
+    browsers: ["SELECT COALESCE(NULLIF(browser, ''), 'Other') label, COUNT(*) value FROM analytics_events WHERE event_name = 'page_view' AND day >= ? GROUP BY label ORDER BY value DESC", startDay],
+    sources: ["SELECT COALESCE(NULLIF(source, ''), 'Direct') label, COUNT(*) value FROM analytics_events WHERE event_name = 'page_view' AND day >= ? GROUP BY label ORDER BY value DESC", startDay]
+  };
+  const listKeys = Object.keys(listQueries);
+  const listResults = await env.ANALYTICS_DB.batch(listKeys.map((key) => env.ANALYTICS_DB.prepare(listQueries[key][0]).bind(listQueries[key][1])));
+  const lists = Object.fromEntries(listKeys.map((key, index) => [key, analyticsRows(listResults[index])]));
+
+  const errorTypes = ["javascript", "api", "checkout", "worker"];
+  const errorResults = await env.ANALYTICS_DB.batch(errorTypes.map((type) => env.ANALYTICS_DB.prepare(`
+    SELECT occurred_at occurredAt, page, error_message message, status_code statusCode
+    FROM analytics_events WHERE error_type = ? ORDER BY occurred_at DESC LIMIT 12
+  `).bind(type)));
+  const errors = Object.fromEntries(errorTypes.map((type, index) => [type, errorResults[index].results || []]));
+  return analyticsJson({ metrics, lists, errors, rangeDays: days });
+}
+
+async function recordWorkerError(env, request, error) {
+  try {
+    await storeAnalyticsEvent(env, { page: new URL(request.url).pathname }, { event: "worker_error", errorType: "worker", errorMessage: error?.message || "Worker error" });
+  } catch (analyticsError) {
+    console.error("Worker analytics logging failed", { message: analyticsText(analyticsError.message, 200) });
+  }
+}
+
+async function handleRequest(request, env, ctx) {
     const url = new URL(request.url);
     const context = requestContext(request, env, ctx);
 
     const forwardedProto = request.headers.get("X-Forwarded-Proto") || "";
     const isHttps = url.protocol === "https:" || forwardedProto === "https";
-    if (!isHttps || url.hostname !== canonicalHostname) {
+    const allowAnalyticsLocalTest = ["127.0.0.1", "localhost"].includes(url.hostname);
+    if (!allowAnalyticsLocalTest && (!isHttps || url.hostname !== canonicalHostname)) {
       url.protocol = "https:";
       url.hostname = canonicalHostname;
       return Response.redirect(url.toString(), 301);
@@ -563,14 +1425,32 @@ export default {
         return Response.redirect(url.toString(), 302);
       }
 
+      if (url.pathname === "/admin/orders" || url.pathname === "/admin/orders/") {
+        return env.ASSETS.fetch(rewriteGetRequest(request, "/admin/orders/index.html"));
+      }
+
+      if (url.pathname === "/admin/analytics" || url.pathname === "/admin/analytics/") {
+        return env.ASSETS.fetch(rewriteGetRequest(request, "/admin/analytics/index.html"));
+      }
+
       if (url.pathname === "/admin/api/update-products") return updateProducts(context);
       if (url.pathname === "/admin/api/update-taxonomy") return updateTaxonomy(context);
       if (url.pathname === "/admin/api/upload-product-image") return uploadProductImage(context);
+      if (url.pathname === "/admin/api/orders" || url.pathname.startsWith("/admin/api/orders/")) return adminOrdersResponse(context, url.pathname);
+      if (url.pathname === "/admin/api/analytics") return analyticsDashboardResponse(request, env);
     }
 
+    if (url.pathname === "/api/meta-catalog-feed.xml") return catalogFeedResponse(request, env, { includePrice: true });
+    if (url.pathname === "/api/product-feed-no-price.xml") return catalogFeedResponse(request, env, { includePrice: false });
     if (url.pathname === "/api/create-paymob-intention") return createPaymobIntention(context);
     if (url.pathname === "/api/create-bosta-delivery") return createBostaDelivery(context);
     if (url.pathname === "/api/paymob-webhook") return paymobWebhook(context);
+    if (url.pathname === "/api/orders") return createOrderResponse(context);
+    if (url.pathname === "/api/best-sellers") {
+      const products = await loadProducts(env, request, { maxAgeMs: 60000 });
+      return bestSellersResponse(context, products);
+    }
+    if (url.pathname === "/api/analytics/events") return analyticsIngestResponse(request, env);
     if (url.pathname === "/products.json") return productsJsonResponse(request, env);
     if (url.pathname === "/category-taxonomy.js") return taxonomyJsResponse(request, env);
 
@@ -599,5 +1479,15 @@ export default {
       if (githubAsset) return githubAsset;
     }
     return withAssetCacheHeaders(assetResponse, url.pathname);
+}
+
+export default {
+  async fetch(request, env, ctx) {
+    try {
+      return await handleRequest(request, env, ctx);
+    } catch (error) {
+      ctx.waitUntil(recordWorkerError(env, request, error));
+      throw error;
+    }
   }
 };

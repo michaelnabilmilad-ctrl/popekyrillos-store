@@ -6,7 +6,7 @@
     <meta name="robots" content="noindex, nofollow">
     <title>إدارة منتجات مكتبة البابا كيرلس</title>
     <link rel="icon" href="data:,">
-    <link rel="stylesheet" href="/admin.css?v=asset-4c224e8382a7">
+    <link rel="stylesheet" href="/admin.css?v=asset-02385d893f8d">
   </head>
   <body>
     <header class="admin-topbar">
@@ -17,19 +17,29 @@
       </div>
       <div class="topbar-actions">
         <a class="button ghost" href="index.html">عرض الموقع</a>
+        <a class="button secondary" href="/admin/orders">إدارة الأوردرات</a>
         <button class="button secondary" type="button" data-action="load-site">تحميل منتجات الموقع</button>
         <button class="button" type="button" data-action="open-file">فتح ملف products.json</button>
       </div>
     </header>
 
-    <main class="admin-layout">
-      <aside class="product-sidebar">
+    <nav class="admin-section-tabs" aria-label="أقسام لوحة الإدارة">
+      <a class="admin-tab is-active" href="/admin/" aria-current="page">إدارة المنتجات</a>
+      <a class="admin-tab" href="/admin/orders">إدارة الأوردرات</a>
+      <a class="admin-tab" href="/admin/analytics">Analytics</a>
+    </nav>
+
+    <main class="admin-layout" data-admin-layout>
+      <aside class="product-sidebar" data-product-sidebar>
         <div class="sidebar-head">
           <div>
             <strong data-product-count>0 منتج</strong>
             <span data-save-state>لم يتم التحميل بعد</span>
           </div>
-          <button class="icon-button" type="button" data-action="add-product" title="إضافة منتج جديد">+</button>
+          <div class="sidebar-head-actions">
+            <button class="sidebar-toggle" type="button" data-ui-action="toggle-sidebar" aria-label="طي قائمة المنتجات" title="طي قائمة المنتجات">⇥</button>
+            <button class="icon-button" type="button" data-action="add-product" title="إضافة منتج جديد">+</button>
+          </div>
         </div>
 
         <label class="search-box">
@@ -49,7 +59,7 @@
           </select>
           <label class="check-row compact">
             <input type="checkbox" data-needs-review-filter>
-            <span>منتجات تحتاج مراجعة</span>
+            <span>منتجات تحتاج تصنيف</span>
           </label>
 
           <button class="button small ghost" type="button" data-action="sort-name">ترتيب بالاسم</button>
@@ -60,172 +70,104 @@
         </div>
       </aside>
 
-      <section class="editor-panel">
-        <div class="editor-empty" data-editor-empty>
-          <h2>اختار منتج للتعديل</h2>
-          <p>يمكنك تحميل منتجات الموقع الحالية أو فتح ملف المنتجات من جهازك، وبعدها تعدّل وتصدّر نسخة جاهزة.</p>
+      <section class="admin-workspace">
+        <div class="product-actions-bar" data-product-actions-bar>
+          <button class="button small ghost mobile-products-toggle" type="button" data-ui-action="toggle-sidebar">قائمة المنتجات</button>
+          <div class="actions-status"><strong>إجراءات المنتج</strong><span data-actions-product-name>اختر منتجًا للتعديل</span></div>
+          <div class="actions-primary">
+            <button class="button secondary" type="button" data-action="publish-products">حفظ ونشر على الموقع</button>
+            <details class="actions-menu">
+              <summary class="button ghost">إجراءات إضافية</summary>
+              <div class="actions-menu-panel">
+                <button class="button ghost" type="button" data-action="save-file" disabled>حفظ في نفس ملف products.json</button>
+                <button class="button ghost" type="button" data-action="download-products">تحميل products.json</button>
+                <button class="button ghost" type="button" data-action="download-functions">تحميل functions-products.json</button>
+                <button class="button ghost" type="button" data-action="copy-json">نسخ JSON</button>
+              </div>
+            </details>
+          </div>
         </div>
 
-        <form class="editor-form" data-editor hidden>
-          <div class="editor-toolbar">
-            <div>
-              <p class="eyebrow">بيانات المنتج</p>
-              <h2 data-editor-title>منتج</h2>
-              <p class="muted" data-editor-id></p>
-            </div>
-            <div class="toolbar-actions">
-              <button class="button ghost" type="button" data-action="duplicate-product">تكرار المنتج</button>
-              <button class="button danger" type="button" data-action="delete-product">حذف</button>
-            </div>
+        <section class="editor-panel">
+          <div class="editor-empty" data-editor-empty>
+            <h2>اختار منتج للتعديل</h2>
+            <p>يمكنك تحميل منتجات الموقع الحالية أو فتح ملف المنتجات من جهازك، وبعدها تعدّل وتصدّر نسخة جاهزة.</p>
           </div>
 
-          <section class="form-section">
-            <h3>المعلومات الأساسية</h3>
-            <div class="field-grid">
-              <label>
-                <span>اسم المنتج</span>
-                <input type="text" data-field="name" required>
-              </label>
-              <label>
-                <span>كود المنتج</span>
-                <input type="text" data-field="id" required>
-              </label>
-              <label class="legacy-taxonomy-field" hidden>
-                <span>القسم الرئيسي</span>
-                <select data-field="category" required></select>
-              </label>
-              <label class="legacy-taxonomy-field" hidden>
-                <span>التصنيف الفرعي</span>
-                <input type="text" data-field="label" placeholder="مثلاً: صلبان زفة">
-              </label>
-              <label>
-                <span>القسم الرئيسي</span>
-                <select data-field="mainCategory" required></select>
-              </label>
-              <label>
-                <span>القسم الفرعي</span>
-                <select data-field="subCategory" required></select>
-              </label>
-
-              <label>
-                <span>شارة الصورة</span>
-                <input type="text" data-field="badge" placeholder="مثلاً: بخور">
-              </label>
-              <label>
-                <span>الحالة</span>
-                <select data-field="stock">
-                  <option value="متاح">متاح</option>
-                  <option value="غير متاح حاليا">غير متاح حاليا</option>
-                </select>
-              </label>
-              <label>
-                <span>السعر الأساسي</span>
-                <input type="number" data-field="price" min="0" step="1">
-              </label>
-              <label>
-                <span>ملاحظة السعر</span>
-                <input type="text" data-field="priceNote" placeholder="اختياري">
-              </label>
+          <form class="editor-form" data-editor hidden>
+            <div class="editor-toolbar">
+              <div><p class="eyebrow">بيانات المنتج</p><h2 data-editor-title>منتج</h2><p class="muted" data-editor-id></p></div>
+              <div class="toolbar-actions"><button class="button ghost" type="button" data-action="duplicate-product">تكرار المنتج</button><button class="button danger" type="button" data-action="delete-product">حذف</button></div>
             </div>
-            <label>
-              <span>الوصف</span>
-              <textarea data-field="description" rows="5" placeholder="وصف واضح للمنتج"></textarea>
-            </label>
-            <label>
-              <span>الكلمات المفتاحية - كل كلمة في سطر</span>
-              <textarea data-field="tags" rows="3" placeholder="نحاسيات&#10;صلبان زفة"></textarea>
-            </label>
-          </section>
 
-          <section class="form-section">
-            <div class="section-title-row">
-              <h3>صور المنتج</h3>
-              <button class="button small secondary" type="button" data-action="upload-image">رفع صور WebP</button>
-              <span class="hint">اكتب مسار كل صورة في سطر. أول صورة هي التي تظهر في الكارت.</span>
-            </div>
-            <label>
-              <span>مسارات الصور</span>
-              <textarea data-field="images" rows="5" dir="ltr" placeholder="assets/optimized/products/example.webp"></textarea>
-            </label>
-            <div class="image-preview" data-image-preview></div>
-          </section>
-
-          <section class="form-section">
-            <div class="section-title-row">
-              <h3>الاختيارات والأسعار والكميات</h3>
-              <button class="button small" type="button" data-action="add-variant">إضافة اختيار</button>
-              <button class="button small secondary" type="button" data-action="sync-variant-options">توليد الاختيارات</button>
-            </div>
-            <p class="hint">لو المنتج له مقاسات أو ألوان، أضف كل اختيار بسعره والكمية المتاحة وصوره الخاصة.</p>
-            <div class="variant-list" data-variant-list></div>
-          </section>
-
-          <section class="form-section">
-            <details>
-              <summary>إعدادات متقدمة</summary>
-              <label>
-                <span>تعريف الاختيارات بصيغة JSON</span>
-                <textarea data-field="options" rows="6" dir="ltr"></textarea>
-              </label>
-              <button class="button small secondary" type="button" data-action="sync-variant-options">توليد من أسماء الاختيارات</button>
-              <p class="hint">اتركها كما هي لو مش محتاج تعدّل أسماء مجموعات الاختيارات.</p>
+            <details class="form-section editor-accordion" data-editor-section="basic" open>
+              <summary><span>المعلومات الأساسية</span><small>الاسم والكود والأقسام والحالة</small></summary>
+              <div class="accordion-body field-grid">
+                <label><span>اسم المنتج</span><input type="text" data-field="name" required></label>
+                <label><span>كود المنتج</span><input type="text" data-field="id" required></label>
+                <label class="legacy-taxonomy-field" hidden><span>القسم الرئيسي</span><select data-field="category" required></select></label>
+                <label class="legacy-taxonomy-field" hidden><span>التصنيف الفرعي</span><input type="text" data-field="label" placeholder="مثلاً: صلبان زفة"></label>
+                <label><span>القسم الرئيسي</span><select data-field="mainCategory" required></select></label>
+                <label><span>القسم الفرعي</span><select data-field="subCategory" required></select></label>
+                <label><span>الحالة</span><select data-field="stock"><option value="متاح">متاح</option><option value="غير متاح حاليا">غير متاح حاليا</option></select></label>
+              </div>
             </details>
-          </section>
-        </form>
-      </section>
 
-      <aside class="export-panel">
-        <h2>الحفظ والنشر</h2>
-        <p>الحفظ هنا يعدّل الملف الذي فتحته من جهازك. لو فتحت المنتجات من الموقع فقط، استخدم التصدير ثم ارفع الملف على GitHub.</p>
+            <details class="form-section editor-accordion" data-editor-section="pricing" open>
+              <summary><span>السعر والمخزون</span><small>السعر الأساسي والاختيارات والكميات</small></summary>
+              <div class="accordion-body">
+                <div class="field-grid"><label><span>السعر الأساسي</span><input type="number" data-field="price" min="0" step="1"></label><label><span>ملاحظة السعر</span><input type="text" data-field="priceNote" placeholder="اختياري"></label></div>
+                <div class="section-title-row nested-section-title"><div><strong>الاختيارات والأسعار والكميات</strong><p class="hint">أضف كل اختيار بسعره والكمية المتاحة وصوره الخاصة.</p></div><button class="button small" type="button" data-action="add-variant">إضافة اختيار</button><button class="button small secondary" type="button" data-action="sync-variant-options">توليد الاختيارات</button></div>
+                <div class="variant-list" data-variant-list></div>
+              </div>
+            </details>
 
-        <button class="button wide secondary" type="button" data-action="publish-products">حفظ ونشر على الموقع</button>
-        <button class="button wide" type="button" data-action="save-file" disabled>حفظ في نفس ملف products.json</button>
-        <button class="button wide secondary" type="button" data-action="download-products">تحميل products.json</button>
-        <button class="button wide secondary" type="button" data-action="download-functions">تحميل functions-products.json</button>
-        <button class="button wide ghost" type="button" data-action="copy-json">نسخ JSON</button>
+            <details class="form-section editor-accordion" data-editor-section="description">
+              <summary><span>الوصف</span><small>وصف المنتج والكلمات المفتاحية</small></summary>
+              <div class="accordion-body"><label><span>الوصف</span><textarea data-field="description" rows="6" placeholder="وصف واضح للمنتج"></textarea></label><label><span>الكلمات المفتاحية - كل كلمة في سطر</span><textarea data-field="tags" rows="3" placeholder="نحاسيات&#10;صلبان زفة"></textarea></label></div>
+            </details>
 
-        <section class="taxonomy-manager">
-          <div class="taxonomy-head">
-            <div>
-              <h3>إدارة الأقسام الفرعية</h3>
-              <p>عدّل الصورة، الاسم، الترتيب، أو انقل القسم الفرعي لقسم رئيسي آخر.</p>
-            </div>
-            <button class="button small" type="button" data-action="publish-taxonomy">حفظ ونشر الأقسام</button>
-            <button class="button small secondary" type="button" data-action="download-taxonomy">تحميل category-taxonomy.js</button>
-          </div>
-          <label>
-            <span>القسم الرئيسي</span>
-            <select data-taxonomy-main></select>
-          </label>
-          <div class="taxonomy-actions">
-            <button class="button small" type="button" data-action="add-subcategory">إضافة قسم فرعي</button>
-          </div>
-          <div class="taxonomy-list" data-taxonomy-list></div>
-          <p class="hint">بعد تعديل الصور أو ترتيب الأقسام، اضغط <b>حفظ ونشر الأقسام</b> حتى تظهر على الموقع.</p>
+            <details class="form-section editor-accordion" data-editor-section="images">
+              <summary><span>الصور</span><small>الصورة الأساسية والصور الإضافية</small></summary>
+              <div class="accordion-body"><div class="section-title-row"><span class="hint">أول صورة هي التي تظهر في الكارت. يمكنك حذف الصور القديمة من المعاينة.</span><div class="image-upload-actions"><button class="button small secondary" type="button" data-action="upload-image">إضافة صور</button><button class="button small danger" type="button" data-action="replace-product-images">استبدال كل الصور</button></div></div><label><span>مسارات الصور</span><textarea data-field="images" rows="5" dir="ltr" placeholder="assets/optimized/products/example.webp"></textarea></label><div class="image-preview" data-image-preview></div></div>
+            </details>
+
+            <details class="form-section editor-accordion" data-editor-section="visibility">
+              <summary><span>إعدادات الظهور</span><small>الشارة والظهور ضمن الأكثر طلبًا</small></summary>
+              <div class="accordion-body field-grid"><label><span>شارة الصورة</span><input type="text" data-field="badge" placeholder="مثلاً: بخور"></label><label class="check-row"><input type="checkbox" data-field="isBestSeller"><span>إظهار ضمن المنتجات الأكثر طلبًا</span></label></div>
+            </details>
+
+            <details class="form-section editor-accordion" data-editor-section="advanced">
+              <summary><span>إعدادات متقدمة</span><small>تعريف الاختيارات بصيغة JSON</small></summary>
+              <div class="accordion-body"><label><span>تعريف الاختيارات بصيغة JSON</span><textarea data-field="options" rows="6" dir="ltr"></textarea></label><button class="button small secondary" type="button" data-action="sync-variant-options">توليد من أسماء الاختيارات</button><p class="hint">اتركها كما هي لو مش محتاج تعدّل أسماء مجموعات الاختيارات.</p></div>
+            </details>
+          </form>
         </section>
 
-        <div class="publish-steps">
-          <h3>طريقة الاستخدام السريعة</h3>
-          <ol>
-            <li>افتح ملف <b>products.json</b> من فولدر الموقع.</li>
-            <li>عدّل السعر، الكمية، الصور أو الوصف.</li>
-            <li>اضغط حفظ، أو حمّل نسخة جديدة.</li>
-            <li>ارفع الملف على GitHub وانشر التعديل.</li>
-          </ol>
-        </div>
+        <details class="workspace-section taxonomy-workspace">
+          <summary><span>الأقسام والتصنيف</span><small>إدارة category taxonomy والأقسام الفرعية</small></summary>
+          <section class="taxonomy-manager">
+            <div class="taxonomy-head"><div><h3>إدارة الأقسام</h3><p>أنشئ الأقسام وعدّل الاسم والوصف والصورة والترتيب والظهور.</p></div><button class="button small" type="button" data-action="publish-taxonomy">حفظ ونشر الأقسام</button><button class="button small secondary" type="button" data-action="download-taxonomy">تحميل category-taxonomy.js</button></div>
+            <label><span>القسم الرئيسي</span><select data-taxonomy-main></select></label>
+            <div class="taxonomy-actions"><button class="button small" type="button" data-action="add-main-category">إضافة قسم رئيسي</button><button class="button small" type="button" data-action="add-subcategory">إضافة قسم فرعي</button><button class="button small ghost" type="button" data-action="move-main-before">القسم لأعلى</button><button class="button small ghost" type="button" data-action="move-main-after">القسم لأسفل</button></div>
+            <div class="field-grid taxonomy-main-fields"><label><span>اسم القسم</span><input data-taxonomy-main-field="name"></label><label><span>الوصف</span><input data-taxonomy-main-field="description"></label><label><span>صورة القسم</span><input dir="ltr" data-taxonomy-main-field="subcategoryImage"></label><label class="check-row"><input type="checkbox" data-taxonomy-main-field="visible"><span>ظاهر للعملاء</span></label><label class="check-row"><input type="checkbox" data-taxonomy-main-field="homeVisible"><span>ظاهر في الرئيسية</span></label></div>
+            <div class="taxonomy-list" data-taxonomy-list></div>
+            <p class="hint">بعد تعديل الصور أو ترتيب الأقسام، اضغط <b>حفظ ونشر الأقسام</b> حتى تظهر على الموقع.</p>
+          </section>
+        </details>
 
-        <div class="notice">
-          <strong>مهم</strong>
-          <p>لو أضفت صورة جديدة، ضعها أولاً داخل فولدر <b>assets</b> واكتب مسارها هنا بنفس الاسم.</p>
-        </div>
-      </aside>
+        <details class="workspace-section admin-help">
+          <summary><span>مساعدة سريعة</span><small>الحفظ والصور وملفات JSON</small></summary>
+          <div class="workspace-help-body"><div class="publish-steps"><h3>طريقة الاستخدام السريعة</h3><ol><li>افتح ملف <b>products.json</b> من فولدر الموقع.</li><li>عدّل السعر، الكمية، الصور أو الوصف.</li><li>اضغط حفظ، أو حمّل نسخة جديدة.</li><li>ارفع الملف على GitHub وانشر التعديل.</li></ol></div><div class="notice"><strong>مهم</strong><p>لو أضفت صورة جديدة، ضعها أولاً داخل فولدر <b>assets</b> واكتب مسارها هنا بنفس الاسم.</p></div></div>
+        </details>
+      </section>
     </main>
 
     <input type="file" data-import-fallback accept=".json,application/json" hidden>
     <input type="file" data-image-upload accept="image/*" multiple hidden>
     <div class="toast" data-toast hidden></div>
 
-    <script src="/category-taxonomy.js?v=asset-4c224e8382a7" defer></script>
-    <script src="/admin.js?v=asset-4c224e8382a7" defer></script>
+    <script src="/category-taxonomy.js?v=asset-02385d893f8d" defer></script>
+    <script src="/admin.js?v=asset-02385d893f8d" defer></script>
   </body>
 </html>
