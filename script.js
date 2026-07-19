@@ -215,6 +215,8 @@ const productModalBody = document.querySelector("[data-product-modal-body]");
 const productModalClose = document.querySelector("[data-product-modal-close]");
 const imageLightbox = document.querySelector("[data-image-lightbox]");
 const imageLightboxImage = document.querySelector("[data-image-lightbox-image]");
+const imageLightboxStage = imageLightboxImage?.parentElement;
+imageLightboxImage?.remove();
 const imageLightboxClose = document.querySelector("[data-image-lightbox-close]");
 let imageLightboxPrev = document.querySelector("[data-image-lightbox-prev]");
 let imageLightboxNext = document.querySelector("[data-image-lightbox-next]");
@@ -3295,6 +3297,9 @@ function syncImageLightboxNav() {
 }
 
 function setImageLightboxImage(src, alt = "", { productId = "", image = "", updateUrl = false } = {}) {
+  if (imageLightboxStage && imageLightboxImage.parentElement !== imageLightboxStage) {
+    imageLightboxStage.appendChild(imageLightboxImage);
+  }
   imageLightboxImage.src = productId && image ? productDetailImageUrl(image, getProduct(productId)) : productDetailImage(src);
   imageLightboxImage.alt = alt;
   state.lightbox.productId = productId;
@@ -3337,6 +3342,7 @@ function closeImageLightbox({ updateUrl = false } = {}) {
   imageLightbox.setAttribute("aria-hidden", "true");
   imageLightboxImage.removeAttribute("src");
   imageLightboxImage.alt = "";
+  imageLightboxImage.remove();
   state.lightbox.productId = "";
   state.lightbox.image = "";
   state.lightbox.alt = "";
