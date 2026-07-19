@@ -51,4 +51,9 @@ test("main category cards render symbols instead of product photos", () => {
   const renderer = source.slice(start, end);
   assert.match(renderer, /mainCategoryTileArt\(category\.id\)/);
   assert.doesNotMatch(renderer, /category-art--photo|<img/);
+  assert.match(source, /"altar-tools": "brass"/);
+  assert.match(source, /"candles-incense": "candles"/);
+  assert.match(source, /"church-vestments": "vestments"/);
+  assert.match(source, /"icons-frames": "icons"/);
+  assert.match(source, /"books-rituals": "books"/);
 });

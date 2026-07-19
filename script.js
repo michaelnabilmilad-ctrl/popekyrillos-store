@@ -143,6 +143,11 @@ let formatter = new Intl.NumberFormat("ar-EG");
 const productGrid = document.querySelector("[data-products]");
 const popularProductsSection = document.querySelector("[data-popular-products]");
 const categoryGrid = document.querySelector(".category-grid");
+const legacyMainCategoryArt = new Map(
+  [...categoryGrid?.querySelectorAll(".category-tile[data-filter]") || []]
+    .map((tile) => [tile.dataset.filter || "", tile.querySelector(".category-art")?.outerHTML || ""])
+    .filter(([, art]) => art)
+);
 const loadMoreButton = document.querySelector("[data-load-more]");
 const filterButtons = document.querySelectorAll("[data-filter]");
 const searchInput = document.querySelector("#product-search");
@@ -1079,6 +1084,20 @@ function ensureMainCategoryTiles() {
 }
 
 function mainCategoryTileArt(categoryId) {
+  const legacyArtKey = {
+    all: "all",
+    "altar-tools": "brass",
+    "altar-vessels": "brass",
+    "censers-incense": "candles",
+    "candles-incense": "candles",
+    "candles-lamps": "candles",
+    "church-vestments": "vestments",
+    "icons-frames": "icons",
+    "books-rituals": "books"
+  }[categoryId];
+  const legacyArt = legacyArtKey ? legacyMainCategoryArt.get(legacyArtKey) : "";
+  if (legacyArt) return legacyArt;
+
   if (categoryId === "crosses") {
     return `<span class="category-art category-art--icons" aria-hidden="true">
       <svg viewBox="0 0 120 82" focusable="false">
