@@ -414,7 +414,10 @@ function catalogSearchScore(product, search) {
     localized(product?.name), product?.label, product?.description, catalogMainCategoryId(product), product?.subcategory, product?.subCategory,
     ...(Array.isArray(product?.tags) ? product.tags : []), ...(Array.isArray(product?.searchKeywords) ? product.searchKeywords : [])
   ].join(" "));
-  const candidates = haystack.split(" ").filter(Boolean);
+  const candidates = [...new Set(haystack.split(" ").filter(Boolean).flatMap((candidate) => {
+    const aliasGroup = catalogSearchAliases.find((group) => group.map(normalizedSearch).includes(candidate)) || [];
+    return [candidate, ...aliasGroup.map(normalizedSearch)];
+  }))];
   let score = 0;
   for (const group of catalogSearchTerms(search)) {
     let best = Infinity;
