@@ -246,8 +246,9 @@ function productPriceText(product) {
 }
 
 function isVariantAvailable(variant) {
-  const quantity = Number(variant?.quantity);
-  if (Number.isInteger(quantity) && quantity >= 0) return quantity > 0;
+  const rawQuantity = variant?.quantity;
+  const quantity = rawQuantity === null || rawQuantity === undefined || rawQuantity === "" ? null : Number(rawQuantity);
+  if (quantity !== null && Number.isInteger(quantity) && quantity >= 0) return quantity > 0;
   return variant?.available !== false;
 }
 
@@ -451,7 +452,7 @@ async function catalogApiResponse(request, env, ctx) {
   const page = Math.max(1, Math.trunc(Number(url.searchParams.get("page"))) || 1);
   const limit = Math.min(48, Math.max(1, Math.trunc(Number(url.searchParams.get("limit"))) || 12));
   const cacheUrl = new URL(url.origin + url.pathname);
-  cacheUrl.searchParams.set("schema", "8");
+  cacheUrl.searchParams.set("schema", "9");
   cacheUrl.searchParams.set("thumbnails", "plain-iota-v2");
   [...url.searchParams.entries()].sort(([a], [b]) => a.localeCompare(b)).forEach(([key, value]) => cacheUrl.searchParams.append(key, value));
   const allProducts = await loadProducts(env, request, { maxAgeMs: 600000 });
