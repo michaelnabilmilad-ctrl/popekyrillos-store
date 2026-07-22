@@ -19,7 +19,7 @@ const vodafoneCashNumber = "01016125589";
 const paymobIntentionEndpointPath = "/api/create-paymob-intention";
 const firebaseSdkVersion = "10.14.1";
 const productBatchSize = 12;
-const catalogSchemaVersion = "4";
+const catalogSchemaVersion = "5";
 const catalogVersion = Date.now().toString(36);
 const canonicalOrigin = "https://popekyrillos.store";
 const guestCartStorageKey = "pope-kyrillos-cart:guest";
@@ -2140,7 +2140,10 @@ function compareFilteredProducts(first, second) {
     }
   }
 
-  return compareCatalogProducts(first, second);
+  // The catalog API already applies the requested global order before pagination.
+  // Preserve that order so loading another page appends its products below the
+  // existing cards instead of re-sorting the combined pages and moving new cards up.
+  return first.index - second.index;
 }
 
 function shouldShowPopularProducts() {
