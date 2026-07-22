@@ -18,7 +18,7 @@ const instapayNumber = "01223515989";
 const vodafoneCashNumber = "01016125589";
 const paymobIntentionEndpointPath = "/api/create-paymob-intention";
 const firebaseSdkVersion = "10.14.1";
-const productBatchSize = 12;
+const productBatchSize = 48;
 const catalogSchemaVersion = "9";
 const catalogVersion = Date.now().toString(36);
 const canonicalOrigin = "https://popekyrillos.store";
@@ -85,6 +85,7 @@ let products = [];
 let catalogPage = 1;
 let catalogTotal = 0;
 let catalogHasMore = false;
+let catalogCategoryCounts = {};
 let catalogRequestController = null;
 let staticCatalogProducts = null;
 let bestSellerProducts = [];
@@ -1084,12 +1085,18 @@ function ensureMainCategoryTiles() {
   const allTile = `<a class="category-tile ${allActive ? "active" : ""}" href="/category/all#catalog" data-filter="all">
     ${mainCategoryTileArt("all")}<strong>${escapeHtml(t("shopMenuAll"))}</strong><small>${escapeHtml(categoryCopy.all[state.language][1])}</small></a>`;
   const tiles = taxonomyCategories.map((category) => {
-    const count = availableProducts().filter((product) => productMainCategoryId(product) === category.id).length;
+    const count = mainCategoryProductCount(category.id);
     return `<a class="category-tile ${normalizeCategoryFilter(state.filter) === category.id ? "active" : ""}" href="/category/${escapeHtml(category.id)}#catalog" data-filter="${escapeHtml(category.id)}">
       ${mainCategoryTileArt(category.id)}
       <strong>${escapeHtml(localized(category.name))}</strong><small>${displayText(formatter.format(count))} ${isEnglish() ? "products" : "منتج"}</small></a>`;
   }).join("");
   categoryGrid.innerHTML = allTile + tiles;
+}
+
+function mainCategoryProductCount(categoryId) {
+  const liveCount = Number(catalogCategoryCounts[categoryId]);
+  if (Number.isFinite(liveCount)) return liveCount;
+  return availableProducts().filter((product) => productMainCategoryId(product) === categoryId).length;
 }
 
 function mainCategoryTileArt(categoryId) {
@@ -1227,7 +1234,7 @@ function renderMainFilterOptions() {
   mainFilterSelect.replaceChildren(allOption);
 
   visibleMainCategories().forEach((category) => {
-    const count = availableProducts().filter((product) => productMainCategoryId(product) === category.id).length;
+    const count = mainCategoryProductCount(category.id);
     mainFilterSelect.append(new Option(`${localized(category.name)} (${displayText(formatter.format(count))})`, category.id));
   });
 
@@ -4899,6 +4906,7 @@ async function loadCatalogPage({ reset = false } = {}) {
     const response = await fetch(catalogApiUrl(nextPage), { cache: "default", signal: catalogRequestController.signal });
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const payload = await response.json();
+    catalogCategoryCounts = payload.categoryCounts && typeof payload.categoryCounts === "object" ? payload.categoryCounts : {};
     const received = (Array.isArray(payload.items) ? payload.items : []).map((item) => ({ ...item, image: item.thumbnail, stock: item.availability === "available" ? "متاح" : "غير متاح حاليا", mainCategory: item.category, subCategory: item.subcategory, label: item.subcategory }));
     products = reset ? received : [...products, ...received];
     catalogPage = Number(payload.page) || nextPage;

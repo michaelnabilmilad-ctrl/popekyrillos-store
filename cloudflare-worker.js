@@ -510,10 +510,15 @@ async function catalogApiResponse(request, env, ctx) {
   const page = Math.max(1, Math.trunc(Number(url.searchParams.get("page"))) || 1);
   const limit = Math.min(48, Math.max(1, Math.trunc(Number(url.searchParams.get("limit"))) || 12));
   const cacheUrl = new URL(url.origin + url.pathname);
-  cacheUrl.searchParams.set("schema", "11");
+  cacheUrl.searchParams.set("schema", "12");
   cacheUrl.searchParams.set("thumbnails", "plain-iota-v2");
   [...url.searchParams.entries()].sort(([a], [b]) => a.localeCompare(b)).forEach(([key, value]) => cacheUrl.searchParams.append(key, value));
   const allProducts = await loadProducts(env, request, { maxAgeMs: 600000 });
+  const categoryCounts = allProducts.filter(hasAvailableVariant).reduce((counts, product) => {
+    const categoryId = catalogMainCategoryId(product);
+    counts[categoryId] = (counts[categoryId] || 0) + 1;
+    return counts;
+  }, {});
   const thumbnailManifest = await loadThumbnailManifest(env, request);
   if (productsCacheSha) cacheUrl.searchParams.set("v", productsCacheSha);
   const cacheKey = new Request(cacheUrl.toString(), { method: "GET" });
@@ -526,7 +531,7 @@ async function catalogApiResponse(request, env, ctx) {
     matched.sort((first, second) => catalogSearchScore(first, search) - catalogSearchScore(second, search));
   }
   const start = (page - 1) * limit;
-  const body = JSON.stringify({ items: matched.slice(start, start + limit).map((product) => catalogDto(product, thumbnailManifest)), page, limit, total: matched.length, hasMore: start + limit < matched.length });
+  const body = JSON.stringify({ items: matched.slice(start, start + limit).map((product) => catalogDto(product, thumbnailManifest)), page, limit, total: matched.length, hasMore: start + limit < matched.length, categoryCounts });
   const response = new Response(body, { headers: { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "public, max-age=0, must-revalidate", "CDN-Cache-Control": "public, max-age=600, stale-while-revalidate=300" } });
   ctx.waitUntil(edgeCache.put(cacheKey, response.clone()));
   return response;
