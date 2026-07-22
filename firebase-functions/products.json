@@ -2951,6 +2951,31 @@
   },
   {
     "id": "custom-1782980654479",
+    "coloringBaseImageUrl": "assets/coloring/iota-medal-1/base.webp",
+    "coloringMaskUrl": "assets/coloring/iota-medal-1/region-mask.png?v=2",
+    "coloringOutlineUrl": "assets/coloring/iota-medal-1/outline.png?v=2",
+    "coloringRegions": [
+      { "id": "region-1", "maskColor": [1, 0, 0] },
+      { "id": "region-2", "maskColor": [2, 0, 0] },
+      { "id": "region-3", "maskColor": [3, 0, 0] },
+      { "id": "region-4", "maskColor": [4, 0, 0] },
+      { "id": "region-5", "maskColor": [5, 0, 0] },
+      { "id": "region-6", "maskColor": [6, 0, 0] },
+      { "id": "region-7", "maskColor": [7, 0, 0] },
+      { "id": "region-8", "maskColor": [8, 0, 0] },
+      { "id": "region-9", "maskColor": [9, 0, 0] },
+      { "id": "region-10", "maskColor": [10, 0, 0] },
+      { "id": "region-11", "maskColor": [11, 0, 0] },
+      { "id": "region-12", "maskColor": [12, 0, 0] },
+      { "id": "region-13", "maskColor": [13, 0, 0] }
+    ],
+    "symmetryGroups": [
+      ["region-2", "region-3", "region-4", "region-5"],
+      ["region-6", "region-7"],
+      ["region-8", "region-9"],
+      ["region-10", "region-11"],
+      ["region-12", "region-13"]
+    ],
     "name": "صليب يوتا مادلية موديل 1",
     "category": "icons",
     "label": "يوتا",

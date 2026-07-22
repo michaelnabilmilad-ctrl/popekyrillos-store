@@ -22,6 +22,26 @@ const staticRewrites = {
   "/payment-pending": "/payment-pending.html"
 };
 const htmlRoutePaths = new Set(["/", "/products", "/contact"]);
+const productColoringConfigs = {
+  "custom-1782980654479": {
+    coloringBaseImageUrl: "assets/coloring/iota-medal-1/base.webp",
+    coloringMaskUrl: "assets/coloring/iota-medal-1/region-mask.png?v=2",
+    coloringOutlineUrl: "assets/coloring/iota-medal-1/outline.png?v=2",
+    coloringRegions: Array.from({ length: 13 }, (_, index) => ({ id: `region-${index + 1}`, maskColor: [index + 1, 0, 0] })),
+    symmetryGroups: [
+      ["region-2", "region-3", "region-4", "region-5"],
+      ["region-6", "region-7"],
+      ["region-8", "region-9"],
+      ["region-10", "region-11"],
+      ["region-12", "region-13"]
+    ]
+  }
+};
+
+function withProductColoringConfig(product) {
+  const config = productColoringConfigs[String(product?.id || "")];
+  return config ? { ...product, ...config } : product;
+}
 
 let productsCache = null;
 let productsCacheTime = 0;
@@ -838,12 +858,12 @@ async function productPageResponse(request, env, product) {
 <html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 ${tags.title}${tags.description}${tags.extra}
 <link rel="preload" href="/assets/fonts/ge-ss-two-bold.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/styles.min.css"><link rel="stylesheet" href="/product-page.css?v=4">
+<link rel="stylesheet" href="/styles.min.css"><link rel="stylesheet" href="/product-page.css?v=6">
 </head><body class="standalone-product-page">
 <header class="site-header" data-elevated="false"><div class="brand-cluster"><a class="brand" href="/" aria-label="مكتبة البابا كيرلس"><span class="brand-logo-wrap"><img src="/assets/optimized/logo-papa-kyrillos-original.webp" alt="" width="160" height="160" decoding="async"></span><span><strong>مكتبة البابا كيرلس</strong><small>مستلزمات الكنائس والخدمة</small></span></a></div><nav class="main-nav" aria-label="التنقل الرئيسي"><a href="/#categories">الأقسام</a><a href="/#catalog">المنتجات</a></nav><div class="header-actions"><a class="cart-toggle" href="/cart" aria-label="فتح السلة"><span>السلة</span><span class="cart-count" data-cart-count>0</span></a></div></header>
 <main class="product-route-main"><a class="product-route-back" href="/#catalog">العودة إلى المنتجات</a><div id="product-detail" aria-label="${name}"></div><section class="product-route-related" aria-labelledby="related-title"><h2 id="related-title">منتجات مشابهة</h2><div class="product-grid" data-related-products></div></section></main>
 <footer class="product-route-footer"><strong>مكتبة البابا كيرلس</strong><span>مستلزمات الكنائس والخدمة</span><a href="/policies">السياسات</a><a href="https://wa.me/201016125589">تواصل معنا</a></footer>
-<div class="toast" data-toast role="status" aria-live="polite"></div><script id="product-data" type="application/json">${safeProduct}</script><script src="/product-page.js?v=4" defer></script></body></html>`;
+<div class="toast" data-toast role="status" aria-live="polite"></div><script id="product-data" type="application/json">${safeProduct}</script><script src="/product-page.js?v=7" defer></script></body></html>`;
   return new Response(html, {
     status: 200,
     headers: {
@@ -1553,7 +1573,7 @@ async function handleRequest(request, env, ctx) {
     if (url.pathname === "/api/catalog") return catalogApiResponse(request, env, ctx);
     if (url.pathname.startsWith("/api/products/")) {
       const products = await loadProducts(env, request, { maxAgeMs: 600000 });
-      const product = productByIdOrSlug(products, url.pathname.slice("/api/products/".length));
+      const product = withProductColoringConfig(productByIdOrSlug(products, url.pathname.slice("/api/products/".length)));
       return product ? productApiResponse(request, env, product) : new Response(JSON.stringify({ error: "not_found" }), { status: 404, headers: { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" } });
     }
     if (url.pathname === "/api/meta-catalog-feed.xml") return catalogFeedResponse(request, env, { includePrice: true });
@@ -1572,7 +1592,7 @@ async function handleRequest(request, env, ctx) {
 
     if (legacyProductUrl(url) || url.pathname.startsWith("/products/")) {
       const products = await loadProducts(env, request);
-      const product = productFromUrl(products, url);
+      const product = withProductColoringConfig(productFromUrl(products, url));
       if (legacyProductUrl(url) && product) return redirectToProduct(product, url);
       if (url.pathname.startsWith("/products/")) {
         if (!product) return notFoundResponse();

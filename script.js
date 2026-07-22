@@ -86,6 +86,7 @@ let catalogPage = 1;
 let catalogTotal = 0;
 let catalogHasMore = false;
 let catalogRequestController = null;
+let staticCatalogProducts = null;
 let bestSellerProducts = [];
 const productDetailsCache = new Map();
 const productDetailsRequests = new Map();
@@ -3085,6 +3086,168 @@ function isOptionValueEnabled(product, optionName, value) {
   return variants.some((variant) => variant.options?.[optionName] === value);
 }
 
+function isIotaMedalProduct(product) {
+  const searchable = normalizedSearch([
+    localized(product?.name),
+    product?.label,
+    ...(Array.isArray(product?.tags) ? product.tags : []),
+    ...(Array.isArray(product?.searchKeywords) ? product.searchKeywords : [])
+  ].join(" "));
+  return /(?:يوتا|يوطا)/.test(searchable) && /(?:مادلي|ميدالي)/.test(searchable);
+}
+
+function coloringGameHtml(image, productName) {
+  const colors = ["#e53935", "#fb8c00", "#fdd835", "#43a047", "#1e88e5", "#8e24aa", "#ec407a", "#6d4c41"];
+  const label = isEnglish() ? "Color the Iota medal" : "لوّن مادلية اليوتا";
+  return `
+    <section class="iota-coloring-game" data-coloring-game data-coloring-source="${escapeHtml(image)}" hidden>
+      <div class="iota-coloring-header">
+        <div>
+          <strong>${label}</strong>
+          <small>${isEnglish() ? "Draw over the medal and save your artwork" : "ارسم فوق المادلية واحفظ لوحتك"}</small>
+        </div>
+        <button class="iota-coloring-close" type="button" data-coloring-close aria-label="${isEnglish() ? "Close coloring game" : "إغلاق لعبة التلوين"}">×</button>
+      </div>
+      <div class="iota-coloring-canvas-wrap">
+        <canvas data-coloring-canvas role="img" aria-label="${escapeHtml(label + " - " + productName)}"></canvas>
+        <span class="iota-coloring-loading" data-coloring-loading>${isEnglish() ? "Preparing the drawing…" : "بنجهّز الرسمة…"}</span>
+      </div>
+      <div class="iota-coloring-palette" aria-label="${isEnglish() ? "Color palette" : "لوحة الألوان"}">
+        ${colors.map((color, index) => `
+          <button
+            class="iota-color-swatch ${index === 0 ? "active" : ""}"
+            type="button"
+            data-coloring-color="${color}"
+            style="--swatch:${color}"
+            aria-label="${isEnglish() ? `Color ${index + 1}` : `اللون ${displayText(formatter.format(index + 1))}`}"
+            aria-pressed="${index === 0 ? "true" : "false"}"
+          ></button>
+        `).join("")}
+      </div>
+      <div class="iota-coloring-tools">
+        <label>
+          <span>${isEnglish() ? "Brush" : "حجم القلم"}</span>
+          <input type="range" min="8" max="54" value="24" data-coloring-size />
+        </label>
+        <button type="button" data-coloring-eraser aria-pressed="false">${isEnglish() ? "Eraser" : "الممحاة"}</button>
+        <button type="button" data-coloring-reset>${isEnglish() ? "Start over" : "ابدأ من جديد"}</button>
+        <button class="primary" type="button" data-coloring-download>${isEnglish() ? "Save drawing" : "احفظ الرسمة"}</button>
+      </div>
+    </section>
+  `;
+}
+
+function initializeColoringGame(panel) {
+  if (!panel || panel.dataset.ready === "true") return;
+  const canvas = panel.querySelector("[data-coloring-canvas]");
+  const loading = panel.querySelector("[data-coloring-loading]");
+  const source = panel.dataset.coloringSource;
+  if (!canvas || !source) return;
+
+  const image = new Image();
+  image.decoding = "async";
+  image.onload = () => {
+    const maxSize = 1000;
+    const scale = Math.min(1, maxSize / Math.max(image.naturalWidth, image.naturalHeight));
+    canvas.width = Math.max(1, Math.round(image.naturalWidth * scale));
+    canvas.height = Math.max(1, Math.round(image.naturalHeight * scale));
+    const paint = document.createElement("canvas");
+    paint.width = canvas.width;
+    paint.height = canvas.height;
+    const paintContext = paint.getContext("2d");
+    const context = canvas.getContext("2d");
+    let color = "#e53935";
+    let size = 24;
+    let erasing = false;
+    let drawing = false;
+    let previous = null;
+
+    const render = () => {
+      context.clearRect(0, 0, canvas.width, canvas.height);
+      context.drawImage(image, 0, 0, canvas.width, canvas.height);
+      context.save();
+      context.globalCompositeOperation = "multiply";
+      context.drawImage(paint, 0, 0);
+      context.restore();
+    };
+    const pointFromEvent = (event) => {
+      const bounds = canvas.getBoundingClientRect();
+      return {
+        x: (event.clientX - bounds.left) * canvas.width / bounds.width,
+        y: (event.clientY - bounds.top) * canvas.height / bounds.height
+      };
+    };
+    const drawTo = (point) => {
+      paintContext.save();
+      paintContext.globalCompositeOperation = erasing ? "destination-out" : "source-over";
+      paintContext.strokeStyle = color;
+      paintContext.globalAlpha = 0.72;
+      paintContext.lineWidth = size * canvas.width / 700;
+      paintContext.lineCap = "round";
+      paintContext.lineJoin = "round";
+      paintContext.beginPath();
+      paintContext.moveTo(previous?.x ?? point.x, previous?.y ?? point.y);
+      paintContext.lineTo(point.x, point.y);
+      paintContext.stroke();
+      paintContext.restore();
+      previous = point;
+      render();
+    };
+
+    canvas.addEventListener("pointerdown", (event) => {
+      drawing = true;
+      previous = pointFromEvent(event);
+      canvas.setPointerCapture(event.pointerId);
+      drawTo(previous);
+    });
+    canvas.addEventListener("pointermove", (event) => {
+      if (drawing) drawTo(pointFromEvent(event));
+    });
+    const stopDrawing = () => { drawing = false; previous = null; };
+    canvas.addEventListener("pointerup", stopDrawing);
+    canvas.addEventListener("pointercancel", stopDrawing);
+
+    panel.querySelectorAll("[data-coloring-color]").forEach((button) => {
+      button.addEventListener("click", () => {
+        color = button.dataset.coloringColor;
+        erasing = false;
+        panel.querySelectorAll("[data-coloring-color]").forEach((item) => {
+          const active = item === button;
+          item.classList.toggle("active", active);
+          item.setAttribute("aria-pressed", active ? "true" : "false");
+        });
+        panel.querySelector("[data-coloring-eraser]")?.setAttribute("aria-pressed", "false");
+      });
+    });
+    panel.querySelector("[data-coloring-size]")?.addEventListener("input", (event) => {
+      size = Number(event.target.value) || 24;
+    });
+    panel.querySelector("[data-coloring-eraser]")?.addEventListener("click", (event) => {
+      erasing = !erasing;
+      event.currentTarget.setAttribute("aria-pressed", erasing ? "true" : "false");
+    });
+    panel.querySelector("[data-coloring-reset]")?.addEventListener("click", () => {
+      paintContext.clearRect(0, 0, paint.width, paint.height);
+      render();
+    });
+    panel.querySelector("[data-coloring-download]")?.addEventListener("click", () => {
+      render();
+      const link = document.createElement("a");
+      link.download = `iota-coloring-${Date.now()}.png`;
+      link.href = canvas.toDataURL("image/png");
+      link.click();
+    });
+
+    panel.dataset.ready = "true";
+    if (loading) loading.hidden = true;
+    render();
+  };
+  image.onerror = () => {
+    if (loading) loading.textContent = isEnglish() ? "The drawing could not be opened." : "تعذر فتح الرسمة.";
+  };
+  image.src = source;
+}
+
 function renderProductModal() {
   const product = getProduct(state.modal.productId);
   if (!product) return;
@@ -3115,6 +3278,7 @@ function renderProductModal() {
   const productName = escapeHtml(productDisplayName);
   const shareUrl = productShareUrl(product.id);
   const whatsappShareUrl = `https://wa.me/?text=${encodeURIComponent(t("productShareMessage", { name: productDisplayName, url: shareUrl }))}`;
+  const hasColoringGame = isIotaMedalProduct(product) && Boolean(activeImage);
 
   const media = activeImage
     ? `
@@ -3217,6 +3381,7 @@ function renderProductModal() {
   productModalBody.innerHTML = `
     <div class="product-modal-media">
       ${media}
+      ${hasColoringGame ? coloringGameHtml(activeDetailImage, productDisplayName) : ""}
     </div>
     <div class="product-modal-copy">
       <p class="eyebrow">${escapeHtml(localized(product.label || "منتج"))}</p>
@@ -3238,6 +3403,12 @@ function renderProductModal() {
         </a>
       </div>
       <p class="modal-description">${formatDescriptionHtml(description)}</p>
+      ${hasColoringGame ? `
+        <button class="button iota-coloring-launch" type="button" data-coloring-open>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4Z"/></svg>
+          ${isEnglish() ? "Play: color this medal" : "العب ولوّن المادلية دي"}
+        </button>
+      ` : ""}
       ${optionGroups ? `<div class="variant-options">${optionGroups}</div>` : ""}
       <div class="variant-summary">
         <span>${t("currentPrice")}</span>
@@ -4647,6 +4818,17 @@ function catalogApiUrl(page = 1) {
 }
 
 async function loadCatalogPage({ reset = false } = {}) {
+  if (staticCatalogProducts) {
+    products = staticCatalogProducts;
+    if (reset) state.visibleProductCount = productBatchSize;
+    else state.visibleProductCount += productBatchSize;
+    catalogTotal = getFilteredProducts().length;
+    catalogHasMore = state.visibleProductCount < catalogTotal;
+    productsAssetVersion = "products-json";
+    renderProducts();
+    return;
+  }
+
   const nextPage = reset ? 1 : catalogPage + 1;
   catalogRequestController?.abort();
   catalogRequestController = new AbortController();
@@ -4664,10 +4846,25 @@ async function loadCatalogPage({ reset = false } = {}) {
     productsAssetVersion = response.headers.get("ETag") || response.headers.get("Last-Modified") || "products";
   } catch (error) {
     if (error?.name === "AbortError") return;
-    console.warn("Could not load products.json, using fallback products.", error);
-    if (reset) products = fallbackProducts.slice(0, productBatchSize);
-    catalogHasMore = false;
-    productsAssetVersion = "fallback";
+    console.warn("Could not load the catalog API; loading the static catalog.", error);
+    try {
+      const response = await fetch(`/products.json?v=${encodeURIComponent(catalogSchemaVersion)}`, { cache: "default" });
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const payload = await response.json();
+      staticCatalogProducts = Array.isArray(payload) ? payload : Array.isArray(payload.products) ? payload.products : [];
+      if (!staticCatalogProducts.length) throw new Error("Static catalog is empty");
+      products = staticCatalogProducts;
+      state.visibleProductCount = reset ? productBatchSize : state.visibleProductCount + productBatchSize;
+      catalogTotal = getFilteredProducts().length;
+      catalogHasMore = state.visibleProductCount < catalogTotal;
+      productsAssetVersion = response.headers.get("ETag") || response.headers.get("Last-Modified") || "products-json";
+    } catch (staticError) {
+      console.warn("Could not load products.json, using fallback products.", staticError);
+      if (reset) products = fallbackProducts.slice();
+      catalogTotal = getFilteredProducts().length;
+      catalogHasMore = state.visibleProductCount < catalogTotal;
+      productsAssetVersion = "fallback";
+    }
   } finally {
     if (loadMoreButton) loadMoreButton.disabled = false;
   }
@@ -5083,6 +5280,28 @@ productModal.addEventListener("click", (event) => {
   const closeButton = event.target.closest("[data-product-modal-close]");
   if (closeButton) {
     closeProductModal();
+    return;
+  }
+
+  const coloringOpenButton = event.target.closest("[data-coloring-open]");
+  if (coloringOpenButton) {
+    const media = productModalBody.querySelector(".product-modal-media");
+    const panel = media?.querySelector("[data-coloring-game]");
+    if (media && panel) {
+      panel.hidden = false;
+      media.classList.add("is-coloring");
+      initializeColoringGame(panel);
+      panel.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+    return;
+  }
+
+  const coloringCloseButton = event.target.closest("[data-coloring-close]");
+  if (coloringCloseButton) {
+    const media = coloringCloseButton.closest(".product-modal-media");
+    const panel = coloringCloseButton.closest("[data-coloring-game]");
+    if (panel) panel.hidden = true;
+    media?.classList.remove("is-coloring");
     return;
   }
 
