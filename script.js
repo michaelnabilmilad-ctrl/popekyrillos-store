@@ -3087,7 +3087,7 @@ function isOptionValueEnabled(product, optionName, value) {
 }
 
 function isIotaMedalProduct(product) {
-  const searchable = normalizedSearch([
+  const searchable = normalizeSearchText([
     localized(product?.name),
     product?.label,
     ...(Array.isArray(product?.tags) ? product.tags : []),

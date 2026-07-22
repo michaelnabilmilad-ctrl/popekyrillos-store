@@ -45,3 +45,12 @@ test("runtime coloring code does not use flood fill, tolerance, or edge detectio
   assert.match(source, /regionByMaskKey/);
   assert.match(source, /globalCompositeOperation = "multiply"/);
 });
+
+test("product quick view uses the storefront search normalizer", () => {
+  const source = fs.readFileSync(path.join(root, "script.js"), "utf8");
+  const start = source.indexOf("function isIotaMedalProduct");
+  const end = source.indexOf("function coloringGameHtml", start);
+  const detector = source.slice(start, end);
+  assert.match(detector, /normalizeSearchText\(/);
+  assert.doesNotMatch(detector, /normalizedSearch\(/);
+});
