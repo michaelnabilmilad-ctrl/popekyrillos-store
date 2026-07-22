@@ -792,13 +792,19 @@ const taxonomy = window.POPE_KYRILLOS_TAXONOMY || null;
 const taxonomyCategories = taxonomy?.customerCategories?.() || [];
 const taxonomyCategoryOrder = taxonomyCategories.map((category) => category.id);
 const legacyCategoryToMainCategory = {
-  brass: "altar-tools",
-  candles: "candles-incense",
+  brass: "altar-vessels",
+  "altar-tools": "altar-vessels",
+  "altar-vessels": "altar-vessels",
+  candles: "censers-incense",
+  "candles-incense": "censers-incense",
+  "censers-incense": "censers-incense",
+  "candles-lamps": "candles-lamps",
   vestments: "church-vestments",
   icons: "icons-frames",
   books: "books-rituals",
   atb3ho: "occasions-service",
-  "gifts-accessories": "occasions-service"
+  "gifts-accessories": "occasions-service",
+  "occasions-service": "occasions-service"
 };
 
 const featuredProductOrder = [
@@ -1146,8 +1152,9 @@ function mainCategoryTileArt(categoryId) {
 
 function normalizeCategoryFilter(category = "all") {
   if (!category || category === "all") return "all";
+  if (legacyCategoryToMainCategory[category]) return legacyCategoryToMainCategory[category];
   if (taxonomy?.categoryById?.has(category)) return category;
-  return legacyCategoryToMainCategory[category] || "all";
+  return "all";
 }
 
 function productMainCategoryId(product) {
