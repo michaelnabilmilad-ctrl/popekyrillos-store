@@ -546,18 +546,6 @@ async function productApiResponse(request, env, product) {
 async function loadTaxonomySource(env, request, { maxAgeMs = 5000 } = {}) {
   if (taxonomyCache && Date.now() - taxonomyCacheTime < maxAgeMs) return taxonomyCache;
 
-  try {
-    const latest = await githubFetchText(env, "category-taxonomy.js");
-    if (latest.text.includes("window.POPE_KYRILLOS_TAXONOMY") && latest.text.includes("subcategoryImage")) {
-      taxonomyCache = latest.text;
-      taxonomyCacheTime = Date.now();
-      taxonomyCacheSha = latest.sha;
-      return taxonomyCache;
-    }
-  } catch (error) {
-    console.warn("Could not load category-taxonomy.js from GitHub, falling back to deployed assets.", error);
-  }
-
   const response = await env.ASSETS.fetch(rewriteRequest(request, "/category-taxonomy.js"));
   if (!response.ok) return "";
   taxonomyCache = await response.text();
