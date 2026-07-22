@@ -1832,12 +1832,70 @@ function productSearchHaystack(product) {
   ]);
 }
 
-function productMatchesSearch(product, query = "") {
+function searchEditDistance(first = "", second = "", maxDistance = Infinity) {
+  if (first === second) return 0;
+  if (!first || !second) return Math.max(first.length, second.length);
+  if (Math.abs(first.length - second.length) > maxDistance) return maxDistance + 1;
+
+  let previous = Array.from({ length: second.length + 1 }, (_, index) => index);
+  for (let firstIndex = 1; firstIndex <= first.length; firstIndex += 1) {
+    const current = [firstIndex];
+    let rowMinimum = current[0];
+    for (let secondIndex = 1; secondIndex <= second.length; secondIndex += 1) {
+      const substitutionCost = first[firstIndex - 1] === second[secondIndex - 1] ? 0 : 1;
+      current[secondIndex] = Math.min(
+        previous[secondIndex] + 1,
+        current[secondIndex - 1] + 1,
+        previous[secondIndex - 1] + substitutionCost
+      );
+      rowMinimum = Math.min(rowMinimum, current[secondIndex]);
+    }
+    if (rowMinimum > maxDistance) return maxDistance + 1;
+    previous = current;
+  }
+  return previous[second.length];
+}
+
+function fuzzySearchDistance(queryToken, candidateToken) {
+  const shortestLength = Math.min(queryToken.length, candidateToken.length);
+  if (shortestLength < 3) return Infinity;
+  const allowedDistance = shortestLength >= 7 ? 2 : 1;
+  const distance = searchEditDistance(queryToken, candidateToken, allowedDistance);
+  return distance <= allowedDistance ? distance : Infinity;
+}
+
+function productSearchScore(product, query = "") {
   const groups = searchQueryGroups(query);
-  if (!groups.length) return true;
+  if (!groups.length) return 0;
 
   const haystack = productSearchHaystack(product);
-  return groups.every((group) => group.some((term) => haystack.includes(term)));
+  const haystackTokens = searchTokens(haystack);
+  let totalScore = 0;
+
+  for (const group of groups) {
+    let groupScore = Infinity;
+    for (const term of group) {
+      if (haystack === term) groupScore = Math.min(groupScore, 0);
+      else if (haystack.includes(term)) groupScore = Math.min(groupScore, 1);
+
+      for (const candidate of haystackTokens) {
+        if (candidate === term) groupScore = Math.min(groupScore, 0);
+        else if (term.length >= 3 && candidate.startsWith(term)) groupScore = Math.min(groupScore, 1);
+        else {
+          const distance = fuzzySearchDistance(term, candidate);
+          if (Number.isFinite(distance)) groupScore = Math.min(groupScore, 2 + distance);
+        }
+      }
+    }
+    if (!Number.isFinite(groupScore)) return Infinity;
+    totalScore += groupScore;
+  }
+
+  return totalScore;
+}
+
+function productMatchesSearch(product, query = "") {
+  return Number.isFinite(productSearchScore(product, query));
 }
 
 function productSlug(product) {
@@ -2139,6 +2197,10 @@ function compareFilteredProducts(first, second) {
     if (firstPrice !== secondPrice) {
       return state.sortFilter === "price-desc" ? secondPrice - firstPrice : firstPrice - secondPrice;
     }
+  }
+
+  if (state.search.trim() && first.searchScore !== second.searchScore) {
+    return first.searchScore - second.searchScore;
   }
 
   // The catalog API already applies the requested global order before pagination.
@@ -2900,12 +2962,12 @@ function cleanDescription(description = "") {
 function getFilteredProducts() {
   const query = state.search.trim();
   return products
-    .map((product, index) => ({ product, index }))
-    .filter(({ product }) => {
+    .map((product, index) => ({ product, index, searchScore: productSearchScore(product, query) }))
+    .filter(({ product, searchScore }) => {
       if (!hasAvailableVariant(product) && product?.source !== "atb3ho") return false;
       const matchesCategory = productMatchesCategory(product, state.filter);
       const matchesLabel = productMatchesSubcategory(product, state.labelFilter);
-      return matchesCategory && matchesLabel && matchesPriceFilter(product) && productMatchesSearch(product, query);
+      return matchesCategory && matchesLabel && matchesPriceFilter(product) && Number.isFinite(searchScore);
     })
     .sort(compareFilteredProducts)
     .map(({ product }) => product);

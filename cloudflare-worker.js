@@ -373,7 +373,62 @@ async function loadThumbnailManifest(env, request) {
 }
 
 function normalizedSearch(value = "") {
-  return String(value).normalize("NFKD").toLocaleLowerCase("ar").replace(/\s+/g, " ").trim();
+  return String(value).normalize("NFKD")
+    .replace(/[\u064b-\u065f\u0670\u0640]/g, "")
+    .replace(/[أإآٱ]/g, "ا").replace(/ى/g, "ي").replace(/ة/g, "ه").replace(/ؤ/g, "و").replace(/ئ/g, "ي")
+    .toLocaleLowerCase("ar").replace(/[^\p{L}\p{N}]+/gu, " ").replace(/\s+/g, " ").trim();
+}
+
+const catalogSearchAliases = [["yota", "iota", "يوتا", "يوطا"], ["icon", "icons", "ايقونه", "ايقونات"], ["cross", "crosses", "salib", "saleeb", "صليب", "صلبان"]];
+
+function catalogSearchTerms(value = "") {
+  const tokens = normalizedSearch(value).split(" ").filter(Boolean);
+  return tokens.map((token) => {
+    const aliases = catalogSearchAliases.find((group) => group.map(normalizedSearch).includes(token)) || [];
+    return [...new Set([token, ...aliases.map(normalizedSearch)])];
+  });
+}
+
+function catalogEditDistance(first, second, maxDistance) {
+  if (first === second) return 0;
+  if (Math.abs(first.length - second.length) > maxDistance) return maxDistance + 1;
+  let previous = Array.from({ length: second.length + 1 }, (_, index) => index);
+  for (let row = 1; row <= first.length; row += 1) {
+    const current = [row];
+    for (let column = 1; column <= second.length; column += 1) {
+      current[column] = Math.min(previous[column] + 1, current[column - 1] + 1, previous[column - 1] + (first[row - 1] === second[column - 1] ? 0 : 1));
+    }
+    previous = current;
+  }
+  return previous[second.length];
+}
+
+function catalogSearchScore(product, search) {
+  if (!search) return 0;
+  const haystack = normalizedSearch([
+    localized(product?.name), product?.label, product?.description, catalogMainCategoryId(product), product?.subcategory, product?.subCategory,
+    ...(Array.isArray(product?.tags) ? product.tags : []), ...(Array.isArray(product?.searchKeywords) ? product.searchKeywords : [])
+  ].join(" "));
+  const candidates = haystack.split(" ").filter(Boolean);
+  let score = 0;
+  for (const group of catalogSearchTerms(search)) {
+    let best = Infinity;
+    for (const term of group) {
+      if (haystack.includes(term)) best = Math.min(best, 1);
+      for (const candidate of candidates) {
+        if (candidate === term) best = 0;
+        else if (term.length >= 3 && candidate.startsWith(term)) best = Math.min(best, 1);
+        else if (Math.min(term.length, candidate.length) >= 3) {
+          const allowed = Math.min(term.length, candidate.length) >= 7 ? 2 : 1;
+          const distance = catalogEditDistance(term, candidate, allowed);
+          if (distance <= allowed) best = Math.min(best, 2 + distance);
+        }
+      }
+    }
+    if (!Number.isFinite(best)) return Infinity;
+    score += best;
+  }
+  return score;
 }
 
 const catalogMainCategoryIds = [
@@ -431,12 +486,7 @@ function catalogProductMatches(product, params) {
   if (price === "1000-5000" && !(amount !== null && amount >= 1000 && amount <= 5000)) return false;
   if (price === "over-5000" && !(amount !== null && amount > 5000)) return false;
   if (search) {
-    const haystack = normalizedSearch([
-      localized(product?.name), product?.label, product?.description, productCategory, productSubcategory,
-      ...(Array.isArray(product?.tags) ? product.tags : []),
-      ...(Array.isArray(product?.searchKeywords) ? product.searchKeywords : [])
-    ].join(" "));
-    if (!haystack.includes(search)) return false;
+    if (!Number.isFinite(catalogSearchScore(product, search))) return false;
   }
   return true;
 }
@@ -452,7 +502,7 @@ async function catalogApiResponse(request, env, ctx) {
   const page = Math.max(1, Math.trunc(Number(url.searchParams.get("page"))) || 1);
   const limit = Math.min(48, Math.max(1, Math.trunc(Number(url.searchParams.get("limit"))) || 12));
   const cacheUrl = new URL(url.origin + url.pathname);
-  cacheUrl.searchParams.set("schema", "9");
+  cacheUrl.searchParams.set("schema", "10");
   cacheUrl.searchParams.set("thumbnails", "plain-iota-v2");
   [...url.searchParams.entries()].sort(([a], [b]) => a.localeCompare(b)).forEach(([key, value]) => cacheUrl.searchParams.append(key, value));
   const allProducts = await loadProducts(env, request, { maxAgeMs: 600000 });
@@ -462,7 +512,11 @@ async function catalogApiResponse(request, env, ctx) {
   const edgeCache = caches.default;
   const cached = await edgeCache.match(cacheKey);
   if (cached) return cached;
+  const search = normalizedSearch(url.searchParams.get("search") || "");
   const matched = sortCatalogProducts(allProducts.filter((product) => catalogProductMatches(product, url.searchParams)), url.searchParams.get("sort") || "default");
+  if (search && !["price-asc", "price-desc"].includes(url.searchParams.get("sort") || "default")) {
+    matched.sort((first, second) => catalogSearchScore(first, search) - catalogSearchScore(second, search));
+  }
   const start = (page - 1) * limit;
   const body = JSON.stringify({ items: matched.slice(start, start + limit).map((product) => catalogDto(product, thumbnailManifest)), page, limit, total: matched.length, hasMore: start + limit < matched.length });
   const response = new Response(body, { headers: { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "public, max-age=0, must-revalidate", "CDN-Cache-Control": "public, max-age=600, stale-while-revalidate=300" } });
