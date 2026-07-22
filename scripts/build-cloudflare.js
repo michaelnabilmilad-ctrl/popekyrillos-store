@@ -23,6 +23,7 @@ const files = [
   "subcategory-image-policy.js",
   "products.json",
   "thumbnail-manifest.json",
+  "thumbnail-manifest-v2.json",
   "sitemap.xml",
   "robots.txt",
   "policies.html",

@@ -345,7 +345,7 @@ function catalogDto(product, thumbnailManifest) {
 
 async function loadThumbnailManifest(env, request) {
   if (thumbnailManifestCache) return thumbnailManifestCache;
-  const response = await env.ASSETS.fetch(rewriteRequest(request, "/thumbnail-manifest.json"));
+  const response = await env.ASSETS.fetch(rewriteRequest(request, "/thumbnail-manifest-v2.json"));
   if (!response.ok) return {};
   try { thumbnailManifestCache = await response.json(); } catch { thumbnailManifestCache = {}; }
   return thumbnailManifestCache;
@@ -391,7 +391,7 @@ async function catalogApiResponse(request, env, ctx) {
   const page = Math.max(1, Math.trunc(Number(url.searchParams.get("page"))) || 1);
   const limit = Math.min(48, Math.max(1, Math.trunc(Number(url.searchParams.get("limit"))) || 12));
   const cacheUrl = new URL(url.origin + url.pathname);
-  cacheUrl.searchParams.set("schema", "5");
+  cacheUrl.searchParams.set("schema", "6");
   [...url.searchParams.entries()].sort(([a], [b]) => a.localeCompare(b)).forEach(([key, value]) => cacheUrl.searchParams.append(key, value));
   const allProducts = await loadProducts(env, request, { maxAgeMs: 600000 });
   const thumbnailManifest = await loadThumbnailManifest(env, request);
