@@ -8,10 +8,11 @@ const productsPath = path.join(root, "products.json");
 const sizes = [320, 480, 640];
 const products = JSON.parse(fs.readFileSync(productsPath, "utf8"));
 
-function filename(product) {
+function filename(product, source = "") {
   const raw = String(product.id || product.slug || "product").replace(/[^a-zA-Z0-9_-]+/g, "-");
   const safe = raw.length > 80 ? `${raw.slice(0, 56)}-${crypto.createHash("sha1").update(raw).digest("hex").slice(0, 12)}` : raw;
-  return `${safe}.webp`;
+  const sourceVersion = crypto.createHash("sha1").update(String(source)).digest("hex").slice(0, 10);
+  return `${safe}-${sourceVersion}.webp`;
 }
 
 async function sourceBuffer(source) {
@@ -32,7 +33,7 @@ async function sourceBuffer(source) {
     if (!source) continue;
     try {
       const buffer = await sourceBuffer(source);
-      const targetName = filename(product);
+      const targetName = filename(product, source);
       for (const width of sizes) {
         const directory = path.join(root, "assets", "thumbnails", String(width));
         await fs.promises.mkdir(directory, { recursive: true });
