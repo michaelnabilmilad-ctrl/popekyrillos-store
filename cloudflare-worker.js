@@ -389,6 +389,16 @@ const legacyCatalogCategoryIds = {
   gifts: "occasions-service"
 };
 
+const namedCatalogCategoryIds = {
+  "مستلزمات المذبح والخدمة": "altar-vessels",
+  "الصلبان": "crosses",
+  "الأيقونات والبراويز": "icons-frames",
+  "الكتب والطقوس": "books-rituals",
+  "الهدايا والإكسسوارات": "occasions-service",
+  "الملابس والمفارش الكنسية": "church-vestments",
+  "تجهيزات الكنيسة": "church-equipment"
+};
+
 function catalogMainCategoryId(product) {
   const mainCategory = String(product?.mainCategory || "").trim();
   if (catalogMainCategoryIds.includes(mainCategory)) return mainCategory;
@@ -398,6 +408,10 @@ function catalogMainCategoryId(product) {
   ].map((value) => String(value));
   const discovered = catalogMainCategoryIds.find((id) => discoveryValues.includes(id));
   if (discovered) return discovered;
+  if (mainCategory === "الشمع والبخور") {
+    return String(product?.category || "") === "brass" ? "censers-incense" : "candles-lamps";
+  }
+  if (namedCatalogCategoryIds[mainCategory]) return namedCatalogCategoryIds[mainCategory];
   return legacyCatalogCategoryIds[String(product?.category || "")] || mainCategory || "uncategorized";
 }
 
@@ -437,7 +451,7 @@ async function catalogApiResponse(request, env, ctx) {
   const page = Math.max(1, Math.trunc(Number(url.searchParams.get("page"))) || 1);
   const limit = Math.min(48, Math.max(1, Math.trunc(Number(url.searchParams.get("limit"))) || 12));
   const cacheUrl = new URL(url.origin + url.pathname);
-  cacheUrl.searchParams.set("schema", "7");
+  cacheUrl.searchParams.set("schema", "8");
   cacheUrl.searchParams.set("thumbnails", "plain-iota-v2");
   [...url.searchParams.entries()].sort(([a], [b]) => a.localeCompare(b)).forEach(([key, value]) => cacheUrl.searchParams.append(key, value));
   const allProducts = await loadProducts(env, request, { maxAgeMs: 600000 });
