@@ -384,7 +384,12 @@ const catalogSearchAliases = [["yota", "iota", "يوتا", "يوطا"], ["icon",
 function catalogSearchTerms(value = "") {
   const tokens = normalizedSearch(value).split(" ").filter(Boolean);
   return tokens.map((token) => {
-    const aliases = catalogSearchAliases.find((group) => group.map(normalizedSearch).includes(token)) || [];
+    const aliases = catalogSearchAliases.find((group) => group.map(normalizedSearch).some((alias) => {
+      if (alias === token) return true;
+      const shortest = Math.min(alias.length, token.length);
+      if (shortest < 3) return false;
+      return catalogEditDistance(alias, token, shortest >= 7 ? 2 : 1) <= (shortest >= 7 ? 2 : 1);
+    })) || [];
     return [...new Set([token, ...aliases.map(normalizedSearch)])];
   });
 }
@@ -502,7 +507,7 @@ async function catalogApiResponse(request, env, ctx) {
   const page = Math.max(1, Math.trunc(Number(url.searchParams.get("page"))) || 1);
   const limit = Math.min(48, Math.max(1, Math.trunc(Number(url.searchParams.get("limit"))) || 12));
   const cacheUrl = new URL(url.origin + url.pathname);
-  cacheUrl.searchParams.set("schema", "10");
+  cacheUrl.searchParams.set("schema", "11");
   cacheUrl.searchParams.set("thumbnails", "plain-iota-v2");
   [...url.searchParams.entries()].sort(([a], [b]) => a.localeCompare(b)).forEach(([key, value]) => cacheUrl.searchParams.append(key, value));
   const allProducts = await loadProducts(env, request, { maxAgeMs: 600000 });
