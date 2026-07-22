@@ -358,7 +358,7 @@ function catalogDto(product, thumbnailManifest) {
     price: productPrice(product),
     thumbnail: catalogThumbnail(product, thumbnailManifest),
     availability: hasAvailableVariant(product) ? "available" : "unavailable",
-    category: product?.mainCategory || product?.category || "",
+    category: catalogMainCategoryId(product),
     subcategory: product?.subcategory || product?.subCategory || ""
   };
 }
@@ -375,16 +375,42 @@ function normalizedSearch(value = "") {
   return String(value).normalize("NFKD").toLocaleLowerCase("ar").replace(/\s+/g, " ").trim();
 }
 
+const catalogMainCategoryIds = [
+  "altar-vessels", "censers-incense", "candles-lamps", "church-vestments", "crosses",
+  "icons-frames", "books-rituals", "occasions-service", "church-equipment"
+];
+
+const legacyCatalogCategoryIds = {
+  brass: "altar-vessels",
+  candles: "candles-lamps",
+  vestments: "church-vestments",
+  icons: "icons-frames",
+  books: "books-rituals",
+  gifts: "occasions-service"
+};
+
+function catalogMainCategoryId(product) {
+  const mainCategory = String(product?.mainCategory || "").trim();
+  if (catalogMainCategoryIds.includes(mainCategory)) return mainCategory;
+  const discoveryValues = [
+    ...(Array.isArray(product?.searchKeywords) ? product.searchKeywords : []),
+    ...(Array.isArray(product?.tags) ? product.tags : [])
+  ].map((value) => String(value));
+  const discovered = catalogMainCategoryIds.find((id) => discoveryValues.includes(id));
+  if (discovered) return discovered;
+  return legacyCatalogCategoryIds[String(product?.category || "")] || mainCategory || "uncategorized";
+}
+
 function catalogProductMatches(product, params) {
   if (!hasAvailableVariant(product)) return false;
   const category = params.get("category") || "all";
   const subcategory = params.get("subcategory") || "";
   const search = normalizedSearch(params.get("search") || "");
   const price = params.get("price") || "all";
-  const productCategory = String(product?.mainCategory || product?.category || "");
+  const productCategory = catalogMainCategoryId(product);
   const productSubcategory = String(product?.subcategory || product?.subCategory || "");
   const amount = productPrice(product);
-  if (category !== "all" && productCategory !== category && String(product?.category || "") !== category) return false;
+  if (category !== "all" && productCategory !== category) return false;
   if (subcategory && productSubcategory !== subcategory && String(product?.label || "") !== subcategory) return false;
   if (price === "under-1000" && !(amount !== null && amount < 1000)) return false;
   if (price === "1000-5000" && !(amount !== null && amount >= 1000 && amount <= 5000)) return false;
@@ -411,7 +437,7 @@ async function catalogApiResponse(request, env, ctx) {
   const page = Math.max(1, Math.trunc(Number(url.searchParams.get("page"))) || 1);
   const limit = Math.min(48, Math.max(1, Math.trunc(Number(url.searchParams.get("limit"))) || 12));
   const cacheUrl = new URL(url.origin + url.pathname);
-  cacheUrl.searchParams.set("schema", "6");
+  cacheUrl.searchParams.set("schema", "7");
   cacheUrl.searchParams.set("thumbnails", "plain-iota-v2");
   [...url.searchParams.entries()].sort(([a], [b]) => a.localeCompare(b)).forEach(([key, value]) => cacheUrl.searchParams.append(key, value));
   const allProducts = await loadProducts(env, request, { maxAgeMs: 600000 });
