@@ -5489,19 +5489,45 @@
       "assets/optimized/products/gallery/009-10120836481331-02.webp",
       "assets/optimized/products/gallery/009-10120836481331-03.webp"
     ],
-    "options": [],
+    "options": [
+      {
+        "name": "الاختيار",
+        "values": [
+          "كبير",
+          "صغير"
+        ]
+      }
+    ],
     "variants": [
       {
         "id": "old-53152749027635",
-        "title": "الاختيار الافتراضي",
-        "options": {},
-        "price": 3960,
+        "title": "كبير",
+        "options": {
+          "الاختيار": "كبير"
+        },
+        "price": 4200,
         "compareAtPrice": 4620,
         "available": true,
         "image": null,
         "images": [],
         "sku": "",
         "quantity": 12
+      },
+      {
+        "id": "old-10120836481331-variant-1785099528262-2",
+        "title": "صغير",
+        "options": {
+          "الاختيار": "صغير"
+        },
+        "price": 3600,
+        "compareAtPrice": null,
+        "available": true,
+        "image": "assets/optimized/products/gallery/009-10120836481331-01.webp",
+        "images": [
+          "assets/optimized/products/gallery/009-10120836481331-01.webp"
+        ],
+        "sku": "",
+        "quantity": null
       }
     ],
     "mainCategory": "الصلبان",
