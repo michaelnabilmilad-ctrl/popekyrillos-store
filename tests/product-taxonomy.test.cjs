@@ -3,8 +3,11 @@ const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const vm = require("node:vm");
 
-function loadTaxonomy() {
-  const context = { window: {} };
+function loadTaxonomy(storedTaxonomy = null) {
+  const context = {
+    window: {},
+    localStorage: { getItem: () => storedTaxonomy ? JSON.stringify(storedTaxonomy) : null }
+  };
   vm.createContext(context);
   vm.runInContext(fs.readFileSync("category-taxonomy.js", "utf8"), context);
   return context.window.POPE_KYRILLOS_TAXONOMY;
@@ -36,6 +39,30 @@ test("cross products are not classified under icons and frames", () => {
   const products = JSON.parse(fs.readFileSync("products.json", "utf8"));
   const misplaced = products.filter((product) => product.mainCategory === "icons-frames" && /صليب|صلبان/.test(product.name));
   assert.deepEqual(misplaced, []);
+});
+
+test("new plain cross subcategories are selectable, visible and migrate safely", () => {
+  const taxonomy = loadTaxonomy();
+  const expected = [
+    ["iota-plain-hand-crosses", "صلبان يد يوتا سادة"],
+    ["plain-cross-medals", "صلبان ميداليات سادة"]
+  ];
+  for (const [id, name] of expected) {
+    assert.equal(taxonomy.subcategoryById.get(id)?.mainId, "crosses");
+    assert.equal(taxonomy.subcategoryIdFromName(name), id);
+  }
+
+  const stored = JSON.parse(JSON.stringify(Array.from(taxonomy.defaultCategories)));
+  const crosses = stored.find((category) => category.id === "crosses");
+  crosses.subcategories = crosses.subcategories.filter((item) => !expected.some(([id]) => id === item.id));
+  crosses.subcategories.push({ id: "custom-kept", name: "قسم محفوظ" });
+  const migratedIds = Array.from(loadTaxonomy(stored).categoryById.get("crosses").subcategories, (item) => item.id);
+  assert.ok(migratedIds.includes("custom-kept"));
+  assert.ok(expected.every(([id]) => migratedIds.includes(id)));
+
+  const source = fs.readFileSync("script.js", "utf8");
+  assert.match(source, /alwaysVisibleSubcategoryIds\.has\(subcategory\.id\)/);
+  assert.doesNotMatch(JSON.stringify(expected), /مديليات/);
 });
 
 test("legacy gifts URL maps to occasions and tote bag card uses the stable meeting-gifts ID", () => {

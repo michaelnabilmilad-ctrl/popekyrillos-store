@@ -369,6 +369,16 @@
         "subcategoryImage": "assets/optimized/products/processional-cross.webp"
       },
       {
+        "id": "iota-plain-hand-crosses",
+        "name": "صلبان يد يوتا سادة",
+        "subcategoryImage": "assets/optimized/products/processional-cross.webp"
+      },
+      {
+        "id": "plain-cross-medals",
+        "name": "صلبان ميداليات سادة",
+        "subcategoryImage": "assets/optimized/products/processional-cross.webp"
+      },
+      {
         "id": "pectoral-crosses",
         "name": "صلبان صدر",
         "subcategoryImage": "assets/optimized/products/processional-cross.webp"
@@ -878,7 +888,21 @@
   }
 ];
   const stored = (() => { try { return JSON.parse(localStorage.getItem("pope-kyrillos-taxonomy") || "null"); } catch { return null; } })();
+  // Keep every locally managed category and product assignment, while making newly
+  // shipped subcategories available to browsers that cached an older taxonomy.
   const categories = Array.isArray(stored) && stored.length ? stored : defaultCategories;
+  const storedCrosses = categories.find((category) => category.id === "crosses");
+  const defaultCrosses = defaultCategories.find((category) => category.id === "crosses");
+  if (storedCrosses && defaultCrosses) {
+    const storedSubcategoryIds = new Set((storedCrosses.subcategories || []).map((subcategory) => subcategory.id));
+    const requiredSubcategoryIds = new Set(["iota-plain-hand-crosses", "plain-cross-medals"]);
+    storedCrosses.subcategories = storedCrosses.subcategories || [];
+    defaultCrosses.subcategories.forEach((subcategory) => {
+      if (requiredSubcategoryIds.has(subcategory.id) && !storedSubcategoryIds.has(subcategory.id)) {
+        storedCrosses.subcategories.push({ ...subcategory });
+      }
+    });
+  }
   const categoryById = new Map(categories.map(c => [c.id,c]));
   const categoryByName = new Map(categories.map(c => [c.name,c]));
   const subcategoryById = new Map(), subcategoryByName = new Map();

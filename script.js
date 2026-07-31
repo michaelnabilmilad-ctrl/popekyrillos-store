@@ -1198,12 +1198,15 @@ function availableProducts() {
   return products.filter(hasAvailableVariant);
 }
 
+const alwaysVisibleSubcategoryIds = new Set(["iota-plain-hand-crosses", "plain-cross-medals"]);
+
 function orderedLabelsForCategory(category) {
   const normalized = normalizeCategoryFilter(category);
   const categoryMeta = taxonomy?.categoryById?.get(normalized);
   if (categoryMeta) {
     return categoryMeta.subcategories
-      .filter((subcategory) => availableProducts().some((product) => productMainCategoryId(product) === normalized && productSubCategoryId(product) === subcategory.id));
+      .filter((subcategory) => alwaysVisibleSubcategoryIds.has(subcategory.id)
+        || availableProducts().some((product) => productMainCategoryId(product) === normalized && productSubCategoryId(product) === subcategory.id));
   }
 
   const labels = [...new Set(availableProducts().filter((product) => product.category === category).map((product) => product.label).filter(Boolean))];
