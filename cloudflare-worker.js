@@ -5,14 +5,25 @@ import { onRequest as uploadProductImage } from "./functions/api/upload-product-
 import { onRequest as updateProducts } from "./functions/api/update-products.js";
 import { onRequest as updateTaxonomy } from "./functions/api/update-taxonomy.js";
 import { bestSellersResponse } from "./functions/api/best-sellers.js";
+import { coloringDesignForProduct } from "./coloringDesigns.js";
+import { backfillAirtableOrderProducts } from "./functions/_airtable-order-backfill.js";
+import {
+  AIRTABLE_PRODUCT_SKU_FIELD,
+  AIRTABLE_PRODUCTS_TABLE,
+  upsertAirtableCatalogProductBySku,
+  syncAirtableCatalogProductMedia,
+  syncResolvedOrderProductMedia
+} from "./functions/_airtable-product-media.js";
 
 const canonicalOrigin = "https://popekyrillos.store";
 const canonicalHostname = "popekyrillos.store";
 const allowedOrdersOrigin = "https://popekyrillos.store";
 const staticRewrites = {
   "/cart": "/cart.html",
+  "/coloring-game": "/coloring-game.html",
   "/checkout": "/checkout.html",
   "/payment": "/payment.html",
+  "/order-success": "/order-success.html",
   "/policies": "/policies.html",
   "/privacy-policy": "/policies.html",
   "/refund-policy": "/policies.html",
@@ -22,25 +33,33 @@ const staticRewrites = {
   "/payment-pending": "/payment-pending.html"
 };
 const htmlRoutePaths = new Set(["/", "/products", "/contact"]);
-const productColoringConfigs = {
-  "custom-1782980654479": {
-    coloringBaseImageUrl: "assets/coloring/iota-medal-1/base.webp",
-    coloringMaskUrl: "assets/coloring/iota-medal-1/region-mask.png?v=2",
-    coloringOutlineUrl: "assets/coloring/iota-medal-1/outline.png?v=2",
-    coloringRegions: Array.from({ length: 13 }, (_, index) => ({ id: `region-${index + 1}`, maskColor: [index + 1, 0, 0] })),
-    symmetryGroups: [
-      ["region-2", "region-3", "region-4", "region-5"],
-      ["region-6", "region-7"],
-      ["region-8", "region-9"],
-      ["region-10", "region-11"],
-      ["region-12", "region-13"]
-    ]
-  }
-};
-
 function withProductColoringConfig(product) {
-  const config = productColoringConfigs[String(product?.id || "")];
-  return config ? { ...product, ...config } : product;
+  const design = coloringDesignForProduct(product);
+  if (!design) return product;
+  // Product data is the source of truth when it already contains a complete,
+  // deployable coloring model. This also keeps older public /assets models
+  // working while a newer generated model is being rolled out.
+  const hasEmbeddedColoringConfig = Boolean(
+    product?.coloringBaseImageUrl &&
+    product?.coloringMaskUrl &&
+    product?.coloringOutlineUrl &&
+    (product?.coloringRegionsUrl || product?.coloringRegions?.length)
+  );
+  if (hasEmbeddedColoringConfig) return product;
+  const version = encodeURIComponent(design.modelVersion);
+  return {
+    ...product,
+    coloringModelId: design.id,
+    coloringModelName: design.name,
+    coloringModelVersion: design.modelVersion,
+    coloringBaseImageUrl: `${design.basePath}?v=${version}`,
+    coloringMaskUrl: `${design.regionsPath}?v=${version}`,
+    coloringOutlineUrl: `${design.outlinePath}?v=${version}`,
+    coloringRegionsUrl: `${design.regionsDataPath}?v=${version}`,
+    ...(design.regionOverridesPath
+      ? { coloringRegionOverridesUrl: `${design.regionOverridesPath}?v=${version}` }
+      : {})
+  };
 }
 
 let productsCache = null;
@@ -942,7 +961,7 @@ async function productPageResponse(request, env, product) {
       status: 200,
       headers: {
         "Content-Type": "text/html; charset=utf-8",
-        "Cache-Control": "public, max-age=60, stale-while-revalidate=300",
+        "Cache-Control": "no-cache, must-revalidate",
         "X-Content-Type-Options": "nosniff"
       }
     });
@@ -954,17 +973,17 @@ async function productPageResponse(request, env, product) {
 <html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 ${tags.title}${tags.description}${tags.extra}
 <link rel="preload" href="/assets/fonts/ge-ss-two-bold.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/styles.min.css"><link rel="stylesheet" href="/product-page.css?v=6">
+<link rel="stylesheet" href="/styles.min.css"><link rel="stylesheet" href="/product-page.css?v=11">
 </head><body class="standalone-product-page">
 <header class="site-header" data-elevated="false"><div class="brand-cluster"><a class="brand" href="/" aria-label="مكتبة البابا كيرلس"><span class="brand-logo-wrap"><img src="/assets/optimized/logo-papa-kyrillos-original.webp" alt="" width="160" height="160" decoding="async"></span><span><strong>مكتبة البابا كيرلس</strong><small>مستلزمات الكنائس والخدمة</small></span></a></div><nav class="main-nav" aria-label="التنقل الرئيسي"><a href="/#categories">الأقسام</a><a href="/#catalog">المنتجات</a></nav><div class="header-actions"><a class="cart-toggle" href="/cart" aria-label="فتح السلة"><span>السلة</span><span class="cart-count" data-cart-count>0</span></a></div></header>
 <main class="product-route-main"><a class="product-route-back" href="/#catalog">العودة إلى المنتجات</a><div id="product-detail" aria-label="${name}"></div><section class="product-route-related" aria-labelledby="related-title"><h2 id="related-title">منتجات مشابهة</h2><div class="product-grid" data-related-products></div></section></main>
 <footer class="product-route-footer"><strong>مكتبة البابا كيرلس</strong><span>مستلزمات الكنائس والخدمة</span><a href="/policies">السياسات</a><a href="https://wa.me/201016125589">تواصل معنا</a></footer>
-<div class="toast" data-toast role="status" aria-live="polite"></div><script id="product-data" type="application/json">${safeProduct}</script><script src="/product-page.js?v=7" defer></script></body></html>`;
+<div class="toast" data-toast role="status" aria-live="polite"></div><script id="product-data" type="application/json">${safeProduct}</script><script src="/yota-colors.js?v=3" defer></script><script src="/product-page.js?v=13" defer></script></body></html>`;
   return new Response(html, {
     status: 200,
     headers: {
       "Content-Type": "text/html; charset=utf-8",
-      "Cache-Control": "public, max-age=60, stale-while-revalidate=300",
+      "Cache-Control": "no-cache, must-revalidate",
       "X-Content-Type-Options": "nosniff"
     }
   });
@@ -1075,6 +1094,213 @@ function parseOrderProducts(value) {
   }
 }
 
+function normalizeOrderItems(value) {
+  const products = parseOrderProducts(value);
+  if (!products || !products.length) return { items: [], errors: ["products"] };
+  const errors = [];
+  const items = products.map((product, index) => {
+    const sku = cleanOrderString(product?.sku);
+    const websiteProductId = cleanOrderString(product?.productId ?? product?.id);
+    const variantId = cleanOrderString(product?.variantId);
+    const productName = cleanOrderString(product?.name) || cleanOrderString(product?.productId) || "منتج بدون اسم";
+    const image = cleanOrderString(product?.previewImage || product?.image);
+    const designId = cleanOrderString(product?.designId);
+    const designName = cleanOrderString(product?.designName);
+    const selectedColors = Array.isArray(product?.selectedColors) ? product.selectedColors : [];
+    const option = cleanOrderString(product?.option);
+    const notes = cleanOrderString(product?.notes ?? product?.note);
+    const quantity = Number(product?.quantity ?? product?.qty);
+    const medalPricing = medalVariantPricing(variantId);
+    const unitPrice = medalPricing ? medalPricing.finalPrice : productLinePrice(product, quantity);
+    const basePrice = medalPricing ? medalPricing.basePrice : Number(product?.basePrice ?? unitPrice);
+    const discountValue = medalPricing ? medalPricing.discountValue : Number(product?.discountValue ?? 0);
+    const discountRate = medalPricing ? medalPricing.discountRate : Number(product?.discountRate ?? 0);
+    const woodType = medalPricing ? medalPricing.woodType : "";
+    if (!sku && !websiteProductId) errors.push(`products[${index}].productId`);
+    if (!Number.isFinite(quantity) || quantity <= 0) errors.push(`products[${index}].quantity`);
+    if (!Number.isFinite(unitPrice) || unitPrice < 0) errors.push(`products[${index}].price`);
+    if (/(?:مادلي|ميدالي|medal)/i.test(productName) && !medalPricing) errors.push(`products[${index}].variantId`);
+    return {
+      sku,
+      websiteProductId,
+      variantId,
+      productName,
+      image,
+      option,
+      notes,
+      quantity,
+      unitPrice,
+      ...(medalPricing ? { image, designId, designName, selectedColors, basePrice, discountValue, discountRate, woodType } : {})
+    };
+  });
+  return { items, errors };
+}
+
+function escapeAirtableFormulaString(value) {
+  return String(value).replace(/\\/g, "\\\\").replace(/'/g, "\\'");
+}
+
+function airtableTableUrl(env, tableName, recordId = "") {
+  const baseId = encodeURIComponent(String(env.AIRTABLE_BASE_ID || "").trim());
+  const suffix = recordId ? `/${encodeURIComponent(recordId)}` : "";
+  return `https://api.airtable.com/v0/${baseId}/${encodeURIComponent(tableName)}${suffix}`;
+}
+
+async function airtableRequest(env, url, init, logContext) {
+  const response = await fetch(url, init);
+  const text = await response.text();
+  let data = {};
+  try { data = text ? JSON.parse(text) : {}; } catch { data = {}; }
+  if (!response.ok) {
+    const error = safeAirtableError(text);
+    console.error("Airtable order-detail request failed", {
+      ...logContext,
+      status: response.status,
+      errorType: error.type
+    });
+    const requestError = new Error("Airtable order-detail request failed");
+    requestError.code = "airtable_detail_failed";
+    requestError.status = response.status;
+    throw requestError;
+  }
+  return data;
+}
+
+async function resolveAirtableProducts(env, items, context) {
+  const cache = new Map();
+  for (const item of items) {
+    const identity = item.sku || item.websiteProductId;
+    if (!identity || cache.has(identity)) continue;
+    const url = new URL(airtableTableUrl(env, AIRTABLE_PRODUCTS_TABLE));
+    url.searchParams.set("maxRecords", "1");
+    url.searchParams.set("fields[]", AIRTABLE_PRODUCT_SKU_FIELD);
+    url.searchParams.set("filterByFormula", `{${AIRTABLE_PRODUCT_SKU_FIELD}}='${escapeAirtableFormulaString(identity)}'`);
+    try {
+      const data = await airtableRequest(env, url.toString(), {
+        headers: { Authorization: `Bearer ${env.AIRTABLE_TOKEN}` }
+      }, { ...context, operation: "find_product", sku: identity });
+      let productId = data.records?.[0]?.id || "";
+      if (!productId && item.websiteProductId) {
+        const result = await upsertAirtableCatalogProductBySku(env, {
+          id: item.websiteProductId,
+          sku: identity,
+          name: item.productName,
+          price: item.unitPrice,
+          image: item.image
+        }, identity, { origin: canonicalOrigin });
+        productId = result.recordId || "";
+      }
+      cache.set(identity, { productId, reason: productId ? "" : "not_found" });
+    } catch {
+      // A product lookup problem must not prevent the customer order.
+      cache.set(identity, { productId: "", reason: "lookup_failed" });
+    }
+  }
+  return items.map((item) => {
+    const identity = item.sku || item.websiteProductId;
+    const match = identity ? cache.get(identity) : null;
+    const productId = match?.productId || "";
+    const unresolved = !productId;
+    const skuLabel = identity || "غير مضاف";
+    if (unresolved) {
+      console.warn("Airtable order item needs manual product linking", {
+        ...context,
+        productName: item.productName,
+        submittedSku: identity || "missing",
+        reason: identity ? (match?.reason || "not_found") : "missing"
+      });
+    }
+    const fallbackNote = unresolved
+      ? `منتج غير مربوط: ${item.productName}${item.option ? ` | الاختيار: ${item.option}` : ""} | SKU: ${skuLabel} | يحتاج ربط يدوي بالمنتج`
+      : "";
+    const pricingNote = item.woodType
+      ? `نوع الخشب: ${item.woodType} | السعر الأساسي: ${item.basePrice} ج.م | خصم الخدمات 10%: ${item.discountValue} ج.م | السعر النهائي: ${item.unitPrice} ج.م | الإجمالي: ${item.unitPrice * item.quantity} ج.م`
+      : "";
+    const imageNote = item.image ? `الصورة: ${item.image}` : "";
+    const designNote = item.designId || item.designName
+      ? `التصميم: ${item.designName || item.productName} (${item.designId || "بدون رقم"})`
+      : "";
+    const colorsNote = item.selectedColors?.length
+      ? `الألوان المختارة: ${item.selectedColors.map((color) => color.colorName || color.name || color.colorHex || color.hex).filter(Boolean).join("، ")}`
+      : "";
+    return {
+      ...item,
+      productId,
+      unresolved,
+      detailNote: [pricingNote, designNote, colorsNote, imageNote, fallbackNote, item.notes].filter(Boolean).join(" | ")
+    };
+  });
+}
+
+async function createAirtableOrderDetails(env, orderRecordId, items, context) {
+  const detailTable = "تفاصيل الطلبات";
+  const unresolvedIndex = items.findIndex((item) => !item.productId);
+  if (unresolvedIndex !== -1) {
+    const error = new Error(`Order item ${unresolvedIndex + 1} has no Airtable product record`);
+    error.code = "airtable_product_unresolved";
+    throw error;
+  }
+  const records = items.map((item) => {
+    const fields = {
+      "رقم الأوردر": [orderRecordId],
+      "الكمية": item.quantity,
+      "سعر القطعة": item.unitPrice
+    };
+    fields["المنتج"] = [item.productId];
+    if (item.detailNote) fields["ملاحظات"] = item.detailNote;
+    return { fields };
+  });
+  const createdIds = [];
+  try {
+    for (let index = 0; index < records.length; index += 10) {
+      const data = await airtableRequest(env, airtableTableUrl(env, detailTable), {
+        method: "POST",
+        headers: { Authorization: `Bearer ${env.AIRTABLE_TOKEN}`, "Content-Type": "application/json" },
+        body: JSON.stringify({ records: records.slice(index, index + 10), typecast: false })
+      }, { ...context, operation: "create_details", batch: Math.floor(index / 10) + 1 });
+      createdIds.push(...(data.records || []).map((record) => record.id).filter(Boolean));
+    }
+    return createdIds;
+  } catch (error) {
+    // Compensate successful earlier batches so a retry can safely recreate the full set.
+    for (let index = 0; index < createdIds.length; index += 10) {
+      const url = new URL(airtableTableUrl(env, detailTable));
+      createdIds.slice(index, index + 10).forEach((id) => url.searchParams.append("records[]", id));
+      try {
+        await airtableRequest(env, url.toString(), {
+          method: "DELETE",
+          headers: { Authorization: `Bearer ${env.AIRTABLE_TOKEN}` }
+        }, { ...context, operation: "rollback_details" });
+      } catch (rollbackError) {
+        console.error("Airtable order-detail rollback failed", { ...context, message: rollbackError.message });
+      }
+    }
+    throw error;
+  }
+}
+
+async function initializeOrderIdempotency(env) {
+  await env.ANALYTICS_DB.prepare(`
+    CREATE TABLE IF NOT EXISTS website_order_requests (
+      request_id TEXT PRIMARY KEY,
+      status TEXT NOT NULL,
+      airtable_order_id TEXT NOT NULL DEFAULT '',
+      detail_count INTEGER NOT NULL DEFAULT 0,
+      updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+    )
+  `).run();
+}
+
+function medalVariantPricing(variantId) {
+  if (variantId === "medal-wood-plywood") {
+    return { woodType: "كونتر", basePrice: 20, discountRate: 0.1, discountValue: 2, finalPrice: 18 };
+  }
+  if (variantId === "medal-wood-beech") {
+    return { woodType: "زان", basePrice: 30, discountRate: 0.1, discountValue: 3, finalPrice: 27 };
+  }
+  return null;
+}
+
 function productLinePrice(product, quantity) {
   const price = Number(product?.price);
   if (Number.isFinite(price)) return price;
@@ -1101,7 +1327,19 @@ function formatOrderProductsForAirtable(value) {
       const safeQuantity = Number.isFinite(quantity) && quantity > 0 ? quantity : 1;
       const price = productLinePrice(product, safeQuantity);
       const priceText = price === null ? "" : formatOrderPrice(price);
-      return `${name} | \u0627\u0644\u0643\u0645\u064a\u0629: ${safeQuantity} | \u0627\u0644\u0633\u0639\u0631: ${priceText} \u062c.\u0645`;
+      const option = cleanOrderString(product?.option);
+      const basePrice = Number(product?.basePrice);
+      const discountValue = Number(product?.discountValue);
+      const lineTotal = price === null ? null : price * safeQuantity;
+      return [
+        name,
+        option,
+        `\u0627\u0644\u0643\u0645\u064a\u0629: ${safeQuantity}`,
+        Number.isFinite(basePrice) ? `\u0627\u0644\u0633\u0639\u0631 \u0627\u0644\u0623\u0633\u0627\u0633\u064a: ${formatOrderPrice(basePrice)} \u062c.\u0645` : "",
+        Number.isFinite(discountValue) && discountValue > 0 ? `\u062e\u0635\u0645 \u0627\u0644\u062e\u062f\u0645\u0627\u062a 10%: ${formatOrderPrice(discountValue)} \u062c.\u0645` : "",
+        `\u0627\u0644\u0633\u0639\u0631 \u0627\u0644\u0646\u0647\u0627\u0626\u064a: ${priceText} \u062c.\u0645`,
+        lineTotal === null ? "" : `\u0627\u0644\u0625\u062c\u0645\u0627\u0644\u064a: ${formatOrderPrice(lineTotal)} \u062c.\u0645`
+      ].filter(Boolean).join(" | ");
     })
     .filter(Boolean);
 
@@ -1343,9 +1581,100 @@ async function adminOrdersResponse(context, pathname) {
   return updateAdminOrder(context, match[1]);
 }
 
+function queueResolvedProductMediaSync(context, resolvedItems, requestId) {
+  if (typeof context.waitUntil !== "function") return;
+  const task = loadProducts(context.env, context.request, { maxAgeMs: 60000 })
+    .then((products) => syncResolvedOrderProductMedia(context.env, resolvedItems, products, { requestId }))
+    .catch((error) => {
+      console.warn("Airtable product media sync skipped after order", {
+        requestId,
+        reason: error.code || "sync_failed",
+        status: error.status || null
+      });
+    });
+  context.waitUntil(task);
+}
+
+async function adminAirtableProductMediaSyncResponse(context) {
+  if (context.request.method !== "POST") {
+    return adminOrdersJson({ error: "method_not_allowed" }, { status: 405, headers: { Allow: "POST" } });
+  }
+  if (!context.env.AIRTABLE_TOKEN || !context.env.AIRTABLE_BASE_ID) {
+    console.error("Airtable product-media configuration is missing", {
+      hasToken: Boolean(context.env.AIRTABLE_TOKEN),
+      hasBaseId: Boolean(context.env.AIRTABLE_BASE_ID)
+    });
+    return adminOrdersJson({ error: "server_not_configured" }, { status: 500 });
+  }
+  const body = await context.request.json().catch(() => ({}));
+  const dryRun = body.dryRun !== false;
+  if (!dryRun && body.confirm !== "SYNC_AIRTABLE_PRODUCT_MEDIA") {
+    return adminOrdersJson({ error: "confirmation_required" }, { status: 400 });
+  }
+  const products = await loadProducts(context.env, context.request, { maxAgeMs: 0 });
+  const summary = await syncAirtableCatalogProductMedia(context.env, products, {
+    dryRun,
+    createMissing: true,
+    includeCatalogFields: true,
+    origin: canonicalOrigin
+  });
+  console.info("Airtable product-media catalog sync completed", {
+    websiteProductsScanned: summary.websiteProductsScanned,
+    airtableProductsUpdated: summary.airtableProductsUpdated,
+    skippedMissingSku: summary.skippedMissingSku.length,
+    skusNotFound: summary.skusNotFound.length,
+    productsMissingImage: summary.productsMissingImage.length,
+    productsMissingPageUrl: summary.productsMissingPageUrl.length,
+    failedUpdates: summary.failedUpdates.length
+  });
+  summary.skipped = summary.alreadyCurrent + summary.skippedMissingSku.length;
+  return adminOrdersJson({ ok: true, dryRun, summary });
+}
+
+async function adminAirtableOrderBackfillResponse(context) {
+  if (context.request.method !== "POST") {
+    return adminOrdersJson({ error: "method_not_allowed" }, { status: 405, headers: { Allow: "POST" } });
+  }
+  if (!context.env.AIRTABLE_TOKEN || !context.env.AIRTABLE_BASE_ID) {
+    return adminOrdersJson({ error: "server_not_configured" }, { status: 500 });
+  }
+  const body = await context.request.json().catch(() => ({}));
+  const dryRun = body.dryRun !== false;
+  if (!dryRun && body.confirm !== "BACKFILL_AIRTABLE_ORDER_PRODUCTS") {
+    return adminOrdersJson({ error: "confirmation_required" }, { status: 400 });
+  }
+  const orderNumbers = Array.isArray(body.orderNumbers)
+    ? body.orderNumbers.map(cleanOrderString).filter((value) => /^\d+$/.test(value)).slice(0, 100)
+    : [];
+  const products = await loadProducts(context.env, context.request, { maxAgeMs: 0 });
+  try {
+    const report = await backfillAirtableOrderProducts(context.env, products, {
+      dryRun,
+      orderNumbers,
+      origin: canonicalOrigin
+    });
+    console.info("Airtable order-product backfill completed", {
+      dryRun,
+      selectedOrderCount: orderNumbers.length,
+      linked: report.linked,
+      alreadyLinked: report.alreadyLinked,
+      unresolved: report.unresolved,
+      problemOrderCount: report.problemOrderNumbers.length
+    });
+    return adminOrdersJson({ ok: true, report });
+  } catch (error) {
+    console.error("Airtable order-product backfill failed", {
+      dryRun,
+      code: error.code || "backfill_failed",
+      status: error.status || null
+    });
+    return adminOrdersJson({ error: "backfill_failed", message: "تعذر تشغيل إصلاح ربط الطلبات." }, { status: 502 });
+  }
+}
+
 async function createOrderResponse(context) {
   const { request, env } = context;
-  const requestId = request.headers.get("X-Request-Id") || "";
+  let requestId = cleanOrderString(request.headers.get("X-Request-Id"));
 
   if (request.method === "OPTIONS") {
     if (!orderCorsAllowed(request)) return new Response(null, { status: 403, headers: orderCorsHeaders(request) });
@@ -1380,6 +1709,16 @@ async function createOrderResponse(context) {
       { status: 500 }
     );
   }
+  if (String(env.AIRTABLE_TABLE_NAME).trim() !== "Orders") {
+    console.error("Airtable Orders table configuration is invalid", {
+      requestId,
+      configuredTable: String(env.AIRTABLE_TABLE_NAME).trim()
+    });
+    return orderJsonResponse(request, {
+      error: "server_not_configured",
+      message: "\u062a\u0639\u0630\u0631 \u062a\u0633\u062c\u064a\u0644 \u0627\u0644\u0637\u0644\u0628 \u062d\u0627\u0644\u064a\u0627."
+    }, { status: 500 });
+  }
 
   let payload;
   try {
@@ -1408,62 +1747,143 @@ async function createOrderResponse(context) {
     );
   }
 
+  requestId = requestId || cleanOrderString(payload.requestId);
+  if (!requestId || requestId.length > 128 || !/^[a-zA-Z0-9._:-]+$/.test(requestId)) {
+    return orderJsonResponse(request, {
+      error: "invalid_request_id",
+      message: "\u062a\u0639\u0630\u0631 \u062a\u0623\u0643\u064a\u062f \u0647\u0648\u064a\u0629 \u0627\u0644\u0637\u0644\u0628. \u062d\u0627\u0648\u0644 \u0645\u0631\u0629 \u0623\u062e\u0631\u0649."
+    }, { status: 400 });
+  }
+  const normalizedItems = normalizeOrderItems(payload.products);
+  if (normalizedItems.errors.length) {
+    console.warn("Invalid /api/orders cart items", { requestId, fields: normalizedItems.errors });
+    return orderJsonResponse(request, {
+      error: "invalid_cart_items",
+      fields: normalizedItems.errors,
+      message: "\u0628\u064a\u0627\u0646\u0627\u062a \u0645\u0646\u062a\u062c\u0627\u062a \u0627\u0644\u0633\u0644\u0629 \u063a\u064a\u0631 \u0645\u0643\u062a\u0645\u0644\u0629."
+    }, { status: 400 });
+  }
+  order.total = normalizedItems.items.reduce((sum, item) => sum + item.unitPrice * item.quantity, 0);
+  order.products = normalizedItems.items.map((item) => [
+    item.productName,
+    item.sku ? `SKU: ${item.sku}` : "",
+    item.websiteProductId ? `Product ID: ${item.websiteProductId}` : "",
+    item.option,
+    `الكمية: ${item.quantity}`,
+    Number.isFinite(item.basePrice) ? `السعر الأساسي: ${formatOrderPrice(item.basePrice)} ج.م` : "",
+    item.discountValue > 0 ? `خصم الخدمات 10%: ${formatOrderPrice(item.discountValue)} ج.م` : "",
+    `السعر النهائي: ${formatOrderPrice(item.unitPrice)} ج.م`,
+    `الإجمالي: ${formatOrderPrice(item.unitPrice * item.quantity)} ج.م`
+  ].filter(Boolean).join(" | ")).join("\n");
+  if (!env.ANALYTICS_DB) {
+    console.error("Order idempotency database is missing", { requestId });
+    return orderJsonResponse(request, {
+      error: "server_not_configured",
+      message: "\u062a\u0639\u0630\u0631 \u062a\u0633\u062c\u064a\u0644 \u0627\u0644\u0637\u0644\u0628 \u062d\u0627\u0644\u064a\u0627."
+    }, { status: 500 });
+  }
+
   const tableName = encodeURIComponent(String(env.AIRTABLE_TABLE_NAME).trim());
   const airtableUrl = `https://api.airtable.com/v0/${encodeURIComponent(String(env.AIRTABLE_BASE_ID).trim())}/${tableName}`;
+  let recordId = "";
 
   try {
-    const airtableResponse = await fetch(airtableUrl, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${env.AIRTABLE_TOKEN}`,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        records: [
-          {
-            fields: airtableOrderFields(order)
-          }
-        ]
-      })
-    });
-    const responseText = await airtableResponse.text();
-    let airtableData = {};
-    try {
-      airtableData = responseText ? JSON.parse(responseText) : {};
-    } catch {
-      airtableData = {};
+    const resolvedItems = await resolveAirtableProducts(env, normalizedItems.items, { requestId });
+    queueResolvedProductMediaSync(context, resolvedItems, requestId);
+    const unresolvedItems = resolvedItems.filter((item) => item.unresolved);
+    if (unresolvedItems.length) {
+      const warning = `يوجد منتجات تحتاج ربط SKU: ${unresolvedItems.map((item) => item.productName).join("، ")}`;
+      order.missingInfo = !order.missingInfo || order.missingInfo === "لا يوجد"
+        ? warning
+        : `${order.missingInfo}؛ ${warning}`;
+    }
+    await initializeOrderIdempotency(env);
+    const reservation = await env.ANALYTICS_DB.prepare(
+      "INSERT OR IGNORE INTO website_order_requests (request_id, status) VALUES (?, 'processing')"
+    ).bind(requestId).run();
+    let savedRequest = await env.ANALYTICS_DB.prepare(
+      "SELECT status, airtable_order_id, detail_count FROM website_order_requests WHERE request_id = ?"
+    ).bind(requestId).first();
+
+    if (!reservation.meta?.changes) {
+      if (savedRequest?.status === "completed" && savedRequest.airtable_order_id) {
+        console.info("Returning completed website order retry", { requestId, recordId: savedRequest.airtable_order_id });
+        return orderJsonResponse(request, {
+          ok: true,
+          requestId,
+          recordId: savedRequest.airtable_order_id,
+          detailCount: savedRequest.detail_count,
+          duplicate: true
+        });
+      }
+      if (savedRequest?.status === "order_created" && savedRequest.airtable_order_id) {
+        recordId = savedRequest.airtable_order_id;
+      } else {
+        return orderJsonResponse(request, {
+          error: "order_in_progress",
+          message: "\u0627\u0644\u0637\u0644\u0628 \u0642\u064a\u062f \u0627\u0644\u062a\u0633\u062c\u064a\u0644. \u062d\u0627\u0648\u0644 \u0628\u0639\u062f \u0644\u062d\u0638\u0627\u062a."
+        }, { status: 409 });
+      }
     }
 
-    if (!airtableResponse.ok) {
-      const airtableError = safeAirtableError(responseText);
-      console.error("Airtable order creation failed", {
-        requestId,
-        status: airtableResponse.status,
-        errorType: airtableError.type,
-        errorMessage: airtableError.message
-      });
-      return orderJsonResponse(
-        request,
-        {
-          error: "airtable_create_failed",
-          message: "\u062a\u0639\u0630\u0631 \u062a\u0633\u062c\u064a\u0644 \u0627\u0644\u0637\u0644\u0628. \u0645\u0646 \u0641\u0636\u0644\u0643 \u062d\u0627\u0648\u0644 \u0645\u0631\u0629 \u0623\u062e\u0631\u0649."
+    if (!recordId) {
+      const airtableData = await airtableRequest(env, airtableUrl, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${env.AIRTABLE_TOKEN}`,
+          "Content-Type": "application/json"
         },
-        { status: 502 }
-      );
+        body: JSON.stringify({ records: [{ fields: airtableOrderFields(order) }] })
+      }, { requestId, operation: "create_order" });
+      recordId = airtableData.records?.[0]?.id || "";
+      if (!recordId) throw Object.assign(new Error("Airtable did not return the created order ID"), { code: "airtable_create_failed" });
+      await env.ANALYTICS_DB.prepare(
+        "UPDATE website_order_requests SET status = 'order_created', airtable_order_id = ?, updated_at = CURRENT_TIMESTAMP WHERE request_id = ?"
+      ).bind(recordId, requestId).run();
+      console.log("Airtable order created", { requestId, recordId });
     }
 
-    const recordId = airtableData.records?.[0]?.id || "";
-    console.log("Airtable order created", { requestId, recordId });
-    return orderJsonResponse(request, { ok: true, requestId, recordId });
+    const detailClaim = await env.ANALYTICS_DB.prepare(
+      "UPDATE website_order_requests SET status = 'details_processing', updated_at = CURRENT_TIMESTAMP WHERE request_id = ? AND status = 'order_created'"
+    ).bind(requestId).run();
+    if (!detailClaim.meta?.changes) {
+      return orderJsonResponse(request, {
+        error: "order_in_progress",
+        message: "\u0627\u0644\u0637\u0644\u0628 \u0642\u064a\u062f \u0627\u0644\u062a\u0633\u062c\u064a\u0644. \u062d\u0627\u0648\u0644 \u0628\u0639\u062f \u0644\u062d\u0638\u0627\u062a."
+      }, { status: 409 });
+    }
+    const detailIds = await createAirtableOrderDetails(env, recordId, resolvedItems, { requestId, recordId });
+    await env.ANALYTICS_DB.prepare(
+      "UPDATE website_order_requests SET status = 'completed', detail_count = ?, updated_at = CURRENT_TIMESTAMP WHERE request_id = ?"
+    ).bind(detailIds.length, requestId).run();
+    console.log("Airtable order details created", { requestId, recordId, detailCount: detailIds.length });
+    return orderJsonResponse(request, {
+      ok: true,
+      requestId,
+      recordId,
+      detailCount: detailIds.length,
+      unresolvedCount: unresolvedItems.length
+    });
   } catch (error) {
-    console.error("Unexpected /api/orders failure", { requestId, message: error.message });
+    console.error("Unexpected /api/orders failure", { requestId, recordId, code: error.code || "", sku: error.sku || "", message: error.message });
+    try {
+      if (recordId) {
+        await env.ANALYTICS_DB.prepare(
+          "UPDATE website_order_requests SET status = 'order_created', updated_at = CURRENT_TIMESTAMP WHERE request_id = ?"
+        ).bind(requestId).run();
+      } else {
+        await env.ANALYTICS_DB.prepare("DELETE FROM website_order_requests WHERE request_id = ?").bind(requestId).run();
+      }
+    } catch (stateError) {
+      console.error("Could not restore website order retry state", { requestId, recordId, message: stateError.message });
+    }
     return orderJsonResponse(
       request,
       {
-        error: "order_create_failed",
+        error: recordId ? "order_detail_create_failed" : "order_create_failed",
         message: "\u062a\u0639\u0630\u0631 \u062a\u0633\u062c\u064a\u0644 \u0627\u0644\u0637\u0644\u0628. \u0645\u0646 \u0641\u0636\u0644\u0643 \u062d\u0627\u0648\u0644 \u0645\u0631\u0629 \u0623\u062e\u0631\u0649."
       },
-      { status: 500 }
+      { status: 502 }
     );
   }
 }
@@ -1632,7 +2052,10 @@ async function handleRequest(request, env, ctx) {
 
     const forwardedProto = request.headers.get("X-Forwarded-Proto") || "";
     const isHttps = url.protocol === "https:" || forwardedProto === "https";
-    const allowAnalyticsLocalTest = env.LOCAL_DEV === "1" || ["127.0.0.1", "localhost"].includes(url.hostname);
+    const allowAnalyticsLocalTest =
+      env.LOCAL_DEV === "1" ||
+      ["127.0.0.1", "localhost"].includes(url.hostname) ||
+      /^(?:127\.0\.0\.1|localhost)(?::\d+)?$/i.test(url.host);
     if (!allowAnalyticsLocalTest && (!isHttps || url.hostname !== canonicalHostname)) {
       url.protocol = "https:";
       url.hostname = canonicalHostname;
@@ -1662,6 +2085,8 @@ async function handleRequest(request, env, ctx) {
       }
       if (url.pathname === "/admin/api/update-taxonomy") return updateTaxonomy(context);
       if (url.pathname === "/admin/api/upload-product-image") return uploadProductImage(context);
+      if (url.pathname === "/admin/api/sync-airtable-product-media") return adminAirtableProductMediaSyncResponse(context);
+      if (url.pathname === "/admin/api/backfill-airtable-order-products") return adminAirtableOrderBackfillResponse(context);
       if (url.pathname === "/admin/api/orders" || url.pathname.startsWith("/admin/api/orders/")) return adminOrdersResponse(context, url.pathname);
       if (url.pathname === "/admin/api/analytics") return analyticsDashboardResponse(request, env);
     }
@@ -1697,7 +2122,7 @@ async function handleRequest(request, env, ctx) {
     }
 
     if (staticRewrites[url.pathname]) {
-      const isPrivate = ["/cart", "/checkout", "/payment", "/payment-success", "/payment-failed", "/payment-pending"].includes(url.pathname);
+      const isPrivate = ["/cart", "/checkout", "/payment", "/order-success", "/payment-success", "/payment-failed", "/payment-pending"].includes(url.pathname);
       return htmlResponse(request, env, staticRewrites[url.pathname], isPrivate ? { private: true } : { canonicalUrl: `${canonicalOrigin}${url.pathname}` });
     }
 
@@ -1712,6 +2137,17 @@ async function handleRequest(request, env, ctx) {
     }
     return withAssetCacheHeaders(assetResponse, url.pathname);
 }
+
+export {
+  adminAirtableOrderBackfillResponse,
+  adminAirtableProductMediaSyncResponse,
+  createAirtableOrderDetails,
+  createOrderResponse,
+  escapeAirtableFormulaString,
+  handleRequest,
+  normalizeOrderItems,
+  resolveAirtableProducts
+};
 
 export default {
   async fetch(request, env, ctx) {

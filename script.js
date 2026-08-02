@@ -82,6 +82,10 @@ const fallbackProducts = [
 ];
 
 let products = [];
+function applySharedYotaColors(items) {
+  if (!Array.isArray(items) || typeof window.enrichYotaColorProduct !== "function") return items;
+  return items.map((product) => window.enrichYotaColorProduct(product));
+}
 let catalogPage = 1;
 let catalogTotal = 0;
 let catalogHasMore = false;
@@ -102,6 +106,8 @@ let modalSwipeSuppressUntil = 0;
 let lightboxPointerStart = null;
 let lightboxSwipeSuppressUntil = 0;
 let lightboxWheelSuppressUntil = 0;
+const lightboxPointers = new Map();
+let lightboxGesture = null;
 let searchRenderTimer = null;
 
 const state = {
@@ -145,7 +151,10 @@ const state = {
   lightbox: {
     productId: "",
     image: "",
-    alt: ""
+    alt: "",
+    scale: 1,
+    x: 0,
+    y: 0
   }
 };
 
@@ -2606,6 +2615,12 @@ function productDetailImage(image = "") {
 }
 
 function getProductVariants(product) {
+  if (isIotaMedalProduct(product)) {
+    return [
+      { id: "medal-wood-plywood", title: "خشب كونتر", price: 18, compareAtPrice: 20, discountRate: 0.1, options: { "نوع الخشب": "كونتر" }, available: true },
+      { id: "medal-wood-beech", title: "خشب زان", price: 27, compareAtPrice: 30, discountRate: 0.1, options: { "نوع الخشب": "زان" }, available: true }
+    ];
+  }
   if (Array.isArray(product?.variants) && product.variants.length) return product.variants;
 
   return [
@@ -2713,13 +2728,13 @@ function productCardChoicesHtml(product) {
   `;
 }
 
-function cartKey(productId, variantId = "default") {
-  return `${productId}${cartSeparator}${variantId || "default"}`;
+function cartKey(productId, variantId = "default", lineId = "") {
+  return `${productId}${cartSeparator}${variantId || "default"}${lineId ? `${cartSeparator}${lineId}` : ""}`;
 }
 
 function parseCartKey(key) {
-  const [productId, variantId = "default"] = String(key).split(cartSeparator);
-  return { productId, variantId };
+  const [productId, variantId = "default", lineId = ""] = String(key).split(cartSeparator);
+  return { productId, variantId, lineId };
 }
 
 function loadCachedAuthUser() {
@@ -2744,7 +2759,7 @@ function authProfile(user) {
 }
 
 function effectiveAuthUser() {
-  return state.auth.user || state.auth.cachedUser;
+  return state.auth.user || (!state.auth.ready ? state.auth.cachedUser : null);
 }
 
 function saveCachedAuthUser(user) {
@@ -2765,6 +2780,11 @@ function clearCachedAuthUser() {
   } catch {
     // Local storage cleanup is best-effort.
   }
+}
+
+function moveCurrentCartToGuest() {
+  const guestCart = readCartRecord(guestCartStorageKey).cart;
+  saveCartToLocal(guestCartStorageKey, mergeCartMaps(guestCart, state.cart));
 }
 
 function currentUserCartStorageKey(user = effectiveAuthUser()) {
@@ -2790,10 +2810,11 @@ function setActiveCartStorageKey(key = currentCartStorageKey()) {
 function cartPayloadFromMap(map = state.cart) {
   return [...map.entries()]
     .map(([key, qty]) => {
-      const { productId, variantId } = parseCartKey(key);
+      const { productId, variantId, lineId } = parseCartKey(key);
       return {
         productId,
         variantId,
+        ...(lineId ? { lineId } : {}),
         qty: Number(qty) || 0
       };
     })
@@ -2809,7 +2830,7 @@ function cartMapFromPayload(items = []) {
     const variantId = item.variantId || parseCartKey(item.key || "").variantId || "default";
     const qty = Number(item.qty);
     if (!productId || !Number.isFinite(qty) || qty <= 0) return;
-    map.set(cartKey(productId, variantId), Math.floor(qty));
+    map.set(cartKey(productId, variantId, item.lineId || ""), Math.floor(qty));
   });
 
   return map;
@@ -3001,6 +3022,7 @@ function syncCatalogFilterControls() {
 }
 
 function renderProducts() {
+  products = applySharedYotaColors(products);
   syncCatalogFilterControls();
   renderPopularProducts();
   const filteredItems = getFilteredProducts();
@@ -3175,15 +3197,16 @@ function isIotaMedalProduct(product) {
   return /(?:يوتا|يوطا)/.test(searchable) && /(?:مادلي|ميدالي)/.test(searchable);
 }
 
-function coloringGameHtml(image, productName) {
-  const colors = ["#e53935", "#fb8c00", "#fdd835", "#43a047", "#1e88e5", "#8e24aa", "#ec407a", "#6d4c41"];
+function coloringGameHtml(_image, productName) {
+  const colors = (Array.isArray(window.YOTA_COLORS) ? window.YOTA_COLORS : [])
+    .filter((color) => color.available !== false);
   const label = isEnglish() ? "Color the Iota medal" : "لوّن مادلية اليوتا";
   return `
-    <section class="iota-coloring-game" data-coloring-game data-coloring-source="${escapeHtml(image)}" hidden>
+    <section class="iota-coloring-game" data-coloring-game hidden>
       <div class="iota-coloring-header">
         <div>
           <strong>${label}</strong>
-          <small>${isEnglish() ? "Draw over the medal and save your artwork" : "ارسم فوق المادلية واحفظ لوحتك"}</small>
+          <small>${isEnglish() ? "Choose a color, then tap one complete region" : "اختر لونًا ثم اضغط مرة واحدة على الجزء"}</small>
         </div>
         <button class="iota-coloring-close" type="button" data-coloring-close aria-label="${isEnglish() ? "Close coloring game" : "إغلاق لعبة التلوين"}">×</button>
       </div>
@@ -3196,18 +3219,17 @@ function coloringGameHtml(image, productName) {
           <button
             class="iota-color-swatch ${index === 0 ? "active" : ""}"
             type="button"
-            data-coloring-color="${color}"
-            style="--swatch:${color}"
+            data-coloring-color="${color.hex}"
+            data-color-id="${color.id}"
+            data-color-name="${escapeHtml(color.name)}"
+            style="--swatch:${color.hex};${color.metallic ? `background:linear-gradient(135deg,${color.highlight},${color.hex},${color.shadow})` : ""}"
+            title="${escapeHtml(color.name)}"
             aria-label="${isEnglish() ? `Color ${index + 1}` : `اللون ${displayText(formatter.format(index + 1))}`}"
             aria-pressed="${index === 0 ? "true" : "false"}"
           ></button>
         `).join("")}
       </div>
       <div class="iota-coloring-tools">
-        <label>
-          <span>${isEnglish() ? "Brush" : "حجم القلم"}</span>
-          <input type="range" min="8" max="54" value="24" data-coloring-size />
-        </label>
         <button type="button" data-coloring-eraser aria-pressed="false">${isEnglish() ? "Eraser" : "الممحاة"}</button>
         <button type="button" data-coloring-reset>${isEnglish() ? "Start over" : "ابدأ من جديد"}</button>
         <button class="primary" type="button" data-coloring-download>${isEnglish() ? "Save drawing" : "احفظ الرسمة"}</button>
@@ -3220,72 +3242,81 @@ function initializeColoringGame(panel) {
   if (!panel || panel.dataset.ready === "true") return;
   const canvas = panel.querySelector("[data-coloring-canvas]");
   const loading = panel.querySelector("[data-coloring-loading]");
-  const source = panel.dataset.coloringSource;
-  if (!canvas || !source) return;
-
-  const image = new Image();
-  image.decoding = "async";
-  image.onload = () => {
-    const maxSize = 1000;
-    const scale = Math.min(1, maxSize / Math.max(image.naturalWidth, image.naturalHeight));
-    canvas.width = Math.max(1, Math.round(image.naturalWidth * scale));
-    canvas.height = Math.max(1, Math.round(image.naturalHeight * scale));
-    const paint = document.createElement("canvas");
-    paint.width = canvas.width;
-    paint.height = canvas.height;
-    const paintContext = paint.getContext("2d");
+  if (!canvas) return;
+  const loadLayer = (source) => new Promise((resolve, reject) => {
+    const image = new Image();
+    image.decoding = "async";
+    image.onload = () => resolve(image);
+    image.onerror = reject;
+    image.src = source;
+  });
+  Promise.all([
+    loadLayer("/coloring/yota-01/base.png"),
+    loadLayer("/coloring/yota-01/regions.png"),
+    loadLayer("/coloring/yota-01/outline.png")
+  ]).then(([baseImage, regionsImage, outlineImage]) => {
+    if (baseImage.naturalWidth !== regionsImage.naturalWidth || baseImage.naturalHeight !== regionsImage.naturalHeight ||
+        baseImage.naturalWidth !== outlineImage.naturalWidth || baseImage.naturalHeight !== outlineImage.naturalHeight) {
+      throw new Error("Coloring layers must have identical dimensions.");
+    }
+    canvas.width = baseImage.naturalWidth;
+    canvas.height = baseImage.naturalHeight;
     const context = canvas.getContext("2d");
-    let color = "#e53935";
-    let size = 24;
+    const regionCanvas = document.createElement("canvas");
+    regionCanvas.width = canvas.width;
+    regionCanvas.height = canvas.height;
+    const regionContext = regionCanvas.getContext("2d", { willReadFrequently: true });
+    regionContext.drawImage(regionsImage, 0, 0);
+    const regionData = regionContext.getImageData(0, 0, canvas.width, canvas.height).data;
+    const pixelsByRegion = new Map();
+    for (let pixel = 0; pixel < canvas.width * canvas.height; pixel++) {
+      const offset = pixel * 4;
+      if (!regionData[offset + 3]) continue;
+      const regionId = `${regionData[offset]},${regionData[offset + 1]},${regionData[offset + 2]}`;
+      if (!pixelsByRegion.has(regionId)) pixelsByRegion.set(regionId, []);
+      pixelsByRegion.get(regionId).push(pixel);
+    }
+    const colorsByRegion = {};
+    let color = window.YOTA_COLORS?.find((entry) => entry.available !== false)?.hex || "#D00101";
     let erasing = false;
-    let drawing = false;
-    let previous = null;
-
     const render = () => {
-      context.clearRect(0, 0, canvas.width, canvas.height);
-      context.drawImage(image, 0, 0, canvas.width, canvas.height);
-      context.save();
+      const colorLayer = context.createImageData(canvas.width, canvas.height);
+      Object.entries(colorsByRegion).forEach(([regionId, hex]) => {
+        const rgb = hex.match(/[0-9a-f]{2}/gi)?.map((part) => parseInt(part, 16));
+        if (!rgb) return;
+        pixelsByRegion.get(regionId)?.forEach((pixel) => {
+          const offset = pixel * 4;
+          colorLayer.data[offset] = rgb[0];
+          colorLayer.data[offset + 1] = rgb[1];
+          colorLayer.data[offset + 2] = rgb[2];
+          colorLayer.data[offset + 3] = 180;
+        });
+      });
+      const colorsCanvas = document.createElement("canvas");
+      colorsCanvas.width = canvas.width;
+      colorsCanvas.height = canvas.height;
+      colorsCanvas.getContext("2d").putImageData(colorLayer, 0, 0);
+      context.globalCompositeOperation = "source-over";
+      context.globalAlpha = 1;
+      context.drawImage(baseImage, 0, 0);
       context.globalCompositeOperation = "multiply";
-      context.drawImage(paint, 0, 0);
-      context.restore();
+      context.drawImage(colorsCanvas, 0, 0);
+      context.globalCompositeOperation = "source-over";
+      context.drawImage(outlineImage, 0, 0);
     };
-    const pointFromEvent = (event) => {
-      const bounds = canvas.getBoundingClientRect();
-      return {
-        x: (event.clientX - bounds.left) * canvas.width / bounds.width,
-        y: (event.clientY - bounds.top) * canvas.height / bounds.height
-      };
-    };
-    const drawTo = (point) => {
-      paintContext.save();
-      paintContext.globalCompositeOperation = erasing ? "destination-out" : "source-over";
-      paintContext.strokeStyle = color;
-      paintContext.globalAlpha = 0.72;
-      paintContext.lineWidth = size * canvas.width / 700;
-      paintContext.lineCap = "round";
-      paintContext.lineJoin = "round";
-      paintContext.beginPath();
-      paintContext.moveTo(previous?.x ?? point.x, previous?.y ?? point.y);
-      paintContext.lineTo(point.x, point.y);
-      paintContext.stroke();
-      paintContext.restore();
-      previous = point;
+    canvas.addEventListener("click", (event) => {
+      const rect = canvas.getBoundingClientRect();
+      const x = Math.floor((event.clientX - rect.left) * canvas.width / rect.width);
+      const y = Math.floor((event.clientY - rect.top) * canvas.height / rect.height);
+      const offset = (y * canvas.width + x) * 4;
+      if (!regionData[offset + 3]) return;
+      const regionId = `${regionData[offset]},${regionData[offset + 1]},${regionData[offset + 2]}`;
+      const pixels = pixelsByRegion.get(regionId) || [];
+      if (erasing) delete colorsByRegion[regionId];
+      else colorsByRegion[regionId] = color;
+      console.log(`[coloring-game] regionId=${regionId} numberOfPixelsColored=${pixels.length}`);
       render();
-    };
-
-    canvas.addEventListener("pointerdown", (event) => {
-      drawing = true;
-      previous = pointFromEvent(event);
-      canvas.setPointerCapture(event.pointerId);
-      drawTo(previous);
     });
-    canvas.addEventListener("pointermove", (event) => {
-      if (drawing) drawTo(pointFromEvent(event));
-    });
-    const stopDrawing = () => { drawing = false; previous = null; };
-    canvas.addEventListener("pointerup", stopDrawing);
-    canvas.addEventListener("pointercancel", stopDrawing);
-
     panel.querySelectorAll("[data-coloring-color]").forEach((button) => {
       button.addEventListener("click", () => {
         color = button.dataset.coloringColor;
@@ -3298,15 +3329,12 @@ function initializeColoringGame(panel) {
         panel.querySelector("[data-coloring-eraser]")?.setAttribute("aria-pressed", "false");
       });
     });
-    panel.querySelector("[data-coloring-size]")?.addEventListener("input", (event) => {
-      size = Number(event.target.value) || 24;
-    });
     panel.querySelector("[data-coloring-eraser]")?.addEventListener("click", (event) => {
       erasing = !erasing;
       event.currentTarget.setAttribute("aria-pressed", erasing ? "true" : "false");
     });
     panel.querySelector("[data-coloring-reset]")?.addEventListener("click", () => {
-      paintContext.clearRect(0, 0, paint.width, paint.height);
+      Object.keys(colorsByRegion).forEach((regionId) => delete colorsByRegion[regionId]);
       render();
     });
     panel.querySelector("[data-coloring-download]")?.addEventListener("click", () => {
@@ -3320,11 +3348,9 @@ function initializeColoringGame(panel) {
     panel.dataset.ready = "true";
     if (loading) loading.hidden = true;
     render();
-  };
-  image.onerror = () => {
+  }).catch(() => {
     if (loading) loading.textContent = isEnglish() ? "The drawing could not be opened." : "تعذر فتح الرسمة.";
-  };
-  image.src = source;
+  });
 }
 
 function renderProductModal() {
@@ -3615,6 +3641,55 @@ function syncImageLightboxNav() {
   if (imageLightboxNext) imageLightboxNext.hidden = !hasNavigation;
 }
 
+function clampImageLightboxPan() {
+  const scale = state.lightbox.scale;
+  if (scale <= 1 || !imageLightboxStage || !imageLightboxImage) {
+    state.lightbox.x = 0;
+    state.lightbox.y = 0;
+    return;
+  }
+  const maxX = Math.max(0, (imageLightboxImage.offsetWidth * scale - imageLightboxStage.clientWidth) / 2);
+  const maxY = Math.max(0, (imageLightboxImage.offsetHeight * scale - imageLightboxStage.clientHeight) / 2);
+  state.lightbox.x = Math.max(-maxX, Math.min(maxX, state.lightbox.x));
+  state.lightbox.y = Math.max(-maxY, Math.min(maxY, state.lightbox.y));
+}
+
+function applyImageLightboxZoom() {
+  clampImageLightboxPan();
+  const { scale, x, y } = state.lightbox;
+  imageLightboxImage.style.transform = `translate3d(${x}px, ${y}px, 0) scale(${scale})`;
+  imageLightboxStage?.classList.toggle("is-zoomed", scale > 1);
+}
+
+function setImageLightboxZoom(nextScale, clientX, clientY) {
+  const previousScale = state.lightbox.scale || 1;
+  const scale = Math.max(1, Math.min(5, Number(nextScale) || 1));
+  if (imageLightboxStage && Number.isFinite(clientX) && Number.isFinite(clientY) && scale !== previousScale) {
+    const bounds = imageLightboxStage.getBoundingClientRect();
+    const pointX = clientX - (bounds.left + bounds.width / 2);
+    const pointY = clientY - (bounds.top + bounds.height / 2);
+    const ratio = scale / previousScale;
+    state.lightbox.x = pointX - (pointX - state.lightbox.x) * ratio;
+    state.lightbox.y = pointY - (pointY - state.lightbox.y) * ratio;
+  }
+  state.lightbox.scale = scale;
+  if (scale === 1) {
+    state.lightbox.x = 0;
+    state.lightbox.y = 0;
+  }
+  applyImageLightboxZoom();
+}
+
+function resetImageLightboxZoom() {
+  state.lightbox.scale = 1;
+  state.lightbox.x = 0;
+  state.lightbox.y = 0;
+  lightboxPointers.clear();
+  lightboxGesture = null;
+  imageLightboxStage?.classList.remove("is-dragging");
+  applyImageLightboxZoom();
+}
+
 function setImageLightboxImage(src, alt = "", { productId = "", image = "", updateUrl = false } = {}) {
   if (imageLightboxStage && imageLightboxImage.parentElement !== imageLightboxStage) {
     imageLightboxStage.appendChild(imageLightboxImage);
@@ -3624,6 +3699,7 @@ function setImageLightboxImage(src, alt = "", { productId = "", image = "", upda
   state.lightbox.productId = productId;
   state.lightbox.image = image;
   state.lightbox.alt = alt;
+  resetImageLightboxZoom();
   syncImageLightboxNav();
   if (updateUrl && productId && image) setProductImageUrl(productId, image);
 }
@@ -3662,6 +3738,7 @@ function closeImageLightbox({ updateUrl = false } = {}) {
   imageLightboxImage.removeAttribute("src");
   imageLightboxImage.alt = "";
   imageLightboxImage.remove();
+  resetImageLightboxZoom();
   state.lightbox.productId = "";
   state.lightbox.image = "";
   state.lightbox.alt = "";
@@ -4350,7 +4427,7 @@ function closeAccountModal() {
 }
 
 function shouldSyncCartToAccount() {
-  return Boolean(effectiveAuthUser()?.uid);
+  return Boolean(state.auth.user?.uid && state.auth.user?.getIdToken);
 }
 
 function warnCartAccountSaveFailed() {
@@ -4534,8 +4611,14 @@ async function initCustomerAuth() {
 
     state.auth.services.onAuthStateChanged(auth, async (user) => {
       state.auth.user = user;
+      state.auth.ready = true;
       state.auth.loading = false;
-      if (user) saveCachedAuthUser(user);
+      if (user) {
+        saveCachedAuthUser(user);
+      } else {
+        moveCurrentCartToGuest();
+        clearCachedAuthUser();
+      }
       renderAuthState();
       if (user) {
         applySignedInCart(user).catch((error) => console.warn("Could not sync signed-in cart.", error));
@@ -4545,6 +4628,7 @@ async function initCustomerAuth() {
       }
     });
   } catch (error) {
+    state.auth.ready = true;
     state.auth.loading = false;
     state.auth.configured = false;
     console.warn("Could not initialize Firebase auth.", error);
@@ -4707,6 +4791,7 @@ async function resetEmailPassword() {
 async function signOutCustomer() {
   const services = state.auth.services;
   await saveCartNow({ immediateRemote: true });
+  moveCurrentCartToGuest();
   clearCachedAuthUser();
   state.auth.user = null;
   if (services?.auth) await services.signOut(services.auth);
@@ -4720,6 +4805,10 @@ async function signOutCustomer() {
 function addToCart(productId, variantId = "", amount = 1) {
   const product = getProduct(productId);
   if (!product) return;
+  if (isIotaMedalProduct(product)) {
+    window.location.href = canonicalProductPath(product);
+    return;
+  }
 
   const variant = variantId ? findVariant(product, variantId) : defaultVariant(product);
   if (!isVariantAvailable(variant, product)) {
@@ -5555,43 +5644,120 @@ imageLightbox.addEventListener("click", (event) => {
 
 imageLightbox.addEventListener("pointerdown", (event) => {
   const stage = event.target.closest(".image-lightbox-stage");
-  if (!stage || lightboxGalleryImages().length < 2) return;
-  lightboxPointerStart = {
-    pointerId: event.pointerId,
-    x: event.clientX,
-    y: event.clientY
-  };
+  if (!stage) return;
+  stage.setPointerCapture?.(event.pointerId);
+  lightboxPointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
+  if (lightboxPointers.size === 1) {
+    lightboxPointerStart = { pointerId: event.pointerId, x: event.clientX, y: event.clientY };
+    lightboxGesture = {
+      type: "pan",
+      pointerId: event.pointerId,
+      startX: event.clientX,
+      startY: event.clientY,
+      originX: state.lightbox.x,
+      originY: state.lightbox.y,
+      moved: false
+    };
+  } else if (lightboxPointers.size === 2) {
+    const [first, second] = [...lightboxPointers.values()];
+    lightboxGesture = {
+      type: "pinch",
+      startDistance: Math.hypot(second.x - first.x, second.y - first.y) || 1,
+      startScale: state.lightbox.scale,
+      moved: false
+    };
+  }
+  if (state.lightbox.scale > 1) stage.classList.add("is-dragging");
 });
 
-imageLightbox.addEventListener("pointerup", (event) => {
-  if (!lightboxPointerStart || lightboxPointerStart.pointerId !== event.pointerId) return;
-  const { x, y } = lightboxPointerStart;
-  lightboxPointerStart = null;
-  const dx = event.clientX - x;
-  const dy = event.clientY - y;
-
-  if (Math.abs(dx) < 45 || Math.abs(dx) <= Math.abs(dy) * 1.2) return;
-  if (showAdjacentLightboxImage(dx < 0 ? 1 : -1)) {
-    lightboxSwipeSuppressUntil = Date.now() + 450;
+imageLightbox.addEventListener("pointermove", (event) => {
+  if (!lightboxPointers.has(event.pointerId)) return;
+  lightboxPointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
+  if (lightboxPointers.size >= 2) {
+    const [first, second] = [...lightboxPointers.values()];
+    if (lightboxGesture?.type !== "pinch") return;
+    const distance = Math.hypot(second.x - first.x, second.y - first.y) || 1;
+    const centerX = (first.x + second.x) / 2;
+    const centerY = (first.y + second.y) / 2;
+    lightboxGesture.moved = true;
+    setImageLightboxZoom(lightboxGesture.startScale * distance / lightboxGesture.startDistance, centerX, centerY);
     event.preventDefault();
-    event.stopPropagation();
+    return;
+  }
+  if (lightboxGesture?.type === "pan" && lightboxGesture.pointerId === event.pointerId && state.lightbox.scale > 1) {
+    const dx = event.clientX - lightboxGesture.startX;
+    const dy = event.clientY - lightboxGesture.startY;
+    if (Math.abs(dx) > 2 || Math.abs(dy) > 2) lightboxGesture.moved = true;
+    state.lightbox.x = lightboxGesture.originX + dx;
+    state.lightbox.y = lightboxGesture.originY + dy;
+    applyImageLightboxZoom();
+    event.preventDefault();
   }
 });
 
-imageLightbox.addEventListener("pointercancel", () => {
+imageLightbox.addEventListener("pointerup", (event) => {
+  if (!lightboxPointers.has(event.pointerId)) return;
+  const wasMoved = Boolean(lightboxGesture?.moved);
+  lightboxPointers.delete(event.pointerId);
+  imageLightboxStage?.classList.remove("is-dragging");
+  if (lightboxPointers.size === 1) {
+    const [pointerId, point] = [...lightboxPointers.entries()][0];
+    lightboxGesture = {
+      type: "pan",
+      pointerId,
+      startX: point.x,
+      startY: point.y,
+      originX: state.lightbox.x,
+      originY: state.lightbox.y,
+      moved: false
+    };
+  } else {
+    lightboxGesture = null;
+  }
+  const pointerStart = lightboxPointerStart;
   lightboxPointerStart = null;
+  if (wasMoved || state.lightbox.scale > 1) {
+    lightboxSwipeSuppressUntil = Date.now() + 250;
+    event.preventDefault();
+    return;
+  }
+  if (!pointerStart || pointerStart.pointerId !== event.pointerId) return;
+  const dx = event.clientX - pointerStart.x;
+  const dy = event.clientY - pointerStart.y;
+  if (Math.abs(dx) >= 45 && Math.abs(dx) > Math.abs(dy) * 1.2 && showAdjacentLightboxImage(dx < 0 ? 1 : -1)) {
+    lightboxSwipeSuppressUntil = Date.now() + 450;
+    event.preventDefault();
+  }
+});
+
+imageLightbox.addEventListener("pointercancel", (event) => {
+  lightboxPointers.delete(event.pointerId);
+  lightboxGesture = null;
+  lightboxPointerStart = null;
+  imageLightboxStage?.classList.remove("is-dragging");
 });
 
 imageLightbox.addEventListener("wheel", (event) => {
-  if (lightboxGalleryImages().length < 2) return;
   const horizontalDelta = Math.abs(event.deltaX) > Math.abs(event.deltaY) ? event.deltaX : (event.shiftKey ? event.deltaY : 0);
-  if (Math.abs(horizontalDelta) < 24 || Date.now() < lightboxWheelSuppressUntil) return;
-
-  if (showAdjacentLightboxImage(horizontalDelta > 0 ? 1 : -1)) {
+  if (state.lightbox.scale === 1 && Math.abs(horizontalDelta) >= 24 && Date.now() >= lightboxWheelSuppressUntil && lightboxGalleryImages().length > 1) {
+    if (showAdjacentLightboxImage(horizontalDelta > 0 ? 1 : -1)) {
+      lightboxWheelSuppressUntil = Date.now() + 360;
+      event.preventDefault();
+    }
+    return;
+  }
+  if (Math.abs(event.deltaY) >= 2) {
+    const factor = event.deltaY < 0 ? 1.2 : 1 / 1.2;
+    setImageLightboxZoom(state.lightbox.scale * factor, event.clientX, event.clientY);
     lightboxWheelSuppressUntil = Date.now() + 360;
     event.preventDefault();
   }
 }, { passive: false });
+
+imageLightboxImage.addEventListener("dblclick", (event) => {
+  setImageLightboxZoom(state.lightbox.scale > 1 ? 1 : 2.5, event.clientX, event.clientY);
+  event.preventDefault();
+});
 
 cartItems.addEventListener("click", (event) => {
   const button = event.target.closest("[data-qty]");

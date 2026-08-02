@@ -27,6 +27,7 @@ const activeCartStorageKey = "pope-kyrillos-cart:active";
 const cachedAuthStorageKey = "pope-kyrillos-auth:user";
 const cartSyncStorageKey = "pope-kyrillos-cart:sync";
 const checkoutStorageKey = "pope-kyrillos-checkout";
+const checkoutOrderRequestStorageKey = "pope-kyrillos-checkout:order-request";
 const encodingCleanupStorageKey = "pope-kyrillos-encoding-cleanup:v1";
 const mojibakeSequencePattern = /[\u00d8\u00d9][\u0080-\u00ff\u201a-\u2026]/u;
 const cartSeparator = "::";
@@ -34,6 +35,7 @@ const cartSeparator = "::";
 const formatter = new Intl.NumberFormat("ar-EG");
 let products = [];
 let cart = new Map();
+let cartItemMetadata = new Map();
 clearCorruptedBrowserStorage();
 let customer = loadCustomer();
 let checkoutAuthServicesPromise = null;
@@ -79,7 +81,7 @@ function text(key, values = {}) {
 
 Object.assign(translations, {
   orderSubmitBusy: "\u062c\u0627\u0631\u064a \u062a\u0633\u062c\u064a\u0644 \u0627\u0644\u0637\u0644\u0628...",
-  orderSubmitFailed: "\u062a\u0639\u0630\u0631 \u062a\u0633\u062c\u064a\u0644 \u0627\u0644\u0637\u0644\u0628. \u0645\u0646 \u0641\u0636\u0644\u0643 \u062d\u0627\u0648\u0644 \u0645\u0631\u0629 \u0623\u062e\u0631\u0649 \u0623\u0648 \u062a\u0648\u0627\u0635\u0644 \u0645\u0639\u0646\u0627.",
+  orderSubmitFailed: "\u0644\u0645 \u064a\u062a\u0645 \u0625\u062a\u0645\u0627\u0645 \u0627\u0644\u0637\u0644\u0628. \u0627\u062d\u062a\u0641\u0638\u0646\u0627 \u0628\u0627\u0644\u0645\u0646\u062a\u062c\u0627\u062a \u062f\u0627\u062e\u0644 \u0627\u0644\u0633\u0644\u0629\u060c \u0628\u0631\u062c\u0627\u0621 \u0627\u0644\u0645\u062d\u0627\u0648\u0644\u0629 \u0645\u0631\u0629 \u0623\u062e\u0631\u0649.",
   orderSubmitReady: "\u062a\u0645 \u062a\u0633\u062c\u064a\u0644 \u0627\u0644\u0637\u0644\u0628. \u0633\u064a\u062a\u0645 \u0641\u062a\u062d \u0648\u0627\u062a\u0633\u0627\u0628 \u0644\u0625\u0631\u0633\u0627\u0644 \u0627\u0644\u062a\u0641\u0627\u0635\u064a\u0644."
 });
 
@@ -124,20 +126,20 @@ function clearCorruptedBrowserStorage() {
   }
 }
 
-function cartKey(productId, variantId = "default") {
-  return `${productId}${cartSeparator}${variantId || "default"}`;
+function cartKey(productId, variantId = "default", lineId = "") {
+  return `${productId}${cartSeparator}${variantId || "default"}${lineId ? `${cartSeparator}${lineId}` : ""}`;
 }
 
 function parseCartKey(key) {
-  const [productId, variantId = "default"] = String(key).split(cartSeparator);
-  return { productId, variantId };
+  const [productId, variantId = "default", lineId = ""] = String(key).split(cartSeparator);
+  return { productId, variantId, lineId };
 }
 
 function cartPayloadFromMap(map = cart) {
   return [...map.entries()]
     .map(([key, qty]) => {
-      const { productId, variantId } = parseCartKey(key);
-      return { productId, variantId, qty: Number(qty) || 0 };
+      const { productId, variantId, lineId } = parseCartKey(key);
+      return { productId, variantId, ...(lineId ? { lineId } : {}), qty: Number(qty) || 0, ...(cartItemMetadata.get(key) || {}) };
     })
     .filter((item) => item.productId && item.qty > 0);
 }
@@ -150,7 +152,18 @@ function cartMapFromPayload(items = []) {
     const variantId = item.variantId || parseCartKey(item.key || "").variantId || "default";
     const qty = Number(item.qty);
     if (!productId || !Number.isFinite(qty) || qty <= 0) return;
-    map.set(cartKey(productId, variantId), Math.floor(qty));
+    const key = cartKey(productId, variantId, item.lineId || "");
+    map.set(key, Math.floor(qty));
+    const metadata = {
+      previewImage: item.previewImage || "",
+      designId: item.designId || "",
+      designName: item.designName || "",
+      selectedColors: Array.isArray(item.selectedColors) ? item.selectedColors : [],
+      coloringDesign: item.coloringDesign || null,
+      woodType: item.woodType || "",
+      finalPrice: Number(item.finalPrice) || 0
+    };
+    if (metadata.previewImage || metadata.coloringDesign || metadata.woodType) cartItemMetadata.set(key, metadata);
   });
   return map;
 }
@@ -202,6 +215,19 @@ function saveCachedAuthUser(user) {
   } catch {
     // Ignore localStorage write failures.
   }
+}
+
+function clearCachedAuthUser() {
+  try {
+    localStorage.removeItem(cachedAuthStorageKey);
+  } catch {
+    // Local storage cleanup is best-effort.
+  }
+}
+
+function moveCheckoutCartToGuest() {
+  const guestCart = readCartRecord(guestCartStorageKey).cart;
+  saveCartRecord(guestCartStorageKey, mergeCartMaps(guestCart, cart));
 }
 
 function currentUserCartStorageKey(user = loadCachedAuthUser()) {
@@ -304,6 +330,47 @@ function saveCart() {
   saveCurrentCheckoutCartRemote();
 }
 
+function checkoutCartStorageKeys(user = loadCachedAuthUser()) {
+  const keys = new Set([
+    guestCartStorageKey,
+    currentUserCartStorageKey(user),
+    activeCartStorageKey,
+    cartSyncStorageKey
+  ]);
+  [localStorage, sessionStorage].forEach((storage) => {
+    try {
+      const activeKey = storage.getItem(activeCartStorageKey);
+      if (activeKey === guestCartStorageKey || activeKey?.startsWith(userCartStoragePrefix)) keys.add(activeKey);
+    } catch {
+      // Storage cleanup is best-effort.
+    }
+  });
+  return [...keys].filter(Boolean);
+}
+
+function clearCheckoutCartStorage() {
+  const keys = checkoutCartStorageKeys();
+  [localStorage, sessionStorage].forEach((storage) => {
+    keys.forEach((key) => {
+      try {
+        storage.removeItem(key);
+      } catch {
+        // Storage cleanup is best-effort.
+      }
+    });
+  });
+}
+
+async function clearCheckoutCartAfterSuccessfulOrder() {
+  cart = new Map();
+  const remoteClear = saveCurrentCheckoutCartRemote().catch(() => false);
+  clearCheckoutCartStorage();
+  setCartCount();
+  renderCartPage();
+  renderOrderSummary();
+  await remoteClear;
+}
+
 function firebaseConfig() {
   return window.POPE_KYRILLOS_FIREBASE_CONFIG || {};
 }
@@ -357,7 +424,12 @@ async function currentCheckoutUser() {
       unsubscribe = services.onAuthStateChanged(services.auth, (user) => {
         window.clearTimeout(timeout);
         unsubscribe();
-        if (user) saveCachedAuthUser(user);
+        if (user) {
+          saveCachedAuthUser(user);
+        } else {
+          moveCheckoutCartToGuest();
+          clearCachedAuthUser();
+        }
         resolve(user);
       });
     });
@@ -422,9 +494,8 @@ async function saveCurrentCheckoutCartRemote() {
 }
 
 async function restoreSignedInCheckoutCart() {
-  const cachedUser = loadCachedAuthUser();
   const realUser = await currentCheckoutUser();
-  const user = realUser || cachedUser;
+  const user = realUser;
   if (!user) return false;
   const before = cartFingerprint(cart);
 
@@ -500,8 +571,18 @@ function productPrice(product) {
 }
 
 function getProductVariants(product) {
+  if (isMedalProduct(product)) {
+    return [
+      { id: "medal-wood-plywood", title: "خشب كونتر", price: 18, compareAtPrice: 20, discountRate: 0.1, options: { "نوع الخشب": "كونتر" }, available: true },
+      { id: "medal-wood-beech", title: "خشب زان", price: 27, compareAtPrice: 30, discountRate: 0.1, options: { "نوع الخشب": "زان" }, available: true }
+    ];
+  }
   if (Array.isArray(product?.variants) && product.variants.length) return product.variants;
   return [{ id: "default", price: productPrice(product), options: {}, available: product?.stock !== "غير متاح حاليا" }];
+}
+
+function isMedalProduct(product) {
+  return /(?:مادلي|ميدالي|medal)/i.test(String(product?.name || ""));
 }
 
 function findVariant(product, variantId = "default") {
@@ -530,7 +611,21 @@ function cartEntries() {
       const product = getProduct(productId);
       if (!product) return null;
       const variant = findVariant(product, variantId);
-      return { key, product, variant, qty, price: variantPrice(variant, product), optionText: variantOptionText(variant) };
+      const price = variantPrice(variant, product);
+      const basePrice = Number(variant?.compareAtPrice);
+      const safeBasePrice = Number.isFinite(basePrice) && basePrice >= price ? basePrice : price;
+      const metadata = cartItemMetadata.get(key) || {};
+      return {
+        key,
+        product,
+        variant,
+        qty,
+        price,
+        basePrice: safeBasePrice,
+        discount: safeBasePrice !== null && price !== null ? safeBasePrice - price : 0,
+        optionText: variantOptionText(variant),
+        ...metadata
+      };
     })
     .filter(Boolean);
 }
@@ -567,7 +662,7 @@ function renderOrderSummary(targetSelector = "[data-order-summary]") {
     <div class="checkout-summary-list">
       ${entries
         .map((item) => {
-          const image = productImage(item.product);
+          const image = item.previewImage || productImage(item.product);
           const lineTotal = item.price === null ? t("askPrice") : money(item.price * item.qty);
           return `
             <article class="checkout-summary-item">
@@ -576,6 +671,7 @@ function renderOrderSummary(targetSelector = "[data-order-summary]") {
                 <h3>${escapeHtml(item.product.name)}</h3>
                 ${item.optionText ? `<p>${escapeHtml(item.optionText)}</p>` : ""}
                 <span>${t("quantity")}: ${formatter.format(item.qty)}</span>
+                ${isMedalProduct(item.product) ? `<small>السعر الأساسي: <del>${money(item.basePrice)}</del> · الخصم: ${money(item.discount)} · السعر النهائي: ${money(item.price)}</small>` : ""}
               </div>
               <strong>${lineTotal}</strong>
             </article>
@@ -602,7 +698,7 @@ function renderCartPage() {
   }
   list.innerHTML = entries
     .map((item) => {
-      const image = productImage(item.product);
+      const image = item.previewImage || productImage(item.product);
       const unitPrice = item.price === null ? t("askPrice") : money(item.price);
       return `
         <article class="cart-page-item">
@@ -610,7 +706,7 @@ function renderCartPage() {
           <div>
             <h2>${escapeHtml(item.product.name)}</h2>
             ${item.optionText ? `<p>${escapeHtml(item.optionText)}</p>` : ""}
-            <span>${unitPrice}</span>
+            ${isMedalProduct(item.product) ? `<p class="cart-medal-pricing"><span>السعر الأساسي: <del>${money(item.basePrice)}</del></span><span>خصم الخدمات 10%: -${money(item.discount)}</span><strong>السعر النهائي: ${unitPrice}</strong><strong>الإجمالي: ${money(item.price * item.qty)}</strong></p>` : `<span>${unitPrice}</span>`}
           </div>
           <div class="cart-page-actions">
             <div class="qty-control">
@@ -641,7 +737,10 @@ function bindCartPage() {
       const key = deltaButton.dataset.cartKey;
       const previous = cartEntries().find((item) => item.key === key);
       const next = (cart.get(key) || 0) + Number(deltaButton.dataset.cartDelta || 0);
-      if (next <= 0) cart.delete(key);
+      if (next <= 0) {
+        cart.delete(key);
+        cartItemMetadata.delete(key);
+      }
       else cart.set(key, next);
       if (previous && Number(deltaButton.dataset.cartDelta || 0) < 0) {
         trackCheckoutEvent("remove_from_cart", checkoutAnalyticsItem(previous, Math.min(previous.qty, Math.abs(Number(deltaButton.dataset.cartDelta || 0)))));
@@ -651,6 +750,7 @@ function bindCartPage() {
       const removed = cartEntries().find((item) => item.key === removeButton.dataset.cartRemove);
       if (removed) trackCheckoutEvent("remove_from_cart", checkoutAnalyticsItem(removed));
       cart.delete(removeButton.dataset.cartRemove);
+      cartItemMetadata.delete(removeButton.dataset.cartRemove);
     }
     saveCart();
     renderCartPage();
@@ -797,17 +897,59 @@ function orderLines() {
     .join("\n");
 }
 
+function savedColoringDesign(productId) {
+  try {
+    const modelId = localStorage.getItem(`yota-coloring-product-model:${productId}`) || "";
+    const storageKey = modelId
+      ? `yota-coloring-design-${modelId}`
+      : `pope-kyrillos-coloring:${productId}`;
+    const coloredParts = Object.values(JSON.parse(
+      localStorage.getItem(storageKey) || "{}"
+    )).filter((part) => part?.regionId && part?.colorId && part?.colorName && part?.colorHex);
+    if (!coloredParts.length) return null;
+    return {
+      modelId: modelId || "yota-01",
+      selectedColors: [...new Map(coloredParts.map((part) => [part.colorId, {
+        colorId: part.colorId,
+        colorName: part.colorName,
+        colorHex: part.colorHex
+      }])).values()],
+      coloredParts
+    };
+  } catch {
+    return null;
+  }
+}
+
 function orderProductsPayload() {
   return JSON.stringify(
-    cartEntries().map((item) => ({
-      productId: item.product.id || item.id || "",
-      name: item.product.name || "",
-      variantId: item.variantId || "",
-      option: item.optionText || "",
-      quantity: item.qty,
-      price: item.price,
-      lineTotal: item.price === null ? null : (item.price || 0) * item.qty
-    }))
+    cartEntries().map((item) => {
+      const productId = item.product.id || item.id || "";
+      const coloringDesign = item.coloringDesign || savedColoringDesign(productId);
+      return {
+        productId,
+        name: item.product.name || "",
+        image: item.previewImage || productImage(item.product),
+        previewImage: item.previewImage || "",
+        woodType: item.woodType || String(item.variant?.options?.["نوع الخشب"] || ""),
+        designId: item.designId || productId,
+        designName: item.designName || item.product.name || "",
+        selectedColors: item.selectedColors || coloringDesign?.selectedColors || [],
+        variantId: item.variant?.id || "",
+        sku: String(item.variant?.sku || item.product?.sku || "").trim(),
+        option: item.optionText || "",
+        quantity: item.qty,
+        price: item.price,
+        basePrice: item.basePrice,
+        discountRate: Number(item.variant?.discountRate) || 0,
+        discountValue: item.discount,
+        lineTotal: item.price === null ? null : (item.price || 0) * item.qty,
+        ...(coloringDesign ? {
+          coloringDesign,
+          notes: `تصميم تلوين اليوطا: ${JSON.stringify(coloringDesign)}`
+        } : {})
+      };
+    })
   );
 }
 
@@ -838,7 +980,56 @@ function createRequestId() {
   return `web-${Date.now()}-${Math.random().toString(16).slice(2)}`;
 }
 
+function checkoutRequestId() {
+  const fingerprint = cartFingerprint(cart);
+  try {
+    const saved = JSON.parse(sessionStorage.getItem(checkoutOrderRequestStorageKey) || "{}");
+    if (saved.requestId && saved.fingerprint === fingerprint) return saved.requestId;
+  } catch {
+    // Fall through and create a new request id.
+  }
+  const requestId = createRequestId();
+  try {
+    sessionStorage.setItem(checkoutOrderRequestStorageKey, JSON.stringify({ requestId, fingerprint }));
+  } catch {
+    // Session storage can be unavailable; the in-page submission guard still applies.
+  }
+  return requestId;
+}
+
+function clearCheckoutRequestId(requestId) {
+  try {
+    const saved = JSON.parse(sessionStorage.getItem(checkoutOrderRequestStorageKey) || "{}");
+    if (!requestId || saved.requestId === requestId) sessionStorage.removeItem(checkoutOrderRequestStorageKey);
+  } catch {
+    try {
+      sessionStorage.removeItem(checkoutOrderRequestStorageKey);
+    } catch {
+      // Session storage cleanup is best-effort.
+    }
+  }
+}
+
+function completedOrderId(data = {}) {
+  return data.recordId || data.orderId || data.id || "";
+}
+
+function assertCompletedOrder(data, expectedDetailCount) {
+  const detailCount = Number(data?.detailCount);
+  if (
+    data?.ok !== true ||
+    !completedOrderId(data) ||
+    !Number.isInteger(detailCount) ||
+    detailCount !== expectedDetailCount
+  ) {
+    throw new Error(t("orderSubmitFailed"));
+  }
+  return data;
+}
+
 async function createWebsiteOrder(paymentMethod, requestId) {
+  const products = orderProductsPayload();
+  const expectedDetailCount = JSON.parse(products).length;
   const response = await fetch(ordersEndpointPath, {
     method: "POST",
     headers: {
@@ -850,7 +1041,7 @@ async function createWebsiteOrder(paymentMethod, requestId) {
       customerName: customer.name,
       phone: customer.phone,
       source: "Website",
-      products: orderProductsPayload(),
+      products,
       total: cartTotal(),
       paymentStatus: paymentStatusForOrder(paymentMethod),
       paymentMethod: paymentMethodForOrder(paymentMethod),
@@ -864,7 +1055,7 @@ async function createWebsiteOrder(paymentMethod, requestId) {
   });
   const data = await response.json().catch(() => ({}));
   if (!response.ok || data.error) throw new Error(data.message || t("orderSubmitFailed"));
-  return data;
+  return assertCompletedOrder(data, expectedDetailCount);
 }
 
 function whatsappOrderUrl(paymentMethod, extra = "") {
@@ -903,6 +1094,7 @@ function bindPaymentPage() {
     window.location.href = "/checkout";
     return;
   }
+  let isSubmittingOrder = false;
   document.querySelectorAll("[data-payment-action]").forEach((button) => {
     if (button.dataset.paymentAction === "paymob") {
       button.disabled = true;
@@ -914,7 +1106,6 @@ function bindPaymentPage() {
       button.closest("article")?.classList.add("payment-option-disabled");
       return;
     }
-    let isSubmittingOrder = false;
     button.addEventListener("click", () => {
       const method = button.dataset.paymentAction;
       trackCheckoutEvent("select_payment_method", { paymentMethod: method || "unknown", price: cartTotal(), currency: "EGP" });
@@ -926,11 +1117,15 @@ function bindPaymentPage() {
         if (isSubmittingOrder) return;
         const status = document.querySelector("[data-payment-status]");
         const originalText = button.textContent;
-        const requestId = createRequestId();
+        const requestId = checkoutRequestId();
         let extraLine = "";
+        const completedEntries = cartEntries();
         isSubmittingOrder = true;
         button.disabled = true;
         try {
+          if (status) status.textContent = t("orderSubmitBusy");
+          trackCheckoutEvent("place_order", { eventId: requestId, quantity: completedEntries.reduce((sum, item) => sum + item.qty, 0), price: cartTotal(), currency: "EGP", paymentMethod: method });
+          const orderResult = await createWebsiteOrder(method, requestId);
           if (customer.deliveryMethod === "bosta") {
             try {
               if (status) status.textContent = t("bostaBusy");
@@ -942,16 +1137,19 @@ function bindPaymentPage() {
               extraLine = t("bostaFailed");
             }
           }
-          if (status) status.textContent = t("orderSubmitBusy");
-          trackCheckoutEvent("place_order", { eventId: requestId, quantity: cartEntries().reduce((sum, item) => sum + item.qty, 0), price: cartTotal(), currency: "EGP", paymentMethod: method });
-          await createWebsiteOrder(method, requestId);
-          cartEntries().forEach((item) => trackCheckoutEvent("order_success", { ...checkoutAnalyticsItem(item), eventId: requestId }));
+          const whatsappUrl = whatsappOrderUrl(method, extraLine);
+          await clearCheckoutCartAfterSuccessfulOrder();
+          clearCheckoutRequestId(requestId);
+          completedEntries.forEach((item) => trackCheckoutEvent("order_success", { ...checkoutAnalyticsItem(item), eventId: requestId }));
           if (status) status.textContent = t("orderSubmitReady");
-          window.open(whatsappOrderUrl(method, extraLine), "_blank", "noopener");
+          window.open(whatsappUrl, "_blank", "noopener");
+          const publicOrderId = orderResult.requestId || completedOrderId(orderResult);
+          window.location.href = `/order-success?orderId=${encodeURIComponent(publicOrderId)}`;
         } catch (error) {
-          trackCheckoutEvent("order_failed", { eventId: requestId, errorType: "checkout", errorMessage: error?.message || "Order failed", paymentMethod: method });
-          trackCheckoutEvent("checkout_error", { errorType: "checkout", errorMessage: error?.message || "Order failed" });
-          if (status) status.textContent = error.message || t("orderSubmitFailed");
+          const errorMessage = error?.message || t("orderSubmitFailed");
+          trackCheckoutEvent("order_failed", { eventId: requestId, errorType: "checkout", errorMessage, paymentMethod: method });
+          trackCheckoutEvent("checkout_error", { errorType: "checkout", errorMessage });
+          if (status) status.textContent = t("orderSubmitFailed");
           isSubmittingOrder = false;
           button.disabled = false;
           button.textContent = originalText;
