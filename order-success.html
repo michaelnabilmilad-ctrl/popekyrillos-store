@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>تم استلام الطلب | مكتبة البابا كيرلس</title>
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="stylesheet" href="styles.min.css?v=asset-eb7f3ec8d964" />
+    <style>
+      body { min-height: 100vh; display: grid; place-items: center; background: #f7f3eb; }
+      .payment-result { width: min(92vw, 680px); padding: 42px; border: 1px solid #ded4c1; border-radius: 18px; background: #fffaf1; box-shadow: 0 24px 60px rgba(18, 35, 47, .12); text-align: center; }
+      .payment-result strong { display: inline-grid; place-items: center; width: 64px; height: 64px; margin-bottom: 18px; border-radius: 50%; background: #0b756d; color: #fff; font-size: 32px; }
+      .payment-result h1 { margin: 0 0 12px; color: #12232f; font-size: clamp(30px, 5vw, 46px); }
+      .payment-result p { color: #526674; font-size: 18px; line-height: 1.8; }
+      .order-reference { font-weight: 900; overflow-wrap: anywhere; }
+      .payment-actions { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-top: 24px; }
+      .payment-actions a { text-decoration: none; }
+    </style>
+  </head>
+  <body>
+    <main class="payment-result">
+      <strong>✓</strong>
+      <h1>تم استلام طلبك بنجاح</h1>
+      <p>تم حفظ الأوردر وكل تفاصيل المنتجات. سلة التسوق أصبحت فارغة، وسنتواصل معك لتأكيد الطلب.</p>
+      <p class="order-reference" data-order-reference hidden></p>
+      <div class="payment-actions">
+        <a class="button primary" href="/">الرجوع للتسوق</a>
+        <a class="button secondary" href="/#contact">تواصل معنا</a>
+      </div>
+    </main>
+    <script>
+      const orderId = new URLSearchParams(window.location.search).get("orderId") || "";
+      const reference = document.querySelector("[data-order-reference]");
+      if (orderId && /^[a-zA-Z0-9._:-]{1,128}$/.test(orderId)) {
+        reference.textContent = `رقم متابعة الطلب: ${orderId}`;
+        reference.hidden = false;
+      }
+    </script>
+    <script src="/analytics-config.js?v=asset-eb7f3ec8d964" defer></script>
+    <script src="/analytics.js?v=asset-eb7f3ec8d964" defer></script>
+  </body>
+</html>
