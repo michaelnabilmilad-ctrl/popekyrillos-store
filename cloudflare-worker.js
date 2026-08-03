@@ -1147,7 +1147,18 @@ function airtableTableUrl(env, tableName, recordId = "") {
 }
 
 async function airtableRequest(env, url, init, logContext) {
-  const response = await fetch(url, init);
+  let response;
+  try {
+    response = await fetch(url, init);
+  } catch (error) {
+    console.error("Airtable request transport failed", {
+      ...logContext,
+      message: String(error?.message || "request_failed").slice(0, 240)
+    });
+    const requestError = new Error("Airtable request could not be completed");
+    requestError.code = "airtable_transport_failed";
+    throw requestError;
+  }
   const text = await response.text();
   let data = {};
   try { data = text ? JSON.parse(text) : {}; } catch { data = {}; }
@@ -1161,6 +1172,7 @@ async function airtableRequest(env, url, init, logContext) {
     const requestError = new Error("Airtable order-detail request failed");
     requestError.code = "airtable_detail_failed";
     requestError.status = response.status;
+    requestError.airtableType = error.type;
     throw requestError;
   }
   return data;
@@ -1233,21 +1245,21 @@ async function resolveAirtableProducts(env, items, context) {
 }
 
 async function createAirtableOrderDetails(env, orderRecordId, items, context) {
-  const detailTable = "تفاصيل الطلبات";
-  const unresolvedIndex = items.findIndex((item) => !item.productId);
-  if (unresolvedIndex !== -1) {
-    const error = new Error(`Order item ${unresolvedIndex + 1} has no Airtable product record`);
-    error.code = "airtable_product_unresolved";
+  const detailTable = "Order Details";
+  const unnamedIndex = items.findIndex((item) => !cleanOrderString(item.productName));
+  if (unnamedIndex !== -1) {
+    const error = new Error(`Order item ${unnamedIndex + 1} has no product name`);
+    error.code = "airtable_product_name_missing";
     throw error;
   }
   const records = items.map((item) => {
     const fields = {
-      "رقم الأوردر": [orderRecordId],
-      "الكمية": item.quantity,
-      "سعر القطعة": item.unitPrice
+      "Order link": [orderRecordId],
+      Product: item.productName,
+      Quantity: item.quantity,
+      Price: item.unitPrice
     };
-    fields["المنتج"] = [item.productId];
-    if (item.detailNote) fields["ملاحظات"] = item.detailNote;
+    if (item.woodType) fields["Wood Type"] = item.woodType;
     return { fields };
   });
   const createdIds = [];
@@ -1257,7 +1269,12 @@ async function createAirtableOrderDetails(env, orderRecordId, items, context) {
         method: "POST",
         headers: { Authorization: `Bearer ${env.AIRTABLE_TOKEN}`, "Content-Type": "application/json" },
         body: JSON.stringify({ records: records.slice(index, index + 10), typecast: false })
-      }, { ...context, operation: "create_details", batch: Math.floor(index / 10) + 1 });
+      }, {
+        ...context,
+        operation: "create_details",
+        batch: Math.floor(index / 10) + 1,
+        products: items.slice(index, index + 10).map((item) => item.productName)
+      });
       createdIds.push(...(data.records || []).map((record) => record.id).filter(Boolean));
     }
     return createdIds;
@@ -1384,6 +1401,7 @@ function normalizeOrderPayload(payload = {}) {
   return {
     customerName: cleanOrderString(payload.customerName),
     phone: cleanOrderString(payload.phone),
+    address: cleanOrderString(payload.address),
     source: cleanOrderString(payload.source) || "Website",
     products: formatOrderProductsForAirtable(payload.products),
     total: Number(payload.total),
@@ -1402,8 +1420,12 @@ function validateOrderPayload(order) {
   const missing = [];
   if (!order.customerName) missing.push("customerName");
   if (!order.phone) missing.push("phone");
+  if (!order.address) missing.push("address");
   if (!order.products || order.products === "[]") missing.push("products");
   if (!Number.isFinite(order.total)) missing.push("total");
+  if (!order.paymentMethod) missing.push("paymentMethod");
+  if (!order.deliveryType) missing.push("deliveryType");
+  if (!order.orderStatus) missing.push("orderStatus");
   return missing;
 }
 
@@ -1411,6 +1433,7 @@ function airtableOrderFields(order) {
   const fields = {
     "Customer Name": order.customerName,
     Phone: order.phone,
+    Address: order.address,
     Source: order.source,
     Products: order.products,
     Total: order.total,
@@ -1788,15 +1811,6 @@ async function createOrderResponse(context) {
   let recordId = "";
 
   try {
-    const resolvedItems = await resolveAirtableProducts(env, normalizedItems.items, { requestId });
-    queueResolvedProductMediaSync(context, resolvedItems, requestId);
-    const unresolvedItems = resolvedItems.filter((item) => item.unresolved);
-    if (unresolvedItems.length) {
-      const warning = `يوجد منتجات تحتاج ربط SKU: ${unresolvedItems.map((item) => item.productName).join("، ")}`;
-      order.missingInfo = !order.missingInfo || order.missingInfo === "لا يوجد"
-        ? warning
-        : `${order.missingInfo}؛ ${warning}`;
-    }
     await initializeOrderIdempotency(env);
     const reservation = await env.ANALYTICS_DB.prepare(
       "INSERT OR IGNORE INTO website_order_requests (request_id, status) VALUES (?, 'processing')"
@@ -1852,7 +1866,7 @@ async function createOrderResponse(context) {
         message: "\u0627\u0644\u0637\u0644\u0628 \u0642\u064a\u062f \u0627\u0644\u062a\u0633\u062c\u064a\u0644. \u062d\u0627\u0648\u0644 \u0628\u0639\u062f \u0644\u062d\u0638\u0627\u062a."
       }, { status: 409 });
     }
-    const detailIds = await createAirtableOrderDetails(env, recordId, resolvedItems, { requestId, recordId });
+    const detailIds = await createAirtableOrderDetails(env, recordId, normalizedItems.items, { requestId, recordId });
     await env.ANALYTICS_DB.prepare(
       "UPDATE website_order_requests SET status = 'completed', detail_count = ?, updated_at = CURRENT_TIMESTAMP WHERE request_id = ?"
     ).bind(detailIds.length, requestId).run();
@@ -1862,7 +1876,7 @@ async function createOrderResponse(context) {
       requestId,
       recordId,
       detailCount: detailIds.length,
-      unresolvedCount: unresolvedItems.length
+      unresolvedCount: 0
     });
   } catch (error) {
     console.error("Unexpected /api/orders failure", { requestId, recordId, code: error.code || "", sku: error.sku || "", message: error.message });
@@ -1881,7 +1895,9 @@ async function createOrderResponse(context) {
       request,
       {
         error: recordId ? "order_detail_create_failed" : "order_create_failed",
-        message: "\u062a\u0639\u0630\u0631 \u062a\u0633\u062c\u064a\u0644 \u0627\u0644\u0637\u0644\u0628. \u0645\u0646 \u0641\u0636\u0644\u0643 \u062d\u0627\u0648\u0644 \u0645\u0631\u0629 \u0623\u062e\u0631\u0649."
+        message: recordId
+          ? `تم إنشاء الطلب ولكن تعذر حفظ تفاصيل المنتجات (${error.airtableType || error.code || "detail_failed"}).`
+          : `تعذر إنشاء الطلب (${error.airtableType || error.code || "order_failed"}).`
       },
       { status: 502 }
     );

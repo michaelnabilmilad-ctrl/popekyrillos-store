@@ -970,6 +970,11 @@ function deliveryTypeForOrder() {
   return customer.deliveryMethod === "pickup" ? "\u0627\u0633\u062a\u0644\u0627\u0645 \u0645\u0646 \u0627\u0644\u0645\u0643\u062a\u0628\u0629" : "\u0634\u062d\u0646";
 }
 
+function orderAddress() {
+  if (customer.deliveryMethod === "pickup") return "\u0627\u0633\u062a\u0644\u0627\u0645 \u0645\u0646 \u0627\u0644\u0645\u0643\u062a\u0628\u0629";
+  return [customer.governorate, customer.city, customer.address].filter(Boolean).join(" - ");
+}
+
 function orderMissingInfo() {
   const missing = validateCustomer(customer);
   return missing ? missing : "\u0644\u0627 \u064a\u0648\u062c\u062f";
@@ -1040,6 +1045,7 @@ async function createWebsiteOrder(paymentMethod, requestId) {
       requestId,
       customerName: customer.name,
       phone: customer.phone,
+      address: orderAddress(),
       source: "Website",
       products,
       total: cartTotal(),
@@ -1054,7 +1060,13 @@ async function createWebsiteOrder(paymentMethod, requestId) {
     })
   });
   const data = await response.json().catch(() => ({}));
-  if (!response.ok || data.error) throw new Error(data.message || t("orderSubmitFailed"));
+  if (!response.ok || data.error) {
+    const error = new Error(data.message || t("orderSubmitFailed"));
+    error.status = response.status;
+    error.serverCode = data.error || "request_failed";
+    error.fields = Array.isArray(data.fields) ? data.fields : [];
+    throw error;
+  }
   return assertCompletedOrder(data, expectedDetailCount);
 }
 
@@ -1116,6 +1128,15 @@ function bindPaymentPage() {
       const sendOrder = async () => {
         if (isSubmittingOrder) return;
         const status = document.querySelector("[data-payment-status]");
+        const missingCustomerField = validateCustomer(customer);
+        if (missingCustomerField) {
+          if (status) status.textContent = `\u0627\u0644\u062d\u0642\u0644 \u0627\u0644\u0645\u0637\u0644\u0648\u0628: ${missingCustomerField}`;
+          return;
+        }
+        if (!method) {
+          if (status) status.textContent = "\u0627\u0644\u062d\u0642\u0644 \u0627\u0644\u0645\u0637\u0644\u0648\u0628: \u0637\u0631\u064a\u0642\u0629 \u0627\u0644\u062f\u0641\u0639";
+          return;
+        }
         const originalText = button.textContent;
         const requestId = checkoutRequestId();
         let extraLine = "";
@@ -1149,7 +1170,11 @@ function bindPaymentPage() {
           const errorMessage = error?.message || t("orderSubmitFailed");
           trackCheckoutEvent("order_failed", { eventId: requestId, errorType: "checkout", errorMessage, paymentMethod: method });
           trackCheckoutEvent("checkout_error", { errorType: "checkout", errorMessage });
-          if (status) status.textContent = t("orderSubmitFailed");
+          if (status) {
+            const responseStatus = Number.isInteger(error?.status) ? `HTTP ${error.status}` : "Network error";
+            const fields = Array.isArray(error?.fields) && error.fields.length ? ` — الحقول: ${error.fields.join(", ")}` : "";
+            status.textContent = `${responseStatus}: ${errorMessage}${fields}`;
+          }
           isSubmittingOrder = false;
           button.disabled = false;
           button.textContent = originalText;
