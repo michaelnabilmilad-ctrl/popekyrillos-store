@@ -12,7 +12,8 @@ test("website orders write each cart line to the current Order Details schema", 
   assert.match(worker, /"الكمية": item\.quantity/);
   assert.match(worker, /"سعر القطعة": item\.unitPrice/);
   assert.match(worker, /createAirtableOrderDetails\(env, recordId, resolvedItems/);
-  assert.match(worker, /Address: order\.address/);
+  assert.doesNotMatch(worker, /Address: order\.address/);
+  assert.match(worker, /`العنوان: \$\{order\.address\}`/);
   assert.match(checkout, /address: orderAddress\(\)/);
 });
 

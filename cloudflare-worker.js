@@ -1448,7 +1448,6 @@ function airtableOrderFields(order) {
   const fields = {
     "Customer Name": order.customerName,
     Phone: order.phone,
-    Address: order.address,
     Source: order.source,
     Products: order.products,
     Total: order.total,
@@ -1457,7 +1456,7 @@ function airtableOrderFields(order) {
     "Delivery Type": order.deliveryType,
     "Order Status": order.orderStatus,
     "Missing Info": order.missingInfo,
-    Notes: order.notes
+    Notes: [`العنوان: ${order.address}`, order.notes].filter(Boolean).join(" | ")
   };
   if (order.pickupDate) fields["Pickup Date"] = order.pickupDate;
   if (order.paymentProof) fields["Payment Proof"] = [{ url: order.paymentProof }];
