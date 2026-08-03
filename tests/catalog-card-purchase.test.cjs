@@ -20,6 +20,8 @@ test("catalog add action is delegated once and cannot navigate or bubble", () =>
   assert.doesNotMatch(script, /if \(isIotaMedalProduct\(product\)\) \{\s*window\.location\.href/);
   assert.doesNotMatch(script, /if \(card\) openProductModal\(card\.dataset\.cardProduct\)/);
   assert.doesNotMatch(script, /class="product-photo-link"/);
+  assert.match(script, /cartSelectionLineId\(variant\)/);
+  assert.match(script, /state\.cart\.delete\(legacyKey\)/);
   assert.match(script, /تمت إضافة المنتج إلى السلة/);
 });
 

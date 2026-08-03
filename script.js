@@ -2762,6 +2762,18 @@ function parseCartKey(key) {
   return { productId, variantId, lineId };
 }
 
+function cartSelectionLineId(variant) {
+  const variantId = variant?.id || "default";
+  const options = Object.entries(variant?.options || {}).sort(([a], [b]) => a.localeCompare(b, "ar"));
+  const value = JSON.stringify({ variantId, options, coloring: "" });
+  let hash = 2166136261;
+  for (let index = 0; index < value.length; index += 1) {
+    hash ^= value.charCodeAt(index);
+    hash = Math.imul(hash, 16777619);
+  }
+  return (hash >>> 0).toString(36);
+}
+
 function loadCachedAuthUser() {
   try {
     const raw = localStorage.getItem(cachedAuthStorageKey);
@@ -4819,8 +4831,10 @@ function addToCart(productId, variantId = "", amount = 1, options = {}) {
     return false;
   }
 
-  const key = cartKey(product.id, variant?.id || "default");
-  const currentQty = state.cart.get(key) || 0;
+  const resolvedVariantId = variant?.id || "default";
+  const key = cartKey(product.id, resolvedVariantId, cartSelectionLineId(variant));
+  const legacyKey = cartKey(product.id, resolvedVariantId);
+  const currentQty = (state.cart.get(key) || 0) + (legacyKey === key ? 0 : state.cart.get(legacyKey) || 0);
   const quantity = variantQuantity(variant);
   const requestedAmount = Math.max(1, Number(amount) || 1);
   const nextQty = currentQty + requestedAmount;
@@ -4829,6 +4843,7 @@ function addToCart(productId, variantId = "", amount = 1, options = {}) {
     return false;
   }
 
+  if (legacyKey !== key) state.cart.delete(legacyKey);
   state.cart.set(key, nextQty);
   state.bosta.shipment = null;
   renderCart();
