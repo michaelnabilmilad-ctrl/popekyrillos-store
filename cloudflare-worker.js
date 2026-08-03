@@ -9,8 +9,9 @@ import { coloringDesignForProduct } from "./coloringDesigns.js";
 import { backfillAirtableOrderProducts } from "./functions/_airtable-order-backfill.js";
 import {
   AIRTABLE_PRODUCT_SKU_FIELD,
+  AIRTABLE_PRODUCT_NAME_FIELD,
+  AIRTABLE_PRODUCT_SELL_PRICE_FIELD,
   AIRTABLE_PRODUCTS_TABLE,
-  upsertAirtableCatalogProductBySku,
   syncAirtableCatalogProductMedia,
   syncResolvedOrderProductMedia
 } from "./functions/_airtable-product-media.js";
@@ -1194,14 +1195,19 @@ async function resolveAirtableProducts(env, items, context) {
       }, { ...context, operation: "find_product", sku: identity });
       let productId = data.records?.[0]?.id || "";
       if (!productId && item.websiteProductId) {
-        const result = await upsertAirtableCatalogProductBySku(env, {
-          id: item.websiteProductId,
-          sku: identity,
-          name: item.productName,
-          price: item.unitPrice,
-          image: item.image
-        }, identity, { origin: canonicalOrigin });
-        productId = result.recordId || "";
+        const created = await airtableRequest(env, airtableTableUrl(env, AIRTABLE_PRODUCTS_TABLE), {
+          method: "POST",
+          headers: { Authorization: `Bearer ${env.AIRTABLE_TOKEN}`, "Content-Type": "application/json" },
+          body: JSON.stringify({
+            records: [{ fields: {
+              [AIRTABLE_PRODUCT_SKU_FIELD]: identity,
+              [AIRTABLE_PRODUCT_NAME_FIELD]: item.productName,
+              [AIRTABLE_PRODUCT_SELL_PRICE_FIELD]: item.unitPrice
+            } }],
+            typecast: false
+          })
+        }, { ...context, operation: "create_order_product", sku: identity, productName: item.productName });
+        productId = created.records?.[0]?.id || "";
       }
       cache.set(identity, { productId, reason: productId ? "" : "not_found" });
     } catch (error) {
