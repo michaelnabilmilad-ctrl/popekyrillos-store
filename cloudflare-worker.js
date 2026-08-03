@@ -1167,7 +1167,8 @@ async function airtableRequest(env, url, init, logContext) {
     console.error("Airtable order-detail request failed", {
       ...logContext,
       status: response.status,
-      errorType: error.type
+      errorType: error.type,
+      airtableMessage: error.message.slice(0, 240)
     });
     const requestError = new Error("Airtable order-detail request failed");
     requestError.code = "airtable_detail_failed";
