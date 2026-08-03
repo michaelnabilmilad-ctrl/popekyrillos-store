@@ -2742,7 +2742,7 @@ function productCardPurchaseHtml(product, { popular = false } = {}) {
     </label>` : "";
   const coloringDesignId = catalogColoringDesignId(product);
   const coloringButton = coloringDesignId ? `
-    <button class="button secondary product-card-coloring" type="button" data-card-coloring data-coloring-url="/coloring-game?design=${encodeURIComponent(coloringDesignId)}&product=${encodeURIComponent(product.id)}">
+    <button class="button secondary product-card-coloring" type="button" data-card-coloring data-coloring-url="/coloring-game?design=${encodeURIComponent(coloringDesignId)}">
       ${escapeHtml(isEnglish() ? "Coloring game" : "لعبة التلوين")}
     </button>` : "";
   return `

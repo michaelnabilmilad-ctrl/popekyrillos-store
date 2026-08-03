@@ -31,6 +31,7 @@ test("coloring is a separate explicit card action and selects the requested desi
   assert.match(script, /const coloringDesignId = catalogColoringDesignId\(product\)/);
   assert.match(script, /type="button" data-card-coloring/);
   assert.match(script, /\/coloring-game\?design=/);
+  assert.doesNotMatch(script, /coloring-game\?design=\$\{[^\n]+&product=/);
   assert.match(script, /const coloringButton = event\.target\.closest\("\[data-card-coloring\]"\);[\s\S]*?event\.preventDefault\(\);\s*event\.stopPropagation\(\);/);
   assert.match(coloringGame, /const requestedDesign = designs\.find/);
   assert.match(coloringGame, /loadDesign\(requestedDesign\)/);
