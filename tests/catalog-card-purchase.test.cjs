@@ -26,6 +26,9 @@ test("catalog add action is delegated once and cannot navigate or bubble", () =>
 });
 
 test("coloring is a separate explicit card action and selects the requested design", () => {
+  assert.match(script, /\["custom-1782980654479", "yota-01"\]/);
+  assert.match(script, /\["custom-1782980654479-copy-1782982056347", "yota-02"\]/);
+  assert.match(script, /const coloringDesignId = catalogColoringDesignId\(product\)/);
   assert.match(script, /type="button" data-card-coloring/);
   assert.match(script, /\/coloring-game\?design=/);
   assert.match(script, /const coloringButton = event\.target\.closest\("\[data-card-coloring\]"\);[\s\S]*?event\.preventDefault\(\);\s*event\.stopPropagation\(\);/);

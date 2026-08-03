@@ -2718,6 +2718,15 @@ function productCardChoicesHtml(product) {
   `;
 }
 
+const catalogColoringDesignByProductId = new Map([
+  ["custom-1782980654479", "yota-01"],
+  ["custom-1782980654479-copy-1782982056347", "yota-02"]
+]);
+
+function catalogColoringDesignId(product) {
+  return product?.coloringModelId || catalogColoringDesignByProductId.get(String(product?.id || "")) || "";
+}
+
 function productCardPurchaseHtml(product, { popular = false } = {}) {
   const variants = getProductVariants(product).filter((variant) => isVariantAvailable(variant, product));
   const requiresChoice = hasProductChoices(product) || variants.length > 1;
@@ -2731,8 +2740,9 @@ function productCardPurchaseHtml(product, { popular = false } = {}) {
         ${variants.map((variant, index) => `<option value="${escapeHtml(variant.id || "default")}">${escapeHtml(variantChoiceLabel(variant, index))}</option>`).join("")}
       </select>
     </label>` : "";
-  const coloringButton = product.coloringModelId ? `
-    <button class="button secondary product-card-coloring" type="button" data-card-coloring data-coloring-url="/coloring-game?design=${encodeURIComponent(product.coloringModelId)}&product=${encodeURIComponent(product.id)}">
+  const coloringDesignId = catalogColoringDesignId(product);
+  const coloringButton = coloringDesignId ? `
+    <button class="button secondary product-card-coloring" type="button" data-card-coloring data-coloring-url="/coloring-game?design=${encodeURIComponent(coloringDesignId)}&product=${encodeURIComponent(product.id)}">
       ${escapeHtml(isEnglish() ? "Coloring game" : "لعبة التلوين")}
     </button>` : "";
   return `
