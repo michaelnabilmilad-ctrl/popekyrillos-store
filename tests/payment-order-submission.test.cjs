@@ -6,7 +6,7 @@ const worker = fs.readFileSync("cloudflare-worker.js", "utf8");
 const checkout = fs.readFileSync("checkout-flow.js", "utf8");
 
 test("website orders write each cart line to the current Order Details schema", () => {
-  assert.match(worker, /const detailTable = "Order Details"/);
+  assert.match(worker, /AIRTABLE_ORDER_DETAILS_TABLE\) \|\| "تفاصيل الطلبات"/);
   assert.match(worker, /"Order link": \[orderRecordId\]/);
   assert.match(worker, /Product: item\.productName/);
   assert.match(worker, /Quantity: item\.quantity/);

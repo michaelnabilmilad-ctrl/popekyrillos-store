@@ -1245,7 +1245,7 @@ async function resolveAirtableProducts(env, items, context) {
 }
 
 async function createAirtableOrderDetails(env, orderRecordId, items, context) {
-  const detailTable = "Order Details";
+  const detailTable = cleanOrderString(env.AIRTABLE_ORDER_DETAILS_TABLE) || "تفاصيل الطلبات";
   const unnamedIndex = items.findIndex((item) => !cleanOrderString(item.productName));
   if (unnamedIndex !== -1) {
     const error = new Error(`Order item ${unnamedIndex + 1} has no product name`);

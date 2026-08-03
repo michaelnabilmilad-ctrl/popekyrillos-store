@@ -195,7 +195,7 @@ test("mixed SKU and permanent-id checkout links every row and retries safely", a
   let detailRequest;
   globalThis.fetch = async (url, init = {}) => {
     const path = new URL(url).pathname;
-    if (path.includes(encodeURIComponent("Order Details"))) {
+    if (path.includes(encodeURIComponent("تفاصيل الطلبات"))) {
       detailCreates += 1;
       detailRequest = JSON.parse(init.body);
       return new Response(JSON.stringify({
@@ -279,7 +279,7 @@ test("detail creation failure never returns checkout success", async () => {
   const originalFetch = globalThis.fetch;
   globalThis.fetch = async (url, init = {}) => {
     const pathname = new URL(url).pathname;
-    if (pathname.includes(encodeURIComponent("Order Details"))) {
+    if (pathname.includes(encodeURIComponent("تفاصيل الطلبات"))) {
       return new Response(JSON.stringify({ error: { type: "DETAILS_FAILED" } }), { status: 500 });
     }
     return new Response(JSON.stringify({ records: [{ id: "recOrder1" }] }));
