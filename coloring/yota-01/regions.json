@@ -1,0 +1,2026 @@
+{
+  "modelId": "yota-01",
+  "modelVersion": "yota-01-v6",
+  "totalRegions": 83,
+  "regions": [
+    {
+      "id": "region-1",
+      "regionId": "region-1",
+      "maskColor": [
+        1,
+        0,
+        73
+      ],
+      "pixelCount": 1151,
+      "centerX": 595,
+      "centerY": 685,
+      "bounds": {
+        "x": 555,
+        "y": 661,
+        "width": 80,
+        "height": 51
+      },
+      "sampleX": 595,
+      "sampleY": 685,
+      "logicalRegionId": "region-1",
+      "shapeGroup": "border-outer-loops",
+      "geometryType": "loop"
+    },
+    {
+      "id": "region-2",
+      "regionId": "region-2",
+      "maskColor": [
+        2,
+        0,
+        146
+      ],
+      "pixelCount": 332,
+      "centerX": 620,
+      "centerY": 685,
+      "bounds": {
+        "x": 611,
+        "y": 676,
+        "width": 21,
+        "height": 20
+      },
+      "sampleX": 620,
+      "sampleY": 685,
+      "logicalRegionId": "region-2",
+      "shapeGroup": "border-inner-circles",
+      "geometryType": "circle"
+    },
+    {
+      "id": "region-3",
+      "regionId": "region-3",
+      "maskColor": [
+        3,
+        0,
+        219
+      ],
+      "pixelCount": 333,
+      "centerX": 576,
+      "centerY": 686,
+      "bounds": {
+        "x": 566,
+        "y": 677,
+        "width": 21,
+        "height": 19
+      },
+      "sampleX": 576,
+      "sampleY": 686,
+      "logicalRegionId": "region-3",
+      "shapeGroup": "border-inner-circles",
+      "geometryType": "circle"
+    },
+    {
+      "id": "region-4",
+      "regionId": "region-4",
+      "maskColor": [
+        4,
+        0,
+        37
+      ],
+      "pixelCount": 1133,
+      "centerX": 640,
+      "centerY": 687,
+      "bounds": {
+        "x": 604,
+        "y": 660,
+        "width": 69,
+        "height": 58
+      },
+      "sampleX": 640,
+      "sampleY": 687,
+      "logicalRegionId": "region-4",
+      "shapeGroup": "border-outer-loops",
+      "geometryType": "loop"
+    },
+    {
+      "id": "region-5",
+      "regionId": "region-5",
+      "maskColor": [
+        5,
+        0,
+        110
+      ],
+      "pixelCount": 1149,
+      "centerX": 551,
+      "centerY": 690,
+      "bounds": {
+        "x": 509,
+        "y": 670,
+        "width": 86,
+        "height": 43
+      },
+      "sampleX": 551,
+      "sampleY": 690,
+      "logicalRegionId": "region-5",
+      "shapeGroup": "border-outer-loops",
+      "geometryType": "loop"
+    },
+    {
+      "id": "region-6",
+      "regionId": "region-6",
+      "maskColor": [
+        6,
+        0,
+        183
+      ],
+      "pixelCount": 318,
+      "centerX": 664,
+      "centerY": 692,
+      "bounds": {
+        "x": 655,
+        "y": 682,
+        "width": 20,
+        "height": 20
+      },
+      "sampleX": 664,
+      "sampleY": 692,
+      "logicalRegionId": "region-6",
+      "shapeGroup": "border-inner-circles",
+      "geometryType": "circle"
+    },
+    {
+      "id": "region-7",
+      "regionId": "region-7",
+      "maskColor": [
+        7,
+        0,
+        1
+      ],
+      "pixelCount": 335,
+      "centerX": 532,
+      "centerY": 695,
+      "bounds": {
+        "x": 522,
+        "y": 686,
+        "width": 21,
+        "height": 20
+      },
+      "sampleX": 532,
+      "sampleY": 695,
+      "logicalRegionId": "region-7",
+      "shapeGroup": "border-inner-circles",
+      "geometryType": "circle"
+    },
+    {
+      "id": "region-8",
+      "regionId": "region-8",
+      "maskColor": [
+        8,
+        0,
+        74
+      ],
+      "pixelCount": 1131,
+      "centerX": 683,
+      "centerY": 696,
+      "bounds": {
+        "x": 651,
+        "y": 666,
+        "width": 59,
+        "height": 66
+      },
+      "sampleX": 683,
+      "sampleY": 696,
+      "logicalRegionId": "region-8",
+      "shapeGroup": "border-outer-loops",
+      "geometryType": "loop"
+    },
+    {
+      "id": "region-9",
+      "regionId": "region-9",
+      "maskColor": [
+        9,
+        0,
+        147
+      ],
+      "pixelCount": 1121,
+      "centerX": 509,
+      "centerY": 703,
+      "bounds": {
+        "x": 466,
+        "y": 686,
+        "width": 88,
+        "height": 36
+      },
+      "sampleX": 509,
+      "sampleY": 703,
+      "logicalRegionId": "region-9",
+      "shapeGroup": "border-outer-loops",
+      "geometryType": "loop"
+    },
+    {
+      "id": "region-10",
+      "regionId": "region-10",
+      "maskColor": [
+        10,
+        0,
+        220
+      ],
+      "pixelCount": 304,
+      "centerX": 705,
+      "centerY": 706,
+      "bounds": {
+        "x": 695,
+        "y": 696,
+        "width": 20,
+        "height": 20
+      },
+      "sampleX": 705,
+      "sampleY": 706,
+      "logicalRegionId": "region-10",
+      "shapeGroup": "border-inner-circles",
+      "geometryType": "circle"
+    },
+    {
+      "id": "region-11",
+      "regionId": "region-11",
+      "maskColor": [
+        11,
+        0,
+        38
+      ],
+      "pixelCount": 336,
+      "centerX": 491,
+      "centerY": 712,
+      "bounds": {
+        "x": 481,
+        "y": 702,
+        "width": 22,
+        "height": 20
+      },
+      "sampleX": 491,
+      "sampleY": 712,
+      "logicalRegionId": "region-11",
+      "shapeGroup": "border-inner-circles",
+      "geometryType": "circle"
+    },
+    {
+      "id": "region-12",
+      "regionId": "region-12",
+      "maskColor": [
+        12,
+        0,
+        111
+      ],
+      "pixelCount": 1154,
+      "centerX": 722,
+      "centerY": 713,
+      "bounds": {
+        "x": 697,
+        "y": 680,
+        "width": 46,
+        "height": 73
+      },
+      "sampleX": 722,
+      "sampleY": 713,
+      "logicalRegionId": "region-12",
+      "shapeGroup": "border-outer-loops",
+      "geometryType": "loop"
+    },
+    {
+      "id": "region-13",
+      "regionId": "region-13",
+      "maskColor": [
+        13,
+        0,
+        184
+      ],
+      "pixelCount": 1109,
+      "centerX": 470,
+      "centerY": 723,
+      "bounds": {
+        "x": 429,
+        "y": 709,
+        "width": 86,
+        "height": 29
+      },
+      "sampleX": 470,
+      "sampleY": 723,
+      "logicalRegionId": "region-13",
+      "shapeGroup": "border-outer-loops",
+      "geometryType": "loop"
+    },
+    {
+      "id": "region-14",
+      "regionId": "region-14",
+      "maskColor": [
+        14,
+        0,
+        2
+      ],
+      "pixelCount": 303,
+      "centerX": 742,
+      "centerY": 726,
+      "bounds": {
+        "x": 733,
+        "y": 717,
+        "width": 20,
+        "height": 19
+      },
+      "sampleX": 742,
+      "sampleY": 726,
+      "logicalRegionId": "region-14",
+      "shapeGroup": "border-inner-circles",
+      "geometryType": "circle"
+    },
+    {
+      "id": "region-15",
+      "regionId": "region-15",
+      "maskColor": [
+        15,
+        0,
+        75
+      ],
+      "pixelCount": 313,
+      "centerX": 455,
+      "centerY": 735,
+      "bounds": {
+        "x": 445,
+        "y": 726,
+        "width": 21,
+        "height": 19
+      },
+      "sampleX": 455,
+      "sampleY": 735,
+      "logicalRegionId": "region-15",
+      "shapeGroup": "border-inner-circles",
+      "geometryType": "circle"
+    },
+    {
+      "id": "region-16",
+      "regionId": "region-16",
+      "maskColor": [
+        16,
+        0,
+        148
+      ],
+      "pixelCount": 1147,
+      "centerX": 758,
+      "centerY": 737,
+      "bounds": {
+        "x": 740,
+        "y": 700,
+        "width": 33,
+        "height": 80
+      },
+      "sampleX": 758,
+      "sampleY": 737,
+      "logicalRegionId": "region-16",
+      "shapeGroup": "border-outer-loops",
+      "geometryType": "loop"
+    },
+    {
+      "id": "region-17",
+      "regionId": "region-17",
+      "maskColor": [
+        17,
+        0,
+        221
+      ],
+      "pixelCount": 1078,
+      "centerX": 436,
+      "centerY": 750,
+      "bounds": {
+        "x": 398,
+        "y": 738,
+        "width": 83,
+        "height": 29
+      },
+      "sampleX": 436,
+      "sampleY": 750,
+      "logicalRegionId": "region-17",
+      "shapeGroup": "border-outer-loops",
+      "geometryType": "loop"
+    },
+    {
+      "id": "region-18",
+      "regionId": "region-18",
+      "maskColor": [
+        18,
+        0,
+        39
+      ],
+      "pixelCount": 307,
+      "centerX": 775,
+      "centerY": 753,
+      "bounds": {
+        "x": 765,
+        "y": 744,
+        "width": 20,
+        "height": 19
+      },
+      "sampleX": 775,
+      "sampleY": 753,
+      "logicalRegionId": "region-18",
+      "shapeGroup": "border-inner-circles",
+      "geometryType": "circle"
+    },
+    {
+      "id": "region-19",
+      "regionId": "region-19",
+      "maskColor": [
+        19,
+        0,
+        112
+      ],
+      "pixelCount": 298,
+      "centerX": 424,
+      "centerY": 764,
+      "bounds": {
+        "x": 415,
+        "y": 755,
+        "width": 20,
+        "height": 18
+      },
+      "sampleX": 424,
+      "sampleY": 764,
+      "logicalRegionId": "region-19",
+      "shapeGroup": "border-inner-circles",
+      "geometryType": "circle"
+    },
+    {
+      "id": "region-20",
+      "regionId": "region-20",
+      "maskColor": [
+        20,
+        0,
+        185
+      ],
+      "pixelCount": 1084,
+      "centerX": 787,
+      "centerY": 766,
+      "bounds": {
+        "x": 775,
+        "y": 727,
+        "width": 27,
+        "height": 82
+      },
+      "sampleX": 787,
+      "sampleY": 766,
+      "logicalRegionId": "region-20",
+      "shapeGroup": "border-outer-loops",
+      "geometryType": "loop"
+    },
+    {
+      "id": "region-21",
+      "regionId": "region-21",
+      "maskColor": [
+        21,
+        0,
+        3
+      ],
+      "pixelCount": 1064,
+      "centerX": 410,
+      "centerY": 783,
+      "bounds": {
+        "x": 375,
+        "y": 766,
+        "width": 77,
+        "height": 39
+      },
+      "sampleX": 410,
+      "sampleY": 783,
+      "logicalRegionId": "region-21",
+      "shapeGroup": "border-outer-loops",
+      "geometryType": "loop"
+    },
+    {
+      "id": "region-22",
+      "regionId": "region-22",
+      "maskColor": [
+        22,
+        0,
+        76
+      ],
+      "pixelCount": 292,
+      "centerX": 801,
+      "centerY": 784,
+      "bounds": {
+        "x": 792,
+        "y": 775,
+        "width": 19,
+        "height": 20
+      },
+      "sampleX": 801,
+      "sampleY": 784,
+      "logicalRegionId": "region-22",
+      "shapeGroup": "border-inner-circles",
+      "geometryType": "circle"
+    },
+    {
+      "id": "region-23",
+      "regionId": "region-23",
+      "maskColor": [
+        23,
+        0,
+        149
+      ],
+      "pixelCount": 297,
+      "centerX": 401,
+      "centerY": 798,
+      "bounds": {
+        "x": 392,
+        "y": 789,
+        "width": 20,
+        "height": 19
+      },
+      "sampleX": 401,
+      "sampleY": 798,
+      "logicalRegionId": "region-23",
+      "shapeGroup": "border-inner-circles",
+      "geometryType": "circle"
+    },
+    {
+      "id": "region-24",
+      "regionId": "region-24",
+      "maskColor": [
+        24,
+        0,
+        222
+      ],
+      "pixelCount": 1114,
+      "centerX": 810,
+      "centerY": 800,
+      "bounds": {
+        "x": 793,
+        "y": 760,
+        "width": 35,
+        "height": 83
+      },
+      "sampleX": 810,
+      "sampleY": 800,
+      "logicalRegionId": "region-24",
+      "shapeGroup": "border-outer-loops",
+      "geometryType": "loop"
+    },
+    {
+      "id": "region-25",
+      "regionId": "region-25",
+      "maskColor": [
+        25,
+        0,
+        40
+      ],
+      "pixelCount": 783,
+      "centerX": 569,
+      "centerY": 801,
+      "bounds": {
+        "x": 555,
+        "y": 788,
+        "width": 29,
+        "height": 27
+      },
+      "sampleX": 569,
+      "sampleY": 801,
+      "logicalRegionId": "region-25",
+      "shapeGroup": "center-small-squares",
+      "geometryType": "square"
+    },
+    {
+      "id": "region-26",
+      "regionId": "region-26",
+      "maskColor": [
+        26,
+        0,
+        113
+      ],
+      "pixelCount": 776,
+      "centerX": 636,
+      "centerY": 801,
+      "bounds": {
+        "x": 622,
+        "y": 788,
+        "width": 29,
+        "height": 27
+      },
+      "sampleX": 636,
+      "sampleY": 801,
+      "logicalRegionId": "region-26",
+      "shapeGroup": "center-small-squares",
+      "geometryType": "square"
+    },
+    {
+      "id": "region-27",
+      "regionId": "region-27",
+      "maskColor": [
+        27,
+        0,
+        186
+      ],
+      "pixelCount": 1040,
+      "centerX": 391,
+      "centerY": 819,
+      "bounds": {
+        "x": 359,
+        "y": 796,
+        "width": 70,
+        "height": 51
+      },
+      "sampleX": 391,
+      "sampleY": 819,
+      "logicalRegionId": "region-27",
+      "shapeGroup": "border-outer-loops",
+      "geometryType": "loop"
+    },
+    {
+      "id": "region-28",
+      "regionId": "region-28",
+      "maskColor": [
+        28,
+        0,
+        4
+      ],
+      "pixelCount": 296,
+      "centerX": 819,
+      "centerY": 821,
+      "bounds": {
+        "x": 810,
+        "y": 811,
+        "width": 20,
+        "height": 20
+      },
+      "sampleX": 819,
+      "sampleY": 820,
+      "logicalRegionId": "region-28",
+      "shapeGroup": "border-inner-circles",
+      "geometryType": "circle"
+    },
+    {
+      "id": "region-29",
+      "regionId": "region-29",
+      "maskColor": [
+        29,
+        0,
+        77
+      ],
+      "pixelCount": 4341,
+      "centerX": 670,
+      "centerY": 833,
+      "bounds": {
+        "x": 623,
+        "y": 788,
+        "width": 95,
+        "height": 91
+      },
+      "sampleX": 670,
+      "sampleY": 833,
+      "logicalRegionId": "region-29",
+      "shapeGroup": "center-corner-l",
+      "geometryType": "corner-l"
+    },
+    {
+      "id": "region-30",
+      "regionId": "region-30",
+      "maskColor": [
+        30,
+        0,
+        150
+      ],
+      "pixelCount": 4350,
+      "centerX": 536,
+      "centerY": 833,
+      "bounds": {
+        "x": 490,
+        "y": 788,
+        "width": 94,
+        "height": 91
+      },
+      "sampleX": 536,
+      "sampleY": 833,
+      "logicalRegionId": "region-30",
+      "shapeGroup": "center-corner-l",
+      "geometryType": "corner-l"
+    },
+    {
+      "id": "region-31",
+      "regionId": "region-31",
+      "maskColor": [
+        31,
+        0,
+        223
+      ],
+      "pixelCount": 287,
+      "centerX": 385,
+      "centerY": 836,
+      "bounds": {
+        "x": 375,
+        "y": 827,
+        "width": 20,
+        "height": 18
+      },
+      "sampleX": 385,
+      "sampleY": 836,
+      "logicalRegionId": "region-31",
+      "shapeGroup": "border-inner-circles",
+      "geometryType": "circle"
+    },
+    {
+      "id": "region-32",
+      "regionId": "region-32",
+      "maskColor": [
+        32,
+        0,
+        41
+      ],
+      "pixelCount": 1080,
+      "centerX": 826,
+      "centerY": 837,
+      "bounds": {
+        "x": 805,
+        "y": 798,
+        "width": 42,
+        "height": 80
+      },
+      "sampleX": 826,
+      "sampleY": 837,
+      "logicalRegionId": "region-32",
+      "shapeGroup": "border-outer-loops",
+      "geometryType": "loop"
+    },
+    {
+      "id": "region-33",
+      "regionId": "region-33",
+      "maskColor": [
+        33,
+        0,
+        114
+      ],
+      "pixelCount": 1053,
+      "centerX": 379,
+      "centerY": 857,
+      "bounds": {
+        "x": 350,
+        "y": 829,
+        "width": 63,
+        "height": 62
+      },
+      "sampleX": 379,
+      "sampleY": 857,
+      "logicalRegionId": "region-33",
+      "shapeGroup": "border-outer-loops",
+      "geometryType": "loop"
+    },
+    {
+      "id": "region-34",
+      "regionId": "region-34",
+      "maskColor": [
+        34,
+        0,
+        187
+      ],
+      "pixelCount": 318,
+      "centerX": 831,
+      "centerY": 860,
+      "bounds": {
+        "x": 821,
+        "y": 850,
+        "width": 20,
+        "height": 20
+      },
+      "sampleX": 831,
+      "sampleY": 860,
+      "logicalRegionId": "region-34",
+      "shapeGroup": "border-inner-circles",
+      "geometryType": "circle"
+    },
+    {
+      "id": "region-35",
+      "regionId": "region-35",
+      "maskColor": [
+        35,
+        0,
+        5
+      ],
+      "pixelCount": 762,
+      "centerX": 704,
+      "centerY": 864,
+      "bounds": {
+        "x": 689,
+        "y": 851,
+        "width": 30,
+        "height": 28
+      },
+      "sampleX": 704,
+      "sampleY": 864,
+      "logicalRegionId": "region-35",
+      "shapeGroup": "center-small-squares",
+      "geometryType": "square"
+    },
+    {
+      "id": "region-36",
+      "regionId": "region-36",
+      "maskColor": [
+        36,
+        0,
+        78
+      ],
+      "pixelCount": 748,
+      "centerX": 570,
+      "centerY": 865,
+      "bounds": {
+        "x": 555,
+        "y": 852,
+        "width": 30,
+        "height": 27
+      },
+      "sampleX": 570,
+      "sampleY": 865,
+      "logicalRegionId": "region-36",
+      "shapeGroup": "center-small-squares",
+      "geometryType": "square"
+    },
+    {
+      "id": "region-37",
+      "regionId": "region-37",
+      "maskColor": [
+        37,
+        0,
+        151
+      ],
+      "pixelCount": 745,
+      "centerX": 636,
+      "centerY": 865,
+      "bounds": {
+        "x": 623,
+        "y": 852,
+        "width": 28,
+        "height": 27
+      },
+      "sampleX": 636,
+      "sampleY": 865,
+      "logicalRegionId": "region-37",
+      "shapeGroup": "center-small-squares",
+      "geometryType": "square"
+    },
+    {
+      "id": "region-38",
+      "regionId": "region-38",
+      "maskColor": [
+        38,
+        0,
+        224
+      ],
+      "pixelCount": 760,
+      "centerX": 503,
+      "centerY": 865,
+      "bounds": {
+        "x": 489,
+        "y": 852,
+        "width": 29,
+        "height": 27
+      },
+      "sampleX": 503,
+      "sampleY": 865,
+      "logicalRegionId": "region-38",
+      "shapeGroup": "center-small-squares",
+      "geometryType": "square"
+    },
+    {
+      "id": "region-39",
+      "regionId": "region-39",
+      "maskColor": [
+        39,
+        0,
+        42
+      ],
+      "pixelCount": 289,
+      "centerX": 376,
+      "centerY": 875,
+      "bounds": {
+        "x": 367,
+        "y": 866,
+        "width": 19,
+        "height": 18
+      },
+      "sampleX": 376,
+      "sampleY": 875,
+      "logicalRegionId": "region-39",
+      "shapeGroup": "border-inner-circles",
+      "geometryType": "circle"
+    },
+    {
+      "id": "region-40",
+      "regionId": "region-40",
+      "maskColor": [
+        40,
+        0,
+        115
+      ],
+      "pixelCount": 1100,
+      "centerX": 834,
+      "centerY": 877,
+      "bounds": {
+        "x": 808,
+        "y": 839,
+        "width": 50,
+        "height": 77
+      },
+      "sampleX": 834,
+      "sampleY": 877,
+      "logicalRegionId": "region-40",
+      "shapeGroup": "border-outer-loops",
+      "geometryType": "loop"
+    },
+    {
+      "id": "region-41",
+      "regionId": "region-41",
+      "maskColor": [
+        41,
+        0,
+        188
+      ],
+      "pixelCount": 1081,
+      "centerX": 374,
+      "centerY": 897,
+      "bounds": {
+        "x": 349,
+        "y": 863,
+        "width": 55,
+        "height": 73
+      },
+      "sampleX": 374,
+      "sampleY": 897,
+      "logicalRegionId": "region-41",
+      "shapeGroup": "border-outer-loops",
+      "geometryType": "loop"
+    },
+    {
+      "id": "region-42",
+      "regionId": "region-42",
+      "maskColor": [
+        42,
+        0,
+        6
+      ],
+      "pixelCount": 300,
+      "centerX": 834,
+      "centerY": 901,
+      "bounds": {
+        "x": 825,
+        "y": 892,
+        "width": 20,
+        "height": 19
+      },
+      "sampleX": 834,
+      "sampleY": 901,
+      "logicalRegionId": "region-42",
+      "shapeGroup": "border-inner-circles",
+      "geometryType": "circle"
+    },
+    {
+      "id": "region-43",
+      "regionId": "region-43",
+      "maskColor": [
+        43,
+        0,
+        79
+      ],
+      "pixelCount": 281,
+      "centerX": 375,
+      "centerY": 915,
+      "bounds": {
+        "x": 366,
+        "y": 906,
+        "width": 19,
+        "height": 19
+      },
+      "sampleX": 375,
+      "sampleY": 915,
+      "logicalRegionId": "region-43",
+      "shapeGroup": "border-inner-circles",
+      "geometryType": "circle"
+    },
+    {
+      "id": "region-44",
+      "regionId": "region-44",
+      "maskColor": [
+        44,
+        0,
+        152
+      ],
+      "pixelCount": 1128,
+      "centerX": 835,
+      "centerY": 918,
+      "bounds": {
+        "x": 804,
+        "y": 883,
+        "width": 58,
+        "height": 69
+      },
+      "sampleX": 835,
+      "sampleY": 918,
+      "logicalRegionId": "region-44",
+      "shapeGroup": "border-outer-loops",
+      "geometryType": "loop"
+    },
+    {
+      "id": "region-45",
+      "regionId": "region-45",
+      "maskColor": [
+        45,
+        0,
+        225
+      ],
+      "pixelCount": 780,
+      "centerX": 704,
+      "centerY": 929,
+      "bounds": {
+        "x": 690,
+        "y": 916,
+        "width": 29,
+        "height": 27
+      },
+      "sampleX": 704,
+      "sampleY": 929,
+      "logicalRegionId": "region-45",
+      "shapeGroup": "center-small-squares",
+      "geometryType": "square"
+    },
+    {
+      "id": "region-46",
+      "regionId": "region-46",
+      "maskColor": [
+        46,
+        0,
+        43
+      ],
+      "pixelCount": 766,
+      "centerX": 637,
+      "centerY": 929,
+      "bounds": {
+        "x": 623,
+        "y": 916,
+        "width": 29,
+        "height": 27
+      },
+      "sampleX": 637,
+      "sampleY": 929,
+      "logicalRegionId": "region-46",
+      "shapeGroup": "center-small-squares",
+      "geometryType": "square"
+    },
+    {
+      "id": "region-47",
+      "regionId": "region-47",
+      "maskColor": [
+        47,
+        0,
+        116
+      ],
+      "pixelCount": 775,
+      "centerX": 570,
+      "centerY": 929,
+      "bounds": {
+        "x": 556,
+        "y": 916,
+        "width": 29,
+        "height": 27
+      },
+      "sampleX": 570,
+      "sampleY": 929,
+      "logicalRegionId": "region-47",
+      "shapeGroup": "center-small-squares",
+      "geometryType": "square"
+    },
+    {
+      "id": "region-48",
+      "regionId": "region-48",
+      "maskColor": [
+        48,
+        0,
+        189
+      ],
+      "pixelCount": 772,
+      "centerX": 503,
+      "centerY": 929,
+      "bounds": {
+        "x": 489,
+        "y": 916,
+        "width": 29,
+        "height": 27
+      },
+      "sampleX": 503,
+      "sampleY": 929,
+      "logicalRegionId": "region-48",
+      "shapeGroup": "center-small-squares",
+      "geometryType": "square"
+    },
+    {
+      "id": "region-49",
+      "regionId": "region-49",
+      "maskColor": [
+        49,
+        0,
+        7
+      ],
+      "pixelCount": 1090,
+      "centerX": 378,
+      "centerY": 937,
+      "bounds": {
+        "x": 356,
+        "y": 899,
+        "width": 46,
+        "height": 78
+      },
+      "sampleX": 378,
+      "sampleY": 937,
+      "logicalRegionId": "region-49",
+      "shapeGroup": "border-outer-loops",
+      "geometryType": "loop"
+    },
+    {
+      "id": "region-50",
+      "regionId": "region-50",
+      "maskColor": [
+        50,
+        0,
+        80
+      ],
+      "pixelCount": 320,
+      "centerX": 831,
+      "centerY": 942,
+      "bounds": {
+        "x": 821,
+        "y": 932,
+        "width": 20,
+        "height": 20
+      },
+      "sampleX": 831,
+      "sampleY": 942,
+      "logicalRegionId": "region-50",
+      "shapeGroup": "border-inner-circles",
+      "geometryType": "circle"
+    },
+    {
+      "id": "region-51",
+      "regionId": "region-51",
+      "maskColor": [
+        51,
+        0,
+        153
+      ],
+      "pixelCount": 282,
+      "centerX": 382,
+      "centerY": 955,
+      "bounds": {
+        "x": 373,
+        "y": 945,
+        "width": 18,
+        "height": 20
+      },
+      "sampleX": 382,
+      "sampleY": 955,
+      "logicalRegionId": "region-51",
+      "shapeGroup": "border-inner-circles",
+      "geometryType": "circle"
+    },
+    {
+      "id": "region-52",
+      "regionId": "region-52",
+      "maskColor": [
+        52,
+        0,
+        226
+      ],
+      "pixelCount": 1180,
+      "centerX": 827,
+      "centerY": 960,
+      "bounds": {
+        "x": 791,
+        "y": 928,
+        "width": 68,
+        "height": 60
+      },
+      "sampleX": 827,
+      "sampleY": 960,
+      "logicalRegionId": "region-52",
+      "shapeGroup": "border-outer-loops",
+      "geometryType": "loop"
+    },
+    {
+      "id": "region-53",
+      "regionId": "region-53",
+      "maskColor": [
+        53,
+        0,
+        44
+      ],
+      "pixelCount": 4465,
+      "centerX": 536,
+      "centerY": 962,
+      "bounds": {
+        "x": 490,
+        "y": 916,
+        "width": 94,
+        "height": 92
+      },
+      "sampleX": 536,
+      "sampleY": 962,
+      "logicalRegionId": "region-53",
+      "shapeGroup": "center-corner-l",
+      "geometryType": "corner-l"
+    },
+    {
+      "id": "region-54",
+      "regionId": "region-54",
+      "maskColor": [
+        54,
+        0,
+        117
+      ],
+      "pixelCount": 4479,
+      "centerX": 671,
+      "centerY": 962,
+      "bounds": {
+        "x": 624,
+        "y": 916,
+        "width": 95,
+        "height": 92
+      },
+      "sampleX": 671,
+      "sampleY": 962,
+      "logicalRegionId": "region-54",
+      "shapeGroup": "center-corner-l",
+      "geometryType": "corner-l"
+    },
+    {
+      "id": "region-55",
+      "regionId": "region-55",
+      "maskColor": [
+        55,
+        0,
+        190
+      ],
+      "pixelCount": 1108,
+      "centerX": 388,
+      "centerY": 977,
+      "bounds": {
+        "x": 369,
+        "y": 935,
+        "width": 40,
+        "height": 83
+      },
+      "sampleX": 388,
+      "sampleY": 977,
+      "logicalRegionId": "region-55",
+      "shapeGroup": "border-outer-loops",
+      "geometryType": "loop"
+    },
+    {
+      "id": "region-56",
+      "regionId": "region-56",
+      "maskColor": [
+        56,
+        0,
+        8
+      ],
+      "pixelCount": 337,
+      "centerX": 818,
+      "centerY": 983,
+      "bounds": {
+        "x": 808,
+        "y": 973,
+        "width": 21,
+        "height": 20
+      },
+      "sampleX": 818,
+      "sampleY": 983,
+      "logicalRegionId": "region-56",
+      "shapeGroup": "border-inner-circles",
+      "geometryType": "circle"
+    },
+    {
+      "id": "region-57",
+      "regionId": "region-57",
+      "maskColor": [
+        57,
+        0,
+        81
+      ],
+      "pixelCount": 308,
+      "centerX": 395,
+      "centerY": 992,
+      "bounds": {
+        "x": 386,
+        "y": 983,
+        "width": 20,
+        "height": 20
+      },
+      "sampleX": 395,
+      "sampleY": 992,
+      "logicalRegionId": "region-57",
+      "shapeGroup": "border-inner-circles",
+      "geometryType": "circle"
+    },
+    {
+      "id": "region-58",
+      "regionId": "region-58",
+      "maskColor": [
+        58,
+        0,
+        154
+      ],
+      "pixelCount": 790,
+      "centerX": 570,
+      "centerY": 994,
+      "bounds": {
+        "x": 556,
+        "y": 980,
+        "width": 29,
+        "height": 29
+      },
+      "sampleX": 570,
+      "sampleY": 994,
+      "logicalRegionId": "region-58",
+      "shapeGroup": "center-small-squares",
+      "geometryType": "square"
+    },
+    {
+      "id": "region-59",
+      "regionId": "region-59",
+      "maskColor": [
+        59,
+        0,
+        227
+      ],
+      "pixelCount": 758,
+      "centerX": 637,
+      "centerY": 994,
+      "bounds": {
+        "x": 623,
+        "y": 981,
+        "width": 29,
+        "height": 28
+      },
+      "sampleX": 637,
+      "sampleY": 994,
+      "logicalRegionId": "region-59",
+      "shapeGroup": "center-small-squares",
+      "geometryType": "square"
+    },
+    {
+      "id": "region-60",
+      "regionId": "region-60",
+      "maskColor": [
+        60,
+        0,
+        45
+      ],
+      "pixelCount": 1161,
+      "centerX": 811,
+      "centerY": 1000,
+      "bounds": {
+        "x": 771,
+        "y": 973,
+        "width": 76,
+        "height": 48
+      },
+      "sampleX": 811,
+      "sampleY": 1000,
+      "logicalRegionId": "region-60",
+      "shapeGroup": "border-outer-loops",
+      "geometryType": "loop"
+    },
+    {
+      "id": "region-61",
+      "regionId": "region-61",
+      "maskColor": [
+        61,
+        0,
+        118
+      ],
+      "pixelCount": 1133,
+      "centerX": 406,
+      "centerY": 1013,
+      "bounds": {
+        "x": 390,
+        "y": 970,
+        "width": 33,
+        "height": 85
+      },
+      "sampleX": 406,
+      "sampleY": 1013,
+      "logicalRegionId": "region-61",
+      "shapeGroup": "border-outer-loops",
+      "geometryType": "loop"
+    },
+    {
+      "id": "region-62",
+      "regionId": "region-62",
+      "maskColor": [
+        62,
+        0,
+        191
+      ],
+      "pixelCount": 335,
+      "centerX": 798,
+      "centerY": 1021,
+      "bounds": {
+        "x": 788,
+        "y": 1011,
+        "width": 20,
+        "height": 21
+      },
+      "sampleX": 798,
+      "sampleY": 1021,
+      "logicalRegionId": "region-62",
+      "shapeGroup": "border-inner-circles",
+      "geometryType": "circle"
+    },
+    {
+      "id": "region-63",
+      "regionId": "region-63",
+      "maskColor": [
+        63,
+        0,
+        9
+      ],
+      "pixelCount": 313,
+      "centerX": 417,
+      "centerY": 1028,
+      "bounds": {
+        "x": 407,
+        "y": 1019,
+        "width": 20,
+        "height": 19
+      },
+      "sampleX": 417,
+      "sampleY": 1028,
+      "logicalRegionId": "region-63",
+      "shapeGroup": "border-inner-circles",
+      "geometryType": "circle"
+    },
+    {
+      "id": "region-64",
+      "regionId": "region-64",
+      "maskColor": [
+        64,
+        0,
+        82
+      ],
+      "pixelCount": 1261,
+      "centerX": 787,
+      "centerY": 1037,
+      "bounds": {
+        "x": 742,
+        "y": 1017,
+        "width": 84,
+        "height": 35
+      },
+      "sampleX": 787,
+      "sampleY": 1037,
+      "logicalRegionId": "region-64",
+      "shapeGroup": "border-outer-loops",
+      "geometryType": "loop"
+    },
+    {
+      "id": "region-65",
+      "regionId": "region-65",
+      "maskColor": [
+        65,
+        0,
+        155
+      ],
+      "pixelCount": 1148,
+      "centerX": 432,
+      "centerY": 1047,
+      "bounds": {
+        "x": 418,
+        "y": 1003,
+        "width": 29,
+        "height": 84
+      },
+      "sampleX": 432,
+      "sampleY": 1047,
+      "logicalRegionId": "region-65",
+      "shapeGroup": "border-outer-loops",
+      "geometryType": "loop"
+    },
+    {
+      "id": "region-66",
+      "regionId": "region-66",
+      "maskColor": [
+        66,
+        0,
+        228
+      ],
+      "pixelCount": 353,
+      "centerX": 769,
+      "centerY": 1055,
+      "bounds": {
+        "x": 759,
+        "y": 1045,
+        "width": 21,
+        "height": 21
+      },
+      "sampleX": 769,
+      "sampleY": 1055,
+      "logicalRegionId": "region-66",
+      "shapeGroup": "border-inner-circles",
+      "geometryType": "circle"
+    },
+    {
+      "id": "region-67",
+      "regionId": "region-67",
+      "maskColor": [
+        67,
+        0,
+        46
+      ],
+      "pixelCount": 320,
+      "centerX": 445,
+      "centerY": 1058,
+      "bounds": {
+        "x": 435,
+        "y": 1049,
+        "width": 20,
+        "height": 20
+      },
+      "sampleX": 445,
+      "sampleY": 1058,
+      "logicalRegionId": "region-67",
+      "shapeGroup": "border-inner-circles",
+      "geometryType": "circle"
+    },
+    {
+      "id": "region-68",
+      "regionId": "region-68",
+      "maskColor": [
+        68,
+        0,
+        119
+      ],
+      "pixelCount": 1197,
+      "centerX": 755,
+      "centerY": 1068,
+      "bounds": {
+        "x": 710,
+        "y": 1055,
+        "width": 88,
+        "height": 28
+      },
+      "sampleX": 755,
+      "sampleY": 1068,
+      "logicalRegionId": "region-68",
+      "shapeGroup": "border-outer-loops",
+      "geometryType": "loop"
+    },
+    {
+      "id": "region-69",
+      "regionId": "region-69",
+      "maskColor": [
+        69,
+        0,
+        192
+      ],
+      "pixelCount": 1201,
+      "centerX": 464,
+      "centerY": 1074,
+      "bounds": {
+        "x": 448,
+        "y": 1031,
+        "width": 38,
+        "height": 82
+      },
+      "sampleX": 464,
+      "sampleY": 1074,
+      "logicalRegionId": "region-69",
+      "shapeGroup": "border-outer-loops",
+      "geometryType": "loop"
+    },
+    {
+      "id": "region-70",
+      "regionId": "region-70",
+      "maskColor": [
+        70,
+        0,
+        10
+      ],
+      "pixelCount": 353,
+      "centerX": 734,
+      "centerY": 1082,
+      "bounds": {
+        "x": 724,
+        "y": 1072,
+        "width": 21,
+        "height": 21
+      },
+      "sampleX": 734,
+      "sampleY": 1082,
+      "logicalRegionId": "region-70",
+      "shapeGroup": "border-inner-circles",
+      "geometryType": "circle"
+    },
+    {
+      "id": "region-71",
+      "regionId": "region-71",
+      "maskColor": [
+        71,
+        0,
+        83
+      ],
+      "pixelCount": 318,
+      "centerX": 480,
+      "centerY": 1084,
+      "bounds": {
+        "x": 470,
+        "y": 1075,
+        "width": 20,
+        "height": 20
+      },
+      "sampleX": 480,
+      "sampleY": 1084,
+      "logicalRegionId": "region-71",
+      "shapeGroup": "border-inner-circles",
+      "geometryType": "circle"
+    },
+    {
+      "id": "region-72",
+      "regionId": "region-72",
+      "maskColor": [
+        72,
+        0,
+        156
+      ],
+      "pixelCount": 1254,
+      "centerX": 717,
+      "centerY": 1092,
+      "bounds": {
+        "x": 672,
+        "y": 1074,
+        "width": 90,
+        "height": 37
+      },
+      "sampleX": 717,
+      "sampleY": 1092,
+      "logicalRegionId": "region-72",
+      "shapeGroup": "border-outer-loops",
+      "geometryType": "loop"
+    },
+    {
+      "id": "region-73",
+      "regionId": "region-73",
+      "maskColor": [
+        73,
+        0,
+        229
+      ],
+      "pixelCount": 1192,
+      "centerX": 501,
+      "centerY": 1096,
+      "bounds": {
+        "x": 479,
+        "y": 1057,
+        "width": 51,
+        "height": 75
+      },
+      "sampleX": 501,
+      "sampleY": 1096,
+      "logicalRegionId": "region-73",
+      "shapeGroup": "border-outer-loops",
+      "geometryType": "loop"
+    },
+    {
+      "id": "region-74",
+      "regionId": "region-74",
+      "maskColor": [
+        74,
+        0,
+        47
+      ],
+      "pixelCount": 343,
+      "centerX": 694,
+      "centerY": 1102,
+      "bounds": {
+        "x": 684,
+        "y": 1092,
+        "width": 21,
+        "height": 21
+      },
+      "sampleX": 694,
+      "sampleY": 1102,
+      "logicalRegionId": "region-74",
+      "shapeGroup": "border-inner-circles",
+      "geometryType": "circle"
+    },
+    {
+      "id": "region-75",
+      "regionId": "region-75",
+      "maskColor": [
+        75,
+        0,
+        120
+      ],
+      "pixelCount": 343,
+      "centerX": 519,
+      "centerY": 1103,
+      "bounds": {
+        "x": 509,
+        "y": 1092,
+        "width": 21,
+        "height": 22
+      },
+      "sampleX": 519,
+      "sampleY": 1103,
+      "logicalRegionId": "region-75",
+      "shapeGroup": "border-inner-circles",
+      "geometryType": "circle"
+    },
+    {
+      "id": "region-76",
+      "regionId": "region-76",
+      "maskColor": [
+        76,
+        0,
+        193
+      ],
+      "pixelCount": 1245,
+      "centerX": 676,
+      "centerY": 1109,
+      "bounds": {
+        "x": 632,
+        "y": 1087,
+        "width": 88,
+        "height": 43
+      },
+      "sampleX": 676,
+      "sampleY": 1109,
+      "logicalRegionId": "region-76",
+      "shapeGroup": "border-outer-loops",
+      "geometryType": "loop"
+    },
+    {
+      "id": "region-77",
+      "regionId": "region-77",
+      "maskColor": [
+        77,
+        0,
+        11
+      ],
+      "pixelCount": 1287,
+      "centerX": 543,
+      "centerY": 1111,
+      "bounds": {
+        "x": 514,
+        "y": 1075,
+        "width": 64,
+        "height": 69
+      },
+      "sampleX": 543,
+      "sampleY": 1111,
+      "logicalRegionId": "region-77",
+      "shapeGroup": "border-outer-loops",
+      "geometryType": "loop"
+    },
+    {
+      "id": "region-78",
+      "regionId": "region-78",
+      "maskColor": [
+        78,
+        0,
+        84
+      ],
+      "pixelCount": 346,
+      "centerX": 651,
+      "centerY": 1115,
+      "bounds": {
+        "x": 641,
+        "y": 1105,
+        "width": 21,
+        "height": 21
+      },
+      "sampleX": 652,
+      "sampleY": 1115,
+      "logicalRegionId": "region-78",
+      "shapeGroup": "border-inner-circles",
+      "geometryType": "circle"
+    },
+    {
+      "id": "region-79",
+      "regionId": "region-79",
+      "maskColor": [
+        79,
+        0,
+        157
+      ],
+      "pixelCount": 343,
+      "centerX": 562,
+      "centerY": 1115,
+      "bounds": {
+        "x": 552,
+        "y": 1105,
+        "width": 21,
+        "height": 21
+      },
+      "sampleX": 562,
+      "sampleY": 1115,
+      "logicalRegionId": "region-79",
+      "shapeGroup": "border-inner-circles",
+      "geometryType": "circle"
+    },
+    {
+      "id": "region-80",
+      "regionId": "region-80",
+      "maskColor": [
+        80,
+        0,
+        230
+      ],
+      "pixelCount": 1281,
+      "centerX": 632,
+      "centerY": 1118,
+      "bounds": {
+        "x": 592,
+        "y": 1091,
+        "width": 83,
+        "height": 52
+      },
+      "sampleX": 632,
+      "sampleY": 1118,
+      "logicalRegionId": "region-80",
+      "shapeGroup": "border-outer-loops",
+      "geometryType": "loop"
+    },
+    {
+      "id": "region-81",
+      "regionId": "region-81",
+      "maskColor": [
+        81,
+        0,
+        48
+      ],
+      "pixelCount": 1269,
+      "centerX": 587,
+      "centerY": 1119,
+      "bounds": {
+        "x": 552,
+        "y": 1087,
+        "width": 75,
+        "height": 61
+      },
+      "sampleX": 587,
+      "sampleY": 1119,
+      "logicalRegionId": "region-81",
+      "shapeGroup": "border-outer-loops",
+      "geometryType": "loop"
+    },
+    {
+      "id": "region-82",
+      "regionId": "region-82",
+      "maskColor": [
+        82,
+        0,
+        121
+      ],
+      "pixelCount": 362,
+      "centerX": 607,
+      "centerY": 1119,
+      "bounds": {
+        "x": 597,
+        "y": 1108,
+        "width": 21,
+        "height": 22
+      },
+      "sampleX": 607,
+      "sampleY": 1119,
+      "logicalRegionId": "region-82",
+      "shapeGroup": "border-inner-circles",
+      "geometryType": "circle"
+    },
+    {
+      "id": "region-83",
+      "regionId": "region-83",
+      "logicalRegionId": "center-cross",
+      "maskColor": [
+        83,
+        0,
+        194
+      ],
+      "pixelCount": 32659,
+      "centerX": 604,
+      "centerY": 900,
+      "bounds": {
+        "x": 422,
+        "y": 724,
+        "width": 367,
+        "height": 354
+      },
+      "sampleX": 605,
+      "sampleY": 901,
+      "shapeGroup": "center-cross",
+      "geometryType": "cross"
+    }
+  ],
+  "shapeGroups": [
+    {
+      "id": "border-outer-loops",
+      "regions": [
+        "region-1",
+        "region-4",
+        "region-5",
+        "region-8",
+        "region-9",
+        "region-12",
+        "region-13",
+        "region-16",
+        "region-17",
+        "region-20",
+        "region-21",
+        "region-24",
+        "region-27",
+        "region-32",
+        "region-33",
+        "region-40",
+        "region-41",
+        "region-44",
+        "region-49",
+        "region-52",
+        "region-55",
+        "region-60",
+        "region-61",
+        "region-64",
+        "region-65",
+        "region-68",
+        "region-69",
+        "region-72",
+        "region-73",
+        "region-76",
+        "region-77",
+        "region-80",
+        "region-81"
+      ]
+    },
+    {
+      "id": "border-inner-circles",
+      "regions": [
+        "region-2",
+        "region-3",
+        "region-6",
+        "region-7",
+        "region-10",
+        "region-11",
+        "region-14",
+        "region-15",
+        "region-18",
+        "region-19",
+        "region-22",
+        "region-23",
+        "region-28",
+        "region-31",
+        "region-34",
+        "region-39",
+        "region-42",
+        "region-43",
+        "region-50",
+        "region-51",
+        "region-56",
+        "region-57",
+        "region-62",
+        "region-63",
+        "region-66",
+        "region-67",
+        "region-70",
+        "region-71",
+        "region-74",
+        "region-75",
+        "region-78",
+        "region-79",
+        "region-82"
+      ]
+    },
+    {
+      "id": "center-small-squares",
+      "regions": [
+        "region-25",
+        "region-26",
+        "region-35",
+        "region-36",
+        "region-37",
+        "region-38",
+        "region-45",
+        "region-46",
+        "region-47",
+        "region-48",
+        "region-58",
+        "region-59"
+      ]
+    },
+    {
+      "id": "center-corner-l",
+      "regions": [
+        "region-29",
+        "region-30",
+        "region-53",
+        "region-54"
+      ]
+    },
+    {
+      "id": "center-cross",
+      "regions": [
+        "region-83"
+      ]
+    }
+  ]
+}

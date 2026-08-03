@@ -160,6 +160,12 @@ const state = {
 
 let formatter = new Intl.NumberFormat("ar-EG");
 const productGrid = document.querySelector("[data-products]");
+if (!document.querySelector("style[data-catalog-card-styles]")) {
+  const catalogCardStyles = document.createElement("style");
+  catalogCardStyles.dataset.catalogCardStyles = "true";
+  catalogCardStyles.textContent = ".product-card-purchase{display:grid;gap:10px;margin-top:14px}.product-card-choice-label,.product-card-quantity-label{display:grid;gap:5px;color:var(--muted);font-size:12px;font-weight:900}.product-card-choice-label select,.product-card-quantity-label input{width:100%;min-height:42px;padding:7px 10px;border:1px solid var(--line);border-radius:var(--radius);background:#fff;color:var(--ink);font:inherit}.product-card-quantity-label{grid-template-columns:auto minmax(72px,92px);align-items:center;justify-content:space-between}.product-card-live-price{color:var(--burgundy);font-size:21px;font-weight:900;line-height:1.35}.product-card-purchase-actions{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px}.product-card-purchase-actions .button{width:100%;min-width:0;min-height:44px;padding:8px 10px;text-align:center}.product-card-validation{min-height:18px;color:var(--burgundy);font-size:12px;font-weight:800}.popular-product-card .product-card-purchase{width:100%}@media(max-width:560px){.product-card-purchase-actions{grid-template-columns:1fr}.product-card-choice-label select,.product-card-quantity-label input,.product-card-purchase-actions .button{max-width:100%}}";
+  document.head.append(catalogCardStyles);
+}
 const popularProductsSection = document.querySelector("[data-popular-products]");
 const categoryGrid = document.querySelector(".category-grid");
 const legacyMainCategoryArt = new Map(
@@ -2341,16 +2347,13 @@ function renderPopularProducts() {
         const image = getProductImages(product)[0] || "";
         const name = displayText(localized(product.name));
         const productId = escapeHtml(product.id);
-        const productPath = escapeHtml(canonicalProductPath(product));
-        const hasChoices = hasProductChoices(product);
         const isAvailable = hasAvailableVariant(product);
-        const canAddDirectly = !hasChoices && isAvailable;
         const loading = index < 4 ? "eager" : "lazy";
         const cardImage = productCardImageUrl(image, product, 600) || versionedAssetUrl("assets/optimized/hero-products-collage.webp", productsAssetVersion || "1");
         const cardSrcset = productCardSrcset(image, product);
         return `
           <article class="popular-product-card" data-card-product="${productId}">
-            <a class="popular-product-media" href="${productPath}" data-view-product="${productId}" aria-label="${escapeHtml(name)}">
+            <div class="popular-product-media" aria-label="${escapeHtml(name)}">
               <span class="popular-product-badge">${escapeHtml(isAvailable ? t("popularBadge") : t("temporarilyOut"))}</span>
               <img
                 src="${escapeHtml(cardImage)}"
@@ -2362,23 +2365,10 @@ function renderPopularProducts() {
                 decoding="async"
                 onerror="this.src='${escapeHtml(versionedAssetUrl("assets/optimized/hero-products-collage.webp", productsAssetVersion || "1"))}'"
               >
-            </a>
+            </div>
             <div class="popular-product-info">
-              <h3>
-                <a href="${productPath}" data-view-product="${productId}">${escapeHtml(name)}</a>
-              </h3>
-              <div class="popular-product-price">${productPriceHtml(product)}</div>
-              <div class="popular-product-actions">
-                <a class="button secondary popular-view-button" href="${productPath}" data-view-product="${productId}">${escapeHtml(t("popularViewProduct"))}</a>
-                ${canAddDirectly ? `
-                  <button class="button primary popular-add-button" type="button" data-add="${productId}">
-                    <svg viewBox="0 0 24 24" aria-hidden="true">
-                      <path d="M12 5v14M5 12h14" />
-                    </svg>
-                    ${escapeHtml(t("add"))}
-                  </button>
-                ` : ""}
-              </div>
+              <h3>${escapeHtml(name)}</h3>
+              ${productCardPurchaseHtml(product, { popular: true })}
             </div>
           </article>
         `;
@@ -2728,6 +2718,41 @@ function productCardChoicesHtml(product) {
   `;
 }
 
+function productCardPurchaseHtml(product, { popular = false } = {}) {
+  const variants = getProductVariants(product).filter((variant) => isVariantAvailable(variant, product));
+  const requiresChoice = hasProductChoices(product) || variants.length > 1;
+  const selectedVariant = requiresChoice ? null : variants[0];
+  const productId = escapeHtml(product.id);
+  const select = requiresChoice ? `
+    <label class="product-card-choice-label">
+      <span>${escapeHtml(isEnglish() ? "Choose an option" : "اختر النوع")}</span>
+      <select data-card-choice required>
+        <option value="" selected disabled>${escapeHtml(isEnglish() ? "Choose an option" : "اختر النوع أولًا")}</option>
+        ${variants.map((variant, index) => `<option value="${escapeHtml(variant.id || "default")}">${escapeHtml(variantChoiceLabel(variant, index))}</option>`).join("")}
+      </select>
+    </label>` : "";
+  const coloringButton = product.coloringModelId ? `
+    <button class="button secondary product-card-coloring" type="button" data-card-coloring data-coloring-url="/coloring-game?design=${encodeURIComponent(product.coloringModelId)}&product=${encodeURIComponent(product.id)}">
+      ${escapeHtml(isEnglish() ? "Coloring game" : "لعبة التلوين")}
+    </button>` : "";
+  return `
+    <div class="product-card-purchase ${popular ? "is-popular" : ""}">
+      ${select}
+      <div class="product-card-live-price" data-card-price>${selectedVariant ? variantPriceHtml(selectedVariant, product) : productPriceHtml(product)}</div>
+      <label class="product-card-quantity-label">
+        <span>${escapeHtml(isEnglish() ? "Quantity" : "الكمية")}</span>
+        <input type="number" min="1" step="1" value="1" inputmode="numeric" data-card-quantity>
+      </label>
+      <div class="product-card-purchase-actions">
+        <button class="button primary add-button" type="button" data-card-add="${productId}" ${variants.length ? "" : "disabled"}>
+          ${escapeHtml(variants.length ? (isEnglish() ? "Add to cart" : "أضف للسلة") : t("unavailable"))}
+        </button>
+        ${coloringButton}
+      </div>
+      <small class="product-card-validation" data-card-validation aria-live="polite"></small>
+    </div>`;
+}
+
 function cartKey(productId, variantId = "default", lineId = "") {
   return `${productId}${cartSeparator}${variantId || "default"}${lineId ? `${cartSeparator}${lineId}` : ""}`;
 }
@@ -3044,10 +3069,6 @@ function renderProducts() {
       const productDisplayName = displayText(localized(product.name));
       const productName = escapeHtml(productDisplayName);
       const productId = escapeHtml(product.id);
-      const productPath = escapeHtml(canonicalProductPath(product));
-      const cardChoices = "";
-      const actionLabel = !isAvailable ? t("unavailable") : t("detailsAndPrices");
-      const disabledAttribute = isAvailable ? "" : "aria-disabled=\"true\"";
       const imageLoading = "lazy";
       const imagePriority = "";
       const thumbnails = galleryImages.length > 1
@@ -3083,9 +3104,7 @@ function renderProducts() {
         ? `
           <div class="product-gallery ${galleryImages.length > 1 ? "has-thumbs" : ""}">
             <div class="product-gallery-main">
-              <a class="product-photo-link" href="${productPath}" data-view-product="${productId}" aria-label="${productName}">
-                <img class="product-photo" data-main-image="${productId}" data-main-raw-image="${escapeHtml(galleryImages[0])}" src="${escapeHtml(mainCardImage)}" ${mainCardSrcset ? `srcset="${mainCardSrcset}" sizes="(max-width: 720px) 92vw, (max-width: 1100px) 44vw, 360px"` : ""} alt="${productName}" width="600" height="600" loading="${imageLoading}" decoding="async"${imagePriority} draggable="false" />
-              </a>
+              <img class="product-photo" data-main-image="${productId}" data-main-raw-image="${escapeHtml(galleryImages[0])}" src="${escapeHtml(mainCardImage)}" ${mainCardSrcset ? `srcset="${mainCardSrcset}" sizes="(max-width: 720px) 92vw, (max-width: 1100px) 44vw, 360px"` : ""} alt="${productName}" width="600" height="600" loading="${imageLoading}" decoding="async"${imagePriority} draggable="false" />
             </div>
             ${thumbnails}
           </div>
@@ -3103,20 +3122,8 @@ function renderProducts() {
               <span>${escapeHtml(localized(product.label || "منتج"))}</span>
               <span class="stock">${escapeHtml(stockText)}</span>
             </div>
-            <h3><a href="${productPath}" data-view-product="${productId}">${productName}</a></h3>
-            ${cardChoices}
-            <a class="product-details" href="${productPath}" data-view-product="${productId}">
-              <span>${t("detailsAndPrices")}</span>
-            </a>
-            <div class="product-bottom">
-              <span class="price">${priceHtml}</span>
-              <a class="button primary add-button" href="${productPath}" data-view-product="${productId}" ${disabledAttribute}>
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M12 5v14M5 12h14" />
-                </svg>
-                ${actionLabel}
-              </a>
-            </div>
+            <h3>${productName}</h3>
+            ${productCardPurchaseHtml(product)}
           </div>
         </article>
       `;
@@ -4802,18 +4809,14 @@ async function signOutCustomer() {
   showToast(t("signoutToast"));
 }
 
-function addToCart(productId, variantId = "", amount = 1) {
+function addToCart(productId, variantId = "", amount = 1, options = {}) {
   const product = getProduct(productId);
-  if (!product) return;
-  if (isIotaMedalProduct(product)) {
-    window.location.href = canonicalProductPath(product);
-    return;
-  }
+  if (!product) return false;
 
   const variant = variantId ? findVariant(product, variantId) : defaultVariant(product);
   if (!isVariantAvailable(variant, product)) {
     showToast(t("unavailableChoiceToast"));
-    return;
+    return false;
   }
 
   const key = cartKey(product.id, variant?.id || "default");
@@ -4823,7 +4826,7 @@ function addToCart(productId, variantId = "", amount = 1) {
   const nextQty = currentQty + requestedAmount;
   if (quantity !== null && nextQty > quantity) {
     showToast(t("quantityLimitToast"));
-    return;
+    return false;
   }
 
   state.cart.set(key, nextQty);
@@ -4832,11 +4835,12 @@ function addToCart(productId, variantId = "", amount = 1) {
   saveCartNow({ immediateRemote: true });
   trackStoreEvent("add_to_cart", analyticsProduct(product, variant, requestedAmount));
   const selected = variantOptionText(variant);
-  showToast(t("addedToast", {
+  showToast(options.message || t("addedToast", {
     count: displayText(formatter.format(requestedAmount)),
     name: displayText(localized(product.name)),
     option: selected ? ` - ${selected}` : ""
   }));
+  return true;
 }
 
 function changeQty(key, delta) {
@@ -5270,15 +5274,6 @@ function openCardMainImage(imageElement) {
   return true;
 }
 
-document.addEventListener("click", (event) => {
-  const productPhoto = event.target.closest?.(".product-photo");
-  if (!productPhoto || !productGrid?.contains(productPhoto)) return;
-  if (productPhoto.closest(".product-photo-link")) return;
-  if (!openCardMainImage(productPhoto)) return;
-  event.preventDefault();
-  event.stopPropagation();
-}, true);
-
 productGrid.addEventListener("click", (event) => {
   if (Date.now() < gallerySwipeSuppressUntil) {
     event.preventDefault();
@@ -5286,74 +5281,86 @@ productGrid.addEventListener("click", (event) => {
     return;
   }
 
-  const productPhotoLink = event.target.closest(".product-photo-link[data-view-product]");
-  if (productPhotoLink) {
-    event.preventDefault();
-    openProductModal(productPhotoLink.dataset.viewProduct);
-    return;
-  }
-
-  const mainGallery = event.target.closest(".product-gallery-main");
-  if (mainGallery) {
-    const mainImage = mainGallery.querySelector("[data-main-image]");
-    if (openCardMainImage(mainImage)) return;
-  }
-
   const thumb = event.target.closest("[data-gallery-image]");
   if (thumb) {
-    setProductGalleryImage(thumb);
-    const card = thumb.closest("[data-card-product]");
-    const productId = card?.dataset.cardProduct || thumb.dataset.gallery;
-    const image = thumb.dataset.galleryRawImage || "";
-    if (productId && image) {
-      openProductModal(productId);
-      openProductImageLightbox(productId, image, thumb.querySelector("img")?.alt || "", { updateUrl: true });
-    }
-    return;
-  }
-
-  const variantButton = event.target.closest("[data-card-variant]");
-  if (variantButton) {
-    openProductModal(variantButton.dataset.cardProductVariant, { variantId: variantButton.dataset.cardVariant });
-    return;
-  }
-
-  const viewButton = event.target.closest("[data-view-product]");
-  if (viewButton) {
     event.preventDefault();
-    openProductModal(viewButton.dataset.viewProduct);
+    event.stopPropagation();
+    setProductGalleryImage(thumb);
     return;
   }
 
-  const button = event.target.closest("[data-add]");
+  const coloringButton = event.target.closest("[data-card-coloring]");
+  if (coloringButton) {
+    event.preventDefault();
+    event.stopPropagation();
+    window.location.href = coloringButton.dataset.coloringUrl;
+    return;
+  }
+
+  const button = event.target.closest("[data-card-add]");
   if (button) {
-    addToCart(button.dataset.add);
+    event.preventDefault();
+    event.stopPropagation();
+    const card = button.closest("[data-card-product]");
+    const choice = card?.querySelector("[data-card-choice]");
+    const validation = card?.querySelector("[data-card-validation]");
+    if (choice && !choice.value) {
+      validation.textContent = isEnglish() ? "Choose the required option first." : "اختر نوع الخشب أو الخيار المطلوب أولًا.";
+      choice.focus();
+      return;
+    }
+    const quantity = Math.max(1, Math.floor(Number(card?.querySelector("[data-card-quantity]")?.value) || 1));
+    const added = addToCart(button.dataset.cardAdd, choice?.value || "", quantity, {
+      message: isEnglish() ? "Product added to cart" : "تمت إضافة المنتج إلى السلة"
+    });
+    if (added && validation) validation.textContent = "";
     return;
   }
-
-  if (event.target.closest(".product-details")) return;
-
-  const card = event.target.closest("[data-card-product]");
-  if (card) openProductModal(card.dataset.cardProduct);
 });
 
 popularProductsSection?.addEventListener("click", (event) => {
-  const viewButton = event.target.closest("[data-view-product]");
-  if (viewButton) {
+  const coloringButton = event.target.closest("[data-card-coloring]");
+  if (coloringButton) {
     event.preventDefault();
-    openProductModal(viewButton.dataset.viewProduct);
+    event.stopPropagation();
+    window.location.href = coloringButton.dataset.coloringUrl;
     return;
   }
-
-  const addButton = event.target.closest("[data-add]");
+  const addButton = event.target.closest("[data-card-add]");
   if (addButton) {
-    addToCart(addButton.dataset.add);
+    event.preventDefault();
+    event.stopPropagation();
+    const card = addButton.closest("[data-card-product]");
+    const choice = card?.querySelector("[data-card-choice]");
+    const validation = card?.querySelector("[data-card-validation]");
+    if (choice && !choice.value) {
+      validation.textContent = isEnglish() ? "Choose the required option first." : "اختر نوع الخشب أو الخيار المطلوب أولًا.";
+      choice.focus();
+      return;
+    }
+    const quantity = Math.max(1, Math.floor(Number(card?.querySelector("[data-card-quantity]")?.value) || 1));
+    const added = addToCart(addButton.dataset.cardAdd, choice?.value || "", quantity, {
+      message: isEnglish() ? "Product added to cart" : "تمت إضافة المنتج إلى السلة"
+    });
+    if (added && validation) validation.textContent = "";
     return;
   }
-
-  const card = event.target.closest("[data-card-product]");
-  if (card) openProductModal(card.dataset.cardProduct);
 });
+
+function updateProductCardChoice(event) {
+  const choice = event.target.closest("[data-card-choice]");
+  if (!choice) return;
+  const card = choice.closest("[data-card-product]");
+  const product = getProduct(card?.dataset.cardProduct || "");
+  const variant = product ? findVariant(product, choice.value) : null;
+  if (!product || !variant) return;
+  card.querySelector("[data-card-price]").innerHTML = variantPriceHtml(variant, product);
+  const validation = card.querySelector("[data-card-validation]");
+  if (validation) validation.textContent = "";
+}
+
+productGrid.addEventListener("change", updateProductCardChoice);
+popularProductsSection?.addEventListener("change", updateProductCardChoice);
 
 productGrid.addEventListener("pointerover", (event) => {
   if (event.pointerType === "touch") return;

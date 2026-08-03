@@ -9,6 +9,7 @@ const files = [
   "cart.html",
   "checkout.html",
   "payment.html",
+  "order-success.html",
   "styles.min.css",
   "styles.css",
   "checkout-flow.min.js",
@@ -17,6 +18,9 @@ const files = [
   "script.js",
   "product-page.css",
   "product-page.js",
+  "product-page-wood-v1.js",
+  "yota-colors.js",
+  "coloringDesigns.js",
   "firebase-config.min.js",
   "firebase-config.js",
   "category-taxonomy.js",
@@ -36,6 +40,9 @@ const files = [
   "admin-analytics.js",
   "analytics-config.js",
   "analytics.js",
+  "coloring-game.html",
+  "coloring-game.css",
+  "coloring-game.js",
   "payment-success.html",
   "payment-failed.html",
   "payment-pending.html",
@@ -45,7 +52,7 @@ const files = [
   "_redirects",
 ];
 
-const directories = ["assets"];
+const directories = ["assets", "coloring"];
 
 function remove(target) {
   fs.rmSync(target, { recursive: true, force: true });
@@ -108,5 +115,6 @@ copyFileAs("admin.js", "admin/admin.js", null);
 copyFileAs("admin-orders.js", "admin/admin-orders.js", null);
 copyFileAs("admin-analytics.js", "admin/admin-analytics.js", null);
 copyFileAs("category-taxonomy.js", "admin/category-taxonomy.js", null);
+copyFileAs("coloring-game.html", "coloring-game/index.html", null);
 
 console.log(`Cloudflare build ready: ${path.relative(root, dist)}`);

@@ -1,0 +1,1300 @@
+{
+  "modelId": "yota-02",
+  "modelName": "ميدالية يوتا 2",
+  "modelVersion": "yota-02-v7",
+  "totalRegions": 50,
+  "regions": [
+    {
+      "id": "region-1",
+      "regionId": "region-1",
+      "maskColor": [
+        1,
+        0,
+        73
+      ],
+      "pixelCount": 19,
+      "centerX": 620,
+      "centerY": 505,
+      "bounds": {
+        "x": 619,
+        "y": 497,
+        "width": 2,
+        "height": 15
+      },
+      "sampleX": 620,
+      "sampleY": 505,
+      "logicalRegionId": "region-1",
+      "shapeGroup": null,
+      "geometryType": null,
+      "enabled": false,
+      "label": "فتحة التعليق - غير قابلة للتلوين"
+    },
+    {
+      "id": "region-2",
+      "regionId": "region-2",
+      "maskColor": [
+        2,
+        0,
+        146
+      ],
+      "pixelCount": 384,
+      "centerX": 652,
+      "centerY": 576,
+      "bounds": {
+        "x": 633,
+        "y": 562,
+        "width": 40,
+        "height": 27
+      },
+      "sampleX": 652,
+      "sampleY": 576,
+      "logicalRegionId": "region-2",
+      "shapeGroup": null,
+      "geometryType": null,
+      "enabled": true,
+      "label": "منطقة 2"
+    },
+    {
+      "id": "region-3",
+      "regionId": "region-3",
+      "maskColor": [
+        3,
+        0,
+        219
+      ],
+      "pixelCount": 475,
+      "centerX": 669,
+      "centerY": 629,
+      "bounds": {
+        "x": 653,
+        "y": 612,
+        "width": 28,
+        "height": 30
+      },
+      "sampleX": 669,
+      "sampleY": 629,
+      "logicalRegionId": "region-3",
+      "shapeGroup": null,
+      "geometryType": null,
+      "enabled": true,
+      "label": "منطقة 3"
+    },
+    {
+      "id": "region-4",
+      "regionId": "region-4",
+      "maskColor": [
+        4,
+        0,
+        37
+      ],
+      "pixelCount": 455,
+      "centerX": 570,
+      "centerY": 630,
+      "bounds": {
+        "x": 559,
+        "y": 612,
+        "width": 27,
+        "height": 32
+      },
+      "sampleX": 570,
+      "sampleY": 630,
+      "logicalRegionId": "region-4",
+      "shapeGroup": null,
+      "geometryType": null,
+      "enabled": true,
+      "label": "منطقة 4"
+    },
+    {
+      "id": "region-5",
+      "regionId": "region-5",
+      "maskColor": [
+        5,
+        0,
+        110
+      ],
+      "pixelCount": 3077,
+      "centerX": 619,
+      "centerY": 648,
+      "bounds": {
+        "x": 590,
+        "y": 580,
+        "width": 60,
+        "height": 136
+      },
+      "sampleX": 619,
+      "sampleY": 648,
+      "logicalRegionId": "top-fleur",
+      "shapeGroup": "large-fleur",
+      "geometryType": "fleur",
+      "enabled": true,
+      "label": "الزخرفة الزهرية العلوية"
+    },
+    {
+      "id": "region-6",
+      "regionId": "region-6",
+      "maskColor": [
+        6,
+        0,
+        183
+      ],
+      "pixelCount": 351,
+      "centerX": 651,
+      "centerY": 687,
+      "bounds": {
+        "x": 644,
+        "y": 668,
+        "width": 19,
+        "height": 42
+      },
+      "sampleX": 651,
+      "sampleY": 687,
+      "logicalRegionId": "region-6",
+      "shapeGroup": null,
+      "geometryType": null,
+      "enabled": true,
+      "label": "منطقة 6"
+    },
+    {
+      "id": "region-7",
+      "regionId": "region-7",
+      "maskColor": [
+        7,
+        0,
+        1
+      ],
+      "pixelCount": 335,
+      "centerX": 586,
+      "centerY": 687,
+      "bounds": {
+        "x": 576,
+        "y": 668,
+        "width": 18,
+        "height": 44
+      },
+      "sampleX": 586,
+      "sampleY": 687,
+      "logicalRegionId": "region-7",
+      "shapeGroup": null,
+      "geometryType": null,
+      "enabled": true,
+      "label": "منطقة 7"
+    },
+    {
+      "id": "region-8",
+      "regionId": "region-8",
+      "maskColor": [
+        8,
+        0,
+        74
+      ],
+      "pixelCount": 2064,
+      "centerX": 512,
+      "centerY": 704,
+      "bounds": {
+        "x": 474,
+        "y": 665,
+        "width": 84,
+        "height": 82
+      },
+      "sampleX": 512,
+      "sampleY": 704,
+      "logicalRegionId": "upper-left-star",
+      "shapeGroup": "outer-stars",
+      "geometryType": "star",
+      "enabled": true,
+      "label": "النجمة العلوية اليسرى"
+    },
+    {
+      "id": "region-9",
+      "regionId": "region-9",
+      "maskColor": [
+        9,
+        0,
+        147
+      ],
+      "pixelCount": 2064,
+      "centerX": 724,
+      "centerY": 704,
+      "bounds": {
+        "x": 679,
+        "y": 665,
+        "width": 84,
+        "height": 82
+      },
+      "sampleX": 724,
+      "sampleY": 704,
+      "logicalRegionId": "upper-right-star",
+      "shapeGroup": "outer-stars",
+      "geometryType": "star",
+      "enabled": true,
+      "label": "النجمة العلوية اليمنى"
+    },
+    {
+      "id": "region-10",
+      "regionId": "region-10",
+      "maskColor": [
+        10,
+        0,
+        220
+      ],
+      "pixelCount": 490,
+      "centerX": 619,
+      "centerY": 746,
+      "bounds": {
+        "x": 602,
+        "y": 736,
+        "width": 34,
+        "height": 27
+      },
+      "sampleX": 619,
+      "sampleY": 746,
+      "logicalRegionId": "region-10",
+      "shapeGroup": "center-triangles",
+      "geometryType": "triangle",
+      "enabled": true,
+      "label": "منطقة 10"
+    },
+    {
+      "id": "region-11",
+      "regionId": "region-11",
+      "maskColor": [
+        11,
+        0,
+        38
+      ],
+      "pixelCount": 357,
+      "centerX": 563,
+      "centerY": 752,
+      "bounds": {
+        "x": 549,
+        "y": 737,
+        "width": 26,
+        "height": 26
+      },
+      "sampleX": 563,
+      "sampleY": 752,
+      "logicalRegionId": "region-11",
+      "shapeGroup": "center-triangles",
+      "geometryType": "triangle",
+      "enabled": true,
+      "label": "منطقة 11"
+    },
+    {
+      "id": "region-12",
+      "regionId": "region-12",
+      "maskColor": [
+        12,
+        0,
+        111
+      ],
+      "pixelCount": 357,
+      "centerX": 673,
+      "centerY": 752,
+      "bounds": {
+        "x": 662,
+        "y": 737,
+        "width": 26,
+        "height": 26
+      },
+      "sampleX": 673,
+      "sampleY": 752,
+      "logicalRegionId": "region-12",
+      "shapeGroup": "center-triangles",
+      "geometryType": "triangle",
+      "enabled": true,
+      "label": "منطقة 12"
+    },
+    {
+      "id": "region-13",
+      "regionId": "region-13",
+      "maskColor": [
+        13,
+        0,
+        184
+      ],
+      "pixelCount": 351,
+      "centerX": 796,
+      "centerY": 759,
+      "bounds": {
+        "x": 785,
+        "y": 749,
+        "width": 27,
+        "height": 25
+      },
+      "sampleX": 796,
+      "sampleY": 759,
+      "logicalRegionId": "region-13",
+      "shapeGroup": null,
+      "geometryType": null,
+      "enabled": true,
+      "label": "منطقة 13"
+    },
+    {
+      "id": "region-14",
+      "regionId": "region-14",
+      "maskColor": [
+        14,
+        0,
+        2
+      ],
+      "pixelCount": 392,
+      "centerX": 444,
+      "centerY": 759,
+      "bounds": {
+        "x": 429,
+        "y": 749,
+        "width": 26,
+        "height": 26
+      },
+      "sampleX": 444,
+      "sampleY": 759,
+      "logicalRegionId": "region-14",
+      "shapeGroup": null,
+      "geometryType": null,
+      "enabled": true,
+      "label": "منطقة 14"
+    },
+    {
+      "id": "region-15",
+      "regionId": "region-15",
+      "maskColor": [
+        15,
+        0,
+        75
+      ],
+      "pixelCount": 302,
+      "centerX": 739,
+      "centerY": 773,
+      "bounds": {
+        "x": 718,
+        "y": 763,
+        "width": 41,
+        "height": 18
+      },
+      "sampleX": 739,
+      "sampleY": 773,
+      "logicalRegionId": "region-15",
+      "shapeGroup": null,
+      "geometryType": null,
+      "enabled": true,
+      "label": "منطقة 15"
+    },
+    {
+      "id": "region-16",
+      "regionId": "region-16",
+      "maskColor": [
+        16,
+        0,
+        148
+      ],
+      "pixelCount": 323,
+      "centerX": 498,
+      "centerY": 773,
+      "bounds": {
+        "x": 480,
+        "y": 764,
+        "width": 41,
+        "height": 17
+      },
+      "sampleX": 498,
+      "sampleY": 773,
+      "logicalRegionId": "region-16",
+      "shapeGroup": null,
+      "geometryType": null,
+      "enabled": true,
+      "label": "منطقة 16"
+    },
+    {
+      "id": "region-17",
+      "regionId": "region-17",
+      "maskColor": [
+        17,
+        0,
+        221
+      ],
+      "pixelCount": 345,
+      "centerX": 849,
+      "centerY": 774,
+      "bounds": {
+        "x": 837,
+        "y": 756,
+        "width": 28,
+        "height": 37
+      },
+      "sampleX": 849,
+      "sampleY": 774,
+      "logicalRegionId": "region-17",
+      "shapeGroup": null,
+      "geometryType": null,
+      "enabled": true,
+      "label": "منطقة 17"
+    },
+    {
+      "id": "region-18",
+      "regionId": "region-18",
+      "maskColor": [
+        18,
+        0,
+        39
+      ],
+      "pixelCount": 288,
+      "centerX": 393,
+      "centerY": 775,
+      "bounds": {
+        "x": 380,
+        "y": 758,
+        "width": 24,
+        "height": 36
+      },
+      "sampleX": 393,
+      "sampleY": 775,
+      "logicalRegionId": "region-18",
+      "shapeGroup": null,
+      "geometryType": null,
+      "enabled": true,
+      "label": "منطقة 18"
+    },
+    {
+      "id": "region-19",
+      "regionId": "region-19",
+      "maskColor": [
+        19,
+        0,
+        112
+      ],
+      "pixelCount": 445,
+      "centerX": 678,
+      "centerY": 802,
+      "bounds": {
+        "x": 662,
+        "y": 786,
+        "width": 25,
+        "height": 33
+      },
+      "sampleX": 678,
+      "sampleY": 802,
+      "logicalRegionId": "region-19",
+      "shapeGroup": "center-triangles",
+      "geometryType": "triangle",
+      "enabled": true,
+      "label": "منطقة 19"
+    },
+    {
+      "id": "region-20",
+      "regionId": "region-20",
+      "maskColor": [
+        20,
+        0,
+        185
+      ],
+      "pixelCount": 1107,
+      "centerX": 618,
+      "centerY": 802,
+      "bounds": {
+        "x": 594,
+        "y": 778,
+        "width": 49,
+        "height": 49
+      },
+      "sampleX": 618,
+      "sampleY": 802,
+      "logicalRegionId": "center-star",
+      "shapeGroup": "center-star",
+      "geometryType": "star",
+      "enabled": true,
+      "label": "النجمة الوسطى"
+    },
+    {
+      "id": "region-21",
+      "regionId": "region-21",
+      "maskColor": [
+        21,
+        0,
+        3
+      ],
+      "pixelCount": 476,
+      "centerX": 558,
+      "centerY": 802,
+      "bounds": {
+        "x": 550,
+        "y": 786,
+        "width": 26,
+        "height": 34
+      },
+      "sampleX": 558,
+      "sampleY": 802,
+      "logicalRegionId": "region-21",
+      "shapeGroup": "center-triangles",
+      "geometryType": "triangle",
+      "enabled": true,
+      "label": "منطقة 21"
+    },
+    {
+      "id": "region-22",
+      "regionId": "region-22",
+      "maskColor": [
+        22,
+        0,
+        76
+      ],
+      "pixelCount": 2814,
+      "centerX": 779,
+      "centerY": 804,
+      "bounds": {
+        "x": 712,
+        "y": 776,
+        "width": 135,
+        "height": 58
+      },
+      "sampleX": 779,
+      "sampleY": 804,
+      "logicalRegionId": "right-fleur",
+      "shapeGroup": "large-fleur",
+      "geometryType": "fleur",
+      "enabled": true,
+      "label": "الزخرفة الزهرية اليمنى"
+    },
+    {
+      "id": "region-23",
+      "regionId": "region-23",
+      "maskColor": [
+        23,
+        0,
+        149
+      ],
+      "pixelCount": 2686,
+      "centerX": 460,
+      "centerY": 804,
+      "bounds": {
+        "x": 396,
+        "y": 777,
+        "width": 129,
+        "height": 56
+      },
+      "sampleX": 460,
+      "sampleY": 804,
+      "logicalRegionId": "left-fleur",
+      "shapeGroup": "large-fleur",
+      "geometryType": "fleur",
+      "enabled": true,
+      "label": "الزخرفة الزهرية اليسرى"
+    },
+    {
+      "id": "region-24",
+      "regionId": "region-24",
+      "maskColor": [
+        24,
+        0,
+        222
+      ],
+      "pixelCount": 279,
+      "centerX": 740,
+      "centerY": 833,
+      "bounds": {
+        "x": 718,
+        "y": 827,
+        "width": 41,
+        "height": 17
+      },
+      "sampleX": 740,
+      "sampleY": 833,
+      "logicalRegionId": "region-24",
+      "shapeGroup": null,
+      "geometryType": null,
+      "enabled": true,
+      "label": "منطقة 24"
+    },
+    {
+      "id": "region-25",
+      "regionId": "region-25",
+      "maskColor": [
+        25,
+        0,
+        40
+      ],
+      "pixelCount": 291,
+      "centerX": 498,
+      "centerY": 834,
+      "bounds": {
+        "x": 480,
+        "y": 827,
+        "width": 41,
+        "height": 18
+      },
+      "sampleX": 498,
+      "sampleY": 834,
+      "logicalRegionId": "region-25",
+      "shapeGroup": null,
+      "geometryType": null,
+      "enabled": true,
+      "label": "منطقة 25"
+    },
+    {
+      "id": "region-26",
+      "regionId": "region-26",
+      "maskColor": [
+        26,
+        0,
+        113
+      ],
+      "pixelCount": 324,
+      "centerX": 391,
+      "centerY": 837,
+      "bounds": {
+        "x": 379,
+        "y": 819,
+        "width": 25,
+        "height": 38
+      },
+      "sampleX": 391,
+      "sampleY": 837,
+      "logicalRegionId": "region-26",
+      "shapeGroup": null,
+      "geometryType": null,
+      "enabled": true,
+      "label": "منطقة 26"
+    },
+    {
+      "id": "region-27",
+      "regionId": "region-27",
+      "maskColor": [
+        27,
+        0,
+        186
+      ],
+      "pixelCount": 395,
+      "centerX": 851,
+      "centerY": 838,
+      "bounds": {
+        "x": 838,
+        "y": 818,
+        "width": 28,
+        "height": 40
+      },
+      "sampleX": 851,
+      "sampleY": 838,
+      "logicalRegionId": "region-27",
+      "shapeGroup": null,
+      "geometryType": null,
+      "enabled": true,
+      "label": "منطقة 27"
+    },
+    {
+      "id": "region-28",
+      "regionId": "region-28",
+      "maskColor": [
+        28,
+        0,
+        4
+      ],
+      "pixelCount": 423,
+      "centerX": 797,
+      "centerY": 852,
+      "bounds": {
+        "x": 786,
+        "y": 836,
+        "width": 28,
+        "height": 28
+      },
+      "sampleX": 797,
+      "sampleY": 852,
+      "logicalRegionId": "region-28",
+      "shapeGroup": null,
+      "geometryType": null,
+      "enabled": true,
+      "label": "منطقة 28"
+    },
+    {
+      "id": "region-29",
+      "regionId": "region-29",
+      "maskColor": [
+        29,
+        0,
+        77
+      ],
+      "pixelCount": 380,
+      "centerX": 443,
+      "centerY": 852,
+      "bounds": {
+        "x": 428,
+        "y": 837,
+        "width": 26,
+        "height": 28
+      },
+      "sampleX": 443,
+      "sampleY": 852,
+      "logicalRegionId": "region-29",
+      "shapeGroup": null,
+      "geometryType": null,
+      "enabled": true,
+      "label": "منطقة 29"
+    },
+    {
+      "id": "region-30",
+      "regionId": "region-30",
+      "maskColor": [
+        30,
+        0,
+        150
+      ],
+      "pixelCount": 362,
+      "centerX": 563,
+      "centerY": 853,
+      "bounds": {
+        "x": 549,
+        "y": 843,
+        "width": 26,
+        "height": 25
+      },
+      "sampleX": 563,
+      "sampleY": 853,
+      "logicalRegionId": "region-30",
+      "shapeGroup": "center-triangles",
+      "geometryType": "triangle",
+      "enabled": true,
+      "label": "منطقة 30"
+    },
+    {
+      "id": "region-31",
+      "regionId": "region-31",
+      "maskColor": [
+        31,
+        0,
+        223
+      ],
+      "pixelCount": 362,
+      "centerX": 673,
+      "centerY": 853,
+      "bounds": {
+        "x": 662,
+        "y": 843,
+        "width": 26,
+        "height": 25
+      },
+      "sampleX": 673,
+      "sampleY": 853,
+      "logicalRegionId": "region-31",
+      "shapeGroup": "center-triangles",
+      "geometryType": "triangle",
+      "enabled": true,
+      "label": "منطقة 31"
+    },
+    {
+      "id": "region-32",
+      "regionId": "region-32",
+      "maskColor": [
+        32,
+        0,
+        41
+      ],
+      "pixelCount": 483,
+      "centerX": 619,
+      "centerY": 859,
+      "bounds": {
+        "x": 601,
+        "y": 843,
+        "width": 35,
+        "height": 26
+      },
+      "sampleX": 619,
+      "sampleY": 859,
+      "logicalRegionId": "region-32",
+      "shapeGroup": "center-triangles",
+      "geometryType": "triangle",
+      "enabled": true,
+      "label": "منطقة 32"
+    },
+    {
+      "id": "region-33",
+      "regionId": "region-33",
+      "maskColor": [
+        33,
+        0,
+        114
+      ],
+      "pixelCount": 1117,
+      "centerX": 494,
+      "centerY": 888,
+      "bounds": {
+        "x": 473,
+        "y": 858,
+        "width": 54,
+        "height": 78
+      },
+      "sampleX": 494,
+      "sampleY": 888,
+      "logicalRegionId": "lower-left-star",
+      "shapeGroup": "outer-stars",
+      "geometryType": "star",
+      "enabled": true,
+      "label": "النجمة السفلية اليسرى"
+    },
+    {
+      "id": "region-34",
+      "regionId": "region-34",
+      "maskColor": [
+        34,
+        0,
+        187
+      ],
+      "pixelCount": 1117,
+      "centerX": 742,
+      "centerY": 888,
+      "bounds": {
+        "x": 710,
+        "y": 858,
+        "width": 54,
+        "height": 78
+      },
+      "sampleX": 742,
+      "sampleY": 888,
+      "logicalRegionId": "lower-right-star",
+      "shapeGroup": "outer-stars",
+      "geometryType": "star",
+      "enabled": true,
+      "label": "النجمة السفلية اليمنى"
+    },
+    {
+      "id": "region-35",
+      "regionId": "region-35",
+      "maskColor": [
+        35,
+        0,
+        5
+      ],
+      "pixelCount": 889,
+      "centerX": 534,
+      "centerY": 917,
+      "bounds": {
+        "x": 497,
+        "y": 889,
+        "width": 61,
+        "height": 51
+      },
+      "sampleX": 534,
+      "sampleY": 917,
+      "logicalRegionId": "lower-left-star",
+      "shapeGroup": "outer-stars",
+      "geometryType": "star",
+      "enabled": true,
+      "label": "النجمة السفلية اليسرى"
+    },
+    {
+      "id": "region-36",
+      "regionId": "region-36",
+      "maskColor": [
+        36,
+        0,
+        78
+      ],
+      "pixelCount": 889,
+      "centerX": 702,
+      "centerY": 917,
+      "bounds": {
+        "x": 679,
+        "y": 889,
+        "width": 61,
+        "height": 51
+      },
+      "sampleX": 702,
+      "sampleY": 917,
+      "logicalRegionId": "lower-right-star",
+      "shapeGroup": "outer-stars",
+      "geometryType": "star",
+      "enabled": true,
+      "label": "النجمة السفلية اليمنى"
+    },
+    {
+      "id": "region-37",
+      "regionId": "region-37",
+      "maskColor": [
+        37,
+        0,
+        151
+      ],
+      "pixelCount": 327,
+      "centerX": 586,
+      "centerY": 917,
+      "bounds": {
+        "x": 575,
+        "y": 895,
+        "width": 19,
+        "height": 42
+      },
+      "sampleX": 586,
+      "sampleY": 917,
+      "logicalRegionId": "region-37",
+      "shapeGroup": null,
+      "geometryType": null,
+      "enabled": true,
+      "label": "منطقة 37"
+    },
+    {
+      "id": "region-38",
+      "regionId": "region-38",
+      "maskColor": [
+        38,
+        0,
+        224
+      ],
+      "pixelCount": 325,
+      "centerX": 652,
+      "centerY": 918,
+      "bounds": {
+        "x": 644,
+        "y": 895,
+        "width": 19,
+        "height": 42
+      },
+      "sampleX": 652,
+      "sampleY": 918,
+      "logicalRegionId": "region-38",
+      "shapeGroup": null,
+      "geometryType": null,
+      "enabled": true,
+      "label": "منطقة 38"
+    },
+    {
+      "id": "region-39",
+      "regionId": "region-39",
+      "maskColor": [
+        39,
+        0,
+        42
+      ],
+      "pixelCount": 2939,
+      "centerX": 618,
+      "centerY": 954,
+      "bounds": {
+        "x": 590,
+        "y": 889,
+        "width": 57,
+        "height": 134
+      },
+      "sampleX": 618,
+      "sampleY": 954,
+      "logicalRegionId": "middle-lower-fleur",
+      "shapeGroup": "large-fleur",
+      "geometryType": "fleur",
+      "enabled": true,
+      "label": "الزخرفة الزهرية الوسطى السفلية"
+    },
+    {
+      "id": "region-40",
+      "regionId": "region-40",
+      "maskColor": [
+        40,
+        0,
+        115
+      ],
+      "pixelCount": 424,
+      "centerX": 667,
+      "centerY": 973,
+      "bounds": {
+        "x": 652,
+        "y": 962,
+        "width": 27,
+        "height": 28
+      },
+      "sampleX": 667,
+      "sampleY": 973,
+      "logicalRegionId": "region-40",
+      "shapeGroup": null,
+      "geometryType": null,
+      "enabled": true,
+      "label": "منطقة 40"
+    },
+    {
+      "id": "region-41",
+      "regionId": "region-41",
+      "maskColor": [
+        41,
+        0,
+        188
+      ],
+      "pixelCount": 415,
+      "centerX": 570,
+      "centerY": 973,
+      "bounds": {
+        "x": 560,
+        "y": 963,
+        "width": 26,
+        "height": 27
+      },
+      "sampleX": 570,
+      "sampleY": 973,
+      "logicalRegionId": "region-41",
+      "shapeGroup": null,
+      "geometryType": null,
+      "enabled": true,
+      "label": "منطقة 41"
+    },
+    {
+      "id": "region-42",
+      "regionId": "region-42",
+      "maskColor": [
+        42,
+        0,
+        6
+      ],
+      "pixelCount": 298,
+      "centerX": 587,
+      "centerY": 1025,
+      "bounds": {
+        "x": 569,
+        "y": 1014,
+        "width": 34,
+        "height": 24
+      },
+      "sampleX": 587,
+      "sampleY": 1025,
+      "logicalRegionId": "region-42",
+      "shapeGroup": null,
+      "geometryType": null,
+      "enabled": true,
+      "label": "منطقة 42"
+    },
+    {
+      "id": "region-43",
+      "regionId": "region-43",
+      "maskColor": [
+        43,
+        0,
+        79
+      ],
+      "pixelCount": 311,
+      "centerX": 651,
+      "centerY": 1025,
+      "bounds": {
+        "x": 633,
+        "y": 1015,
+        "width": 36,
+        "height": 24
+      },
+      "sampleX": 651,
+      "sampleY": 1025,
+      "logicalRegionId": "region-43",
+      "shapeGroup": null,
+      "geometryType": null,
+      "enabled": true,
+      "label": "منطقة 43"
+    },
+    {
+      "id": "region-44",
+      "regionId": "region-44",
+      "maskColor": [
+        44,
+        0,
+        152
+      ],
+      "pixelCount": 379,
+      "centerX": 653,
+      "centerY": 1091,
+      "bounds": {
+        "x": 645,
+        "y": 1067,
+        "width": 21,
+        "height": 44
+      },
+      "sampleX": 653,
+      "sampleY": 1091,
+      "logicalRegionId": "region-44",
+      "shapeGroup": null,
+      "geometryType": null,
+      "enabled": true,
+      "label": "منطقة 44"
+    },
+    {
+      "id": "region-45",
+      "regionId": "region-45",
+      "maskColor": [
+        45,
+        0,
+        225
+      ],
+      "pixelCount": 344,
+      "centerX": 586,
+      "centerY": 1091,
+      "bounds": {
+        "x": 574,
+        "y": 1069,
+        "width": 20,
+        "height": 42
+      },
+      "sampleX": 586,
+      "sampleY": 1091,
+      "logicalRegionId": "region-45",
+      "shapeGroup": null,
+      "geometryType": null,
+      "enabled": true,
+      "label": "منطقة 45"
+    },
+    {
+      "id": "region-46",
+      "regionId": "region-46",
+      "maskColor": [
+        46,
+        0,
+        43
+      ],
+      "pixelCount": 3025,
+      "centerX": 619,
+      "centerY": 1127,
+      "bounds": {
+        "x": 591,
+        "y": 1062,
+        "width": 57,
+        "height": 134
+      },
+      "sampleX": 619,
+      "sampleY": 1127,
+      "logicalRegionId": "bottom-fleur",
+      "shapeGroup": "large-fleur",
+      "geometryType": "fleur",
+      "enabled": true,
+      "label": "الزخرفة الزهرية السفلية"
+    },
+    {
+      "id": "region-47",
+      "regionId": "region-47",
+      "maskColor": [
+        47,
+        0,
+        116
+      ],
+      "pixelCount": 423,
+      "centerX": 570,
+      "centerY": 1147,
+      "bounds": {
+        "x": 560,
+        "y": 1136,
+        "width": 26,
+        "height": 28
+      },
+      "sampleX": 570,
+      "sampleY": 1147,
+      "logicalRegionId": "region-47",
+      "shapeGroup": null,
+      "geometryType": null,
+      "enabled": true,
+      "label": "منطقة 47"
+    },
+    {
+      "id": "region-48",
+      "regionId": "region-48",
+      "maskColor": [
+        48,
+        0,
+        189
+      ],
+      "pixelCount": 423,
+      "centerX": 669,
+      "centerY": 1147,
+      "bounds": {
+        "x": 653,
+        "y": 1137,
+        "width": 27,
+        "height": 28
+      },
+      "sampleX": 669,
+      "sampleY": 1147,
+      "logicalRegionId": "region-48",
+      "shapeGroup": null,
+      "geometryType": null,
+      "enabled": true,
+      "label": "منطقة 48"
+    },
+    {
+      "id": "region-49",
+      "regionId": "region-49",
+      "maskColor": [
+        49,
+        0,
+        7
+      ],
+      "pixelCount": 249,
+      "centerX": 587,
+      "centerY": 1197,
+      "bounds": {
+        "x": 571,
+        "y": 1188,
+        "width": 31,
+        "height": 21
+      },
+      "sampleX": 587,
+      "sampleY": 1197,
+      "logicalRegionId": "region-49",
+      "shapeGroup": null,
+      "geometryType": null,
+      "enabled": true,
+      "label": "منطقة 49"
+    },
+    {
+      "id": "region-50",
+      "regionId": "region-50",
+      "maskColor": [
+        50,
+        0,
+        80
+      ],
+      "pixelCount": 259,
+      "centerX": 652,
+      "centerY": 1198,
+      "bounds": {
+        "x": 636,
+        "y": 1189,
+        "width": 33,
+        "height": 21
+      },
+      "sampleX": 652,
+      "sampleY": 1198,
+      "logicalRegionId": "region-50",
+      "shapeGroup": null,
+      "geometryType": null,
+      "enabled": true,
+      "label": "منطقة 50"
+    }
+  ],
+  "shapeGroups": [
+    {
+      "id": "large-fleur",
+      "regions": [
+        "region-5",
+        "region-22",
+        "region-23",
+        "region-39",
+        "region-46"
+      ]
+    },
+    {
+      "id": "outer-stars",
+      "regions": [
+        "region-8",
+        "region-9",
+        "region-33",
+        "region-34",
+        "region-35",
+        "region-36"
+      ]
+    },
+    {
+      "id": "center-triangles",
+      "regions": [
+        "region-10",
+        "region-11",
+        "region-12",
+        "region-19",
+        "region-21",
+        "region-30",
+        "region-31",
+        "region-32"
+      ]
+    },
+    {
+      "id": "center-star",
+      "regions": [
+        "region-20"
+      ]
+    }
+  ]
+}

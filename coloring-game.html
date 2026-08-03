@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#8b1e2d">
+  <title>لعبة تلوين ميداليات يوتا | مكتبة البابا كيرلس</title>
+  <meta name="description" content="لوّن ميدالية يوتا الخشبية واحفظ تصميمك أو نزّله كصورة.">
+  <link rel="icon" href="/favicon.png">
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/coloring-game.css">
+</head>
+<body class="coloring-page">
+  <header class="coloring-header">
+    <a class="coloring-brand" href="/" aria-label="العودة إلى مكتبة البابا كيرلس">
+      <img src="/assets/optimized/logo-papa-kyrillos-original.webp" alt="" width="58" height="58">
+      <span><strong>مكتبة البابا كيرلس</strong><small>مستلزمات الكنائس والخدمة</small></span>
+    </a>
+    <a class="coloring-back" href="/">العودة للمتجر</a>
+  </header>
+  <main class="coloring-main">
+    <section class="coloring-intro">
+      <span class="coloring-kicker">لوّنها بطريقتك</span>
+      <h1>لعبة تلوين ميداليات يوتا</h1>
+      <p>اختر لونًا، ثم المس أي مساحة مغلقة داخل النقش. يمكنك استخدام لون مختلف لكل جزء.</p>
+    </section>
+    <div class="coloring-layout">
+      <section class="coloring-studio" aria-labelledby="current-model-name">
+        <div class="model-heading">
+          <div><span>الموديل الحالي</span><h2 id="current-model-name">ميدالية يوتا 1</h2></div>
+          <button type="button" class="text-button" data-new-design>بدء تصميم جديد</button>
+        </div>
+        <div class="canvas-shell" data-canvas-shell aria-busy="true">
+          <canvas data-coloring-canvas aria-label="ميدالية يوتا قابلة للتلوين" role="img"></canvas>
+          <div class="canvas-loading" data-loading><span class="loading-spinner" aria-hidden="true"></span><strong>نجهّز مساحات التلوين…</strong></div>
+          <div class="touch-hint" data-touch-hint>المس جزءًا مغلقًا لتلوينه</div>
+        </div>
+        <p class="coloring-status" data-status role="status" aria-live="polite"></p>
+      </section>
+      <aside class="coloring-controls" aria-label="أدوات التلوين">
+        <section class="control-card">
+          <div class="control-title"><h2>لوحة الألوان</h2><span class="selected-color-preview" data-selected-preview aria-hidden="true"></span></div>
+          <div class="color-palette" data-palette></div>
+        </section>
+        <section class="control-card">
+          <h2>أدوات التصميم</h2>
+          <div class="tool-grid">
+            <button type="button" class="tool-button" data-action="undo" disabled><span aria-hidden="true">↶</span> تراجع</button>
+            <button type="button" class="tool-button" data-action="redo" disabled><span aria-hidden="true">↷</span> إعادة</button>
+            <button type="button" class="tool-button" data-action="eraser"><span aria-hidden="true">⌫</span> ممحاة</button>
+            <button type="button" class="tool-button" data-action="reset"><span aria-hidden="true">×</span> مسح الكل</button>
+          </div>
+        </section>
+        <section class="control-card save-card">
+          <button type="button" class="save-button" data-save>حفظ التصميم</button>
+          <button type="button" class="download-button" data-download>تنزيل التصميم PNG</button>
+          <p>يُحفظ آخر تصميم تلقائيًا على هذا الجهاز.</p>
+        </section>
+      </aside>
+    </div>
+    <section class="models-section" aria-labelledby="models-title">
+      <div><span class="coloring-kicker">الموديلات</span><h2 id="models-title">اختر الميدالية</h2></div>
+      <div class="models-list" data-models></div>
+    </section>
+  </main>
+  <script src="/yota-colors.js?v=asset-eb7f3ec8d964"></script>
+  <script type="module">
+    import { COLORING_DESIGNS } from "/coloringDesigns.js";
+    window.COLORING_DESIGNS = COLORING_DESIGNS;
+    await import("/coloring-game.js?v=3");
+  </script>
+</body>
+</html>
