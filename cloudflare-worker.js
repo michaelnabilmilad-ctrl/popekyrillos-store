@@ -1821,7 +1821,8 @@ async function createOrderResponse(context) {
     }, { status: 500 });
   }
 
-  const tableName = encodeURIComponent(String(env.AIRTABLE_TABLE_NAME).trim());
+  const airtableTableName = String(env.AIRTABLE_TABLE_NAME).trim();
+  const tableName = encodeURIComponent(airtableTableName);
   const airtableUrl = `https://api.airtable.com/v0/${encodeURIComponent(String(env.AIRTABLE_BASE_ID).trim())}/${tableName}`;
   let recordId = "";
 
@@ -1856,14 +1857,17 @@ async function createOrderResponse(context) {
     }
 
     if (!recordId) {
+      const orderFields = airtableOrderFields(order);
+      const fieldNames = Object.keys(orderFields);
+      console.info("Creating Airtable order", { requestId, tableName: airtableTableName, fieldNames });
       const airtableData = await airtableRequest(env, airtableUrl, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${env.AIRTABLE_TOKEN}`,
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({ records: [{ fields: airtableOrderFields(order) }] })
-      }, { requestId, operation: "create_order" });
+        body: JSON.stringify({ records: [{ fields: orderFields }] })
+      }, { requestId, operation: "create_order", tableName: airtableTableName, fieldNames });
       recordId = airtableData.records?.[0]?.id || "";
       if (!recordId) throw Object.assign(new Error("Airtable did not return the created order ID"), { code: "airtable_create_failed" });
       await env.ANALYTICS_DB.prepare(
