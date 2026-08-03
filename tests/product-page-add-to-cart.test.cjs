@@ -23,5 +23,5 @@ test("the same complete selection merges while different coloring selections rem
 });
 
 test("product page cache key is bumped for the fixed behavior", () => {
-  assert.match(worker, /product-page\.js\?v=13/);
+  assert.match(worker, /product-page\.js\?v=14/);
 });
