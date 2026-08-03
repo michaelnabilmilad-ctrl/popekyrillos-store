@@ -119,10 +119,10 @@ test("creates linked detail rows in batches of ten with unit prices", async () =
     assert.deepEqual(requests.map((request) => request.records.length), [10, 2]);
     assert.equal(ids.length, 12);
     assert.deepEqual(requests[0].records[0].fields, {
-      "Order link": ["recOrder1"],
-      Product: "Product 0",
-      Quantity: 3,
-      Price: 20
+      "رقم الأوردر": ["recOrder1"],
+      "المنتج": ["recProduct0"],
+      "الكمية": 3,
+      "سعر القطعة": 20
     });
   } finally {
     globalThis.fetch = originalFetch;
@@ -195,6 +195,9 @@ test("mixed SKU and permanent-id checkout links every row and retries safely", a
   let detailRequest;
   globalThis.fetch = async (url, init = {}) => {
     const path = new URL(url).pathname;
+    if (!init.method && path.includes(encodeURIComponent("المنتجات"))) {
+      return new Response(JSON.stringify({ records: [{ id: "recProduct1" }] }));
+    }
     if (path.includes(encodeURIComponent("تفاصيل الطلبات"))) {
       detailCreates += 1;
       detailRequest = JSON.parse(init.body);
@@ -236,9 +239,9 @@ test("mixed SKU and permanent-id checkout links every row and retries safely", a
     assert.equal(orderCreates, 1);
     assert.equal(detailCreates, 1);
     assert.equal(detailRequest.records.length, 2);
-    assert.equal(detailRequest.records[0].fields.Product, "Linked Item");
-    assert.equal(detailRequest.records[1].fields.Product, "Permanent ID Item");
-    assert.deepEqual(detailRequest.records[0].fields["Order link"], ["recOrder1"]);
+    assert.deepEqual(detailRequest.records[0].fields["المنتج"], ["recProduct1"]);
+    assert.deepEqual(detailRequest.records[1].fields["المنتج"], ["recProduct1"]);
+    assert.deepEqual(detailRequest.records[0].fields["رقم الأوردر"], ["recOrder1"]);
     assert.equal(orderRequest.records[0].fields["Missing Info"], "لا يوجد");
   } finally {
     globalThis.fetch = originalFetch;
@@ -279,6 +282,9 @@ test("detail creation failure never returns checkout success", async () => {
   const originalFetch = globalThis.fetch;
   globalThis.fetch = async (url, init = {}) => {
     const pathname = new URL(url).pathname;
+    if (!init.method && pathname.includes(encodeURIComponent("المنتجات"))) {
+      return new Response(JSON.stringify({ records: [{ id: "recProduct1" }] }));
+    }
     if (pathname.includes(encodeURIComponent("تفاصيل الطلبات"))) {
       return new Response(JSON.stringify({ error: { type: "DETAILS_FAILED" } }), { status: 500 });
     }

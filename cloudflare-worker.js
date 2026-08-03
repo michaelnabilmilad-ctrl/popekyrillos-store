@@ -1204,9 +1204,17 @@ async function resolveAirtableProducts(env, items, context) {
         productId = result.recordId || "";
       }
       cache.set(identity, { productId, reason: productId ? "" : "not_found" });
-    } catch {
+    } catch (error) {
       // A product lookup problem must not prevent the customer order.
       cache.set(identity, { productId: "", reason: "lookup_failed" });
+      console.error("Airtable order product lookup failed", {
+        ...context,
+        productName: item.productName,
+        submittedSku: identity,
+        code: error?.code || "lookup_failed",
+        status: error?.status || 0,
+        airtableType: error?.airtableType || ""
+      });
     }
   }
   return items.map((item) => {
@@ -1255,12 +1263,12 @@ async function createAirtableOrderDetails(env, orderRecordId, items, context) {
   }
   const records = items.map((item) => {
     const fields = {
-      "Order link": [orderRecordId],
-      Product: item.productName,
-      Quantity: item.quantity,
-      Price: item.unitPrice
+      "رقم الأوردر": [orderRecordId],
+      "المنتج": [item.productId],
+      "الكمية": item.quantity,
+      "سعر القطعة": item.unitPrice
     };
-    if (item.woodType) fields["Wood Type"] = item.woodType;
+    if (item.detailNote) fields["ملاحظات"] = item.detailNote;
     return { fields };
   });
   const createdIds = [];
@@ -1867,7 +1875,14 @@ async function createOrderResponse(context) {
         message: "\u0627\u0644\u0637\u0644\u0628 \u0642\u064a\u062f \u0627\u0644\u062a\u0633\u062c\u064a\u0644. \u062d\u0627\u0648\u0644 \u0628\u0639\u062f \u0644\u062d\u0638\u0627\u062a."
       }, { status: 409 });
     }
-    const detailIds = await createAirtableOrderDetails(env, recordId, normalizedItems.items, { requestId, recordId });
+    const resolvedItems = await resolveAirtableProducts(env, normalizedItems.items, { requestId });
+    const unresolvedIndex = resolvedItems.findIndex((item) => !item.productId);
+    if (unresolvedIndex !== -1) {
+      const unresolvedError = new Error(`Order item ${unresolvedIndex + 1} has no Airtable product record`);
+      unresolvedError.code = "airtable_product_unresolved";
+      throw unresolvedError;
+    }
+    const detailIds = await createAirtableOrderDetails(env, recordId, resolvedItems, { requestId, recordId });
     await env.ANALYTICS_DB.prepare(
       "UPDATE website_order_requests SET status = 'completed', detail_count = ?, updated_at = CURRENT_TIMESTAMP WHERE request_id = ?"
     ).bind(detailIds.length, requestId).run();

@@ -7,12 +7,11 @@ const checkout = fs.readFileSync("checkout-flow.js", "utf8");
 
 test("website orders write each cart line to the current Order Details schema", () => {
   assert.match(worker, /AIRTABLE_ORDER_DETAILS_TABLE\) \|\| "تفاصيل الطلبات"/);
-  assert.match(worker, /"Order link": \[orderRecordId\]/);
-  assert.match(worker, /Product: item\.productName/);
-  assert.match(worker, /Quantity: item\.quantity/);
-  assert.match(worker, /Price: item\.unitPrice/);
-  assert.match(worker, /fields\["Wood Type"\] = item\.woodType/);
-  assert.match(worker, /createAirtableOrderDetails\(env, recordId, normalizedItems\.items/);
+  assert.match(worker, /"رقم الأوردر": \[orderRecordId\]/);
+  assert.match(worker, /"المنتج": \[item\.productId\]/);
+  assert.match(worker, /"الكمية": item\.quantity/);
+  assert.match(worker, /"سعر القطعة": item\.unitPrice/);
+  assert.match(worker, /createAirtableOrderDetails\(env, recordId, resolvedItems/);
   assert.match(worker, /Address: order\.address/);
   assert.match(checkout, /address: orderAddress\(\)/);
 });
