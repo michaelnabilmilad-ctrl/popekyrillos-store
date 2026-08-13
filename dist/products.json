@@ -5156,13 +5156,13 @@
         "quantity": null
       },
       {
-        "id": "old-53249962541363",
+      "id": "old-53249962541363",
         "title": "متوسط 15*22 سم / رمادي",
         "options": {
           "المقاس": "متوسط 15*22 سم",
           "اللون": "رمادي"
         },
-        "price": 60,
+      "price": 80,
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/006-10121173303603-11.webp",
@@ -5173,13 +5173,13 @@
         "quantity": null
       },
       {
-        "id": "old-53249962574131",
+      "id": "old-53249962574131",
         "title": "متوسط 15*22 سم / فيروزي",
         "options": {
           "المقاس": "متوسط 15*22 سم",
           "اللون": "فيروزي"
         },
-        "price": 60,
+      "price": 80,
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/006-10121173303603-12.webp",
@@ -5292,13 +5292,13 @@
         "quantity": null
       },
       {
-        "id": "old-53249962606899",
+      "id": "old-53249962606899",
         "title": "كبير بيد 20*30 سم / رمادي",
         "options": {
           "المقاس": "كبير بيد 20*30 سم",
           "اللون": "رمادي"
         },
-        "price": 60,
+      "price": 130,
         "compareAtPrice": null,
         "available": false,
         "image": "assets/optimized/products/gallery/006-10121173303603-11.webp",
@@ -5309,13 +5309,13 @@
         "quantity": null
       },
       {
-        "id": "old-53249962639667",
+      "id": "old-53249962639667",
         "title": "كبير بيد 20*30 سم / فيروزي",
         "options": {
           "المقاس": "كبير بيد 20*30 سم",
           "اللون": "فيروزي"
         },
-        "price": 60,
+      "price": 130,
         "compareAtPrice": null,
         "available": false,
         "image": "assets/optimized/products/gallery/006-10121173303603-12.webp",
