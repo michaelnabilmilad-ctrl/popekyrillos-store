@@ -3,13 +3,22 @@ const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const vm = require("node:vm");
 
-function loadTaxonomy(storedTaxonomy = null) {
+function loadTaxonomy(storedTaxonomy = null, storedVersion = 2026080801, extraStorage = {}) {
+  const storage = new Map(Object.entries({
+    ...extraStorage,
+    ...(storedTaxonomy ? { "pope-kyrillos-taxonomy": JSON.stringify(storedTaxonomy) } : {}),
+    ...(storedVersion === null ? {} : { "pope-kyrillos-taxonomy-version": String(storedVersion) })
+  }));
   const context = {
     window: {},
-    localStorage: { getItem: () => storedTaxonomy ? JSON.stringify(storedTaxonomy) : null }
+    localStorage: {
+      getItem: (key) => storage.get(key) ?? null,
+      setItem: (key, value) => storage.set(key, String(value))
+    }
   };
   vm.createContext(context);
   vm.runInContext(fs.readFileSync("category-taxonomy.js", "utf8"), context);
+  Object.defineProperty(context.window.POPE_KYRILLOS_TAXONOMY, "testStorage", { value: storage });
   return context.window.POPE_KYRILLOS_TAXONOMY;
 }
 
@@ -41,28 +50,71 @@ test("cross products are not classified under icons and frames", () => {
   assert.deepEqual(misplaced, []);
 });
 
-test("new plain cross subcategories are selectable, visible and migrate safely", () => {
+test("plain Iota hand crosses and plain cross medals are selectable cross subcategories", () => {
   const taxonomy = loadTaxonomy();
+  const crosses = taxonomy.categoryById.get("crosses");
   const expected = [
     ["iota-plain-hand-crosses", "صلبان يد يوتا سادة"],
     ["plain-cross-medals", "صلبان ميداليات سادة"]
   ];
+
   for (const [id, name] of expected) {
+    const subcategory = crosses.subcategories.find((item) => item.id === id);
+    assert.equal(subcategory?.name, name);
     assert.equal(taxonomy.subcategoryById.get(id)?.mainId, "crosses");
     assert.equal(taxonomy.subcategoryIdFromName(name), id);
   }
 
-  const stored = JSON.parse(JSON.stringify(Array.from(taxonomy.defaultCategories)));
-  const crosses = stored.find((category) => category.id === "crosses");
-  crosses.subcategories = crosses.subcategories.filter((item) => !expected.some(([id]) => id === item.id));
-  crosses.subcategories.push({ id: "custom-kept", name: "قسم محفوظ" });
-  const migratedIds = Array.from(loadTaxonomy(stored).categoryById.get("crosses").subcategories, (item) => item.id);
-  assert.ok(migratedIds.includes("custom-kept"));
-  assert.ok(expected.every(([id]) => migratedIds.includes(id)));
-
-  const source = fs.readFileSync("script.js", "utf8");
-  assert.match(source, /alwaysVisibleSubcategoryIds\.has\(subcategory\.id\)/);
   assert.doesNotMatch(JSON.stringify(expected), /مديليات/);
+});
+
+test("new cross subcategories merge into an older locally managed taxonomy without removing data", () => {
+  const current = loadTaxonomy();
+  const stored = JSON.parse(JSON.stringify(Array.from(current.defaultCategories)));
+  const crosses = stored.find((category) => category.id === "crosses");
+  crosses.subcategories = crosses.subcategories.filter((item) => !["iota-plain-hand-crosses", "plain-cross-medals"].includes(item.id));
+  crosses.subcategories.push({ id: "custom-kept", name: "قسم محفوظ" });
+
+  const migrated = loadTaxonomy(stored);
+  const migratedIds = Array.from(migrated.categoryById.get("crosses").subcategories, (item) => item.id);
+  assert.ok(migratedIds.includes("custom-kept"));
+  assert.ok(migratedIds.includes("iota-plain-hand-crosses"));
+  assert.ok(migratedIds.includes("plain-cross-medals"));
+});
+
+test("an old cached taxonomy is replaced without touching cart or login storage", () => {
+  const current = loadTaxonomy();
+  const partial = JSON.parse(JSON.stringify(Array.from(current.defaultCategories).slice(0, 5)));
+  partial[0].name = "اسم عرض محفوظ";
+
+  const migrated = loadTaxonomy(partial, 1, {
+    "pope-kyrillos-cart": "cart-must-stay",
+    "firebase:authUser:test": "login-must-stay"
+  });
+  assert.deepEqual(
+    Array.from(migrated.customerCategories(), (category) => category.id),
+    ["altar-vessels", "censers-incense", "candles-lamps", "church-vestments", "crosses", "icons-frames", "books-rituals", "occasions-service", "church-equipment"]
+  );
+  assert.equal(migrated.categoryById.get("altar-vessels").name, "المذبح والأواني المقدسة");
+  assert.equal(migrated.testStorage.get("pope-kyrillos-taxonomy-version"), String(migrated.CURRENT_TAXONOMY_VERSION));
+  assert.equal(JSON.parse(migrated.testStorage.get("pope-kyrillos-taxonomy")).length, migrated.defaultCategories.length);
+  assert.equal(migrated.testStorage.get("pope-kyrillos-cart"), "cart-must-stay");
+  assert.equal(migrated.testStorage.get("firebase:authUser:test"), "login-must-stay");
+
+  const migratedWithoutVersion = loadTaxonomy(partial, null, {
+    "pope-kyrillos-cart": "cart-still-here",
+    "pope-kyrillos-auth:user": "auth-still-here"
+  });
+  assert.equal(migratedWithoutVersion.customerCategories().length, 9);
+  assert.equal(migratedWithoutVersion.testStorage.get("pope-kyrillos-taxonomy-version"), String(migratedWithoutVersion.CURRENT_TAXONOMY_VERSION));
+  assert.equal(migratedWithoutVersion.testStorage.get("pope-kyrillos-cart"), "cart-still-here");
+  assert.equal(migratedWithoutVersion.testStorage.get("pope-kyrillos-auth:user"), "auth-still-here");
+});
+
+test("new empty cross subcategories remain visible in storefront cards and filters", () => {
+  const source = fs.readFileSync("script.js", "utf8");
+  assert.match(source, /alwaysVisibleSubcategoryIds = new Set\(\["iota-plain-hand-crosses", "plain-cross-medals"\]\)/);
+  assert.match(source, /alwaysVisibleSubcategoryIds\.has\(subcategory\.id\)/);
 });
 
 test("legacy gifts URL maps to occasions and tote bag card uses the stable meeting-gifts ID", () => {
@@ -78,9 +130,6 @@ test("main category cards render symbols instead of product photos", () => {
   const renderer = source.slice(start, end);
   assert.match(renderer, /mainCategoryTileArt\(category\.id\)/);
   assert.doesNotMatch(renderer, /category-art--photo|<img/);
-  assert.match(source, /"altar-tools": "brass"/);
-  assert.match(source, /"candles-incense": "candles"/);
-  assert.match(source, /"church-vestments": "vestments"/);
-  assert.match(source, /"icons-frames": "icons"/);
-  assert.match(source, /"books-rituals": "books"/);
+  assert.doesNotMatch(source, /legacyMainCategoryArt/);
+  assert.match(source, /function mainCategoryTileArt\(categoryId\)/);
 });

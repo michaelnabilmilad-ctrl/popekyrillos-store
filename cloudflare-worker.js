@@ -19,6 +19,7 @@ import {
 const canonicalOrigin = "https://popekyrillos.store";
 const canonicalHostname = "popekyrillos.store";
 const allowedOrdersOrigin = "https://popekyrillos.store";
+const AIRTABLE_ORDER_DETAIL_IMAGE_FIELD = "صورة المنتج المختارة";
 const staticRewrites = {
   "/cart": "/cart.html",
   "/coloring-game": "/coloring-game.html",
@@ -575,12 +576,12 @@ async function loadTaxonomySource(env, request, { maxAgeMs = 5000 } = {}) {
 }
 
 async function taxonomyJsResponse(request, env) {
-  const source = await loadTaxonomySource(env, request, { maxAgeMs: 300000 });
+  const source = await loadTaxonomySource(env, request, { maxAgeMs: 5000 });
   return new Response(source, {
-    status: 200,
+    status: source ? 200 : 503,
     headers: {
       "Content-Type": "application/javascript; charset=utf-8",
-      "Cache-Control": "public, max-age=300, stale-while-revalidate=600",
+      "Cache-Control": "no-cache, must-revalidate",
       ...(taxonomyCacheSha ? { ETag: taxonomyCacheSha } : {})
     }
   });
@@ -943,7 +944,7 @@ function productMetaTags(product) {
 }
 
 async function htmlResponse(request, env, pathname = "/index.html", init = {}) {
-  const assetPath = pathname === "/index.html" ? "/" : pathname.replace(/\.html$/, "");
+  const assetPath = init.assetPath || (pathname === "/index.html" ? "/" : pathname.replace(/\.html$/, ""));
   const response = await env.ASSETS.fetch(rewriteGetRequest(request, assetPath));
   const headers = new Headers(response.headers);
   ensureUtf8ContentType(headers, pathname);
@@ -974,12 +975,12 @@ async function productPageResponse(request, env, product) {
 <html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 ${tags.title}${tags.description}${tags.extra}
 <link rel="preload" href="/assets/fonts/ge-ss-two-bold.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/styles.min.css"><link rel="stylesheet" href="/product-page.css?v=11">
+<link rel="stylesheet" href="/styles.min.css"><link rel="stylesheet" href="/product-page.css?v=12">
 </head><body class="standalone-product-page">
 <header class="site-header" data-elevated="false"><div class="brand-cluster"><a class="brand" href="/" aria-label="مكتبة البابا كيرلس"><span class="brand-logo-wrap"><img src="/assets/optimized/logo-papa-kyrillos-original.webp" alt="" width="160" height="160" decoding="async"></span><span><strong>مكتبة البابا كيرلس</strong><small>مستلزمات الكنائس والخدمة</small></span></a></div><nav class="main-nav" aria-label="التنقل الرئيسي"><a href="/#categories">الأقسام</a><a href="/#catalog">المنتجات</a></nav><div class="header-actions"><a class="cart-toggle" href="/cart" aria-label="فتح السلة"><span>السلة</span><span class="cart-count" data-cart-count>0</span></a></div></header>
 <main class="product-route-main"><a class="product-route-back" href="/#catalog">العودة إلى المنتجات</a><div id="product-detail" aria-label="${name}"></div><section class="product-route-related" aria-labelledby="related-title"><h2 id="related-title">منتجات مشابهة</h2><div class="product-grid" data-related-products></div></section></main>
 <footer class="product-route-footer"><strong>مكتبة البابا كيرلس</strong><span>مستلزمات الكنائس والخدمة</span><a href="/policies">السياسات</a><a href="https://wa.me/201016125589">تواصل معنا</a></footer>
-<div class="toast" data-toast role="status" aria-live="polite"></div><script id="product-data" type="application/json">${safeProduct}</script><script src="/yota-colors.js?v=3" defer></script><script src="/product-page.js?v=14" defer></script></body></html>`;
+<div class="toast" data-toast role="status" aria-live="polite"></div><script id="product-data" type="application/json">${safeProduct}</script><script src="/yota-colors.js?v=3" defer></script><script src="/product-page.js?v=16" defer></script></body></html>`;
   return new Response(html, {
     status: 200,
     headers: {
@@ -1030,7 +1031,7 @@ function withAssetCacheHeaders(response, pathname) {
   if (pathname === "/products.json") {
     headers.set("Cache-Control", "public, max-age=60, stale-while-revalidate=300");
   } else if (pathname === "/category-taxonomy.js") {
-    headers.set("Cache-Control", "public, max-age=300, stale-while-revalidate=600");
+    headers.set("Cache-Control", "no-cache, must-revalidate");
   } else if (pathname === "/sitemap.xml" || pathname === "/robots.txt") {
     headers.set("Cache-Control", "no-store");
   } else if (/\/assets\/thumbnails\/(?:320|480|640)\//.test(pathname) || /\/assets\/(?:optimized|detail|products)\//.test(pathname)) {
@@ -1095,6 +1096,46 @@ function parseOrderProducts(value) {
   }
 }
 
+function parseSelectedColors(value) {
+  if (Array.isArray(value)) {
+    return Object.fromEntries(value.flatMap((part) => {
+      const regionId = cleanOrderString(part?.regionId ?? part?.id);
+      const colorHex = cleanOrderString(part?.colorHex ?? part?.hex);
+      return regionId && colorHex ? [[regionId, colorHex]] : [];
+    }));
+  }
+  if (value && typeof value === "object") {
+    return Object.fromEntries(Object.entries(value).flatMap(([regionId, color]) => {
+      const colorHex = cleanOrderString(typeof color === "string" ? color : color?.colorHex ?? color?.hex);
+      return regionId && colorHex ? [[regionId, colorHex]] : [];
+    }));
+  }
+  if (typeof value !== "string") return {};
+  try {
+    return parseSelectedColors(JSON.parse(value));
+  } catch { return {}; }
+}
+
+function orderItemSelectedColors(product = {}) {
+  return {
+    ...parseSelectedColors(product?.coloringDesign?.coloredParts),
+    ...parseSelectedColors(product?.coloringDesign?.selectedColors),
+    ...parseSelectedColors(product?.selectedColors),
+    ...parseSelectedColors(product?.customization?.selectedColors)
+  };
+}
+
+function absoluteOrderImageUrl(value) {
+  const source = cleanOrderString(value);
+  if (!source || /^(?:data|blob):/i.test(source)) return "";
+  try {
+    const url = new URL(source, canonicalOrigin);
+    return /^https?:$/i.test(url.protocol) ? url.toString() : "";
+  } catch {
+    return "";
+  }
+}
+
 function normalizeOrderItems(value) {
   const products = parseOrderProducts(value);
   if (!products || !products.length) return { items: [], errors: ["products"] };
@@ -1104,11 +1145,15 @@ function normalizeOrderItems(value) {
     const websiteProductId = cleanOrderString(product?.productId ?? product?.id);
     const variantId = cleanOrderString(product?.variantId);
     const productName = cleanOrderString(product?.name) || cleanOrderString(product?.productId) || "منتج بدون اسم";
-    const image = cleanOrderString(product?.previewImage || product?.image);
+    const imageUrl = [product?.imageUrl, product?.image, product?.previewImage]
+      .map(absoluteOrderImageUrl)
+      .find(Boolean) || "";
     const designId = cleanOrderString(product?.designId);
     const designName = cleanOrderString(product?.designName);
-    const selectedColors = Array.isArray(product?.selectedColors) ? product.selectedColors : [];
+    const customizationId = cleanOrderString(product?.customizationId || product?.coloringDesign?.customizationId);
+    const selectedColors = orderItemSelectedColors(product);
     const option = cleanOrderString(product?.option);
+    const variantName = cleanOrderString(product?.variantName) || option;
     const notes = cleanOrderString(product?.notes ?? product?.note);
     const quantity = Number(product?.quantity ?? product?.qty);
     const medalPricing = medalVariantPricing(variantId);
@@ -1126,12 +1171,19 @@ function normalizeOrderItems(value) {
       websiteProductId,
       variantId,
       productName,
-      image,
+      image: imageUrl,
+      imageUrl,
+      variantName,
       option,
       notes,
       quantity,
       unitPrice,
-      ...(medalPricing ? { image, designId, designName, selectedColors, basePrice, discountValue, discountRate, woodType } : {})
+      designId,
+      designName,
+      customizationId,
+      customization: { selectedColors },
+      selectedColors,
+      ...(medalPricing ? { basePrice, discountValue, discountRate, woodType } : {})
     };
   });
   return { items, errors };
@@ -1175,6 +1227,7 @@ async function airtableRequest(env, url, init, logContext) {
     requestError.code = "airtable_detail_failed";
     requestError.status = response.status;
     requestError.airtableType = error.type;
+    requestError.airtableMessage = error.message;
     throw requestError;
   }
   return data;
@@ -1243,18 +1296,20 @@ async function resolveAirtableProducts(env, items, context) {
     const pricingNote = item.woodType
       ? `نوع الخشب: ${item.woodType} | السعر الأساسي: ${item.basePrice} ج.م | خصم الخدمات 10%: ${item.discountValue} ج.م | السعر النهائي: ${item.unitPrice} ج.م | الإجمالي: ${item.unitPrice * item.quantity} ج.م`
       : "";
-    const imageNote = item.image ? `الصورة: ${item.image}` : "";
+    const imageNote = item.imageUrl ? `الصورة: ${item.imageUrl}` : "";
+    const variantNote = item.variantName || item.option ? `الاختيار: ${item.variantName || item.option}` : "";
     const designNote = item.designId || item.designName
       ? `التصميم: ${item.designName || item.productName} (${item.designId || "بدون رقم"})`
       : "";
-    const colorsNote = item.selectedColors?.length
-      ? `الألوان المختارة: ${item.selectedColors.map((color) => color.colorName || color.name || color.colorHex || color.hex).filter(Boolean).join("، ")}`
+    const colorEntries = Object.entries(parseSelectedColors(item.selectedColors));
+    const colorsNote = colorEntries.length
+      ? `الألوان المختارة: ${colorEntries.map(([region, hex]) => `${region}: ${hex}`).join("، ")}`
       : "";
     return {
       ...item,
       productId,
       unresolved,
-      detailNote: [pricingNote, designNote, colorsNote, imageNote, fallbackNote, item.notes].filter(Boolean).join(" | ")
+      detailNote: [variantNote, pricingNote, designNote, colorsNote, imageNote, fallbackNote, item.notes].filter(Boolean).join(" | ")
     };
   });
 }
@@ -1274,23 +1329,59 @@ async function createAirtableOrderDetails(env, orderRecordId, items, context) {
       "الكمية": item.quantity,
       "سعر القطعة": item.unitPrice
     };
+    if (item.imageUrl) fields[AIRTABLE_ORDER_DETAIL_IMAGE_FIELD] = [{ url: item.imageUrl }];
     if (item.detailNote) fields["ملاحظات"] = item.detailNote;
     return { fields };
   });
   const createdIds = [];
   try {
     for (let index = 0; index < records.length; index += 10) {
-      const data = await airtableRequest(env, airtableTableUrl(env, detailTable), {
-        method: "POST",
-        headers: { Authorization: `Bearer ${env.AIRTABLE_TOKEN}`, "Content-Type": "application/json" },
-        body: JSON.stringify({ records: records.slice(index, index + 10), typecast: false })
-      }, {
-        ...context,
-        operation: "create_details",
-        batch: Math.floor(index / 10) + 1,
-        products: items.slice(index, index + 10).map((item) => item.productName)
-      });
-      createdIds.push(...(data.records || []).map((record) => record.id).filter(Boolean));
+      const batchRecords = records.slice(index, index + 10);
+      const batchItems = items.slice(index, index + 10);
+      try {
+        const data = await airtableRequest(env, airtableTableUrl(env, detailTable), {
+          method: "POST",
+          headers: { Authorization: `Bearer ${env.AIRTABLE_TOKEN}`, "Content-Type": "application/json" },
+          body: JSON.stringify({ records: batchRecords, typecast: false })
+        }, {
+          ...context,
+          operation: "create_details",
+          batch: Math.floor(index / 10) + 1,
+          products: batchItems.map((item) => item.productName)
+        });
+        createdIds.push(...(data.records || []).map((record) => record.id).filter(Boolean));
+      } catch (batchError) {
+        if (!batchRecords.some((record) => record.fields[AIRTABLE_ORDER_DETAIL_IMAGE_FIELD])) throw batchError;
+        for (let offset = 0; offset < batchRecords.length; offset += 1) {
+          const record = batchRecords[offset];
+          const item = batchItems[offset];
+          try {
+            const data = await airtableRequest(env, airtableTableUrl(env, detailTable), {
+              method: "POST",
+              headers: { Authorization: `Bearer ${env.AIRTABLE_TOKEN}`, "Content-Type": "application/json" },
+              body: JSON.stringify({ records: [record], typecast: false })
+            }, { ...context, operation: "create_detail_with_image", productName: item.productName });
+            createdIds.push(...(data.records || []).map((created) => created.id).filter(Boolean));
+          } catch (imageError) {
+            console.warn("Airtable order detail image was skipped", {
+              ...context,
+              productName: item.productName,
+              variantId: item.variantId || "",
+              imageUrl: item.imageUrl || "",
+              code: imageError?.code || "attachment_failed",
+              status: imageError?.status || 0
+            });
+            const fieldsWithoutImage = { ...record.fields };
+            delete fieldsWithoutImage[AIRTABLE_ORDER_DETAIL_IMAGE_FIELD];
+            const data = await airtableRequest(env, airtableTableUrl(env, detailTable), {
+              method: "POST",
+              headers: { Authorization: `Bearer ${env.AIRTABLE_TOKEN}`, "Content-Type": "application/json" },
+              body: JSON.stringify({ records: [{ fields: fieldsWithoutImage }], typecast: false })
+            }, { ...context, operation: "create_detail_without_image", productName: item.productName });
+            createdIds.push(...(data.records || []).map((created) => created.id).filter(Boolean));
+          }
+        }
+      }
     }
     return createdIds;
   } catch (error) {
@@ -1363,9 +1454,11 @@ function formatOrderProductsForAirtable(value) {
       const basePrice = Number(product?.basePrice);
       const discountValue = Number(product?.discountValue);
       const lineTotal = price === null ? null : price * safeQuantity;
+      const colorEntries = Object.entries(orderItemSelectedColors(product));
       return [
         name,
         option,
+        colorEntries.length ? `\u0627\u0644\u0623\u0644\u0648\u0627\u0646: ${colorEntries.map(([region, hex]) => `${region}: ${hex}`).join("\u060c ")}` : "",
         `\u0627\u0644\u0643\u0645\u064a\u0629: ${safeQuantity}`,
         Number.isFinite(basePrice) ? `\u0627\u0644\u0633\u0639\u0631 \u0627\u0644\u0623\u0633\u0627\u0633\u064a: ${formatOrderPrice(basePrice)} \u062c.\u0645` : "",
         Number.isFinite(discountValue) && discountValue > 0 ? `\u062e\u0635\u0645 \u0627\u0644\u062e\u062f\u0645\u0627\u062a 10%: ${formatOrderPrice(discountValue)} \u062c.\u0645` : "",
@@ -1806,6 +1899,9 @@ async function createOrderResponse(context) {
     item.sku ? `SKU: ${item.sku}` : "",
     item.websiteProductId ? `Product ID: ${item.websiteProductId}` : "",
     item.option,
+    Object.entries(parseSelectedColors(item.selectedColors)).length
+      ? `\u0627\u0644\u0623\u0644\u0648\u0627\u0646: ${Object.entries(parseSelectedColors(item.selectedColors)).map(([region, hex]) => `${region}: ${hex}`).join("\u060c ")}`
+      : "",
     `الكمية: ${item.quantity}`,
     Number.isFinite(item.basePrice) ? `السعر الأساسي: ${formatOrderPrice(item.basePrice)} ج.م` : "",
     item.discountValue > 0 ? `خصم الخدمات 10%: ${formatOrderPrice(item.discountValue)} ج.م` : "",
@@ -1865,7 +1961,11 @@ async function createOrderResponse(context) {
           Authorization: `Bearer ${env.AIRTABLE_TOKEN}`,
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({ records: [{ fields: orderFields }] })
+        // Airtable select fields occasionally reject otherwise valid checkout labels
+        // unless API type coercion is enabled. Values are already normalized and
+        // validated above, so typecast keeps the website payload aligned with the
+        // configured choices without changing checkout semantics.
+        body: JSON.stringify({ records: [{ fields: orderFields }], typecast: true })
       }, { requestId, operation: "create_order", tableName: airtableTableName, fieldNames });
       recordId = airtableData.records?.[0]?.id || "";
       if (!recordId) throw Object.assign(new Error("Airtable did not return the created order ID"), { code: "airtable_create_failed" });
@@ -2111,6 +2211,10 @@ async function handleRequest(request, env, ctx) {
         return Response.redirect(url.toString(), 302);
       }
 
+      if (url.pathname === "/admin/") {
+        return env.ASSETS.fetch(rewriteGetRequest(request, "/admin/index.html"));
+      }
+
       if (url.pathname === "/admin/orders" || url.pathname === "/admin/orders/") {
         return env.ASSETS.fetch(rewriteGetRequest(request, "/admin/orders/index.html"));
       }
@@ -2124,7 +2228,11 @@ async function handleRequest(request, env, ctx) {
         if (response.ok) { productsCache = null; productsCacheTime = 0; productsCacheSha = ""; }
         return response;
       }
-      if (url.pathname === "/admin/api/update-taxonomy") return updateTaxonomy(context);
+      if (url.pathname === "/admin/api/update-taxonomy") {
+        const response = await updateTaxonomy(context);
+        if (response.ok) { taxonomyCache = null; taxonomyCacheTime = 0; taxonomyCacheSha = ""; }
+        return response;
+      }
       if (url.pathname === "/admin/api/upload-product-image") return uploadProductImage(context);
       if (url.pathname === "/admin/api/sync-airtable-product-media") return adminAirtableProductMediaSyncResponse(context);
       if (url.pathname === "/admin/api/backfill-airtable-order-products") return adminAirtableOrderBackfillResponse(context);
@@ -2154,7 +2262,11 @@ async function handleRequest(request, env, ctx) {
 
     if (legacyProductUrl(url) || url.pathname.startsWith("/products/")) {
       const products = await loadProducts(env, request);
-      const product = withProductColoringConfig(productFromUrl(products, url));
+      const matchedProduct = productFromUrl(products, url);
+      const thumbnailManifest = matchedProduct ? await loadThumbnailManifest(env, request) : {};
+      const product = matchedProduct
+        ? withProductColoringConfig({ ...matchedProduct, thumbnail: catalogThumbnail(matchedProduct, thumbnailManifest) })
+        : null;
       if (legacyProductUrl(url) && product) return redirectToProduct(product, url);
       if (url.pathname.startsWith("/products/")) {
         if (!product) return notFoundResponse();
@@ -2164,7 +2276,9 @@ async function handleRequest(request, env, ctx) {
 
     if (staticRewrites[url.pathname]) {
       const isPrivate = ["/cart", "/checkout", "/payment", "/order-success", "/payment-success", "/payment-failed", "/payment-pending"].includes(url.pathname);
-      return htmlResponse(request, env, staticRewrites[url.pathname], isPrivate ? { private: true } : { canonicalUrl: `${canonicalOrigin}${url.pathname}` });
+      const responseOptions = isPrivate ? { private: true } : { canonicalUrl: `${canonicalOrigin}${url.pathname}` };
+      if (url.pathname === "/coloring-game") responseOptions.assetPath = "/coloring-game/index.html";
+      return htmlResponse(request, env, staticRewrites[url.pathname], responseOptions);
     }
 
     if (htmlRoutePaths.has(url.pathname) || url.pathname.startsWith("/category/")) {

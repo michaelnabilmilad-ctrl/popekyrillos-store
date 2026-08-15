@@ -627,7 +627,7 @@ body[data-lang="en"] .hero h1 {
 
 .eyebrow {
   margin: 0 0 10px;
-  color: var(--gold);
+  color: #81561d;
   font-size: 13px;
   font-weight: 800;
   letter-spacing: 0;
@@ -842,8 +842,44 @@ body.shop-toggle-floating .hero-shop-button {
 
 .category-grid {
   display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 14px;
+}
+
+.category-loading {
+  display: contents;
+}
+
+.category-skeleton {
+  display: block;
+  min-height: 178px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: linear-gradient(100deg, #f0ece3 20%, #fffdf7 38%, #f0ece3 56%);
+  background-size: 220% 100%;
+  animation: category-skeleton-shimmer 1.25s ease-in-out infinite;
+}
+
+.category-load-error {
+  grid-column: 1 / -1;
+  min-height: 178px;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  border: 1px solid rgba(133, 36, 60, 0.2);
+  border-radius: var(--radius);
+  background: rgba(133, 36, 60, 0.06);
+  color: var(--burgundy);
+  font-weight: 900;
+  text-align: center;
+}
+
+@keyframes category-skeleton-shimmer {
+  to { background-position: -220% 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .category-skeleton { animation: none; }
 }
 
 .category-tile {
@@ -1046,6 +1082,14 @@ body[data-lang="en"] .category-art {
   background: var(--paper);
 }
 
+.is-home-route .popular-products {
+  min-height: 760px;
+}
+
+.is-home-route .popular-products[hidden] {
+  display: block;
+}
+
 .popular-products-head {
   max-width: 760px;
   margin: 0 0 28px;
@@ -1061,7 +1105,7 @@ body[data-lang="en"] .category-art {
 
 .popular-products-head p:not(.eyebrow) {
   margin: 12px 0 0;
-  color: var(--muted);
+  color: #5f6c72;
   font-size: 17px;
   line-height: 1.8;
 }
@@ -2851,6 +2895,10 @@ body[data-lang="en"] .policy-lang[lang="en"] {
   opacity: 1;
 }
 
+body.image-zoom-open {
+  overflow: hidden;
+}
+
 .image-lightbox-close {
   position: fixed;
   top: 18px;
@@ -2891,7 +2939,8 @@ body[data-lang="en"] .policy-lang[lang="en"] {
   width: min(1120px, 100%);
   max-height: calc(100vh - 56px);
   -webkit-touch-callout: none;
-  touch-action: pan-y;
+  overflow: hidden;
+  touch-action: none;
   user-select: none;
 }
 
@@ -2904,7 +2953,29 @@ body[data-lang="en"] .policy-lang[lang="en"] {
   object-fit: contain;
   box-shadow: 0 28px 80px rgba(0, 0, 0, 0.42);
   -webkit-user-drag: none;
+  cursor: zoom-in;
+  transform: translate3d(0, 0, 0) scale(1);
+  transform-origin: center;
+  transition: transform 120ms ease;
+  will-change: transform;
   user-select: none;
+}
+
+.image-lightbox-stage.is-zoomed {
+  cursor: grab;
+}
+
+.image-lightbox-stage.is-dragging {
+  cursor: grabbing;
+}
+
+.image-lightbox-stage.is-zoomed img {
+  cursor: grab;
+}
+
+.image-lightbox-stage.is-dragging img {
+  cursor: grabbing;
+  transition: none;
 }
 
 .account-modal {
@@ -4206,6 +4277,25 @@ body.account-open .scrim {
 
 .cart-page-item p,
 .cart-page-item span,
+.cart-medal-pricing {
+  margin: 0;
+}
+
+.cart-medal-pricing {
+  display: grid;
+  gap: 4px;
+  color: #594b3d;
+}
+
+.cart-medal-pricing strong:last-child {
+  color: #8b2f2f;
+}
+
+.cart-selected-colors{display:flex;flex-wrap:wrap;gap:.45rem .75rem;margin:.55rem 0}.cart-selected-colors span{display:inline-flex;align-items:center;gap:.35rem}.cart-selected-colors i{width:1rem;height:1rem;border:1px solid #9b9387;border-radius:50%;box-shadow:0 0 0 1px #fff inset}.cart-selected-colors code{direction:ltr;font:inherit;font-size:.82em}
+
+
+.cart-page-item p,
+.cart-page-item span,
 .checkout-summary-item p,
 .checkout-summary-item span,
 .payment-page-options p {
@@ -4632,7 +4722,7 @@ body.account-open .scrim {
     background:
       linear-gradient(180deg, rgba(5, 18, 23, 0.24) 0%, rgba(5, 18, 23, 0.42) 42%, rgba(5, 18, 23, 0.78) 100%),
       linear-gradient(90deg, rgba(5, 18, 23, 0.04) 0%, rgba(5, 18, 23, 0.26) 42%, rgba(5, 18, 23, 0.82) 100%),
-      url("assets/optimized/hero-papa-kyrillos-products.webp") 35% center / cover no-repeat;
+      url("assets/optimized/hero-papa-kyrillos-products-mobile.webp") 35% center / cover no-repeat;
   }
 
   .hero h1 {
@@ -4670,6 +4760,10 @@ body.account-open .scrim {
     gap: 12px;
   }
 
+  .is-home-route .popular-products {
+    min-height: 1370px;
+  }
+
   .popular-products-head p:not(.eyebrow) {
     font-size: 15px;
   }
@@ -4705,7 +4799,7 @@ body.account-open .scrim {
   }
 
   .category-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 8px;
   }
 
