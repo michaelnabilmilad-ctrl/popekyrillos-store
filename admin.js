@@ -407,6 +407,17 @@
       await openTaxonomyImageUpload(Number(button.closest("[data-taxonomy-sub-index]")?.dataset.taxonomySubIndex));
     }
 
+    if (action === "remove-taxonomy-image") {
+      const index = Number(button.closest("[data-taxonomy-sub-index]")?.dataset.taxonomySubIndex);
+      const subcategory = selectedTaxonomyCategory()?.subcategories?.[index];
+      if (subcategory && !Number.isNaN(index)) {
+        subcategory.manualImage = "";
+        renderTaxonomyManager();
+        refreshTaxonomyDependentUi();
+        showToast("تم حذف الصورة المخصصة محليًا. اضغط حفظ ونشر الأقسام لتطبيق التغيير.");
+      }
+    }
+
     if (action === "remove-subcategory") {
       removeSubcategory(Number(button.closest("[data-taxonomy-sub-index]")?.dataset.taxonomySubIndex));
     }
@@ -1176,14 +1187,53 @@
     return findTaxonomyCategory(state.taxonomyMain) || taxonomyCategoriesForAdmin()[0] || null;
   }
 
+  function categoryProductImages(product) {
+    if (Array.isArray(product?.images) && product.images.length) return product.images;
+    return product?.image ? [product.image] : [];
+  }
+
+  function categoryProductHasAvailableVariant(product) {
+    if (product?.stock === "غير متاح حاليا" || product?.stock === "Currently unavailable") return false;
+    const variants = Array.isArray(product?.variants) && product.variants.length ? product.variants : [product];
+    return variants.some((variant) => {
+      if (variant?.quantity !== null && variant?.quantity !== undefined && variant?.quantity !== "") {
+        const quantity = Number(variant.quantity);
+        if (Number.isInteger(quantity) && quantity >= 0) return quantity > 0;
+      }
+      return variant?.available !== false;
+    });
+  }
+
+  function effectiveCategoryImage(categoryId, subcategory) {
+    return window.POPE_KYRILLOS_SUBCATEGORY_IMAGE_POLICY?.chooseImage({
+      categoryId,
+      subcategory,
+      products: state.products,
+      getMainId: (product) => normalizeMainCategoryValue(product.mainCategory, product.category),
+      getSubId: (product) => normalizeSubCategoryValue(product.subcategory || product.subCategory),
+      getImages: categoryProductImages,
+      isActive: (product) => product?.published !== false && product?.deleted !== true && categoryProductHasAvailableVariant(product)
+    }) || { image: "", source: "none", productId: "" };
+  }
+
+  function productById(productId) {
+    return state.products.find((product) => String(product.id) === String(productId || "")) || null;
+  }
+
+  function productOptionLabel(product) {
+    const sku = String(product?.sku || "").trim();
+    return `${product?.name || product?.id || "منتج"}${sku ? ` — SKU: ${sku}` : ""}`;
+  }
+
   function representativeProductOptions(categoryId, subcategory) {
     const options = state.products.filter((product) => normalizeMainCategoryValue(product.mainCategory, product.category) === categoryId
       && normalizeSubCategoryValue(product.subcategory || product.subCategory) === subcategory.id
       && product.published !== false && product.deleted !== true
+      && categoryProductHasAvailableVariant(product)
       && Boolean((product.images || [])[0] || product.image));
     return [`<option value="">تلقائي: أول منتج صالح من نفس القسم</option>`, ...options.map((product) => {
       const selected = String(product.id) === String(subcategory.representativeProductId || "") ? " selected" : "";
-      return `<option value="${escapeAttribute(product.id)}"${selected}>${escapeHtml(product.name)} — ${escapeHtml(product.id)}</option>`;
+      return `<option value="${escapeAttribute(product.id)}"${selected}>${escapeHtml(productOptionLabel(product))}</option>`;
     })].join("");
   }
 
@@ -1234,10 +1284,26 @@
       .map((item) => `<option value="${escapeAttribute(item.id)}">${escapeHtml(item.name)}</option>`)
       .join("");
 
-    elements.taxonomyList.innerHTML = subcategories.map(({ subcategory, index }) => `
+    elements.taxonomyList.innerHTML = subcategories.map(({ subcategory, index }) => {
+      const effectiveImage = effectiveCategoryImage(category.id, subcategory);
+      const effectiveProduct = productById(effectiveImage.productId);
+      const effectiveSource = effectiveImage.source === "manual"
+        ? "المصدر: صورة مخصصة للقسم"
+        : effectiveProduct
+          ? `المصدر: صورة المنتج \"${effectiveProduct.name || effectiveProduct.id}\"`
+          : "⚠ لا توجد صورة متاحة لهذا القسم حاليًا.";
+      const automaticProduct = !subcategory.representativeProductId && effectiveProduct
+        ? `يستخدم حاليًا: ${productOptionLabel(effectiveProduct)}`
+        : "";
+      const representativePreview = effectiveProduct;
+      return `
       <article class="taxonomy-card" data-taxonomy-sub-index="${index}">
-        <div class="taxonomy-preview">
-          ${subcategory.manualImage ? `<img src="${escapeAttribute(previewAssetUrl(subcategory.manualImage))}" alt="" loading="lazy" decoding="async" onerror="this.remove()">` : ""}
+        <div class="taxonomy-current-image ${effectiveImage.image ? "" : "is-missing"}">
+          <strong>الصورة الحالية للقسم</strong>
+          <div class="taxonomy-preview taxonomy-effective-preview">
+            ${effectiveImage.image ? `<img src="${escapeAttribute(previewAssetUrl(effectiveImage.image))}" alt="صورة ${escapeAttribute(subcategory.name || "القسم")}" loading="lazy" decoding="async">` : ""}
+          </div>
+          <p class="taxonomy-image-source ${effectiveImage.image ? "" : "warning"}">${escapeHtml(effectiveSource)}</p>
         </div>
         <div class="taxonomy-fields">
           <label>
@@ -1252,13 +1318,26 @@
             <span>الوصف</span>
             <input type="text" data-taxonomy-field="description" value="${escapeAttribute(subcategory.description || "")}">
           </label>
-          <label>
-            <span>صورة القسم اليدوية</span>
-            <input type="text" dir="ltr" data-taxonomy-field="manualImage" value="${escapeAttribute(subcategory.manualImage || "")}" placeholder="اتركه فارغًا لاستخدام منتج من نفس القسم">
-          </label>
+          <section class="taxonomy-manual-image">
+            <strong>صورة مخصصة للقسم (اختياري)</strong>
+            <div class="taxonomy-manual-preview">
+              ${subcategory.manualImage ? `<img src="${escapeAttribute(previewAssetUrl(subcategory.manualImage))}" alt="معاينة الصورة المخصصة" loading="lazy" decoding="async">` : `<span>لا توجد صورة مخصصة</span>`}
+            </div>
+            <label>
+              <span class="sr-only">مسار الصورة المخصصة</span>
+              <input type="text" dir="ltr" data-taxonomy-field="manualImage" value="${escapeAttribute(subcategory.manualImage || "")}" placeholder="اتركه فارغًا لاستخدام منتج من نفس القسم">
+            </label>
+            <div class="taxonomy-image-actions">
+              <button class="button small secondary" type="button" data-action="upload-taxonomy-image">${subcategory.manualImage ? "تغيير الصورة" : "رفع صورة"}</button>
+              <button class="button small ghost" type="button" data-action="remove-taxonomy-image" ${subcategory.manualImage ? "" : "disabled"}>حذف الصورة المخصصة</button>
+            </div>
+            <small>إذا لم تضف صورة مخصصة، سيستخدم الموقع تلقائيًا صورة المنتج الممثل للقسم.</small>
+          </section>
           <label>
             <span>المنتج الممثل للقسم</span>
             <select data-taxonomy-field="representativeProductId">${representativeProductOptions(category.id, subcategory)}</select>
+            ${automaticProduct ? `<small class="taxonomy-auto-product">${escapeHtml(automaticProduct)}</small>` : ""}
+            ${representativePreview ? `<span class="taxonomy-selected-product"><img src="${escapeAttribute(previewAssetUrl(categoryProductImages(representativePreview)[0] || ""))}" alt="" loading="lazy" decoding="async"><span>${escapeHtml(productOptionLabel(representativePreview))}</span></span>` : ""}
           </label>
           <label>
             <span>نقل إلى قسم رئيسي</span>
@@ -1268,13 +1347,13 @@
           <label class="check-row"><input type="checkbox" data-taxonomy-field="homeVisible" ${subcategory.homeVisible !== false ? "checked" : ""}><span>ظاهر في الرئيسية</span></label>
         </div>
         <div class="taxonomy-card-actions">
-          <button class="button small secondary" type="button" data-action="upload-taxonomy-image">رفع/استبدال الصورة اليدوية</button>
           <button class="button small ghost" type="button" data-action="move-subcategory-before" ${index === 0 ? "disabled" : ""}>فوق</button>
           <button class="button small ghost" type="button" data-action="move-subcategory-after" ${index === allSubcategories.length - 1 ? "disabled" : ""}>تحت</button>
           <button class="button small danger" type="button" data-action="remove-subcategory">حذف</button>
         </div>
       </article>
-    `).join("");
+    `;
+    }).join("");
 
     elements.taxonomyList.querySelectorAll("[data-taxonomy-field='mainId']").forEach((select) => {
       select.value = category.id;
@@ -1340,15 +1419,14 @@
       if (element.value !== subcategory.id) element.value = subcategory.id;
     } else if (field === "manualImage") {
       subcategory.manualImage = normalizeImagePath(element.value);
-      const image = card.querySelector(".taxonomy-preview img");
-      const preview = card.querySelector(".taxonomy-preview");
-      preview?.classList.remove("image-missing");
-      if (image) image.src = previewAssetUrl(subcategory.manualImage);
       if (element.value !== subcategory.manualImage) element.value = subcategory.manualImage;
     } else {
       subcategory[field] = element.type === "checkbox" ? element.checked : element.value.trim();
     }
 
+    if (event.type === "change" && (field === "manualImage" || field === "representativeProductId")) {
+      renderTaxonomyManager();
+    }
     refreshTaxonomyDependentUi();
   }
 
