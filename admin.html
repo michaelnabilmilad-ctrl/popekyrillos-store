@@ -6,7 +6,7 @@
     <meta name="robots" content="noindex, nofollow">
     <title>إدارة منتجات مكتبة البابا كيرلس</title>
     <link rel="icon" href="data:,">
-    <link rel="stylesheet" href="/admin.css?v=asset-4220a9046851">
+    <link rel="stylesheet" href="/admin.css?v=asset-admin-dashboard-20260816">
   </head>
   <body>
     <header class="admin-topbar">
@@ -23,28 +23,35 @@
       </div>
     </header>
 
-    <nav class="admin-section-tabs" aria-label="أقسام لوحة الإدارة">
-      <a class="admin-tab is-active" href="/admin/" aria-current="page">إدارة المنتجات</a>
-      <a class="admin-tab" href="/admin/orders">إدارة الأوردرات</a>
-      <a class="admin-tab" href="/admin/analytics">Analytics</a>
+    <nav class="admin-section-tabs admin-primary-nav" aria-label="أقسام لوحة الإدارة">
+      <button class="admin-nav-toggle" type="button" data-ui-action="toggle-admin-nav" aria-expanded="false">☰ القائمة</button>
+      <a class="admin-tab" href="/admin/analytics">الرئيسية</a>
+      <button class="admin-tab is-active" type="button" data-admin-view-target="products" aria-current="page">المنتجات</button>
+      <button class="admin-tab" type="button" data-admin-view-target="taxonomy">الأقسام</button>
+      <a class="admin-tab" href="/admin/orders">الطلبات</a>
+      <button class="admin-tab" type="button" data-admin-view-target="inventory">المخزون</button>
+      <button class="admin-tab" type="button" data-admin-view-target="airtable">Airtable</button>
+      <button class="admin-tab" type="button" data-admin-view-target="settings">الإعدادات</button>
     </nav>
 
-    <main class="admin-layout" data-admin-layout>
+    <main class="admin-layout" data-admin-layout data-admin-view="products">
       <aside class="product-sidebar" data-product-sidebar>
         <div class="sidebar-head">
           <div>
+            <p class="eyebrow">الكتالوج</p>
+            <h2>إدارة المنتجات</h2>
             <strong data-product-count>0 منتج</strong>
             <span data-save-state>لم يتم التحميل بعد</span>
           </div>
           <div class="sidebar-head-actions">
             <button class="sidebar-toggle" type="button" data-ui-action="toggle-sidebar" aria-label="طي قائمة المنتجات" title="طي قائمة المنتجات">⇥</button>
-            <button class="icon-button" type="button" data-action="add-product" title="إضافة منتج جديد">+</button>
+            <button class="button" type="button" data-action="add-product">+ إضافة منتج جديد</button>
           </div>
         </div>
 
         <label class="search-box">
           <span>بحث</span>
-          <input type="search" data-search placeholder="اكتب اسم المنتج أو الكود">
+          <input type="search" data-search placeholder="ابحث باسم المنتج أو SKU">
         </label>
 
         <div class="list-tools">
@@ -57,12 +64,18 @@
           <select data-sub-category-filter aria-label="فلترة حسب القسم الفرعي">
             <option value="all">كل الأقسام الفرعية</option>
           </select>
+          <select data-stock-filter aria-label="فلترة حسب التوفر">
+            <option value="all">كل حالات التوفر</option>
+            <option value="available">متوفر</option>
+            <option value="out">نفد / غير متاح</option>
+          </select>
           <label class="check-row compact">
             <input type="checkbox" data-needs-review-filter>
             <span>منتجات تحتاج تصنيف</span>
           </label>
 
           <button class="button small ghost" type="button" data-action="sort-name">ترتيب بالاسم</button>
+          <button class="button small ghost" type="button" data-action="reset-filters">مسح الفلاتر</button>
         </div>
 
         <div class="product-list" data-product-list>
@@ -95,16 +108,27 @@
           </div>
 
           <form class="editor-form" data-editor hidden>
+            <nav class="editor-breadcrumb" data-editor-breadcrumb aria-label="مسار المنتج"></nav>
             <div class="editor-toolbar">
               <div><p class="eyebrow">بيانات المنتج</p><h2 data-editor-title>منتج</h2><p class="muted" data-editor-id></p></div>
               <div class="toolbar-actions"><button class="button ghost" type="button" data-action="duplicate-product">تكرار المنتج</button><button class="button danger" type="button" data-action="delete-product">حذف</button></div>
             </div>
+            <div class="notice" data-coloring-files-warning hidden></div>
+            <nav class="editor-tabs" aria-label="أقسام بيانات المنتج">
+              <button type="button" class="is-active" data-editor-tab="basic">الأساسية</button>
+              <button type="button" data-editor-tab="images">الصور</button>
+              <button type="button" data-editor-tab="pricing">الاختيارات</button>
+              <button type="button" data-editor-tab="description">الوصف</button>
+              <button type="button" data-editor-tab="visibility">الظهور وSEO</button>
+              <button type="button" data-editor-tab="advanced">متقدم</button>
+            </nav>
 
             <details class="form-section editor-accordion" data-editor-section="basic" open>
               <summary><span>المعلومات الأساسية</span><small>الاسم والكود والأقسام والحالة</small></summary>
               <div class="accordion-body field-grid">
                 <label><span>اسم المنتج</span><input type="text" data-field="name" required></label>
                 <label><span>كود المنتج</span><input type="text" data-field="id" required></label>
+                <label><span>SKU</span><span class="input-with-action"><input type="text" data-field="sku"><button type="button" data-action="generate-product-sku">توليد SKU</button></span></label>
                 <label class="legacy-taxonomy-field" hidden><span>القسم الرئيسي</span><select data-field="category" required></select></label>
                 <label class="legacy-taxonomy-field" hidden><span>التصنيف الفرعي</span><input type="text" data-field="label" placeholder="مثلاً: صلبان زفة"></label>
                 <label><span>القسم الرئيسي</span><select data-field="mainCategory" required></select></label>
@@ -117,7 +141,7 @@
               <summary><span>السعر والمخزون</span><small>السعر الأساسي والاختيارات والكميات</small></summary>
               <div class="accordion-body">
                 <div class="field-grid"><label><span>السعر الأساسي</span><input type="number" data-field="price" min="0" step="1"></label><label><span>ملاحظة السعر</span><input type="text" data-field="priceNote" placeholder="اختياري"></label></div>
-                <div class="section-title-row nested-section-title"><div><strong>الاختيارات والأسعار والكميات</strong><p class="hint">أضف كل اختيار بسعره والكمية المتاحة وصوره الخاصة.</p></div><button class="button small" type="button" data-action="add-variant">إضافة اختيار</button><button class="button small secondary" type="button" data-action="sync-variant-options">توليد الاختيارات</button></div>
+                <div class="section-title-row nested-section-title"><label class="variant-switch"><input type="checkbox" data-has-variants><span>هذا المنتج له اختيارات</span></label><div><strong>الاختيارات والأسعار والكميات</strong><p class="hint">أضف كل اختيار بسعره والكمية المتاحة وصوره الخاصة.</p></div><button class="button small" type="button" data-action="add-variant">+ إضافة اختيار</button><button class="button small secondary" type="button" data-action="sync-variant-options">توليد الاختيارات</button></div>
                 <div class="variant-list" data-variant-list></div>
               </div>
             </details>
@@ -129,7 +153,7 @@
 
             <details class="form-section editor-accordion" data-editor-section="images">
               <summary><span>الصور</span><small>الصورة الأساسية والصور الإضافية</small></summary>
-              <div class="accordion-body"><div class="section-title-row"><span class="hint">أول صورة هي التي تظهر في الكارت. يمكنك حذف الصور القديمة من المعاينة.</span><div class="image-upload-actions"><button class="button small secondary" type="button" data-action="upload-image">إضافة صور</button><button class="button small danger" type="button" data-action="replace-product-images">استبدال كل الصور</button></div></div><label><span>مسارات الصور</span><textarea data-field="images" rows="5" dir="ltr" placeholder="assets/optimized/products/example.webp"></textarea></label><div class="image-preview" data-image-preview></div></div>
+              <div class="accordion-body"><div class="image-drop-zone" data-image-drop-zone tabindex="0"><strong>اسحب الصور هنا أو اضغط للرفع</strong><span>يتم التحويل والرفع بنفس آلية الصور الحالية</span></div><div class="section-title-row"><span class="hint">أول صورة هي التي تظهر في الكارت وعليها علامة ⭐.</span><div class="image-upload-actions"><button class="button small secondary" type="button" data-action="upload-image">إضافة صور</button><button class="button small danger" type="button" data-action="replace-product-images">استبدال كل الصور</button></div></div><label class="advanced-image-paths"><span>مسارات الصور</span><textarea data-field="images" rows="5" dir="ltr" placeholder="assets/optimized/products/example.webp"></textarea></label><div class="image-preview" data-image-preview></div></div>
             </details>
 
             <details class="form-section editor-accordion" data-editor-section="visibility">
@@ -139,35 +163,85 @@
 
             <details class="form-section editor-accordion" data-editor-section="advanced">
               <summary><span>إعدادات متقدمة</span><small>تعريف الاختيارات بصيغة JSON</small></summary>
-              <div class="accordion-body"><label><span>تعريف الاختيارات بصيغة JSON</span><textarea data-field="options" rows="6" dir="ltr"></textarea></label><button class="button small secondary" type="button" data-action="sync-variant-options">توليد من أسماء الاختيارات</button><p class="hint">اتركها كما هي لو مش محتاج تعدّل أسماء مجموعات الاختيارات.</p></div>
+              <div class="accordion-body"><div class="notice"><strong>للمستخدم المتقدم فقط</strong><p>تعديل JSON بشكل خاطئ قد يمنع مطابقة الاختيارات.</p></div><label><span>تعريف الاختيارات بصيغة JSON</span><textarea data-field="options" rows="6" dir="ltr"></textarea></label><button class="button small secondary" type="button" data-action="sync-variant-options">توليد من أسماء الاختيارات</button><button class="button small ghost" type="button" data-action="toggle-variant-json">إظهار/إخفاء JSON لكل اختيار</button></div>
             </details>
           </form>
         </section>
 
-        <details class="workspace-section taxonomy-workspace">
+        <details class="workspace-section taxonomy-workspace" data-view-section="taxonomy">
           <summary><span>الأقسام والتصنيف</span><small>إدارة category taxonomy والأقسام الفرعية</small></summary>
           <section class="taxonomy-manager">
-            <div class="taxonomy-head"><div><h3>إدارة الأقسام</h3><p>أنشئ الأقسام وعدّل الاسم والوصف والصورة والترتيب والظهور.</p></div><button class="button small" type="button" data-action="publish-taxonomy">حفظ ونشر الأقسام</button><button class="button small secondary" type="button" data-action="download-taxonomy">تحميل category-taxonomy.js</button></div>
+            <div class="taxonomy-head"><div><h3>إدارة الأقسام</h3><p>أنشئ الأقسام وعدّل الاسم والوصف والصورة والترتيب والظهور.</p></div><button class="button small secondary" type="button" data-action="save-taxonomy">حفظ</button><button class="button small" type="button" data-action="publish-taxonomy">حفظ ونشر</button><button class="button small ghost" type="button" data-action="download-taxonomy">تصدير نسخة احتياطية</button></div>
             <label><span>القسم الرئيسي</span><select data-taxonomy-main></select></label>
-            <div class="taxonomy-actions"><button class="button small" type="button" data-action="add-main-category">إضافة قسم رئيسي</button><button class="button small" type="button" data-action="add-subcategory">إضافة قسم فرعي</button><button class="button small ghost" type="button" data-action="move-main-before">القسم لأعلى</button><button class="button small ghost" type="button" data-action="move-main-after">القسم لأسفل</button></div>
+            <div class="taxonomy-actions"><button class="button small" type="button" data-action="add-main-category">إضافة قسم رئيسي</button><button class="button small" type="button" data-action="add-subcategory">إضافة قسم فرعي</button><button class="button small ghost" type="button" data-action="move-main-before">القسم لأعلى</button><button class="button small ghost" type="button" data-action="move-main-after">القسم لأسفل</button><button class="button small danger" type="button" data-action="remove-main-category">حذف القسم</button></div>
             <div class="field-grid taxonomy-main-fields"><label><span>اسم القسم</span><input data-taxonomy-main-field="name"></label><label><span>الوصف</span><input data-taxonomy-main-field="description"></label><label><span>صورة القسم</span><input dir="ltr" data-taxonomy-main-field="subcategoryImage"></label><label class="check-row"><input type="checkbox" data-taxonomy-main-field="visible"><span>ظاهر للعملاء</span></label><label class="check-row"><input type="checkbox" data-taxonomy-main-field="homeVisible"><span>ظاهر في الرئيسية</span></label></div>
             <div class="taxonomy-list" data-taxonomy-list></div>
             <p class="hint">بعد تعديل الصور أو ترتيب الأقسام، اضغط <b>حفظ ونشر الأقسام</b> حتى تظهر على الموقع.</p>
           </section>
         </details>
 
-        <details class="workspace-section admin-help">
+        <details class="workspace-section airtable-sync-workspace" data-airtable-sync data-view-section="airtable" open>
+          <summary><span>مزامنة Airtable</span><small>إصلاح روابط الطلبات ومزامنة بيانات وصور المنتجات</small></summary>
+          <div class="airtable-sync-body">
+            <section class="airtable-sync-card">
+              <h3>إصلاح ربط تفاصيل الطلبات</h3>
+              <p class="hint">اترك أرقام الطلبات فارغة لفحص كل تفاصيل الطلبات القديمة غير المرتبطة، أو اكتب أرقامًا مفصولة بفواصل مثل 41,42,43.</p>
+              <label><span>أرقام الطلبات (اختياري)</span><input type="text" inputmode="numeric" dir="ltr" data-airtable-order-numbers placeholder="41,42,43"></label>
+              <div class="airtable-sync-actions">
+                <button class="button secondary" type="button" data-action="preview-airtable-order-backfill">معاينة إصلاح ربط الطلبات</button>
+                <button class="button danger" type="button" data-action="apply-airtable-order-backfill">تنفيذ إصلاح ربط الطلبات</button>
+              </div>
+            </section>
+            <section class="airtable-sync-card">
+              <h3>مزامنة صور المنتجات</h3>
+              <p class="hint">يطابق SKU ويحدّث اسم المنتج ورابطه وصورته الأساسية، وينشئ المنتج فقط عند عدم وجوده.</p>
+              <div class="airtable-sync-actions">
+                <button class="button secondary" type="button" data-action="preview-airtable-product-media">معاينة مزامنة صور المنتجات</button>
+                <button class="button danger" type="button" data-action="apply-airtable-product-media">تنفيذ مزامنة صور المنتجات</button>
+              </div>
+            </section>
+            <section class="airtable-sync-report" aria-live="polite" data-airtable-sync-report>
+              <p>لم يتم تشغيل أي مزامنة بعد.</p>
+            </section>
+          </div>
+        </details>
+
+        <details class="workspace-section admin-help" data-view-section="settings">
           <summary><span>مساعدة سريعة</span><small>الحفظ والصور وملفات JSON</small></summary>
           <div class="workspace-help-body"><div class="publish-steps"><h3>طريقة الاستخدام السريعة</h3><ol><li>افتح ملف <b>products.json</b> من فولدر الموقع.</li><li>عدّل السعر، الكمية، الصور أو الوصف.</li><li>اضغط حفظ، أو حمّل نسخة جديدة.</li><li>ارفع الملف على GitHub وانشر التعديل.</li></ol></div><div class="notice"><strong>مهم</strong><p>لو أضفت صورة جديدة، ضعها أولاً داخل فولدر <b>assets</b> واكتب مسارها هنا بنفس الاسم.</p></div></div>
         </details>
       </section>
     </main>
 
+    <div class="admin-save-bar" data-save-bar hidden>
+      <span data-sticky-save-state>لا توجد تعديلات غير محفوظة</span>
+      <div>
+        <button class="button ghost" type="button" data-action="cancel-edits">إلغاء</button>
+        <button class="button secondary" type="button" data-action="save-file">حفظ</button>
+        <button class="button" type="button" data-action="publish-products">حفظ ونشر</button>
+      </div>
+    </div>
+
+    <dialog class="quick-edit-dialog" data-quick-edit-dialog>
+      <form method="dialog" data-quick-edit-form>
+        <header><div><p class="eyebrow">تعديل سريع</p><h2 data-quick-edit-title>منتج</h2></div><button class="icon-button" value="cancel" aria-label="إغلاق">×</button></header>
+        <div class="field-grid">
+          <label><span>اسم المنتج</span><input name="name" required></label>
+          <label><span>السعر</span><input name="price" type="number" min="0"></label>
+          <label><span>الكمية</span><input name="quantity" type="number" min="0"></label>
+          <label><span>القسم الرئيسي</span><select name="mainCategory"></select></label>
+          <label><span>القسم الفرعي</span><select name="subCategory"></select></label>
+          <label><span>الحالة</span><select name="stock"><option value="متاح">متاح</option><option value="غير متاح حاليا">نفد من المخزون</option></select></label>
+        </div>
+        <footer><button class="button ghost" value="cancel">إلغاء</button><button class="button" value="save" data-action="save-quick-edit">حفظ</button></footer>
+      </form>
+    </dialog>
+
     <input type="file" data-import-fallback accept=".json,application/json" hidden>
     <input type="file" data-image-upload accept="image/*" multiple hidden>
     <div class="toast" data-toast hidden></div>
 
-    <script src="/category-taxonomy.js?v=asset-4220a9046851" defer></script>
-    <script src="/admin.js?v=asset-4220a9046851" defer></script>
+    <script src="/category-taxonomy.js?v=asset-a51e8801eec8" defer></script>
+    <script src="/admin.js?v=asset-admin-dashboard-20260816" defer></script>
   </body>
 </html>
