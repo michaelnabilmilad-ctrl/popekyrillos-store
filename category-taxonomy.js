@@ -59,7 +59,7 @@
         "subcategoryImage": "assets/optimized/products/communion-set.webp"
       },
       {
-        "id": "altar-crosses",
+        "id": "altar-vessel-crosses",
         "name": "صلبان المذبح",
         "subcategoryImage": "assets/optimized/products/communion-set.webp"
       },
