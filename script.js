@@ -1131,15 +1131,66 @@ function mainCategoryProductCount(categoryId) {
 
 function mainCategoryTileArt(category) {
   const categoryId = typeof category === "string" ? category : category?.id || "";
-  const image = typeof category === "object" ? taxonomy?.categoryImage?.(category) || "" : "";
-  if (image) {
-    const src = versionedAssetUrl(image, taxonomy?.CURRENT_TAXONOMY_VERSION || productsAssetVersion || "1");
-    return `<span class="category-art category-art--photo"><img src="${escapeHtml(src)}" alt="${escapeHtml(localized(category.name))}" width="320" height="320" loading="lazy" decoding="async" data-category-image data-category-image-id="${escapeHtml(categoryId)}"></span>`;
-  }
+  const historicalArt = historicalMainCategoryArt(categoryId);
+  if (historicalArt) return historicalArt;
   return mainCategoryFallbackArt(categoryId);
 }
 
-function mainCategoryFallbackArt(categoryId) {
+function historicalMainCategoryArt(categoryId) {
+  if (categoryId === "all") {
+    return `<span class="category-art category-art--all" aria-hidden="true">
+      <svg viewBox="0 0 120 82" focusable="false">
+        <rect x="15" y="22" width="38" height="40" rx="6" fill="#c99239" />
+        <rect x="37" y="16" width="38" height="44" rx="6" fill="#0b7772" />
+        <rect x="61" y="10" width="38" height="48" rx="6" fill="#85243c" />
+        <path d="M77 22v24M65 34h24" stroke="#fff5d8" stroke-width="6" stroke-linecap="round" />
+        <path d="M22 64h74" stroke="#10212a" stroke-opacity=".16" stroke-width="5" stroke-linecap="round" />
+      </svg>
+    </span>`;
+  }
+  if (categoryId === "altar-vessels") {
+    return `<span class="category-art category-art--brass" aria-hidden="true">
+      <svg viewBox="0 0 120 82" focusable="false">
+        <defs><linearGradient id="brassGold" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#fff2a8" /><stop offset=".5" stop-color="#d49b28" /><stop offset="1" stop-color="#7a4d12" /></linearGradient></defs>
+        <path d="M20 57c8 7 25 7 33 0l-5 9H25z" fill="url(#brassGold)" />
+        <path d="M23 22h28c-2 14-7 23-14 23s-12-9-14-23z" fill="url(#brassGold)" />
+        <path d="M28 22c4 5 14 5 18 0" fill="none" stroke="#fff5c2" stroke-width="3" />
+        <path d="M37 45v12" stroke="#9b6418" stroke-width="5" stroke-linecap="round" />
+        <circle cx="72" cy="51" r="14" fill="url(#brassGold)" />
+        <path d="M62 41c7-8 17-8 24 0" fill="none" stroke="#f7d674" stroke-width="5" stroke-linecap="round" />
+        <path d="M58 50c-6 0-9 6-5 11" fill="none" stroke="#9b6418" stroke-width="4" stroke-linecap="round" />
+        <rect x="82" y="21" width="23" height="34" rx="5" fill="url(#brassGold)" />
+        <path d="M94 15v20M86 25h16" stroke="#fff5c2" stroke-width="4" stroke-linecap="round" />
+        <path d="M24 68h78" stroke="#10212a" stroke-opacity=".18" stroke-width="5" stroke-linecap="round" />
+      </svg>
+    </span>`;
+  }
+  if (categoryId === "censers-incense" || categoryId === "candles-lamps") {
+    return `<span class="category-art category-art--candles" aria-hidden="true">
+      <svg viewBox="0 0 120 82" focusable="false">
+        <path d="M70 12c8 9 0 18-6 19 0-7 1-12 6-19z" fill="#f0b64d" />
+        <path d="M48 18c7 7 0 14-5 16 0-6 1-10 5-16z" fill="#c99239" />
+        <rect x="59" y="30" width="18" height="38" rx="5" fill="#fff0bf" />
+        <rect x="38" y="38" width="18" height="30" rx="5" fill="#ffe2a0" />
+        <path d="M68 31v37M47 39v29" stroke="#f8cd6a" stroke-width="3" />
+        <ellipse cx="33" cy="66" rx="6" ry="3" fill="#bd7a2f" />
+        <ellipse cx="88" cy="66" rx="7" ry="4" fill="#bd7a2f" />
+        <path d="M23 69h78" stroke="#10212a" stroke-opacity=".16" stroke-width="5" stroke-linecap="round" />
+      </svg>
+    </span>`;
+  }
+  if (categoryId === "church-vestments") {
+    return `<span class="category-art category-art--vestments" aria-hidden="true">
+      <svg viewBox="0 0 120 82" focusable="false">
+        <path d="M38 12h44l-7 58H45z" fill="#fff7ec" stroke="#e3c4c9" stroke-width="2" />
+        <path d="M48 15h8v52h-8zM64 15h8v52h-8z" fill="#85243c" />
+        <path d="M43 37h34" stroke="#c99239" stroke-width="7" stroke-linecap="round" />
+        <path d="M52 22v18M68 22v18" stroke="#fff0bf" stroke-width="2" />
+        <path d="M41 70h38" stroke="#c99239" stroke-width="5" stroke-linecap="round" />
+        <path d="M30 70h60" stroke="#10212a" stroke-opacity=".15" stroke-width="5" stroke-linecap="round" />
+      </svg>
+    </span>`;
+  }
   if (categoryId === "crosses") {
     return `<span class="category-art category-art--icons" aria-hidden="true">
       <svg viewBox="0 0 120 82" focusable="false">
@@ -1149,7 +1200,31 @@ function mainCategoryFallbackArt(categoryId) {
       </svg>
     </span>`;
   }
-  if (categoryId === "gifts-accessories") {
+  if (categoryId === "icons-frames") {
+    return `<span class="category-art category-art--icons" aria-hidden="true">
+      <svg viewBox="0 0 120 82" focusable="false">
+        <rect x="31" y="13" width="42" height="52" rx="6" fill="#f8ebce" stroke="#d7ad61" stroke-width="5" />
+        <path d="M52 26v24M42 38h20" stroke="#0b7772" stroke-width="5" stroke-linecap="round" />
+        <circle cx="88" cy="50" r="12" fill="#85243c" />
+        <path d="M88 41v18M80 50h16" stroke="#fff5d8" stroke-width="4" stroke-linecap="round" />
+        <rect x="79" y="25" width="21" height="15" rx="3" fill="#c99239" />
+        <path d="M25 68h80" stroke="#10212a" stroke-opacity=".15" stroke-width="5" stroke-linecap="round" />
+      </svg>
+    </span>`;
+  }
+  if (categoryId === "books-rituals") {
+    return `<span class="category-art category-art--books" aria-hidden="true">
+      <svg viewBox="0 0 120 82" focusable="false">
+        <rect x="25" y="24" width="34" height="42" rx="5" fill="#c99239" />
+        <rect x="43" y="18" width="34" height="48" rx="5" fill="#0b7772" />
+        <rect x="62" y="13" width="34" height="53" rx="5" fill="#85243c" />
+        <path d="M80 25v22M70 36h20" stroke="#fff5d8" stroke-width="5" stroke-linecap="round" />
+        <path d="M32 30h15M50 25h15M69 21h15" stroke="#ffffff" stroke-opacity=".55" stroke-width="2" stroke-linecap="round" />
+        <path d="M22 69h76" stroke="#10212a" stroke-opacity=".15" stroke-width="5" stroke-linecap="round" />
+      </svg>
+    </span>`;
+  }
+  if (categoryId === "occasions-service") {
     return `<span class="category-art category-art--icons" aria-hidden="true">
       <svg viewBox="0 0 120 82" focusable="false">
         <rect x="25" y="31" width="48" height="37" rx="6" fill="#f1b85b" stroke="#9e6b1f" stroke-width="4" />
@@ -1161,6 +1236,10 @@ function mainCategoryFallbackArt(categoryId) {
       </svg>
     </span>`;
   }
+  return "";
+}
+
+function mainCategoryFallbackArt(categoryId) {
   return `<span class="category-art category-art--icons" aria-hidden="true">
     <svg viewBox="0 0 120 82" focusable="false">
       <rect x="27" y="15" width="66" height="52" rx="8" fill="#f8ebce" stroke="#d7ad61" stroke-width="4" />
@@ -1169,15 +1248,6 @@ function mainCategoryFallbackArt(categoryId) {
     </svg>
   </span>`;
 }
-
-categoryGrid?.addEventListener("error", (event) => {
-  const image = event.target.closest?.("img[data-category-image]");
-  const art = image?.closest(".category-art");
-  if (!image || !art) return;
-  const template = document.createElement("template");
-  template.innerHTML = mainCategoryFallbackArt(image.dataset.categoryImageId || "");
-  art.replaceWith(template.content.firstElementChild);
-}, true);
 
 function normalizeCategoryFilter(category = "all") {
   if (!category || category === "all") return "all";

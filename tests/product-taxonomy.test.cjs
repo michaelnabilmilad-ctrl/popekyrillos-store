@@ -123,17 +123,22 @@ test("legacy gifts URL maps to occasions and tote bag card uses the stable meeti
   assert.match(fs.readFileSync("script.js", "utf8"), /"gifts-accessories": "occasions-service"/);
 });
 
-test("main category cards render canonical taxonomy images with an error-only fallback", () => {
+test("main category cards render the recovered historical artwork instead of product images", () => {
   const source = fs.readFileSync("script.js", "utf8");
   const start = source.indexOf("function ensureMainCategoryTiles()");
-  const end = source.indexOf("function mainCategoryTileArt", start);
+  const end = source.indexOf("function normalizeCategoryFilter", start);
   const renderer = source.slice(start, end);
   assert.match(renderer, /mainCategoryTileArt\(category\)/);
-  assert.doesNotMatch(source, /legacyMainCategoryArt/);
-  assert.match(source, /taxonomy\?\.categoryImage\?\.\(category\)/);
-  assert.match(source, /data-category-image/);
-  assert.match(source, /categoryGrid\?\.addEventListener\("error"/);
-  assert.match(source, /mainCategoryFallbackArt/);
+  assert.doesNotMatch(renderer, /taxonomy\?\.categoryImage|category-art--photo|<img/);
+  assert.match(renderer, /categoryId === "altar-vessels"/);
+  assert.match(renderer, /categoryId === "censers-incense" \|\| categoryId === "candles-lamps"/);
+  assert.match(renderer, /categoryId === "church-vestments"/);
+  assert.match(renderer, /categoryId === "crosses"/);
+  assert.match(renderer, /categoryId === "icons-frames"/);
+  assert.match(renderer, /categoryId === "books-rituals"/);
+  assert.match(renderer, /categoryId === "occasions-service"/);
+  assert.match(renderer, /function mainCategoryFallbackArt\(categoryId\)/);
+  assert.doesNotMatch(renderer, /categoryId === "church-equipment"/);
 });
 
 test("every customer category has a canonical image that exists on disk", () => {
