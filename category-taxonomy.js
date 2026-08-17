@@ -887,22 +887,45 @@
     ]
   }
 ];
-  const stored = (() => { try { return JSON.parse(localStorage.getItem("pope-kyrillos-taxonomy") || "null"); } catch { return null; } })();
-  // Keep every locally managed category and product assignment, while making newly
-  // shipped subcategories available to browsers that cached an older taxonomy.
-  const categories = Array.isArray(stored) && stored.length ? stored : defaultCategories;
-  const storedCrosses = categories.find((category) => category.id === "crosses");
-  const defaultCrosses = defaultCategories.find((category) => category.id === "crosses");
-  if (storedCrosses && defaultCrosses) {
-    const storedSubcategoryIds = new Set((storedCrosses.subcategories || []).map((subcategory) => subcategory.id));
-    const requiredSubcategoryIds = new Set(["iota-plain-hand-crosses", "plain-cross-medals"]);
-    storedCrosses.subcategories = storedCrosses.subcategories || [];
-    defaultCrosses.subcategories.forEach((subcategory) => {
-      if (requiredSubcategoryIds.has(subcategory.id) && !storedSubcategoryIds.has(subcategory.id)) {
-        storedCrosses.subcategories.push({ ...subcategory });
+  const TAXONOMY_STORAGE_KEY = "pope-kyrillos-taxonomy";
+  const TAXONOMY_VERSION_STORAGE_KEY = "pope-kyrillos-taxonomy-version";
+  const CURRENT_TAXONOMY_VERSION = 2026080801;
+  const stored = (() => {
+    try {
+      const storedVersion = Number(localStorage.getItem(TAXONOMY_VERSION_STORAGE_KEY) || 0);
+      if (!Number.isFinite(storedVersion) || storedVersion < CURRENT_TAXONOMY_VERSION) {
+        localStorage.setItem(TAXONOMY_STORAGE_KEY, JSON.stringify(defaultCategories));
+        localStorage.setItem(TAXONOMY_VERSION_STORAGE_KEY, String(CURRENT_TAXONOMY_VERSION));
+        return defaultCategories;
       }
-    });
-  }
+      const parsed = JSON.parse(localStorage.getItem(TAXONOMY_STORAGE_KEY) || "null");
+      if (Array.isArray(parsed)) return parsed;
+      localStorage.setItem(TAXONOMY_STORAGE_KEY, JSON.stringify(defaultCategories));
+      localStorage.setItem(TAXONOMY_VERSION_STORAGE_KEY, String(CURRENT_TAXONOMY_VERSION));
+      return defaultCategories;
+    } catch {
+      return null;
+    }
+  })();
+  // The shipped taxonomy is canonical. Merge locally managed presentation fields
+  // into it by stable ID so an old, partial browser cache can never hide categories
+  // or subcategories added in a later release.
+  const storedCategories = Array.isArray(stored) ? stored : [];
+  const mergeSubcategories = (defaults = [], overrides = []) => {
+    const overridesById = new Map(overrides.filter((item) => item?.id).map((item) => [item.id, item]));
+    const merged = defaults.map((item) => ({ ...item, ...(overridesById.get(item.id) || {}) }));
+    const defaultIds = new Set(defaults.map((item) => item.id));
+    return merged.concat(overrides.filter((item) => item?.id && !defaultIds.has(item.id)));
+  };
+  const storedById = new Map(storedCategories.filter((item) => item?.id).map((item) => [item.id, item]));
+  const categories = defaultCategories.map((category) => {
+    const override = storedById.get(category.id);
+    return override
+      ? { ...category, ...override, id: category.id, subcategories: mergeSubcategories(category.subcategories, override.subcategories) }
+      : { ...category, subcategories: mergeSubcategories(category.subcategories) };
+  });
+  const defaultCategoryIds = new Set(defaultCategories.map((category) => category.id));
+  categories.push(...storedCategories.filter((category) => category?.id && !defaultCategoryIds.has(category.id)));
   const categoryById = new Map(categories.map(c => [c.id,c]));
   const categoryByName = new Map(categories.map(c => [c.name,c]));
   const subcategoryById = new Map(), subcategoryByName = new Map();
@@ -911,5 +934,10 @@
   function categoryIdFromName(n){ return categoryByName.get(n)?.id || ""; } function categoryNameFromId(id){ return categoryById.get(id)?.name || ""; }
   function subcategoryIdFromName(n){ return subcategoryByName.get(n)?.id || ""; } function subcategoryNameFromId(id){ return subcategoryById.get(id)?.name || ""; }
   function getSubcategories(v){ return (categoryById.get(v)||categoryByName.get(v))?.subcategories||[]; }
-  window.POPE_KYRILLOS_TAXONOMY={categories,defaultCategories,customerCategories,categoryById,categoryByName,subcategoryById,subcategoryByName,categoryIdFromName,categoryNameFromId,subcategoryIdFromName,subcategoryNameFromId,getSubcategories};
+  function categoryImage(category){
+    const value = category?.subcategoryImage || category?.imageUrl || category?.imageURL || category?.image_url || category?.image || category?.thumbnail || category?.thumbnailUrl || category?.cover || category?.categoryImage || "";
+    if (typeof value !== "string" || !value.trim() || /^(?:javascript|data:text|blob):/i.test(value.trim())) return "";
+    return value.trim().replace(/^\/public\//, "/");
+  }
+  window.POPE_KYRILLOS_TAXONOMY={categories,defaultCategories,CURRENT_TAXONOMY_VERSION,customerCategories,categoryById,categoryByName,subcategoryById,subcategoryByName,categoryIdFromName,categoryNameFromId,subcategoryIdFromName,subcategoryNameFromId,getSubcategories,categoryImage};
 })();

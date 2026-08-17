@@ -123,13 +123,51 @@ test("legacy gifts URL maps to occasions and tote bag card uses the stable meeti
   assert.match(fs.readFileSync("script.js", "utf8"), /"gifts-accessories": "occasions-service"/);
 });
 
-test("main category cards render symbols instead of product photos", () => {
+test("main category cards render canonical taxonomy images with an error-only fallback", () => {
   const source = fs.readFileSync("script.js", "utf8");
   const start = source.indexOf("function ensureMainCategoryTiles()");
   const end = source.indexOf("function mainCategoryTileArt", start);
   const renderer = source.slice(start, end);
-  assert.match(renderer, /mainCategoryTileArt\(category\.id\)/);
-  assert.doesNotMatch(renderer, /category-art--photo|<img/);
+  assert.match(renderer, /mainCategoryTileArt\(category\)/);
   assert.doesNotMatch(source, /legacyMainCategoryArt/);
-  assert.match(source, /function mainCategoryTileArt\(categoryId\)/);
+  assert.match(source, /taxonomy\?\.categoryImage\?\.\(category\)/);
+  assert.match(source, /data-category-image/);
+  assert.match(source, /categoryGrid\?\.addEventListener\("error"/);
+  assert.match(source, /mainCategoryFallbackArt/);
+});
+
+test("every customer category has a canonical image that exists on disk", () => {
+  const taxonomy = loadTaxonomy();
+  for (const category of taxonomy.customerCategories()) {
+    const image = taxonomy.categoryImage(category);
+    assert.equal(image, category.subcategoryImage, `${category.id}: subcategoryImage must remain canonical`);
+    assert.ok(image, `${category.id}: missing category image`);
+    assert.ok(fs.existsSync(image.replace(/^\//, "")), `${category.id}: image does not exist: ${image}`);
+  }
+});
+
+test("category image normalization accepts legacy field names without changing canonical data", () => {
+  const taxonomy = loadTaxonomy();
+  assert.equal(taxonomy.categoryImage({ imageUrl: "/images/category.webp" }), "/images/category.webp");
+  assert.equal(taxonomy.categoryImage({ image: "/public/images/category.webp" }), "/images/category.webp");
+  assert.equal(taxonomy.categoryImage({ imageUrl: "javascript:alert(1)" }), "");
+});
+
+test("admin name edits and image replacements persist without clearing category images", () => {
+  const taxonomy = loadTaxonomy();
+  const stored = JSON.parse(JSON.stringify(Array.from(taxonomy.categories)));
+  const category = stored.find((item) => item.id === "crosses");
+  const originalImage = category.subcategoryImage;
+
+  category.name = "اسم اختبار غير صوري";
+  const afterNameEdit = loadTaxonomy(stored, taxonomy.CURRENT_TAXONOMY_VERSION);
+  assert.equal(afterNameEdit.categoryById.get("crosses").subcategoryImage, originalImage);
+
+  category.subcategoryImage = "assets/optimized/products/communion-set.webp";
+  const afterImageEdit = loadTaxonomy(stored, taxonomy.CURRENT_TAXONOMY_VERSION);
+  assert.equal(afterImageEdit.categoryById.get("crosses").subcategoryImage, "assets/optimized/products/communion-set.webp");
+
+  const adminSource = fs.readFileSync("admin.js", "utf8");
+  assert.match(adminSource, /const key = field\.dataset\.taxonomyMainField;[\s\S]*category\[key\] =/);
+  assert.match(adminSource, /JSON\.stringify\(taxonomyCategoriesForAdmin\(\), null, 4\)/);
 });

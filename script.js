@@ -1110,7 +1110,7 @@ function ensureMainCategoryTiles() {
     const count = mainCategoryProductCount(category.id);
     const countText = count === null ? "" : `<small>${displayText(formatter.format(count))} ${isEnglish() ? "products" : "منتج"}</small>`;
     return `<a class="category-tile ${normalizeCategoryFilter(state.filter) === category.id ? "active" : ""}" href="/category/${escapeHtml(category.id)}#catalog" data-filter="${escapeHtml(category.id)}">
-      ${mainCategoryTileArt(category.id)}
+      ${mainCategoryTileArt(category)}
       <strong>${escapeHtml(localized(category.name))}</strong>${countText}</a>`;
   }).join("");
   categoryGrid.innerHTML = allTile + tiles;
@@ -1129,7 +1129,17 @@ function mainCategoryProductCount(categoryId) {
     .size;
 }
 
-function mainCategoryTileArt(categoryId) {
+function mainCategoryTileArt(category) {
+  const categoryId = typeof category === "string" ? category : category?.id || "";
+  const image = typeof category === "object" ? taxonomy?.categoryImage?.(category) || "" : "";
+  if (image) {
+    const src = versionedAssetUrl(image, taxonomy?.CURRENT_TAXONOMY_VERSION || productsAssetVersion || "1");
+    return `<span class="category-art category-art--photo"><img src="${escapeHtml(src)}" alt="${escapeHtml(localized(category.name))}" width="320" height="320" loading="lazy" decoding="async" data-category-image data-category-image-id="${escapeHtml(categoryId)}"></span>`;
+  }
+  return mainCategoryFallbackArt(categoryId);
+}
+
+function mainCategoryFallbackArt(categoryId) {
   if (categoryId === "crosses") {
     return `<span class="category-art category-art--icons" aria-hidden="true">
       <svg viewBox="0 0 120 82" focusable="false">
@@ -1159,6 +1169,15 @@ function mainCategoryTileArt(categoryId) {
     </svg>
   </span>`;
 }
+
+categoryGrid?.addEventListener("error", (event) => {
+  const image = event.target.closest?.("img[data-category-image]");
+  const art = image?.closest(".category-art");
+  if (!image || !art) return;
+  const template = document.createElement("template");
+  template.innerHTML = mainCategoryFallbackArt(image.dataset.categoryImageId || "");
+  art.replaceWith(template.content.firstElementChild);
+}, true);
 
 function normalizeCategoryFilter(category = "all") {
   if (!category || category === "all") return "all";

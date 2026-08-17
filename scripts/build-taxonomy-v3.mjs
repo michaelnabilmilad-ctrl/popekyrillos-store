@@ -73,6 +73,33 @@ fs.writeFileSync(path.join(root,"products.json"),JSON.stringify(products,null,2)
 for (const target of ["dist/products.json","firebase-functions/products.json"]) fs.writeFileSync(path.join(root,target),JSON.stringify(products,null,2)+"\n");
 fs.writeFileSync(path.join(root,"product-taxonomy-mapping.csv"),"id,name,oldCategory,oldSubcategory,newMainCategory,newSubcategory,tags,needsReview\n"+report.map(row=>Object.values(row).map(v=>`"${String(v??"").replaceAll('"','""')}"`).join(",")).join("\n")+"\n");
 
-const source = `(function () {\n  const defaultCategories = ${JSON.stringify(categories,null,2)};\n  const stored = (() => { try { return JSON.parse(localStorage.getItem("pope-kyrillos-taxonomy") || "null"); } catch { return null; } })();\n  const categories = Array.isArray(stored) && stored.length ? stored : defaultCategories;\n  const categoryById = new Map(categories.map(c => [c.id,c]));\n  const categoryByName = new Map(categories.map(c => [c.name,c]));\n  const subcategoryById = new Map(), subcategoryByName = new Map();\n  categories.forEach(c => (c.subcategories||[]).forEach(s => { const entry={...s,mainId:c.id,mainName:c.name}; subcategoryById.set(s.id,entry); subcategoryByName.set(s.name,entry); }));\n  function customerCategories(){ return categories.filter(c => !c.hiddenFromCustomerNav && c.visible !== false); }\n  function categoryIdFromName(n){ return categoryByName.get(n)?.id || ""; } function categoryNameFromId(id){ return categoryById.get(id)?.name || ""; }\n  function subcategoryIdFromName(n){ return subcategoryByName.get(n)?.id || ""; } function subcategoryNameFromId(id){ return subcategoryById.get(id)?.name || ""; }\n  function getSubcategories(v){ return (categoryById.get(v)||categoryByName.get(v))?.subcategories||[]; }\n  window.POPE_KYRILLOS_TAXONOMY={categories,defaultCategories,customerCategories,categoryById,categoryByName,subcategoryById,subcategoryByName,categoryIdFromName,categoryNameFromId,subcategoryIdFromName,subcategoryNameFromId,getSubcategories};\n})();\n`;
-fs.writeFileSync(path.join(root,"category-taxonomy.js"),source);
+const source = `(function () {\n  const defaultCategories = ${JSON.stringify(categories,null,2)};\n  const stored = (() => { try { return JSON.parse(localStorage.getItem("pope-kyrillos-taxonomy") || "null"); } catch { return null; } })();\n  const categories = Array.isArray(stored) && stored.length ? stored : defaultCategories;\n  const categoryById = new Map(categories.map(c => [c.id,c]));\n  const categoryByName = new Map(categories.map(c => [c.name,c]));\n  const subcategoryById = new Map(), subcategoryByName = new Map();\n  categories.forEach(c => (c.subcategories||[]).forEach(s => { const entry={...s,mainId:c.id,mainName:c.name}; subcategoryById.set(s.id,entry); subcategoryByName.set(s.name,entry); }));\n  function customerCategories(){\n    const visibleCategories = categories.filter(c => !c.hiddenFromCustomerNav && c.visible !== false);\n    if (visibleCategories.length) return visibleCategories;\n    return defaultCategories.filter(c => !c.hiddenFromCustomerNav && c.visible !== false);\n  }\n  function categoryIdFromName(n){ return categoryByName.get(n)?.id || ""; } function categoryNameFromId(id){ return categoryById.get(id)?.name || ""; }\n  function subcategoryIdFromName(n){ return subcategoryByName.get(n)?.id || ""; } function subcategoryNameFromId(id){ return subcategoryById.get(id)?.name || ""; }\n  function getSubcategories(v){ return (categoryById.get(v)||categoryByName.get(v))?.subcategories||[]; }\n  window.POPE_KYRILLOS_TAXONOMY={categories,defaultCategories,customerCategories,categoryById,categoryByName,subcategoryById,subcategoryByName,categoryIdFromName,categoryNameFromId,subcategoryIdFromName,subcategoryNameFromId,getSubcategories};\n})();\n`;
+const safeSource = source
+  .replace(
+    '  const stored = (() => { try { return JSON.parse(localStorage.getItem("pope-kyrillos-taxonomy") || "null"); } catch { return null; } })();',
+    `  const TAXONOMY_STORAGE_KEY = "pope-kyrillos-taxonomy";
+  const TAXONOMY_VERSION_STORAGE_KEY = "pope-kyrillos-taxonomy-version";
+  const CURRENT_TAXONOMY_VERSION = 2026080801;
+  const stored = (() => { try { const storedVersion=Number(localStorage.getItem(TAXONOMY_VERSION_STORAGE_KEY)||0); if(!Number.isFinite(storedVersion)||storedVersion<CURRENT_TAXONOMY_VERSION){ localStorage.setItem(TAXONOMY_STORAGE_KEY,JSON.stringify(defaultCategories)); localStorage.setItem(TAXONOMY_VERSION_STORAGE_KEY,String(CURRENT_TAXONOMY_VERSION)); return defaultCategories; } const parsed=JSON.parse(localStorage.getItem(TAXONOMY_STORAGE_KEY)||"null"); if(Array.isArray(parsed)) return parsed; localStorage.setItem(TAXONOMY_STORAGE_KEY,JSON.stringify(defaultCategories)); localStorage.setItem(TAXONOMY_VERSION_STORAGE_KEY,String(CURRENT_TAXONOMY_VERSION)); return defaultCategories; } catch { return null; } })();`
+  )
+  .replace(
+    "  const categories = Array.isArray(stored) && stored.length ? stored : defaultCategories;",
+    `  const storedCategories = Array.isArray(stored) ? stored : [];
+  const mergeSubcategories = (defaults = [], overrides = []) => { const overridesById = new Map(overrides.filter(s => s?.id).map(s => [s.id,s])); const defaultIds = new Set(defaults.map(s => s.id)); return defaults.map(s => ({...s,...(overridesById.get(s.id)||{})})).concat(overrides.filter(s => s?.id && !defaultIds.has(s.id))); };
+  const storedById = new Map(storedCategories.filter(c => c?.id).map(c => [c.id,c]));
+  const categories = defaultCategories.map(c => { const override=storedById.get(c.id); return override ? {...c,...override,id:c.id,subcategories:mergeSubcategories(c.subcategories,override.subcategories)} : {...c,subcategories:mergeSubcategories(c.subcategories)}; });
+  const defaultIds = new Set(defaultCategories.map(c => c.id)); categories.push(...storedCategories.filter(c => c?.id && !defaultIds.has(c.id)));`
+  )
+  .replace(
+    /  function customerCategories\(\)\{[\s\S]*?\n  \}/,
+    "  function customerCategories(){ return categories.filter(c => !c.hiddenFromCustomerNav && c.visible !== false); }"
+  )
+  .replace(
+    "  window.POPE_KYRILLOS_TAXONOMY=",
+    `  function categoryImage(category){ const value=category?.subcategoryImage||category?.imageUrl||category?.imageURL||category?.image_url||category?.image||category?.thumbnail||category?.thumbnailUrl||category?.cover||category?.categoryImage||""; if(typeof value!=="string"||!value.trim()||/^(?:javascript|data:text|blob):/i.test(value.trim())) return ""; return value.trim().replace(/^\\/public\\//,"/"); }
+  window.POPE_KYRILLOS_TAXONOMY=`
+  )
+  .replace("window.POPE_KYRILLOS_TAXONOMY={categories,defaultCategories,", "window.POPE_KYRILLOS_TAXONOMY={categories,defaultCategories,CURRENT_TAXONOMY_VERSION,")
+  .replace("getSubcategories};", "getSubcategories,categoryImage};");
+fs.writeFileSync(path.join(root,"category-taxonomy.js"),safeSource);
 console.log(JSON.stringify({backup,products:products.length,needsReview:report.filter(r=>r.needsReview).length,categories:9},null,2));

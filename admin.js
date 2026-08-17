@@ -2595,6 +2595,12 @@ function updateProductField(product, element) {
     return category?.subcategories || [];
   }
 
+  function categoryImage(category) {
+    const value = category?.subcategoryImage || category?.imageUrl || category?.imageURL || category?.image_url || category?.image || category?.thumbnail || category?.thumbnailUrl || category?.cover || category?.categoryImage || "";
+    if (typeof value !== "string" || !value.trim() || /^(?:javascript|data:text|blob):/i.test(value.trim())) return "";
+    return value.trim().replace(/^\\/public\\//, "/");
+  }
+
   window.POPE_KYRILLOS_TAXONOMY = {
     categories,
     defaultCategories,
@@ -2608,7 +2614,8 @@ function updateProductField(product, element) {
     categoryNameFromId,
     subcategoryIdFromName,
     subcategoryNameFromId,
-    getSubcategories
+    getSubcategories,
+    categoryImage
   };
 })();
 `;
