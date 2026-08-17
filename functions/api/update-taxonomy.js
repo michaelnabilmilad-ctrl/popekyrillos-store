@@ -133,6 +133,24 @@ function validateCategories(categories) {
     throw Object.assign(new Error("categories must be a non-empty array."), { statusCode: 400 });
   }
 
+  const categoryIdCounts = new Map();
+  const subcategoryIdCounts = new Map();
+  for (const category of categories) {
+    const categoryId = String(category?.id || "").trim();
+    if (categoryId) categoryIdCounts.set(categoryId, (categoryIdCounts.get(categoryId) || 0) + 1);
+    for (const subcategory of Array.isArray(category?.subcategories) ? category.subcategories : []) {
+      const subcategoryId = String(subcategory?.id || "").trim();
+      if (subcategoryId) subcategoryIdCounts.set(subcategoryId, (subcategoryIdCounts.get(subcategoryId) || 0) + 1);
+    }
+  }
+  const duplicateIds = [
+    ...[...categoryIdCounts].filter(([, count]) => count > 1).map(([id]) => `main:${id}`),
+    ...[...subcategoryIdCounts].filter(([, count]) => count > 1).map(([id]) => `sub:${id}`)
+  ];
+  if (duplicateIds.length) {
+    throw Object.assign(new Error(`Duplicate taxonomy IDs (${duplicateIds.length}): ${duplicateIds.join(", ")}.`), { statusCode: 400 });
+  }
+
   for (const [categoryIndex, category] of categories.entries()) {
     if (!category || typeof category !== "object" || Array.isArray(category)) {
       throw Object.assign(new Error(`Invalid category at index ${categoryIndex}.`), { statusCode: 400 });

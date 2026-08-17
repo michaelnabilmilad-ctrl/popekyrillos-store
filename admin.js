@@ -652,7 +652,7 @@
     }
     const validation = validateTaxonomy(categoriesList);
     if (!validation.ok) {
-      showToast(`تعذر النشر: ${validation.errors[0]}`);
+      showToast(`تعذر النشر:\n${validation.errors.join("\n")}`);
       return;
     }
 
@@ -1597,20 +1597,29 @@
     if (!Array.isArray(categoriesList) || !categoriesList.length) errors.push("قائمة الأقسام فارغة.");
     const categoryIds = new Set();
     const subcategoryIds = new Set();
+    const duplicateCategoryIds = new Set();
+    const duplicateSubcategoryIds = new Set();
     for (const category of categoriesList || []) {
       const id = String(category?.id || "").trim();
       if (!id) errors.push("يوجد قسم رئيسي بدون ID صالح.");
-      else if (categoryIds.has(id)) errors.push(`ID قسم رئيسي مكرر: ${id}`);
+      else if (categoryIds.has(id)) duplicateCategoryIds.add(id);
       categoryIds.add(id);
       if (!String(category?.name || "").trim()) errors.push(`القسم ${id || "غير المعروف"} بدون اسم.`);
       if (!Array.isArray(category?.subcategories)) errors.push(`الأقسام الفرعية في ${id} غير صالحة.`);
       for (const subcategory of category?.subcategories || []) {
         const subId = String(subcategory?.id || "").trim();
         if (!subId) errors.push(`يوجد قسم فرعي بدون ID داخل ${id}.`);
-        else if (subcategoryIds.has(subId)) errors.push(`ID قسم فرعي مكرر: ${subId}`);
+        else if (subcategoryIds.has(subId)) duplicateSubcategoryIds.add(subId);
         subcategoryIds.add(subId);
         if (!String(subcategory?.name || "").trim()) errors.push(`القسم الفرعي ${subId || "غير المعروف"} بدون اسم.`);
       }
+    }
+    const duplicateIds = [
+      ...[...duplicateCategoryIds].map((id) => `قسم رئيسي: ${id}`),
+      ...[...duplicateSubcategoryIds].map((id) => `قسم فرعي: ${id}`)
+    ];
+    if (duplicateIds.length) {
+      errors.unshift(`تم العثور على ${duplicateIds.length} IDs مكررة:\n${duplicateIds.map((item) => `• ${item}`).join("\n")}`);
     }
     if (state.products.length) {
       const parentBySubcategory = new Map();
@@ -1635,7 +1644,7 @@
     }
     const validation = validateTaxonomy(state.taxonomy);
     if (!validation.ok) {
-      showToast(`تعذر الحفظ: ${validation.errors[0]}`);
+      showToast(`تعذر الحفظ:\n${validation.errors.join("\n")}`);
       return;
     }
     try {

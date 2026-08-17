@@ -3,7 +3,7 @@ const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const vm = require("node:vm");
 
-function loadTaxonomy(storedTaxonomy = null, storedVersion = 2026080801, extraStorage = {}) {
+function loadTaxonomy(storedTaxonomy = null, storedVersion = 2026081701, extraStorage = {}) {
   const storage = new Map(Object.entries({
     ...extraStorage,
     ...(storedTaxonomy ? { "pope-kyrillos-taxonomy": JSON.stringify(storedTaxonomy) } : {}),

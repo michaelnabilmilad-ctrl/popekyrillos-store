@@ -842,6 +842,7 @@ textarea:focus {
   border-radius: var(--radius);
   background: var(--ink);
   color: #fff;
+  white-space: pre-line;
   box-shadow: var(--shadow);
 }
 

@@ -889,7 +889,7 @@
 ];
   const TAXONOMY_STORAGE_KEY = "pope-kyrillos-taxonomy";
   const TAXONOMY_VERSION_STORAGE_KEY = "pope-kyrillos-taxonomy-version";
-  const CURRENT_TAXONOMY_VERSION = 2026080801;
+  const CURRENT_TAXONOMY_VERSION = 2026081701;
   const stored = (() => {
     try {
       const storedVersion = Number(localStorage.getItem(TAXONOMY_VERSION_STORAGE_KEY) || 0);
@@ -911,18 +911,25 @@
   // into it by stable ID so an old, partial browser cache can never hide categories
   // or subcategories added in a later release.
   const storedCategories = Array.isArray(stored) ? stored : [];
-  const mergeSubcategories = (defaults = [], overrides = []) => {
-    const overridesById = new Map(overrides.filter((item) => item?.id).map((item) => [item.id, item]));
+  const migrateStoredSubcategory = (categoryId, item) => {
+    if (categoryId === "altar-vessels" && item?.id === "altar-crosses") {
+      return { ...item, id: "altar-vessel-crosses" };
+    }
+    return item;
+  };
+  const mergeSubcategories = (categoryId, defaults = [], overrides = []) => {
+    const migratedOverrides = overrides.map((item) => migrateStoredSubcategory(categoryId, item));
+    const overridesById = new Map(migratedOverrides.filter((item) => item?.id).map((item) => [item.id, item]));
     const merged = defaults.map((item) => ({ ...item, ...(overridesById.get(item.id) || {}) }));
     const defaultIds = new Set(defaults.map((item) => item.id));
-    return merged.concat(overrides.filter((item) => item?.id && !defaultIds.has(item.id)));
+    return merged.concat(migratedOverrides.filter((item) => item?.id && !defaultIds.has(item.id)));
   };
   const storedById = new Map(storedCategories.filter((item) => item?.id).map((item) => [item.id, item]));
   const categories = defaultCategories.map((category) => {
     const override = storedById.get(category.id);
     return override
-      ? { ...category, ...override, id: category.id, subcategories: mergeSubcategories(category.subcategories, override.subcategories) }
-      : { ...category, subcategories: mergeSubcategories(category.subcategories) };
+      ? { ...category, ...override, id: category.id, subcategories: mergeSubcategories(category.id, category.subcategories, override.subcategories) }
+      : { ...category, subcategories: mergeSubcategories(category.id, category.subcategories) };
   });
   const defaultCategoryIds = new Set(defaultCategories.map((category) => category.id));
   categories.push(...storedCategories.filter((category) => category?.id && !defaultCategoryIds.has(category.id)));
