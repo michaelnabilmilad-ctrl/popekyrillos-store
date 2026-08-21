@@ -1984,10 +1984,10 @@
         "quantity": 1000
       }
     ],
-    "mainCategory": "الصلبان",
-    "subCategory": "يحتاج مراجعة",
+    "mainCategory": "occasions-service",
+    "subCategory": "crafts-coloring",
     "isBestSeller": false,
-    "subcategory": "meeting-games",
+    "subcategory": "crafts-coloring",
     "collections": [
       "هدايا الخدمة",
       "منتجات الأطفال"
@@ -2040,12 +2040,12 @@
         "quantity": null
       }
     ],
-    "mainCategory": "المناسبات والخدمة",
-    "subCategory": "توتي باج وشنط",
+    "mainCategory": "occasions-service",
+    "subCategory": "meeting-gifts",
     "updatedAt": "2026-07-04T18:38:24+03:00",
     "slug": "شنطه-اتبعه",
     "isBestSeller": false,
-    "subcategory": "tote-bags",
+    "subcategory": "meeting-gifts",
     "collections": [
       "هدايا الخدمة"
     ],
@@ -2097,12 +2097,12 @@
         "quantity": null
       }
     ],
-    "mainCategory": "المناسبات والخدمة",
-    "subCategory": "توتي باج وشنط",
+    "mainCategory": "occasions-service",
+    "subCategory": "meeting-gifts",
     "updatedAt": "2026-07-04T18:38:24+03:00",
     "slug": "شنطه-اتبعه-3ho-10618127974565",
     "isBestSeller": false,
-    "subcategory": "tote-bags",
+    "subcategory": "meeting-gifts",
     "collections": [
       "هدايا الخدمة"
     ],
@@ -2201,12 +2201,12 @@
         "quantity": null
       }
     ],
-    "mainCategory": "المناسبات والخدمة",
-    "subCategory": "توتي باج وشنط",
+    "mainCategory": "books-rituals",
+    "subCategory": "book-accessories",
     "updatedAt": "2026-07-04T18:38:24+03:00",
     "slug": "كافر-كتاب-مقدس-وشنطه-مستلزمات-روحيه",
     "isBestSeller": false,
-    "subcategory": "tote-bags",
+    "subcategory": "book-accessories",
     "collections": [
       "هدايا الخدمة"
     ],
@@ -5326,11 +5326,11 @@
         "quantity": null
       }
     ],
-    "mainCategory": "الكتب والطقوس",
-    "subCategory": "يحتاج مراجعة",
+    "mainCategory": "books-rituals",
+    "subCategory": "book-accessories",
     "slug": "جراب-للكتاب-المقدس",
     "isBestSeller": false,
-    "subcategory": "liturgical-books",
+    "subcategory": "book-accessories",
     "collections": [],
     "searchKeywords": [
       "جراب للكتاب المقدس",
