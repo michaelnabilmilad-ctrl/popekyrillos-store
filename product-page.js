@@ -531,7 +531,7 @@ function initializeColoringGame(panel) {
     const logicalShapeCount = Object.keys(regionOverrideData?.logicalShapes || {}).length;
     const similarShapeGroupCount = Object.keys(regionOverrideData?.similarShapeGroups || {}).length;
     const shouldShowSimilarShapesCheckbox = Boolean(hasColoringGame);
-    console.info("[coloring-game] grouping configuration", {
+    const groupingDiagnostics = {
       model: activeModelId,
       modelVersion: activeModelVersion,
       configKey: coloringStorageKey,
@@ -539,7 +539,13 @@ function initializeColoringGame(panel) {
       similarShapeGroupsLoaded: similarShapeGroupCount > 0,
       similarShapeGroupsCount: similarShapeGroupCount,
       shouldShowSimilarShapesCheckbox
-    });
+    };
+    panel.dataset.coloringModel = activeModelId;
+    panel.dataset.coloringModelVersion = activeModelVersion;
+    panel.dataset.logicalShapesLoaded = String(logicalShapeCount);
+    panel.dataset.similarShapeGroupsLoaded = String(similarShapeGroupCount);
+    panel.dataset.shouldShowSimilarShapesCheckbox = String(shouldShowSimilarShapesCheckbox);
+    console.info(`[coloring-game] grouping configuration ${JSON.stringify(groupingDiagnostics)}`);
     if (activeModelId === "yota-02" && (!logicalShapeCount || !similarShapeGroupCount)) {
       console.error("YOTA MODEL 2 EXPECTED SIMILAR GROUPS BUT NONE WERE LOADED", {
         modelVersion: activeModelVersion,
