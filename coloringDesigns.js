@@ -22,7 +22,7 @@ export const COLORING_DESIGNS = Object.freeze([
     regionOverridesPath: "/coloring/yota-02/region-overrides.json",
     enabled: true,
     status: "ready",
-    modelVersion: "yota-02-v13"
+    modelVersion: "yota-02-v14"
   }),
   Object.freeze({
     id: "yota-03",

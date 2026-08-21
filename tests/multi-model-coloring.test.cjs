@@ -94,7 +94,7 @@ test("yota-02 metadata defines raw regions, logical shapes, and similar-shape gr
   const overrides = JSON.parse(fs.readFileSync(path.join(directory, "region-overrides.json"), "utf8"));
   const validIds = new Set(data.regions.map((region) => region.regionId || region.id));
   assert.equal(overrides.modelId, "yota-02");
-  assert.equal(overrides.modelVersion, "yota-02-v13");
+  assert.equal(overrides.modelVersion, "yota-02-v14");
   Object.entries(overrides.groups).forEach(([group, ids]) => {
     assert.equal(ids.length, new Set(ids).size, `${group} contains duplicate IDs`);
     ids.forEach((id) => {
@@ -105,7 +105,7 @@ test("yota-02 metadata defines raw regions, logical shapes, and similar-shape gr
     assert.ok(validIds.has(id), `${id} override does not exist`);
     assert.equal(typeof metadata, "object");
   });
-  assert.equal(data.modelVersion, "yota-02-v13");
+  assert.equal(data.modelVersion, "yota-02-v14");
   assert.equal(data.totalRegions, 50);
   assert.deepEqual(data.shapeGroups, []);
   assert.ok(data.regions.every((region) => region.shapeGroup === null));
@@ -116,6 +116,8 @@ test("yota-02 metadata defines raw regions, logical shapes, and similar-shape gr
   assert.deepEqual(new Set(logicalRawIds), validIds);
   assert.deepEqual(overrides.logicalShapes["lower-left-star"], ["region-33", "region-38"]);
   assert.deepEqual(overrides.logicalShapes["lower-right-star"], ["region-34", "region-35"]);
+  assert.ok(["region-33", "region-38"].every((id) => data.regions.find((region) => region.id === id).logicalRegionId === "lower-left-star"));
+  assert.ok(["region-34", "region-35"].every((id) => data.regions.find((region) => region.id === id).logicalRegionId === "lower-right-star"));
   const logicalNames = new Set(logicalEntries.map(([name]) => name));
   Object.values(overrides.similarShapeGroups).flat().forEach((logicalName) => {
     assert.ok(logicalNames.has(logicalName), `${logicalName} is not a logical shape`);
@@ -261,8 +263,8 @@ test("current product ID overrides stale copied coloring configuration", async (
     ...staleModelOneFields
   });
   assert.equal(modelTwo.coloringModelId, "yota-02");
-  assert.match(modelTwo.coloringBaseImageUrl, /^\/coloring\/yota-02\/base\.png\?v=yota-02-v13$/);
-  assert.match(modelTwo.coloringMaskUrl, /^\/coloring\/yota-02\/regions\.png\?v=yota-02-v13$/);
+  assert.match(modelTwo.coloringBaseImageUrl, /^\/coloring\/yota-02\/base\.png\?v=yota-02-v14$/);
+  assert.match(modelTwo.coloringMaskUrl, /^\/coloring\/yota-02\/regions\.png\?v=yota-02-v14$/);
   assert.equal(modelTwo.coloringRegions, undefined);
 
   const unsupportedModel = registry.withYotaColoringConfig({

@@ -1,6 +1,6 @@
 {
   "modelId": "yota-02",
-  "modelVersion": "yota-02-v13",
+  "modelVersion": "yota-02-v14",
   "logicalShapes": {
     "top-right-cap": ["region-1"],
     "top-left-cap": ["region-2"],
