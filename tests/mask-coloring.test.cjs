@@ -43,7 +43,8 @@ test("runtime coloring code does not use flood fill, tolerance, or edge detectio
   const source = fs.readFileSync(path.join(root, "product-page.js"), "utf8");
   assert.doesNotMatch(source, /flood\s*fill|floodFill|tolerance|edge\s*detection/i);
   assert.match(source, /regionByMaskKey/);
-  assert.match(source, /globalCompositeOperation = "multiply"/);
+  assert.doesNotMatch(source, /globalCompositeOperation = "multiply"/);
+  assert.match(source, /renderColoringArtwork/);
 });
 
 test("product quick view uses the storefront search normalizer", () => {
