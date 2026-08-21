@@ -195,11 +195,11 @@
         "quantity": null
       }
     ],
-    "mainCategory": "occasions-service",
-    "subCategory": "meeting-gifts",
+    "mainCategory": "books-rituals",
+    "subCategory": "book-accessories",
     "updatedAt": "2026-07-04T18:38:24+03:00",
     "slug": "كافر-كتاب-مقدس-وشنطه-مستلزمات-روحيه",
-    "subcategory": "meeting-gifts",
+    "subcategory": "book-accessories",
     "collections": [
       "هدايا الخدمة"
     ],
@@ -4448,9 +4448,9 @@
       }
     ],
     "mainCategory": "books-rituals",
-    "subCategory": "liturgy-books",
+    "subCategory": "book-accessories",
     "slug": "جراب-للكتاب-المقدس",
-    "subcategory": "liturgy-books",
+    "subcategory": "book-accessories",
     "collections": [],
     "searchKeywords": [
       "جراب للكتاب المقدس",
@@ -8086,9 +8086,9 @@
       }
     ],
     "mainCategory": "occasions-service",
-    "subCategory": "christian-games",
+    "subCategory": "crafts-coloring",
     "slug": "الوان-اليوطا",
-    "subcategory": "christian-games",
+    "subcategory": "crafts-coloring",
     "collections": [
       "هدايا الخدمة",
       "منتجات الأطفال"

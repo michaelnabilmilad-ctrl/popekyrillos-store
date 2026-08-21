@@ -1,7 +1,7 @@
 id,name,oldCategory,oldSubcategory,newMainCategory,newSubcategory,tags,needsReview
 "atb3ho-10618130956453","شنطه اتبعه","occasions-service","meeting-gifts","occasions-service","meeting-gifts","أتبعه | Atb3ho | شنط ومستلزمات روحية","false"
 "atb3ho-10618127974565","شنطه اتبعه","occasions-service","meeting-gifts","occasions-service","meeting-gifts","أتبعه | Atb3ho | شنط ومستلزمات روحية","false"
-"atb3ho-10558435197093","كافر كتاب مقدس وشنطه مستلزمات روحيه","occasions-service","meeting-gifts","occasions-service","meeting-gifts","أتبعه | Atb3ho | شنط ومستلزمات روحية","false"
+"atb3ho-10558435197093","كافر كتاب مقدس وشنطه مستلزمات روحيه","occasions-service","meeting-gifts","books-rituals","book-accessories","أتبعه | Atb3ho | شنط ومستلزمات روحية","false"
 "atb3ho-10555319877797","تحدي التغيير","occasions-service","christian-games","occasions-service","christian-games","أتبعه | Atb3ho | كروت","false"
 "atb3ho-10547044876453","٥ بوك مارك + ٥ FREE","occasions-service","cards-bookmarks","occasions-service","cards-bookmarks","أتبعه | Atb3ho | بوك مارك","false"
 "atb3ho-10547041829029","جورنالينج اتبعه ٣٦٥ يوم","occasions-service","notebooks-planners","occasions-service","notebooks-planners","أتبعه | Atb3ho | جورنالينج","false"
@@ -61,7 +61,7 @@ id,name,oldCategory,oldSubcategory,newMainCategory,newSubcategory,tags,needsRevi
 "old-10123913003315","علبة بخور نحاس فضي فص ملون","censers-incense","church-incense","censers-incense","church-incense","نحاسيات | علب بخور | brass | الشمع والبخور | أطقم بخور","false"
 "old-10121340551475","تريانتو ستانلس","altar-vessels","service-plates","altar-vessels","service-plates","دفوف وتريانتو | الحجم | المقاس | brass | أدوات المذبح | أدوات خدمة","false"
 "old-10121339568435","دف 18 سم نحاس ذهبي تقيل","altar-vessels","service-plates","altar-vessels","service-plates","دفوف وتريانتو | الحجم | المقاس | brass | أدوات المذبح | أدوات خدمة","false"
-"old-10121173303603","جراب للكتاب المقدس","books-rituals","liturgy-books","books-rituals","liturgy-books","كتب وطقوس | جرابات كتاب مقدس | الحجم | اللون | المقاس | books | الكتب والطقوس | كتب طقسية","false"
+"old-10121173303603","جراب للكتاب المقدس","books-rituals","liturgy-books","books-rituals","book-accessories","كتب وطقوس | جرابات كتاب مقدس | الحجم | اللون | المقاس | books | الكتب والطقوس | كتب طقسية","false"
 "old-10120837660979","صليب زفة نحاس طبقتين بفصوص ملونة","crosses","processional-crosses","crosses","processional-crosses","صلبان زفة | brass | أدوات المذبح | صلبان مذبح","false"
 "old-10120837300531","صليب زفة نحاس طبقتين","crosses","processional-crosses","crosses","processional-crosses","صلبان زفة | brass | أدوات المذبح | صلبان مذبح","false"
 "old-10120836481331","صليب زفة نحاس رفيع بفص ألوان","crosses","processional-crosses","crosses","processional-crosses","صلبان زفة | brass | أدوات المذبح | صلبان مذبح","false"
@@ -99,4 +99,4 @@ id,name,oldCategory,oldSubcategory,newMainCategory,newSubcategory,tags,needsRevi
 "stole-red-gold-02","بطرشيل كنسي أحمر ذهبي - موديل 2","church-vestments","stoles","church-vestments","stoles","أقمشة ومفارش | الطول | التفصيل | vestments | بطرشيلات | الملابس الكنسية","false"
 "stole-red-gold-03","بطرشيل كنسي أحمر ذهبي - موديل 3","church-vestments","stoles","church-vestments","stoles","أقمشة ومفارش | الطول | التفصيل | vestments | بطرشيلات | الملابس الكنسية","false"
 "stole-red-gold-04","بطرشيل كنسي أحمر ذهبي - موديل 4","church-vestments","stoles","church-vestments","stoles","أقمشة ومفارش | الطول | التفصيل | vestments | بطرشيلات | الملابس الكنسية","false"
-"custom-1783272387022","ألوان اليوطا","occasions-service","christian-games","occasions-service","christian-games","","false"
+"custom-1783272387022","ألوان اليوطا","occasions-service","christian-games","occasions-service","crafts-coloring","","false"
