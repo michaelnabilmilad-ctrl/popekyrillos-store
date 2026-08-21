@@ -1,7 +1,7 @@
 {
   "modelId": "yota-02",
   "modelName": "ميدالية يوتا 2",
-  "modelVersion": "yota-02-v7",
+  "modelVersion": "yota-02-v13",
   "totalRegions": 50,
   "regions": [
     {
@@ -11,31 +11,6 @@
         1,
         0,
         73
-      ],
-      "pixelCount": 19,
-      "centerX": 620,
-      "centerY": 505,
-      "bounds": {
-        "x": 619,
-        "y": 497,
-        "width": 2,
-        "height": 15
-      },
-      "sampleX": 620,
-      "sampleY": 505,
-      "logicalRegionId": "region-1",
-      "shapeGroup": null,
-      "geometryType": null,
-      "enabled": false,
-      "label": "فتحة التعليق - غير قابلة للتلوين"
-    },
-    {
-      "id": "region-2",
-      "regionId": "region-2",
-      "maskColor": [
-        2,
-        0,
-        146
       ],
       "pixelCount": 384,
       "centerX": 652,
@@ -48,6 +23,31 @@
       },
       "sampleX": 652,
       "sampleY": 576,
+      "logicalRegionId": "region-1",
+      "shapeGroup": null,
+      "geometryType": null,
+      "enabled": true,
+      "label": "منطقة 1"
+    },
+    {
+      "id": "region-2",
+      "regionId": "region-2",
+      "maskColor": [
+        2,
+        0,
+        146
+      ],
+      "pixelCount": 421,
+      "centerX": 585,
+      "centerY": 577,
+      "bounds": {
+        "x": 563,
+        "y": 561,
+        "width": 45,
+        "height": 33
+      },
+      "sampleX": 585,
+      "sampleY": 577,
       "logicalRegionId": "region-2",
       "shapeGroup": null,
       "geometryType": null,
@@ -123,11 +123,11 @@
       },
       "sampleX": 619,
       "sampleY": 648,
-      "logicalRegionId": "top-fleur",
-      "shapeGroup": "large-fleur",
-      "geometryType": "fleur",
+      "logicalRegionId": "region-5",
+      "shapeGroup": null,
+      "geometryType": null,
       "enabled": true,
-      "label": "الزخرفة الزهرية العلوية"
+      "label": "منطقة 5"
     },
     {
       "id": "region-6",
@@ -171,8 +171,8 @@
         "width": 18,
         "height": 44
       },
-      "sampleX": 586,
-      "sampleY": 687,
+      "sampleX": 587,
+      "sampleY": 688,
       "logicalRegionId": "region-7",
       "shapeGroup": null,
       "geometryType": null,
@@ -188,31 +188,6 @@
         74
       ],
       "pixelCount": 2064,
-      "centerX": 512,
-      "centerY": 704,
-      "bounds": {
-        "x": 474,
-        "y": 665,
-        "width": 84,
-        "height": 82
-      },
-      "sampleX": 512,
-      "sampleY": 704,
-      "logicalRegionId": "upper-left-star",
-      "shapeGroup": "outer-stars",
-      "geometryType": "star",
-      "enabled": true,
-      "label": "النجمة العلوية اليسرى"
-    },
-    {
-      "id": "region-9",
-      "regionId": "region-9",
-      "maskColor": [
-        9,
-        0,
-        147
-      ],
-      "pixelCount": 2064,
       "centerX": 724,
       "centerY": 704,
       "bounds": {
@@ -222,12 +197,37 @@
         "height": 82
       },
       "sampleX": 724,
-      "sampleY": 704,
-      "logicalRegionId": "upper-right-star",
-      "shapeGroup": "outer-stars",
-      "geometryType": "star",
+      "sampleY": 723,
+      "logicalRegionId": "region-8",
+      "shapeGroup": null,
+      "geometryType": null,
       "enabled": true,
-      "label": "النجمة العلوية اليمنى"
+      "label": "منطقة 8"
+    },
+    {
+      "id": "region-9",
+      "regionId": "region-9",
+      "maskColor": [
+        9,
+        0,
+        147
+      ],
+      "pixelCount": 919,
+      "centerX": 499,
+      "centerY": 725,
+      "bounds": {
+        "x": 478,
+        "y": 689,
+        "width": 50,
+        "height": 59
+      },
+      "sampleX": 496,
+      "sampleY": 725,
+      "logicalRegionId": "region-9",
+      "shapeGroup": null,
+      "geometryType": null,
+      "enabled": true,
+      "label": "منطقة 9"
     },
     {
       "id": "region-10",
@@ -249,8 +249,8 @@
       "sampleX": 619,
       "sampleY": 746,
       "logicalRegionId": "region-10",
-      "shapeGroup": "center-triangles",
-      "geometryType": "triangle",
+      "shapeGroup": null,
+      "geometryType": null,
       "enabled": true,
       "label": "منطقة 10"
     },
@@ -263,19 +263,19 @@
         38
       ],
       "pixelCount": 357,
-      "centerX": 563,
+      "centerX": 673,
       "centerY": 752,
       "bounds": {
-        "x": 549,
+        "x": 662,
         "y": 737,
         "width": 26,
         "height": 26
       },
-      "sampleX": 563,
+      "sampleX": 673,
       "sampleY": 752,
       "logicalRegionId": "region-11",
-      "shapeGroup": "center-triangles",
-      "geometryType": "triangle",
+      "shapeGroup": null,
+      "geometryType": null,
       "enabled": true,
       "label": "منطقة 11"
     },
@@ -287,20 +287,20 @@
         0,
         111
       ],
-      "pixelCount": 357,
-      "centerX": 673,
+      "pixelCount": 349,
+      "centerX": 565,
       "centerY": 752,
       "bounds": {
-        "x": 662,
-        "y": 737,
+        "x": 550,
+        "y": 738,
         "width": 26,
-        "height": 26
+        "height": 25
       },
-      "sampleX": 673,
+      "sampleX": 565,
       "sampleY": 752,
       "logicalRegionId": "region-12",
-      "shapeGroup": "center-triangles",
-      "geometryType": "triangle",
+      "shapeGroup": null,
+      "geometryType": null,
       "enabled": true,
       "label": "منطقة 12"
     },
@@ -474,8 +474,8 @@
       "sampleX": 678,
       "sampleY": 802,
       "logicalRegionId": "region-19",
-      "shapeGroup": "center-triangles",
-      "geometryType": "triangle",
+      "shapeGroup": null,
+      "geometryType": null,
       "enabled": true,
       "label": "منطقة 19"
     },
@@ -498,11 +498,11 @@
       },
       "sampleX": 618,
       "sampleY": 802,
-      "logicalRegionId": "center-star",
-      "shapeGroup": "center-star",
-      "geometryType": "star",
+      "logicalRegionId": "region-20",
+      "shapeGroup": null,
+      "geometryType": null,
       "enabled": true,
-      "label": "النجمة الوسطى"
+      "label": "منطقة 20"
     },
     {
       "id": "region-21",
@@ -524,8 +524,8 @@
       "sampleX": 558,
       "sampleY": 802,
       "logicalRegionId": "region-21",
-      "shapeGroup": "center-triangles",
-      "geometryType": "triangle",
+      "shapeGroup": null,
+      "geometryType": null,
       "enabled": true,
       "label": "منطقة 21"
     },
@@ -548,11 +548,11 @@
       },
       "sampleX": 779,
       "sampleY": 804,
-      "logicalRegionId": "right-fleur",
-      "shapeGroup": "large-fleur",
-      "geometryType": "fleur",
+      "logicalRegionId": "region-22",
+      "shapeGroup": null,
+      "geometryType": null,
       "enabled": true,
-      "label": "الزخرفة الزهرية اليمنى"
+      "label": "منطقة 22"
     },
     {
       "id": "region-23",
@@ -573,11 +573,11 @@
       },
       "sampleX": 460,
       "sampleY": 804,
-      "logicalRegionId": "left-fleur",
-      "shapeGroup": "large-fleur",
-      "geometryType": "fleur",
+      "logicalRegionId": "region-23",
+      "shapeGroup": null,
+      "geometryType": null,
       "enabled": true,
-      "label": "الزخرفة الزهرية اليسرى"
+      "label": "منطقة 23"
     },
     {
       "id": "region-24",
@@ -737,20 +737,20 @@
         0,
         150
       ],
-      "pixelCount": 362,
-      "centerX": 563,
+      "pixelCount": 352,
+      "centerX": 564,
       "centerY": 853,
       "bounds": {
-        "x": 549,
+        "x": 550,
         "y": 843,
         "width": 26,
         "height": 25
       },
-      "sampleX": 563,
+      "sampleX": 564,
       "sampleY": 853,
       "logicalRegionId": "region-30",
-      "shapeGroup": "center-triangles",
-      "geometryType": "triangle",
+      "shapeGroup": null,
+      "geometryType": null,
       "enabled": true,
       "label": "منطقة 30"
     },
@@ -774,8 +774,8 @@
       "sampleX": 673,
       "sampleY": 853,
       "logicalRegionId": "region-31",
-      "shapeGroup": "center-triangles",
-      "geometryType": "triangle",
+      "shapeGroup": null,
+      "geometryType": null,
       "enabled": true,
       "label": "منطقة 31"
     },
@@ -799,8 +799,8 @@
       "sampleX": 619,
       "sampleY": 859,
       "logicalRegionId": "region-32",
-      "shapeGroup": "center-triangles",
-      "geometryType": "triangle",
+      "shapeGroup": null,
+      "geometryType": null,
       "enabled": true,
       "label": "منطقة 32"
     },
@@ -812,22 +812,22 @@
         0,
         114
       ],
-      "pixelCount": 1117,
-      "centerX": 494,
-      "centerY": 888,
+      "pixelCount": 933,
+      "centerX": 498,
+      "centerY": 881,
       "bounds": {
-        "x": 473,
+        "x": 475,
         "y": 858,
-        "width": 54,
-        "height": 78
+        "width": 53,
+        "height": 58
       },
-      "sampleX": 494,
-      "sampleY": 888,
-      "logicalRegionId": "lower-left-star",
-      "shapeGroup": "outer-stars",
-      "geometryType": "star",
+      "sampleX": 495,
+      "sampleY": 880,
+      "logicalRegionId": "region-33",
+      "shapeGroup": null,
+      "geometryType": null,
       "enabled": true,
-      "label": "النجمة السفلية اليسرى"
+      "label": "منطقة 33"
     },
     {
       "id": "region-34",
@@ -846,13 +846,13 @@
         "width": 54,
         "height": 78
       },
-      "sampleX": 742,
-      "sampleY": 888,
-      "logicalRegionId": "lower-right-star",
-      "shapeGroup": "outer-stars",
-      "geometryType": "star",
+      "sampleX": 743,
+      "sampleY": 883,
+      "logicalRegionId": "region-34",
+      "shapeGroup": null,
+      "geometryType": null,
       "enabled": true,
-      "label": "النجمة السفلية اليمنى"
+      "label": "منطقة 34"
     },
     {
       "id": "region-35",
@@ -861,31 +861,6 @@
         35,
         0,
         5
-      ],
-      "pixelCount": 889,
-      "centerX": 534,
-      "centerY": 917,
-      "bounds": {
-        "x": 497,
-        "y": 889,
-        "width": 61,
-        "height": 51
-      },
-      "sampleX": 534,
-      "sampleY": 917,
-      "logicalRegionId": "lower-left-star",
-      "shapeGroup": "outer-stars",
-      "geometryType": "star",
-      "enabled": true,
-      "label": "النجمة السفلية اليسرى"
-    },
-    {
-      "id": "region-36",
-      "regionId": "region-36",
-      "maskColor": [
-        36,
-        0,
-        78
       ],
       "pixelCount": 889,
       "centerX": 702,
@@ -897,20 +872,20 @@
         "height": 51
       },
       "sampleX": 702,
-      "sampleY": 917,
-      "logicalRegionId": "lower-right-star",
-      "shapeGroup": "outer-stars",
-      "geometryType": "star",
+      "sampleY": 919,
+      "logicalRegionId": "region-35",
+      "shapeGroup": null,
+      "geometryType": null,
       "enabled": true,
-      "label": "النجمة السفلية اليمنى"
+      "label": "منطقة 35"
     },
     {
-      "id": "region-37",
-      "regionId": "region-37",
+      "id": "region-36",
+      "regionId": "region-36",
       "maskColor": [
-        37,
+        36,
         0,
-        151
+        78
       ],
       "pixelCount": 327,
       "centerX": 586,
@@ -923,6 +898,31 @@
       },
       "sampleX": 586,
       "sampleY": 917,
+      "logicalRegionId": "region-36",
+      "shapeGroup": null,
+      "geometryType": null,
+      "enabled": true,
+      "label": "منطقة 36"
+    },
+    {
+      "id": "region-37",
+      "regionId": "region-37",
+      "maskColor": [
+        37,
+        0,
+        151
+      ],
+      "pixelCount": 325,
+      "centerX": 652,
+      "centerY": 918,
+      "bounds": {
+        "x": 644,
+        "y": 895,
+        "width": 19,
+        "height": 42
+      },
+      "sampleX": 652,
+      "sampleY": 918,
       "logicalRegionId": "region-37",
       "shapeGroup": null,
       "geometryType": null,
@@ -937,17 +937,17 @@
         0,
         224
       ],
-      "pixelCount": 325,
-      "centerX": 652,
-      "centerY": 918,
+      "pixelCount": 1055,
+      "centerX": 528,
+      "centerY": 919,
       "bounds": {
-        "x": 644,
-        "y": 895,
-        "width": 19,
-        "height": 42
+        "x": 480,
+        "y": 889,
+        "width": 80,
+        "height": 51
       },
-      "sampleX": 652,
-      "sampleY": 918,
+      "sampleX": 532,
+      "sampleY": 920,
       "logicalRegionId": "region-38",
       "shapeGroup": null,
       "geometryType": null,
@@ -973,11 +973,11 @@
       },
       "sampleX": 618,
       "sampleY": 954,
-      "logicalRegionId": "middle-lower-fleur",
-      "shapeGroup": "large-fleur",
-      "geometryType": "fleur",
+      "logicalRegionId": "region-39",
+      "shapeGroup": null,
+      "geometryType": null,
       "enabled": true,
-      "label": "الزخرفة الزهرية الوسطى السفلية"
+      "label": "منطقة 39"
     },
     {
       "id": "region-40",
@@ -1148,11 +1148,11 @@
       },
       "sampleX": 619,
       "sampleY": 1127,
-      "logicalRegionId": "bottom-fleur",
-      "shapeGroup": "large-fleur",
-      "geometryType": "fleur",
+      "logicalRegionId": "region-46",
+      "shapeGroup": null,
+      "geometryType": null,
       "enabled": true,
-      "label": "الزخرفة الزهرية السفلية"
+      "label": "منطقة 46"
     },
     {
       "id": "region-47",
@@ -1255,46 +1255,5 @@
       "label": "منطقة 50"
     }
   ],
-  "shapeGroups": [
-    {
-      "id": "large-fleur",
-      "regions": [
-        "region-5",
-        "region-22",
-        "region-23",
-        "region-39",
-        "region-46"
-      ]
-    },
-    {
-      "id": "outer-stars",
-      "regions": [
-        "region-8",
-        "region-9",
-        "region-33",
-        "region-34",
-        "region-35",
-        "region-36"
-      ]
-    },
-    {
-      "id": "center-triangles",
-      "regions": [
-        "region-10",
-        "region-11",
-        "region-12",
-        "region-19",
-        "region-21",
-        "region-30",
-        "region-31",
-        "region-32"
-      ]
-    },
-    {
-      "id": "center-star",
-      "regions": [
-        "region-20"
-      ]
-    }
-  ]
+  "shapeGroups": []
 }

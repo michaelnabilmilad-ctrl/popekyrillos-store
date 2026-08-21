@@ -1,79 +1,95 @@
 {
   "modelId": "yota-02",
-  "modelVersion": "yota-02-v7",
-  "groups": {
+  "modelVersion": "yota-02-v13",
+  "logicalShapes": {
+    "top-right-cap": ["region-1"],
+    "top-left-cap": ["region-2"],
+    "top-right-leaf": ["region-3"],
+    "top-left-leaf": ["region-4"],
+    "top-fleur": ["region-5"],
+    "top-fleur-right-slit": ["region-6"],
+    "top-fleur-left-slit": ["region-7"],
+    "upper-right-star": ["region-8"],
+    "upper-left-star": ["region-9"],
+    "center-petal-north": ["region-10"],
+    "center-petal-northeast": ["region-11"],
+    "center-petal-northwest": ["region-12"],
+    "right-upper-outer-curl": ["region-13"],
+    "left-upper-outer-curl": ["region-14"],
+    "right-inner-upper-curl": ["region-15"],
+    "left-inner-upper-curl": ["region-16"],
+    "right-upper-tip": ["region-17"],
+    "left-upper-tip": ["region-18"],
+    "center-petal-east": ["region-19"],
     "center-star": ["region-20"],
-    "center-surrounding-petals": ["region-10", "region-11", "region-12", "region-19", "region-21", "region-30", "region-31", "region-32"],
-    "main-arabesque-leaves": ["region-5", "region-22", "region-23", "region-39"],
-    "corner-star-motifs": ["region-8", "region-9", "region-33", "region-34", "region-35", "region-36"],
-    "outer-curved-details": ["region-2", "region-3", "region-4", "region-6", "region-7", "region-13", "region-14", "region-15", "region-16", "region-17", "region-18", "region-24", "region-25", "region-26", "region-27", "region-28", "region-37", "region-38", "region-40", "region-41"],
-    "bottom-tail-side-details": ["region-42", "region-43", "region-44", "region-45", "region-47", "region-48", "region-49", "region-50"],
-    "bottom-tail-center-motif": ["region-46"]
+    "center-petal-west": ["region-21"],
+    "right-fleur": ["region-22"],
+    "left-fleur": ["region-23"],
+    "right-inner-lower-curl": ["region-24"],
+    "left-inner-lower-curl": ["region-25"],
+    "left-lower-tip": ["region-26"],
+    "right-lower-tip": ["region-27"],
+    "right-lower-outer-curl": ["region-28"],
+    "left-lower-outer-curl": ["region-29"],
+    "center-petal-southwest": ["region-30"],
+    "center-petal-southeast": ["region-31"],
+    "center-petal-south": ["region-32"],
+    "lower-left-star": ["region-33", "region-38"],
+    "lower-right-star": ["region-34", "region-35"],
+    "lower-fleur-left-slit": ["region-36"],
+    "lower-fleur-right-slit": ["region-37"],
+    "lower-fleur": ["region-39"],
+    "lower-fleur-right-curl": ["region-40"],
+    "lower-fleur-left-curl": ["region-41"],
+    "tail-upper-left-curl": ["region-42"],
+    "tail-upper-right-curl": ["region-43"],
+    "tail-left-slit": ["region-44"],
+    "tail-right-slit": ["region-45"],
+    "tail-center-fleur": ["region-46"],
+    "tail-left-curl": ["region-47"],
+    "tail-right-curl": ["region-48"],
+    "tail-bottom-left-curl": ["region-49"],
+    "tail-bottom-right-curl": ["region-50"]
   },
-  "regions": {
-    "region-1": {
-      "enabled": false,
-      "label": "فتحة التعليق - غير قابلة للتلوين"
-    },
-    "region-5": {
-      "logicalRegionId": "top-fleur",
-      "geometryType": "fleur",
-      "label": "الزخرفة الرئيسية العلوية"
-    },
-    "region-8": {
-      "logicalRegionId": "upper-left-star",
-      "geometryType": "star",
-      "label": "الزخرفة النجمية العلوية اليسرى"
-    },
-    "region-9": {
-      "logicalRegionId": "upper-right-star",
-      "geometryType": "star",
-      "label": "الزخرفة النجمية العلوية اليمنى"
-    },
-    "region-20": {
-      "logicalRegionId": "center-star",
-      "geometryType": "star",
-      "label": "النجمة الوسطى"
-    },
-    "region-22": {
-      "logicalRegionId": "right-fleur",
-      "geometryType": "fleur",
-      "label": "الزخرفة الرئيسية اليمنى"
-    },
-    "region-23": {
-      "logicalRegionId": "left-fleur",
-      "geometryType": "fleur",
-      "label": "الزخرفة الرئيسية اليسرى"
-    },
-    "region-33": {
-      "logicalRegionId": "lower-left-star",
-      "geometryType": "star",
-      "label": "الزخرفة النجمية السفلية اليسرى"
-    },
-    "region-34": {
-      "logicalRegionId": "lower-right-star",
-      "geometryType": "star",
-      "label": "الزخرفة النجمية السفلية اليمنى"
-    },
-    "region-35": {
-      "logicalRegionId": "lower-left-star",
-      "geometryType": "star",
-      "label": "الزخرفة النجمية السفلية اليسرى"
-    },
-    "region-36": {
-      "logicalRegionId": "lower-right-star",
-      "geometryType": "star",
-      "label": "الزخرفة النجمية السفلية اليمنى"
-    },
-    "region-39": {
-      "logicalRegionId": "middle-lower-fleur",
-      "geometryType": "fleur",
-      "label": "الزخرفة الرئيسية السفلية"
-    },
-    "region-46": {
-      "logicalRegionId": "bottom-tail-center-motif",
-      "geometryType": "fleur",
-      "label": "زخرفة منتصف الذيل السفلي"
-    }
-  }
+  "similarShapeGroups": {
+    "top-caps": ["top-left-cap", "top-right-cap"],
+    "top-side-leaves": ["top-left-leaf", "top-right-leaf"],
+    "top-fleur-side-slits": ["top-fleur-left-slit", "top-fleur-right-slit"],
+    "corner-stars": ["upper-left-star", "upper-right-star", "lower-left-star", "lower-right-star"],
+    "center-petals": ["center-petal-north", "center-petal-northeast", "center-petal-east", "center-petal-southeast", "center-petal-south", "center-petal-southwest", "center-petal-west", "center-petal-northwest"],
+    "main-fleurs": ["top-fleur", "right-fleur", "lower-fleur", "left-fleur"],
+    "upper-outer-curls": ["left-upper-outer-curl", "right-upper-outer-curl"],
+    "inner-upper-curls": ["left-inner-upper-curl", "right-inner-upper-curl"],
+    "upper-tips": ["left-upper-tip", "right-upper-tip"],
+    "inner-lower-curls": ["left-inner-lower-curl", "right-inner-lower-curl"],
+    "lower-tips": ["left-lower-tip", "right-lower-tip"],
+    "lower-outer-curls": ["left-lower-outer-curl", "right-lower-outer-curl"],
+    "lower-fleur-side-slits": ["lower-fleur-left-slit", "lower-fleur-right-slit"],
+    "lower-fleur-curls": ["lower-fleur-left-curl", "lower-fleur-right-curl"],
+    "tail-upper-curls": ["tail-upper-left-curl", "tail-upper-right-curl"],
+    "tail-side-slits": ["tail-left-slit", "tail-right-slit"],
+    "tail-middle-curls": ["tail-left-curl", "tail-right-curl"],
+    "tail-bottom-curls": ["tail-bottom-left-curl", "tail-bottom-right-curl"]
+  },
+  "groups": {
+    "top-caps": ["region-2", "region-1"],
+    "top-side-leaves": ["region-4", "region-3"],
+    "top-fleur-side-slits": ["region-7", "region-6"],
+    "corner-stars": ["region-9", "region-8", "region-33", "region-38", "region-34", "region-35"],
+    "center-petals": ["region-10", "region-11", "region-19", "region-31", "region-32", "region-30", "region-21", "region-12"],
+    "main-fleurs": ["region-5", "region-22", "region-39", "region-23"],
+    "upper-outer-curls": ["region-14", "region-13"],
+    "inner-upper-curls": ["region-16", "region-15"],
+    "upper-tips": ["region-18", "region-17"],
+    "inner-lower-curls": ["region-25", "region-24"],
+    "lower-tips": ["region-26", "region-27"],
+    "lower-outer-curls": ["region-29", "region-28"],
+    "lower-fleur-side-slits": ["region-36", "region-37"],
+    "lower-fleur-curls": ["region-41", "region-40"],
+    "tail-upper-curls": ["region-42", "region-43"],
+    "tail-side-slits": ["region-44", "region-45"],
+    "tail-middle-curls": ["region-47", "region-48"],
+    "tail-bottom-curls": ["region-49", "region-50"]
+  },
+  "regions": {}
 }

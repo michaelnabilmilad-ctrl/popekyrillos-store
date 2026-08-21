@@ -5,7 +5,7 @@ const relatedRoot = document.querySelector("[data-related-products]");
 const cartCount = document.querySelector("[data-cart-count]");
 const cartKey = "pope-kyrillos-cart:guest";
 const legacyColoringStorageKey = `pope-kyrillos-coloring:${product.id || "product"}`;
-let coloringStorageKey = `yota-coloring-design-${product.coloringModelId || "yota-01"}`;
+let coloringStorageKey = `yota-coloring-design-${product.coloringModelId || "unconfigured"}:${product.coloringModelVersion || "unversioned"}:${product.id || "product"}`;
 const yotaColors = Array.isArray(window.YOTA_COLORS) ? window.YOTA_COLORS : [];
 const yotaColorById = new Map(yotaColors.map((color) => [color.id, color]));
 const yotaColorByHex = new Map(yotaColors.map((color) => [color.hex.toUpperCase(), color]));
@@ -13,6 +13,19 @@ let currentColoringDesign = null;
 let currentMedalPreviewImage = "";
 let refreshColoringWoodPreview = null;
 let medalPreviewRequest = 0;
+
+function createCustomizationId() {
+  return globalThis.crypto?.randomUUID?.() || `custom-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
+}
+
+function parseObject(value, fallback = {}) {
+  if (value && typeof value === "object" && !Array.isArray(value)) return value;
+  if (typeof value !== "string") return fallback;
+  try {
+    const parsed = JSON.parse(value);
+    return parsed && typeof parsed === "object" && !Array.isArray(parsed) ? parsed : fallback;
+  } catch { return fallback; }
+}
 
 const text = (value) => typeof value === "object" && value ? value.ar || value.en || Object.values(value)[0] || "" : String(value || "");
 const money = (value) => Number.isFinite(Number(value)) ? `${new Intl.NumberFormat("ar-EG").format(Number(value))} ج.م` : "";
@@ -137,8 +150,21 @@ async function updateMedalPhotoPreview() {
   }
 }
 
-function imageMarkup(source, index, className="") {
-  return `<img class="${className}" src="${escapeHtml(assetUrl(source))}" alt="${index === 0 ? escapeHtml(text(product.name)) : ""}" width="800" height="800" ${index ? 'loading="lazy"' : 'fetchpriority="high"'} decoding="async">`;
+function productThumbnailUrl(width = 640) {
+  const thumbnail = String(product.thumbnail || "");
+  if (!thumbnail.includes("/assets/thumbnails/320/")) return "";
+  return assetUrl(thumbnail.replace("/assets/thumbnails/320/", `/assets/thumbnails/${width}/`));
+}
+
+function imageMarkup(source, index, className = "", purpose = "thumbnail") {
+  const isPrimaryProductImage = String(source || "") === String(images[0] || "");
+  const responsive = isPrimaryProductImage && productThumbnailUrl(640)
+    ? [320, 480, 640].map((width) => `${escapeHtml(productThumbnailUrl(width))} ${width}w`).join(", ")
+    : "";
+  const displaySource = responsive ? productThumbnailUrl(purpose === "main" ? 640 : 320) : assetUrl(source);
+  const loading = purpose === "main" ? 'fetchpriority="high"' : 'loading="lazy"';
+  const sizes = responsive ? ` srcset="${responsive}" sizes="${purpose === "main" ? "(max-width: 760px) calc(100vw - 32px), 540px" : "72px"}"` : "";
+  return `<img class="${className}" src="${escapeHtml(displaySource)}"${sizes} alt="${index === 0 ? escapeHtml(text(product.name)) : ""}" width="800" height="800" ${loading} decoding="async">`;
 }
 
 function applyRouteZoom() {
@@ -347,13 +373,18 @@ async function loadImage(source, kind = "coloring image") {
 
 function readSavedColoring() {
   try {
-    const saved = localStorage.getItem(coloringStorageKey) || localStorage.getItem(legacyColoringStorageKey) || "{}";
-    const parsed = JSON.parse(saved);
-    return Object.fromEntries(Object.entries(parsed).flatMap(([regionId, value]) => {
+    // A region ID only has meaning inside one exact mask version. Never apply
+    // saved colors from an older mask to a rebuilt model.
+    const saved = localStorage.getItem(coloringStorageKey) || "{}";
+    const parsed = parseObject(saved);
+    const selectedColors = Array.isArray(parsed.selectedColors)
+      ? Object.fromEntries((parsed.coloredParts || parsed.selectedColors).flatMap((part) => part?.regionId && part?.colorHex ? [[part.regionId, part.colorHex]] : []))
+      : parseObject(parsed.selectedColors, parsed);
+    return Object.fromEntries(Object.entries(selectedColors).flatMap(([regionId, value]) => {
       if (!coloringRegions.some((region) => (region.id || region.regionId) === regionId)) return [];
       const source = typeof value === "string"
         ? yotaColorByHex.get(value.toUpperCase())
-        : yotaColorById.get(value?.colorId) || yotaColorByHex.get(String(value?.colorHex || "").toUpperCase());
+        : yotaColorById.get(value?.colorId) || yotaColorByHex.get(String(value?.colorHex || value || "").toUpperCase());
       if (!source) return [];
       return [[regionId, {
         regionId,
@@ -409,6 +440,33 @@ function initializeColoringGame(panel) {
     "beforebegin",
     '<button type="button" data-coloring-undo disabled>تراجع</button><button type="button" data-coloring-redo disabled>إعادة</button>'
   );
+  const actualProductImage = Array.isArray(product.images) && product.images.length
+    ? product.images[0]
+    : (product.image || "");
+  console.log("[MODEL 2 PRODUCT IMAGE]", {
+    id: product.id || "",
+    slug: product.slug || "",
+    title: text(product.name),
+    image: actualProductImage
+  });
+  console.log("[YOTA COLORING IMAGE]", {
+    productId: product.id || "",
+    productSlug: product.slug || "",
+    model: product.coloringModelId || "",
+    configKey: product.id || "",
+    baseImage: product.coloringBaseImageUrl || "",
+    maskImage: product.coloringMaskUrl || ""
+  });
+  console.log("[YOTA DEBUG]", {
+    productTitle: text(product.name),
+    productId: product.id || "",
+    productSlug: product.slug || "",
+    detectedModel: product.coloringModelId || "",
+    configKey: product.id || "",
+    configModel: product.coloringModelId || "",
+    baseImage: product.coloringBaseImageUrl || "",
+    maskImage: product.coloringMaskUrl || ""
+  });
   Promise.all([
     loadImage(product.coloringBaseImageUrl, "coloring base image"),
     loadImage(product.coloringMaskUrl, "coloring region mask"),
@@ -420,8 +478,14 @@ function initializeColoringGame(panel) {
       ? fetchColoringFile(product.coloringRegionOverridesUrl, "coloring overrides JSON", "application/json").then((response) => response.json())
       : Promise.resolve({ groups: {}, regions: {} })
   ]).then(([baseImage, maskImage, outlineImage, regionData, regionOverrideData]) => {
-    const activeModelId = regionData.modelId || product.coloringModelId || "yota-01";
-    coloringStorageKey = `yota-coloring-design-${activeModelId}`;
+    const configuredModelId = String(product.coloringModelId || "").trim();
+    const regionModelId = String(regionData.modelId || "").trim();
+    if (configuredModelId && regionModelId && configuredModelId !== regionModelId) {
+      throw new Error(`Coloring model mismatch: product=${configuredModelId}, regions=${regionModelId}`);
+    }
+    const activeModelId = regionModelId || configuredModelId;
+    const activeModelVersion = String(regionData.modelVersion || product.coloringModelVersion || "unversioned");
+    coloringStorageKey = `yota-coloring-design-${activeModelId}:${activeModelVersion}:${product.id || "product"}`;
     localStorage.setItem(`yota-coloring-product-model:${product.id}`, activeModelId);
     const overrideRegions = regionOverrideData?.regions && typeof regionOverrideData.regions === "object"
       ? regionOverrideData.regions
@@ -430,14 +494,60 @@ function initializeColoringGame(panel) {
     Object.entries(regionOverrideData?.groups || {}).forEach(([groupName, regionIds]) => {
       (Array.isArray(regionIds) ? regionIds : []).forEach((regionId) => overrideGroupByRegion.set(regionId, groupName));
     });
+    const logicalShapeByRegion = new Map();
+    Object.entries(regionOverrideData?.logicalShapes || {}).forEach(([logicalShapeId, regionIds]) => {
+      (Array.isArray(regionIds) ? regionIds : []).forEach((regionId) => logicalShapeByRegion.set(regionId, logicalShapeId));
+    });
+    const similarGroupByLogicalShape = new Map();
+    Object.entries(regionOverrideData?.similarShapeGroups || {}).forEach(([groupName, logicalShapeIds]) => {
+      (Array.isArray(logicalShapeIds) ? logicalShapeIds : []).forEach((logicalShapeId) => {
+        similarGroupByLogicalShape.set(logicalShapeId, groupName);
+      });
+    });
     coloringRegions = (Array.isArray(regionData.regions) ? regionData.regions : []).map((region) => {
       const regionId = region.id || region.regionId;
+      const logicalShapeId = logicalShapeByRegion.get(regionId)
+        || overrideRegions[regionId]?.logicalShapeId
+        || overrideRegions[regionId]?.logicalRegionId
+        || region.logicalShapeId
+        || region.logicalRegionId
+        || regionId;
+      const similarShapeGroup = similarGroupByLogicalShape.get(logicalShapeId)
+        || overrideRegions[regionId]?.similarShapeGroup
+        || overrideRegions[regionId]?.shapeGroup
+        || overrideGroupByRegion.get(regionId)
+        || region.similarShapeGroup
+        || region.shapeGroup
+        || null;
       return {
         ...region,
         ...(overrideRegions[regionId] || {}),
-        ...(overrideGroupByRegion.has(regionId) ? { shapeGroup: overrideGroupByRegion.get(regionId) } : {})
+        logicalShapeId,
+        logicalRegionId: logicalShapeId,
+        similarShapeGroup,
+        shapeGroup: similarShapeGroup
       };
     });
+    const logicalShapeCount = Object.keys(regionOverrideData?.logicalShapes || {}).length;
+    const similarShapeGroupCount = Object.keys(regionOverrideData?.similarShapeGroups || {}).length;
+    const shouldShowSimilarShapesCheckbox = Boolean(hasColoringGame);
+    console.info("[coloring-game] grouping configuration", {
+      model: activeModelId,
+      modelVersion: activeModelVersion,
+      configKey: coloringStorageKey,
+      logicalShapesLoaded: logicalShapeCount,
+      similarShapeGroupsLoaded: similarShapeGroupCount > 0,
+      similarShapeGroupsCount: similarShapeGroupCount,
+      shouldShowSimilarShapesCheckbox
+    });
+    if (activeModelId === "yota-02" && (!logicalShapeCount || !similarShapeGroupCount)) {
+      console.error("YOTA MODEL 2 EXPECTED SIMILAR GROUPS BUT NONE WERE LOADED", {
+        modelVersion: activeModelVersion,
+        logicalShapeCount,
+        similarShapeGroupCount,
+        regionOverridesUrl: product.coloringRegionOverridesUrl || "missing"
+      });
+    }
     coloringShapeGroups = regionData.shapeGroups && typeof regionData.shapeGroups === "object" ? regionData.shapeGroups : {};
     const allRegionByMaskKey = new Map(coloringRegions.map((region) => [region.maskColor.join(","), region.id || region.regionId]));
     regionByMaskKey = new Map(coloringRegions
@@ -492,6 +602,10 @@ function initializeColoringGame(panel) {
     const regionPixelIndexes = new Map(coloringRegions.map((region) => [region.id || region.regionId, []]));
     const regionMetadata = new Map(coloringRegions.map((region) => [region.id || region.regionId, region]));
     const regionColors = readSavedColoring();
+    let customizationId = (() => {
+      const saved = parseObject(localStorage.getItem(coloringStorageKey) || "{}");
+      return String(saved.customizationId || "");
+    })();
     const debugColoring = new URLSearchParams(location.search).get("coloringDebug") === "1";
     const groupEditorRequested = new URLSearchParams(location.search).get("coloringGroupEditor") === "1";
     const groupEditorMode = groupEditorRequested && ["localhost", "127.0.0.1", "::1"].includes(location.hostname);
@@ -508,6 +622,8 @@ function initializeColoringGame(panel) {
       const normalized = {
         modelId: activeModelId,
         modelVersion: regionData.modelVersion || product.coloringModelVersion || "",
+        logicalShapes: Object.fromEntries(Object.entries(value?.logicalShapes || {}).map(([name, ids]) => [name, [...new Set(Array.isArray(ids) ? ids : [])]])),
+        similarShapeGroups: Object.fromEntries(Object.entries(value?.similarShapeGroups || {}).map(([name, logicalShapeIds]) => [name, [...new Set(Array.isArray(logicalShapeIds) ? logicalShapeIds : [])]])),
         groups,
         regions: Object.fromEntries(Object.entries(value?.regions || {}).map(([id, metadata]) => [id, { ...metadata }]))
       };
@@ -813,10 +929,14 @@ function initializeColoringGame(panel) {
           colorHex: paint.hex
         };
       });
+      if (coloredParts.length && !customizationId) customizationId = createCustomizationId();
+      const selectedColors = Object.fromEntries(coloredParts.map((part) => [part.regionId, part.colorHex]));
       currentColoringDesign = coloredParts.length ? {
-        modelId: regionData.modelId || product.coloringModelId || "yota-01",
+        customizationId,
+        modelId: regionData.modelId || product.coloringModelId,
         modelName: regionData.modelName || text(product.name),
-        selectedColors: [...new Map(coloredParts.map((part) => [part.colorId, {
+        selectedColors,
+        selectedColorDetails: [...new Map(coloredParts.map((part) => [part.colorId, {
           colorId: part.colorId,
           colorName: part.colorName,
           colorHex: part.colorHex
@@ -826,7 +946,7 @@ function initializeColoringGame(panel) {
     };
     const persistColoringDesign = () => {
       syncCurrentColoringDesign();
-      localStorage.setItem(coloringStorageKey, JSON.stringify(regionColors));
+      localStorage.setItem(coloringStorageKey, JSON.stringify(currentColoringDesign || { customizationId, selectedColors: {} }));
       requestAnimationFrame(updateFinalMedalPreview);
     };
     const updateHistoryButtons = () => {
@@ -842,18 +962,17 @@ function initializeColoringGame(panel) {
     };
 
     const relatedRegions = (regionId) => {
-      const logicalRegionId = regionMetadata.get(regionId)?.logicalRegionId;
-      if (logicalRegionId && logicalRegionId !== regionId) {
-        return coloringRegions
-          .filter((region) => region.logicalRegionId === logicalRegionId)
-          .map((region) => region.id || region.regionId);
-      }
-      if (!panel.querySelector("[data-coloring-symmetry]")?.checked) return [regionId];
-      const shapeGroup = regionMetadata.get(regionId)?.shapeGroup;
-      if (!shapeGroup) return [regionId];
-      return coloringRegions
-        .filter((region) => region.shapeGroup === shapeGroup)
+      const metadata = regionMetadata.get(regionId);
+      const logicalShapeId = metadata?.logicalShapeId || metadata?.logicalRegionId || regionId;
+      const logicalMembers = coloringRegions
+        .filter((region) => (region.logicalShapeId || region.logicalRegionId || region.id || region.regionId) === logicalShapeId)
         .map((region) => region.id || region.regionId);
+      if (!panel.querySelector("[data-coloring-symmetry]")?.checked) return [...new Set(logicalMembers)];
+      const similarShapeGroup = metadata?.similarShapeGroup || metadata?.shapeGroup;
+      if (!similarShapeGroup) return [...new Set(logicalMembers)];
+      return [...new Set(coloringRegions
+        .filter((region) => (region.similarShapeGroup || region.shapeGroup) === similarShapeGroup)
+        .map((region) => region.id || region.regionId))];
     };
 
     const findNearestRegion = (x, y, radius = 4) => {
@@ -1204,6 +1323,25 @@ function initializeColoringGame(panel) {
 
     canvas.addEventListener("click", (event) => {
       const regionId = regionAtPointer(event);
+      if (debugColoring && activeModelId === "yota-02") {
+        const rect = canvas.getBoundingClientRect();
+        const x = Math.floor((event.clientX - rect.left) * canvas.width / rect.width);
+        const y = Math.floor((event.clientY - rect.top) * canvas.height / rect.height);
+        const pixel = (y * canvas.width + x) * 4;
+        const directRegionId = x >= 0 && y >= 0 && x < canvas.width && y < canvas.height && maskPixels[pixel + 3] !== 0
+          ? allRegionByMaskKey.get(`${maskPixels[pixel]},${maskPixels[pixel + 1]},${maskPixels[pixel + 2]}`) || ""
+          : "";
+        const metadata = regionMetadata.get(regionId);
+        console.log("[coloring-game:model-2-debug] Clicked pixel", {
+          x,
+          y,
+          regionId: directRegionId || 0,
+          resolvedRegionId: regionId || 0,
+          isColorable: Boolean(regionId && metadata?.enabled !== false),
+          symmetryGroup: metadata?.shapeGroup || null,
+          unsupported: Boolean(directRegionId && !regionMetadata.has(directRegionId))
+        });
+      }
       if (!regionId) return;
       if (groupEditorMode) {
         if (editorPanMode || editorDidPan) {
@@ -1277,6 +1415,7 @@ function initializeColoringGame(panel) {
       redoStack.length = 0;
       Object.keys(regionColors).forEach((regionId) => delete regionColors[regionId]);
       localStorage.removeItem(coloringStorageKey);
+      customizationId = "";
       currentColoringDesign = null;
       renderCanvas();
       updateHistoryButtons();
@@ -1353,7 +1492,7 @@ function render() {
     const values = option.values || [];
     return `<label>${escapeHtml(name)}<select data-option="${escapeHtml(name)}">${values.map((value)=>`<option value="${escapeHtml(text(value))}" ${selected?.options?.[name]===text(value)?"selected":""}>${escapeHtml(text(value))}</option>`).join("")}</select></label>`;
   }).join("");
-  root.innerHTML = `<div class="product-route-grid"><div class="product-route-gallery"><button class="product-route-main-image" type="button" data-main data-route-zoom aria-label="تكبير صورة ${escapeHtml(text(product.name))}">${images[0]?imageMarkup(images[0],0):""}</button>${images.length>1?`<div class="product-route-thumbs">${images.map((image,index)=>`<button class="product-route-thumb" type="button" data-image="${escapeHtml(image)}" aria-pressed="${index===0}">${imageMarkup(image,index)}</button>`).join("")}</div>`:""}</div><article class="product-route-copy"><p class="product-route-category">${escapeHtml(text(product.label||product.badge||product.subcategory||"منتج"))}</p><h1>${escapeHtml(text(product.name))}</h1><p class="product-route-description">${escapeHtml(text(product.description))}</p>${coloringMarkup()}<div class="product-route-price" data-price>${isMedalProduct ? "اختر نوع الخشب لعرض السعر" : money(selected?.price ?? product.price)}</div><div class="product-route-options">${optionControls}</div><div class="product-route-actions"><input class="product-route-quantity" type="number" min="1" value="1" data-quantity aria-label="الكمية"><button class="button primary" type="button" data-add ${isMedalProduct || !available(selected)?"disabled":""}>${isMedalProduct ? "اختر نوع الخشب أولًا" : available(selected)?"أضف إلى السلة":"غير متاح حاليا"}</button><a class="button secondary" href="/cart">عرض السلة</a></div><p class="product-route-message" data-message></p></article></div>`;
+  root.innerHTML = `<div class="product-route-grid"><div class="product-route-gallery"><button class="product-route-main-image" type="button" data-main data-route-zoom aria-label="تكبير صورة ${escapeHtml(text(product.name))}">${images[0]?imageMarkup(images[0],0,"","main"):""}</button>${images.length>1?`<div class="product-route-thumbs">${images.map((image,index)=>`<button class="product-route-thumb" type="button" data-image="${escapeHtml(image)}" aria-pressed="${index===0}">${imageMarkup(image,index,"","thumbnail")}</button>`).join("")}</div>`:""}</div><article class="product-route-copy"><p class="product-route-category">${escapeHtml(text(product.label||product.badge||product.subcategory||"منتج"))}</p><h1>${escapeHtml(text(product.name))}</h1><p class="product-route-description">${escapeHtml(text(product.description))}</p>${coloringMarkup()}<div class="product-route-price" data-price>${isMedalProduct ? "اختر نوع الخشب لعرض السعر" : money(selected?.price ?? product.price)}</div><div class="product-route-options">${optionControls}</div><div class="product-route-actions"><input class="product-route-quantity" type="number" min="1" value="1" data-quantity aria-label="الكمية"><button class="button primary" type="button" data-add ${isMedalProduct || !available(selected)?"disabled":""}>${isMedalProduct ? "اختر نوع الخشب أولًا" : available(selected)?"أضف إلى السلة":"غير متاح حاليا"}</button><a class="button secondary" href="/cart">عرض السلة</a></div><p class="product-route-message" data-message></p></article></div>`;
 }
 
 function chooseVariant() {
@@ -1401,7 +1540,9 @@ function addToCart() {
     previewImage: currentMedalPreviewImage || assetUrl(activeImage),
     designId: product.coloringModelId || product.id,
     designName: text(product.name),
-    selectedColors: coloringDesign?.selectedColors || [],
+    customizationId: coloringDesign?.customizationId || createCustomizationId(),
+    customization: { selectedColors: { ...(coloringDesign?.selectedColors || {}) } },
+    selectedColors: { ...(coloringDesign?.selectedColors || {}) },
     finalPrice: Number(selected?.price) || 0
   } : null;
   if(found) {
