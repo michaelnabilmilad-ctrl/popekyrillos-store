@@ -326,6 +326,7 @@ function coloringMarkup() {
         ${colors.map((color,index)=>`<button type="button" data-coloring-color-id="${escapeHtml(color.id)}" data-color-name="${escapeHtml(color.name)}" style="--swatch:${escapeHtml(color.hex)};${color.metallic ? `--swatch-background:linear-gradient(135deg,${escapeHtml(color.highlight)} 0%,${escapeHtml(color.hex)} 52%,${escapeHtml(color.shadow)} 100%);` : ""}" aria-label="${escapeHtml(color.name)}" title="${escapeHtml(color.name)}" aria-pressed="${index===0}"></button>`).join("")}
       </div>
       <label class="product-coloring-grouping-option"><input type="checkbox" data-coloring-symmetry> <span>لوّن الأشكال المتشابهة معًا</span></label>
+      ${product.coloringModelId === "yota-03" ? '<label class="product-coloring-grouping-option"><input type="checkbox" data-coloring-whole-background> <span>لوّن خلفية الميدالية كلها معًا</span></label>' : ""}
       <div class="product-coloring-tools">
         <button type="button" data-coloring-eraser aria-pressed="false">الممحاة</button>
         <button type="button" data-coloring-reset>ابدأ من جديد</button>
@@ -504,6 +505,12 @@ function initializeColoringGame(panel) {
         similarGroupByLogicalShape.set(logicalShapeId, groupName);
       });
     });
+    const backgroundGroupByLogicalShape = new Map();
+    Object.entries(regionOverrideData?.backgroundGroups || {}).forEach(([groupName, logicalShapeIds]) => {
+      (Array.isArray(logicalShapeIds) ? logicalShapeIds : []).forEach((logicalShapeId) => {
+        backgroundGroupByLogicalShape.set(logicalShapeId, groupName);
+      });
+    });
     coloringRegions = (Array.isArray(regionData.regions) ? regionData.regions : []).map((region) => {
       const regionId = region.id || region.regionId;
       const logicalShapeId = logicalShapeByRegion.get(regionId)
@@ -519,12 +526,17 @@ function initializeColoringGame(panel) {
         || region.similarShapeGroup
         || region.shapeGroup
         || null;
+      const backgroundGroup = backgroundGroupByLogicalShape.get(logicalShapeId)
+        || overrideRegions[regionId]?.backgroundGroup
+        || region.backgroundGroup
+        || null;
       return {
         ...region,
         ...(overrideRegions[regionId] || {}),
         logicalShapeId,
         logicalRegionId: logicalShapeId,
         similarShapeGroup,
+        backgroundGroup,
         shapeGroup: similarShapeGroup
       };
     });
@@ -973,6 +985,12 @@ function initializeColoringGame(panel) {
       const logicalMembers = coloringRegions
         .filter((region) => (region.logicalShapeId || region.logicalRegionId || region.id || region.regionId) === logicalShapeId)
         .map((region) => region.id || region.regionId);
+      const backgroundGroup = metadata?.backgroundGroup;
+      if (backgroundGroup && panel.querySelector("[data-coloring-whole-background]")?.checked) {
+        return [...new Set(coloringRegions
+          .filter((region) => region.backgroundGroup === backgroundGroup)
+          .map((region) => region.id || region.regionId))];
+      }
       if (!panel.querySelector("[data-coloring-symmetry]")?.checked) return [...new Set(logicalMembers)];
       const similarShapeGroup = metadata?.similarShapeGroup || metadata?.shapeGroup;
       if (!similarShapeGroup) return [...new Set(logicalMembers)];

@@ -29,9 +29,14 @@ export const COLORING_DESIGNS = Object.freeze([
     name: "ميدالية يوتا 3",
     productId: "custom-1782980654479-copy-1782982056347-copy-1782986984554",
     productImagePath: "/assets/optimized/products/gallery/product-1-3-20260702101011-89b158.webp",
-    enabled: false,
-    status: "missing-region-assets",
-    missingAssets: Object.freeze(["base.png", "outline.png", "regions.png", "regions.json"])
+    basePath: "/coloring/yota-03/base.png",
+    outlinePath: "/coloring/yota-03/outline.png",
+    regionsPath: "/coloring/yota-03/regions.png",
+    regionsDataPath: "/coloring/yota-03/regions.json",
+    regionOverridesPath: "/coloring/yota-03/region-overrides.json",
+    enabled: true,
+    status: "ready",
+    modelVersion: "yota-03-v2"
   }),
   Object.freeze({
     id: "yota-04",
