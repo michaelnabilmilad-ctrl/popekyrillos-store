@@ -1,5 +1,5 @@
 (function () {
-  const categories = [
+  const defaultCategories = [
       {
           "id": "altar-vessels",
           "name": "المذبح والأواني المقدسة",
@@ -59,7 +59,7 @@
                   "subcategoryImage": "assets/optimized/products/communion-set.webp"
               },
               {
-                  "id": "altar-crosses",
+                  "id": "altar-vessel-crosses",
                   "name": "صلبان المذبح",
                   "subcategoryImage": "assets/optimized/products/communion-set.webp"
               },
@@ -400,7 +400,7 @@
               },
               {
                   "id": "processional-crosses",
-                  "name": "صلبان زفة",
+                  "name": "صلبان مواكب",
                   "subcategoryImage": "assets/optimized/products/processional-cross.webp"
               },
               {
@@ -887,6 +887,26 @@
           ]
       }
   ];
+  const TAXONOMY_STORAGE_KEY = "pope-kyrillos-taxonomy";
+  const TAXONOMY_VERSION_STORAGE_KEY = "pope-kyrillos-taxonomy-version";
+  const CURRENT_TAXONOMY_VERSION = 1787307640802;
+  const categories = (() => {
+    try {
+      const storedVersion = Number(localStorage.getItem(TAXONOMY_VERSION_STORAGE_KEY) || 0);
+      if (!Number.isFinite(storedVersion) || storedVersion < CURRENT_TAXONOMY_VERSION) {
+        localStorage.setItem(TAXONOMY_STORAGE_KEY, JSON.stringify(defaultCategories));
+        localStorage.setItem(TAXONOMY_VERSION_STORAGE_KEY, String(CURRENT_TAXONOMY_VERSION));
+        return defaultCategories;
+      }
+      const stored = JSON.parse(localStorage.getItem(TAXONOMY_STORAGE_KEY) || "null");
+      if (Array.isArray(stored)) return stored;
+      localStorage.setItem(TAXONOMY_STORAGE_KEY, JSON.stringify(defaultCategories));
+      localStorage.setItem(TAXONOMY_VERSION_STORAGE_KEY, String(CURRENT_TAXONOMY_VERSION));
+      return defaultCategories;
+    } catch {
+      return defaultCategories;
+    }
+  })();
 
   const categoryById = new Map(categories.map((category) => [category.id, category]));
   const categoryByName = new Map(categories.map((category) => [category.name, category]));
@@ -956,8 +976,16 @@
     return category?.subcategories || [];
   }
 
+  function categoryImage(category) {
+    const value = category?.subcategoryImage || category?.imageUrl || category?.imageURL || category?.image_url || category?.image || category?.thumbnail || category?.thumbnailUrl || category?.cover || category?.categoryImage || "";
+    if (typeof value !== "string" || !value.trim() || /^(?:javascript|data:text|blob):/i.test(value.trim())) return "";
+    return value.trim().replace(/^\/public\//, "/");
+  }
+
   window.POPE_KYRILLOS_TAXONOMY = {
     categories,
+    defaultCategories,
+    CURRENT_TAXONOMY_VERSION,
     customerCategories,
     categoryById,
     categoryByName,
@@ -967,6 +995,7 @@
     categoryNameFromId,
     subcategoryIdFromName,
     subcategoryNameFromId,
-    getSubcategories
+    getSubcategories,
+    categoryImage
   };
 })();
