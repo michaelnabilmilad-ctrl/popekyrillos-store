@@ -396,7 +396,7 @@
               {
                   "id": "altar-crosses",
                   "name": "صلبان مذبح",
-                  "subcategoryImage": "assets/optimized/products/processional-cross.webp"
+                  "subcategoryImage": "assets/optimized/products/gallery/taxonomy-altar-crosses-image-20260705123001-516aaf.webp"
               },
               {
                   "id": "processional-crosses",
@@ -421,7 +421,7 @@
               {
                   "id": "wooden-crosses",
                   "name": "صلبان خشب",
-                  "subcategoryImage": "assets/optimized/products/processional-cross.webp"
+                  "subcategoryImage": "assets/products/gallery/iota-plain-cross-20cm-model-1.webp"
               },
               {
                   "id": "brass-crosses",
