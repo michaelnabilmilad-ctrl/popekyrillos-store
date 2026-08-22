@@ -1,7 +1,7 @@
 {
   "modelId": "yota-03",
   "modelName": "ميدالية يوتا 3",
-  "modelVersion": "yota-03-v3",
+  "modelVersion": "yota-03-v4",
   "paintMode": "replace-source-color",
   "totalRegions": 13,
   "regions": [
@@ -13,23 +13,23 @@
         0,
         73
       ],
-      "pixelCount": 8099,
-      "centerX": 687,
-      "centerY": 829,
+      "pixelCount": 3603,
+      "centerX": 684,
+      "centerY": 790,
       "bounds": {
-        "x": 616,
-        "y": 760,
-        "width": 142,
-        "height": 138
+        "x": 657,
+        "y": 740,
+        "width": 98,
+        "height": 127
       },
-      "sampleX": 687,
-      "sampleY": 829,
+      "sampleX": 684,
+      "sampleY": 790,
       "regionKind": "decorative",
       "logicalRegionId": "region-1",
       "shapeGroup": "outer-crosses",
-      "geometryType": "red",
+      "geometryType": "outer-crosses",
       "enabled": true,
-      "label": "منطقة زخرفية 1"
+      "label": "outer-top"
     },
     {
       "id": "region-2",
@@ -39,23 +39,23 @@
         0,
         146
       ],
-      "pixelCount": 1469,
-      "centerX": 786,
-      "centerY": 917,
+      "pixelCount": 693,
+      "centerX": 578,
+      "centerY": 890,
       "bounds": {
-        "x": 759,
-        "y": 892,
-        "width": 53,
-        "height": 52
+        "x": 566,
+        "y": 867,
+        "width": 35,
+        "height": 48
       },
-      "sampleX": 786,
-      "sampleY": 917,
+      "sampleX": 578,
+      "sampleY": 890,
       "regionKind": "decorative",
       "logicalRegionId": "region-2",
       "shapeGroup": "small-cyan-crosses",
-      "geometryType": "cyan",
+      "geometryType": "small-cyan-crosses",
       "enabled": true,
-      "label": "منطقة زخرفية 2"
+      "label": "small-upper-left"
     },
     {
       "id": "region-3",
@@ -65,23 +65,23 @@
         0,
         219
       ],
-      "pixelCount": 1432,
-      "centerX": 583,
-      "centerY": 920,
+      "pixelCount": 1149,
+      "centerX": 795,
+      "centerY": 890,
       "bounds": {
-        "x": 557,
-        "y": 894,
-        "width": 52,
-        "height": 52
+        "x": 766,
+        "y": 867,
+        "width": 48,
+        "height": 48
       },
-      "sampleX": 583,
-      "sampleY": 920,
+      "sampleX": 795,
+      "sampleY": 890,
       "regionKind": "decorative",
       "logicalRegionId": "region-3",
       "shapeGroup": "small-cyan-crosses",
-      "geometryType": "cyan",
+      "geometryType": "small-cyan-crosses",
       "enabled": true,
-      "label": "منطقة زخرفية 3"
+      "label": "small-upper-right"
     },
     {
       "id": "region-4",
@@ -91,23 +91,23 @@
         0,
         37
       ],
-      "pixelCount": 1551,
-      "centerX": 726,
-      "centerY": 975,
+      "pixelCount": 4123,
+      "centerX": 481,
+      "centerY": 1000,
       "bounds": {
-        "x": 699,
-        "y": 948,
-        "width": 56,
-        "height": 56
+        "x": 450,
+        "y": 925,
+        "width": 101,
+        "height": 138
       },
-      "sampleX": 726,
-      "sampleY": 975,
+      "sampleX": 481,
+      "sampleY": 1000,
       "regionKind": "decorative",
       "logicalRegionId": "region-4",
-      "shapeGroup": "center-white-details",
-      "geometryType": "white",
+      "shapeGroup": "outer-crosses",
+      "geometryType": "outer-crosses",
       "enabled": true,
-      "label": "منطقة زخرفية 4"
+      "label": "outer-left"
     },
     {
       "id": "region-5",
@@ -117,23 +117,23 @@
         0,
         110
       ],
-      "pixelCount": 1590,
-      "centerX": 648,
-      "centerY": 976,
+      "pixelCount": 1098,
+      "centerX": 631,
+      "centerY": 959,
       "bounds": {
-        "x": 620,
-        "y": 948,
-        "width": 57,
-        "height": 56
+        "x": 615,
+        "y": 925,
+        "width": 56,
+        "height": 55
       },
-      "sampleX": 648,
-      "sampleY": 976,
+      "sampleX": 631,
+      "sampleY": 959,
       "regionKind": "decorative",
       "logicalRegionId": "region-5",
       "shapeGroup": "center-white-details",
-      "geometryType": "white",
+      "geometryType": "center-white-details",
       "enabled": true,
-      "label": "منطقة زخرفية 5"
+      "label": "center-upper-left"
     },
     {
       "id": "region-6",
@@ -143,23 +143,23 @@
         0,
         183
       ],
-      "pixelCount": 9151,
-      "centerX": 882,
-      "centerY": 1013,
+      "pixelCount": 1275,
+      "centerX": 738,
+      "centerY": 959,
       "bounds": {
-        "x": 810,
-        "y": 942,
-        "width": 146,
-        "height": 144
+        "x": 698,
+        "y": 925,
+        "width": 56,
+        "height": 55
       },
-      "sampleX": 882,
-      "sampleY": 1013,
+      "sampleX": 738,
+      "sampleY": 959,
       "regionKind": "decorative",
       "logicalRegionId": "region-6",
-      "shapeGroup": "outer-crosses",
-      "geometryType": "red",
+      "shapeGroup": "center-white-details",
+      "geometryType": "center-white-details",
       "enabled": true,
-      "label": "منطقة زخرفية 6"
+      "label": "center-upper-right"
     },
     {
       "id": "region-7",
@@ -169,23 +169,23 @@
         0,
         1
       ],
-      "pixelCount": 8932,
-      "centerX": 688,
-      "centerY": 1018,
+      "pixelCount": 7710,
+      "centerX": 684,
+      "centerY": 1015,
       "bounds": {
-        "x": 579,
-        "y": 910,
-        "width": 217,
-        "height": 220
+        "x": 573,
+        "y": 885,
+        "width": 221,
+        "height": 219
       },
-      "sampleX": 688,
-      "sampleY": 1018,
+      "sampleX": 684,
+      "sampleY": 1015,
       "regionKind": "decorative",
       "logicalRegionId": "region-7",
       "shapeGroup": null,
-      "geometryType": "yellow",
+      "geometryType": "center-cross",
       "enabled": true,
-      "label": "منطقة زخرفية 7"
+      "label": "center-cross"
     },
     {
       "id": "region-8",
@@ -195,23 +195,23 @@
         0,
         74
       ],
-      "pixelCount": 8603,
-      "centerX": 491,
-      "centerY": 1021,
+      "pixelCount": 5785,
+      "centerX": 884,
+      "centerY": 1000,
       "bounds": {
-        "x": 417,
-        "y": 948,
-        "width": 147,
-        "height": 146
+        "x": 815,
+        "y": 925,
+        "width": 142,
+        "height": 138
       },
-      "sampleX": 491,
-      "sampleY": 1021,
+      "sampleX": 884,
+      "sampleY": 1000,
       "regionKind": "decorative",
       "logicalRegionId": "region-8",
       "shapeGroup": "outer-crosses",
-      "geometryType": "red",
+      "geometryType": "outer-crosses",
       "enabled": true,
-      "label": "منطقة زخرفية 8"
+      "label": "outer-right"
     },
     {
       "id": "region-9",
@@ -221,23 +221,23 @@
         0,
         147
       ],
-      "pixelCount": 1643,
-      "centerX": 727,
-      "centerY": 1054,
+      "pixelCount": 1296,
+      "centerX": 645,
+      "centerY": 1041,
       "bounds": {
-        "x": 699,
-        "y": 1024,
-        "width": 57,
-        "height": 60
+        "x": 615,
+        "y": 1007,
+        "width": 56,
+        "height": 56
       },
-      "sampleX": 727,
-      "sampleY": 1054,
+      "sampleX": 645,
+      "sampleY": 1041,
       "regionKind": "decorative",
       "logicalRegionId": "region-9",
       "shapeGroup": "center-white-details",
-      "geometryType": "white",
+      "geometryType": "center-white-details",
       "enabled": true,
-      "label": "منطقة زخرفية 9"
+      "label": "center-lower-left"
     },
     {
       "id": "region-10",
@@ -247,23 +247,23 @@
         0,
         220
       ],
-      "pixelCount": 1597,
-      "centerX": 648,
-      "centerY": 1055,
+      "pixelCount": 1319,
+      "centerX": 724,
+      "centerY": 1041,
       "bounds": {
-        "x": 619,
-        "y": 1028,
-        "width": 58,
-        "height": 57
+        "x": 698,
+        "y": 1008,
+        "width": 55,
+        "height": 55
       },
-      "sampleX": 648,
-      "sampleY": 1055,
+      "sampleX": 724,
+      "sampleY": 1041,
       "regionKind": "decorative",
       "logicalRegionId": "region-10",
       "shapeGroup": "center-white-details",
-      "geometryType": "white",
+      "geometryType": "center-white-details",
       "enabled": true,
-      "label": "منطقة زخرفية 10"
+      "label": "center-lower-right"
     },
     {
       "id": "region-11",
@@ -273,23 +273,23 @@
         0,
         38
       ],
-      "pixelCount": 1579,
-      "centerX": 789,
-      "centerY": 1123,
+      "pixelCount": 1162,
+      "centerX": 578,
+      "centerY": 1110,
       "bounds": {
-        "x": 763,
-        "y": 1096,
-        "width": 54,
-        "height": 54
+        "x": 551,
+        "y": 1079,
+        "width": 48,
+        "height": 49
       },
-      "sampleX": 789,
-      "sampleY": 1123,
+      "sampleX": 578,
+      "sampleY": 1110,
       "regionKind": "decorative",
       "logicalRegionId": "region-11",
       "shapeGroup": "small-cyan-crosses",
-      "geometryType": "cyan",
+      "geometryType": "small-cyan-crosses",
       "enabled": true,
-      "label": "منطقة زخرفية 11"
+      "label": "small-lower-left"
     },
     {
       "id": "region-12",
@@ -299,23 +299,23 @@
         0,
         111
       ],
-      "pixelCount": 1598,
-      "centerX": 583,
-      "centerY": 1127,
+      "pixelCount": 1204,
+      "centerX": 795,
+      "centerY": 1110,
       "bounds": {
-        "x": 557,
-        "y": 1100,
-        "width": 53,
-        "height": 54
+        "x": 765,
+        "y": 1079,
+        "width": 49,
+        "height": 50
       },
-      "sampleX": 583,
-      "sampleY": 1127,
+      "sampleX": 795,
+      "sampleY": 1110,
       "regionKind": "decorative",
       "logicalRegionId": "region-12",
       "shapeGroup": "small-cyan-crosses",
-      "geometryType": "cyan",
+      "geometryType": "small-cyan-crosses",
       "enabled": true,
-      "label": "منطقة زخرفية 12"
+      "label": "small-lower-right"
     },
     {
       "id": "region-13",
@@ -325,23 +325,23 @@
         0,
         184
       ],
-      "pixelCount": 9294,
-      "centerX": 688,
-      "centerY": 1213,
+      "pixelCount": 5993,
+      "centerX": 684,
+      "centerY": 1195,
       "bounds": {
-        "x": 616,
-        "y": 1139,
-        "width": 148,
-        "height": 151
+        "x": 613,
+        "y": 1123,
+        "width": 140,
+        "height": 144
       },
-      "sampleX": 688,
-      "sampleY": 1213,
+      "sampleX": 684,
+      "sampleY": 1195,
       "regionKind": "decorative",
       "logicalRegionId": "region-13",
       "shapeGroup": "outer-crosses",
-      "geometryType": "red",
+      "geometryType": "outer-crosses",
       "enabled": true,
-      "label": "منطقة زخرفية 13"
+      "label": "outer-bottom"
     }
   ],
   "shapeGroups": [
@@ -349,7 +349,7 @@
       "id": "outer-crosses",
       "regions": [
         "region-1",
-        "region-6",
+        "region-4",
         "region-8",
         "region-13"
       ]
@@ -366,8 +366,8 @@
     {
       "id": "center-white-details",
       "regions": [
-        "region-4",
         "region-5",
+        "region-6",
         "region-9",
         "region-10"
       ]

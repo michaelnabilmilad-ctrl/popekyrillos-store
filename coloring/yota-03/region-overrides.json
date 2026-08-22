@@ -1,83 +1,83 @@
 {
   "modelId": "yota-03",
-  "modelVersion": "yota-03-v3",
+  "modelVersion": "yota-03-v4",
   "regions": {
     "region-1": {
       "logicalRegionId": "region-1",
       "similarShapeGroup": "outer-crosses",
-      "geometryType": "red",
+      "geometryType": "outer-crosses",
       "regionKind": "decorative"
     },
     "region-2": {
       "logicalRegionId": "region-2",
       "similarShapeGroup": "small-cyan-crosses",
-      "geometryType": "cyan",
+      "geometryType": "small-cyan-crosses",
       "regionKind": "decorative"
     },
     "region-3": {
       "logicalRegionId": "region-3",
       "similarShapeGroup": "small-cyan-crosses",
-      "geometryType": "cyan",
+      "geometryType": "small-cyan-crosses",
       "regionKind": "decorative"
     },
     "region-4": {
       "logicalRegionId": "region-4",
-      "similarShapeGroup": "center-white-details",
-      "geometryType": "white",
+      "similarShapeGroup": "outer-crosses",
+      "geometryType": "outer-crosses",
       "regionKind": "decorative"
     },
     "region-5": {
       "logicalRegionId": "region-5",
       "similarShapeGroup": "center-white-details",
-      "geometryType": "white",
+      "geometryType": "center-white-details",
       "regionKind": "decorative"
     },
     "region-6": {
       "logicalRegionId": "region-6",
-      "similarShapeGroup": "outer-crosses",
-      "geometryType": "red",
+      "similarShapeGroup": "center-white-details",
+      "geometryType": "center-white-details",
       "regionKind": "decorative"
     },
     "region-7": {
       "logicalRegionId": "region-7",
       "similarShapeGroup": null,
-      "geometryType": "yellow",
+      "geometryType": "center-cross",
       "regionKind": "decorative"
     },
     "region-8": {
       "logicalRegionId": "region-8",
       "similarShapeGroup": "outer-crosses",
-      "geometryType": "red",
+      "geometryType": "outer-crosses",
       "regionKind": "decorative"
     },
     "region-9": {
       "logicalRegionId": "region-9",
       "similarShapeGroup": "center-white-details",
-      "geometryType": "white",
+      "geometryType": "center-white-details",
       "regionKind": "decorative"
     },
     "region-10": {
       "logicalRegionId": "region-10",
       "similarShapeGroup": "center-white-details",
-      "geometryType": "white",
+      "geometryType": "center-white-details",
       "regionKind": "decorative"
     },
     "region-11": {
       "logicalRegionId": "region-11",
       "similarShapeGroup": "small-cyan-crosses",
-      "geometryType": "cyan",
+      "geometryType": "small-cyan-crosses",
       "regionKind": "decorative"
     },
     "region-12": {
       "logicalRegionId": "region-12",
       "similarShapeGroup": "small-cyan-crosses",
-      "geometryType": "cyan",
+      "geometryType": "small-cyan-crosses",
       "regionKind": "decorative"
     },
     "region-13": {
       "logicalRegionId": "region-13",
       "similarShapeGroup": "outer-crosses",
-      "geometryType": "red",
+      "geometryType": "outer-crosses",
       "regionKind": "decorative"
     }
   },
@@ -125,7 +125,7 @@
   "similarShapeGroups": {
     "outer-crosses": [
       "region-1",
-      "region-6",
+      "region-4",
       "region-8",
       "region-13"
     ],
@@ -136,8 +136,8 @@
       "region-12"
     ],
     "center-white-details": [
-      "region-4",
       "region-5",
+      "region-6",
       "region-9",
       "region-10"
     ]
@@ -145,7 +145,7 @@
   "groups": {
     "outer-crosses": [
       "region-1",
-      "region-6",
+      "region-4",
       "region-8",
       "region-13"
     ],
@@ -156,8 +156,8 @@
       "region-12"
     ],
     "center-white-details": [
-      "region-4",
       "region-5",
+      "region-6",
       "region-9",
       "region-10"
     ]
