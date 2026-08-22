@@ -1984,10 +1984,10 @@
         "quantity": 1000
       }
     ],
-    "mainCategory": "الصلبان",
-    "subCategory": "يحتاج مراجعة",
+    "mainCategory": "المناسبات والخدمة",
+    "subCategory": "تلوين وأشغال يدوية",
     "isBestSeller": false,
-    "subcategory": "meeting-games",
+    "subcategory": "crafts-coloring",
     "collections": [
       "هدايا الخدمة",
       "منتجات الأطفال"
@@ -2045,7 +2045,7 @@
     "updatedAt": "2026-07-04T18:38:24+03:00",
     "slug": "شنطه-اتبعه",
     "isBestSeller": false,
-    "subcategory": "tote-bags",
+    "subcategory": "meeting-gifts",
     "collections": [
       "هدايا الخدمة"
     ],
@@ -2102,7 +2102,7 @@
     "updatedAt": "2026-07-04T18:38:24+03:00",
     "slug": "شنطه-اتبعه-3ho-10618127974565",
     "isBestSeller": false,
-    "subcategory": "tote-bags",
+    "subcategory": "meeting-gifts",
     "collections": [
       "هدايا الخدمة"
     ],
@@ -2201,12 +2201,12 @@
         "quantity": null
       }
     ],
-    "mainCategory": "المناسبات والخدمة",
-    "subCategory": "توتي باج وشنط",
+    "mainCategory": "الكتب والطقوس",
+    "subCategory": "فواصل وجرابات الكتب",
     "updatedAt": "2026-07-04T18:38:24+03:00",
     "slug": "كافر-كتاب-مقدس-وشنطه-مستلزمات-روحيه",
     "isBestSeller": false,
-    "subcategory": "tote-bags",
+    "subcategory": "book-accessories",
     "collections": [
       "هدايا الخدمة"
     ],
@@ -2553,7 +2553,7 @@
         "quantity": null
       }
     ],
-    "mainCategory": "الهدايا والإكسسوارات",
+    "mainCategory": "المناسبات والخدمة",
     "subCategory": "يحتاج مراجعة",
     "updatedAt": "2026-07-04T18:38:24+03:00",
     "slug": "بوك-مارك-بالاسم",
@@ -2612,7 +2612,7 @@
         "quantity": null
       }
     ],
-    "mainCategory": "الهدايا والإكسسوارات",
+    "mainCategory": "المناسبات والخدمة",
     "subCategory": "يحتاج مراجعة",
     "updatedAt": "2026-07-04T18:38:24+03:00",
     "slug": "بوك-مارك-بالاسم-اتبعه",
@@ -2671,7 +2671,7 @@
         "quantity": null
       }
     ],
-    "mainCategory": "الهدايا والإكسسوارات",
+    "mainCategory": "المناسبات والخدمة",
     "subCategory": "يحتاج مراجعة",
     "updatedAt": "2026-07-04T18:38:24+03:00",
     "slug": "بوك-مارك-بالاسم-3ho-10545388191909",
@@ -5327,10 +5327,10 @@
       }
     ],
     "mainCategory": "الكتب والطقوس",
-    "subCategory": "يحتاج مراجعة",
+    "subCategory": "فواصل وجرابات الكتب",
     "slug": "جراب-للكتاب-المقدس",
     "isBestSeller": false,
-    "subcategory": "liturgical-books",
+    "subcategory": "book-accessories",
     "collections": [],
     "searchKeywords": [
       "جراب للكتاب المقدس",
@@ -5385,7 +5385,7 @@
       }
     ],
     "mainCategory": "الصلبان",
-    "subCategory": "صلبان المذبح",
+    "subCategory": "صلبان مواكب",
     "slug": "صليب-زفه-نحاس-طبقتين-بفصوص-ملونه",
     "isBestSeller": false,
     "subcategory": "processional-crosses",
@@ -5445,7 +5445,7 @@
       }
     ],
     "mainCategory": "الصلبان",
-    "subCategory": "صلبان المذبح",
+    "subCategory": "صلبان يد",
     "slug": "صليب-زفه-نحاس-طبقتين",
     "isBestSeller": false,
     "subcategory": "processional-crosses",
@@ -6127,7 +6127,7 @@
         "quantity": null
       }
     ],
-    "mainCategory": "مستلزمات المذبح والخدمة",
+    "mainCategory": "المذبح والأواني المقدسة",
     "subCategory": "يحتاج مراجعة",
     "slug": "حق-ذخيره-كبير-نحاس-مطلي-نيكل",
     "isBestSeller": false,
@@ -6185,7 +6185,7 @@
         "quantity": null
       }
     ],
-    "mainCategory": "مستلزمات المذبح والخدمة",
+    "mainCategory": "المذبح والأواني المقدسة",
     "subCategory": "يحتاج مراجعة",
     "slug": "حق-ذخيره-صغير-نحاس-مطلي-نيكل",
     "isBestSeller": false,
@@ -6243,7 +6243,7 @@
         "quantity": null
       }
     ],
-    "mainCategory": "مستلزمات المذبح والخدمة",
+    "mainCategory": "المذبح والأواني المقدسة",
     "subCategory": "يحتاج مراجعة",
     "slug": "حق-ذخيره-استانلس-صغير",
     "isBestSeller": false,
@@ -6302,7 +6302,7 @@
         "quantity": null
       }
     ],
-    "mainCategory": "مستلزمات المذبح والخدمة",
+    "mainCategory": "المذبح والأواني المقدسة",
     "subCategory": "يحتاج مراجعة",
     "slug": "حق-ذخيره-استانلس-وسط",
     "isBestSeller": false,
@@ -6360,7 +6360,7 @@
         "quantity": null
       }
     ],
-    "mainCategory": "مستلزمات المذبح والخدمة",
+    "mainCategory": "المذبح والأواني المقدسة",
     "subCategory": "يحتاج مراجعة",
     "slug": "حق-ذخيره-استانلس-صغير-old-10068212646195",
     "isBestSeller": false,
@@ -7007,7 +7007,7 @@
         "quantity": null
       }
     ],
-    "mainCategory": "مستلزمات المذبح والخدمة",
+    "mainCategory": "المذبح والأواني المقدسة",
     "subCategory": "يحتاج مراجعة",
     "slug": "انابيب-رفات-قديسين-زان",
     "isBestSeller": false,
