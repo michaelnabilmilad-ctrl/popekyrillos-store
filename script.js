@@ -91,6 +91,8 @@ let catalogTotal = 0;
 let catalogHasMore = false;
 let catalogCategoryCounts = {};
 let catalogCategoryCountsLoaded = false;
+let catalogSubcategoryCounts = {};
+let catalogSubcategoryCountsLoaded = false;
 let catalogRequestController = null;
 let staticCatalogProducts = null;
 let bestSellerProducts = [];
@@ -795,10 +797,166 @@ const catalogLabelOrder = {
   icons: ["صلبان وهدايا", "أيقونات وهدايا"],
   books: ["كتب وطقوس"]
 };
-const taxonomy = window.POPE_KYRILLOS_TAXONOMY || null;
-const taxonomyCategories = taxonomy?.customerCategories?.() || [];
-const taxonomyReady = Array.isArray(taxonomy?.categories) && taxonomy.categories.length > 0 && taxonomyCategories.length > 0;
-const taxonomyCategoryOrder = taxonomyCategories.map((category) => category.id);
+let taxonomy = null;
+let taxonomyCategories = [];
+let taxonomyReady = false;
+let taxonomyCategoryOrder = [];
+let taxonomyLoadState = "loading";
+let taxonomyLoadPromise = null;
+const taxonomyAuthoritativeVersionStorageKey = "pope-kyrillos-taxonomy-authoritative-version";
+let renderedTaxonomyVersion = "";
+let taxonomyVersionCheckPromise = null;
+let taxonomyRefreshGeneration = 0;
+
+function useTaxonomy(candidate) {
+  try {
+    const categories = candidate?.customerCategories?.() || [];
+    if (!Array.isArray(candidate?.categories) || candidate.categories.length === 0 || categories.length === 0) return false;
+    taxonomy = candidate;
+    taxonomyCategories = categories;
+    taxonomyCategoryOrder = categories.map((category) => category.id);
+    taxonomyReady = true;
+    taxonomyLoadState = "ready";
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+useTaxonomy(window.POPE_KYRILLOS_TAXONOMY || null);
+
+function taxonomyRequestUrl(version = "") {
+  const configuredScript = document.querySelector('script[src*="/category-taxonomy.js"]');
+  const url = new URL(configuredScript?.src || "/category-taxonomy.js", window.location.origin);
+  if (version) url.searchParams.set("taxonomy", version);
+  return url.href;
+}
+
+function taxonomyRetryableStatus(status) {
+  return status === 408 || status === 425 || status === 429 || status >= 500;
+}
+
+function taxonomyRetryDelay(attempt) {
+  return attempt === 0 ? 250 : 750;
+}
+
+function waitForTaxonomyRetry(milliseconds) {
+  return new Promise((resolve) => window.setTimeout(resolve, milliseconds));
+}
+
+async function requestTaxonomyOnce({ version = "", generation = taxonomyRefreshGeneration } = {}) {
+  const response = await fetch(taxonomyRequestUrl(version), {
+    cache: "no-store",
+    credentials: "same-origin",
+    headers: { Accept: "application/javascript" }
+  });
+  if (!response.ok) {
+    const error = new Error(`Taxonomy request failed with ${response.status}`);
+    error.status = response.status;
+    throw error;
+  }
+  const source = await response.text();
+  if (!source.includes("POPE_KYRILLOS_TAXONOMY")) throw new Error("Taxonomy response was invalid");
+  if (generation !== taxonomyRefreshGeneration) return taxonomy;
+  const script = document.createElement("script");
+  script.dataset.taxonomyRecovery = "true";
+  script.textContent = source;
+  document.head.append(script);
+  script.remove();
+  if (!useTaxonomy(window.POPE_KYRILLOS_TAXONOMY || null)) throw new Error("Taxonomy response did not initialize categories");
+  if (version) {
+    renderedTaxonomyVersion = version;
+    try { localStorage.setItem(taxonomyAuthoritativeVersionStorageKey, version); } catch {}
+  }
+  return taxonomy;
+}
+
+function loadStorefrontTaxonomy({ force = false } = {}) {
+  if (!force && useTaxonomy(window.POPE_KYRILLOS_TAXONOMY || null)) return Promise.resolve(taxonomy);
+  if (taxonomyLoadPromise) return taxonomyLoadPromise;
+  taxonomyLoadState = "loading";
+  ensureMainCategoryTiles();
+  taxonomyLoadPromise = (async () => {
+    let lastError = null;
+    for (let attempt = 0; attempt < 3; attempt += 1) {
+      try {
+        return await requestTaxonomyOnce({ generation: taxonomyRefreshGeneration });
+      } catch (error) {
+        lastError = error;
+        if (error?.name === "AbortError") throw error;
+        if (Number.isFinite(error?.status) && !taxonomyRetryableStatus(error.status)) break;
+        if (attempt < 2) await waitForTaxonomyRetry(taxonomyRetryDelay(attempt));
+      }
+    }
+    throw lastError || new Error("Taxonomy could not be loaded");
+  })().catch((error) => {
+    if (error?.name !== "AbortError") taxonomyLoadState = "error";
+    throw error;
+  }).finally(() => {
+    taxonomyLoadPromise = null;
+    ensureMainCategoryTiles();
+    renderShopMenu();
+  });
+  return taxonomyLoadPromise;
+}
+
+function taxonomyVersionDiagnostics(authoritativeVersion = "") {
+  let storedVersion = "";
+  try { storedVersion = localStorage.getItem(taxonomyAuthoritativeVersionStorageKey) || ""; } catch {}
+  window.POPE_KYRILLOS_TAXONOMY_DIAGNOSTICS = {
+    storedVersion,
+    authoritativeVersion,
+    renderedVersion: renderedTaxonomyVersion || storedVersion || "embedded"
+  };
+  document.documentElement.dataset.taxonomyStoredVersion = storedVersion;
+  document.documentElement.dataset.taxonomyAuthoritativeVersion = authoritativeVersion;
+  document.documentElement.dataset.taxonomyRenderedVersion = renderedTaxonomyVersion || storedVersion || "embedded";
+}
+
+async function fetchAuthoritativeTaxonomyVersion() {
+  const response = await fetch("/category-taxonomy-version.json", {
+    cache: "no-store",
+    credentials: "same-origin",
+    headers: { Accept: "application/json" }
+  });
+  if (!response.ok) throw new Error(`Taxonomy version request failed with ${response.status}`);
+  const payload = await response.json();
+  const version = String(payload?.version || "").trim();
+  if (!version) throw new Error("Taxonomy version response was invalid");
+  return { version, contentVersion: String(payload?.contentVersion || "").trim() };
+}
+
+async function checkForTaxonomyUpdate() {
+  if (taxonomyVersionCheckPromise) return taxonomyVersionCheckPromise;
+  taxonomyVersionCheckPromise = (async () => {
+    const authoritative = await fetchAuthoritativeTaxonomyVersion();
+    const authoritativeVersion = authoritative.version;
+    let storedVersion = "";
+    try { storedVersion = localStorage.getItem(taxonomyAuthoritativeVersionStorageKey) || ""; } catch {}
+    taxonomyVersionDiagnostics(authoritativeVersion);
+    const embeddedContentVersion = String(window.POPE_KYRILLOS_TAXONOMY?.CURRENT_TAXONOMY_VERSION || "");
+    if (authoritativeVersion === renderedTaxonomyVersion || (
+      authoritativeVersion === storedVersion
+      && authoritative.contentVersion
+      && authoritative.contentVersion === embeddedContentVersion
+      && taxonomyReady
+    )) return false;
+
+    const generation = ++taxonomyRefreshGeneration;
+    await requestTaxonomyOnce({ version: authoritativeVersion, generation });
+    if (generation !== taxonomyRefreshGeneration) return false;
+    taxonomyVersionDiagnostics(authoritativeVersion);
+    applyLanguage();
+    await loadCatalogPage({ reset: true });
+    renderShopMenu();
+    return true;
+  })().catch((error) => {
+    taxonomyVersionDiagnostics();
+    if (!taxonomyReady) throw error;
+    return false;
+  }).finally(() => { taxonomyVersionCheckPromise = null; });
+  return taxonomyVersionCheckPromise;
+}
 const legacyCategoryToMainCategory = {
   brass: "altar-vessels",
   "altar-tools": "altar-vessels",
@@ -1096,8 +1254,15 @@ function applyCategoryLanguage() {
 function ensureMainCategoryTiles() {
   if (!categoryGrid) return;
   if (!taxonomyReady) {
+    if (taxonomyLoadState === "loading") {
+      categoryGrid.setAttribute("aria-busy", "true");
+      if (!categoryGrid.querySelector(".category-skeleton")) {
+        categoryGrid.innerHTML = '<div class="category-loading"><span class="category-skeleton"></span><span class="category-skeleton"></span><span class="category-skeleton"></span></div>';
+      }
+      return;
+    }
     categoryGrid.setAttribute("aria-busy", "false");
-    categoryGrid.innerHTML = `<div class="category-load-error" role="alert">${escapeHtml(isEnglish() ? "Categories could not be loaded. Refresh the page and try again." : "تعذر تحميل الأقسام. حاول تحديث الصفحة.")}</div>`;
+    categoryGrid.innerHTML = `<div class="category-load-error" role="alert"><span>${escapeHtml(isEnglish() ? "Categories could not be loaded. Refresh the page and try again." : "تعذر تحميل الأقسام. حاول تحديث الصفحة.")}</span><button class="button button-secondary" type="button" data-taxonomy-retry>${escapeHtml(isEnglish() ? "Try again" : "إعادة المحاولة")}</button></div>`;
     return;
   }
   const allActive = normalizeCategoryFilter(state.filter || "all") === "all";
@@ -1297,15 +1462,25 @@ function availableProducts() {
   return products.filter(hasAvailableVariant);
 }
 
-const alwaysVisibleSubcategoryIds = new Set(["iota-plain-hand-crosses", "plain-cross-medals"]);
+function storefrontProductEligible(product) {
+  return product?.active !== false && product?.hidden !== true && product?.deleted !== true && product?.published !== false && hasAvailableVariant(product);
+}
+
+function completeLocalSubcategoryCounts(items, category) {
+  return items
+    .filter((product) => storefrontProductEligible(product) && productMatchesCategory(product, category))
+    .reduce((counts, product) => {
+      const subcategoryId = productSubCategoryId(product);
+      if (subcategoryId) counts[subcategoryId] = (counts[subcategoryId] || 0) + 1;
+      return counts;
+    }, {});
+}
 
 function orderedLabelsForCategory(category) {
   const normalized = normalizeCategoryFilter(category);
   const categoryMeta = taxonomy?.categoryById?.get(normalized);
   if (categoryMeta) {
-    return categoryMeta.subcategories
-      .filter((subcategory) => alwaysVisibleSubcategoryIds.has(subcategory.id)
-        || availableProducts().some((product) => productMainCategoryId(product) === normalized && productSubCategoryId(product) === subcategory.id));
+    return [...categoryMeta.subcategories];
   }
 
   const labels = [...new Set(availableProducts().filter((product) => product.category === category).map((product) => product.label).filter(Boolean))];
@@ -1318,6 +1493,11 @@ function orderedLabelsForCategory(category) {
   }).map((label) => ({ id: label, name: label }));
 }
 
+function visibleSubcategoryLabelsForCategory(category) {
+  if (!catalogSubcategoryCountsLoaded) return [];
+  return orderedLabelsForCategory(category).filter((subcategory) => subcategoryProductCount(subcategory.id) > 0);
+}
+
 function productsForCurrentCategory() {
   const category = state.filter || "all";
   return availableProducts().filter((product) => productMatchesCategory(product, category));
@@ -1325,11 +1505,11 @@ function productsForCurrentCategory() {
 
 function orderedLabelsForCurrentFilter() {
   const normalized = normalizeCategoryFilter(state.filter || "all");
-  if (normalized !== "all") return orderedLabelsForCategory(normalized);
+  if (normalized !== "all") return visibleSubcategoryLabelsForCategory(normalized);
 
   const labels = [];
   visibleMainCategories().forEach((category) => {
-    orderedLabelsForCategory(category.id).forEach((subcategory) => {
+    visibleSubcategoryLabelsForCategory(category.id).forEach((subcategory) => {
       if (!labels.some((item) => item.id === subcategory.id)) labels.push(subcategory);
     });
   });
@@ -1354,6 +1534,7 @@ function renderMainFilterOptions() {
 
 function renderLabelFilterOptions() {
   if (!labelFilterSelect) return;
+  labelFilterSelect.disabled = !catalogSubcategoryCountsLoaded;
   const labels = orderedLabelsForCurrentFilter();
   if (state.labelFilter && !labels.some((label) => label.id === state.labelFilter || label.name === state.labelFilter)) {
     state.labelFilter = "";
@@ -1363,7 +1544,7 @@ function renderLabelFilterOptions() {
   allOption.dataset.labelOptionAll = "";
   labelFilterSelect.replaceChildren(allOption);
   labels.forEach((label) => {
-    const count = productsForCurrentCategory().filter((product) => productMatchesSubcategory(product, label.id)).length;
+    const count = subcategoryProductCount(label.id);
     labelFilterSelect.append(new Option(`${localized(label.name)} (${displayText(formatter.format(count))})`, label.id));
   });
   labelFilterSelect.value = state.labelFilter || "";
@@ -1382,6 +1563,15 @@ function subcategoryCardImage(subcategory, category) {
   return choice?.image || "";
 }
 
+function subcategoryProductCount(subcategoryId, categoryProducts = []) {
+  if (Object.prototype.hasOwnProperty.call(catalogSubcategoryCounts, subcategoryId)) {
+    const liveCount = Number(catalogSubcategoryCounts[subcategoryId]);
+    if (Number.isFinite(liveCount)) return liveCount;
+  }
+  if (catalogSubcategoryCountsLoaded) return 0;
+  return categoryProducts.filter((product) => productMatchesSubcategory(product, subcategoryId)).length;
+}
+
 function renderSubcategoryCards() {
   if (!subcategoryCards) return;
   const categoryId = normalizeCategoryFilter(state.filter || "all");
@@ -1392,16 +1582,24 @@ function renderSubcategoryCards() {
     return;
   }
 
+  if (!catalogSubcategoryCountsLoaded) {
+    subcategoryCards.hidden = true;
+    subcategoryCards.setAttribute("aria-busy", "true");
+    subcategoryCards.innerHTML = "";
+    return;
+  }
+
   const category = taxonomy?.categoryById?.get(categoryId);
-  const labels = orderedLabelsForCategory(categoryId);
+  const labels = visibleSubcategoryLabelsForCategory(categoryId);
   if (!labels.length) {
     subcategoryCards.hidden = true;
+    subcategoryCards.setAttribute("aria-busy", "false");
     subcategoryCards.innerHTML = "";
     return;
   }
 
   const categoryProducts = productsForCurrentCategory();
-  const allCount = categoryProducts.length;
+  const allCount = mainCategoryProductCount(categoryId) ?? categoryProducts.length;
   const activeLabel = state.labelFilter || "";
   const cards = [
     {
@@ -1414,29 +1612,20 @@ function renderSubcategoryCards() {
     ...labels.map((label) => ({
       id: label.id,
       name: localized(label.name),
-      count: categoryProducts.filter((product) => productMatchesSubcategory(product, label.id)).length,
+      count: subcategoryProductCount(label.id, categoryProducts),
       image: subcategoryCardImage(label, category),
       active: activeLabel === label.id
     }))
-  ].filter((card) => card.id === "" || card.count > 0);
+  ];
 
   if (state.subcategoryCardsCategory !== categoryId) {
     state.subcategoryCardsCategory = categoryId;
     state.subcategoryCardsExpanded = false;
   }
 
-  const collapsedCardCount = 4;
-  const needsMoreCard = cards.length > collapsedCardCount;
-  let visibleCards = cards;
-  if (needsMoreCard && !state.subcategoryCardsExpanded) {
-    visibleCards = cards.slice(0, collapsedCardCount);
-    const activeCard = activeLabel ? cards.find((card) => card.id === activeLabel) : null;
-    if (activeCard && !visibleCards.some((card) => card.id === activeCard.id)) {
-      visibleCards = [...visibleCards.slice(0, collapsedCardCount - 1), activeCard];
-    }
-  }
-  const visibleIds = new Set(visibleCards.map((card) => card.id));
-  const hiddenCount = cards.filter((card) => !visibleIds.has(card.id)).length;
+  // Keep every populated card in the DOM on the first render. CSS controls
+  // wrapping responsively; rendering must not depend on scrolling or viewport.
+  const visibleCards = cards;
 
   const cardHtml = (card) => `
     <button
@@ -1453,25 +1642,11 @@ function renderSubcategoryCards() {
     </button>
   `;
 
-  const moreCardHtml = needsMoreCard ? `
-    <button
-      class="subcategory-card subcategory-card-more"
-      type="button"
-      data-subcategory-more="${state.subcategoryCardsExpanded ? "less" : "more"}"
-      aria-expanded="${state.subcategoryCardsExpanded ? "true" : "false"}"
-    >
-      <span class="subcategory-card-more-icon" aria-hidden="true">${state.subcategoryCardsExpanded ? "−" : "+"}</span>
-      <span class="subcategory-card-body">
-        <strong>${escapeHtml(t(state.subcategoryCardsExpanded ? "subcategoryLess" : "subcategoryMore"))}</strong>
-        <small>${state.subcategoryCardsExpanded ? escapeHtml(t("labelAll")) : `${escapeHtml(displayText(formatter.format(hiddenCount)))} ${isEnglish() ? "more" : "قسم إضافي"}`}</small>
-      </span>
-    </button>
-  ` : "";
-
   subcategoryCards.hidden = false;
-  subcategoryCards.dataset.collapsible = needsMoreCard ? "true" : "false";
-  subcategoryCards.dataset.expanded = state.subcategoryCardsExpanded ? "true" : "false";
-  subcategoryCards.innerHTML = `${visibleCards.map(cardHtml).join("")}${moreCardHtml}`;
+  subcategoryCards.setAttribute("aria-busy", "false");
+  subcategoryCards.dataset.collapsible = "false";
+  subcategoryCards.dataset.expanded = "true";
+  subcategoryCards.innerHTML = visibleCards.map(cardHtml).join("");
   loadSubcategoryCardImages();
 }
 
@@ -1525,7 +1700,7 @@ function updateCatalogFilterText() {
 function renderShopMenu() {
   if (!shopMenuList) return;
   if (!taxonomyReady) {
-    shopMenuList.innerHTML = `<p class="category-load-error" role="alert">${escapeHtml(isEnglish() ? "Categories could not be loaded. Refresh the page and try again." : "تعذر تحميل الأقسام. حاول تحديث الصفحة.")}</p>`;
+    shopMenuList.innerHTML = taxonomyLoadState === "loading" ? "" : `<p class="category-load-error" role="alert">${escapeHtml(isEnglish() ? "Categories could not be loaded." : "تعذر تحميل الأقسام.")}</p>`;
     return;
   }
   const categories = visibleMainCategories();
@@ -5123,7 +5298,14 @@ function catalogApiUrl(page = 1) {
 
 async function loadCatalogPage({ reset = false } = {}) {
   if (staticCatalogProducts) {
+    if (reset) {
+      catalogSubcategoryCounts = {};
+      catalogSubcategoryCountsLoaded = false;
+      renderSubcategoryCards();
+    }
     products = staticCatalogProducts;
+    catalogSubcategoryCounts = completeLocalSubcategoryCounts(staticCatalogProducts, state.filter);
+    catalogSubcategoryCountsLoaded = true;
     if (reset) state.visibleProductCount = productBatchSize;
     else state.visibleProductCount += productBatchSize;
     catalogTotal = getFilteredProducts().length;
@@ -5134,6 +5316,11 @@ async function loadCatalogPage({ reset = false } = {}) {
   }
 
   const nextPage = reset ? 1 : catalogPage + 1;
+  if (reset) {
+    catalogSubcategoryCounts = {};
+    catalogSubcategoryCountsLoaded = false;
+    renderSubcategoryCards();
+  }
   catalogRequestController?.abort();
   catalogRequestController = new AbortController();
   try {
@@ -5143,6 +5330,8 @@ async function loadCatalogPage({ reset = false } = {}) {
     const payload = await response.json();
     catalogCategoryCountsLoaded = Boolean(payload.categoryCounts && typeof payload.categoryCounts === "object");
     catalogCategoryCounts = catalogCategoryCountsLoaded ? payload.categoryCounts : {};
+    catalogSubcategoryCountsLoaded = Boolean(payload.subcategoryCounts && typeof payload.subcategoryCounts === "object");
+    catalogSubcategoryCounts = catalogSubcategoryCountsLoaded ? payload.subcategoryCounts : {};
     const received = (Array.isArray(payload.items) ? payload.items : []).map((item) => ({ ...item, image: item.thumbnail, stock: item.availability === "available" ? "متاح" : "غير متاح حاليا", mainCategory: item.category, subCategory: item.subcategory, label: item.subcategory }));
     products = reset ? received : [...products, ...received];
     catalogPage = Number(payload.page) || nextPage;
@@ -5162,6 +5351,8 @@ async function loadCatalogPage({ reset = false } = {}) {
       products = staticCatalogProducts;
       catalogCategoryCounts = {};
       catalogCategoryCountsLoaded = true;
+      catalogSubcategoryCounts = completeLocalSubcategoryCounts(staticCatalogProducts, state.filter);
+      catalogSubcategoryCountsLoaded = true;
       state.visibleProductCount = reset ? productBatchSize : state.visibleProductCount + productBatchSize;
       catalogTotal = getFilteredProducts().length;
       catalogHasMore = state.visibleProductCount < catalogTotal;
@@ -5171,6 +5362,8 @@ async function loadCatalogPage({ reset = false } = {}) {
       if (reset) products = fallbackProducts.slice();
       catalogCategoryCounts = {};
       catalogCategoryCountsLoaded = true;
+      catalogSubcategoryCounts = {};
+      catalogSubcategoryCountsLoaded = true;
       catalogTotal = getFilteredProducts().length;
       catalogHasMore = state.visibleProductCount < catalogTotal;
       productsAssetVersion = "fallback";
@@ -5218,6 +5411,15 @@ document.addEventListener("copy", (event) => {
 });
 
 categoryGrid?.addEventListener("click", (event) => {
+  const retryButton = event.target.closest("[data-taxonomy-retry]");
+  if (retryButton) {
+    event.preventDefault();
+    void loadStorefrontTaxonomy({ force: true }).then(() => {
+      applyLanguage();
+      void loadProducts();
+    }).catch(() => {});
+    return;
+  }
   const button = event.target.closest("[data-filter]");
   if (!button) return;
   event.preventDefault();
@@ -6088,6 +6290,7 @@ window.addEventListener("scroll", () => {
 });
 
 window.addEventListener("popstate", () => {
+  void checkForTaxonomyUpdate();
   const productId = productIdFromUrl();
   if (productId) {
     openProductFromUrl();
@@ -6102,6 +6305,15 @@ window.addEventListener("popstate", () => {
   }
 });
 
+window.addEventListener("pageshow", () => { void checkForTaxonomyUpdate(); });
+window.addEventListener("focus", () => { void checkForTaxonomyUpdate(); });
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "visible") void checkForTaxonomyUpdate();
+});
+window.setInterval(() => {
+  if (document.visibilityState === "visible") void checkForTaxonomyUpdate();
+}, 60000);
+
 window.addEventListener("storage", (event) => {
   const userKey = currentUserCartStorageKey();
   const relevantKeys = [guestCartStorageKey, userKey, activeCartStorageKey, cartSyncStorageKey];
@@ -6115,4 +6327,8 @@ applyLanguage();
 updateFloatingShopButton();
 state.auth.configured = false;
 renderAuthState();
-loadProducts();
+void loadStorefrontTaxonomy().then(() => {
+  applyLanguage();
+  void checkForTaxonomyUpdate();
+  return loadProducts();
+}).catch(() => {});

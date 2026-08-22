@@ -70,6 +70,7 @@ let productsCacheSha = "";
 let taxonomyCache = "";
 let taxonomyCacheTime = 0;
 let taxonomyCacheSha = "";
+let taxonomyRefreshPromise = null;
 let thumbnailManifestCache = null;
 
 function githubConfig(env = {}) {
@@ -91,11 +92,11 @@ function githubHeaders(config, accept = "application/vnd.github+json") {
 }
 
 function githubContentsUrl(config, path) {
-  return `https://api.github.com/repos/${config.owner}/${config.repo}/contents/${path.replace(/^\/+/, "")}?ref=${encodeURIComponent(config.branch)}`;
+  return `https://api.github.com/repos/${config.owner}/${config.repo}/contents/${path.replace(/^\/+/, "")}?ref=${encodeURIComponent(config.branch)}&fresh=${Date.now()}`;
 }
 
 function githubRawUrl(config, path) {
-  return `https://raw.githubusercontent.com/${config.owner}/${config.repo}/${encodeURIComponent(config.branch)}/${path.replace(/^\/+/, "")}`;
+  return `https://raw.githubusercontent.com/${config.owner}/${config.repo}/${encodeURIComponent(config.branch)}/${path.replace(/^\/+/, "")}?fresh=${Date.now()}`;
 }
 
 async function githubFetchText(env, path) {
@@ -103,7 +104,8 @@ async function githubFetchText(env, path) {
 
   if (config.token) {
     const response = await fetch(githubContentsUrl(config, path), {
-      headers: githubHeaders(config, "application/vnd.github.raw")
+      cache: "no-store",
+      headers: { ...githubHeaders(config, "application/vnd.github.raw"), "Cache-Control": "no-cache" }
     });
     if (response.ok) {
       return {
@@ -114,7 +116,8 @@ async function githubFetchText(env, path) {
   }
 
   const response = await fetch(githubRawUrl(config, path), {
-    headers: { "User-Agent": "popekyrillos-store" }
+    cache: "no-store",
+    headers: { "User-Agent": "popekyrillos-store", "Cache-Control": "no-cache" }
   });
   if (!response.ok) throw new Error(`GitHub raw fetch failed with ${response.status}`);
   return {
@@ -501,7 +504,7 @@ function catalogMainCategoryId(product) {
 }
 
 function catalogProductMatches(product, params) {
-  if (!hasAvailableVariant(product)) return false;
+  if (!isVisibleCatalogProduct(product) || !hasAvailableVariant(product)) return false;
   const category = params.get("category") || "all";
   const subcategory = params.get("subcategory") || "";
   const search = normalizedSearch(params.get("search") || "");
@@ -531,15 +534,25 @@ async function catalogApiResponse(request, env, ctx) {
   const page = Math.max(1, Math.trunc(Number(url.searchParams.get("page"))) || 1);
   const limit = Math.min(48, Math.max(1, Math.trunc(Number(url.searchParams.get("limit"))) || 12));
   const cacheUrl = new URL(url.origin + url.pathname);
-  cacheUrl.searchParams.set("schema", "12");
+  cacheUrl.searchParams.set("schema", "14");
   cacheUrl.searchParams.set("thumbnails", "plain-iota-v2");
   [...url.searchParams.entries()].sort(([a], [b]) => a.localeCompare(b)).forEach(([key, value]) => cacheUrl.searchParams.append(key, value));
-  const allProducts = await loadProducts(env, request, { maxAgeMs: 600000 });
-  const categoryCounts = allProducts.filter(hasAvailableVariant).reduce((counts, product) => {
+  const allProducts = await loadProducts(env, request, { maxAgeMs: 5000 });
+  const categoryCounts = allProducts.filter((product) => isVisibleCatalogProduct(product) && hasAvailableVariant(product)).reduce((counts, product) => {
     const categoryId = catalogMainCategoryId(product);
     counts[categoryId] = (counts[categoryId] || 0) + 1;
     return counts;
   }, {});
+  const subcategoryCountParams = new URLSearchParams();
+  const requestedCategory = url.searchParams.get("category") || "all";
+  if (requestedCategory !== "all") subcategoryCountParams.set("category", requestedCategory);
+  const subcategoryCounts = allProducts
+    .filter((product) => catalogProductMatches(product, subcategoryCountParams))
+    .reduce((counts, product) => {
+      const subcategoryId = String(product?.subcategory || product?.subCategory || product?.label || "").trim();
+      if (subcategoryId) counts[subcategoryId] = (counts[subcategoryId] || 0) + 1;
+      return counts;
+    }, {});
   const thumbnailManifest = await loadThumbnailManifest(env, request);
   if (productsCacheSha) cacheUrl.searchParams.set("v", productsCacheSha);
   const cacheKey = new Request(cacheUrl.toString(), { method: "GET" });
@@ -552,8 +565,8 @@ async function catalogApiResponse(request, env, ctx) {
     matched.sort((first, second) => catalogSearchScore(first, search) - catalogSearchScore(second, search));
   }
   const start = (page - 1) * limit;
-  const body = JSON.stringify({ items: matched.slice(start, start + limit).map((product) => catalogDto(product, thumbnailManifest)), page, limit, total: matched.length, hasMore: start + limit < matched.length, categoryCounts });
-  const response = new Response(body, { headers: { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "public, max-age=0, must-revalidate", "CDN-Cache-Control": "public, max-age=600, stale-while-revalidate=300" } });
+  const body = JSON.stringify({ items: matched.slice(start, start + limit).map((product) => catalogDto(product, thumbnailManifest)), page, limit, total: matched.length, hasMore: start + limit < matched.length, categoryCounts, subcategoryCounts });
+  const response = new Response(body, { headers: { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "public, max-age=0, must-revalidate", "CDN-Cache-Control": "public, max-age=60, stale-while-revalidate=300" } });
   ctx.waitUntil(edgeCache.put(cacheKey, response.clone()));
   return response;
 }
@@ -566,13 +579,39 @@ async function productApiResponse(request, env, product) {
 
 async function loadTaxonomySource(env, request, { maxAgeMs = 5000 } = {}) {
   if (taxonomyCache && Date.now() - taxonomyCacheTime < maxAgeMs) return taxonomyCache;
+  if (taxonomyRefreshPromise) return taxonomyRefreshPromise;
 
-  const response = await env.ASSETS.fetch(rewriteRequest(request, "/category-taxonomy.js"));
-  if (!response.ok) return "";
-  taxonomyCache = await response.text();
-  taxonomyCacheTime = Date.now();
-  taxonomyCacheSha = response.headers.get("ETag") || "";
-  return taxonomyCache;
+  taxonomyRefreshPromise = (async () => {
+    if (githubConfig(env).token) {
+      try {
+        const latest = await githubFetchText(env, "category-taxonomy.js");
+        if (latest.text.includes("POPE_KYRILLOS_TAXONOMY")) {
+          taxonomyCache = latest.text;
+          taxonomyCacheTime = Date.now();
+          taxonomyCacheSha = latest.sha;
+          return taxonomyCache;
+        }
+      } catch (error) {
+        console.warn("Could not load category-taxonomy.js from GitHub, falling back to deployed assets.", error);
+      }
+    }
+
+    try {
+      const response = await env.ASSETS.fetch(rewriteRequest(request, "/category-taxonomy.js"));
+      if (!response.ok) return taxonomyCache;
+      const source = await response.text();
+      if (!source.includes("POPE_KYRILLOS_TAXONOMY")) return taxonomyCache;
+      taxonomyCache = source;
+      taxonomyCacheTime = Date.now();
+      taxonomyCacheSha = response.headers.get("ETag") || "";
+      return taxonomyCache;
+    } catch {
+      return taxonomyCache;
+    } finally {
+      taxonomyRefreshPromise = null;
+    }
+  })();
+  return taxonomyRefreshPromise;
 }
 
 async function taxonomyJsResponse(request, env) {
@@ -582,7 +621,32 @@ async function taxonomyJsResponse(request, env) {
     headers: {
       "Content-Type": "application/javascript; charset=utf-8",
       "Cache-Control": "no-cache, must-revalidate",
+      "CDN-Cache-Control": "no-cache, must-revalidate, stale-if-error=86400",
       ...(taxonomyCacheSha ? { ETag: taxonomyCacheSha } : {})
+    }
+  });
+}
+
+async function taxonomyVersionResponse(request, env) {
+  const source = await loadTaxonomySource(env, request, { maxAgeMs: 0 });
+  if (!source) {
+    return new Response(JSON.stringify({ error: "taxonomy_unavailable" }), {
+      status: 503,
+      headers: { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" }
+    });
+  }
+  let version = taxonomyCacheSha;
+  if (!version) {
+    const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(source));
+    version = [...new Uint8Array(digest)].map((byte) => byte.toString(16).padStart(2, "0")).join("");
+  }
+  const contentVersion = source.match(/CURRENT_TAXONOMY_VERSION\s*=\s*(["']?)([^;"']+)\1\s*;/)?.[2]?.trim() || "";
+  return new Response(JSON.stringify({ version, contentVersion }), {
+    headers: {
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "no-store, max-age=0",
+      "CDN-Cache-Control": "no-store",
+      "Pragma": "no-cache"
     }
   });
 }
@@ -2258,6 +2322,7 @@ async function handleRequest(request, env, ctx) {
     }
     if (url.pathname === "/api/analytics/events") return analyticsIngestResponse(request, env);
     if (url.pathname === "/products.json") return productsJsonResponse(request, env);
+    if (url.pathname === "/category-taxonomy-version.json") return taxonomyVersionResponse(request, env);
     if (url.pathname === "/category-taxonomy.js") return taxonomyJsResponse(request, env);
 
     if (legacyProductUrl(url) || url.pathname.startsWith("/products/")) {

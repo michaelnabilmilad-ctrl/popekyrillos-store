@@ -111,10 +111,11 @@ test("an old cached taxonomy is replaced without touching cart or login storage"
   assert.equal(migratedWithoutVersion.testStorage.get("pope-kyrillos-auth:user"), "auth-still-here");
 });
 
-test("new empty cross subcategories remain visible in storefront cards and filters", () => {
+test("empty cross subcategories remain configured but storefront visibility requires a positive authoritative count", () => {
   const source = fs.readFileSync("script.js", "utf8");
-  assert.match(source, /alwaysVisibleSubcategoryIds = new Set\(\["iota-plain-hand-crosses", "plain-cross-medals"\]\)/);
-  assert.match(source, /alwaysVisibleSubcategoryIds\.has\(subcategory\.id\)/);
+  assert.match(source, /visibleSubcategoryLabelsForCategory/);
+  assert.match(source, /subcategoryProductCount\(subcategory\.id\) > 0/);
+  assert.doesNotMatch(source, /alwaysVisibleSubcategoryIds/);
 });
 
 test("legacy gifts URL maps to occasions and tote bag card uses the stable meeting-gifts ID", () => {
