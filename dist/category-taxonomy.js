@@ -381,7 +381,8 @@
               {
                   "id": "yota-medallions",
                   "name": "مادليات اليوطا",
-                  "disableProductImageFallback": true
+                  "disableProductImageFallback": true,
+                  "manualImage": "assets/optimized/products/gallery/taxonomy-yota-medallions-image-20260822192514-d126b0.webp"
               },
               {
                   "id": "pectoral-crosses",
@@ -894,7 +895,7 @@
   ];
   const TAXONOMY_STORAGE_KEY = "pope-kyrillos-taxonomy";
   const TAXONOMY_VERSION_STORAGE_KEY = "pope-kyrillos-taxonomy-version";
-  const CURRENT_TAXONOMY_VERSION = 1787425186647;
+  const CURRENT_TAXONOMY_VERSION = 1787426731973;
   const categories = (() => {
     try {
       const storedVersion = Number(localStorage.getItem(TAXONOMY_VERSION_STORAGE_KEY) || 0);
