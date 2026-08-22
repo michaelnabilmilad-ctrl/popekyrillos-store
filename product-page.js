@@ -6,6 +6,7 @@ const cartCount = document.querySelector("[data-cart-count]");
 const cartKey = "pope-kyrillos-cart:guest";
 const legacyColoringStorageKey = `pope-kyrillos-coloring:${product.id || "product"}`;
 let coloringStorageKey = `yota-coloring-design-${product.coloringModelId || "unconfigured"}:${product.coloringModelVersion || "unversioned"}:${product.id || "product"}`;
+let coloringStorageVersion = String(product.coloringModelVersion || "unversioned");
 const yotaColors = Array.isArray(window.YOTA_COLORS) ? window.YOTA_COLORS : [];
 const yotaColorById = new Map(yotaColors.map((color) => [color.id, color]));
 const yotaColorByHex = new Map(yotaColors.map((color) => [color.hex.toUpperCase(), color]));
@@ -377,6 +378,7 @@ function readSavedColoring() {
     // saved colors from an older mask to a rebuilt model.
     const saved = localStorage.getItem(coloringStorageKey) || "{}";
     const parsed = parseObject(saved);
+    if (String(parsed.modelVersion || "") !== coloringStorageVersion) return {};
     const selectedColors = Array.isArray(parsed.selectedColors)
       ? Object.fromEntries((parsed.coloredParts || parsed.selectedColors).flatMap((part) => part?.regionId && part?.colorHex ? [[part.regionId, part.colorHex]] : []))
       : parseObject(parsed.selectedColors, parsed);
@@ -486,6 +488,19 @@ function initializeColoringGame(panel) {
     const activeModelId = regionModelId || configuredModelId;
     const activeModelVersion = String(regionData.modelVersion || product.coloringModelVersion || "unversioned");
     coloringStorageKey = `yota-coloring-design-${activeModelId}:${activeModelVersion}:${product.id || "product"}`;
+    coloringStorageVersion = activeModelVersion;
+    const modelStoragePrefix = `yota-coloring-design-${activeModelId}:`;
+    Object.keys(localStorage).forEach((key) => {
+      if (key.startsWith(modelStoragePrefix) && key !== coloringStorageKey) localStorage.removeItem(key);
+    });
+    try {
+      const currentSaved = parseObject(localStorage.getItem(coloringStorageKey) || "{}");
+      if (localStorage.getItem(coloringStorageKey) && String(currentSaved.modelVersion || "") !== activeModelVersion) {
+        localStorage.removeItem(coloringStorageKey);
+      }
+    } catch {
+      localStorage.removeItem(coloringStorageKey);
+    }
     localStorage.setItem(`yota-coloring-product-model:${product.id}`, activeModelId);
     const overrideRegions = regionOverrideData?.regions && typeof regionOverrideData.regions === "object"
       ? regionOverrideData.regions
@@ -942,6 +957,7 @@ function initializeColoringGame(panel) {
       const selectedColors = Object.fromEntries(coloredParts.map((part) => [part.regionId, part.colorHex]));
       currentColoringDesign = coloredParts.length ? {
         customizationId,
+        modelVersion: coloringStorageVersion,
         modelId: regionData.modelId || product.coloringModelId,
         modelName: regionData.modelName || text(product.name),
         selectedColors,
@@ -955,7 +971,7 @@ function initializeColoringGame(panel) {
     };
     const persistColoringDesign = () => {
       syncCurrentColoringDesign();
-      localStorage.setItem(coloringStorageKey, JSON.stringify(currentColoringDesign || { customizationId, selectedColors: {} }));
+      localStorage.setItem(coloringStorageKey, JSON.stringify(currentColoringDesign || { customizationId, modelVersion: coloringStorageVersion, selectedColors: {} }));
       requestAnimationFrame(updateFinalMedalPreview);
     };
     const updateHistoryButtons = () => {

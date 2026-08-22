@@ -84,6 +84,9 @@ test("one shared runtime selects model assets and model-scoped storage", () => {
   assert.match(source, /product\.coloringMaskUrl/);
   assert.match(source, /product\.coloringOutlineUrl/);
   assert.match(source, /yota-coloring-design-\$\{activeModelId\}/);
+  assert.match(source, /String\(parsed\.modelVersion \|\| ""\) !== coloringStorageVersion/);
+  assert.match(source, /key\.startsWith\(modelStoragePrefix\) && key !== coloringStorageKey/);
+  assert.match(source, /modelVersion: coloringStorageVersion/);
   assert.match(source, /renderColoringArtwork/);
   assert.doesNotMatch(source, /function\s+initializeYota02Coloring/);
 });
@@ -272,8 +275,8 @@ test("current product ID overrides stale copied coloring configuration", async (
     ...staleModelOneFields
   });
   assert.equal(modelThree.coloringModelId, "yota-03");
-  assert.match(modelThree.coloringBaseImageUrl, /^\/coloring\/yota-03\/base\.png\?v=yota-03-v4$/);
-  assert.match(modelThree.coloringMaskUrl, /^\/coloring\/yota-03\/regions\.png\?v=yota-03-v4$/);
+  assert.match(modelThree.coloringBaseImageUrl, /^\/coloring\/yota-03\/base\.png\?v=yota-03-v5$/);
+  assert.match(modelThree.coloringMaskUrl, /^\/coloring\/yota-03\/regions\.png\?v=yota-03-v5$/);
 });
 
 test("model 3 colors decorative fills only", () => {
@@ -281,7 +284,7 @@ test("model 3 colors decorative fills only", () => {
   const data = JSON.parse(fs.readFileSync(path.join(directory, "regions.json"), "utf8"));
   const overrides = JSON.parse(fs.readFileSync(path.join(directory, "region-overrides.json"), "utf8"));
   const source = fs.readFileSync(path.join(root, "product-page.js"), "utf8");
-  assert.equal(data.modelVersion, "yota-03-v4");
+  assert.equal(data.modelVersion, "yota-03-v5");
   assert.equal(data.paintMode, "replace-source-color");
   assert.equal(data.totalRegions, 13);
   assert.ok(data.regions.every((region) => region.regionKind === "decorative"));

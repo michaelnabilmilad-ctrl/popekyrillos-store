@@ -1,7 +1,7 @@
 {
   "modelId": "yota-03",
   "modelName": "ميدالية يوتا 3",
-  "modelVersion": "yota-03-v4",
+  "modelVersion": "yota-03-v5",
   "paintMode": "replace-source-color",
   "totalRegions": 13,
   "regions": [
