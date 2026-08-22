@@ -1,134 +1,84 @@
 {
   "modelId": "yota-03",
-  "modelVersion": "yota-03-v2",
+  "modelVersion": "yota-03-v3",
   "regions": {
     "region-1": {
       "logicalRegionId": "region-1",
-      "similarShapeGroup": "red-similar-1",
-      "geometryType": "red-14x14"
-    },
-    "region-7": {
-      "logicalRegionId": "region-7",
-      "similarShapeGroup": "red-similar-1",
-      "geometryType": "red-14x14"
-    },
-    "region-8": {
-      "logicalRegionId": "region-8",
-      "similarShapeGroup": "red-similar-1",
-      "geometryType": "red-14x14"
-    },
-    "region-14": {
-      "logicalRegionId": "region-14",
-      "similarShapeGroup": "red-similar-1",
-      "geometryType": "red-14x14"
-    },
-    "region-3": {
-      "logicalRegionId": "region-3",
-      "similarShapeGroup": "cyan-similar-2",
-      "geometryType": "cyan-5x5"
-    },
-    "region-4": {
-      "logicalRegionId": "region-4",
-      "similarShapeGroup": "cyan-similar-2",
-      "geometryType": "cyan-5x5"
-    },
-    "region-11": {
-      "logicalRegionId": "region-11",
-      "similarShapeGroup": "cyan-similar-2",
-      "geometryType": "cyan-5x5"
-    },
-    "region-12": {
-      "logicalRegionId": "region-12",
-      "similarShapeGroup": "cyan-similar-2",
-      "geometryType": "cyan-5x5"
-    },
-    "region-5": {
-      "logicalRegionId": "region-5",
-      "similarShapeGroup": "white-similar-3",
-      "geometryType": "white-6x6"
-    },
-    "region-6": {
-      "logicalRegionId": "region-6",
-      "similarShapeGroup": "white-similar-3",
-      "geometryType": "white-6x6"
-    },
-    "region-9": {
-      "logicalRegionId": "region-9",
-      "similarShapeGroup": "white-similar-3",
-      "geometryType": "white-6x6"
-    },
-    "region-10": {
-      "logicalRegionId": "region-10",
-      "similarShapeGroup": "white-similar-3",
-      "geometryType": "white-6x6"
+      "similarShapeGroup": "outer-crosses",
+      "geometryType": "red",
+      "regionKind": "decorative"
     },
     "region-2": {
       "logicalRegionId": "region-2",
+      "similarShapeGroup": "small-cyan-crosses",
+      "geometryType": "cyan",
+      "regionKind": "decorative"
+    },
+    "region-3": {
+      "logicalRegionId": "region-3",
+      "similarShapeGroup": "small-cyan-crosses",
+      "geometryType": "cyan",
+      "regionKind": "decorative"
+    },
+    "region-4": {
+      "logicalRegionId": "region-4",
+      "similarShapeGroup": "center-white-details",
+      "geometryType": "white",
+      "regionKind": "decorative"
+    },
+    "region-5": {
+      "logicalRegionId": "region-5",
+      "similarShapeGroup": "center-white-details",
+      "geometryType": "white",
+      "regionKind": "decorative"
+    },
+    "region-6": {
+      "logicalRegionId": "region-6",
+      "similarShapeGroup": "outer-crosses",
+      "geometryType": "red",
+      "regionKind": "decorative"
+    },
+    "region-7": {
+      "logicalRegionId": "region-7",
       "similarShapeGroup": null,
-      "geometryType": "white"
+      "geometryType": "yellow",
+      "regionKind": "decorative"
+    },
+    "region-8": {
+      "logicalRegionId": "region-8",
+      "similarShapeGroup": "outer-crosses",
+      "geometryType": "red",
+      "regionKind": "decorative"
+    },
+    "region-9": {
+      "logicalRegionId": "region-9",
+      "similarShapeGroup": "center-white-details",
+      "geometryType": "white",
+      "regionKind": "decorative"
+    },
+    "region-10": {
+      "logicalRegionId": "region-10",
+      "similarShapeGroup": "center-white-details",
+      "geometryType": "white",
+      "regionKind": "decorative"
+    },
+    "region-11": {
+      "logicalRegionId": "region-11",
+      "similarShapeGroup": "small-cyan-crosses",
+      "geometryType": "cyan",
+      "regionKind": "decorative"
+    },
+    "region-12": {
+      "logicalRegionId": "region-12",
+      "similarShapeGroup": "small-cyan-crosses",
+      "geometryType": "cyan",
+      "regionKind": "decorative"
     },
     "region-13": {
       "logicalRegionId": "region-13",
-      "similarShapeGroup": null,
-      "geometryType": "yellow"
-    },
-    "region-15": {
-      "logicalRegionId": "region-15",
-      "similarShapeGroup": null,
-      "geometryType": "yellow"
-    },
-    "region-16": {
-      "logicalRegionId": "region-16",
-      "similarShapeGroup": null,
-      "geometryType": "yellow"
-    },
-    "region-17": {
-      "logicalRegionId": "background-top",
-      "similarShapeGroup": null,
-      "backgroundGroup": "wholeWoodBackground",
-      "regionKind": "wood-background"
-    },
-    "region-18": {
-      "logicalRegionId": "background-right",
-      "similarShapeGroup": null,
-      "backgroundGroup": "wholeWoodBackground",
-      "regionKind": "wood-background"
-    },
-    "region-20": {
-      "logicalRegionId": "background-right",
-      "similarShapeGroup": null,
-      "backgroundGroup": "wholeWoodBackground",
-      "regionKind": "wood-background"
-    },
-    "region-22": {
-      "logicalRegionId": "background-right",
-      "similarShapeGroup": null,
-      "backgroundGroup": "wholeWoodBackground",
-      "regionKind": "wood-background"
-    },
-    "region-19": {
-      "logicalRegionId": "background-center",
-      "similarShapeGroup": null,
-      "backgroundGroup": "wholeWoodBackground",
-      "regionKind": "wood-background"
-    },
-    "region-23": {
-      "logicalRegionId": "background-center",
-      "similarShapeGroup": null,
-      "backgroundGroup": "wholeWoodBackground",
-      "regionKind": "wood-background"
-    },
-    "region-21": {
-      "logicalRegionId": "background-left",
-      "similarShapeGroup": null,
-      "backgroundGroup": "wholeWoodBackground",
-      "regionKind": "wood-background"
-    },
-    "region-24": {
-      "logicalRegionId": "background-bottom",
-      "similarShapeGroup": null,
-      "backgroundGroup": "wholeWoodBackground",
-      "regionKind": "wood-background"
+      "similarShapeGroup": "outer-crosses",
+      "geometryType": "red",
+      "regionKind": "decorative"
     }
   },
   "logicalShapes": {
@@ -170,82 +120,46 @@
     ],
     "region-13": [
       "region-13"
-    ],
-    "region-14": [
-      "region-14"
-    ],
-    "region-15": [
-      "region-15"
-    ],
-    "region-16": [
-      "region-16"
-    ],
-    "background-top": [
-      "region-17"
-    ],
-    "background-right": [
-      "region-18",
-      "region-20",
-      "region-22"
-    ],
-    "background-center": [
-      "region-19",
-      "region-23"
-    ],
-    "background-left": [
-      "region-21"
-    ],
-    "background-bottom": [
-      "region-24"
     ]
   },
   "similarShapeGroups": {
-    "red-similar-1": [
+    "outer-crosses": [
       "region-1",
-      "region-7",
+      "region-6",
       "region-8",
-      "region-14"
+      "region-13"
     ],
-    "cyan-similar-2": [
+    "small-cyan-crosses": [
+      "region-2",
       "region-3",
-      "region-4",
       "region-11",
       "region-12"
     ],
-    "white-similar-3": [
+    "center-white-details": [
+      "region-4",
       "region-5",
-      "region-6",
       "region-9",
       "region-10"
     ]
   },
   "groups": {
-    "red-similar-1": [
+    "outer-crosses": [
       "region-1",
-      "region-7",
+      "region-6",
       "region-8",
-      "region-14"
+      "region-13"
     ],
-    "cyan-similar-2": [
+    "small-cyan-crosses": [
+      "region-2",
       "region-3",
-      "region-4",
       "region-11",
       "region-12"
     ],
-    "white-similar-3": [
+    "center-white-details": [
+      "region-4",
       "region-5",
-      "region-6",
       "region-9",
       "region-10"
-    ]
-  },
-  "backgroundGroups": {
-    "wholeWoodBackground": [
-      "background-top",
-      "background-right",
-      "background-center",
-      "background-left",
-      "background-bottom"
     ]
   }
 }

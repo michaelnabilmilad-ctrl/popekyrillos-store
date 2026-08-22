@@ -326,7 +326,6 @@ function coloringMarkup() {
         ${colors.map((color,index)=>`<button type="button" data-coloring-color-id="${escapeHtml(color.id)}" data-color-name="${escapeHtml(color.name)}" style="--swatch:${escapeHtml(color.hex)};${color.metallic ? `--swatch-background:linear-gradient(135deg,${escapeHtml(color.highlight)} 0%,${escapeHtml(color.hex)} 52%,${escapeHtml(color.shadow)} 100%);` : ""}" aria-label="${escapeHtml(color.name)}" title="${escapeHtml(color.name)}" aria-pressed="${index===0}"></button>`).join("")}
       </div>
       <label class="product-coloring-grouping-option"><input type="checkbox" data-coloring-symmetry> <span>لوّن الأشكال المتشابهة معًا</span></label>
-      ${product.coloringModelId === "yota-03" ? '<label class="product-coloring-grouping-option"><input type="checkbox" data-coloring-whole-background> <span>لوّن خلفية الميدالية كلها معًا</span></label>' : ""}
       <div class="product-coloring-tools">
         <button type="button" data-coloring-eraser aria-pressed="false">الممحاة</button>
         <button type="button" data-coloring-reset>ابدأ من جديد</button>
@@ -505,12 +504,6 @@ function initializeColoringGame(panel) {
         similarGroupByLogicalShape.set(logicalShapeId, groupName);
       });
     });
-    const backgroundGroupByLogicalShape = new Map();
-    Object.entries(regionOverrideData?.backgroundGroups || {}).forEach(([groupName, logicalShapeIds]) => {
-      (Array.isArray(logicalShapeIds) ? logicalShapeIds : []).forEach((logicalShapeId) => {
-        backgroundGroupByLogicalShape.set(logicalShapeId, groupName);
-      });
-    });
     coloringRegions = (Array.isArray(regionData.regions) ? regionData.regions : []).map((region) => {
       const regionId = region.id || region.regionId;
       const logicalShapeId = logicalShapeByRegion.get(regionId)
@@ -526,24 +519,19 @@ function initializeColoringGame(panel) {
         || region.similarShapeGroup
         || region.shapeGroup
         || null;
-      const backgroundGroup = backgroundGroupByLogicalShape.get(logicalShapeId)
-        || overrideRegions[regionId]?.backgroundGroup
-        || region.backgroundGroup
-        || null;
       return {
         ...region,
         ...(overrideRegions[regionId] || {}),
         logicalShapeId,
         logicalRegionId: logicalShapeId,
         similarShapeGroup,
-        backgroundGroup,
         shapeGroup: similarShapeGroup
       };
     });
     const logicalShapeCount = Object.keys(regionOverrideData?.logicalShapes || {}).length;
     const similarShapeGroupCount = Object.keys(regionOverrideData?.similarShapeGroups || {}).length;
     const shouldShowSimilarShapesCheckbox = Boolean(hasColoringGame);
-    const groupingDiagnostics = {
+    console.info("[coloring-game] grouping configuration", {
       model: activeModelId,
       modelVersion: activeModelVersion,
       configKey: coloringStorageKey,
@@ -551,13 +539,7 @@ function initializeColoringGame(panel) {
       similarShapeGroupsLoaded: similarShapeGroupCount > 0,
       similarShapeGroupsCount: similarShapeGroupCount,
       shouldShowSimilarShapesCheckbox
-    };
-    panel.dataset.coloringModel = activeModelId;
-    panel.dataset.coloringModelVersion = activeModelVersion;
-    panel.dataset.logicalShapesLoaded = String(logicalShapeCount);
-    panel.dataset.similarShapeGroupsLoaded = String(similarShapeGroupCount);
-    panel.dataset.shouldShowSimilarShapesCheckbox = String(shouldShowSimilarShapesCheckbox);
-    console.info(`[coloring-game] grouping configuration ${JSON.stringify(groupingDiagnostics)}`);
+    });
     if (activeModelId === "yota-02" && (!logicalShapeCount || !similarShapeGroupCount)) {
       console.error("YOTA MODEL 2 EXPECTED SIMILAR GROUPS BUT NONE WERE LOADED", {
         modelVersion: activeModelVersion,
@@ -676,6 +658,11 @@ function initializeColoringGame(panel) {
       const regionId = allRegionByMaskKey.get(`${maskPixels[pixel]},${maskPixels[pixel+1]},${maskPixels[pixel+2]}`);
       if (regionId) regionPixelIndexes.get(regionId).push(pixel);
     }
+    const replaceSourceColor = regionData.paintMode === "replace-source-color";
+    const regionAverageLuminance = new Map([...regionPixelIndexes].map(([regionId, pixels]) => {
+      const total = pixels.reduce((sum, offset) => sum + 0.2126 * basePixels[offset] + 0.7152 * basePixels[offset + 1] + 0.0722 * basePixels[offset + 2], 0);
+      return [regionId, pixels.length ? total / pixels.length : 128];
+    }));
 
     const parseHex = (hex) => (String(hex || "").match(/[0-9a-f]{2}/gi) || []).map((part) => parseInt(part, 16));
     const normalizePaint = (value) => {
@@ -718,9 +705,13 @@ function initializeColoringGame(panel) {
         const x = pixel % canvas.width;
         const y = Math.floor(pixel / canvas.width);
         const localIndex = ((y - bounds.y) * bounds.width + (x - bounds.x)) * 4;
-        let outputRed = basePixels[sourceIndex] * (1 - paintOpacity) + red * paintOpacity;
-        let outputGreen = basePixels[sourceIndex + 1] * (1 - paintOpacity) + green * paintOpacity;
-        let outputBlue = basePixels[sourceIndex + 2] * (1 - paintOpacity) + blue * paintOpacity;
+        const sourceLuminance = 0.2126 * basePixels[sourceIndex] + 0.7152 * basePixels[sourceIndex + 1] + 0.0722 * basePixels[sourceIndex + 2];
+        const textureFactor = replaceSourceColor
+          ? Math.max(0.82, Math.min(1.18, 1 + (sourceLuminance - regionAverageLuminance.get(regionId)) / 420))
+          : 1;
+        let outputRed = replaceSourceColor ? red * textureFactor : basePixels[sourceIndex] * (1 - paintOpacity) + red * paintOpacity;
+        let outputGreen = replaceSourceColor ? green * textureFactor : basePixels[sourceIndex + 1] * (1 - paintOpacity) + green * paintOpacity;
+        let outputBlue = replaceSourceColor ? blue * textureFactor : basePixels[sourceIndex + 2] * (1 - paintOpacity) + blue * paintOpacity;
         if (!flatMode) {
           const strengthScale = paintEffectStrength / 0.22;
           const bevelWidth = 3 * effectScale;
@@ -985,12 +976,6 @@ function initializeColoringGame(panel) {
       const logicalMembers = coloringRegions
         .filter((region) => (region.logicalShapeId || region.logicalRegionId || region.id || region.regionId) === logicalShapeId)
         .map((region) => region.id || region.regionId);
-      const backgroundGroup = metadata?.backgroundGroup;
-      if (backgroundGroup && panel.querySelector("[data-coloring-whole-background]")?.checked) {
-        return [...new Set(coloringRegions
-          .filter((region) => region.backgroundGroup === backgroundGroup)
-          .map((region) => region.id || region.regionId))];
-      }
       if (!panel.querySelector("[data-coloring-symmetry]")?.checked) return [...new Set(logicalMembers)];
       const similarShapeGroup = metadata?.similarShapeGroup || metadata?.shapeGroup;
       if (!similarShapeGroup) return [...new Set(logicalMembers)];

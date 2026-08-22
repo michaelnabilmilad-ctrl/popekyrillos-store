@@ -237,8 +237,8 @@ test("all website Yota medallions are represented without sharing masks", async 
 
   const ready = registry.COLORING_DESIGNS.filter((design) => design.enabled !== false);
   const pending = registry.COLORING_DESIGNS.filter((design) => design.enabled === false);
-  assert.deepEqual(ready.map((design) => design.id), ["yota-01", "yota-02"]);
-  assert.deepEqual(pending.map((design) => design.id), ["yota-03", "yota-04", "yota-05", "yota-06", "yota-07"]);
+  assert.deepEqual(ready.map((design) => design.id), ["yota-01", "yota-02", "yota-03"]);
+  assert.deepEqual(pending.map((design) => design.id), ["yota-04", "yota-05", "yota-06", "yota-07"]);
   assert.equal(new Set(ready.map((design) => design.regionsPath)).size, ready.length);
   pending.forEach((design) => {
     assert.equal(design.status, "missing-region-assets");
@@ -267,11 +267,26 @@ test("current product ID overrides stale copied coloring configuration", async (
   assert.match(modelTwo.coloringMaskUrl, /^\/coloring\/yota-02\/regions\.png\?v=yota-02-v14$/);
   assert.equal(modelTwo.coloringRegions, undefined);
 
-  const unsupportedModel = registry.withYotaColoringConfig({
+  const modelThree = registry.withYotaColoringConfig({
     id: "custom-1782980654479-copy-1782982056347-copy-1782986984554",
     ...staleModelOneFields
   });
-  assert.equal(unsupportedModel.coloringModelId, undefined);
-  assert.equal(unsupportedModel.coloringBaseImageUrl, undefined);
-  assert.equal(unsupportedModel.coloringMaskUrl, undefined);
+  assert.equal(modelThree.coloringModelId, "yota-03");
+  assert.match(modelThree.coloringBaseImageUrl, /^\/coloring\/yota-03\/base\.png\?v=yota-03-v3$/);
+  assert.match(modelThree.coloringMaskUrl, /^\/coloring\/yota-03\/regions\.png\?v=yota-03-v3$/);
+});
+
+test("model 3 colors decorative fills only", () => {
+  const directory = path.join(root, "coloring", "yota-03");
+  const data = JSON.parse(fs.readFileSync(path.join(directory, "regions.json"), "utf8"));
+  const overrides = JSON.parse(fs.readFileSync(path.join(directory, "region-overrides.json"), "utf8"));
+  const source = fs.readFileSync(path.join(root, "product-page.js"), "utf8");
+  assert.equal(data.modelVersion, "yota-03-v3");
+  assert.equal(data.paintMode, "replace-source-color");
+  assert.equal(data.totalRegions, 13);
+  assert.ok(data.regions.every((region) => region.regionKind === "decorative"));
+  assert.equal(Object.keys(overrides.logicalShapes).length, 13);
+  assert.equal(overrides.backgroundGroups, undefined);
+  assert.doesNotMatch(source, /data-coloring-whole-background/);
+  assert.match(source, /replace-source-color/);
 });
