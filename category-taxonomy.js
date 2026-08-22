@@ -369,6 +369,12 @@
                   "subcategoryImage": "assets/optimized/products/processional-cross.webp"
               },
               {
+                  "id": "yota-medallions",
+                  "name": "مادليات اليوطا",
+                  "disableProductImageFallback": true,
+                  "manualImage": "assets/optimized/products/gallery/taxonomy-yota-medallions-image-20260822192514-d126b0.webp"
+              },
+              {
                   "id": "iota-plain-hand-crosses",
                   "name": "صلبان يد يوتا سادة",
                   "subcategoryImage": "assets/optimized/products/processional-cross.webp"
@@ -377,12 +383,6 @@
                   "id": "plain-cross-medals",
                   "name": "صلبان ميداليات سادة",
                   "subcategoryImage": "assets/optimized/products/processional-cross.webp"
-              },
-              {
-                  "id": "yota-medallions",
-                  "name": "مادليات اليوطا",
-                  "disableProductImageFallback": true,
-                  "manualImage": "assets/optimized/products/gallery/taxonomy-yota-medallions-image-20260822192514-d126b0.webp"
               },
               {
                   "id": "pectoral-crosses",
@@ -895,7 +895,7 @@
   ];
   const TAXONOMY_STORAGE_KEY = "pope-kyrillos-taxonomy";
   const TAXONOMY_VERSION_STORAGE_KEY = "pope-kyrillos-taxonomy-version";
-  const CURRENT_TAXONOMY_VERSION = 1787426731973;
+  const CURRENT_TAXONOMY_VERSION = 1787426895663;
   const categories = (() => {
     try {
       const storedVersion = Number(localStorage.getItem(TAXONOMY_VERSION_STORAGE_KEY) || 0);
