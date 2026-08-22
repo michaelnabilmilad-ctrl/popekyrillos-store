@@ -400,7 +400,7 @@
               },
               {
                   "id": "processional-crosses",
-                  "name": "صلبان مواكب",
+                  "name": "صلبان الزفة",
                   "subcategoryImage": "assets/optimized/products/processional-cross.webp"
               },
               {
@@ -889,7 +889,7 @@
   ];
   const TAXONOMY_STORAGE_KEY = "pope-kyrillos-taxonomy";
   const TAXONOMY_VERSION_STORAGE_KEY = "pope-kyrillos-taxonomy-version";
-  const CURRENT_TAXONOMY_VERSION = 1787307640802;
+  const CURRENT_TAXONOMY_VERSION = 1787401053366;
   const categories = (() => {
     try {
       const storedVersion = Number(localStorage.getItem(TAXONOMY_VERSION_STORAGE_KEY) || 0);
