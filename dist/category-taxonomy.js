@@ -379,6 +379,11 @@
                   "subcategoryImage": "assets/optimized/products/processional-cross.webp"
               },
               {
+                  "id": "yota-medallions",
+                  "name": "مادليات اليوطا",
+                  "disableProductImageFallback": true
+              },
+              {
                   "id": "pectoral-crosses",
                   "name": "صلبان صدر",
                   "subcategoryImage": "assets/optimized/products/processional-cross.webp"
@@ -889,7 +894,7 @@
   ];
   const TAXONOMY_STORAGE_KEY = "pope-kyrillos-taxonomy";
   const TAXONOMY_VERSION_STORAGE_KEY = "pope-kyrillos-taxonomy-version";
-  const CURRENT_TAXONOMY_VERSION = 1787424461727;
+  const CURRENT_TAXONOMY_VERSION = 1787425186647;
   const categories = (() => {
     try {
       const storedVersion = Number(localStorage.getItem(TAXONOMY_VERSION_STORAGE_KEY) || 0);
