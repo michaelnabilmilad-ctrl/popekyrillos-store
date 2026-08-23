@@ -36,13 +36,13 @@ const paint = (ids, rgb) => {
   }
   return output;
 };
-const colors = { blue: [0, 80, 210], green: [0, 155, 70], yellow: [245, 190, 0], white: [245, 245, 245] };
-const targets = [...overrides.similarShapeGroups["outer-crosses"], ...overrides.similarShapeGroups["small-cyan-crosses"]];
+const colors = { red: [208, 1, 1], blue: [0, 80, 210], black: [20, 20, 20], white: [245, 245, 245] };
+const targets = data.regions.map((region) => region.regionId || region.id);
 const panels = [];
 for (const [name, rgb] of Object.entries(colors)) {
   const painted = paint(targets, rgb);
   const image = await sharp(painted, { raw: info }).extract({ left: 350, top: 680, width: 680, height: 700 }).resize(420, 430, { fit: "contain", background: "white" }).png().toBuffer();
-  const title = Buffer.from(`<svg width="420" height="34"><rect width="420" height="34" fill="white"/><text x="210" y="23" text-anchor="middle" font-family="Arial" font-size="17" font-weight="700">Red + cyan replaced with ${name}</text></svg>`);
+  const title = Buffer.from(`<svg width="420" height="34"><rect width="420" height="34" fill="white"/><text x="210" y="23" text-anchor="middle" font-family="Arial" font-size="17" font-weight="700">All 13 logical shapes: ${name}</text></svg>`);
   panels.push(await sharp({ create: { width: 420, height: 464, channels: 4, background: "white" } }).composite([{ input: title, top: 0, left: 0 }, { input: image, top: 34, left: 0 }]).png().toBuffer());
 }
 await sharp({ create: { width: 840, height: 928, channels: 4, background: "#eee" } }).composite(panels.map((input, i) => ({ input, left: (i % 2) * 420, top: Math.floor(i / 2) * 464 }))).png().toFile(path.join(dir, "recolor-validation.png"));

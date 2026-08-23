@@ -1,8 +1,9 @@
 {
   "modelId": "yota-03",
   "modelName": "ميدالية يوتا 3",
-  "modelVersion": "yota-03-v5",
+  "modelVersion": "yota-03-v6",
   "paintMode": "replace-source-color",
+  "ignoreNeutralWatermark": true,
   "totalRegions": 13,
   "regions": [
     {
@@ -13,14 +14,14 @@
         0,
         73
       ],
-      "pixelCount": 3603,
+      "pixelCount": 7451,
       "centerX": 684,
       "centerY": 790,
       "bounds": {
-        "x": 657,
-        "y": 740,
-        "width": 98,
-        "height": 127
+        "x": 652,
+        "y": 735,
+        "width": 108,
+        "height": 137
       },
       "sampleX": 684,
       "sampleY": 790,
@@ -39,14 +40,14 @@
         0,
         146
       ],
-      "pixelCount": 693,
+      "pixelCount": 1841,
       "centerX": 578,
       "centerY": 890,
       "bounds": {
-        "x": 566,
-        "y": 867,
-        "width": 35,
-        "height": 48
+        "x": 561,
+        "y": 862,
+        "width": 45,
+        "height": 58
       },
       "sampleX": 578,
       "sampleY": 890,
@@ -65,14 +66,14 @@
         0,
         219
       ],
-      "pixelCount": 1149,
+      "pixelCount": 2209,
       "centerX": 795,
       "centerY": 890,
       "bounds": {
-        "x": 766,
-        "y": 867,
-        "width": 48,
-        "height": 48
+        "x": 761,
+        "y": 862,
+        "width": 58,
+        "height": 58
       },
       "sampleX": 795,
       "sampleY": 890,
@@ -91,14 +92,14 @@
         0,
         37
       ],
-      "pixelCount": 4123,
+      "pixelCount": 8573,
       "centerX": 481,
       "centerY": 1000,
       "bounds": {
-        "x": 450,
-        "y": 925,
-        "width": 101,
-        "height": 138
+        "x": 445,
+        "y": 920,
+        "width": 111,
+        "height": 148
       },
       "sampleX": 481,
       "sampleY": 1000,
@@ -117,14 +118,14 @@
         0,
         110
       ],
-      "pixelCount": 1098,
+      "pixelCount": 2467,
       "centerX": 631,
       "centerY": 959,
       "bounds": {
-        "x": 615,
-        "y": 925,
-        "width": 56,
-        "height": 55
+        "x": 610,
+        "y": 920,
+        "width": 64,
+        "height": 63
       },
       "sampleX": 631,
       "sampleY": 959,
@@ -143,14 +144,14 @@
         0,
         183
       ],
-      "pixelCount": 1275,
+      "pixelCount": 2467,
       "centerX": 738,
       "centerY": 959,
       "bounds": {
-        "x": 698,
-        "y": 925,
-        "width": 56,
-        "height": 55
+        "x": 695,
+        "y": 920,
+        "width": 64,
+        "height": 63
       },
       "sampleX": 738,
       "sampleY": 959,
@@ -169,14 +170,14 @@
         0,
         1
       ],
-      "pixelCount": 7710,
+      "pixelCount": 14074,
       "centerX": 684,
       "centerY": 1015,
       "bounds": {
-        "x": 573,
-        "y": 885,
-        "width": 221,
-        "height": 219
+        "x": 568,
+        "y": 880,
+        "width": 231,
+        "height": 229
       },
       "sampleX": 684,
       "sampleY": 1015,
@@ -195,14 +196,14 @@
         0,
         74
       ],
-      "pixelCount": 5785,
+      "pixelCount": 10882,
       "centerX": 884,
       "centerY": 1000,
       "bounds": {
-        "x": 815,
-        "y": 925,
-        "width": 142,
-        "height": 138
+        "x": 810,
+        "y": 920,
+        "width": 152,
+        "height": 148
       },
       "sampleX": 884,
       "sampleY": 1000,
@@ -221,14 +222,14 @@
         0,
         147
       ],
-      "pixelCount": 1296,
+      "pixelCount": 2485,
       "centerX": 645,
       "centerY": 1041,
       "bounds": {
-        "x": 615,
-        "y": 1007,
-        "width": 56,
-        "height": 56
+        "x": 610,
+        "y": 1004,
+        "width": 64,
+        "height": 64
       },
       "sampleX": 645,
       "sampleY": 1041,
@@ -247,14 +248,14 @@
         0,
         220
       ],
-      "pixelCount": 1319,
+      "pixelCount": 2474,
       "centerX": 724,
       "centerY": 1041,
       "bounds": {
-        "x": 698,
-        "y": 1008,
-        "width": 55,
-        "height": 55
+        "x": 695,
+        "y": 1005,
+        "width": 63,
+        "height": 63
       },
       "sampleX": 724,
       "sampleY": 1041,
@@ -273,14 +274,14 @@
         0,
         38
       ],
-      "pixelCount": 1162,
+      "pixelCount": 2267,
       "centerX": 578,
       "centerY": 1110,
       "bounds": {
-        "x": 551,
-        "y": 1079,
-        "width": 48,
-        "height": 49
+        "x": 546,
+        "y": 1074,
+        "width": 58,
+        "height": 59
       },
       "sampleX": 578,
       "sampleY": 1110,
@@ -299,14 +300,14 @@
         0,
         111
       ],
-      "pixelCount": 1204,
+      "pixelCount": 2327,
       "centerX": 795,
       "centerY": 1110,
       "bounds": {
-        "x": 765,
-        "y": 1079,
-        "width": 49,
-        "height": 50
+        "x": 760,
+        "y": 1074,
+        "width": 59,
+        "height": 60
       },
       "sampleX": 795,
       "sampleY": 1110,
@@ -325,14 +326,14 @@
         0,
         184
       ],
-      "pixelCount": 5993,
+      "pixelCount": 11074,
       "centerX": 684,
       "centerY": 1195,
       "bounds": {
-        "x": 613,
-        "y": 1123,
-        "width": 140,
-        "height": 144
+        "x": 608,
+        "y": 1118,
+        "width": 150,
+        "height": 154
       },
       "sampleX": 684,
       "sampleY": 1195,

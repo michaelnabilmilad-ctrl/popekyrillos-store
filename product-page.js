@@ -720,9 +720,15 @@ function initializeColoringGame(panel) {
         const x = pixel % canvas.width;
         const y = Math.floor(pixel / canvas.width);
         const localIndex = ((y - bounds.y) * bounds.width + (x - bounds.x)) * 4;
-        const sourceLuminance = 0.2126 * basePixels[sourceIndex] + 0.7152 * basePixels[sourceIndex + 1] + 0.0722 * basePixels[sourceIndex + 2];
+        const sourceRed = basePixels[sourceIndex];
+        const sourceGreen = basePixels[sourceIndex + 1];
+        const sourceBlue = basePixels[sourceIndex + 2];
+        const sourceLuminance = 0.2126 * sourceRed + 0.7152 * sourceGreen + 0.0722 * sourceBlue;
+        const neutralWatermarkPixel = regionData.ignoreNeutralWatermark === true &&
+          Math.abs(sourceRed - sourceGreen) < 18 && Math.abs(sourceGreen - sourceBlue) < 18;
+        const effectiveSourceLuminance = neutralWatermarkPixel ? regionAverageLuminance.get(regionId) : sourceLuminance;
         const textureFactor = replaceSourceColor
-          ? Math.max(0.82, Math.min(1.18, 1 + (sourceLuminance - regionAverageLuminance.get(regionId)) / 420))
+          ? Math.max(0.82, Math.min(1.18, 1 + (effectiveSourceLuminance - regionAverageLuminance.get(regionId)) / 420))
           : 1;
         let outputRed = replaceSourceColor ? red * textureFactor : basePixels[sourceIndex] * (1 - paintOpacity) + red * paintOpacity;
         let outputGreen = replaceSourceColor ? green * textureFactor : basePixels[sourceIndex + 1] * (1 - paintOpacity) + green * paintOpacity;
@@ -741,7 +747,7 @@ function initializeColoringGame(panel) {
           const highlightSampleY = Math.max(1, Math.round(Math.abs(highlightOffsetY) / effectScale));
           const shadowSampleX = Math.max(1, Math.round(shadowOffsetX / effectScale));
           const shadowSampleY = Math.max(1, Math.round(shadowOffsetY / effectScale));
-          const woodLuminance = (basePixels[sourceIndex] + basePixels[sourceIndex + 1] + basePixels[sourceIndex + 2]) / 3;
+          const woodLuminance = effectiveSourceLuminance;
           const softLightTexture = ((woodLuminance - 128) / 128) * 0.045;
           outputRed += (softLightTexture >= 0 ? 255 - outputRed : outputRed) * softLightTexture;
           outputGreen += (softLightTexture >= 0 ? 255 - outputGreen : outputGreen) * softLightTexture;
