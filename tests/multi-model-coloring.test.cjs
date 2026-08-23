@@ -275,8 +275,8 @@ test("current product ID overrides stale copied coloring configuration", async (
     ...staleModelOneFields
   });
   assert.equal(modelThree.coloringModelId, "yota-03");
-  assert.match(modelThree.coloringBaseImageUrl, /^\/coloring\/yota-03\/base\.png\?v=yota-03-v6$/);
-  assert.match(modelThree.coloringMaskUrl, /^\/coloring\/yota-03\/regions\.png\?v=yota-03-v6$/);
+  assert.match(modelThree.coloringBaseImageUrl, /^\/coloring\/yota-03\/base\.png\?v=yota-03-v7$/);
+  assert.match(modelThree.coloringMaskUrl, /^\/coloring\/yota-03\/regions\.png\?v=yota-03-v7$/);
 });
 
 test("model 3 colors decorative fills only", () => {
@@ -284,9 +284,9 @@ test("model 3 colors decorative fills only", () => {
   const data = JSON.parse(fs.readFileSync(path.join(directory, "regions.json"), "utf8"));
   const overrides = JSON.parse(fs.readFileSync(path.join(directory, "region-overrides.json"), "utf8"));
   const source = fs.readFileSync(path.join(root, "product-page.js"), "utf8");
-  assert.equal(data.modelVersion, "yota-03-v6");
+  assert.equal(data.modelVersion, "yota-03-v7");
   assert.equal(data.paintMode, "replace-source-color");
-  assert.equal(data.ignoreNeutralWatermark, true);
+  assert.equal(data.ignoreNeutralWatermark, undefined);
   assert.equal(data.totalRegions, 13);
   assert.ok(data.regions.every((region) => region.regionKind === "decorative"));
   assert.equal(Object.keys(overrides.logicalShapes).length, 13);

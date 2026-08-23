@@ -1,9 +1,8 @@
 {
   "modelId": "yota-03",
   "modelName": "ميدالية يوتا 3",
-  "modelVersion": "yota-03-v6",
+  "modelVersion": "yota-03-v7",
   "paintMode": "replace-source-color",
-  "ignoreNeutralWatermark": true,
   "totalRegions": 13,
   "regions": [
     {
@@ -14,14 +13,14 @@
         0,
         73
       ],
-      "pixelCount": 7451,
+      "pixelCount": 10101,
       "centerX": 684,
       "centerY": 790,
       "bounds": {
-        "x": 652,
-        "y": 735,
-        "width": 108,
-        "height": 137
+        "x": 609,
+        "y": 727,
+        "width": 151,
+        "height": 145
       },
       "sampleX": 684,
       "sampleY": 790,
@@ -40,13 +39,13 @@
         0,
         146
       ],
-      "pixelCount": 1841,
+      "pixelCount": 2209,
       "centerX": 578,
       "centerY": 890,
       "bounds": {
-        "x": 561,
+        "x": 550,
         "y": 862,
-        "width": 45,
+        "width": 58,
         "height": 58
       },
       "sampleX": 578,
@@ -92,13 +91,13 @@
         0,
         37
       ],
-      "pixelCount": 8573,
+      "pixelCount": 10882,
       "centerX": 481,
       "centerY": 1000,
       "bounds": {
-        "x": 445,
+        "x": 407,
         "y": 920,
-        "width": 111,
+        "width": 152,
         "height": 148
       },
       "sampleX": 481,
@@ -118,7 +117,7 @@
         0,
         110
       ],
-      "pixelCount": 2467,
+      "pixelCount": 2454,
       "centerX": 631,
       "centerY": 959,
       "bounds": {
@@ -170,13 +169,13 @@
         0,
         1
       ],
-      "pixelCount": 14074,
+      "pixelCount": 14028,
       "centerX": 684,
       "centerY": 1015,
       "bounds": {
-        "x": 568,
+        "x": 570,
         "y": 880,
-        "width": 231,
+        "width": 229,
         "height": 229
       },
       "sampleX": 684,

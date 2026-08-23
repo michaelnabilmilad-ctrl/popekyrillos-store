@@ -4,7 +4,7 @@ import sharp from "sharp";
 
 const root = path.resolve(import.meta.dirname, "..");
 const outputDir = path.join(root, "coloring", "yota-03");
-const source = path.join(outputDir, "plain-gallery-source.webp");
+const source = path.join(outputDir, "clean-base-source.png");
 const { data: rgb, info } = await sharp(source).removeAlpha().raw().toBuffer({ resolveWithObject: true });
 const gray = await sharp(source).greyscale().raw().toBuffer();
 const localMean = await sharp(source).greyscale().blur(4).raw().toBuffer();
@@ -13,8 +13,8 @@ const totalPixels = width * height;
 const indexOf = (x, y) => y * width + x;
 const engraving = new Uint8Array(totalPixels);
 
-// Only the warm brown laser engraving is a boundary. The neutral gray
-// diagonal watermark is deliberately excluded, so it cannot split a shape.
+// Only the photographed laser engraving is a boundary. The source artwork is
+// already clean, so branding has no role in segmentation or hit detection.
 for (let y = 430; y < 1370; y += 1) {
   for (let x = 300; x < 1060; x += 1) {
     const pixel = indexOf(x, y);
@@ -182,10 +182,10 @@ const regions = components.map((component, index) => ({
   regionKind: "decorative", logicalRegionId: `region-${index + 1}`, shapeGroup: component.family, geometryType: component.family || "center-cross",
   enabled: true, label: component.name
 }));
-const regionsJson = { modelId: "yota-03", modelName: "ميدالية يوتا 3", modelVersion: "yota-03-v6", paintMode: "replace-source-color", ignoreNeutralWatermark: true, totalRegions: regions.length, regions, shapeGroups: Object.entries(groups).map(([id, regions]) => ({ id, regions })) };
+const regionsJson = { modelId: "yota-03", modelName: "ميدالية يوتا 3", modelVersion: "yota-03-v7", paintMode: "replace-source-color", totalRegions: regions.length, regions, shapeGroups: Object.entries(groups).map(([id, regions]) => ({ id, regions })) };
 const overrideRegions = Object.fromEntries(components.map((component, index) => [`region-${index + 1}`, { logicalRegionId: `region-${index + 1}`, similarShapeGroup: component.family, geometryType: component.family || "center-cross", regionKind: "decorative" }]));
 const logicalShapes = Object.fromEntries(components.map((component, index) => [`region-${index + 1}`, [`region-${index + 1}`]]));
-const overrides = { modelId: "yota-03", modelVersion: "yota-03-v6", regions: overrideRegions, logicalShapes, similarShapeGroups: groups, groups };
+const overrides = { modelId: "yota-03", modelVersion: "yota-03-v7", regions: overrideRegions, logicalShapes, similarShapeGroups: groups, groups };
 fs.writeFileSync(path.join(outputDir, "regions.json"), `${JSON.stringify(regionsJson, null, 2)}\n`);
 fs.writeFileSync(path.join(outputDir, "region-overrides.json"), `${JSON.stringify(overrides, null, 2)}\n`);
 
@@ -201,4 +201,4 @@ const labels = components.map((component, index) => `<text x="${component.x}" y=
 const svg = Buffer.from(`<svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">${labels}</svg>`);
 await sharp(source).composite([{ input: debug, raw: { width, height, channels: 4 } }, { input: outline, raw: { width, height, channels: 4 } }, { input: svg }]).png().toFile(path.join(outputDir, "regions-debug.png"));
 console.log(components.map((component, index) => ({ id: index + 1, name: component.name, pixels: component.pixels.length })));
-console.log({ uniquePixels: unique.size, source, outputDir, modelVersion: "yota-03-v6" });
+console.log({ uniquePixels: unique.size, source, outputDir, modelVersion: "yota-03-v7" });
