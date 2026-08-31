@@ -1445,7 +1445,9 @@ function renderSubcategoryCards() {
       data-subcategory-card="${escapeHtml(card.id)}"
       aria-pressed="${card.active ? "true" : "false"}"
     >
-      <span class="subcategory-card-image is-empty"${card.image ? ` data-subcategory-image-src="${escapeHtml(versionedAssetUrl(card.image, productsAssetVersion || "1"))}"` : ""}></span>
+      <span class="subcategory-card-image${card.image ? "" : " is-empty"}">
+        ${card.image ? `<img src="${escapeHtml(versionedAssetUrl(card.image, productsAssetVersion || "1"))}" alt="" width="320" height="320" loading="lazy" decoding="async" />` : ""}
+      </span>
       <span class="subcategory-card-body">
         <strong>${escapeHtml(card.name)}</strong>
         <small>${escapeHtml(displayText(formatter.format(card.count)))} ${isEnglish() ? "products" : "منتج"}</small>
@@ -1472,23 +1474,6 @@ function renderSubcategoryCards() {
   subcategoryCards.dataset.collapsible = needsMoreCard ? "true" : "false";
   subcategoryCards.dataset.expanded = state.subcategoryCardsExpanded ? "true" : "false";
   subcategoryCards.innerHTML = `${visibleCards.map(cardHtml).join("")}${moreCardHtml}`;
-  loadSubcategoryCardImages();
-}
-
-function loadSubcategoryCardImages() {
-  subcategoryCards?.querySelectorAll("[data-subcategory-image-src]").forEach((area) => {
-    const src = area.dataset.subcategoryImageSrc;
-    if (!src) return;
-    const probe = new Image();
-    probe.onload = () => {
-      if (!area.isConnected || area.dataset.subcategoryImageSrc !== src) return;
-      const image = document.createElement("img");
-      image.src = src; image.alt = ""; image.width = 320; image.height = 320;
-      image.loading = "lazy"; image.decoding = "async";
-      area.classList.remove("is-empty"); area.append(image);
-    };
-    probe.src = src;
-  });
 }
 
 function updateFilterButtons() {

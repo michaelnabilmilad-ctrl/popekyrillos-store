@@ -23,9 +23,13 @@ test("tote bag card never uses colors and loses product image after product is m
   assert.equal(choose(sub,[colors,bag]).image,"");
 });
 test("hidden or deleted product image is never selected",()=>assert.equal(choose({id:"tote-bags"},[product("bag","occasions-service","tote-bags","assets/bag.webp",{published:false})]).image,""));
-test("broken URL cannot create a card img before a successful preload",()=>{
+test("every subcategory image is rendered immediately and independently of active state",()=>{
   const source=fs.readFileSync("script.js","utf8");
-  assert.match(source,/probe\.onload\s*=\s*\(\)\s*=>/);
-  assert.match(source,/document\.createElement\("img"\)/);
-  assert.doesNotMatch(source,/subcategory-card-image[^\n]+<img/);
+  const renderer=source.slice(source.indexOf("function renderSubcategoryCards()"),source.indexOf("function updateFilterButtons()"));
+  assert.match(renderer,/card\.image \? `<img src=/);
+  assert.match(renderer,/loading="lazy" decoding="async"/);
+  assert.doesNotMatch(renderer,/data-subcategory-image-src|loadSubcategoryCardImages|new Image\(\)/);
+  assert.doesNotMatch(renderer,/card\.active[^\n]+<img|activeLabel[^\n]+<img/);
+  const css=fs.readFileSync("styles.css","utf8");
+  assert.match(css,/\.subcategory-card-image img\s*\{[^}]*display:\s*block;[^}]*visibility:\s*visible;[^}]*opacity:\s*1;/s);
 });
