@@ -742,6 +742,89 @@ function feedMoney(value) {
   return `${Number(value).toFixed(2)} EGP`;
 }
 
+const metaCsvHeaders = ["id", "title", "description", "availability", "condition", "price", "link", "image_link", "brand", "product_type"];
+
+function csvCell(value = "") {
+  const text = String(value ?? "").replace(/\r\n?/g, "\n");
+  return /[",\n]/.test(text) ? `"${text.replace(/"/g, '""')}"` : text;
+}
+
+function csvDescription(value, fallback) {
+  const text = String(localized(value) || "")
+    .replace(/<script[\s\S]*?<\/script>/gi, " ")
+    .replace(/<style[\s\S]*?<\/style>/gi, " ")
+    .replace(/<br\s*\/?\s*>/gi, "\n")
+    .replace(/<\/p\s*>/gi, "\n")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/[ \t]+/g, " ")
+    .replace(/ *\n */g, "\n")
+    .trim();
+  return text || fallback;
+}
+
+function metaCsvRow(product) {
+  const id = feedText(product?.sku || product?.id);
+  const title = feedText(product?.name, id);
+  const images = feedImages(product);
+  const pricing = feedPricing(product);
+  const excludedReasons = [];
+
+  if (!id) excludedReasons.push("missing stable SKU/product id");
+  if (!title) excludedReasons.push("missing title");
+  if (!images.length) excludedReasons.push("missing valid image");
+  if (!pricing) excludedReasons.push("missing valid price");
+  if (excludedReasons.length) return { row: "", excludedReasons };
+
+  return {
+    row: [id, title, csvDescription(product?.description, title),
+      hasAvailableVariant(product) ? "in stock" : "out of stock", "new",
+      feedMoney(pricing.salePrice ?? pricing.price), canonicalProductUrl(product), images[0],
+      "مكتبة البابا كيرلس", feedProductType(product)].map(csvCell).join(","),
+    excludedReasons: []
+  };
+}
+
+function metaProductFeedCsv(products) {
+  const rows = [];
+  const excluded = [];
+  const seenIds = new Set();
+  products.filter(isVisibleCatalogProduct).forEach((product) => {
+    try {
+      const result = metaCsvRow(product);
+      const id = feedText(product?.sku || product?.id);
+      if (result.row && seenIds.has(id)) {
+        result.row = "";
+        result.excludedReasons = ["duplicate stable id"];
+      }
+      if (result.row) {
+        seenIds.add(id);
+        rows.push(result.row);
+      } else {
+        excluded.push({ id, reasons: result.excludedReasons });
+        console.warn(`Meta CSV feed skipped product ${id || "(missing id)"}: ${result.excludedReasons.join(", ")}`);
+      }
+    } catch (error) {
+      const id = feedText(product?.sku || product?.id);
+      excluded.push({ id, reasons: [error?.message || "unknown error"] });
+      console.warn(`Meta CSV feed failed product ${id || "(missing id)"}`, error);
+    }
+  });
+  return { csv: `\uFEFF${[metaCsvHeaders.join(","), ...rows].join("\r\n")}\r\n`, includedCount: rows.length, excluded };
+}
+
+async function metaProductFeedResponse(request, env) {
+  const products = await loadProducts(env, request, { maxAgeMs: 60000 });
+  const result = metaProductFeedCsv(products);
+  return new Response(result.csv, { status: 200, headers: {
+    "Content-Type": "text/csv; charset=utf-8",
+    "Content-Disposition": 'inline; filename="meta-product-feed.csv"',
+    "Cache-Control": "public, max-age=60, stale-while-revalidate=300",
+    "X-Content-Type-Options": "nosniff",
+    "X-Catalog-Feed-Included": String(result.includedCount),
+    "X-Catalog-Feed-Excluded": String(result.excluded.length)
+  }});
+}
+
 function catalogFeedItem(product, { includePrice = true } = {}) {
   const id = feedText(product.id);
   const title = feedText(product.name, id);
@@ -2246,6 +2329,7 @@ async function handleRequest(request, env, ctx) {
       const product = withProductColoringConfig(productByIdOrSlug(products, url.pathname.slice("/api/products/".length)));
       return product ? productApiResponse(request, env, product) : new Response(JSON.stringify({ error: "not_found" }), { status: 404, headers: { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" } });
     }
+    if (url.pathname === "/meta-product-feed.csv") return metaProductFeedResponse(request, env);
     if (url.pathname === "/api/meta-catalog-feed.xml") return catalogFeedResponse(request, env, { includePrice: true });
     if (url.pathname === "/api/product-feed-no-price.xml") return catalogFeedResponse(request, env, { includePrice: false });
     if (url.pathname === "/api/create-paymob-intention") return createPaymobIntention(context);
@@ -2300,6 +2384,8 @@ export {
   createOrderResponse,
   escapeAirtableFormulaString,
   handleRequest,
+  metaProductFeedCsv,
+  metaProductFeedResponse,
   normalizeOrderItems,
   resolveAirtableProducts
 };
