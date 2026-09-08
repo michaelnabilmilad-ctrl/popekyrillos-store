@@ -16,7 +16,7 @@ test("main category tiles and filters use the shared taxonomy source", () => {
 
 test("category counts stay hidden until complete counts or static products load", () => {
   assert.match(script, /if \(!catalogCategoryCountsLoaded\) return null/);
-  assert.match(script, /ensureMainCategoryTiles\(\);\n  syncCatalogFilterControls/);
+  assert.match(script, /ensureMainCategoryTiles\(\);\r?\n  syncCatalogFilterControls/);
   assert.match(script, /Object\.prototype\.hasOwnProperty\.call\(catalogCategoryCounts, categoryId\)/);
 });
 

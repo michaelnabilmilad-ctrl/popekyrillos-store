@@ -19,7 +19,7 @@ const vodafoneCashNumber = "01016125589";
 const paymobIntentionEndpointPath = "/api/create-paymob-intention";
 const firebaseSdkVersion = "10.14.1";
 const productBatchSize = 24;
-const catalogSchemaVersion = "9";
+const catalogSchemaVersion = "10";
 const catalogVersion = Date.now().toString(36);
 const canonicalOrigin = "https://popekyrillos.store";
 const guestCartStorageKey = "pope-kyrillos-cart:guest";
@@ -91,6 +91,8 @@ let catalogTotal = 0;
 let catalogHasMore = false;
 let catalogCategoryCounts = {};
 let catalogCategoryCountsLoaded = false;
+let catalogSubcategoryCounts = {};
+let catalogSubcategoryCountsLoaded = false;
 let catalogRequestController = null;
 let staticCatalogProducts = null;
 let bestSellerProducts = [];
@@ -803,9 +805,9 @@ const legacyCategoryToMainCategory = {
   brass: "altar-vessels",
   "altar-tools": "altar-vessels",
   "altar-vessels": "altar-vessels",
-  candles: "censers-incense",
-  "candles-incense": "censers-incense",
-  "censers-incense": "censers-incense",
+  candles: "candles-lamps",
+  "candles-incense": "candles-lamps",
+  "censers-incense": "altar-vessels",
   "candles-lamps": "candles-lamps",
   vestments: "church-vestments",
   icons: "icons-frames",
@@ -1257,6 +1259,7 @@ function normalizeCategoryFilter(category = "all") {
 }
 
 function productMainCategoryId(product) {
+  product = window.POPE_KYRILLOS_CATEGORY_MIGRATION.product(product);
   const raw = product?.mainCategory || "";
   return taxonomy?.categoryIdFromName?.(raw) || (taxonomy?.categoryById?.has(raw) ? raw : "") || legacyCategoryToMainCategory[product?.category] || "uncategorized";
 }
@@ -1267,6 +1270,7 @@ function productMainCategoryName(product) {
 }
 
 function productSubCategoryId(product) {
+  product = window.POPE_KYRILLOS_CATEGORY_MIGRATION.product(product);
   const raw = product?.subcategory || product?.subCategory || "";
   const fromNew = taxonomy?.subcategoryIdFromName?.(raw) || (taxonomy?.subcategoryById?.has(raw) ? raw : "");
   if (fromNew) return fromNew;
@@ -1299,13 +1303,32 @@ function availableProducts() {
 
 const alwaysVisibleSubcategoryIds = new Set(["iota-plain-hand-crosses", "plain-cross-medals"]);
 
+function buildSubcategoryCounts(items = []) {
+  return items.filter(hasAvailableVariant).reduce((counts, product) => {
+    const categoryId = productMainCategoryId(product);
+    const subcategoryId = productSubCategoryId(product);
+    if (!categoryId || !subcategoryId) return counts;
+    counts[categoryId] ||= {};
+    counts[categoryId][subcategoryId] = (counts[categoryId][subcategoryId] || 0) + 1;
+    return counts;
+  }, {});
+}
+
+function subcategoryProductCount(categoryId, subcategoryId) {
+  if (!catalogSubcategoryCountsLoaded) return null;
+  return Number(catalogSubcategoryCounts?.[categoryId]?.[subcategoryId]) || 0;
+}
+
 function orderedLabelsForCategory(category) {
   const normalized = normalizeCategoryFilter(category);
   const categoryMeta = taxonomy?.categoryById?.get(normalized);
   if (categoryMeta) {
-    return categoryMeta.subcategories
-      .filter((subcategory) => alwaysVisibleSubcategoryIds.has(subcategory.id)
-        || availableProducts().some((product) => productMainCategoryId(product) === normalized && productSubCategoryId(product) === subcategory.id));
+    return categoryMeta.subcategories.filter((subcategory) => {
+      if (["censers", "lamps"].includes(subcategory.id) || alwaysVisibleSubcategoryIds.has(subcategory.id)) return true;
+      const totalCount = subcategoryProductCount(normalized, subcategory.id);
+      if (totalCount !== null) return totalCount > 0;
+      return availableProducts().some((product) => productMainCategoryId(product) === normalized && productSubCategoryId(product) === subcategory.id);
+    });
   }
 
   const labels = [...new Set(availableProducts().filter((product) => product.category === category).map((product) => product.label).filter(Boolean))];
@@ -1418,7 +1441,7 @@ function renderSubcategoryCards() {
       image: subcategoryCardImage(label, category),
       active: activeLabel === label.id
     }))
-  ].filter((card) => card.id === "" || card.count > 0);
+  ].filter((card) => card.id === "" || ["censers", "lamps"].includes(card.id) || card.count > 0);
 
   if (state.subcategoryCardsCategory !== categoryId) {
     state.subcategoryCardsCategory = categoryId;
@@ -2096,13 +2119,15 @@ function catalogFilterFromUrl() {
   const url = new URL(window.location.href);
   const pathSegments = url.pathname.split("/").filter(Boolean).map((part) => decodeURIComponent(part));
   if (pathSegments[0] === "category") {
-    const category = normalizeCategoryFilter(pathSegments[1] || "all");
-    const subcategory = pathSegments[2] || "";
+    const migrated = window.POPE_KYRILLOS_CATEGORY_MIGRATION.route(pathSegments[1] || "all", pathSegments[2] || "");
+    const category = normalizeCategoryFilter(migrated.category);
+    const subcategory = migrated.label;
     return { category, label: taxonomy?.subcategoryById?.has(subcategory) ? subcategory : "" };
   }
 
-  const category = normalizeCategoryFilter(url.searchParams.get("category") || "all");
-  const label = url.searchParams.get("subcategory") || url.searchParams.get("label") || "";
+  const migrated = window.POPE_KYRILLOS_CATEGORY_MIGRATION.route(url.searchParams.get("category") || "all", url.searchParams.get("subcategory") || url.searchParams.get("label") || "");
+  const category = normalizeCategoryFilter(migrated.category);
+  const label = migrated.label;
   const subcategoryId = taxonomy?.subcategoryIdFromName?.(label) || (taxonomy?.subcategoryById?.has(label) ? label : label);
   return { category, label: subcategoryId };
 }
@@ -5128,6 +5153,8 @@ async function loadCatalogPage({ reset = false } = {}) {
     const payload = await response.json();
     catalogCategoryCountsLoaded = Boolean(payload.categoryCounts && typeof payload.categoryCounts === "object");
     catalogCategoryCounts = catalogCategoryCountsLoaded ? payload.categoryCounts : {};
+    catalogSubcategoryCountsLoaded = Boolean(payload.subcategoryCounts && typeof payload.subcategoryCounts === "object");
+    catalogSubcategoryCounts = catalogSubcategoryCountsLoaded ? payload.subcategoryCounts : {};
     const received = (Array.isArray(payload.items) ? payload.items : []).map((item) => ({ ...item, image: item.thumbnail, stock: item.availability === "available" ? "متاح" : "غير متاح حاليا", mainCategory: item.category, subCategory: item.subcategory, label: item.subcategory }));
     products = reset ? received : [...products, ...received];
     catalogPage = Number(payload.page) || nextPage;
@@ -5147,6 +5174,8 @@ async function loadCatalogPage({ reset = false } = {}) {
       products = staticCatalogProducts;
       catalogCategoryCounts = {};
       catalogCategoryCountsLoaded = true;
+      catalogSubcategoryCounts = buildSubcategoryCounts(staticCatalogProducts);
+      catalogSubcategoryCountsLoaded = true;
       state.visibleProductCount = reset ? productBatchSize : state.visibleProductCount + productBatchSize;
       catalogTotal = getFilteredProducts().length;
       catalogHasMore = state.visibleProductCount < catalogTotal;
@@ -5156,6 +5185,8 @@ async function loadCatalogPage({ reset = false } = {}) {
       if (reset) products = fallbackProducts.slice();
       catalogCategoryCounts = {};
       catalogCategoryCountsLoaded = true;
+      catalogSubcategoryCounts = buildSubcategoryCounts(products);
+      catalogSubcategoryCountsLoaded = true;
       catalogTotal = getFilteredProducts().length;
       catalogHasMore = state.visibleProductCount < catalogTotal;
       productsAssetVersion = "fallback";

@@ -2,6 +2,8 @@
 // Run with: node scripts/build-taxonomy-v3.mjs
 import fs from "node:fs";
 import path from "node:path";
+import "../category-migration.js";
+const categoryMigration = globalThis.POPE_KYRILLOS_CATEGORY_MIGRATION;
 
 const root = process.cwd();
 const stamp = new Date().toISOString().replace(/[:.]/g, "-");
@@ -22,7 +24,7 @@ const image = {
   church: "assets/optimized/hero-products-collage.webp"
 };
 const c = (id, name, description, subcategoryImage, names) => ({ id, name, description, subcategoryImage, visible: true, homeVisible: true, subcategories: names.map(([sid, sname]) => ({ id: sid, name: sname, manualImage: "", representativeProductId: "" })) });
-const categories = [
+const legacyCategories = [
   c("altar-vessels", "المذبح والأواني المقدسة", "أواني المذبح والذخيرة وأدوات الخدمة المقدسة", image.altar, [["altar-sets","أطقم أواني المذبح"],["chalices","الكؤوس"],["trays-stars","الصواني والنجوم"],["mystir","المستير"],["water-wine-cruets","قوارير الماء والخمر"],["relic-boxes","حق الذخيرة"],["communion-bread-boxes","بيوت القربان"],["holy-oil-vessels","أواني الميرون والزيوت"],["laqan-vessels","أواني اللقان"],["service-plates","أطباق الخدمة"],["altar-vessel-crosses","صلبان المذبح"],["altar-candlesticks","شمعدانات المذبح"],["gospel-stands","حوامل الإنجيل والبشارة"],["vessel-cases","شنط وصناديق حفظ الأواني"]]),
   c("censers-incense", "الشوريات والبخور", "الشوريات والمباخر والبخور والفحم والعطور الكنسية", image.incense, [["brass-censers","شوريات نحاس"],["stainless-censers","شوريات ستانلس"],["silver-gold-censers","شوريات فضي وذهبي"],["deacon-censers","شوريات شماسية"],["home-censers","مباخر منزلية"],["incense-boxes","حق البخور"],["incense-spoons","ملاعق البخور"],["church-incense","بخور كنسي"],["greek-incense","بخور يوناني"],["natural-incense","لبان وبخور طبيعي"],["charcoal","الفحم"],["aparaka","الأباركة والعطور الكنسية"],["hanout","الحنوط"],["censer-parts","أدوات وقطع غيار الشوريات"]]),
   c("candles-lamps", "الشمع والقناديل", "شموع الكنيسة والقناديل وزيوتها وقطع غيارها", image.candle, [["church-candles","شمع الكنيسة"],["altar-candles","شمع المذبح"],["wedding-candles","شمع الإكليل"],["baptism-candles","شمع المعمودية"],["holy-week-candles","شمع أسبوع الآلام"],["resurrection-candles","شمع القيامة"],["beeswax-candles","شمع النحل"],["candlesticks","شمعدانات"],["candle-holders","حوامل شمع"],["hanging-lamps","قناديل معلقة"],["wall-lamps","قناديل حائط"],["altar-lamps","قناديل المذبح"],["lamp-glasses","كاسات القناديل"],["lamp-oil","زيت القناديل"],["wicks-floats","الفتائل والعوامات"],["lamp-parts","قطع غيار القناديل"]]),
@@ -51,16 +53,19 @@ const subMap = {
   "tote-bags":["occasions-service","meeting-gifts"],"notebooks":["occasions-service","notebooks-planners"],"planners":["occasions-service","notebooks-planners"],"cards":["occasions-service","cards-bookmarks"],"bookmarks":["occasions-service","cards-bookmarks"],"meeting-games":["occasions-service","christian-games"],"personalized":["occasions-service","personalized"],"medals":["occasions-service","medals-bracelets"],"chains":["occasions-service","medals-bracelets"],"bracelets":["occasions-service","medals-bracelets"]
 };
 
+const categories = categoryMigration.categories(legacyCategories);
 const productsSource = process.env.TAXONOMY_SOURCE_PRODUCTS || path.join(root,"products.json");
 const products = JSON.parse(fs.readFileSync(productsSource,"utf8"));
 const validCategory = new Map(categories.flatMap(category => (category.subcategories || []).map(subcategory => [subcategory.id, category.id])));
 const before = products.map(p => ({ id:p.id, name:p.name, oldCategory:p.mainCategory || p.category, oldSubcategory:p.subcategory, price:JSON.stringify(p.price), images:JSON.stringify(p.images || p.image), slug:p.slug || "" }));
 for (const p of products) {
+  Object.assign(p, categoryMigration.product(p));
   const currentSubcategory = p.subcategory || p.subCategory;
   const target = validCategory.get(currentSubcategory) === p.mainCategory
     ? [p.mainCategory, currentSubcategory]
     : subMap[currentSubcategory] || subMap[p.subCategory] || oldToNew[p.mainCategory] || ["uncategorized","needs-review"];
   p.mainCategory = target[0]; p.subcategory = target[1]; p.subCategory = target[1];
+  Object.assign(p, categoryMigration.product(p));
   p.tags = Array.isArray(p.tags) ? p.tags : [];
   p.collections = Array.isArray(p.collections) ? p.collections : [];
   p.searchKeywords = [...new Set([...(Array.isArray(p.searchKeywords)?p.searchKeywords:[]), p.material, p.saint, p.occasion].filter(Boolean))];
@@ -80,7 +85,7 @@ const safeSource = source
     `  const TAXONOMY_STORAGE_KEY = "pope-kyrillos-taxonomy";
   const TAXONOMY_VERSION_STORAGE_KEY = "pope-kyrillos-taxonomy-version";
   const CURRENT_TAXONOMY_VERSION = 2026080801;
-  const stored = (() => { try { const storedVersion=Number(localStorage.getItem(TAXONOMY_VERSION_STORAGE_KEY)||0); if(!Number.isFinite(storedVersion)||storedVersion<CURRENT_TAXONOMY_VERSION){ localStorage.setItem(TAXONOMY_STORAGE_KEY,JSON.stringify(defaultCategories)); localStorage.setItem(TAXONOMY_VERSION_STORAGE_KEY,String(CURRENT_TAXONOMY_VERSION)); return defaultCategories; } const parsed=JSON.parse(localStorage.getItem(TAXONOMY_STORAGE_KEY)||"null"); if(Array.isArray(parsed)) return parsed; localStorage.setItem(TAXONOMY_STORAGE_KEY,JSON.stringify(defaultCategories)); localStorage.setItem(TAXONOMY_VERSION_STORAGE_KEY,String(CURRENT_TAXONOMY_VERSION)); return defaultCategories; } catch { return null; } })();`
+  const stored = (() => { try { const storedVersion=Number(localStorage.getItem(TAXONOMY_VERSION_STORAGE_KEY)||0); if(!Number.isFinite(storedVersion)||storedVersion<CURRENT_TAXONOMY_VERSION){ localStorage.setItem(TAXONOMY_STORAGE_KEY,JSON.stringify(defaultCategories)); localStorage.setItem(TAXONOMY_VERSION_STORAGE_KEY,String(CURRENT_TAXONOMY_VERSION)); return defaultCategories; } const parsed=JSON.parse(localStorage.getItem(TAXONOMY_STORAGE_KEY)||"null"); if(Array.isArray(parsed)) return window.POPE_KYRILLOS_CATEGORY_MIGRATION.categories(parsed); localStorage.setItem(TAXONOMY_STORAGE_KEY,JSON.stringify(defaultCategories)); localStorage.setItem(TAXONOMY_VERSION_STORAGE_KEY,String(CURRENT_TAXONOMY_VERSION)); return defaultCategories; } catch { return null; } })();`
   )
   .replace(
     "  const categories = Array.isArray(stored) && stored.length ? stored : defaultCategories;",
@@ -102,4 +107,4 @@ const safeSource = source
   .replace("window.POPE_KYRILLOS_TAXONOMY={categories,defaultCategories,", "window.POPE_KYRILLOS_TAXONOMY={categories,defaultCategories,CURRENT_TAXONOMY_VERSION,")
   .replace("getSubcategories};", "getSubcategories,categoryImage};");
 fs.writeFileSync(path.join(root,"category-taxonomy.js"),safeSource);
-console.log(JSON.stringify({backup,products:products.length,needsReview:report.filter(r=>r.needsReview).length,categories:9},null,2));
+console.log(JSON.stringify({backup,products:products.length,needsReview:report.filter(r=>r.needsReview).length,categories:categories.filter(c => !c.hiddenFromCustomerNav).length},null,2));

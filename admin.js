@@ -169,7 +169,7 @@
       let editableCategories = siteCategories;
       try {
         const draft = JSON.parse(localStorage.getItem(TAXONOMY_DRAFT_KEY) || "null");
-        if (Array.isArray(draft?.categories) && validateTaxonomy(draft.categories).ok) editableCategories = deepClone(draft.categories);
+        if (Array.isArray(draft?.categories) && validateTaxonomy(draft.categories).ok) editableCategories = window.POPE_KYRILLOS_CATEGORY_MIGRATION.categories(draft.categories);
       } catch (error) {
         console.error("Failed to restore taxonomy draft:", error);
       }
@@ -1081,6 +1081,7 @@
   }
 
   function mainCategoryName(product) {
+    product = window.POPE_KYRILLOS_CATEGORY_MIGRATION.product(product);
     let id = normalizeMainCategoryValue(product.mainCategory, product.category);
     if (id === "uncategorized") {
       const inferred = inferredSubcategoryFromProduct(product);
@@ -1090,6 +1091,7 @@
   }
 
   function subCategoryName(product) {
+    product = window.POPE_KYRILLOS_CATEGORY_MIGRATION.product(product);
     let id = normalizeSubCategoryValue(product.subCategory);
     if (id === "needs-review") {
       const inferred = inferredSubcategoryFromProduct(product);
@@ -1103,7 +1105,7 @@
   }
 
   function setProducts(products, message) {
-    state.products = Array.isArray(products) ? products : [];
+    state.products = Array.isArray(products) ? products.map(window.POPE_KYRILLOS_CATEGORY_MIGRATION.product) : [];
     state.newProductIds.clear();
     state.selectedId = state.products[0]?.id || "";
     state.dirty = false;
@@ -1180,7 +1182,10 @@
     subSelect.innerHTML = subcategories.map((subcategory) => `<option value="${escapeHtml(subcategory.name)}">${escapeHtml(subcategory.name)}</option>`).join("");
     const current = subCategoryOptionValue(product?.subCategory) || subcategories[0]?.name || "";
     subSelect.value = subcategories.some((item) => item.name === current) ? current : subcategories[0]?.name || "";
-    if (product && subSelect.value && product.subCategory !== subSelect.value) product.subCategory = subSelect.value;
+    if (product && subSelect.value) {
+      product.subCategory = subSelect.value;
+      product.subcategory = taxonomySubcategoryIdFromName(subSelect.value) || subSelect.value;
+    }
   }
 
   function selectedTaxonomyCategory() {
@@ -1727,6 +1732,7 @@
     product.price = numberOrNull(form.elements.price.value) ?? 0;
     product.mainCategory = form.elements.mainCategory.value;
     product.subCategory = form.elements.subCategory.value;
+    product.subcategory = taxonomySubcategoryIdFromName(product.subCategory) || product.subCategory;
     product.stock = form.elements.stock.value;
     const quantity = numberOrNull(form.elements.quantity.value);
     if ((product.variants || []).length === 1) product.variants[0].quantity = quantity;
@@ -2006,6 +2012,7 @@ function updateProductField(product, element) {
 
   if (field === "subCategory") {
     product.subCategory = subCategoryOptionValue(value);
+    product.subcategory = taxonomySubcategoryIdFromName(product.subCategory) || product.subCategory;
     fillSubCategoryFilter();
     renderProductList();
     return;

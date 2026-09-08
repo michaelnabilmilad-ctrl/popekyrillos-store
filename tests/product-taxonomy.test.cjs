@@ -22,11 +22,11 @@ function loadTaxonomy(storedTaxonomy = null, storedVersion = 2026081701, extraSt
   return context.window.POPE_KYRILLOS_TAXONOMY;
 }
 
-test("exposes exactly the nine requested customer categories", () => {
+test("exposes exactly the eight requested customer categories", () => {
   const taxonomy = loadTaxonomy();
   assert.deepEqual(
     Array.from(taxonomy.customerCategories(), (category) => category.id),
-    ["altar-vessels", "censers-incense", "candles-lamps", "church-vestments", "crosses", "icons-frames", "books-rituals", "occasions-service", "church-equipment"]
+    ["altar-vessels", "candles-lamps", "church-vestments", "crosses", "icons-frames", "books-rituals", "occasions-service", "church-equipment"]
   );
 });
 
@@ -93,7 +93,7 @@ test("an old cached taxonomy is replaced without touching cart or login storage"
   });
   assert.deepEqual(
     Array.from(migrated.customerCategories(), (category) => category.id),
-    ["altar-vessels", "censers-incense", "candles-lamps", "church-vestments", "crosses", "icons-frames", "books-rituals", "occasions-service", "church-equipment"]
+    ["altar-vessels", "candles-lamps", "church-vestments", "crosses", "icons-frames", "books-rituals", "occasions-service", "church-equipment"]
   );
   assert.equal(migrated.categoryById.get("altar-vessels").name, "المذبح والأواني المقدسة");
   assert.equal(migrated.testStorage.get("pope-kyrillos-taxonomy-version"), String(migrated.CURRENT_TAXONOMY_VERSION));
@@ -105,7 +105,7 @@ test("an old cached taxonomy is replaced without touching cart or login storage"
     "pope-kyrillos-cart": "cart-still-here",
     "pope-kyrillos-auth:user": "auth-still-here"
   });
-  assert.equal(migratedWithoutVersion.customerCategories().length, 9);
+  assert.equal(migratedWithoutVersion.customerCategories().length, 8);
   assert.equal(migratedWithoutVersion.testStorage.get("pope-kyrillos-taxonomy-version"), String(migratedWithoutVersion.CURRENT_TAXONOMY_VERSION));
   assert.equal(migratedWithoutVersion.testStorage.get("pope-kyrillos-cart"), "cart-still-here");
   assert.equal(migratedWithoutVersion.testStorage.get("pope-kyrillos-auth:user"), "auth-still-here");

@@ -1,3 +1,4 @@
+import "./category-migration.js";
 import { onRequest as createBostaDelivery } from "./functions/api/create-bosta-delivery.js";
 import { onRequest as createPaymobIntention } from "./functions/api/create-paymob-intention.js";
 import { onRequest as paymobWebhook } from "./functions/api/paymob-webhook.js";
@@ -337,7 +338,7 @@ async function loadProducts(env, request, { maxAgeMs = 5000 } = {}) {
     const latest = await githubFetchText(env, "products.json");
     const products = JSON.parse(latest.text);
     if (Array.isArray(products)) {
-      productsCache = products;
+      productsCache = products.map(globalThis.POPE_KYRILLOS_CATEGORY_MIGRATION.product);
       productsCacheTime = Date.now();
       productsCacheSha = latest.sha;
       return productsCache;
@@ -348,7 +349,7 @@ async function loadProducts(env, request, { maxAgeMs = 5000 } = {}) {
 
   const response = await env.ASSETS.fetch(rewriteRequest(request, "/products.json"));
   if (!response.ok) return [];
-  productsCache = await response.json();
+  productsCache = (await response.json()).map(globalThis.POPE_KYRILLOS_CATEGORY_MIGRATION.product);
   productsCacheTime = Date.now();
   productsCacheSha = response.headers.get("ETag") || "";
   return productsCache;
@@ -461,7 +462,7 @@ function catalogSearchScore(product, search) {
 }
 
 const catalogMainCategoryIds = [
-  "altar-vessels", "censers-incense", "candles-lamps", "church-vestments", "crosses",
+  "altar-vessels", "candles-lamps", "church-vestments", "crosses",
   "icons-frames", "books-rituals", "occasions-service", "church-equipment"
 ];
 
@@ -475,6 +476,8 @@ const legacyCatalogCategoryIds = {
 };
 
 const namedCatalogCategoryIds = {
+  "المذبح والأواني المقدسة": "altar-vessels",
+  "الشمع والبخور": "candles-lamps",
   "مستلزمات المذبح والخدمة": "altar-vessels",
   "الصلبان": "crosses",
   "الأيقونات والبراويز": "icons-frames",
@@ -494,7 +497,7 @@ function catalogMainCategoryId(product) {
   const discovered = catalogMainCategoryIds.find((id) => discoveryValues.includes(id));
   if (discovered) return discovered;
   if (mainCategory === "الشمع والبخور") {
-    return String(product?.category || "") === "brass" ? "censers-incense" : "candles-lamps";
+    return "candles-lamps";
   }
   if (namedCatalogCategoryIds[mainCategory]) return namedCatalogCategoryIds[mainCategory];
   return legacyCatalogCategoryIds[String(product?.category || "")] || mainCategory || "uncategorized";
@@ -502,8 +505,9 @@ function catalogMainCategoryId(product) {
 
 function catalogProductMatches(product, params) {
   if (!hasAvailableVariant(product)) return false;
-  const category = params.get("category") || "all";
-  const subcategory = params.get("subcategory") || "";
+  const migrated = globalThis.POPE_KYRILLOS_CATEGORY_MIGRATION.route(params.get("category") || "all", params.get("subcategory") || "");
+  const category = migrated.category;
+  const subcategory = migrated.label;
   const search = normalizedSearch(params.get("search") || "");
   const price = params.get("price") || "all";
   const productCategory = catalogMainCategoryId(product);
@@ -531,13 +535,21 @@ async function catalogApiResponse(request, env, ctx) {
   const page = Math.max(1, Math.trunc(Number(url.searchParams.get("page"))) || 1);
   const limit = Math.min(48, Math.max(1, Math.trunc(Number(url.searchParams.get("limit"))) || 12));
   const cacheUrl = new URL(url.origin + url.pathname);
-  cacheUrl.searchParams.set("schema", "12");
+  cacheUrl.searchParams.set("schema", "14");
   cacheUrl.searchParams.set("thumbnails", "plain-iota-v2");
   [...url.searchParams.entries()].sort(([a], [b]) => a.localeCompare(b)).forEach(([key, value]) => cacheUrl.searchParams.append(key, value));
   const allProducts = await loadProducts(env, request, { maxAgeMs: 600000 });
   const categoryCounts = allProducts.filter(hasAvailableVariant).reduce((counts, product) => {
     const categoryId = catalogMainCategoryId(product);
     counts[categoryId] = (counts[categoryId] || 0) + 1;
+    return counts;
+  }, {});
+  const subcategoryCounts = allProducts.filter(hasAvailableVariant).reduce((counts, product) => {
+    const categoryId = catalogMainCategoryId(product);
+    const subcategoryId = String(product?.subcategory || product?.subCategory || product?.label || "").trim();
+    if (!subcategoryId) return counts;
+    counts[categoryId] ||= {};
+    counts[categoryId][subcategoryId] = (counts[categoryId][subcategoryId] || 0) + 1;
     return counts;
   }, {});
   const thumbnailManifest = await loadThumbnailManifest(env, request);
@@ -552,7 +564,7 @@ async function catalogApiResponse(request, env, ctx) {
     matched.sort((first, second) => catalogSearchScore(first, search) - catalogSearchScore(second, search));
   }
   const start = (page - 1) * limit;
-  const body = JSON.stringify({ items: matched.slice(start, start + limit).map((product) => catalogDto(product, thumbnailManifest)), page, limit, total: matched.length, hasMore: start + limit < matched.length, categoryCounts });
+  const body = JSON.stringify({ items: matched.slice(start, start + limit).map((product) => catalogDto(product, thumbnailManifest)), page, limit, total: matched.length, hasMore: start + limit < matched.length, categoryCounts, subcategoryCounts });
   const response = new Response(body, { headers: { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "public, max-age=0, must-revalidate", "CDN-Cache-Control": "public, max-age=600, stale-while-revalidate=300" } });
   ctx.waitUntil(edgeCache.put(cacheKey, response.clone()));
   return response;

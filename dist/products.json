@@ -3651,7 +3651,7 @@
         "quantity": 10
       }
     ],
-    "mainCategory": "censers-incense",
+    "mainCategory": "candles-lamps",
     "subCategory": "church-incense",
     "slug": "علبه-بخور-نحاس-ذهبي-بصليب",
     "subcategory": "church-incense",
@@ -3707,7 +3707,7 @@
         "quantity": 10
       }
     ],
-    "mainCategory": "censers-incense",
+    "mainCategory": "candles-lamps",
     "subCategory": "church-incense",
     "slug": "علبه-بخور-نحاس-فضي-بصليب",
     "subcategory": "church-incense",
@@ -3764,7 +3764,7 @@
         "quantity": 10
       }
     ],
-    "mainCategory": "censers-incense",
+    "mainCategory": "candles-lamps",
     "subCategory": "church-incense",
     "slug": "علبه-بخور-نحاس-فضي-فص-ملون",
     "subcategory": "church-incense",
@@ -5682,7 +5682,7 @@
         "quantity": 10
       }
     ],
-    "mainCategory": "censers-incense",
+    "mainCategory": "candles-lamps",
     "subCategory": "church-incense",
     "slug": "علبه-بخور-من-النحاس-شكل-دايري",
     "subcategory": "church-incense",
@@ -5740,7 +5740,7 @@
         "quantity": 10
       }
     ],
-    "mainCategory": "censers-incense",
+    "mainCategory": "candles-lamps",
     "subCategory": "church-incense",
     "slug": "علبه-بخور-نحاس-علي-شكل-صليب",
     "subcategory": "church-incense",
@@ -5798,7 +5798,7 @@
         "quantity": 10
       }
     ],
-    "mainCategory": "censers-incense",
+    "mainCategory": "candles-lamps",
     "subCategory": "church-incense",
     "slug": "علبه-بخور-نحاس-علي-شكل-صندوق-كنز",
     "subcategory": "church-incense",
@@ -5899,7 +5899,7 @@
         "quantity": null
       }
     ],
-    "mainCategory": "censers-incense",
+    "mainCategory": "candles-lamps",
     "subCategory": "church-incense",
     "slug": "علبه-بخور-نحاس-شكل-صندوق-عادي",
     "subcategory": "church-incense",
@@ -5960,7 +5960,7 @@
         "quantity": 12
       }
     ],
-    "mainCategory": "censers-incense",
+    "mainCategory": "candles-lamps",
     "subCategory": "church-incense",
     "slug": "علبه-بخور-نحاس-صغيره-شكل-مستطيل",
     "subcategory": "church-incense",
@@ -6018,7 +6018,7 @@
         "quantity": 12
       }
     ],
-    "mainCategory": "censers-incense",
+    "mainCategory": "candles-lamps",
     "subCategory": "church-incense",
     "slug": "علبه-بخور-نحاس-كبيره-شكل-مستطيل",
     "subcategory": "church-incense",
@@ -6306,7 +6306,7 @@
         "quantity": null
       }
     ],
-    "mainCategory": "censers-incense",
+    "mainCategory": "candles-lamps",
     "subCategory": "church-incense",
     "slug": "بخور-كنسي-فاخر",
     "subcategory": "church-incense",
@@ -6745,11 +6745,11 @@
         "quantity": null
       }
     ],
-    "mainCategory": "censers-incense",
-    "subCategory": "church-incense",
+    "mainCategory": "altar-vessels",
+    "subCategory": "censers",
     "slug": "شوريه-نحاس-ذهبي-يوناني",
     "isBestSeller": true,
-    "subcategory": "church-incense",
+    "subcategory": "censers",
     "collections": [],
     "searchKeywords": [
       "شورية نحاس ذهبي يوناني",

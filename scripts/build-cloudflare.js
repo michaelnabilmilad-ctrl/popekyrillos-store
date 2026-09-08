@@ -23,6 +23,7 @@ const files = [
   "coloringDesigns.js",
   "firebase-config.min.js",
   "firebase-config.js",
+  "category-migration.js",
   "category-taxonomy.js",
   "subcategory-image-policy.js",
   "products.json",

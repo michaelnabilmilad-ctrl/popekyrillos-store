@@ -9,6 +9,16 @@
     "homeVisible": true,
     "subcategories": [
       {
+        "id": "censers",
+        "name": "الشوريات",
+        "subcategoryImage": "assets/optimized/products/incense-chat.webp"
+      },
+      {
+        "id": "lamps",
+        "name": "القناديل",
+        "subcategoryImage": "assets/optimized/products/gallery/sham3.iconat.webp"
+      },
+      {
         "id": "altar-sets",
         "name": "أطقم أواني المذبح",
         "subcategoryImage": "assets/optimized/products/communion-set.webp"
@@ -81,89 +91,9 @@
     ]
   },
   {
-    "id": "censers-incense",
-    "name": "الشوريات والبخور",
-    "description": "الشوريات والمباخر والبخور والفحم والعطور الكنسية",
-    "subcategoryImage": "assets/optimized/products/incense-chat.webp",
-    "visible": true,
-    "homeVisible": true,
-    "subcategories": [
-      {
-        "id": "brass-censers",
-        "name": "شوريات نحاس",
-        "subcategoryImage": "assets/optimized/products/incense-chat.webp"
-      },
-      {
-        "id": "stainless-censers",
-        "name": "شوريات ستانلس",
-        "subcategoryImage": "assets/optimized/products/incense-chat.webp"
-      },
-      {
-        "id": "silver-gold-censers",
-        "name": "شوريات فضي وذهبي",
-        "subcategoryImage": "assets/optimized/products/incense-chat.webp"
-      },
-      {
-        "id": "deacon-censers",
-        "name": "شوريات شماسية",
-        "subcategoryImage": "assets/optimized/products/incense-chat.webp"
-      },
-      {
-        "id": "home-censers",
-        "name": "مباخر منزلية",
-        "subcategoryImage": "assets/optimized/products/incense-chat.webp"
-      },
-      {
-        "id": "incense-boxes",
-        "name": "حق البخور",
-        "subcategoryImage": "assets/optimized/products/incense-chat.webp"
-      },
-      {
-        "id": "incense-spoons",
-        "name": "ملاعق البخور",
-        "subcategoryImage": "assets/optimized/products/incense-chat.webp"
-      },
-      {
-        "id": "church-incense",
-        "name": "بخور كنسي",
-        "subcategoryImage": "assets/optimized/products/incense-chat.webp"
-      },
-      {
-        "id": "greek-incense",
-        "name": "بخور يوناني",
-        "subcategoryImage": "assets/optimized/products/incense-chat.webp"
-      },
-      {
-        "id": "natural-incense",
-        "name": "لبان وبخور طبيعي",
-        "subcategoryImage": "assets/optimized/products/incense-chat.webp"
-      },
-      {
-        "id": "charcoal",
-        "name": "الفحم",
-        "subcategoryImage": "assets/optimized/products/incense-chat.webp"
-      },
-      {
-        "id": "aparaka",
-        "name": "الأباركة والعطور الكنسية",
-        "subcategoryImage": "assets/optimized/products/incense-chat.webp"
-      },
-      {
-        "id": "hanout",
-        "name": "الحنوط",
-        "subcategoryImage": "assets/optimized/products/incense-chat.webp"
-      },
-      {
-        "id": "censer-parts",
-        "name": "أدوات وقطع غيار الشوريات",
-        "subcategoryImage": "assets/optimized/products/incense-chat.webp"
-      }
-    ]
-  },
-  {
     "id": "candles-lamps",
-    "name": "الشمع والقناديل",
-    "description": "شموع الكنيسة والقناديل وزيوتها وقطع غيارها",
+    "name": "الشمع والبخور",
+    "description": "شموع الكنيسة والبخور والفحم والعطور الكنسية",
     "subcategoryImage": "assets/optimized/products/gallery/sham3.iconat.webp",
     "visible": true,
     "homeVisible": true,
@@ -214,39 +144,44 @@
         "subcategoryImage": "assets/optimized/products/gallery/sham3.iconat.webp"
       },
       {
-        "id": "hanging-lamps",
-        "name": "قناديل معلقة",
-        "subcategoryImage": "assets/optimized/products/gallery/sham3.iconat.webp"
+        "id": "incense-boxes",
+        "name": "حق البخور",
+        "subcategoryImage": "assets/optimized/products/incense-chat.webp"
       },
       {
-        "id": "wall-lamps",
-        "name": "قناديل حائط",
-        "subcategoryImage": "assets/optimized/products/gallery/sham3.iconat.webp"
+        "id": "incense-spoons",
+        "name": "ملاعق البخور",
+        "subcategoryImage": "assets/optimized/products/incense-chat.webp"
       },
       {
-        "id": "altar-lamps",
-        "name": "قناديل المذبح",
-        "subcategoryImage": "assets/optimized/products/gallery/sham3.iconat.webp"
+        "id": "church-incense",
+        "name": "بخور كنسي",
+        "subcategoryImage": "assets/optimized/products/incense-chat.webp"
       },
       {
-        "id": "lamp-glasses",
-        "name": "كاسات القناديل",
-        "subcategoryImage": "assets/optimized/products/gallery/sham3.iconat.webp"
+        "id": "greek-incense",
+        "name": "بخور يوناني",
+        "subcategoryImage": "assets/optimized/products/incense-chat.webp"
       },
       {
-        "id": "lamp-oil",
-        "name": "زيت القناديل",
-        "subcategoryImage": "assets/optimized/products/gallery/sham3.iconat.webp"
+        "id": "natural-incense",
+        "name": "لبان وبخور طبيعي",
+        "subcategoryImage": "assets/optimized/products/incense-chat.webp"
       },
       {
-        "id": "wicks-floats",
-        "name": "الفتائل والعوامات",
-        "subcategoryImage": "assets/optimized/products/gallery/sham3.iconat.webp"
+        "id": "charcoal",
+        "name": "الفحم",
+        "subcategoryImage": "assets/optimized/products/incense-chat.webp"
       },
       {
-        "id": "lamp-parts",
-        "name": "قطع غيار القناديل",
-        "subcategoryImage": "assets/optimized/products/gallery/sham3.iconat.webp"
+        "id": "aparaka",
+        "name": "الأباركة والعطور الكنسية",
+        "subcategoryImage": "assets/optimized/products/incense-chat.webp"
+      },
+      {
+        "id": "hanout",
+        "name": "الحنوط",
+        "subcategoryImage": "assets/optimized/products/incense-chat.webp"
       }
     ]
   },
@@ -899,7 +834,11 @@
         return defaultCategories;
       }
       const parsed = JSON.parse(localStorage.getItem(TAXONOMY_STORAGE_KEY) || "null");
-      if (Array.isArray(parsed)) return parsed;
+      if (Array.isArray(parsed)) {
+        const migrated = window.POPE_KYRILLOS_CATEGORY_MIGRATION?.categories(parsed) || parsed;
+        localStorage.setItem(TAXONOMY_STORAGE_KEY, JSON.stringify(migrated));
+        return migrated;
+      }
       localStorage.setItem(TAXONOMY_STORAGE_KEY, JSON.stringify(defaultCategories));
       localStorage.setItem(TAXONOMY_VERSION_STORAGE_KEY, String(CURRENT_TAXONOMY_VERSION));
       return defaultCategories;
