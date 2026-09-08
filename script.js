@@ -1301,8 +1301,6 @@ function availableProducts() {
   return products.filter(hasAvailableVariant);
 }
 
-const alwaysVisibleSubcategoryIds = new Set(["iota-plain-hand-crosses", "plain-cross-medals"]);
-
 function buildSubcategoryCounts(items = []) {
   return items.filter(hasAvailableVariant).reduce((counts, product) => {
     const categoryId = productMainCategoryId(product);
@@ -1323,12 +1321,7 @@ function orderedLabelsForCategory(category) {
   const normalized = normalizeCategoryFilter(category);
   const categoryMeta = taxonomy?.categoryById?.get(normalized);
   if (categoryMeta) {
-    return categoryMeta.subcategories.filter((subcategory) => {
-      if (["censers", "lamps"].includes(subcategory.id) || alwaysVisibleSubcategoryIds.has(subcategory.id)) return true;
-      const totalCount = subcategoryProductCount(normalized, subcategory.id);
-      if (totalCount !== null) return totalCount > 0;
-      return availableProducts().some((product) => productMainCategoryId(product) === normalized && productSubCategoryId(product) === subcategory.id);
-    });
+    return categoryMeta.subcategories;
   }
 
   const labels = [...new Set(availableProducts().filter((product) => product.category === category).map((product) => product.label).filter(Boolean))];
@@ -1344,6 +1337,18 @@ function orderedLabelsForCategory(category) {
 function productsForCurrentCategory() {
   const category = state.filter || "all";
   return availableProducts().filter((product) => productMatchesCategory(product, category));
+}
+
+function fullCategoryProductCount(categoryId) {
+  const count = mainCategoryProductCount(categoryId);
+  if (count !== null) return count;
+  return productsForCurrentCategory().length;
+}
+
+function fullSubcategoryProductCount(categoryId, subcategoryId) {
+  const count = subcategoryProductCount(categoryId, subcategoryId);
+  if (count !== null) return count;
+  return productsForCurrentCategory().filter((product) => productMatchesSubcategory(product, subcategoryId)).length;
 }
 
 function orderedLabelsForCurrentFilter() {
@@ -1386,7 +1391,7 @@ function renderLabelFilterOptions() {
   allOption.dataset.labelOptionAll = "";
   labelFilterSelect.replaceChildren(allOption);
   labels.forEach((label) => {
-    const count = productsForCurrentCategory().filter((product) => productMatchesSubcategory(product, label.id)).length;
+    const count = fullSubcategoryProductCount(normalizeCategoryFilter(state.filter || "all"), label.id);
     labelFilterSelect.append(new Option(`${localized(label.name)} (${displayText(formatter.format(count))})`, label.id));
   });
   labelFilterSelect.value = state.labelFilter || "";
@@ -1423,8 +1428,7 @@ function renderSubcategoryCards() {
     return;
   }
 
-  const categoryProducts = productsForCurrentCategory();
-  const allCount = categoryProducts.length;
+  const allCount = fullCategoryProductCount(categoryId);
   const activeLabel = state.labelFilter || "";
   const cards = [
     {
@@ -1437,11 +1441,11 @@ function renderSubcategoryCards() {
     ...labels.map((label) => ({
       id: label.id,
       name: localized(label.name),
-      count: categoryProducts.filter((product) => productMatchesSubcategory(product, label.id)).length,
+      count: fullSubcategoryProductCount(categoryId, label.id),
       image: subcategoryCardImage(label, category),
       active: activeLabel === label.id
     }))
-  ].filter((card) => card.id === "" || ["censers", "lamps"].includes(card.id) || card.count > 0);
+  ];
 
   if (state.subcategoryCardsCategory !== categoryId) {
     state.subcategoryCardsCategory = categoryId;
