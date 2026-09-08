@@ -42,9 +42,9 @@
         "quantity": null
       }
     ],
-    "mainCategory": "مستلزمات المذبح والخدمة",
-    "subCategory": "يحتاج مراجعة",
-    "subcategory": "service-tools",
+    "mainCategory": "altar-vessels",
+    "subCategory": "censers",
+    "subcategory": "censers",
     "collections": [
       "مستلزمات المذبح"
     ],
@@ -104,9 +104,9 @@
         "quantity": null
       }
     ],
-    "mainCategory": "مستلزمات المذبح والخدمة",
-    "subCategory": "يحتاج مراجعة",
-    "subcategory": "service-tools",
+    "mainCategory": "altar-vessels",
+    "subCategory": "censers",
+    "subcategory": "censers",
     "collections": [
       "مستلزمات المذبح"
     ],
@@ -165,9 +165,9 @@
         "quantity": null
       }
     ],
-    "mainCategory": "مستلزمات المذبح والخدمة",
-    "subCategory": "يحتاج مراجعة",
-    "subcategory": "service-tools",
+    "mainCategory": "altar-vessels",
+    "subCategory": "censers",
+    "subcategory": "censers",
     "collections": [
       "مستلزمات المذبح"
     ],
@@ -227,9 +227,9 @@
         "quantity": null
       }
     ],
-    "mainCategory": "مستلزمات المذبح والخدمة",
-    "subCategory": "يحتاج مراجعة",
-    "subcategory": "service-tools",
+    "mainCategory": "altar-vessels",
+    "subCategory": "censers",
+    "subcategory": "censers",
     "collections": [
       "مستلزمات المذبح"
     ],
@@ -4415,11 +4415,11 @@
         "quantity": 1
       }
     ],
-    "mainCategory": "الشمع والبخور",
-    "subCategory": "يحتاج مراجعة",
+    "mainCategory": "candles-lamps",
+    "subCategory": "church-candles",
     "slug": "شمع-ايقونات",
     "isBestSeller": false,
-    "subcategory": "candles",
+    "subcategory": "church-candles",
     "collections": [],
     "searchKeywords": [
       "شمع أيقونات",
@@ -4469,11 +4469,11 @@
         "quantity": 10
       }
     ],
-    "mainCategory": "الشمع والبخور",
-    "subCategory": "يحتاج مراجعة",
+    "mainCategory": "candles-lamps",
+    "subCategory": "church-incense",
     "slug": "علبه-بخور-نحاس-ذهبي-بصليب",
     "isBestSeller": false,
-    "subcategory": "incense-sets",
+    "subcategory": "church-incense",
     "collections": [],
     "searchKeywords": [
       "علبة بخور نحاس ذهبي بصليب",
@@ -4525,11 +4525,11 @@
         "quantity": 10
       }
     ],
-    "mainCategory": "الشمع والبخور",
-    "subCategory": "يحتاج مراجعة",
+    "mainCategory": "candles-lamps",
+    "subCategory": "church-incense",
     "slug": "علبه-بخور-نحاس-فضي-بصليب",
     "isBestSeller": false,
-    "subcategory": "incense-sets",
+    "subcategory": "church-incense",
     "collections": [],
     "searchKeywords": [
       "علبة بخور نحاس فضي بصليب",
@@ -4582,11 +4582,11 @@
         "quantity": 10
       }
     ],
-    "mainCategory": "الشمع والبخور",
-    "subCategory": "يحتاج مراجعة",
+    "mainCategory": "candles-lamps",
+    "subCategory": "church-incense",
     "slug": "علبه-بخور-نحاس-فضي-فص-ملون",
     "isBestSeller": false,
-    "subcategory": "incense-sets",
+    "subcategory": "church-incense",
     "collections": [],
     "searchKeywords": [
       "علبة بخور نحاس فضي فص ملون",
@@ -5713,8 +5713,8 @@
         "quantity": 12
       }
     ],
-    "mainCategory": "الشمع والقناديل",
-    "subCategory": "شمعدانات",
+    "mainCategory": "candles-lamps",
+    "subCategory": "candlesticks",
     "slug": "شمعدان-مذبح-كبير",
     "isBestSeller": false,
     "subcategory": "candlesticks",
@@ -5802,11 +5802,11 @@
         "quantity": null
       }
     ],
-    "mainCategory": "الشمع والبخور",
-    "subCategory": "يحتاج مراجعة",
+    "mainCategory": "candles-lamps",
+    "subCategory": "church-candles",
     "slug": "شمعه-شحن",
     "isBestSeller": false,
-    "subcategory": "candles",
+    "subcategory": "church-candles",
     "collections": [],
     "searchKeywords": [
       "شمعة شحن",
@@ -5856,11 +5856,11 @@
         "quantity": 12
       }
     ],
-    "mainCategory": "الشمع والبخور",
-    "subCategory": "يحتاج مراجعة",
+    "mainCategory": "candles-lamps",
+    "subCategory": "church-candles",
     "slug": "شمعه-شماس-شكل-صليب",
     "isBestSeller": false,
-    "subcategory": "candles",
+    "subcategory": "church-candles",
     "collections": [],
     "searchKeywords": [
       "شمعة شماس شكل صليب",
@@ -5955,8 +5955,8 @@
         "quantity": null
       }
     ],
-    "mainCategory": "الشمع والقناديل",
-    "subCategory": "شمعدانات",
+    "mainCategory": "candles-lamps",
+    "subCategory": "candlesticks",
     "slug": "شمعدان-منجليه",
     "isBestSeller": false,
     "subcategory": "candlesticks",
@@ -6521,11 +6521,11 @@
         "quantity": 10
       }
     ],
-    "mainCategory": "الشمع والبخور",
-    "subCategory": "يحتاج مراجعة",
+    "mainCategory": "candles-lamps",
+    "subCategory": "church-incense",
     "slug": "علبه-بخور-من-النحاس-شكل-دايري",
     "isBestSeller": false,
-    "subcategory": "incense-sets",
+    "subcategory": "church-incense",
     "collections": [],
     "searchKeywords": [
       "علبة بخور من النحاس شكل دائري",
@@ -6579,11 +6579,11 @@
         "quantity": 10
       }
     ],
-    "mainCategory": "الشمع والبخور",
-    "subCategory": "يحتاج مراجعة",
+    "mainCategory": "candles-lamps",
+    "subCategory": "church-incense",
     "slug": "علبه-بخور-نحاس-علي-شكل-صليب",
     "isBestSeller": false,
-    "subcategory": "incense-sets",
+    "subcategory": "church-incense",
     "collections": [],
     "searchKeywords": [
       "علبة بخور نحاس علي شكل صليب",
@@ -6637,11 +6637,11 @@
         "quantity": 10
       }
     ],
-    "mainCategory": "الشمع والبخور",
-    "subCategory": "يحتاج مراجعة",
+    "mainCategory": "candles-lamps",
+    "subCategory": "church-incense",
     "slug": "علبه-بخور-نحاس-علي-شكل-صندوق-كنز",
     "isBestSeller": false,
-    "subcategory": "incense-sets",
+    "subcategory": "church-incense",
     "collections": [],
     "searchKeywords": [
       "علبة بخور نحاس علي شكل صندوق كنز",
@@ -6738,11 +6738,11 @@
         "quantity": null
       }
     ],
-    "mainCategory": "الشمع والبخور",
-    "subCategory": "يحتاج مراجعة",
+    "mainCategory": "candles-lamps",
+    "subCategory": "church-incense",
     "slug": "علبه-بخور-نحاس-شكل-صندوق-عادي",
     "isBestSeller": false,
-    "subcategory": "incense-sets",
+    "subcategory": "church-incense",
     "collections": [],
     "searchKeywords": [
       "علبة بخور نحاس شكل صندوق عادي",
@@ -6799,11 +6799,11 @@
         "quantity": 12
       }
     ],
-    "mainCategory": "الشمع والبخور",
-    "subCategory": "يحتاج مراجعة",
+    "mainCategory": "candles-lamps",
+    "subCategory": "church-incense",
     "slug": "علبه-بخور-نحاس-صغيره-شكل-مستطيل",
     "isBestSeller": false,
-    "subcategory": "incense-sets",
+    "subcategory": "church-incense",
     "collections": [],
     "searchKeywords": [
       "علبة بخور نحاس صغيرة شكل مستطيل",
@@ -6857,11 +6857,11 @@
         "quantity": 12
       }
     ],
-    "mainCategory": "الشمع والبخور",
-    "subCategory": "يحتاج مراجعة",
+    "mainCategory": "candles-lamps",
+    "subCategory": "church-incense",
     "slug": "علبه-بخور-نحاس-كبيره-شكل-مستطيل",
     "isBestSeller": false,
-    "subcategory": "incense-sets",
+    "subcategory": "church-incense",
     "collections": [],
     "searchKeywords": [
       "علبة بخور نحاس كبيرة شكل مستطيل",
@@ -7145,11 +7145,11 @@
         "quantity": null
       }
     ],
-    "mainCategory": "الشمع والبخور",
-    "subCategory": "يحتاج مراجعة",
+    "mainCategory": "candles-lamps",
+    "subCategory": "church-incense",
     "slug": "بخور-كنسي-فاخر",
     "isBestSeller": false,
-    "subcategory": "incense",
+    "subcategory": "church-incense",
     "collections": [],
     "searchKeywords": [
       "بخور كنسي فاخر",
@@ -7200,8 +7200,8 @@
         "quantity": 12
       }
     ],
-    "mainCategory": "الشمع والقناديل",
-    "subCategory": "شمعدانات",
+    "mainCategory": "candles-lamps",
+    "subCategory": "candlesticks",
     "slug": "زوج-شمعدان-نحاس-ذهبي-كهرباء-شكل-الورده-كبير",
     "isBestSeller": false,
     "subcategory": "candlesticks",
@@ -7259,8 +7259,8 @@
         "quantity": 12
       }
     ],
-    "mainCategory": "الشمع والقناديل",
-    "subCategory": "شمعدانات",
+    "mainCategory": "candles-lamps",
+    "subCategory": "candlesticks",
     "slug": "شمعدان-نحاس-ذهبي-سوسته",
     "isBestSeller": false,
     "subcategory": "candlesticks",
@@ -7319,8 +7319,8 @@
         "quantity": 12
       }
     ],
-    "mainCategory": "الشمع والقناديل",
-    "subCategory": "شمعدانات",
+    "mainCategory": "candles-lamps",
+    "subCategory": "candlesticks",
     "slug": "زوج-شمعدان-نحاس-ذهبي-شكل-الورده-صغير",
     "isBestSeller": false,
     "subcategory": "candlesticks",
@@ -7378,8 +7378,8 @@
         "quantity": 12
       }
     ],
-    "mainCategory": "الشمع والقناديل",
-    "subCategory": "شمعدانات",
+    "mainCategory": "candles-lamps",
+    "subCategory": "candlesticks",
     "slug": "زوج-شمعدان-نحاس-ذهبي-شكل-الخروف",
     "isBestSeller": false,
     "subcategory": "candlesticks",
@@ -7438,8 +7438,8 @@
         "quantity": 12
       }
     ],
-    "mainCategory": "الشمع والقناديل",
-    "subCategory": "شمعدانات",
+    "mainCategory": "candles-lamps",
+    "subCategory": "candlesticks",
     "slug": "زوج-شمعدان-برج-ايفل-نحاس-ذهبي-ثقيل",
     "isBestSeller": false,
     "subcategory": "candlesticks",
@@ -7584,11 +7584,11 @@
         "quantity": null
       }
     ],
-    "mainCategory": "الشمع والبخور",
-    "subCategory": "يحتاج مراجعة",
+    "mainCategory": "altar-vessels",
+    "subCategory": "censers",
     "slug": "شوريه-نحاس-ذهبي-يوناني",
     "isBestSeller": false,
-    "subcategory": "incense",
+    "subcategory": "censers",
     "collections": [],
     "searchKeywords": [
       "شورية نحاس ذهبي يوناني",
