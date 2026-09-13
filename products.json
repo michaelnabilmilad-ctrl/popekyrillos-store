@@ -7193,7 +7193,9 @@
     "slug": "شوريه-نحاس-ذهبي-يوناني",
     "isBestSeller": true,
     "subcategory": "censers",
-    "collections": [],
+    "collections": [
+      "greek-vessels"
+    ],
     "searchKeywords": [
       "شورية نحاس ذهبي يوناني",
       "شواري",
