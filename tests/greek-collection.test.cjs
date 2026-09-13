@@ -65,8 +65,8 @@ test("Admin exposes a dedicated counted Greek collection filter", () => {
 });
 
 test("Quick Edit reads and writes the same Greek collections field", () => {
-  const html = read("admin.html");
-  const admin = read("admin.js");
+  const html = fs.readFileSync("admin.html", "utf8");
+  const admin = fs.readFileSync("admin.js", "utf8");
 
   assert.match(html, /data-quick-edit-greek-field/);
   assert.match(html, /name="isGreekCollection"/);
