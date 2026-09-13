@@ -3002,26 +3002,134 @@
     "coloringMaskUrl": "assets/coloring/iota-medal-1/region-mask.png?v=2",
     "coloringOutlineUrl": "assets/coloring/iota-medal-1/outline.png?v=2",
     "coloringRegions": [
-      { "id": "region-1", "maskColor": [1, 0, 0] },
-      { "id": "region-2", "maskColor": [2, 0, 0] },
-      { "id": "region-3", "maskColor": [3, 0, 0] },
-      { "id": "region-4", "maskColor": [4, 0, 0] },
-      { "id": "region-5", "maskColor": [5, 0, 0] },
-      { "id": "region-6", "maskColor": [6, 0, 0] },
-      { "id": "region-7", "maskColor": [7, 0, 0] },
-      { "id": "region-8", "maskColor": [8, 0, 0] },
-      { "id": "region-9", "maskColor": [9, 0, 0] },
-      { "id": "region-10", "maskColor": [10, 0, 0] },
-      { "id": "region-11", "maskColor": [11, 0, 0] },
-      { "id": "region-12", "maskColor": [12, 0, 0] },
-      { "id": "region-13", "maskColor": [13, 0, 0] }
+      {
+        "id": "region-1",
+        "maskColor": [
+          1,
+          0,
+          0
+        ]
+      },
+      {
+        "id": "region-2",
+        "maskColor": [
+          2,
+          0,
+          0
+        ]
+      },
+      {
+        "id": "region-3",
+        "maskColor": [
+          3,
+          0,
+          0
+        ]
+      },
+      {
+        "id": "region-4",
+        "maskColor": [
+          4,
+          0,
+          0
+        ]
+      },
+      {
+        "id": "region-5",
+        "maskColor": [
+          5,
+          0,
+          0
+        ]
+      },
+      {
+        "id": "region-6",
+        "maskColor": [
+          6,
+          0,
+          0
+        ]
+      },
+      {
+        "id": "region-7",
+        "maskColor": [
+          7,
+          0,
+          0
+        ]
+      },
+      {
+        "id": "region-8",
+        "maskColor": [
+          8,
+          0,
+          0
+        ]
+      },
+      {
+        "id": "region-9",
+        "maskColor": [
+          9,
+          0,
+          0
+        ]
+      },
+      {
+        "id": "region-10",
+        "maskColor": [
+          10,
+          0,
+          0
+        ]
+      },
+      {
+        "id": "region-11",
+        "maskColor": [
+          11,
+          0,
+          0
+        ]
+      },
+      {
+        "id": "region-12",
+        "maskColor": [
+          12,
+          0,
+          0
+        ]
+      },
+      {
+        "id": "region-13",
+        "maskColor": [
+          13,
+          0,
+          0
+        ]
+      }
     ],
     "symmetryGroups": [
-      ["region-2", "region-3", "region-4", "region-5"],
-      ["region-6", "region-7"],
-      ["region-8", "region-9"],
-      ["region-10", "region-11"],
-      ["region-12", "region-13"]
+      [
+        "region-2",
+        "region-3",
+        "region-4",
+        "region-5"
+      ],
+      [
+        "region-6",
+        "region-7"
+      ],
+      [
+        "region-8",
+        "region-9"
+      ],
+      [
+        "region-10",
+        "region-11"
+      ],
+      [
+        "region-12",
+        "region-13"
+      ]
     ],
     "name": "صليب يوتا مادلية موديل 1",
     "category": "icons",
@@ -4045,9 +4153,9 @@
     "name": "جراب للكتاب المقدس",
     "category": "books",
     "label": "كتب وطقوس",
-    "description": "جراب مميز وعملي للكتاب المقدس يجمع بين الحماية والأناقة. يتوفر بثلاثة مقاسات مختلفة تناسب جميع أحجام الكتب المقدسة، مما يضمن ملاءمة مثالية لاحتياجاتك. اختر من بين ألوان جذابة وراقية تعكس ذوقك الشخصي وتضيف لمسة جمالية لمكتبتك أو حقيبتك. مصنوع بمواد متينة توفر حماية فعالة من الأتربة والرطوبة والتلف اليومي. مثالي كهدية قيمة لأحبائك أو لاستخدامك الشخصي في الكنيسة أو المنزل.\n\nالاختيارات والأسعار:\nSmall 13*19 cm / أسود: ٦٠ ج.م (غير متاح حاليا)\nSmall 13*19 cm / أزرق: ٦٠ ج.م\nSmall 13*19 cm / أحمر: ٦٠ ج.م\nSmall 13*19 cm / وردي: ٦٠ ج.م\nSmall 13*19 cm / بنفسجي: ٦٠ ج.م\nSmall 13*19 cm / أخضر: ٦٠ ج.م\nSmall 13*19 cm / رمادي: ٦٠ ج.م (غير متاح حاليا)\nSmall 13*19 cm / فيروزي: ٦٠ ج.م (غير متاح حاليا)\nMedium 15*22 cm / أسود: ٨٠ ج.م\nMedium 15*22 cm / أزرق: ٨٠ ج.م (غير متاح حاليا)\nMedium 15*22 cm / أحمر: ٨٠ ج.م\nMedium 15*22 cm / وردي: ٨٠ ج.م\nMedium 15*22 cm / بنفسجي: ٨٠ ج.م (غير متاح حاليا)\nMedium 15*22 cm / أخضر: ٨٠ ج.م\nMedium 15*22 cm / رمادي: ٦٠ ج.م\nMedium 15*22 cm / فيروزي: ٦٠ ج.م\nLarge with hand 20*30 cm / أسود: ١٣٠ ج.م (غير متاح حاليا)\nLarge with hand 20*30 cm / أزرق: ١٣٠ ج.م\nLarge with hand 20*30 cm / أحمر: ١٣٠ ج.م\nLarge with hand 20*30 cm / وردي: ١٣٠ ج.م (غير متاح حاليا)\nLarge with hand 20*30 cm / بنفسجي: ١٣٠ ج.م (غير متاح حاليا)\nLarge with hand 20*30 cm / أخضر: ١٣٠ ج.م\nLarge with hand 20*30 cm / رمادي: ٦٠ ج.م (غير متاح حاليا)\nLarge with hand 20*30 cm / فيروزي: ٦٠ ج.م (غير متاح حاليا)",
-    "price": 60,
-    "priceNote": "يبدأ من ٦٠ ج.م حتى ١٣٠ ج.م",
+    "description": "جراب مميز وعملي للكتاب المقدس يجمع بين الحماية والأناقة. يتوفر بثلاثة مقاسات مختلفة تناسب جميع أحجام الكتب المقدسة، مما يضمن ملاءمة مثالية لاحتياجاتك. اختر من بين ألوان جذابة وراقية تعكس ذوقك الشخصي وتضيف لمسة جمالية لمكتبتك أو حقيبتك. مصنوع بمواد متينة توفر حماية فعالة من الأتربة والرطوبة والتلف اليومي. مثالي كهدية قيمة لأحبائك أو لاستخدامك الشخصي في الكنيسة أو المنزل.\n\nالاختيارات والأسعار:\nSmall 13*19 cm / أسود: ٧٠ ج.م (غير متاح حاليا)\nSmall 13*19 cm / أزرق: ٧٠ ج.م\nSmall 13*19 cm / أحمر: ٧٠ ج.م\nSmall 13*19 cm / وردي: ٧٠ ج.م\nSmall 13*19 cm / بنفسجي: ٧٠ ج.م\nSmall 13*19 cm / أخضر: ٧٠ ج.م\nSmall 13*19 cm / رمادي: ٧٠ ج.م (غير متاح حاليا)\nSmall 13*19 cm / فيروزي: ٧٠ ج.م (غير متاح حاليا)\nMedium 15*22 cm / أسود: ٩٠ ج.م\nMedium 15*22 cm / أزرق: ٩٠ ج.م (غير متاح حاليا)\nMedium 15*22 cm / أحمر: ٩٠ ج.م\nMedium 15*22 cm / وردي: ٩٠ ج.م\nMedium 15*22 cm / بنفسجي: ٩٠ ج.م (غير متاح حاليا)\nMedium 15*22 cm / أخضر: ٩٠ ج.م\nMedium 15*22 cm / رمادي: ٩٠ ج.م\nMedium 15*22 cm / فيروزي: ٩٠ ج.م\nLarge with hand 20*30 cm / أسود: ١٤٠ ج.م (غير متاح حاليا)\nLarge with hand 20*30 cm / أزرق: ١٤٠ ج.م\nLarge with hand 20*30 cm / أحمر: ١٤٠ ج.م\nLarge with hand 20*30 cm / وردي: ١٤٠ ج.م (غير متاح حاليا)\nLarge with hand 20*30 cm / بنفسجي: ١٤٠ ج.م (غير متاح حاليا)\nLarge with hand 20*30 cm / أخضر: ١٤٠ ج.م\nLarge with hand 20*30 cm / رمادي: ١٤٠ ج.م (غير متاح حاليا)\nLarge with hand 20*30 cm / فيروزي: ١٤٠ ج.م (غير متاح حاليا)",
+    "price": 70,
+    "priceNote": "يبدأ من ٧٠ ج.م حتى ١٤٠ ج.م",
     "stock": "متاح",
     "badge": "جرابات كتاب مقدس",
     "image": "assets/optimized/products/gallery/006-10121173303603-01.webp",
@@ -4107,7 +4215,7 @@
           "المقاس": "صغير 13*19 سم",
           "اللون": "أسود"
         },
-        "price": 60,
+        "price": 70,
         "compareAtPrice": null,
         "available": false,
         "image": "assets/optimized/products/gallery/006-10121173303603-07.webp",
@@ -4124,7 +4232,7 @@
           "المقاس": "صغير 13*19 سم",
           "اللون": "أزرق"
         },
-        "price": 60,
+        "price": 70,
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/006-10121173303603-01.webp",
@@ -4141,7 +4249,7 @@
           "المقاس": "صغير 13*19 سم",
           "اللون": "أحمر"
         },
-        "price": 60,
+        "price": 70,
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/006-10121173303603-04.webp",
@@ -4158,7 +4266,7 @@
           "المقاس": "صغير 13*19 سم",
           "اللون": "وردي"
         },
-        "price": 60,
+        "price": 70,
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/006-10121173303603-09.webp",
@@ -4175,7 +4283,7 @@
           "المقاس": "صغير 13*19 سم",
           "اللون": "بنفسجي"
         },
-        "price": 60,
+        "price": 70,
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/006-10121173303603-08.webp",
@@ -4192,7 +4300,7 @@
           "المقاس": "صغير 13*19 سم",
           "اللون": "أخضر"
         },
-        "price": 60,
+        "price": 70,
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/006-10121173303603-06.webp",
@@ -4209,7 +4317,7 @@
           "المقاس": "صغير 13*19 سم",
           "اللون": "رمادي"
         },
-        "price": 60,
+        "price": 70,
         "compareAtPrice": null,
         "available": false,
         "image": "assets/optimized/products/gallery/006-10121173303603-11.webp",
@@ -4226,7 +4334,7 @@
           "المقاس": "صغير 13*19 سم",
           "اللون": "فيروزي"
         },
-        "price": 60,
+        "price": 70,
         "compareAtPrice": null,
         "available": false,
         "image": "assets/optimized/products/gallery/006-10121173303603-12.webp",
@@ -4243,7 +4351,7 @@
           "المقاس": "متوسط 15*22 سم",
           "اللون": "أسود"
         },
-        "price": 80,
+        "price": 90,
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/006-10121173303603-07.webp",
@@ -4260,7 +4368,7 @@
           "المقاس": "متوسط 15*22 سم",
           "اللون": "أزرق"
         },
-        "price": 80,
+        "price": 90,
         "compareAtPrice": 90,
         "available": false,
         "image": "assets/optimized/products/gallery/006-10121173303603-01.webp",
@@ -4277,7 +4385,7 @@
           "المقاس": "متوسط 15*22 سم",
           "اللون": "أحمر"
         },
-        "price": 80,
+        "price": 90,
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/006-10121173303603-04.webp",
@@ -4294,7 +4402,7 @@
           "المقاس": "متوسط 15*22 سم",
           "اللون": "وردي"
         },
-        "price": 80,
+        "price": 90,
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/006-10121173303603-09.webp",
@@ -4311,7 +4419,7 @@
           "المقاس": "متوسط 15*22 سم",
           "اللون": "بنفسجي"
         },
-        "price": 80,
+        "price": 90,
         "compareAtPrice": null,
         "available": false,
         "image": "assets/optimized/products/gallery/006-10121173303603-08.webp",
@@ -4328,7 +4436,7 @@
           "المقاس": "متوسط 15*22 سم",
           "اللون": "أخضر"
         },
-        "price": 80,
+        "price": 90,
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/006-10121173303603-06.webp",
@@ -4345,7 +4453,7 @@
           "المقاس": "متوسط 15*22 سم",
           "اللون": "رمادي"
         },
-        "price": 60,
+        "price": 90,
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/006-10121173303603-11.webp",
@@ -4362,7 +4470,7 @@
           "المقاس": "متوسط 15*22 سم",
           "اللون": "فيروزي"
         },
-        "price": 60,
+        "price": 90,
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/006-10121173303603-12.webp",
@@ -4379,7 +4487,7 @@
           "المقاس": "كبير بيد 20*30 سم",
           "اللون": "أسود"
         },
-        "price": 130,
+        "price": 140,
         "compareAtPrice": null,
         "available": false,
         "image": "assets/optimized/products/gallery/006-10121173303603-07.webp",
@@ -4396,7 +4504,7 @@
           "المقاس": "كبير بيد 20*30 سم",
           "اللون": "أزرق"
         },
-        "price": 130,
+        "price": 140,
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/006-10121173303603-01.webp",
@@ -4413,7 +4521,7 @@
           "المقاس": "كبير بيد 20*30 سم",
           "اللون": "أحمر"
         },
-        "price": 130,
+        "price": 140,
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/006-10121173303603-04.webp",
@@ -4430,7 +4538,7 @@
           "المقاس": "كبير بيد 20*30 سم",
           "اللون": "وردي"
         },
-        "price": 130,
+        "price": 140,
         "compareAtPrice": null,
         "available": false,
         "image": "assets/optimized/products/gallery/006-10121173303603-09.webp",
@@ -4447,7 +4555,7 @@
           "المقاس": "كبير بيد 20*30 سم",
           "اللون": "بنفسجي"
         },
-        "price": 130,
+        "price": 140,
         "compareAtPrice": null,
         "available": false,
         "image": "assets/optimized/products/gallery/006-10121173303603-08.webp",
@@ -4464,7 +4572,7 @@
           "المقاس": "كبير بيد 20*30 سم",
           "اللون": "أخضر"
         },
-        "price": 130,
+        "price": 140,
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/006-10121173303603-06.webp",
@@ -4481,7 +4589,7 @@
           "المقاس": "كبير بيد 20*30 سم",
           "اللون": "رمادي"
         },
-        "price": 60,
+        "price": 140,
         "compareAtPrice": null,
         "available": false,
         "image": "assets/optimized/products/gallery/006-10121173303603-11.webp",
@@ -4498,7 +4606,7 @@
           "المقاس": "كبير بيد 20*30 سم",
           "اللون": "فيروزي"
         },
-        "price": 60,
+        "price": 140,
         "compareAtPrice": null,
         "available": false,
         "image": "assets/optimized/products/gallery/006-10121173303603-12.webp",
