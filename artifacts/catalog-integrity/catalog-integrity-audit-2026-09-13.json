@@ -1,0 +1,3255 @@
+{
+  "generatedAt": "2026-09-13T19:31:11.220Z",
+  "newestLegitimateBaseline": "fe91198",
+  "regressionCommit": "8a9656a",
+  "currentBaseline": "f904eb6",
+  "strategy": "Restore a field only when it changed in the regression commit and still exactly equals the stale value; preserve every later-diverged field.",
+  "ignoredDerivedFields": [
+    "thumbnail"
+  ],
+  "summary": {
+    "catalogProducts": 115,
+    "correctedProducts": 65,
+    "correctedFields": 154
+  },
+  "changes": [
+    {
+      "productId": "atb3ho-10555319877797",
+      "productName": "تحدي التغيير",
+      "field": "subcategory",
+      "valueBeforeRegression": "meeting-games",
+      "valueAfterRegression": "christian-games",
+      "recommendedValue": "meeting-games"
+    },
+    {
+      "productId": "atb3ho-10547044876453",
+      "productName": "٥ بوك مارك + ٥ FREE",
+      "field": "subcategory",
+      "valueBeforeRegression": "bookmarks",
+      "valueAfterRegression": "cards-bookmarks",
+      "recommendedValue": "bookmarks"
+    },
+    {
+      "productId": "atb3ho-10547041829029",
+      "productName": "جورنالينج اتبعه ٣٦٥ يوم",
+      "field": "subcategory",
+      "valueBeforeRegression": "planners",
+      "valueAfterRegression": "notebooks-planners",
+      "recommendedValue": "planners"
+    },
+    {
+      "productId": "atb3ho-10545390780581",
+      "productName": "بوك مارك",
+      "field": "subcategory",
+      "valueBeforeRegression": "bookmarks",
+      "valueAfterRegression": "cards-bookmarks",
+      "recommendedValue": "bookmarks"
+    },
+    {
+      "productId": "atb3ho-10545390354597",
+      "productName": "بوك مارك داود",
+      "field": "subcategory",
+      "valueBeforeRegression": "bookmarks",
+      "valueAfterRegression": "cards-bookmarks",
+      "recommendedValue": "bookmarks"
+    },
+    {
+      "productId": "atb3ho-10545386553509",
+      "productName": "بوك مارك مزمور ١١٧",
+      "field": "subcategory",
+      "valueBeforeRegression": "bookmarks",
+      "valueAfterRegression": "cards-bookmarks",
+      "recommendedValue": "bookmarks"
+    },
+    {
+      "productId": "atb3ho-10545385636005",
+      "productName": "بوك مارك رحلتك",
+      "field": "subcategory",
+      "valueBeforeRegression": "bookmarks",
+      "valueAfterRegression": "cards-bookmarks",
+      "recommendedValue": "bookmarks"
+    },
+    {
+      "productId": "atb3ho-10545382686885",
+      "productName": "بوك مارك الصليب",
+      "field": "subcategory",
+      "valueBeforeRegression": "bookmarks",
+      "valueAfterRegression": "cards-bookmarks",
+      "recommendedValue": "bookmarks"
+    },
+    {
+      "productId": "atb3ho-10545381474469",
+      "productName": "بوك مارك اتبعه",
+      "field": "subcategory",
+      "valueBeforeRegression": "bookmarks",
+      "valueAfterRegression": "cards-bookmarks",
+      "recommendedValue": "bookmarks"
+    },
+    {
+      "productId": "atb3ho-10545380884645",
+      "productName": "بوك مارك صلاة يسوع",
+      "field": "subcategory",
+      "valueBeforeRegression": "bookmarks",
+      "valueAfterRegression": "cards-bookmarks",
+      "recommendedValue": "bookmarks"
+    },
+    {
+      "productId": "atb3ho-10545379934373",
+      "productName": "بوك مارك بابا يسوع",
+      "field": "subcategory",
+      "valueBeforeRegression": "bookmarks",
+      "valueAfterRegression": "cards-bookmarks",
+      "recommendedValue": "bookmarks"
+    },
+    {
+      "productId": "atb3ho-10545379836069",
+      "productName": "نوت بوك اتبعه في صلاتي (اجندة)",
+      "field": "subcategory",
+      "valueBeforeRegression": "notebooks",
+      "valueAfterRegression": "notebooks-planners",
+      "recommendedValue": "notebooks"
+    },
+    {
+      "productId": "atb3ho-10545378001061",
+      "productName": "نوت بوك اتبعه في صلاة (سلك)",
+      "field": "variants",
+      "valueBeforeRegression": [
+        {
+          "id": "atb3ho-10545378001061-variant-47741218291877",
+          "title": "الاختيار الافتراضي",
+          "options": {},
+          "price": 65,
+          "compareAtPrice": null,
+          "available": true,
+          "image": null,
+          "images": [],
+          "sku": "PK-PRAYER-WIRE",
+          "quantity": null
+        }
+      ],
+      "valueAfterRegression": [
+        {
+          "id": "atb3ho-10545378001061-variant-47741218291877",
+          "title": "الاختيار الافتراضي",
+          "options": {},
+          "price": 65,
+          "compareAtPrice": null,
+          "available": true,
+          "image": null,
+          "images": [],
+          "sku": "",
+          "quantity": null
+        }
+      ],
+      "recommendedValue": [
+        {
+          "id": "atb3ho-10545378001061-variant-47741218291877",
+          "title": "الاختيار الافتراضي",
+          "options": {},
+          "price": 65,
+          "compareAtPrice": null,
+          "available": true,
+          "image": null,
+          "images": [],
+          "sku": "PK-PRAYER-WIRE",
+          "quantity": null
+        }
+      ]
+    },
+    {
+      "productId": "atb3ho-10545378001061",
+      "productName": "نوت بوك اتبعه في صلاة (سلك)",
+      "field": "subcategory",
+      "valueBeforeRegression": "notebooks",
+      "valueAfterRegression": "notebooks-planners",
+      "recommendedValue": "notebooks"
+    },
+    {
+      "productId": "atb3ho-10545377149093",
+      "productName": "اتبعه في تحدياتي",
+      "field": "variants",
+      "valueBeforeRegression": [
+        {
+          "id": "atb3ho-10545377149093-variant-47741217472677",
+          "title": "الاختيار الافتراضي",
+          "options": {},
+          "price": 120,
+          "compareAtPrice": 150,
+          "available": true,
+          "image": null,
+          "images": [],
+          "sku": "PK-CARDS",
+          "quantity": null
+        }
+      ],
+      "valueAfterRegression": [
+        {
+          "id": "atb3ho-10545377149093-variant-47741217472677",
+          "title": "الاختيار الافتراضي",
+          "options": {},
+          "price": 120,
+          "compareAtPrice": 150,
+          "available": true,
+          "image": null,
+          "images": [],
+          "sku": "",
+          "quantity": null
+        }
+      ],
+      "recommendedValue": [
+        {
+          "id": "atb3ho-10545377149093-variant-47741217472677",
+          "title": "الاختيار الافتراضي",
+          "options": {},
+          "price": 120,
+          "compareAtPrice": 150,
+          "available": true,
+          "image": null,
+          "images": [],
+          "sku": "PK-CARDS",
+          "quantity": null
+        }
+      ]
+    },
+    {
+      "productId": "atb3ho-10545377149093",
+      "productName": "اتبعه في تحدياتي",
+      "field": "subcategory",
+      "valueBeforeRegression": "meeting-games",
+      "valueAfterRegression": "christian-games",
+      "recommendedValue": "meeting-games"
+    },
+    {
+      "productId": "atb3ho-10545374298277",
+      "productName": "باكدج اتبعه",
+      "field": "subcategory",
+      "valueBeforeRegression": "meeting-games",
+      "valueAfterRegression": "christian-games",
+      "recommendedValue": "meeting-games"
+    },
+    {
+      "productId": "atb3ho-10545373839525",
+      "productName": "كارت منظم لمواعيد سر الاعتراف",
+      "field": "subcategory",
+      "valueBeforeRegression": "cards",
+      "valueAfterRegression": "cards-bookmarks",
+      "recommendedValue": "cards"
+    },
+    {
+      "productId": "atb3ho-10545371218085",
+      "productName": "اتبعُه رحلة ٢١٤ يوم",
+      "field": "subcategory",
+      "valueBeforeRegression": "planners",
+      "valueAfterRegression": "notebooks-planners",
+      "recommendedValue": "planners"
+    },
+    {
+      "productId": "iota-plain-cross-20cm-1",
+      "productName": "صليب يوتا سادة 20 سم - موديل 1",
+      "field": "url",
+      "valueBeforeRegression": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D8%A9-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-1",
+      "valueAfterRegression": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D9%87-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-1",
+      "recommendedValue": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D8%A9-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-1"
+    },
+    {
+      "productId": "iota-plain-cross-20cm-1",
+      "productName": "صليب يوتا سادة 20 سم - موديل 1",
+      "field": "slug",
+      "valueBeforeRegression": "صليب-يوتا-سادة-20-سم-موديل-1",
+      "valueAfterRegression": "صليب-يوتا-ساده-20-سم-موديل-1",
+      "recommendedValue": "صليب-يوتا-سادة-20-سم-موديل-1"
+    },
+    {
+      "productId": "iota-plain-cross-20cm-2",
+      "productName": "صليب يوتا سادة 20 سم - موديل 2",
+      "field": "url",
+      "valueBeforeRegression": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D8%A9-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-2",
+      "valueAfterRegression": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D9%87-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-2",
+      "recommendedValue": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D8%A9-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-2"
+    },
+    {
+      "productId": "iota-plain-cross-20cm-2",
+      "productName": "صليب يوتا سادة 20 سم - موديل 2",
+      "field": "slug",
+      "valueBeforeRegression": "صليب-يوتا-سادة-20-سم-موديل-2",
+      "valueAfterRegression": "صليب-يوتا-ساده-20-سم-موديل-2",
+      "recommendedValue": "صليب-يوتا-سادة-20-سم-موديل-2"
+    },
+    {
+      "productId": "iota-plain-cross-20cm-3",
+      "productName": "صليب يوتا سادة 20 سم - موديل 3",
+      "field": "price",
+      "valueBeforeRegression": 104,
+      "valueAfterRegression": 84,
+      "recommendedValue": 104
+    },
+    {
+      "productId": "iota-plain-cross-20cm-3",
+      "productName": "صليب يوتا سادة 20 سم - موديل 3",
+      "field": "url",
+      "valueBeforeRegression": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D8%A9-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-3",
+      "valueAfterRegression": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D9%87-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-3",
+      "recommendedValue": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D8%A9-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-3"
+    },
+    {
+      "productId": "iota-plain-cross-20cm-3",
+      "productName": "صليب يوتا سادة 20 سم - موديل 3",
+      "field": "variants",
+      "valueBeforeRegression": [
+        {
+          "id": "iota-plain-cross-20cm-3-variant-1",
+          "title": "الاختيار الافتراضي",
+          "options": {},
+          "price": 104,
+          "compareAtPrice": null,
+          "available": true,
+          "image": null,
+          "images": [],
+          "sku": "",
+          "quantity": 1000
+        }
+      ],
+      "valueAfterRegression": [
+        {
+          "id": "iota-plain-cross-20cm-3-variant-1",
+          "title": "الاختيار الافتراضي",
+          "options": {},
+          "price": 84,
+          "compareAtPrice": null,
+          "available": true,
+          "image": null,
+          "images": [],
+          "sku": "",
+          "quantity": 1000
+        }
+      ],
+      "recommendedValue": [
+        {
+          "id": "iota-plain-cross-20cm-3-variant-1",
+          "title": "الاختيار الافتراضي",
+          "options": {},
+          "price": 104,
+          "compareAtPrice": null,
+          "available": true,
+          "image": null,
+          "images": [],
+          "sku": "",
+          "quantity": 1000
+        }
+      ]
+    },
+    {
+      "productId": "iota-plain-cross-20cm-3",
+      "productName": "صليب يوتا سادة 20 سم - موديل 3",
+      "field": "slug",
+      "valueBeforeRegression": "صليب-يوتا-سادة-20-سم-موديل-3",
+      "valueAfterRegression": "صليب-يوتا-ساده-20-سم-موديل-3",
+      "recommendedValue": "صليب-يوتا-سادة-20-سم-موديل-3"
+    },
+    {
+      "productId": "iota-plain-cross-20cm-4",
+      "productName": "صليب يوتا سادة 20 سم - موديل 4",
+      "field": "url",
+      "valueBeforeRegression": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D8%A9-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-4",
+      "valueAfterRegression": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D9%87-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-4",
+      "recommendedValue": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D8%A9-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-4"
+    },
+    {
+      "productId": "iota-plain-cross-20cm-4",
+      "productName": "صليب يوتا سادة 20 سم - موديل 4",
+      "field": "slug",
+      "valueBeforeRegression": "صليب-يوتا-سادة-20-سم-موديل-4",
+      "valueAfterRegression": "صليب-يوتا-ساده-20-سم-موديل-4",
+      "recommendedValue": "صليب-يوتا-سادة-20-سم-موديل-4"
+    },
+    {
+      "productId": "iota-plain-cross-20cm-5",
+      "productName": "صليب يوتا سادة 20 سم - موديل 5",
+      "field": "url",
+      "valueBeforeRegression": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D8%A9-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-5",
+      "valueAfterRegression": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D9%87-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-5",
+      "recommendedValue": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D8%A9-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-5"
+    },
+    {
+      "productId": "iota-plain-cross-20cm-5",
+      "productName": "صليب يوتا سادة 20 سم - موديل 5",
+      "field": "slug",
+      "valueBeforeRegression": "صليب-يوتا-سادة-20-سم-موديل-5",
+      "valueAfterRegression": "صليب-يوتا-ساده-20-سم-موديل-5",
+      "recommendedValue": "صليب-يوتا-سادة-20-سم-موديل-5"
+    },
+    {
+      "productId": "iota-plain-cross-20cm-6",
+      "productName": "صليب يوتا سادة 20 سم - موديل 6",
+      "field": "url",
+      "valueBeforeRegression": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D8%A9-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-6",
+      "valueAfterRegression": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D9%87-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-6",
+      "recommendedValue": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D8%A9-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-6"
+    },
+    {
+      "productId": "iota-plain-cross-20cm-6",
+      "productName": "صليب يوتا سادة 20 سم - موديل 6",
+      "field": "slug",
+      "valueBeforeRegression": "صليب-يوتا-سادة-20-سم-موديل-6",
+      "valueAfterRegression": "صليب-يوتا-ساده-20-سم-موديل-6",
+      "recommendedValue": "صليب-يوتا-سادة-20-سم-موديل-6"
+    },
+    {
+      "productId": "iota-plain-cross-20cm-7",
+      "productName": "صليب يوتا سادة 20 سم - موديل 7",
+      "field": "url",
+      "valueBeforeRegression": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D8%A9-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-7",
+      "valueAfterRegression": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D9%87-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-7",
+      "recommendedValue": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D8%A9-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-7"
+    },
+    {
+      "productId": "iota-plain-cross-20cm-7",
+      "productName": "صليب يوتا سادة 20 سم - موديل 7",
+      "field": "slug",
+      "valueBeforeRegression": "صليب-يوتا-سادة-20-سم-موديل-7",
+      "valueAfterRegression": "صليب-يوتا-ساده-20-سم-موديل-7",
+      "recommendedValue": "صليب-يوتا-سادة-20-سم-موديل-7"
+    },
+    {
+      "productId": "iota-plain-cross-20cm-8",
+      "productName": "صليب يوتا سادة 20 سم - موديل 8",
+      "field": "price",
+      "valueBeforeRegression": 104,
+      "valueAfterRegression": 84,
+      "recommendedValue": 104
+    },
+    {
+      "productId": "iota-plain-cross-20cm-8",
+      "productName": "صليب يوتا سادة 20 سم - موديل 8",
+      "field": "url",
+      "valueBeforeRegression": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D8%A9-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-8",
+      "valueAfterRegression": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D9%87-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-8",
+      "recommendedValue": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D8%A9-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-8"
+    },
+    {
+      "productId": "iota-plain-cross-20cm-8",
+      "productName": "صليب يوتا سادة 20 سم - موديل 8",
+      "field": "variants",
+      "valueBeforeRegression": [
+        {
+          "id": "iota-plain-cross-20cm-8-variant-1",
+          "title": "الاختيار الافتراضي",
+          "options": {},
+          "price": 104,
+          "compareAtPrice": null,
+          "available": true,
+          "image": null,
+          "images": [],
+          "sku": "",
+          "quantity": 1000
+        }
+      ],
+      "valueAfterRegression": [
+        {
+          "id": "iota-plain-cross-20cm-8-variant-1",
+          "title": "الاختيار الافتراضي",
+          "options": {},
+          "price": 84,
+          "compareAtPrice": null,
+          "available": true,
+          "image": null,
+          "images": [],
+          "sku": "",
+          "quantity": 1000
+        }
+      ],
+      "recommendedValue": [
+        {
+          "id": "iota-plain-cross-20cm-8-variant-1",
+          "title": "الاختيار الافتراضي",
+          "options": {},
+          "price": 104,
+          "compareAtPrice": null,
+          "available": true,
+          "image": null,
+          "images": [],
+          "sku": "",
+          "quantity": 1000
+        }
+      ]
+    },
+    {
+      "productId": "iota-plain-cross-20cm-8",
+      "productName": "صليب يوتا سادة 20 سم - موديل 8",
+      "field": "slug",
+      "valueBeforeRegression": "صليب-يوتا-سادة-20-سم-موديل-8",
+      "valueAfterRegression": "صليب-يوتا-ساده-20-سم-موديل-8",
+      "recommendedValue": "صليب-يوتا-سادة-20-سم-موديل-8"
+    },
+    {
+      "productId": "iota-plain-cross-20cm-9",
+      "productName": "صليب يوتا سادة 20 سم - موديل 9",
+      "field": "url",
+      "valueBeforeRegression": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D8%A9-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-9",
+      "valueAfterRegression": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D9%87-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-9",
+      "recommendedValue": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D8%A9-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-9"
+    },
+    {
+      "productId": "iota-plain-cross-20cm-9",
+      "productName": "صليب يوتا سادة 20 سم - موديل 9",
+      "field": "slug",
+      "valueBeforeRegression": "صليب-يوتا-سادة-20-سم-موديل-9",
+      "valueAfterRegression": "صليب-يوتا-ساده-20-سم-موديل-9",
+      "recommendedValue": "صليب-يوتا-سادة-20-سم-موديل-9"
+    },
+    {
+      "productId": "iota-plain-cross-20cm-10",
+      "productName": "صليب يوتا سادة 20 سم - موديل 10",
+      "field": "url",
+      "valueBeforeRegression": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D8%A9-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-10",
+      "valueAfterRegression": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D9%87-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-10",
+      "recommendedValue": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D8%A9-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-10"
+    },
+    {
+      "productId": "iota-plain-cross-20cm-10",
+      "productName": "صليب يوتا سادة 20 سم - موديل 10",
+      "field": "slug",
+      "valueBeforeRegression": "صليب-يوتا-سادة-20-سم-موديل-10",
+      "valueAfterRegression": "صليب-يوتا-ساده-20-سم-موديل-10",
+      "recommendedValue": "صليب-يوتا-سادة-20-سم-موديل-10"
+    },
+    {
+      "productId": "iota-plain-cross-20cm-11",
+      "productName": "صليب يوتا سادة 20 سم - موديل 11",
+      "field": "price",
+      "valueBeforeRegression": 104,
+      "valueAfterRegression": 84,
+      "recommendedValue": 104
+    },
+    {
+      "productId": "iota-plain-cross-20cm-11",
+      "productName": "صليب يوتا سادة 20 سم - موديل 11",
+      "field": "url",
+      "valueBeforeRegression": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D8%A9-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-11",
+      "valueAfterRegression": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D9%87-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-11",
+      "recommendedValue": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D8%A9-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-11"
+    },
+    {
+      "productId": "iota-plain-cross-20cm-11",
+      "productName": "صليب يوتا سادة 20 سم - موديل 11",
+      "field": "variants",
+      "valueBeforeRegression": [
+        {
+          "id": "iota-plain-cross-20cm-11-variant-1",
+          "title": "الاختيار الافتراضي",
+          "options": {},
+          "price": 104,
+          "compareAtPrice": null,
+          "available": true,
+          "image": null,
+          "images": [],
+          "sku": "",
+          "quantity": 1000
+        }
+      ],
+      "valueAfterRegression": [
+        {
+          "id": "iota-plain-cross-20cm-11-variant-1",
+          "title": "الاختيار الافتراضي",
+          "options": {},
+          "price": 84,
+          "compareAtPrice": null,
+          "available": true,
+          "image": null,
+          "images": [],
+          "sku": "",
+          "quantity": 1000
+        }
+      ],
+      "recommendedValue": [
+        {
+          "id": "iota-plain-cross-20cm-11-variant-1",
+          "title": "الاختيار الافتراضي",
+          "options": {},
+          "price": 104,
+          "compareAtPrice": null,
+          "available": true,
+          "image": null,
+          "images": [],
+          "sku": "",
+          "quantity": 1000
+        }
+      ]
+    },
+    {
+      "productId": "iota-plain-cross-20cm-11",
+      "productName": "صليب يوتا سادة 20 سم - موديل 11",
+      "field": "slug",
+      "valueBeforeRegression": "صليب-يوتا-سادة-20-سم-موديل-11",
+      "valueAfterRegression": "صليب-يوتا-ساده-20-سم-موديل-11",
+      "recommendedValue": "صليب-يوتا-سادة-20-سم-موديل-11"
+    },
+    {
+      "productId": "iota-plain-cross-20cm-12",
+      "productName": "صليب يوتا سادة 20 سم - موديل 12",
+      "field": "url",
+      "valueBeforeRegression": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D8%A9-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-12",
+      "valueAfterRegression": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D9%87-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-12",
+      "recommendedValue": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D8%A9-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-12"
+    },
+    {
+      "productId": "iota-plain-cross-20cm-12",
+      "productName": "صليب يوتا سادة 20 سم - موديل 12",
+      "field": "slug",
+      "valueBeforeRegression": "صليب-يوتا-سادة-20-سم-موديل-12",
+      "valueAfterRegression": "صليب-يوتا-ساده-20-سم-موديل-12",
+      "recommendedValue": "صليب-يوتا-سادة-20-سم-موديل-12"
+    },
+    {
+      "productId": "iota-plain-cross-20cm-13",
+      "productName": "صليب يوتا سادة 20 سم - موديل 13",
+      "field": "url",
+      "valueBeforeRegression": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D8%A9-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-13",
+      "valueAfterRegression": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D9%87-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-13",
+      "recommendedValue": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D8%A9-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-13"
+    },
+    {
+      "productId": "iota-plain-cross-20cm-13",
+      "productName": "صليب يوتا سادة 20 سم - موديل 13",
+      "field": "slug",
+      "valueBeforeRegression": "صليب-يوتا-سادة-20-سم-موديل-13",
+      "valueAfterRegression": "صليب-يوتا-ساده-20-سم-موديل-13",
+      "recommendedValue": "صليب-يوتا-سادة-20-سم-موديل-13"
+    },
+    {
+      "productId": "iota-plain-cross-20cm-14",
+      "productName": "صليب يوتا سادة 20 سم - موديل 14",
+      "field": "url",
+      "valueBeforeRegression": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D8%A9-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-14",
+      "valueAfterRegression": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D9%87-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-14",
+      "recommendedValue": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D8%A9-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-14"
+    },
+    {
+      "productId": "iota-plain-cross-20cm-14",
+      "productName": "صليب يوتا سادة 20 سم - موديل 14",
+      "field": "slug",
+      "valueBeforeRegression": "صليب-يوتا-سادة-20-سم-موديل-14",
+      "valueAfterRegression": "صليب-يوتا-ساده-20-سم-موديل-14",
+      "recommendedValue": "صليب-يوتا-سادة-20-سم-موديل-14"
+    },
+    {
+      "productId": "iota-plain-cross-20cm-15",
+      "productName": "صليب يوتا سادة 20 سم - موديل 15",
+      "field": "url",
+      "valueBeforeRegression": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D8%A9-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-15",
+      "valueAfterRegression": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D9%87-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-15",
+      "recommendedValue": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D8%A9-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-15"
+    },
+    {
+      "productId": "iota-plain-cross-20cm-15",
+      "productName": "صليب يوتا سادة 20 سم - موديل 15",
+      "field": "slug",
+      "valueBeforeRegression": "صليب-يوتا-سادة-20-سم-موديل-15",
+      "valueAfterRegression": "صليب-يوتا-ساده-20-سم-موديل-15",
+      "recommendedValue": "صليب-يوتا-سادة-20-سم-موديل-15"
+    },
+    {
+      "productId": "iota-plain-cross-20cm-16",
+      "productName": "صليب يوتا سادة 20 سم - موديل 16",
+      "field": "price",
+      "valueBeforeRegression": 104,
+      "valueAfterRegression": 84,
+      "recommendedValue": 104
+    },
+    {
+      "productId": "iota-plain-cross-20cm-16",
+      "productName": "صليب يوتا سادة 20 سم - موديل 16",
+      "field": "url",
+      "valueBeforeRegression": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D8%A9-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-16",
+      "valueAfterRegression": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D9%87-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-16",
+      "recommendedValue": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D8%A9-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-16"
+    },
+    {
+      "productId": "iota-plain-cross-20cm-16",
+      "productName": "صليب يوتا سادة 20 سم - موديل 16",
+      "field": "variants",
+      "valueBeforeRegression": [
+        {
+          "id": "iota-plain-cross-20cm-16-variant-1",
+          "title": "الاختيار الافتراضي",
+          "options": {},
+          "price": 104,
+          "compareAtPrice": null,
+          "available": true,
+          "image": null,
+          "images": [],
+          "sku": "",
+          "quantity": 1000
+        }
+      ],
+      "valueAfterRegression": [
+        {
+          "id": "iota-plain-cross-20cm-16-variant-1",
+          "title": "الاختيار الافتراضي",
+          "options": {},
+          "price": 84,
+          "compareAtPrice": null,
+          "available": true,
+          "image": null,
+          "images": [],
+          "sku": "",
+          "quantity": 1000
+        }
+      ],
+      "recommendedValue": [
+        {
+          "id": "iota-plain-cross-20cm-16-variant-1",
+          "title": "الاختيار الافتراضي",
+          "options": {},
+          "price": 104,
+          "compareAtPrice": null,
+          "available": true,
+          "image": null,
+          "images": [],
+          "sku": "",
+          "quantity": 1000
+        }
+      ]
+    },
+    {
+      "productId": "iota-plain-cross-20cm-16",
+      "productName": "صليب يوتا سادة 20 سم - موديل 16",
+      "field": "slug",
+      "valueBeforeRegression": "صليب-يوتا-سادة-20-سم-موديل-16",
+      "valueAfterRegression": "صليب-يوتا-ساده-20-سم-موديل-16",
+      "recommendedValue": "صليب-يوتا-سادة-20-سم-موديل-16"
+    },
+    {
+      "productId": "iota-plain-cross-20cm-17",
+      "productName": "صليب يوتا سادة 20 سم - موديل 17",
+      "field": "url",
+      "valueBeforeRegression": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D8%A9-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-17",
+      "valueAfterRegression": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D9%87-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-17",
+      "recommendedValue": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D8%A9-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-17"
+    },
+    {
+      "productId": "iota-plain-cross-20cm-17",
+      "productName": "صليب يوتا سادة 20 سم - موديل 17",
+      "field": "slug",
+      "valueBeforeRegression": "صليب-يوتا-سادة-20-سم-موديل-17",
+      "valueAfterRegression": "صليب-يوتا-ساده-20-سم-موديل-17",
+      "recommendedValue": "صليب-يوتا-سادة-20-سم-موديل-17"
+    },
+    {
+      "productId": "custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642-copy-1783007465321-copy-1783296428133-copy-1783296505870-copy-1783296547191-copy-1783296594080-copy-1783296672538-copy-1783296711318",
+      "productName": "صليب يوتا مادلية موديل 13",
+      "field": "description",
+      "valueBeforeRegression": "وّل وقت النشاط إلى تجربة ممتعة ومفيدة مع ميداليات فن اليوتا الجاهزة للتلوين، بتصميمات قبطية مميزة تساعد الأطفال والشباب على التعبير عن إبداعهم وصناعة هدية تذكارية بأيديهم.\n\nمناسبة للأنشطة الفنية خلال مدارس الأحد، والخدمات، والمؤتمرات، والخلوات والأيام الروحية. يمكن تلوينها بسهولة بالألوان المناسبة، ثم استخدامها كميدالية شخصية أو تقديمها كهدية تذكارية جميلة للمخدومين.\n\nتتميز الميداليات بأنها:\n\nجاهزة للتلوين والاستخدام مباشرة.\nمناسبة للأطفال والشباب ومختلف المراحل العمرية.\nنشاط جماعي ممتع وسهل التنفيذ.\nتساعد على تنمية التركيز والإبداع والمهارات اليدوية.\nتذكار مميز يحتفظ به المخدوم بعد انتهاء اليوم الروحي.\n\nاختيار مثالي للخدام الباحثين عن نشاط بسيط، هادف ومحبوب داخل الخدمة أو الخلوة الروحية.",
+      "valueAfterRegression": "ميدالية يوتا خشبية موديل 13 جاهزة للتلوين والأنشطة الكنسية.",
+      "recommendedValue": "وّل وقت النشاط إلى تجربة ممتعة ومفيدة مع ميداليات فن اليوتا الجاهزة للتلوين، بتصميمات قبطية مميزة تساعد الأطفال والشباب على التعبير عن إبداعهم وصناعة هدية تذكارية بأيديهم.\n\nمناسبة للأنشطة الفنية خلال مدارس الأحد، والخدمات، والمؤتمرات، والخلوات والأيام الروحية. يمكن تلوينها بسهولة بالألوان المناسبة، ثم استخدامها كميدالية شخصية أو تقديمها كهدية تذكارية جميلة للمخدومين.\n\nتتميز الميداليات بأنها:\n\nجاهزة للتلوين والاستخدام مباشرة.\nمناسبة للأطفال والشباب ومختلف المراحل العمرية.\nنشاط جماعي ممتع وسهل التنفيذ.\nتساعد على تنمية التركيز والإبداع والمهارات اليدوية.\nتذكار مميز يحتفظ به المخدوم بعد انتهاء اليوم الروحي.\n\nاختيار مثالي للخدام الباحثين عن نشاط بسيط، هادف ومحبوب داخل الخدمة أو الخلوة الروحية."
+    },
+    {
+      "productId": "custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642-copy-1783007465321-copy-1783296428133-copy-1783296505870-copy-1783296547191-copy-1783296594080-copy-1783296672538-copy-1783296711318",
+      "productName": "صليب يوتا مادلية موديل 13",
+      "field": "url",
+      "valueBeforeRegression": "https://popekyrillos.store/?product=custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642-copy-1783007465321-copy-1783296428133-copy-1783296505870-copy-1783296547191-copy-1783296594080-copy-1783296672538-copy-1783296711318",
+      "valueAfterRegression": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D9%85%D8%A7%D8%AF%D9%84%D9%8A%D9%87-%D9%85%D9%88%D8%AF%D9%8A%D9%84-13",
+      "recommendedValue": "https://popekyrillos.store/?product=custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642-copy-1783007465321-copy-1783296428133-copy-1783296505870-copy-1783296547191-copy-1783296594080-copy-1783296672538-copy-1783296711318"
+    },
+    {
+      "productId": "custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642-copy-1783007465321-copy-1783296428133-copy-1783296505870-copy-1783296547191-copy-1783296594080-copy-1783296672538-copy-1783296711318",
+      "productName": "صليب يوتا مادلية موديل 13",
+      "field": "tags",
+      "valueBeforeRegression": [
+        "يوتا",
+        "مادليات",
+        "خشب طبقات",
+        "فن",
+        "تلوين",
+        "يوطا",
+        "الأيقونات والبراويز",
+        "أيقونات صغيرة",
+        "أيقونات وهدايا"
+      ],
+      "valueAfterRegression": [
+        "يوتا",
+        "مادليات",
+        "خشب طبقات",
+        "فن",
+        "تلوين"
+      ],
+      "recommendedValue": [
+        "يوتا",
+        "مادليات",
+        "خشب طبقات",
+        "فن",
+        "تلوين",
+        "يوطا",
+        "الأيقونات والبراويز",
+        "أيقونات صغيرة",
+        "أيقونات وهدايا"
+      ]
+    },
+    {
+      "productId": "custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642-copy-1783007465321-copy-1783296428133-copy-1783296505870-copy-1783296547191-copy-1783296594080-copy-1783296672538-copy-1783296711318",
+      "productName": "صليب يوتا مادلية موديل 13",
+      "field": "slug",
+      "valueBeforeRegression": "صليب-يوتا-مادليه-موديل-7",
+      "valueAfterRegression": "صليب-يوتا-مادليه-موديل-13",
+      "recommendedValue": "صليب-يوتا-مادليه-موديل-7"
+    },
+    {
+      "productId": "custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642-copy-1783007465321-copy-1783296428133-copy-1783296505870-copy-1783296547191-copy-1783296594080-copy-1783296672538-copy-1783296711318",
+      "productName": "صليب يوتا مادلية موديل 13",
+      "field": "searchKeywords",
+      "valueBeforeRegression": [
+        "صليب يوتا مادلية موديل 13",
+        "يوتا",
+        "مادليات",
+        "خشب طبقات",
+        "فن",
+        "تلوين",
+        "يوطا",
+        "الأيقونات والبراويز",
+        "أيقونات صغيرة",
+        "أيقونات وهدايا",
+        "crosses",
+        "wooden-crosses",
+        "هدايا الخدمة",
+        "منتجات الأطفال"
+      ],
+      "valueAfterRegression": [
+        "صليب يوتا مادلية موديل 13",
+        "يوتا",
+        "مادليات",
+        "تلوين",
+        "crosses",
+        "wooden-crosses"
+      ],
+      "recommendedValue": [
+        "صليب يوتا مادلية موديل 13",
+        "يوتا",
+        "مادليات",
+        "خشب طبقات",
+        "فن",
+        "تلوين",
+        "يوطا",
+        "الأيقونات والبراويز",
+        "أيقونات صغيرة",
+        "أيقونات وهدايا",
+        "crosses",
+        "wooden-crosses",
+        "هدايا الخدمة",
+        "منتجات الأطفال"
+      ]
+    },
+    {
+      "productId": "custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642-copy-1783007465321-copy-1783296428133-copy-1783296505870-copy-1783296547191-copy-1783296594080-copy-1783296672538",
+      "productName": "صليب يوتا مادلية موديل 12",
+      "field": "description",
+      "valueBeforeRegression": "وّل وقت النشاط إلى تجربة ممتعة ومفيدة مع ميداليات فن اليوتا الجاهزة للتلوين، بتصميمات قبطية مميزة تساعد الأطفال والشباب على التعبير عن إبداعهم وصناعة هدية تذكارية بأيديهم.\n\nمناسبة للأنشطة الفنية خلال مدارس الأحد، والخدمات، والمؤتمرات، والخلوات والأيام الروحية. يمكن تلوينها بسهولة بالألوان المناسبة، ثم استخدامها كميدالية شخصية أو تقديمها كهدية تذكارية جميلة للمخدومين.\n\nتتميز الميداليات بأنها:\n\nجاهزة للتلوين والاستخدام مباشرة.\nمناسبة للأطفال والشباب ومختلف المراحل العمرية.\nنشاط جماعي ممتع وسهل التنفيذ.\nتساعد على تنمية التركيز والإبداع والمهارات اليدوية.\nتذكار مميز يحتفظ به المخدوم بعد انتهاء اليوم الروحي.\n\nاختيار مثالي للخدام الباحثين عن نشاط بسيط، هادف ومحبوب داخل الخدمة أو الخلوة الروحية.",
+      "valueAfterRegression": "ميدالية يوتا خشبية موديل 12 جاهزة للتلوين والأنشطة الكنسية.",
+      "recommendedValue": "وّل وقت النشاط إلى تجربة ممتعة ومفيدة مع ميداليات فن اليوتا الجاهزة للتلوين، بتصميمات قبطية مميزة تساعد الأطفال والشباب على التعبير عن إبداعهم وصناعة هدية تذكارية بأيديهم.\n\nمناسبة للأنشطة الفنية خلال مدارس الأحد، والخدمات، والمؤتمرات، والخلوات والأيام الروحية. يمكن تلوينها بسهولة بالألوان المناسبة، ثم استخدامها كميدالية شخصية أو تقديمها كهدية تذكارية جميلة للمخدومين.\n\nتتميز الميداليات بأنها:\n\nجاهزة للتلوين والاستخدام مباشرة.\nمناسبة للأطفال والشباب ومختلف المراحل العمرية.\nنشاط جماعي ممتع وسهل التنفيذ.\nتساعد على تنمية التركيز والإبداع والمهارات اليدوية.\nتذكار مميز يحتفظ به المخدوم بعد انتهاء اليوم الروحي.\n\nاختيار مثالي للخدام الباحثين عن نشاط بسيط، هادف ومحبوب داخل الخدمة أو الخلوة الروحية."
+    },
+    {
+      "productId": "custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642-copy-1783007465321-copy-1783296428133-copy-1783296505870-copy-1783296547191-copy-1783296594080-copy-1783296672538",
+      "productName": "صليب يوتا مادلية موديل 12",
+      "field": "url",
+      "valueBeforeRegression": "https://popekyrillos.store/?product=custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642-copy-1783007465321-copy-1783296428133-copy-1783296505870-copy-1783296547191-copy-1783296594080-copy-1783296672538",
+      "valueAfterRegression": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D9%85%D8%A7%D8%AF%D9%84%D9%8A%D9%87-%D9%85%D9%88%D8%AF%D9%8A%D9%84-12",
+      "recommendedValue": "https://popekyrillos.store/?product=custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642-copy-1783007465321-copy-1783296428133-copy-1783296505870-copy-1783296547191-copy-1783296594080-copy-1783296672538"
+    },
+    {
+      "productId": "custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642-copy-1783007465321-copy-1783296428133-copy-1783296505870-copy-1783296547191-copy-1783296594080-copy-1783296672538",
+      "productName": "صليب يوتا مادلية موديل 12",
+      "field": "tags",
+      "valueBeforeRegression": [
+        "يوتا",
+        "مادليات",
+        "خشب طبقات",
+        "فن",
+        "تلوين",
+        "يوطا",
+        "الأيقونات والبراويز",
+        "أيقونات صغيرة",
+        "أيقونات وهدايا"
+      ],
+      "valueAfterRegression": [
+        "يوتا",
+        "مادليات",
+        "خشب طبقات",
+        "فن",
+        "تلوين"
+      ],
+      "recommendedValue": [
+        "يوتا",
+        "مادليات",
+        "خشب طبقات",
+        "فن",
+        "تلوين",
+        "يوطا",
+        "الأيقونات والبراويز",
+        "أيقونات صغيرة",
+        "أيقونات وهدايا"
+      ]
+    },
+    {
+      "productId": "custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642-copy-1783007465321-copy-1783296428133-copy-1783296505870-copy-1783296547191-copy-1783296594080-copy-1783296672538",
+      "productName": "صليب يوتا مادلية موديل 12",
+      "field": "slug",
+      "valueBeforeRegression": "صليب-يوتا-مادليه-موديل-7",
+      "valueAfterRegression": "صليب-يوتا-مادليه-موديل-12",
+      "recommendedValue": "صليب-يوتا-مادليه-موديل-7"
+    },
+    {
+      "productId": "custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642-copy-1783007465321-copy-1783296428133-copy-1783296505870-copy-1783296547191-copy-1783296594080-copy-1783296672538",
+      "productName": "صليب يوتا مادلية موديل 12",
+      "field": "searchKeywords",
+      "valueBeforeRegression": [
+        "صليب يوتا مادلية موديل 12",
+        "يوتا",
+        "مادليات",
+        "خشب طبقات",
+        "فن",
+        "تلوين",
+        "يوطا",
+        "الأيقونات والبراويز",
+        "أيقونات صغيرة",
+        "أيقونات وهدايا",
+        "crosses",
+        "wooden-crosses",
+        "هدايا الخدمة",
+        "منتجات الأطفال"
+      ],
+      "valueAfterRegression": [
+        "صليب يوتا مادلية موديل 12",
+        "يوتا",
+        "مادليات",
+        "تلوين",
+        "crosses",
+        "wooden-crosses"
+      ],
+      "recommendedValue": [
+        "صليب يوتا مادلية موديل 12",
+        "يوتا",
+        "مادليات",
+        "خشب طبقات",
+        "فن",
+        "تلوين",
+        "يوطا",
+        "الأيقونات والبراويز",
+        "أيقونات صغيرة",
+        "أيقونات وهدايا",
+        "crosses",
+        "wooden-crosses",
+        "هدايا الخدمة",
+        "منتجات الأطفال"
+      ]
+    },
+    {
+      "productId": "custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642-copy-1783007465321-copy-1783296428133-copy-1783296505870-copy-1783296547191-copy-1783296594080",
+      "productName": "صليب يوتا مادلية موديل 11",
+      "field": "description",
+      "valueBeforeRegression": "وّل وقت النشاط إلى تجربة ممتعة ومفيدة مع ميداليات فن اليوتا الجاهزة للتلوين، بتصميمات قبطية مميزة تساعد الأطفال والشباب على التعبير عن إبداعهم وصناعة هدية تذكارية بأيديهم.\n\nمناسبة للأنشطة الفنية خلال مدارس الأحد، والخدمات، والمؤتمرات، والخلوات والأيام الروحية. يمكن تلوينها بسهولة بالألوان المناسبة، ثم استخدامها كميدالية شخصية أو تقديمها كهدية تذكارية جميلة للمخدومين.\n\nتتميز الميداليات بأنها:\n\nجاهزة للتلوين والاستخدام مباشرة.\nمناسبة للأطفال والشباب ومختلف المراحل العمرية.\nنشاط جماعي ممتع وسهل التنفيذ.\nتساعد على تنمية التركيز والإبداع والمهارات اليدوية.\nتذكار مميز يحتفظ به المخدوم بعد انتهاء اليوم الروحي.\n\nاختيار مثالي للخدام الباحثين عن نشاط بسيط، هادف ومحبوب داخل الخدمة أو الخلوة الروحية.",
+      "valueAfterRegression": "ميدالية يوتا خشبية موديل 11 جاهزة للتلوين والأنشطة الكنسية.",
+      "recommendedValue": "وّل وقت النشاط إلى تجربة ممتعة ومفيدة مع ميداليات فن اليوتا الجاهزة للتلوين، بتصميمات قبطية مميزة تساعد الأطفال والشباب على التعبير عن إبداعهم وصناعة هدية تذكارية بأيديهم.\n\nمناسبة للأنشطة الفنية خلال مدارس الأحد، والخدمات، والمؤتمرات، والخلوات والأيام الروحية. يمكن تلوينها بسهولة بالألوان المناسبة، ثم استخدامها كميدالية شخصية أو تقديمها كهدية تذكارية جميلة للمخدومين.\n\nتتميز الميداليات بأنها:\n\nجاهزة للتلوين والاستخدام مباشرة.\nمناسبة للأطفال والشباب ومختلف المراحل العمرية.\nنشاط جماعي ممتع وسهل التنفيذ.\nتساعد على تنمية التركيز والإبداع والمهارات اليدوية.\nتذكار مميز يحتفظ به المخدوم بعد انتهاء اليوم الروحي.\n\nاختيار مثالي للخدام الباحثين عن نشاط بسيط، هادف ومحبوب داخل الخدمة أو الخلوة الروحية."
+    },
+    {
+      "productId": "custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642-copy-1783007465321-copy-1783296428133-copy-1783296505870-copy-1783296547191-copy-1783296594080",
+      "productName": "صليب يوتا مادلية موديل 11",
+      "field": "url",
+      "valueBeforeRegression": "https://popekyrillos.store/?product=custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642-copy-1783007465321-copy-1783296428133-copy-1783296505870-copy-1783296547191-copy-1783296594080",
+      "valueAfterRegression": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D9%85%D8%A7%D8%AF%D9%84%D9%8A%D9%87-%D9%85%D9%88%D8%AF%D9%8A%D9%84-11",
+      "recommendedValue": "https://popekyrillos.store/?product=custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642-copy-1783007465321-copy-1783296428133-copy-1783296505870-copy-1783296547191-copy-1783296594080"
+    },
+    {
+      "productId": "custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642-copy-1783007465321-copy-1783296428133-copy-1783296505870-copy-1783296547191-copy-1783296594080",
+      "productName": "صليب يوتا مادلية موديل 11",
+      "field": "tags",
+      "valueBeforeRegression": [
+        "يوتا",
+        "مادليات",
+        "خشب طبقات",
+        "فن",
+        "تلوين",
+        "يوطا",
+        "الأيقونات والبراويز",
+        "أيقونات صغيرة",
+        "أيقونات وهدايا"
+      ],
+      "valueAfterRegression": [
+        "يوتا",
+        "مادليات",
+        "خشب طبقات",
+        "فن",
+        "تلوين"
+      ],
+      "recommendedValue": [
+        "يوتا",
+        "مادليات",
+        "خشب طبقات",
+        "فن",
+        "تلوين",
+        "يوطا",
+        "الأيقونات والبراويز",
+        "أيقونات صغيرة",
+        "أيقونات وهدايا"
+      ]
+    },
+    {
+      "productId": "custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642-copy-1783007465321-copy-1783296428133-copy-1783296505870-copy-1783296547191-copy-1783296594080",
+      "productName": "صليب يوتا مادلية موديل 11",
+      "field": "slug",
+      "valueBeforeRegression": "صليب-يوتا-مادليه-موديل-7",
+      "valueAfterRegression": "صليب-يوتا-مادليه-موديل-11",
+      "recommendedValue": "صليب-يوتا-مادليه-موديل-7"
+    },
+    {
+      "productId": "custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642-copy-1783007465321-copy-1783296428133-copy-1783296505870-copy-1783296547191-copy-1783296594080",
+      "productName": "صليب يوتا مادلية موديل 11",
+      "field": "searchKeywords",
+      "valueBeforeRegression": [
+        "صليب يوتا مادلية موديل 11",
+        "يوتا",
+        "مادليات",
+        "خشب طبقات",
+        "فن",
+        "تلوين",
+        "يوطا",
+        "الأيقونات والبراويز",
+        "أيقونات صغيرة",
+        "أيقونات وهدايا",
+        "crosses",
+        "wooden-crosses",
+        "هدايا الخدمة",
+        "منتجات الأطفال"
+      ],
+      "valueAfterRegression": [
+        "صليب يوتا مادلية موديل 11",
+        "يوتا",
+        "مادليات",
+        "تلوين",
+        "crosses",
+        "wooden-crosses"
+      ],
+      "recommendedValue": [
+        "صليب يوتا مادلية موديل 11",
+        "يوتا",
+        "مادليات",
+        "خشب طبقات",
+        "فن",
+        "تلوين",
+        "يوطا",
+        "الأيقونات والبراويز",
+        "أيقونات صغيرة",
+        "أيقونات وهدايا",
+        "crosses",
+        "wooden-crosses",
+        "هدايا الخدمة",
+        "منتجات الأطفال"
+      ]
+    },
+    {
+      "productId": "custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642-copy-1783007465321-copy-1783296428133-copy-1783296505870-copy-1783296547191",
+      "productName": "صليب يوتا مادلية موديل 10",
+      "field": "description",
+      "valueBeforeRegression": "وّل وقت النشاط إلى تجربة ممتعة ومفيدة مع ميداليات فن اليوتا الجاهزة للتلوين، بتصميمات قبطية مميزة تساعد الأطفال والشباب على التعبير عن إبداعهم وصناعة هدية تذكارية بأيديهم.\n\nمناسبة للأنشطة الفنية خلال مدارس الأحد، والخدمات، والمؤتمرات، والخلوات والأيام الروحية. يمكن تلوينها بسهولة بالألوان المناسبة، ثم استخدامها كميدالية شخصية أو تقديمها كهدية تذكارية جميلة للمخدومين.\n\nتتميز الميداليات بأنها:\n\nجاهزة للتلوين والاستخدام مباشرة.\nمناسبة للأطفال والشباب ومختلف المراحل العمرية.\nنشاط جماعي ممتع وسهل التنفيذ.\nتساعد على تنمية التركيز والإبداع والمهارات اليدوية.\nتذكار مميز يحتفظ به المخدوم بعد انتهاء اليوم الروحي.\n\nاختيار مثالي للخدام الباحثين عن نشاط بسيط، هادف ومحبوب داخل الخدمة أو الخلوة الروحية.",
+      "valueAfterRegression": "ميدالية يوتا خشبية موديل 10 جاهزة للتلوين والأنشطة الكنسية.",
+      "recommendedValue": "وّل وقت النشاط إلى تجربة ممتعة ومفيدة مع ميداليات فن اليوتا الجاهزة للتلوين، بتصميمات قبطية مميزة تساعد الأطفال والشباب على التعبير عن إبداعهم وصناعة هدية تذكارية بأيديهم.\n\nمناسبة للأنشطة الفنية خلال مدارس الأحد، والخدمات، والمؤتمرات، والخلوات والأيام الروحية. يمكن تلوينها بسهولة بالألوان المناسبة، ثم استخدامها كميدالية شخصية أو تقديمها كهدية تذكارية جميلة للمخدومين.\n\nتتميز الميداليات بأنها:\n\nجاهزة للتلوين والاستخدام مباشرة.\nمناسبة للأطفال والشباب ومختلف المراحل العمرية.\nنشاط جماعي ممتع وسهل التنفيذ.\nتساعد على تنمية التركيز والإبداع والمهارات اليدوية.\nتذكار مميز يحتفظ به المخدوم بعد انتهاء اليوم الروحي.\n\nاختيار مثالي للخدام الباحثين عن نشاط بسيط، هادف ومحبوب داخل الخدمة أو الخلوة الروحية."
+    },
+    {
+      "productId": "custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642-copy-1783007465321-copy-1783296428133-copy-1783296505870-copy-1783296547191",
+      "productName": "صليب يوتا مادلية موديل 10",
+      "field": "url",
+      "valueBeforeRegression": "https://popekyrillos.store/?product=custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642-copy-1783007465321-copy-1783296428133-copy-1783296505870-copy-1783296547191",
+      "valueAfterRegression": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D9%85%D8%A7%D8%AF%D9%84%D9%8A%D9%87-%D9%85%D9%88%D8%AF%D9%8A%D9%84-10",
+      "recommendedValue": "https://popekyrillos.store/?product=custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642-copy-1783007465321-copy-1783296428133-copy-1783296505870-copy-1783296547191"
+    },
+    {
+      "productId": "custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642-copy-1783007465321-copy-1783296428133-copy-1783296505870-copy-1783296547191",
+      "productName": "صليب يوتا مادلية موديل 10",
+      "field": "tags",
+      "valueBeforeRegression": [
+        "يوتا",
+        "مادليات",
+        "خشب طبقات",
+        "فن",
+        "تلوين",
+        "يوطا",
+        "الأيقونات والبراويز",
+        "أيقونات صغيرة",
+        "أيقونات وهدايا"
+      ],
+      "valueAfterRegression": [
+        "يوتا",
+        "مادليات",
+        "خشب طبقات",
+        "فن",
+        "تلوين"
+      ],
+      "recommendedValue": [
+        "يوتا",
+        "مادليات",
+        "خشب طبقات",
+        "فن",
+        "تلوين",
+        "يوطا",
+        "الأيقونات والبراويز",
+        "أيقونات صغيرة",
+        "أيقونات وهدايا"
+      ]
+    },
+    {
+      "productId": "custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642-copy-1783007465321-copy-1783296428133-copy-1783296505870-copy-1783296547191",
+      "productName": "صليب يوتا مادلية موديل 10",
+      "field": "slug",
+      "valueBeforeRegression": "صليب-يوتا-مادليه-موديل-7",
+      "valueAfterRegression": "صليب-يوتا-مادليه-موديل-10",
+      "recommendedValue": "صليب-يوتا-مادليه-موديل-7"
+    },
+    {
+      "productId": "custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642-copy-1783007465321-copy-1783296428133-copy-1783296505870-copy-1783296547191",
+      "productName": "صليب يوتا مادلية موديل 10",
+      "field": "searchKeywords",
+      "valueBeforeRegression": [
+        "صليب يوتا مادلية موديل 10",
+        "يوتا",
+        "مادليات",
+        "خشب طبقات",
+        "فن",
+        "تلوين",
+        "يوطا",
+        "الأيقونات والبراويز",
+        "أيقونات صغيرة",
+        "أيقونات وهدايا",
+        "crosses",
+        "wooden-crosses",
+        "هدايا الخدمة",
+        "منتجات الأطفال"
+      ],
+      "valueAfterRegression": [
+        "صليب يوتا مادلية موديل 10",
+        "يوتا",
+        "مادليات",
+        "تلوين",
+        "crosses",
+        "wooden-crosses"
+      ],
+      "recommendedValue": [
+        "صليب يوتا مادلية موديل 10",
+        "يوتا",
+        "مادليات",
+        "خشب طبقات",
+        "فن",
+        "تلوين",
+        "يوطا",
+        "الأيقونات والبراويز",
+        "أيقونات صغيرة",
+        "أيقونات وهدايا",
+        "crosses",
+        "wooden-crosses",
+        "هدايا الخدمة",
+        "منتجات الأطفال"
+      ]
+    },
+    {
+      "productId": "custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642-copy-1783007465321-copy-1783296428133-copy-1783296505870",
+      "productName": "صليب يوتا مادلية موديل 9",
+      "field": "description",
+      "valueBeforeRegression": "وّل وقت النشاط إلى تجربة ممتعة ومفيدة مع ميداليات فن اليوتا الجاهزة للتلوين، بتصميمات قبطية مميزة تساعد الأطفال والشباب على التعبير عن إبداعهم وصناعة هدية تذكارية بأيديهم.\n\nمناسبة للأنشطة الفنية خلال مدارس الأحد، والخدمات، والمؤتمرات، والخلوات والأيام الروحية. يمكن تلوينها بسهولة بالألوان المناسبة، ثم استخدامها كميدالية شخصية أو تقديمها كهدية تذكارية جميلة للمخدومين.\n\nتتميز الميداليات بأنها:\n\nجاهزة للتلوين والاستخدام مباشرة.\nمناسبة للأطفال والشباب ومختلف المراحل العمرية.\nنشاط جماعي ممتع وسهل التنفيذ.\nتساعد على تنمية التركيز والإبداع والمهارات اليدوية.\nتذكار مميز يحتفظ به المخدوم بعد انتهاء اليوم الروحي.\n\nاختيار مثالي للخدام الباحثين عن نشاط بسيط، هادف ومحبوب داخل الخدمة أو الخلوة الروحية.",
+      "valueAfterRegression": "ميدالية يوتا خشبية موديل 9 جاهزة للتلوين والأنشطة الكنسية.",
+      "recommendedValue": "وّل وقت النشاط إلى تجربة ممتعة ومفيدة مع ميداليات فن اليوتا الجاهزة للتلوين، بتصميمات قبطية مميزة تساعد الأطفال والشباب على التعبير عن إبداعهم وصناعة هدية تذكارية بأيديهم.\n\nمناسبة للأنشطة الفنية خلال مدارس الأحد، والخدمات، والمؤتمرات، والخلوات والأيام الروحية. يمكن تلوينها بسهولة بالألوان المناسبة، ثم استخدامها كميدالية شخصية أو تقديمها كهدية تذكارية جميلة للمخدومين.\n\nتتميز الميداليات بأنها:\n\nجاهزة للتلوين والاستخدام مباشرة.\nمناسبة للأطفال والشباب ومختلف المراحل العمرية.\nنشاط جماعي ممتع وسهل التنفيذ.\nتساعد على تنمية التركيز والإبداع والمهارات اليدوية.\nتذكار مميز يحتفظ به المخدوم بعد انتهاء اليوم الروحي.\n\nاختيار مثالي للخدام الباحثين عن نشاط بسيط، هادف ومحبوب داخل الخدمة أو الخلوة الروحية."
+    },
+    {
+      "productId": "custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642-copy-1783007465321-copy-1783296428133-copy-1783296505870",
+      "productName": "صليب يوتا مادلية موديل 9",
+      "field": "url",
+      "valueBeforeRegression": "https://popekyrillos.store/?product=custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642-copy-1783007465321-copy-1783296428133-copy-1783296505870",
+      "valueAfterRegression": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D9%85%D8%A7%D8%AF%D9%84%D9%8A%D9%87-%D9%85%D9%88%D8%AF%D9%8A%D9%84-9",
+      "recommendedValue": "https://popekyrillos.store/?product=custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642-copy-1783007465321-copy-1783296428133-copy-1783296505870"
+    },
+    {
+      "productId": "custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642-copy-1783007465321-copy-1783296428133-copy-1783296505870",
+      "productName": "صليب يوتا مادلية موديل 9",
+      "field": "tags",
+      "valueBeforeRegression": [
+        "يوتا",
+        "مادليات",
+        "خشب طبقات",
+        "فن",
+        "تلوين",
+        "يوطا",
+        "الأيقونات والبراويز",
+        "أيقونات صغيرة",
+        "أيقونات وهدايا"
+      ],
+      "valueAfterRegression": [
+        "يوتا",
+        "مادليات",
+        "خشب طبقات",
+        "فن",
+        "تلوين"
+      ],
+      "recommendedValue": [
+        "يوتا",
+        "مادليات",
+        "خشب طبقات",
+        "فن",
+        "تلوين",
+        "يوطا",
+        "الأيقونات والبراويز",
+        "أيقونات صغيرة",
+        "أيقونات وهدايا"
+      ]
+    },
+    {
+      "productId": "custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642-copy-1783007465321-copy-1783296428133-copy-1783296505870",
+      "productName": "صليب يوتا مادلية موديل 9",
+      "field": "slug",
+      "valueBeforeRegression": "صليب-يوتا-مادليه-موديل-7",
+      "valueAfterRegression": "صليب-يوتا-مادليه-موديل-9",
+      "recommendedValue": "صليب-يوتا-مادليه-موديل-7"
+    },
+    {
+      "productId": "custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642-copy-1783007465321-copy-1783296428133-copy-1783296505870",
+      "productName": "صليب يوتا مادلية موديل 9",
+      "field": "searchKeywords",
+      "valueBeforeRegression": [
+        "صليب يوتا مادلية موديل 9",
+        "يوتا",
+        "مادليات",
+        "خشب طبقات",
+        "فن",
+        "تلوين",
+        "يوطا",
+        "الأيقونات والبراويز",
+        "أيقونات صغيرة",
+        "أيقونات وهدايا",
+        "crosses",
+        "wooden-crosses",
+        "هدايا الخدمة",
+        "منتجات الأطفال"
+      ],
+      "valueAfterRegression": [
+        "صليب يوتا مادلية موديل 9",
+        "يوتا",
+        "مادليات",
+        "تلوين",
+        "crosses",
+        "wooden-crosses"
+      ],
+      "recommendedValue": [
+        "صليب يوتا مادلية موديل 9",
+        "يوتا",
+        "مادليات",
+        "خشب طبقات",
+        "فن",
+        "تلوين",
+        "يوطا",
+        "الأيقونات والبراويز",
+        "أيقونات صغيرة",
+        "أيقونات وهدايا",
+        "crosses",
+        "wooden-crosses",
+        "هدايا الخدمة",
+        "منتجات الأطفال"
+      ]
+    },
+    {
+      "productId": "custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642-copy-1783007465321-copy-1783296428133",
+      "productName": "صليب يوتا مادلية موديل 8",
+      "field": "description",
+      "valueBeforeRegression": "وّل وقت النشاط إلى تجربة ممتعة ومفيدة مع ميداليات فن اليوتا الجاهزة للتلوين، بتصميمات قبطية مميزة تساعد الأطفال والشباب على التعبير عن إبداعهم وصناعة هدية تذكارية بأيديهم.\n\nمناسبة للأنشطة الفنية خلال مدارس الأحد، والخدمات، والمؤتمرات، والخلوات والأيام الروحية. يمكن تلوينها بسهولة بالألوان المناسبة، ثم استخدامها كميدالية شخصية أو تقديمها كهدية تذكارية جميلة للمخدومين.\n\nتتميز الميداليات بأنها:\n\nجاهزة للتلوين والاستخدام مباشرة.\nمناسبة للأطفال والشباب ومختلف المراحل العمرية.\nنشاط جماعي ممتع وسهل التنفيذ.\nتساعد على تنمية التركيز والإبداع والمهارات اليدوية.\nتذكار مميز يحتفظ به المخدوم بعد انتهاء اليوم الروحي.\n\nاختيار مثالي للخدام الباحثين عن نشاط بسيط، هادف ومحبوب داخل الخدمة أو الخلوة الروحية.",
+      "valueAfterRegression": "ميدالية يوتا خشبية موديل 8 جاهزة للتلوين والأنشطة الكنسية.",
+      "recommendedValue": "وّل وقت النشاط إلى تجربة ممتعة ومفيدة مع ميداليات فن اليوتا الجاهزة للتلوين، بتصميمات قبطية مميزة تساعد الأطفال والشباب على التعبير عن إبداعهم وصناعة هدية تذكارية بأيديهم.\n\nمناسبة للأنشطة الفنية خلال مدارس الأحد، والخدمات، والمؤتمرات، والخلوات والأيام الروحية. يمكن تلوينها بسهولة بالألوان المناسبة، ثم استخدامها كميدالية شخصية أو تقديمها كهدية تذكارية جميلة للمخدومين.\n\nتتميز الميداليات بأنها:\n\nجاهزة للتلوين والاستخدام مباشرة.\nمناسبة للأطفال والشباب ومختلف المراحل العمرية.\nنشاط جماعي ممتع وسهل التنفيذ.\nتساعد على تنمية التركيز والإبداع والمهارات اليدوية.\nتذكار مميز يحتفظ به المخدوم بعد انتهاء اليوم الروحي.\n\nاختيار مثالي للخدام الباحثين عن نشاط بسيط، هادف ومحبوب داخل الخدمة أو الخلوة الروحية."
+    },
+    {
+      "productId": "custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642-copy-1783007465321-copy-1783296428133",
+      "productName": "صليب يوتا مادلية موديل 8",
+      "field": "image",
+      "valueBeforeRegression": "assets/optimized/products/gallery/product-1-88-20260706000805-8a1934.webp",
+      "valueAfterRegression": "coloring/yota-08/base.png",
+      "recommendedValue": "assets/optimized/products/gallery/product-1-88-20260706000805-8a1934.webp"
+    },
+    {
+      "productId": "custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642-copy-1783007465321-copy-1783296428133",
+      "productName": "صليب يوتا مادلية موديل 8",
+      "field": "url",
+      "valueBeforeRegression": "https://popekyrillos.store/?product=custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642-copy-1783007465321-copy-1783296428133",
+      "valueAfterRegression": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D9%85%D8%A7%D8%AF%D9%84%D9%8A%D9%87-%D9%85%D9%88%D8%AF%D9%8A%D9%84-8",
+      "recommendedValue": "https://popekyrillos.store/?product=custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642-copy-1783007465321-copy-1783296428133"
+    },
+    {
+      "productId": "custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642-copy-1783007465321-copy-1783296428133",
+      "productName": "صليب يوتا مادلية موديل 8",
+      "field": "tags",
+      "valueBeforeRegression": [
+        "يوتا",
+        "مادليات",
+        "خشب طبقات",
+        "فن",
+        "تلوين",
+        "يوطا",
+        "الأيقونات والبراويز",
+        "أيقونات صغيرة",
+        "أيقونات وهدايا"
+      ],
+      "valueAfterRegression": [
+        "يوتا",
+        "مادليات",
+        "خشب طبقات",
+        "فن",
+        "تلوين"
+      ],
+      "recommendedValue": [
+        "يوتا",
+        "مادليات",
+        "خشب طبقات",
+        "فن",
+        "تلوين",
+        "يوطا",
+        "الأيقونات والبراويز",
+        "أيقونات صغيرة",
+        "أيقونات وهدايا"
+      ]
+    },
+    {
+      "productId": "custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642-copy-1783007465321-copy-1783296428133",
+      "productName": "صليب يوتا مادلية موديل 8",
+      "field": "images",
+      "valueBeforeRegression": [
+        "assets/optimized/products/gallery/product-1-88-20260706000805-8a1934.webp",
+        "assets/optimized/products/gallery/product-1-8-20260706000800-af4496.webp"
+      ],
+      "valueAfterRegression": [
+        "coloring/yota-08/base.png"
+      ],
+      "recommendedValue": [
+        "assets/optimized/products/gallery/product-1-88-20260706000805-8a1934.webp",
+        "assets/optimized/products/gallery/product-1-8-20260706000800-af4496.webp"
+      ]
+    },
+    {
+      "productId": "custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642-copy-1783007465321-copy-1783296428133",
+      "productName": "صليب يوتا مادلية موديل 8",
+      "field": "slug",
+      "valueBeforeRegression": "صليب-يوتا-مادليه-موديل-7",
+      "valueAfterRegression": "صليب-يوتا-مادليه-موديل-8",
+      "recommendedValue": "صليب-يوتا-مادليه-موديل-7"
+    },
+    {
+      "productId": "custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642-copy-1783007465321-copy-1783296428133",
+      "productName": "صليب يوتا مادلية موديل 8",
+      "field": "searchKeywords",
+      "valueBeforeRegression": [
+        "صليب يوتا مادلية موديل 8",
+        "يوتا",
+        "مادليات",
+        "خشب طبقات",
+        "فن",
+        "تلوين",
+        "يوطا",
+        "الأيقونات والبراويز",
+        "أيقونات صغيرة",
+        "أيقونات وهدايا",
+        "crosses",
+        "wooden-crosses",
+        "هدايا الخدمة",
+        "منتجات الأطفال"
+      ],
+      "valueAfterRegression": [
+        "صليب يوتا مادلية موديل 8",
+        "يوتا",
+        "مادليات",
+        "تلوين",
+        "crosses",
+        "wooden-crosses"
+      ],
+      "recommendedValue": [
+        "صليب يوتا مادلية موديل 8",
+        "يوتا",
+        "مادليات",
+        "خشب طبقات",
+        "فن",
+        "تلوين",
+        "يوطا",
+        "الأيقونات والبراويز",
+        "أيقونات صغيرة",
+        "أيقونات وهدايا",
+        "crosses",
+        "wooden-crosses",
+        "هدايا الخدمة",
+        "منتجات الأطفال"
+      ]
+    },
+    {
+      "productId": "custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642-copy-1783007465321",
+      "productName": "صليب يوتا مادلية موديل 7",
+      "field": "image",
+      "valueBeforeRegression": "assets/optimized/products/gallery/product-25-71-20260705044317-41c7bc.webp",
+      "valueAfterRegression": "assets/optimized/products/gallery/product-1-7-20260702155122-9f46d4.webp",
+      "recommendedValue": "assets/optimized/products/gallery/product-25-71-20260705044317-41c7bc.webp"
+    },
+    {
+      "productId": "custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642-copy-1783007465321",
+      "productName": "صليب يوتا مادلية موديل 7",
+      "field": "images",
+      "valueBeforeRegression": [
+        "assets/optimized/products/gallery/product-25-71-20260705044317-41c7bc.webp",
+        "assets/optimized/products/gallery/product-1-7-20260702155122-9f46d4.webp"
+      ],
+      "valueAfterRegression": [
+        "assets/optimized/products/gallery/product-1-7-20260702155122-9f46d4.webp"
+      ],
+      "recommendedValue": [
+        "assets/optimized/products/gallery/product-25-71-20260705044317-41c7bc.webp",
+        "assets/optimized/products/gallery/product-1-7-20260702155122-9f46d4.webp"
+      ]
+    },
+    {
+      "productId": "custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642",
+      "productName": "صليب يوتا مادلية موديل 6",
+      "field": "image",
+      "valueBeforeRegression": "assets/optimized/products/gallery/product-26-61-20260705054933-58526e.webp",
+      "valueAfterRegression": "assets/optimized/products/gallery/product-1-6-20260702155054-4c2515.webp",
+      "recommendedValue": "assets/optimized/products/gallery/product-26-61-20260705054933-58526e.webp"
+    },
+    {
+      "productId": "custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642",
+      "productName": "صليب يوتا مادلية موديل 6",
+      "field": "images",
+      "valueBeforeRegression": [
+        "assets/optimized/products/gallery/product-26-61-20260705054933-58526e.webp",
+        "assets/optimized/products/gallery/product-1-6-20260702155054-4c2515.webp"
+      ],
+      "valueAfterRegression": [
+        "assets/optimized/products/gallery/product-1-6-20260702155054-4c2515.webp"
+      ],
+      "recommendedValue": [
+        "assets/optimized/products/gallery/product-26-61-20260705054933-58526e.webp",
+        "assets/optimized/products/gallery/product-1-6-20260702155054-4c2515.webp"
+      ]
+    },
+    {
+      "productId": "custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119",
+      "productName": "صليب يوتا مادلية موديل 5",
+      "field": "image",
+      "valueBeforeRegression": "assets/optimized/products/gallery/product-27-51-20260705055006-c95c52.webp",
+      "valueAfterRegression": "assets/optimized/products/gallery/product-1-5-20260702155020-88d93d.webp",
+      "recommendedValue": "assets/optimized/products/gallery/product-27-51-20260705055006-c95c52.webp"
+    },
+    {
+      "productId": "custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119",
+      "productName": "صليب يوتا مادلية موديل 5",
+      "field": "images",
+      "valueBeforeRegression": [
+        "assets/optimized/products/gallery/product-27-51-20260705055006-c95c52.webp",
+        "assets/optimized/products/gallery/product-1-5-20260702155020-88d93d.webp"
+      ],
+      "valueAfterRegression": [
+        "assets/optimized/products/gallery/product-1-5-20260702155020-88d93d.webp"
+      ],
+      "recommendedValue": [
+        "assets/optimized/products/gallery/product-27-51-20260705055006-c95c52.webp",
+        "assets/optimized/products/gallery/product-1-5-20260702155020-88d93d.webp"
+      ]
+    },
+    {
+      "productId": "custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699",
+      "productName": "صليب يوتا مادلية موديل 4",
+      "field": "image",
+      "valueBeforeRegression": "assets/optimized/products/gallery/product-35-41-20260706002340-38080e.webp",
+      "valueAfterRegression": "assets/optimized/products/gallery/product-1-4-20260702154908-1f32ba.webp",
+      "recommendedValue": "assets/optimized/products/gallery/product-35-41-20260706002340-38080e.webp"
+    },
+    {
+      "productId": "custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699",
+      "productName": "صليب يوتا مادلية موديل 4",
+      "field": "images",
+      "valueBeforeRegression": [
+        "assets/optimized/products/gallery/product-35-41-20260706002340-38080e.webp",
+        "assets/optimized/products/gallery/product-1-4-20260702154908-1f32ba.webp"
+      ],
+      "valueAfterRegression": [
+        "assets/optimized/products/gallery/product-1-4-20260702154908-1f32ba.webp"
+      ],
+      "recommendedValue": [
+        "assets/optimized/products/gallery/product-35-41-20260706002340-38080e.webp",
+        "assets/optimized/products/gallery/product-1-4-20260702154908-1f32ba.webp"
+      ]
+    },
+    {
+      "productId": "custom-1782980654479-copy-1782982056347-copy-1782986984554",
+      "productName": "صليب يوتا مادلية موديل 3",
+      "field": "image",
+      "valueBeforeRegression": "assets/optimized/products/gallery/product-29-31-20260705055116-60bf4e.webp",
+      "valueAfterRegression": "assets/optimized/products/gallery/product-1-3-20260702101011-89b158.webp",
+      "recommendedValue": "assets/optimized/products/gallery/product-29-31-20260705055116-60bf4e.webp"
+    },
+    {
+      "productId": "custom-1782980654479-copy-1782982056347-copy-1782986984554",
+      "productName": "صليب يوتا مادلية موديل 3",
+      "field": "images",
+      "valueBeforeRegression": [
+        "assets/optimized/products/gallery/product-29-31-20260705055116-60bf4e.webp",
+        "assets/optimized/products/gallery/product-1-3-20260702101011-89b158.webp"
+      ],
+      "valueAfterRegression": [
+        "assets/optimized/products/gallery/product-1-3-20260702101011-89b158.webp"
+      ],
+      "recommendedValue": [
+        "assets/optimized/products/gallery/product-29-31-20260705055116-60bf4e.webp",
+        "assets/optimized/products/gallery/product-1-3-20260702101011-89b158.webp"
+      ]
+    },
+    {
+      "productId": "custom-1782980654479-copy-1782982056347",
+      "productName": "صليب يوتا مادلية موديل 2",
+      "field": "image",
+      "valueBeforeRegression": "assets/optimized/products/gallery/product-30-21-20260705055141-055485.webp",
+      "valueAfterRegression": "assets/optimized/products/gallery/product-1-2-20260702085747-85666b.webp",
+      "recommendedValue": "assets/optimized/products/gallery/product-30-21-20260705055141-055485.webp"
+    },
+    {
+      "productId": "custom-1782980654479-copy-1782982056347",
+      "productName": "صليب يوتا مادلية موديل 2",
+      "field": "images",
+      "valueBeforeRegression": [
+        "assets/optimized/products/gallery/product-30-21-20260705055141-055485.webp",
+        "assets/optimized/products/gallery/product-1-2-20260702085747-85666b.webp"
+      ],
+      "valueAfterRegression": [
+        "assets/optimized/products/gallery/product-1-2-20260702085747-85666b.webp"
+      ],
+      "recommendedValue": [
+        "assets/optimized/products/gallery/product-30-21-20260705055141-055485.webp",
+        "assets/optimized/products/gallery/product-1-2-20260702085747-85666b.webp"
+      ]
+    },
+    {
+      "productId": "custom-1782980654479",
+      "productName": "صليب يوتا مادلية موديل 1",
+      "field": "image",
+      "valueBeforeRegression": "assets/optimized/products/gallery/product-31-11-20260705055205-367876.webp",
+      "valueAfterRegression": "assets/optimized/products/gallery/product-1-1-20260702084720-6a46f9.webp",
+      "recommendedValue": "assets/optimized/products/gallery/product-31-11-20260705055205-367876.webp"
+    },
+    {
+      "productId": "custom-1782980654479",
+      "productName": "صليب يوتا مادلية موديل 1",
+      "field": "images",
+      "valueBeforeRegression": [
+        "assets/optimized/products/gallery/product-31-11-20260705055205-367876.webp",
+        "assets/optimized/products/gallery/product-1-1-20260702084720-6a46f9.webp"
+      ],
+      "valueAfterRegression": [
+        "assets/optimized/products/gallery/product-1-1-20260702084720-6a46f9.webp"
+      ],
+      "recommendedValue": [
+        "assets/optimized/products/gallery/product-31-11-20260705055205-367876.webp",
+        "assets/optimized/products/gallery/product-1-1-20260702084720-6a46f9.webp"
+      ]
+    },
+    {
+      "productId": "custom-1782980654479",
+      "productName": "صليب يوتا مادلية موديل 1",
+      "field": "coloringBaseImageUrl",
+      "valueBeforeRegression": null,
+      "valueAfterRegression": "assets/coloring/iota-medal-1/base.webp",
+      "recommendedValue": null
+    },
+    {
+      "productId": "custom-1782980654479",
+      "productName": "صليب يوتا مادلية موديل 1",
+      "field": "coloringMaskUrl",
+      "valueBeforeRegression": null,
+      "valueAfterRegression": "assets/coloring/iota-medal-1/region-mask.png?v=2",
+      "recommendedValue": null
+    },
+    {
+      "productId": "custom-1782980654479",
+      "productName": "صليب يوتا مادلية موديل 1",
+      "field": "coloringOutlineUrl",
+      "valueBeforeRegression": null,
+      "valueAfterRegression": "assets/coloring/iota-medal-1/outline.png?v=2",
+      "recommendedValue": null
+    },
+    {
+      "productId": "custom-1782980654479",
+      "productName": "صليب يوتا مادلية موديل 1",
+      "field": "coloringRegions",
+      "valueBeforeRegression": null,
+      "valueAfterRegression": [
+        {
+          "id": "region-1",
+          "maskColor": [
+            1,
+            0,
+            0
+          ]
+        },
+        {
+          "id": "region-2",
+          "maskColor": [
+            2,
+            0,
+            0
+          ]
+        },
+        {
+          "id": "region-3",
+          "maskColor": [
+            3,
+            0,
+            0
+          ]
+        },
+        {
+          "id": "region-4",
+          "maskColor": [
+            4,
+            0,
+            0
+          ]
+        },
+        {
+          "id": "region-5",
+          "maskColor": [
+            5,
+            0,
+            0
+          ]
+        },
+        {
+          "id": "region-6",
+          "maskColor": [
+            6,
+            0,
+            0
+          ]
+        },
+        {
+          "id": "region-7",
+          "maskColor": [
+            7,
+            0,
+            0
+          ]
+        },
+        {
+          "id": "region-8",
+          "maskColor": [
+            8,
+            0,
+            0
+          ]
+        },
+        {
+          "id": "region-9",
+          "maskColor": [
+            9,
+            0,
+            0
+          ]
+        },
+        {
+          "id": "region-10",
+          "maskColor": [
+            10,
+            0,
+            0
+          ]
+        },
+        {
+          "id": "region-11",
+          "maskColor": [
+            11,
+            0,
+            0
+          ]
+        },
+        {
+          "id": "region-12",
+          "maskColor": [
+            12,
+            0,
+            0
+          ]
+        },
+        {
+          "id": "region-13",
+          "maskColor": [
+            13,
+            0,
+            0
+          ]
+        }
+      ],
+      "recommendedValue": null
+    },
+    {
+      "productId": "custom-1782980654479",
+      "productName": "صليب يوتا مادلية موديل 1",
+      "field": "symmetryGroups",
+      "valueBeforeRegression": null,
+      "valueAfterRegression": [
+        [
+          "region-2",
+          "region-3",
+          "region-4",
+          "region-5"
+        ],
+        [
+          "region-6",
+          "region-7"
+        ],
+        [
+          "region-8",
+          "region-9"
+        ],
+        [
+          "region-10",
+          "region-11"
+        ],
+        [
+          "region-12",
+          "region-13"
+        ]
+      ],
+      "recommendedValue": null
+    },
+    {
+      "productId": "old-10121340551475",
+      "productName": "تريانتو ستانلس",
+      "field": "subcategory",
+      "valueBeforeRegression": "service-tools",
+      "valueAfterRegression": "service-plates",
+      "recommendedValue": "service-tools"
+    },
+    {
+      "productId": "old-10121339568435",
+      "productName": "دف 18 سم نحاس ذهبي تقيل",
+      "field": "isBestSeller",
+      "valueBeforeRegression": false,
+      "valueAfterRegression": true,
+      "recommendedValue": false
+    },
+    {
+      "productId": "old-10121339568435",
+      "productName": "دف 18 سم نحاس ذهبي تقيل",
+      "field": "subcategory",
+      "valueBeforeRegression": "service-tools",
+      "valueAfterRegression": "service-plates",
+      "recommendedValue": "service-tools"
+    },
+    {
+      "productId": "old-10120837660979",
+      "productName": "صليب زفة نحاس طبقتين بفصوص ملونة",
+      "field": "isBestSeller",
+      "valueBeforeRegression": false,
+      "valueAfterRegression": true,
+      "recommendedValue": false
+    },
+    {
+      "productId": "old-10120837300531",
+      "productName": "صليب زفة نحاس طبقتين",
+      "field": "isBestSeller",
+      "valueBeforeRegression": false,
+      "valueAfterRegression": true,
+      "recommendedValue": false
+    },
+    {
+      "productId": "old-10120836481331",
+      "productName": "صليب زفة نحاس رفيع بفص ألوان",
+      "field": "options",
+      "valueBeforeRegression": [
+        {
+          "name": "الاختيار",
+          "values": [
+            "كبير",
+            "صغير"
+          ]
+        }
+      ],
+      "valueAfterRegression": [],
+      "recommendedValue": [
+        {
+          "name": "الاختيار",
+          "values": [
+            "كبير",
+            "صغير"
+          ]
+        }
+      ]
+    },
+    {
+      "productId": "old-10120836481331",
+      "productName": "صليب زفة نحاس رفيع بفص ألوان",
+      "field": "variants",
+      "valueBeforeRegression": [
+        {
+          "id": "old-53152749027635",
+          "title": "كبير",
+          "options": {
+            "الاختيار": "كبير"
+          },
+          "price": 4200,
+          "compareAtPrice": 4620,
+          "available": true,
+          "image": null,
+          "images": [],
+          "sku": "",
+          "quantity": 12
+        },
+        {
+          "id": "old-10120836481331-variant-1785099528262-2",
+          "title": "صغير",
+          "options": {
+            "الاختيار": "صغير"
+          },
+          "price": 3600,
+          "compareAtPrice": null,
+          "available": true,
+          "image": "assets/optimized/products/gallery/009-10120836481331-01.webp",
+          "images": [
+            "assets/optimized/products/gallery/009-10120836481331-01.webp"
+          ],
+          "sku": "",
+          "quantity": null
+        }
+      ],
+      "valueAfterRegression": [
+        {
+          "id": "old-53152749027635",
+          "title": "الاختيار الافتراضي",
+          "options": {},
+          "price": 3960,
+          "compareAtPrice": 4620,
+          "available": true,
+          "image": null,
+          "images": [],
+          "sku": "",
+          "quantity": 12
+        }
+      ],
+      "recommendedValue": [
+        {
+          "id": "old-53152749027635",
+          "title": "كبير",
+          "options": {
+            "الاختيار": "كبير"
+          },
+          "price": 4200,
+          "compareAtPrice": 4620,
+          "available": true,
+          "image": null,
+          "images": [],
+          "sku": "",
+          "quantity": 12
+        },
+        {
+          "id": "old-10120836481331-variant-1785099528262-2",
+          "title": "صغير",
+          "options": {
+            "الاختيار": "صغير"
+          },
+          "price": 3600,
+          "compareAtPrice": null,
+          "available": true,
+          "image": "assets/optimized/products/gallery/009-10120836481331-01.webp",
+          "images": [
+            "assets/optimized/products/gallery/009-10120836481331-01.webp"
+          ],
+          "sku": "",
+          "quantity": null
+        }
+      ]
+    },
+    {
+      "productId": "old-10120836481331",
+      "productName": "صليب زفة نحاس رفيع بفص ألوان",
+      "field": "isBestSeller",
+      "valueBeforeRegression": false,
+      "valueAfterRegression": true,
+      "recommendedValue": false
+    },
+    {
+      "productId": "old-10068217561395",
+      "productName": "حُق ذخيرة صغير نحاس مطلي نيكل",
+      "field": "stock",
+      "valueBeforeRegression": "غير متاح حاليا",
+      "valueAfterRegression": "متاح",
+      "recommendedValue": "غير متاح حاليا"
+    },
+    {
+      "productId": "old-10068217561395",
+      "productName": "حُق ذخيرة صغير نحاس مطلي نيكل",
+      "field": "variants",
+      "valueBeforeRegression": [
+        {
+          "id": "old-53006297170227",
+          "title": "الاختيار الافتراضي",
+          "options": {},
+          "price": 330,
+          "compareAtPrice": 385,
+          "available": false,
+          "image": null,
+          "images": [],
+          "sku": "",
+          "quantity": null
+        }
+      ],
+      "valueAfterRegression": [
+        {
+          "id": "old-53006297170227",
+          "title": "الاختيار الافتراضي",
+          "options": {},
+          "price": 330,
+          "compareAtPrice": 385,
+          "available": true,
+          "image": null,
+          "images": [],
+          "sku": "",
+          "quantity": null
+        }
+      ],
+      "recommendedValue": [
+        {
+          "id": "old-53006297170227",
+          "title": "الاختيار الافتراضي",
+          "options": {},
+          "price": 330,
+          "compareAtPrice": 385,
+          "available": false,
+          "image": null,
+          "images": [],
+          "sku": "",
+          "quantity": null
+        }
+      ]
+    },
+    {
+      "productId": "old-10068215628083",
+      "productName": "حُق ذخيرة استانلس صغير",
+      "field": "stock",
+      "valueBeforeRegression": "غير متاح حاليا",
+      "valueAfterRegression": "متاح",
+      "recommendedValue": "غير متاح حاليا"
+    },
+    {
+      "productId": "old-10068215628083",
+      "productName": "حُق ذخيرة استانلس صغير",
+      "field": "variants",
+      "valueBeforeRegression": [
+        {
+          "id": "old-53006286487859",
+          "title": "الاختيار الافتراضي",
+          "options": {},
+          "price": 360,
+          "compareAtPrice": 420,
+          "available": false,
+          "image": null,
+          "images": [],
+          "sku": "",
+          "quantity": null
+        }
+      ],
+      "valueAfterRegression": [
+        {
+          "id": "old-53006286487859",
+          "title": "الاختيار الافتراضي",
+          "options": {},
+          "price": 360,
+          "compareAtPrice": 420,
+          "available": true,
+          "image": null,
+          "images": [],
+          "sku": "",
+          "quantity": null
+        }
+      ],
+      "recommendedValue": [
+        {
+          "id": "old-53006286487859",
+          "title": "الاختيار الافتراضي",
+          "options": {},
+          "price": 360,
+          "compareAtPrice": 420,
+          "available": false,
+          "image": null,
+          "images": [],
+          "sku": "",
+          "quantity": null
+        }
+      ]
+    },
+    {
+      "productId": "old-10068213006643",
+      "productName": "حُق ذخيرة استانلس وسط",
+      "field": "stock",
+      "valueBeforeRegression": "غير متاح حاليا",
+      "valueAfterRegression": "متاح",
+      "recommendedValue": "غير متاح حاليا"
+    },
+    {
+      "productId": "old-10068213006643",
+      "productName": "حُق ذخيرة استانلس وسط",
+      "field": "variants",
+      "valueBeforeRegression": [
+        {
+          "id": "old-53006271086899",
+          "title": "الاختيار الافتراضي",
+          "options": {},
+          "price": 300,
+          "compareAtPrice": 350,
+          "available": false,
+          "image": null,
+          "images": [],
+          "sku": "",
+          "quantity": null
+        }
+      ],
+      "valueAfterRegression": [
+        {
+          "id": "old-53006271086899",
+          "title": "الاختيار الافتراضي",
+          "options": {},
+          "price": 300,
+          "compareAtPrice": 350,
+          "available": true,
+          "image": null,
+          "images": [],
+          "sku": "",
+          "quantity": null
+        }
+      ],
+      "recommendedValue": [
+        {
+          "id": "old-53006271086899",
+          "title": "الاختيار الافتراضي",
+          "options": {},
+          "price": 300,
+          "compareAtPrice": 350,
+          "available": false,
+          "image": null,
+          "images": [],
+          "sku": "",
+          "quantity": null
+        }
+      ]
+    },
+    {
+      "productId": "old-10068212646195",
+      "productName": "حُق ذخيرة استانلس صغير",
+      "field": "stock",
+      "valueBeforeRegression": "غير متاح حاليا",
+      "valueAfterRegression": "متاح",
+      "recommendedValue": "غير متاح حاليا"
+    },
+    {
+      "productId": "old-10068212646195",
+      "productName": "حُق ذخيرة استانلس صغير",
+      "field": "variants",
+      "valueBeforeRegression": [
+        {
+          "id": "old-53006268301619",
+          "title": "الاختيار الافتراضي",
+          "options": {},
+          "price": 240,
+          "compareAtPrice": 280,
+          "available": false,
+          "image": null,
+          "images": [],
+          "sku": "",
+          "quantity": null
+        }
+      ],
+      "valueAfterRegression": [
+        {
+          "id": "old-53006268301619",
+          "title": "الاختيار الافتراضي",
+          "options": {},
+          "price": 240,
+          "compareAtPrice": 280,
+          "available": true,
+          "image": null,
+          "images": [],
+          "sku": "",
+          "quantity": null
+        }
+      ],
+      "recommendedValue": [
+        {
+          "id": "old-53006268301619",
+          "title": "الاختيار الافتراضي",
+          "options": {},
+          "price": 240,
+          "compareAtPrice": 280,
+          "available": false,
+          "image": null,
+          "images": [],
+          "sku": "",
+          "quantity": null
+        }
+      ]
+    },
+    {
+      "productId": "old-10067794067763",
+      "productName": "إبريق نحاس ذهبي",
+      "field": "isBestSeller",
+      "valueBeforeRegression": false,
+      "valueAfterRegression": true,
+      "recommendedValue": false
+    },
+    {
+      "productId": "old-10067794067763",
+      "productName": "إبريق نحاس ذهبي",
+      "field": "subcategory",
+      "valueBeforeRegression": "altar-vessels",
+      "valueAfterRegression": "altar-sets",
+      "recommendedValue": "altar-vessels"
+    },
+    {
+      "productId": "reliquary-tubes-papa-kyrillos",
+      "productName": "أنابيب رفات قديسين زان",
+      "field": "stock",
+      "valueBeforeRegression": "غير متاح حاليا",
+      "valueAfterRegression": "متاح",
+      "recommendedValue": "غير متاح حاليا"
+    },
+    {
+      "productId": "reliquary-tubes-papa-kyrillos",
+      "productName": "أنابيب رفات قديسين زان",
+      "field": "variants",
+      "valueBeforeRegression": [
+        {
+          "id": "reliquary-tubes-size-5",
+          "title": "مقاس 5 - 37×15",
+          "options": {
+            "المقاس": "مقاس 5 - 37×15"
+          },
+          "price": 462,
+          "compareAtPrice": null,
+          "available": false,
+          "image": "assets/optimized/products/gallery/029-9841772396851-01.webp",
+          "images": [
+            "assets/optimized/products/gallery/029-9841772396851-01.webp",
+            "assets/optimized/products/gallery/029-9841772396851-02.webp",
+            "assets/optimized/products/gallery/029-9841772396851-03.webp",
+            "assets/optimized/products/reliquary-tubes-papa-kyrillos.jpg"
+          ],
+          "sku": "",
+          "quantity": null
+        },
+        {
+          "id": "reliquary-tubes-size-4",
+          "title": "مقاس 4 - 37×12",
+          "options": {
+            "المقاس": "مقاس 4 - 37×12"
+          },
+          "price": 330,
+          "compareAtPrice": null,
+          "available": false,
+          "image": "assets/optimized/products/gallery/030-9841770725683-01.webp",
+          "images": [
+            "assets/optimized/products/gallery/030-9841770725683-01.webp",
+            "assets/optimized/products/gallery/030-9841770725683-02.webp",
+            "assets/optimized/products/gallery/030-9841770725683-03.webp",
+            "assets/optimized/products/reliquary-tubes-papa-kyrillos.jpg"
+          ],
+          "sku": "",
+          "quantity": null
+        },
+        {
+          "id": "reliquary-tubes-size-3",
+          "title": "مقاس 3 - 37×9.5",
+          "options": {
+            "المقاس": "مقاس 3 - 37×9.5"
+          },
+          "price": 234,
+          "compareAtPrice": null,
+          "available": false,
+          "image": "assets/optimized/products/gallery/031-9841769054515-01.webp",
+          "images": [
+            "assets/optimized/products/gallery/031-9841769054515-01.webp",
+            "assets/optimized/products/gallery/031-9841769054515-02.webp",
+            "assets/optimized/products/gallery/031-9841769054515-03.webp",
+            "assets/optimized/products/reliquary-tubes-papa-kyrillos.jpg"
+          ],
+          "sku": "",
+          "quantity": null
+        },
+        {
+          "id": "reliquary-tubes-above-zero",
+          "title": "فوق الزيرو - 27×9.5",
+          "options": {
+            "المقاس": "فوق الزيرو - 27×9.5"
+          },
+          "price": 180,
+          "compareAtPrice": null,
+          "available": false,
+          "image": "assets/optimized/products/gallery/032-9841765515571-01.webp",
+          "images": [
+            "assets/optimized/products/gallery/032-9841765515571-01.webp",
+            "assets/optimized/products/gallery/032-9841765515571-02.webp",
+            "assets/optimized/products/gallery/032-9841765515571-03.webp",
+            "assets/optimized/products/reliquary-tubes-papa-kyrillos.jpg"
+          ],
+          "sku": "",
+          "quantity": null
+        },
+        {
+          "id": "reliquary-tubes-zero",
+          "title": "زيرو - 17×9.5",
+          "options": {
+            "المقاس": "زيرو - 17×9.5"
+          },
+          "price": 144,
+          "compareAtPrice": null,
+          "available": false,
+          "image": "assets/optimized/products/gallery/033-9841763516723-01.webp",
+          "images": [
+            "assets/optimized/products/gallery/033-9841763516723-01.webp",
+            "assets/optimized/products/gallery/033-9841763516723-02.webp",
+            "assets/optimized/products/gallery/033-9841763516723-03.webp",
+            "assets/optimized/products/reliquary-tubes-papa-kyrillos.jpg"
+          ],
+          "sku": "",
+          "quantity": null
+        }
+      ],
+      "valueAfterRegression": [
+        {
+          "id": "reliquary-tubes-size-5",
+          "title": "مقاس 5 - 37×15",
+          "options": {
+            "المقاس": "مقاس 5 - 37×15"
+          },
+          "price": 462,
+          "compareAtPrice": null,
+          "available": true,
+          "image": "assets/optimized/products/gallery/029-9841772396851-01.webp",
+          "images": [
+            "assets/optimized/products/gallery/029-9841772396851-01.webp",
+            "assets/optimized/products/gallery/029-9841772396851-02.webp",
+            "assets/optimized/products/gallery/029-9841772396851-03.webp",
+            "assets/optimized/products/reliquary-tubes-papa-kyrillos.jpg"
+          ],
+          "sku": "",
+          "quantity": null
+        },
+        {
+          "id": "reliquary-tubes-size-4",
+          "title": "مقاس 4 - 37×12",
+          "options": {
+            "المقاس": "مقاس 4 - 37×12"
+          },
+          "price": 330,
+          "compareAtPrice": null,
+          "available": true,
+          "image": "assets/optimized/products/gallery/030-9841770725683-01.webp",
+          "images": [
+            "assets/optimized/products/gallery/030-9841770725683-01.webp",
+            "assets/optimized/products/gallery/030-9841770725683-02.webp",
+            "assets/optimized/products/gallery/030-9841770725683-03.webp",
+            "assets/optimized/products/reliquary-tubes-papa-kyrillos.jpg"
+          ],
+          "sku": "",
+          "quantity": null
+        },
+        {
+          "id": "reliquary-tubes-size-3",
+          "title": "مقاس 3 - 37×9.5",
+          "options": {
+            "المقاس": "مقاس 3 - 37×9.5"
+          },
+          "price": 234,
+          "compareAtPrice": null,
+          "available": true,
+          "image": "assets/optimized/products/gallery/031-9841769054515-01.webp",
+          "images": [
+            "assets/optimized/products/gallery/031-9841769054515-01.webp",
+            "assets/optimized/products/gallery/031-9841769054515-02.webp",
+            "assets/optimized/products/gallery/031-9841769054515-03.webp",
+            "assets/optimized/products/reliquary-tubes-papa-kyrillos.jpg"
+          ],
+          "sku": "",
+          "quantity": null
+        },
+        {
+          "id": "reliquary-tubes-above-zero",
+          "title": "فوق الزيرو - 27×9.5",
+          "options": {
+            "المقاس": "فوق الزيرو - 27×9.5"
+          },
+          "price": 180,
+          "compareAtPrice": null,
+          "available": true,
+          "image": "assets/optimized/products/gallery/032-9841765515571-01.webp",
+          "images": [
+            "assets/optimized/products/gallery/032-9841765515571-01.webp",
+            "assets/optimized/products/gallery/032-9841765515571-02.webp",
+            "assets/optimized/products/gallery/032-9841765515571-03.webp",
+            "assets/optimized/products/reliquary-tubes-papa-kyrillos.jpg"
+          ],
+          "sku": "",
+          "quantity": null
+        },
+        {
+          "id": "reliquary-tubes-zero",
+          "title": "زيرو - 17×9.5",
+          "options": {
+            "المقاس": "زيرو - 17×9.5"
+          },
+          "price": 144,
+          "compareAtPrice": null,
+          "available": true,
+          "image": "assets/optimized/products/gallery/033-9841763516723-01.webp",
+          "images": [
+            "assets/optimized/products/gallery/033-9841763516723-01.webp",
+            "assets/optimized/products/gallery/033-9841763516723-02.webp",
+            "assets/optimized/products/gallery/033-9841763516723-03.webp",
+            "assets/optimized/products/reliquary-tubes-papa-kyrillos.jpg"
+          ],
+          "sku": "",
+          "quantity": null
+        }
+      ],
+      "recommendedValue": [
+        {
+          "id": "reliquary-tubes-size-5",
+          "title": "مقاس 5 - 37×15",
+          "options": {
+            "المقاس": "مقاس 5 - 37×15"
+          },
+          "price": 462,
+          "compareAtPrice": null,
+          "available": false,
+          "image": "assets/optimized/products/gallery/029-9841772396851-01.webp",
+          "images": [
+            "assets/optimized/products/gallery/029-9841772396851-01.webp",
+            "assets/optimized/products/gallery/029-9841772396851-02.webp",
+            "assets/optimized/products/gallery/029-9841772396851-03.webp",
+            "assets/optimized/products/reliquary-tubes-papa-kyrillos.jpg"
+          ],
+          "sku": "",
+          "quantity": null
+        },
+        {
+          "id": "reliquary-tubes-size-4",
+          "title": "مقاس 4 - 37×12",
+          "options": {
+            "المقاس": "مقاس 4 - 37×12"
+          },
+          "price": 330,
+          "compareAtPrice": null,
+          "available": false,
+          "image": "assets/optimized/products/gallery/030-9841770725683-01.webp",
+          "images": [
+            "assets/optimized/products/gallery/030-9841770725683-01.webp",
+            "assets/optimized/products/gallery/030-9841770725683-02.webp",
+            "assets/optimized/products/gallery/030-9841770725683-03.webp",
+            "assets/optimized/products/reliquary-tubes-papa-kyrillos.jpg"
+          ],
+          "sku": "",
+          "quantity": null
+        },
+        {
+          "id": "reliquary-tubes-size-3",
+          "title": "مقاس 3 - 37×9.5",
+          "options": {
+            "المقاس": "مقاس 3 - 37×9.5"
+          },
+          "price": 234,
+          "compareAtPrice": null,
+          "available": false,
+          "image": "assets/optimized/products/gallery/031-9841769054515-01.webp",
+          "images": [
+            "assets/optimized/products/gallery/031-9841769054515-01.webp",
+            "assets/optimized/products/gallery/031-9841769054515-02.webp",
+            "assets/optimized/products/gallery/031-9841769054515-03.webp",
+            "assets/optimized/products/reliquary-tubes-papa-kyrillos.jpg"
+          ],
+          "sku": "",
+          "quantity": null
+        },
+        {
+          "id": "reliquary-tubes-above-zero",
+          "title": "فوق الزيرو - 27×9.5",
+          "options": {
+            "المقاس": "فوق الزيرو - 27×9.5"
+          },
+          "price": 180,
+          "compareAtPrice": null,
+          "available": false,
+          "image": "assets/optimized/products/gallery/032-9841765515571-01.webp",
+          "images": [
+            "assets/optimized/products/gallery/032-9841765515571-01.webp",
+            "assets/optimized/products/gallery/032-9841765515571-02.webp",
+            "assets/optimized/products/gallery/032-9841765515571-03.webp",
+            "assets/optimized/products/reliquary-tubes-papa-kyrillos.jpg"
+          ],
+          "sku": "",
+          "quantity": null
+        },
+        {
+          "id": "reliquary-tubes-zero",
+          "title": "زيرو - 17×9.5",
+          "options": {
+            "المقاس": "زيرو - 17×9.5"
+          },
+          "price": 144,
+          "compareAtPrice": null,
+          "available": false,
+          "image": "assets/optimized/products/gallery/033-9841763516723-01.webp",
+          "images": [
+            "assets/optimized/products/gallery/033-9841763516723-01.webp",
+            "assets/optimized/products/gallery/033-9841763516723-02.webp",
+            "assets/optimized/products/gallery/033-9841763516723-03.webp",
+            "assets/optimized/products/reliquary-tubes-papa-kyrillos.jpg"
+          ],
+          "sku": "",
+          "quantity": null
+        }
+      ]
+    },
+    {
+      "productId": "old-9840433955123",
+      "productName": "زوج شمعدان نحاس ذهبي كهرباء شكل الوردة كبير",
+      "field": "stock",
+      "valueBeforeRegression": "متاح",
+      "valueAfterRegression": "غير متاح حاليا",
+      "recommendedValue": "متاح"
+    },
+    {
+      "productId": "old-9840433955123",
+      "productName": "زوج شمعدان نحاس ذهبي كهرباء شكل الوردة كبير",
+      "field": "variants",
+      "valueBeforeRegression": [
+        {
+          "id": "old-52070352879923",
+          "title": "الاختيار الافتراضي",
+          "options": {},
+          "price": 6720,
+          "compareAtPrice": null,
+          "available": true,
+          "image": null,
+          "images": [],
+          "sku": "",
+          "quantity": 12
+        }
+      ],
+      "valueAfterRegression": [
+        {
+          "id": "old-52070352879923",
+          "title": "الاختيار الافتراضي",
+          "options": {},
+          "price": 6720,
+          "compareAtPrice": null,
+          "available": false,
+          "image": null,
+          "images": [],
+          "sku": "",
+          "quantity": 12
+        }
+      ],
+      "recommendedValue": [
+        {
+          "id": "old-52070352879923",
+          "title": "الاختيار الافتراضي",
+          "options": {},
+          "price": 6720,
+          "compareAtPrice": null,
+          "available": true,
+          "image": null,
+          "images": [],
+          "sku": "",
+          "quantity": 12
+        }
+      ]
+    },
+    {
+      "productId": "old-9840425500979",
+      "productName": "شمعدان نحاس ذهبي سوستة",
+      "field": "stock",
+      "valueBeforeRegression": "متاح",
+      "valueAfterRegression": "غير متاح حاليا",
+      "recommendedValue": "متاح"
+    },
+    {
+      "productId": "old-9840425500979",
+      "productName": "شمعدان نحاس ذهبي سوستة",
+      "field": "variants",
+      "valueBeforeRegression": [
+        {
+          "id": "old-52070117802291",
+          "title": "الاختيار الافتراضي",
+          "options": {},
+          "price": 3000,
+          "compareAtPrice": null,
+          "available": true,
+          "image": null,
+          "images": [],
+          "sku": "",
+          "quantity": 12
+        }
+      ],
+      "valueAfterRegression": [
+        {
+          "id": "old-52070117802291",
+          "title": "الاختيار الافتراضي",
+          "options": {},
+          "price": 3000,
+          "compareAtPrice": null,
+          "available": false,
+          "image": null,
+          "images": [],
+          "sku": "",
+          "quantity": 12
+        }
+      ],
+      "recommendedValue": [
+        {
+          "id": "old-52070117802291",
+          "title": "الاختيار الافتراضي",
+          "options": {},
+          "price": 3000,
+          "compareAtPrice": null,
+          "available": true,
+          "image": null,
+          "images": [],
+          "sku": "",
+          "quantity": 12
+        }
+      ]
+    },
+    {
+      "productId": "old-9762774024499",
+      "productName": "بشارة ذهبي يوناني",
+      "field": "stock",
+      "valueBeforeRegression": "غير متاح حاليا",
+      "valueAfterRegression": "متاح",
+      "recommendedValue": "غير متاح حاليا"
+    },
+    {
+      "productId": "old-9762774024499",
+      "productName": "بشارة ذهبي يوناني",
+      "field": "variants",
+      "valueBeforeRegression": [
+        {
+          "id": "old-51620622041395",
+          "title": "الاختيار الافتراضي",
+          "options": {},
+          "price": 15000,
+          "compareAtPrice": 16000,
+          "available": false,
+          "image": null,
+          "images": [],
+          "sku": "",
+          "quantity": 1
+        }
+      ],
+      "valueAfterRegression": [
+        {
+          "id": "old-51620622041395",
+          "title": "الاختيار الافتراضي",
+          "options": {},
+          "price": 15000,
+          "compareAtPrice": 16000,
+          "available": true,
+          "image": null,
+          "images": [],
+          "sku": "",
+          "quantity": 1
+        }
+      ],
+      "recommendedValue": [
+        {
+          "id": "old-51620622041395",
+          "title": "الاختيار الافتراضي",
+          "options": {},
+          "price": 15000,
+          "compareAtPrice": 16000,
+          "available": false,
+          "image": null,
+          "images": [],
+          "sku": "",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "productId": "old-9762774024499",
+      "productName": "بشارة ذهبي يوناني",
+      "field": "subcategory",
+      "valueBeforeRegression": "service-tools",
+      "valueAfterRegression": "service-plates",
+      "recommendedValue": "service-tools"
+    },
+    {
+      "productId": "old-9762760196403",
+      "productName": "شورية نحاس ذهبي يوناني",
+      "field": "isBestSeller",
+      "valueBeforeRegression": false,
+      "valueAfterRegression": true,
+      "recommendedValue": false
+    },
+    {
+      "productId": "old-9762682011955",
+      "productName": "طقم أواني مذبح ذهبي يوناني",
+      "field": "image",
+      "valueBeforeRegression": "assets/optimized/products/gallery/product-78-2-20260705061752-ad9508.webp",
+      "valueAfterRegression": "assets/optimized/products/gallery/041-9762682011955-01.webp",
+      "recommendedValue": "assets/optimized/products/gallery/product-78-2-20260705061752-ad9508.webp"
+    },
+    {
+      "productId": "old-9762682011955",
+      "productName": "طقم أواني مذبح ذهبي يوناني",
+      "field": "images",
+      "valueBeforeRegression": [
+        "assets/optimized/products/gallery/product-78-2-20260705061752-ad9508.webp",
+        "assets/optimized/products/gallery/product-78-1-20260705061723-bf32c3.webp",
+        "assets/optimized/products/gallery/product-78-3-20260705061653-c60736.webp",
+        "assets/optimized/products/gallery/product-78-4-20260705061658-b5d4ff.webp"
+      ],
+      "valueAfterRegression": [
+        "assets/optimized/products/gallery/041-9762682011955-01.webp",
+        "assets/optimized/products/gallery/041-9762682011955-02.webp",
+        "assets/optimized/products/gallery/041-9762682011955-03.webp",
+        "assets/optimized/products/gallery/041-9762682011955-04.webp",
+        "assets/optimized/products/gallery/041-9762682011955-05.webp"
+      ],
+      "recommendedValue": [
+        "assets/optimized/products/gallery/product-78-2-20260705061752-ad9508.webp",
+        "assets/optimized/products/gallery/product-78-1-20260705061723-bf32c3.webp",
+        "assets/optimized/products/gallery/product-78-3-20260705061653-c60736.webp",
+        "assets/optimized/products/gallery/product-78-4-20260705061658-b5d4ff.webp"
+      ]
+    },
+    {
+      "productId": "old-9762682011955",
+      "productName": "طقم أواني مذبح ذهبي يوناني",
+      "field": "isBestSeller",
+      "valueBeforeRegression": false,
+      "valueAfterRegression": true,
+      "recommendedValue": false
+    },
+    {
+      "productId": "old-9762682011955",
+      "productName": "طقم أواني مذبح ذهبي يوناني",
+      "field": "subcategory",
+      "valueBeforeRegression": "altar-vessels",
+      "valueAfterRegression": "altar-sets",
+      "recommendedValue": "altar-vessels"
+    },
+    {
+      "productId": "old-9757475930419",
+      "productName": "أيقونة صليب صدر يوناني ذهبي",
+      "field": "stock",
+      "valueBeforeRegression": "غير متاح حاليا",
+      "valueAfterRegression": "متاح",
+      "recommendedValue": "غير متاح حاليا"
+    },
+    {
+      "productId": "old-9757475930419",
+      "productName": "أيقونة صليب صدر يوناني ذهبي",
+      "field": "variants",
+      "valueBeforeRegression": [
+        {
+          "id": "old-51592087404851",
+          "title": "الاختيار الافتراضي",
+          "options": {},
+          "price": 5000,
+          "compareAtPrice": 6000,
+          "available": false,
+          "image": null,
+          "images": [],
+          "sku": "123",
+          "quantity": null
+        }
+      ],
+      "valueAfterRegression": [
+        {
+          "id": "old-51592087404851",
+          "title": "الاختيار الافتراضي",
+          "options": {},
+          "price": 5000,
+          "compareAtPrice": 6000,
+          "available": true,
+          "image": null,
+          "images": [],
+          "sku": "123",
+          "quantity": null
+        }
+      ],
+      "recommendedValue": [
+        {
+          "id": "old-51592087404851",
+          "title": "الاختيار الافتراضي",
+          "options": {},
+          "price": 5000,
+          "compareAtPrice": 6000,
+          "available": false,
+          "image": null,
+          "images": [],
+          "sku": "123",
+          "quantity": null
+        }
+      ]
+    },
+    {
+      "productId": "old-9757475930419",
+      "productName": "أيقونة صليب صدر يوناني ذهبي",
+      "field": "isBestSeller",
+      "valueBeforeRegression": false,
+      "valueAfterRegression": true,
+      "recommendedValue": false
+    },
+    {
+      "productId": "custom-1783272387022",
+      "productName": "ألوان اليوطا",
+      "field": "description",
+      "valueBeforeRegression": "وصف المنتج\n\n30 مللي من ألوان تلوين صلبان اليوتا\nألوان جاهزة للاستخدام، مناسبة لتلوين صلبان وميداليات اليوتا خلال مدارس الأحد والخلوات والأنشطة الكنسية. تأتي كل عبوة بسن دقيق يساعد على التحكم في اللون وتنفيذ التفاصيل الصغيرة بسهولة، مع غطاء محكم للحفاظ على اللون.\nالعبوة تكفي لتلوين 20-30 مادلية\n\nالألوان المتاحة:\nأحمر – أسود – أبيض – أصفر – أخضر – فضي – دهبي – نبيتي – لبني – بني – بيج – برتقالي.\n\nمميزات المنتج:\n\nألوان واضحة وزاهية.\nسهلة الاستخدام للأطفال والخدام.\nسن دقيق للتلوين والتفاصيل.\nمناسبة للأنشطة والمسابقات والهدايا.\nتُباع العبوات بالألوان بصورة منفردة.\n\nتنبيه: يُفضّل رجّ العبوة جيدًا قبل الاستخدام وإغلاقها بإحكام بعد الانتهاء.",
+      "valueAfterRegression": "وصف المنتج\n\nألوان تلوين صلبان اليوتا\nألوان جاهزة للاستخدام، مناسبة لتلوين صلبان وميداليات اليوتا خلال مدارس الأحد والخلوات والأنشطة الكنسية. تأتي كل عبوة بسن دقيق يساعد على التحكم في اللون وتنفيذ التفاصيل الصغيرة بسهولة، مع غطاء محكم للحفاظ على اللون.\n\nالألوان المتاحة:\nأحمر – أسود – أبيض – أصفر – أخضر – فضي – نبيتي – لبني – بني – بيج – برتقالي.\n\nمميزات المنتج:\n\nألوان واضحة وزاهية.\nسهلة الاستخدام للأطفال والخدام.\nسن دقيق للتلوين والتفاصيل.\nمناسبة للأنشطة والمسابقات والهدايا.\nتُباع العبوات بالألوان بصورة منفردة.\n\nتنبيه: يُفضّل رجّ العبوة جيدًا قبل الاستخدام وإغلاقها بإحكام بعد الانتهاء.",
+      "recommendedValue": "وصف المنتج\n\n30 مللي من ألوان تلوين صلبان اليوتا\nألوان جاهزة للاستخدام، مناسبة لتلوين صلبان وميداليات اليوتا خلال مدارس الأحد والخلوات والأنشطة الكنسية. تأتي كل عبوة بسن دقيق يساعد على التحكم في اللون وتنفيذ التفاصيل الصغيرة بسهولة، مع غطاء محكم للحفاظ على اللون.\nالعبوة تكفي لتلوين 20-30 مادلية\n\nالألوان المتاحة:\nأحمر – أسود – أبيض – أصفر – أخضر – فضي – دهبي – نبيتي – لبني – بني – بيج – برتقالي.\n\nمميزات المنتج:\n\nألوان واضحة وزاهية.\nسهلة الاستخدام للأطفال والخدام.\nسن دقيق للتلوين والتفاصيل.\nمناسبة للأنشطة والمسابقات والهدايا.\nتُباع العبوات بالألوان بصورة منفردة.\n\nتنبيه: يُفضّل رجّ العبوة جيدًا قبل الاستخدام وإغلاقها بإحكام بعد الانتهاء."
+    },
+    {
+      "productId": "custom-1783272387022",
+      "productName": "ألوان اليوطا",
+      "field": "price",
+      "valueBeforeRegression": 50,
+      "valueAfterRegression": 70,
+      "recommendedValue": 50
+    },
+    {
+      "productId": "custom-1783272387022",
+      "productName": "ألوان اليوطا",
+      "field": "url",
+      "valueBeforeRegression": "https://popekyrillos.store/?product=custom-1783272387022",
+      "valueAfterRegression": "https://popekyrillos.store/products/%D8%A7%D9%84%D9%88%D8%A7%D9%86-%D8%A7%D9%84%D9%8A%D9%88%D8%B7%D8%A7",
+      "recommendedValue": "https://popekyrillos.store/?product=custom-1783272387022"
+    },
+    {
+      "productId": "custom-1783272387022",
+      "productName": "ألوان اليوطا",
+      "field": "images",
+      "valueBeforeRegression": [
+        "assets/optimized/products/gallery/product-1-image-20260705172724-e7fdfd.webp",
+        "assets/optimized/products/gallery/product-1-image-20260705172735-c0297e.webp",
+        "assets/optimized/products/gallery/product-1-image-20260705172741-9b13e8.webp",
+        "assets/optimized/products/gallery/product-1-image-20260705225937-8e1017.webp",
+        "assets/optimized/products/gallery/product-1-image-20260705225933-bc8e0d.webp",
+        "assets/optimized/products/gallery/product-1-image-20260705225926-f19abc.webp",
+        "assets/optimized/products/gallery/product-1-image-20260705225941-a78b23.webp",
+        "assets/optimized/products/gallery/product-1-image-20260705225945-288b80.webp",
+        "assets/optimized/products/gallery/product-1-image-20260705225949-f7ff38.webp",
+        "assets/optimized/products/gallery/product-1-image-20260705225953-cc24fd.webp",
+        "assets/optimized/products/gallery/product-1-image-20260705225957-b91fba.webp",
+        "assets/optimized/products/gallery/product-1-image-20260705230001-5400b2.webp",
+        "assets/optimized/products/gallery/product-1-image-20260705230800-9d7e97.webp"
+      ],
+      "valueAfterRegression": [
+        "assets/optimized/products/gallery/product-1-image-20260705172724-e7fdfd.webp",
+        "assets/optimized/products/gallery/product-1-image-20260705172735-c0297e.webp",
+        "assets/optimized/products/gallery/product-1-image-20260705172741-9b13e8.webp"
+      ],
+      "recommendedValue": [
+        "assets/optimized/products/gallery/product-1-image-20260705172724-e7fdfd.webp",
+        "assets/optimized/products/gallery/product-1-image-20260705172735-c0297e.webp",
+        "assets/optimized/products/gallery/product-1-image-20260705172741-9b13e8.webp",
+        "assets/optimized/products/gallery/product-1-image-20260705225937-8e1017.webp",
+        "assets/optimized/products/gallery/product-1-image-20260705225933-bc8e0d.webp",
+        "assets/optimized/products/gallery/product-1-image-20260705225926-f19abc.webp",
+        "assets/optimized/products/gallery/product-1-image-20260705225941-a78b23.webp",
+        "assets/optimized/products/gallery/product-1-image-20260705225945-288b80.webp",
+        "assets/optimized/products/gallery/product-1-image-20260705225949-f7ff38.webp",
+        "assets/optimized/products/gallery/product-1-image-20260705225953-cc24fd.webp",
+        "assets/optimized/products/gallery/product-1-image-20260705225957-b91fba.webp",
+        "assets/optimized/products/gallery/product-1-image-20260705230001-5400b2.webp",
+        "assets/optimized/products/gallery/product-1-image-20260705230800-9d7e97.webp"
+      ]
+    },
+    {
+      "productId": "custom-1783272387022",
+      "productName": "ألوان اليوطا",
+      "field": "options",
+      "valueBeforeRegression": [
+        {
+          "name": "الاختيار",
+          "values": [
+            "أبيض",
+            "أحمر",
+            "أصفر",
+            "أسود",
+            "أخضر",
+            "أزرق",
+            "برتقالي",
+            "بني",
+            "بيج",
+            "فضي",
+            "لبني",
+            "نبيتي"
+          ]
+        }
+      ],
+      "valueAfterRegression": [
+        {
+          "name": "الاختيار",
+          "values": [
+            "أبيض",
+            "أحمر"
+          ]
+        }
+      ],
+      "recommendedValue": [
+        {
+          "name": "الاختيار",
+          "values": [
+            "أبيض",
+            "أحمر",
+            "أصفر",
+            "أسود",
+            "أخضر",
+            "أزرق",
+            "برتقالي",
+            "بني",
+            "بيج",
+            "فضي",
+            "لبني",
+            "نبيتي"
+          ]
+        }
+      ]
+    },
+    {
+      "productId": "custom-1783272387022",
+      "productName": "ألوان اليوطا",
+      "field": "variants",
+      "valueBeforeRegression": [
+        {
+          "id": "custom-1783272387022-variant-1783272480728-2",
+          "title": "أبيض",
+          "options": {
+            "الاختيار": "أبيض"
+          },
+          "price": 50,
+          "compareAtPrice": null,
+          "available": true,
+          "image": "assets/optimized/products/gallery/product-1-image-20260705172735-c0297e.webp",
+          "images": [
+            "assets/optimized/products/gallery/product-1-image-20260705172735-c0297e.webp"
+          ],
+          "sku": "",
+          "quantity": 1000
+        },
+        {
+          "id": "custom-1783272387022-variant-1783272505128-3",
+          "title": "أحمر",
+          "options": {
+            "الاختيار": "أحمر"
+          },
+          "price": 50,
+          "compareAtPrice": null,
+          "available": true,
+          "image": "assets/optimized/products/gallery/product-1-image-20260705172741-9b13e8.webp",
+          "images": [
+            "assets/optimized/products/gallery/product-1-image-20260705172741-9b13e8.webp"
+          ],
+          "sku": "",
+          "quantity": 1000
+        },
+        {
+          "id": "custom-1783272387022-variant-1783292468540-3",
+          "title": "أصفر",
+          "options": {
+            "الاختيار": "أصفر"
+          },
+          "price": 50,
+          "compareAtPrice": null,
+          "available": true,
+          "image": "assets/optimized/products/gallery/product-1-image-20260705225937-8e1017.webp",
+          "images": [
+            "assets/optimized/products/gallery/product-1-image-20260705225937-8e1017.webp"
+          ],
+          "sku": "",
+          "quantity": 1000
+        },
+        {
+          "id": "custom-1783272387022-variant-1783292500079-4",
+          "title": "أسود",
+          "options": {
+            "الاختيار": "أسود"
+          },
+          "price": 50,
+          "compareAtPrice": null,
+          "available": true,
+          "image": "assets/optimized/products/gallery/product-1-image-20260705225933-bc8e0d.webp",
+          "images": [
+            "assets/optimized/products/gallery/product-1-image-20260705225933-bc8e0d.webp"
+          ],
+          "sku": "",
+          "quantity": 1000
+        },
+        {
+          "id": "custom-1783272387022-variant-1783292533863-5",
+          "title": "أخضر",
+          "options": {
+            "الاختيار": "أخضر"
+          },
+          "price": 50,
+          "compareAtPrice": null,
+          "available": true,
+          "image": "assets/optimized/products/gallery/product-1-image-20260705225926-f19abc.webp",
+          "images": [
+            "assets/optimized/products/gallery/product-1-image-20260705225926-f19abc.webp"
+          ],
+          "sku": "",
+          "quantity": 1002
+        },
+        {
+          "id": "custom-1783272387022-variant-1783292858876-12",
+          "title": "أزرق",
+          "options": {
+            "الاختيار": "أزرق"
+          },
+          "price": 50,
+          "compareAtPrice": null,
+          "available": true,
+          "image": "assets/optimized/products/gallery/product-1-image-20260705230800-9d7e97.webp",
+          "images": [
+            "assets/optimized/products/gallery/product-1-image-20260705230800-9d7e97.webp"
+          ],
+          "sku": "",
+          "quantity": 1002
+        },
+        {
+          "id": "custom-1783272387022-variant-1783292556755-6",
+          "title": "برتقالي",
+          "options": {
+            "الاختيار": "برتقالي"
+          },
+          "price": 50,
+          "compareAtPrice": null,
+          "available": true,
+          "image": "assets/optimized/products/gallery/product-1-image-20260705225941-a78b23.webp",
+          "images": [
+            "assets/optimized/products/gallery/product-1-image-20260705225941-a78b23.webp"
+          ],
+          "sku": "",
+          "quantity": 1000
+        },
+        {
+          "id": "custom-1783272387022-variant-1783292560930-7",
+          "title": "بني",
+          "options": {
+            "الاختيار": "بني"
+          },
+          "price": 50,
+          "compareAtPrice": 0,
+          "available": true,
+          "image": "assets/optimized/products/gallery/product-1-image-20260705225945-288b80.webp",
+          "images": [
+            "assets/optimized/products/gallery/product-1-image-20260705225945-288b80.webp"
+          ],
+          "sku": "",
+          "quantity": 1001
+        },
+        {
+          "id": "custom-1783272387022-variant-1783292561964-8",
+          "title": "بيج",
+          "options": {
+            "الاختيار": "بيج"
+          },
+          "price": 50,
+          "compareAtPrice": null,
+          "available": true,
+          "image": "assets/optimized/products/gallery/product-1-image-20260705225949-f7ff38.webp",
+          "images": [
+            "assets/optimized/products/gallery/product-1-image-20260705225949-f7ff38.webp"
+          ],
+          "sku": "",
+          "quantity": 1000
+        },
+        {
+          "id": "custom-1783272387022-variant-1783292562876-9",
+          "title": "فضي",
+          "options": {
+            "الاختيار": "فضي"
+          },
+          "price": 50,
+          "compareAtPrice": null,
+          "available": true,
+          "image": "assets/optimized/products/gallery/product-1-image-20260705225953-cc24fd.webp",
+          "images": [
+            "assets/optimized/products/gallery/product-1-image-20260705225953-cc24fd.webp"
+          ],
+          "sku": "",
+          "quantity": 1003
+        },
+        {
+          "id": "custom-1783272387022-variant-1783292566140-10",
+          "title": "لبني",
+          "options": {
+            "الاختيار": "لبني"
+          },
+          "price": 50,
+          "compareAtPrice": null,
+          "available": true,
+          "image": "assets/optimized/products/gallery/product-1-image-20260705225957-b91fba.webp",
+          "images": [
+            "assets/optimized/products/gallery/product-1-image-20260705225957-b91fba.webp"
+          ],
+          "sku": "",
+          "quantity": 998
+        },
+        {
+          "id": "custom-1783272387022-variant-1783292566938-11",
+          "title": "نبيتي",
+          "options": {
+            "الاختيار": "نبيتي"
+          },
+          "price": 50,
+          "compareAtPrice": null,
+          "available": true,
+          "image": "assets/optimized/products/gallery/product-1-image-20260705230001-5400b2.webp",
+          "images": [
+            "assets/optimized/products/gallery/product-1-image-20260705230001-5400b2.webp"
+          ],
+          "sku": "",
+          "quantity": 1000
+        }
+      ],
+      "valueAfterRegression": [
+        {
+          "id": "custom-1783272387022-variant-1783272480728-2",
+          "title": "أبيض",
+          "options": {
+            "الاختيار": "أبيض"
+          },
+          "price": 70,
+          "compareAtPrice": null,
+          "available": true,
+          "image": "assets/optimized/products/gallery/product-1-image-20260705172735-c0297e.webp",
+          "images": [
+            "assets/optimized/products/gallery/product-1-image-20260705172735-c0297e.webp"
+          ],
+          "sku": "",
+          "quantity": 1000
+        },
+        {
+          "id": "custom-1783272387022-variant-1783272505128-3",
+          "title": "أحمر",
+          "options": {
+            "الاختيار": "أحمر"
+          },
+          "price": 70,
+          "compareAtPrice": null,
+          "available": true,
+          "image": "assets/optimized/products/gallery/product-1-image-20260705172741-9b13e8.webp",
+          "images": [
+            "assets/optimized/products/gallery/product-1-image-20260705172741-9b13e8.webp"
+          ],
+          "sku": "",
+          "quantity": 1000
+        }
+      ],
+      "recommendedValue": [
+        {
+          "id": "custom-1783272387022-variant-1783272480728-2",
+          "title": "أبيض",
+          "options": {
+            "الاختيار": "أبيض"
+          },
+          "price": 50,
+          "compareAtPrice": null,
+          "available": true,
+          "image": "assets/optimized/products/gallery/product-1-image-20260705172735-c0297e.webp",
+          "images": [
+            "assets/optimized/products/gallery/product-1-image-20260705172735-c0297e.webp"
+          ],
+          "sku": "",
+          "quantity": 1000
+        },
+        {
+          "id": "custom-1783272387022-variant-1783272505128-3",
+          "title": "أحمر",
+          "options": {
+            "الاختيار": "أحمر"
+          },
+          "price": 50,
+          "compareAtPrice": null,
+          "available": true,
+          "image": "assets/optimized/products/gallery/product-1-image-20260705172741-9b13e8.webp",
+          "images": [
+            "assets/optimized/products/gallery/product-1-image-20260705172741-9b13e8.webp"
+          ],
+          "sku": "",
+          "quantity": 1000
+        },
+        {
+          "id": "custom-1783272387022-variant-1783292468540-3",
+          "title": "أصفر",
+          "options": {
+            "الاختيار": "أصفر"
+          },
+          "price": 50,
+          "compareAtPrice": null,
+          "available": true,
+          "image": "assets/optimized/products/gallery/product-1-image-20260705225937-8e1017.webp",
+          "images": [
+            "assets/optimized/products/gallery/product-1-image-20260705225937-8e1017.webp"
+          ],
+          "sku": "",
+          "quantity": 1000
+        },
+        {
+          "id": "custom-1783272387022-variant-1783292500079-4",
+          "title": "أسود",
+          "options": {
+            "الاختيار": "أسود"
+          },
+          "price": 50,
+          "compareAtPrice": null,
+          "available": true,
+          "image": "assets/optimized/products/gallery/product-1-image-20260705225933-bc8e0d.webp",
+          "images": [
+            "assets/optimized/products/gallery/product-1-image-20260705225933-bc8e0d.webp"
+          ],
+          "sku": "",
+          "quantity": 1000
+        },
+        {
+          "id": "custom-1783272387022-variant-1783292533863-5",
+          "title": "أخضر",
+          "options": {
+            "الاختيار": "أخضر"
+          },
+          "price": 50,
+          "compareAtPrice": null,
+          "available": true,
+          "image": "assets/optimized/products/gallery/product-1-image-20260705225926-f19abc.webp",
+          "images": [
+            "assets/optimized/products/gallery/product-1-image-20260705225926-f19abc.webp"
+          ],
+          "sku": "",
+          "quantity": 1002
+        },
+        {
+          "id": "custom-1783272387022-variant-1783292858876-12",
+          "title": "أزرق",
+          "options": {
+            "الاختيار": "أزرق"
+          },
+          "price": 50,
+          "compareAtPrice": null,
+          "available": true,
+          "image": "assets/optimized/products/gallery/product-1-image-20260705230800-9d7e97.webp",
+          "images": [
+            "assets/optimized/products/gallery/product-1-image-20260705230800-9d7e97.webp"
+          ],
+          "sku": "",
+          "quantity": 1002
+        },
+        {
+          "id": "custom-1783272387022-variant-1783292556755-6",
+          "title": "برتقالي",
+          "options": {
+            "الاختيار": "برتقالي"
+          },
+          "price": 50,
+          "compareAtPrice": null,
+          "available": true,
+          "image": "assets/optimized/products/gallery/product-1-image-20260705225941-a78b23.webp",
+          "images": [
+            "assets/optimized/products/gallery/product-1-image-20260705225941-a78b23.webp"
+          ],
+          "sku": "",
+          "quantity": 1000
+        },
+        {
+          "id": "custom-1783272387022-variant-1783292560930-7",
+          "title": "بني",
+          "options": {
+            "الاختيار": "بني"
+          },
+          "price": 50,
+          "compareAtPrice": 0,
+          "available": true,
+          "image": "assets/optimized/products/gallery/product-1-image-20260705225945-288b80.webp",
+          "images": [
+            "assets/optimized/products/gallery/product-1-image-20260705225945-288b80.webp"
+          ],
+          "sku": "",
+          "quantity": 1001
+        },
+        {
+          "id": "custom-1783272387022-variant-1783292561964-8",
+          "title": "بيج",
+          "options": {
+            "الاختيار": "بيج"
+          },
+          "price": 50,
+          "compareAtPrice": null,
+          "available": true,
+          "image": "assets/optimized/products/gallery/product-1-image-20260705225949-f7ff38.webp",
+          "images": [
+            "assets/optimized/products/gallery/product-1-image-20260705225949-f7ff38.webp"
+          ],
+          "sku": "",
+          "quantity": 1000
+        },
+        {
+          "id": "custom-1783272387022-variant-1783292562876-9",
+          "title": "فضي",
+          "options": {
+            "الاختيار": "فضي"
+          },
+          "price": 50,
+          "compareAtPrice": null,
+          "available": true,
+          "image": "assets/optimized/products/gallery/product-1-image-20260705225953-cc24fd.webp",
+          "images": [
+            "assets/optimized/products/gallery/product-1-image-20260705225953-cc24fd.webp"
+          ],
+          "sku": "",
+          "quantity": 1003
+        },
+        {
+          "id": "custom-1783272387022-variant-1783292566140-10",
+          "title": "لبني",
+          "options": {
+            "الاختيار": "لبني"
+          },
+          "price": 50,
+          "compareAtPrice": null,
+          "available": true,
+          "image": "assets/optimized/products/gallery/product-1-image-20260705225957-b91fba.webp",
+          "images": [
+            "assets/optimized/products/gallery/product-1-image-20260705225957-b91fba.webp"
+          ],
+          "sku": "",
+          "quantity": 998
+        },
+        {
+          "id": "custom-1783272387022-variant-1783292566938-11",
+          "title": "نبيتي",
+          "options": {
+            "الاختيار": "نبيتي"
+          },
+          "price": 50,
+          "compareAtPrice": null,
+          "available": true,
+          "image": "assets/optimized/products/gallery/product-1-image-20260705230001-5400b2.webp",
+          "images": [
+            "assets/optimized/products/gallery/product-1-image-20260705230001-5400b2.webp"
+          ],
+          "sku": "",
+          "quantity": 1000
+        }
+      ]
+    },
+    {
+      "productId": "custom-1783272387022",
+      "productName": "ألوان اليوطا",
+      "field": "slug",
+      "valueBeforeRegression": null,
+      "valueAfterRegression": "الوان-اليوطا",
+      "recommendedValue": null
+    }
+  ]
+}
