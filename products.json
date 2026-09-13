@@ -1,5 +1,44 @@
 [
   {
+    "id": "custom-1789302819968",
+    "name": "حامل شوريات نحاس 180 سم",
+    "category": "brass",
+    "label": "نحاسيات",
+    "description": "حامل شوريات فاخر مصنوع من النحاس، بتصميم كنسي مميز ونقوش دقيقة، مزوّد بعدة خطافات لتعليق أكثر من 10 شوريات بأحجام وتصميمات مختلفة، مع قاعدة عريضة وثابتة للاستخدام الآمن والعرض الأنيق.\n\nمناسب للكنائس والأديرة ومحلات المستلزمات الكنسية.\n\nالخامة: نحاس\nالارتفاع: 180 سم\nالوزن: 11 كجم\nالسعة: أكثر من 10 شوريات\nالمنتج يشمل الحامل فقط، ولا يشمل الشوريات الظاهرة في الصور.",
+    "price": 13500,
+    "priceNote": "",
+    "stock": "متاح",
+    "badge": "حامل",
+    "isBestSeller": false,
+    "image": "assets/optimized/products/gallery/product-1-2-20260913124121-cb366f.webp",
+    "url": "https://popekyrillos.store/?product=custom-1789302819968",
+    "tags": [],
+    "collections": [],
+    "images": [
+      "assets/optimized/products/gallery/product-1-2-20260913124121-cb366f.webp",
+      "assets/optimized/products/gallery/product-1-1-20260913124115-72d034.webp"
+    ],
+    "options": [],
+    "variants": [
+      {
+        "id": "custom-1789302819968-variant-1789302819968-1",
+        "title": "الاختيار الافتراضي",
+        "options": {},
+        "price": 13500,
+        "compareAtPrice": null,
+        "available": true,
+        "image": null,
+        "images": [],
+        "sku": "PK-244D41C05FD046E7852F6596F4239ABC",
+        "quantity": null
+      }
+    ],
+    "mainCategory": "المذبح والأواني المقدسة",
+    "subCategory": "الشوريات",
+    "subcategory": "censers",
+    "sku": "PK-A7C2F8E6DE8F49FA8A96D0E6CCAB49A3"
+  },
+  {
     "id": "atb3ho-10618130956453",
     "name": "شنطه اتبعه",
     "category": "atb3ho",
