@@ -1,5 +1,44 @@
 [
   {
+    "id": "custom-1789302819968",
+    "name": "حامل شوريات نحاس 180 سم",
+    "category": "brass",
+    "label": "نحاسيات",
+    "description": "حامل شوريات فاخر مصنوع من النحاس، بتصميم كنسي مميز ونقوش دقيقة، مزوّد بعدة خطافات لتعليق أكثر من 10 شوريات بأحجام وتصميمات مختلفة، مع قاعدة عريضة وثابتة للاستخدام الآمن والعرض الأنيق.\n\nمناسب للكنائس والأديرة ومحلات المستلزمات الكنسية.\n\nالخامة: نحاس\nالارتفاع: 180 سم\nالوزن: 11 كجم\nالسعة: أكثر من 10 شوريات\nالمنتج يشمل الحامل فقط، ولا يشمل الشوريات الظاهرة في الصور.",
+    "price": 13500,
+    "priceNote": "",
+    "stock": "متاح",
+    "badge": "حامل",
+    "isBestSeller": false,
+    "image": "assets/optimized/products/gallery/product-1-2-20260913124121-cb366f.webp",
+    "url": "https://popekyrillos.store/?product=custom-1789302819968",
+    "tags": [],
+    "collections": [],
+    "images": [
+      "assets/optimized/products/gallery/product-1-2-20260913124121-cb366f.webp",
+      "assets/optimized/products/gallery/product-1-1-20260913124115-72d034.webp"
+    ],
+    "options": [],
+    "variants": [
+      {
+        "id": "custom-1789302819968-variant-1789302819968-1",
+        "title": "الاختيار الافتراضي",
+        "options": {},
+        "price": 13500,
+        "compareAtPrice": null,
+        "available": true,
+        "image": null,
+        "images": [],
+        "sku": "PK-244D41C05FD046E7852F6596F4239ABC",
+        "quantity": null
+      }
+    ],
+    "mainCategory": "المذبح والأواني المقدسة",
+    "subCategory": "الشوريات",
+    "subcategory": "censers",
+    "sku": "PK-A7C2F8E6DE8F49FA8A96D0E6CCAB49A3"
+  },
+  {
     "id": "atb3ho-10618130956453",
     "name": "شنطه اتبعه",
     "category": "atb3ho",
@@ -36,8 +75,8 @@
         "quantity": null
       }
     ],
-    "mainCategory": "occasions-service",
-    "subCategory": "meeting-gifts",
+    "mainCategory": "المناسبات والخدمة",
+    "subCategory": "توتي باج وشنط",
     "updatedAt": "2026-07-04T18:38:24+03:00",
     "slug": "شنطه-اتبعه",
     "subcategory": "meeting-gifts",
@@ -54,7 +93,8 @@
       "هدايا الخدمة",
       "هدايا اكسسوارات إكسسوارات"
     ],
-    "thumbnail": "/assets/thumbnails/320/atb3ho-10618130956453.webp"
+    "thumbnail": "/assets/thumbnails/320/atb3ho-10618130956453-e9d6e400b5.webp",
+    "isBestSeller": false
   },
   {
     "id": "atb3ho-10618127974565",
@@ -93,8 +133,8 @@
         "quantity": null
       }
     ],
-    "mainCategory": "occasions-service",
-    "subCategory": "meeting-gifts",
+    "mainCategory": "المناسبات والخدمة",
+    "subCategory": "توتي باج وشنط",
     "updatedAt": "2026-07-04T18:38:24+03:00",
     "slug": "شنطه-اتبعه-3ho-10618127974565",
     "subcategory": "meeting-gifts",
@@ -111,7 +151,8 @@
       "هدايا الخدمة",
       "هدايا اكسسوارات إكسسوارات"
     ],
-    "thumbnail": "/assets/thumbnails/320/atb3ho-10618127974565.webp"
+    "thumbnail": "/assets/thumbnails/320/atb3ho-10618127974565-e9d6e400b5.webp",
+    "isBestSeller": false
   },
   {
     "id": "atb3ho-10558435197093",
@@ -197,8 +238,8 @@
         "quantity": null
       }
     ],
-    "mainCategory": "books-rituals",
-    "subCategory": "book-accessories",
+    "mainCategory": "الكتب والطقوس",
+    "subCategory": "فواصل وجرابات الكتب",
     "updatedAt": "2026-07-04T18:38:24+03:00",
     "slug": "كافر-كتاب-مقدس-وشنطه-مستلزمات-روحيه",
     "subcategory": "book-accessories",
@@ -216,7 +257,8 @@
       "هدايا الخدمة",
       "هدايا اكسسوارات إكسسوارات"
     ],
-    "thumbnail": "/assets/thumbnails/320/atb3ho-10558435197093.webp"
+    "thumbnail": "/assets/thumbnails/320/atb3ho-10558435197093-16cbfd10f0.webp",
+    "isBestSeller": false
   },
   {
     "id": "atb3ho-10555319877797",
@@ -255,8 +297,8 @@
         "quantity": null
       }
     ],
-    "mainCategory": "occasions-service",
-    "subCategory": "christian-games",
+    "mainCategory": "المناسبات والخدمة",
+    "subCategory": "ألعاب مسيحية",
     "updatedAt": "2026-07-04T18:38:24+03:00",
     "slug": "تحدي-التغيير",
     "subcategory": "christian-games",
@@ -275,7 +317,8 @@
       "منتجات الأطفال",
       "هدايا اكسسوارات إكسسوارات"
     ],
-    "thumbnail": "/assets/thumbnails/320/atb3ho-10555319877797.webp"
+    "thumbnail": "/assets/thumbnails/320/atb3ho-10555319877797-fa67cec165.webp",
+    "isBestSeller": false
   },
   {
     "id": "atb3ho-10547044876453",
@@ -314,8 +357,8 @@
         "quantity": null
       }
     ],
-    "mainCategory": "occasions-service",
-    "subCategory": "cards-bookmarks",
+    "mainCategory": "المناسبات والخدمة",
+    "subCategory": "كروت وبوك مارك",
     "updatedAt": "2026-07-04T18:38:24+03:00",
     "slug": "٥-بوك-مارك-٥-free",
     "subcategory": "cards-bookmarks",
@@ -335,7 +378,8 @@
       "منتجات الأطفال",
       "هدايا اكسسوارات إكسسوارات"
     ],
-    "thumbnail": "/assets/thumbnails/320/atb3ho-10547044876453.webp"
+    "thumbnail": "/assets/thumbnails/320/atb3ho-10547044876453-d6a1428d9e.webp",
+    "isBestSeller": false
   },
   {
     "id": "atb3ho-10547041829029",
@@ -374,8 +418,8 @@
         "quantity": null
       }
     ],
-    "mainCategory": "occasions-service",
-    "subCategory": "notebooks-planners",
+    "mainCategory": "المناسبات والخدمة",
+    "subCategory": "أجندات ونوت",
     "updatedAt": "2026-07-04T18:38:24+03:00",
     "slug": "جورنالينج-اتبعه-٣٦٥-يوم",
     "subcategory": "notebooks-planners",
@@ -393,7 +437,8 @@
       "هدايا الخدمة",
       "هدايا اكسسوارات إكسسوارات"
     ],
-    "thumbnail": "/assets/thumbnails/320/atb3ho-10547041829029.webp"
+    "thumbnail": "/assets/thumbnails/320/atb3ho-10547041829029-9eb2b8d02c.webp",
+    "isBestSeller": false
   },
   {
     "id": "atb3ho-10545390780581",
@@ -432,8 +477,8 @@
         "quantity": null
       }
     ],
-    "mainCategory": "occasions-service",
-    "subCategory": "cards-bookmarks",
+    "mainCategory": "المناسبات والخدمة",
+    "subCategory": "كروت وبوك مارك",
     "updatedAt": "2026-07-04T18:38:24+03:00",
     "slug": "بوك-مارك",
     "subcategory": "cards-bookmarks",
@@ -451,7 +496,8 @@
       "منتجات الأطفال",
       "هدايا اكسسوارات إكسسوارات"
     ],
-    "thumbnail": "/assets/thumbnails/320/atb3ho-10545390780581.webp"
+    "thumbnail": "/assets/thumbnails/320/atb3ho-10545390780581-320ff27f3a.webp",
+    "isBestSeller": false
   },
   {
     "id": "atb3ho-10545390354597",
@@ -490,8 +536,8 @@
         "quantity": null
       }
     ],
-    "mainCategory": "occasions-service",
-    "subCategory": "cards-bookmarks",
+    "mainCategory": "المناسبات والخدمة",
+    "subCategory": "كروت وبوك مارك",
     "updatedAt": "2026-07-04T18:38:24+03:00",
     "slug": "بوك-مارك-داود",
     "subcategory": "cards-bookmarks",
@@ -510,7 +556,8 @@
       "منتجات الأطفال",
       "هدايا اكسسوارات إكسسوارات"
     ],
-    "thumbnail": "/assets/thumbnails/320/atb3ho-10545390354597.webp"
+    "thumbnail": "/assets/thumbnails/320/atb3ho-10545390354597-df3650e1ae.webp",
+    "isBestSeller": false
   },
   {
     "id": "atb3ho-10545389863077",
@@ -549,8 +596,8 @@
         "quantity": null
       }
     ],
-    "mainCategory": "occasions-service",
-    "subCategory": "personalized",
+    "mainCategory": "المناسبات والخدمة",
+    "subCategory": "منتجات مطبوعة ومخصصة",
     "updatedAt": "2026-07-04T18:38:24+03:00",
     "slug": "بوك-مارك-بالاسم",
     "subcategory": "personalized",
@@ -569,7 +616,8 @@
       "منتجات بالاسم",
       "هدايا اكسسوارات إكسسوارات"
     ],
-    "thumbnail": "/assets/thumbnails/320/atb3ho-10545389863077.webp"
+    "thumbnail": "/assets/thumbnails/320/atb3ho-10545389863077-b06abd8b70.webp",
+    "isBestSeller": false
   },
   {
     "id": "atb3ho-10545388912805",
@@ -608,8 +656,8 @@
         "quantity": null
       }
     ],
-    "mainCategory": "occasions-service",
-    "subCategory": "personalized",
+    "mainCategory": "المناسبات والخدمة",
+    "subCategory": "منتجات مطبوعة ومخصصة",
     "updatedAt": "2026-07-04T18:38:24+03:00",
     "slug": "بوك-مارك-بالاسم-اتبعه",
     "subcategory": "personalized",
@@ -628,7 +676,8 @@
       "منتجات بالاسم",
       "هدايا اكسسوارات إكسسوارات"
     ],
-    "thumbnail": "/assets/thumbnails/320/atb3ho-10545388912805.webp"
+    "thumbnail": "/assets/thumbnails/320/atb3ho-10545388912805-9ee05568d9.webp",
+    "isBestSeller": false
   },
   {
     "id": "atb3ho-10545388191909",
@@ -667,8 +716,8 @@
         "quantity": null
       }
     ],
-    "mainCategory": "occasions-service",
-    "subCategory": "personalized",
+    "mainCategory": "المناسبات والخدمة",
+    "subCategory": "منتجات مطبوعة ومخصصة",
     "updatedAt": "2026-07-04T18:38:24+03:00",
     "slug": "بوك-مارك-بالاسم-3ho-10545388191909",
     "subcategory": "personalized",
@@ -687,7 +736,8 @@
       "منتجات بالاسم",
       "هدايا اكسسوارات إكسسوارات"
     ],
-    "thumbnail": "/assets/thumbnails/320/atb3ho-10545388191909.webp"
+    "thumbnail": "/assets/thumbnails/320/atb3ho-10545388191909-aed37e57b5.webp",
+    "isBestSeller": false
   },
   {
     "id": "atb3ho-10545386553509",
@@ -726,8 +776,8 @@
         "quantity": null
       }
     ],
-    "mainCategory": "occasions-service",
-    "subCategory": "cards-bookmarks",
+    "mainCategory": "المناسبات والخدمة",
+    "subCategory": "كروت وبوك مارك",
     "updatedAt": "2026-07-04T18:38:24+03:00",
     "slug": "بوك-مارك-مزمور-١١٧",
     "subcategory": "cards-bookmarks",
@@ -746,7 +796,8 @@
       "منتجات الأطفال",
       "هدايا اكسسوارات إكسسوارات"
     ],
-    "thumbnail": "/assets/thumbnails/320/atb3ho-10545386553509.webp"
+    "thumbnail": "/assets/thumbnails/320/atb3ho-10545386553509-eb513ed976.webp",
+    "isBestSeller": false
   },
   {
     "id": "atb3ho-10545385636005",
@@ -785,8 +836,8 @@
         "quantity": null
       }
     ],
-    "mainCategory": "occasions-service",
-    "subCategory": "cards-bookmarks",
+    "mainCategory": "المناسبات والخدمة",
+    "subCategory": "كروت وبوك مارك",
     "updatedAt": "2026-07-04T18:38:24+03:00",
     "slug": "بوك-مارك-رحلتك",
     "subcategory": "cards-bookmarks",
@@ -805,7 +856,8 @@
       "منتجات الأطفال",
       "هدايا اكسسوارات إكسسوارات"
     ],
-    "thumbnail": "/assets/thumbnails/320/atb3ho-10545385636005.webp"
+    "thumbnail": "/assets/thumbnails/320/atb3ho-10545385636005-ab270ec5de.webp",
+    "isBestSeller": false
   },
   {
     "id": "atb3ho-10545382686885",
@@ -844,8 +896,8 @@
         "quantity": null
       }
     ],
-    "mainCategory": "occasions-service",
-    "subCategory": "cards-bookmarks",
+    "mainCategory": "المناسبات والخدمة",
+    "subCategory": "كروت وبوك مارك",
     "updatedAt": "2026-07-04T18:38:24+03:00",
     "slug": "بوك-مارك-الصليب",
     "subcategory": "cards-bookmarks",
@@ -864,7 +916,8 @@
       "منتجات الأطفال",
       "هدايا اكسسوارات إكسسوارات"
     ],
-    "thumbnail": "/assets/thumbnails/320/atb3ho-10545382686885.webp"
+    "thumbnail": "/assets/thumbnails/320/atb3ho-10545382686885-244a4a7a21.webp",
+    "isBestSeller": false
   },
   {
     "id": "atb3ho-10545381474469",
@@ -903,8 +956,8 @@
         "quantity": null
       }
     ],
-    "mainCategory": "occasions-service",
-    "subCategory": "cards-bookmarks",
+    "mainCategory": "المناسبات والخدمة",
+    "subCategory": "كروت وبوك مارك",
     "updatedAt": "2026-07-04T18:38:24+03:00",
     "slug": "بوك-مارك-اتبعه",
     "subcategory": "cards-bookmarks",
@@ -924,7 +977,8 @@
       "منتجات الأطفال",
       "هدايا اكسسوارات إكسسوارات"
     ],
-    "thumbnail": "/assets/thumbnails/320/atb3ho-10545381474469.webp"
+    "thumbnail": "/assets/thumbnails/320/atb3ho-10545381474469-69b147538e.webp",
+    "isBestSeller": false
   },
   {
     "id": "atb3ho-10545380884645",
@@ -963,8 +1017,8 @@
         "quantity": null
       }
     ],
-    "mainCategory": "occasions-service",
-    "subCategory": "cards-bookmarks",
+    "mainCategory": "المناسبات والخدمة",
+    "subCategory": "كروت وبوك مارك",
     "updatedAt": "2026-07-04T18:38:24+03:00",
     "slug": "بوك-مارك-صلاه-يسوع",
     "subcategory": "cards-bookmarks",
@@ -983,7 +1037,8 @@
       "منتجات الأطفال",
       "هدايا اكسسوارات إكسسوارات"
     ],
-    "thumbnail": "/assets/thumbnails/320/atb3ho-10545380884645.webp"
+    "thumbnail": "/assets/thumbnails/320/atb3ho-10545380884645-4638b1daf6.webp",
+    "isBestSeller": false
   },
   {
     "id": "atb3ho-10545379934373",
@@ -1022,8 +1077,8 @@
         "quantity": null
       }
     ],
-    "mainCategory": "occasions-service",
-    "subCategory": "cards-bookmarks",
+    "mainCategory": "المناسبات والخدمة",
+    "subCategory": "كروت وبوك مارك",
     "updatedAt": "2026-07-04T18:38:24+03:00",
     "slug": "بوك-مارك-بابا-يسوع",
     "subcategory": "cards-bookmarks",
@@ -1042,7 +1097,8 @@
       "منتجات الأطفال",
       "هدايا اكسسوارات إكسسوارات"
     ],
-    "thumbnail": "/assets/thumbnails/320/atb3ho-10545379934373.webp"
+    "thumbnail": "/assets/thumbnails/320/atb3ho-10545379934373-d5392f3d53.webp",
+    "isBestSeller": false
   },
   {
     "id": "atb3ho-10545379836069",
@@ -1081,8 +1137,8 @@
         "quantity": null
       }
     ],
-    "mainCategory": "occasions-service",
-    "subCategory": "notebooks-planners",
+    "mainCategory": "المناسبات والخدمة",
+    "subCategory": "أجندات ونوت",
     "updatedAt": "2026-07-04T18:38:24+03:00",
     "slug": "نوت-بوك-اتبعه-في-صلاتي-اجنده",
     "subcategory": "notebooks-planners",
@@ -1099,7 +1155,8 @@
       "هدايا الخدمة",
       "هدايا اكسسوارات إكسسوارات"
     ],
-    "thumbnail": "/assets/thumbnails/320/atb3ho-10545379836069.webp"
+    "thumbnail": "/assets/thumbnails/320/atb3ho-10545379836069-5e2c2fc702.webp",
+    "isBestSeller": false
   },
   {
     "id": "atb3ho-10545378001061",
@@ -1138,8 +1195,8 @@
         "quantity": null
       }
     ],
-    "mainCategory": "occasions-service",
-    "subCategory": "notebooks-planners",
+    "mainCategory": "المناسبات والخدمة",
+    "subCategory": "أجندات ونوت",
     "updatedAt": "2026-07-04T18:38:24+03:00",
     "slug": "نوت-بوك-اتبعه-في-صلاه-سلك",
     "subcategory": "notebooks-planners",
@@ -1156,7 +1213,8 @@
       "هدايا الخدمة",
       "هدايا اكسسوارات إكسسوارات"
     ],
-    "thumbnail": "/assets/thumbnails/320/atb3ho-10545378001061.webp"
+    "thumbnail": "/assets/thumbnails/320/atb3ho-10545378001061-f5f2411bc1.webp",
+    "isBestSeller": false
   },
   {
     "id": "atb3ho-10545377149093",
@@ -1195,8 +1253,8 @@
         "quantity": null
       }
     ],
-    "mainCategory": "occasions-service",
-    "subCategory": "christian-games",
+    "mainCategory": "المناسبات والخدمة",
+    "subCategory": "ألعاب مسيحية",
     "updatedAt": "2026-07-04T18:38:24+03:00",
     "slug": "اتبعه-في-تحدياتي",
     "subcategory": "christian-games",
@@ -1216,7 +1274,8 @@
       "منتجات الأطفال",
       "هدايا اكسسوارات إكسسوارات"
     ],
-    "thumbnail": "/assets/thumbnails/320/atb3ho-10545377149093.webp"
+    "thumbnail": "/assets/thumbnails/320/atb3ho-10545377149093-ad4155a4e6.webp",
+    "isBestSeller": false
   },
   {
     "id": "atb3ho-10545374298277",
@@ -1255,8 +1314,8 @@
         "quantity": null
       }
     ],
-    "mainCategory": "occasions-service",
-    "subCategory": "christian-games",
+    "mainCategory": "المناسبات والخدمة",
+    "subCategory": "ألعاب مسيحية",
     "updatedAt": "2026-07-04T18:38:24+03:00",
     "slug": "باكدج-اتبعه",
     "subcategory": "christian-games",
@@ -1276,7 +1335,8 @@
       "منتجات الأطفال",
       "هدايا اكسسوارات إكسسوارات"
     ],
-    "thumbnail": "/assets/thumbnails/320/atb3ho-10545374298277.webp"
+    "thumbnail": "/assets/thumbnails/320/atb3ho-10545374298277-7b2b0dcba5.webp",
+    "isBestSeller": false
   },
   {
     "id": "atb3ho-10545373839525",
@@ -1315,8 +1375,8 @@
         "quantity": null
       }
     ],
-    "mainCategory": "occasions-service",
-    "subCategory": "cards-bookmarks",
+    "mainCategory": "المناسبات والخدمة",
+    "subCategory": "كروت وبوك مارك",
     "updatedAt": "2026-07-04T18:38:24+03:00",
     "slug": "كارت-منظم-لمواعيد-سر-الاعتراف",
     "subcategory": "cards-bookmarks",
@@ -1335,7 +1395,8 @@
       "منتجات الأطفال",
       "هدايا اكسسوارات إكسسوارات"
     ],
-    "thumbnail": "/assets/thumbnails/320/atb3ho-10545373839525.webp"
+    "thumbnail": "/assets/thumbnails/320/atb3ho-10545373839525-7a3d50a3db.webp",
+    "isBestSeller": false
   },
   {
     "id": "atb3ho-10545371218085",
@@ -1399,8 +1460,8 @@
         "quantity": null
       }
     ],
-    "mainCategory": "occasions-service",
-    "subCategory": "notebooks-planners",
+    "mainCategory": "المناسبات والخدمة",
+    "subCategory": "أجندات ونوت",
     "updatedAt": "2026-07-04T18:38:24+03:00",
     "slug": "اتبعه-رحله-٢١٤-يوم",
     "subcategory": "notebooks-planners",
@@ -1418,7 +1479,8 @@
       "هدايا الخدمة",
       "هدايا اكسسوارات إكسسوارات"
     ],
-    "thumbnail": "/assets/thumbnails/320/atb3ho-10545371218085.webp"
+    "thumbnail": "/assets/thumbnails/320/atb3ho-10545371218085-c0425db324.webp",
+    "isBestSeller": false
   },
   {
     "id": "iota-plain-cross-20cm-1",
@@ -1459,8 +1521,8 @@
         "quantity": 1000
       }
     ],
-    "mainCategory": "crosses",
-    "subCategory": "wooden-crosses",
+    "mainCategory": "الصلبان",
+    "subCategory": "صلبان خشب",
     "slug": "صليب-يوتا-ساده-20-سم-موديل-1",
     "subcategory": "wooden-crosses",
     "collections": [
@@ -1482,7 +1544,8 @@
       "منتجات الأطفال",
       "صليب صلبان"
     ],
-    "thumbnail": "/assets/thumbnails/320/iota-plain-cross-20cm-1.webp"
+    "thumbnail": "/assets/thumbnails/320/iota-plain-cross-20cm-1-b1c0669641.webp",
+    "isBestSeller": false
   },
   {
     "id": "iota-plain-cross-20cm-2",
@@ -1523,8 +1586,8 @@
         "quantity": 1000
       }
     ],
-    "mainCategory": "crosses",
-    "subCategory": "wooden-crosses",
+    "mainCategory": "الصلبان",
+    "subCategory": "صلبان خشب",
     "slug": "صليب-يوتا-ساده-20-سم-موديل-2",
     "subcategory": "wooden-crosses",
     "collections": [
@@ -1546,7 +1609,8 @@
       "منتجات الأطفال",
       "صليب صلبان"
     ],
-    "thumbnail": "/assets/thumbnails/320/iota-plain-cross-20cm-2.webp"
+    "thumbnail": "/assets/thumbnails/320/iota-plain-cross-20cm-2-8a82ee9991.webp",
+    "isBestSeller": false
   },
   {
     "id": "iota-plain-cross-20cm-3",
@@ -1587,8 +1651,8 @@
         "quantity": 1000
       }
     ],
-    "mainCategory": "crosses",
-    "subCategory": "wooden-crosses",
+    "mainCategory": "الصلبان",
+    "subCategory": "صلبان خشب",
     "slug": "صليب-يوتا-ساده-20-سم-موديل-3",
     "subcategory": "wooden-crosses",
     "collections": [
@@ -1610,7 +1674,8 @@
       "منتجات الأطفال",
       "صليب صلبان"
     ],
-    "thumbnail": "/assets/thumbnails/320/iota-plain-cross-20cm-3.webp"
+    "thumbnail": "/assets/thumbnails/320/iota-plain-cross-20cm-3-654efb5c9c.webp",
+    "isBestSeller": false
   },
   {
     "id": "iota-plain-cross-20cm-4",
@@ -1651,8 +1716,8 @@
         "quantity": 1000
       }
     ],
-    "mainCategory": "crosses",
-    "subCategory": "wooden-crosses",
+    "mainCategory": "الصلبان",
+    "subCategory": "صلبان خشب",
     "slug": "صليب-يوتا-ساده-20-سم-موديل-4",
     "subcategory": "wooden-crosses",
     "collections": [
@@ -1674,7 +1739,8 @@
       "منتجات الأطفال",
       "صليب صلبان"
     ],
-    "thumbnail": "/assets/thumbnails/320/iota-plain-cross-20cm-4.webp"
+    "thumbnail": "/assets/thumbnails/320/iota-plain-cross-20cm-4-5046dea591.webp",
+    "isBestSeller": false
   },
   {
     "id": "iota-plain-cross-20cm-5",
@@ -1715,8 +1781,8 @@
         "quantity": 1000
       }
     ],
-    "mainCategory": "crosses",
-    "subCategory": "wooden-crosses",
+    "mainCategory": "الصلبان",
+    "subCategory": "صلبان خشب",
     "slug": "صليب-يوتا-ساده-20-سم-موديل-5",
     "subcategory": "wooden-crosses",
     "collections": [
@@ -1738,7 +1804,8 @@
       "منتجات الأطفال",
       "صليب صلبان"
     ],
-    "thumbnail": "/assets/thumbnails/320/iota-plain-cross-20cm-5.webp"
+    "thumbnail": "/assets/thumbnails/320/iota-plain-cross-20cm-5-57d1cb12c3.webp",
+    "isBestSeller": false
   },
   {
     "id": "iota-plain-cross-20cm-6",
@@ -1779,8 +1846,8 @@
         "quantity": 1000
       }
     ],
-    "mainCategory": "crosses",
-    "subCategory": "wooden-crosses",
+    "mainCategory": "الصلبان",
+    "subCategory": "صلبان خشب",
     "slug": "صليب-يوتا-ساده-20-سم-موديل-6",
     "subcategory": "wooden-crosses",
     "collections": [
@@ -1802,7 +1869,8 @@
       "منتجات الأطفال",
       "صليب صلبان"
     ],
-    "thumbnail": "/assets/thumbnails/320/iota-plain-cross-20cm-6.webp"
+    "thumbnail": "/assets/thumbnails/320/iota-plain-cross-20cm-6-22f41cce71.webp",
+    "isBestSeller": false
   },
   {
     "id": "iota-plain-cross-20cm-7",
@@ -1843,8 +1911,8 @@
         "quantity": 1000
       }
     ],
-    "mainCategory": "crosses",
-    "subCategory": "wooden-crosses",
+    "mainCategory": "الصلبان",
+    "subCategory": "صلبان خشب",
     "slug": "صليب-يوتا-ساده-20-سم-موديل-7",
     "subcategory": "wooden-crosses",
     "collections": [
@@ -1866,7 +1934,8 @@
       "منتجات الأطفال",
       "صليب صلبان"
     ],
-    "thumbnail": "/assets/thumbnails/320/iota-plain-cross-20cm-7.webp"
+    "thumbnail": "/assets/thumbnails/320/iota-plain-cross-20cm-7-088fcecae0.webp",
+    "isBestSeller": false
   },
   {
     "id": "iota-plain-cross-20cm-8",
@@ -1907,8 +1976,8 @@
         "quantity": 1000
       }
     ],
-    "mainCategory": "crosses",
-    "subCategory": "wooden-crosses",
+    "mainCategory": "الصلبان",
+    "subCategory": "صلبان خشب",
     "slug": "صليب-يوتا-ساده-20-سم-موديل-8",
     "subcategory": "wooden-crosses",
     "collections": [
@@ -1930,7 +1999,8 @@
       "منتجات الأطفال",
       "صليب صلبان"
     ],
-    "thumbnail": "/assets/thumbnails/320/iota-plain-cross-20cm-8.webp"
+    "thumbnail": "/assets/thumbnails/320/iota-plain-cross-20cm-8-b79bd6683e.webp",
+    "isBestSeller": false
   },
   {
     "id": "iota-plain-cross-20cm-9",
@@ -1971,8 +2041,8 @@
         "quantity": 1000
       }
     ],
-    "mainCategory": "crosses",
-    "subCategory": "wooden-crosses",
+    "mainCategory": "الصلبان",
+    "subCategory": "صلبان خشب",
     "slug": "صليب-يوتا-ساده-20-سم-موديل-9",
     "subcategory": "wooden-crosses",
     "collections": [
@@ -1994,7 +2064,8 @@
       "منتجات الأطفال",
       "صليب صلبان"
     ],
-    "thumbnail": "/assets/thumbnails/320/iota-plain-cross-20cm-9.webp"
+    "thumbnail": "/assets/thumbnails/320/iota-plain-cross-20cm-9-eacd3b8db6.webp",
+    "isBestSeller": false
   },
   {
     "id": "iota-plain-cross-20cm-10",
@@ -2035,8 +2106,8 @@
         "quantity": 1000
       }
     ],
-    "mainCategory": "crosses",
-    "subCategory": "wooden-crosses",
+    "mainCategory": "الصلبان",
+    "subCategory": "صلبان خشب",
     "slug": "صليب-يوتا-ساده-20-سم-موديل-10",
     "subcategory": "wooden-crosses",
     "collections": [
@@ -2058,7 +2129,8 @@
       "منتجات الأطفال",
       "صليب صلبان"
     ],
-    "thumbnail": "/assets/thumbnails/320/iota-plain-cross-20cm-10.webp"
+    "thumbnail": "/assets/thumbnails/320/iota-plain-cross-20cm-10-c89bfcec26.webp",
+    "isBestSeller": false
   },
   {
     "id": "iota-plain-cross-20cm-11",
@@ -2099,8 +2171,8 @@
         "quantity": 1000
       }
     ],
-    "mainCategory": "crosses",
-    "subCategory": "wooden-crosses",
+    "mainCategory": "الصلبان",
+    "subCategory": "صلبان خشب",
     "slug": "صليب-يوتا-ساده-20-سم-موديل-11",
     "subcategory": "wooden-crosses",
     "collections": [
@@ -2122,7 +2194,8 @@
       "منتجات الأطفال",
       "صليب صلبان"
     ],
-    "thumbnail": "/assets/thumbnails/320/iota-plain-cross-20cm-11.webp"
+    "thumbnail": "/assets/thumbnails/320/iota-plain-cross-20cm-11-5723d05b6c.webp",
+    "isBestSeller": false
   },
   {
     "id": "iota-plain-cross-20cm-12",
@@ -2163,8 +2236,8 @@
         "quantity": 1000
       }
     ],
-    "mainCategory": "crosses",
-    "subCategory": "wooden-crosses",
+    "mainCategory": "الصلبان",
+    "subCategory": "صلبان خشب",
     "slug": "صليب-يوتا-ساده-20-سم-موديل-12",
     "subcategory": "wooden-crosses",
     "collections": [
@@ -2186,7 +2259,8 @@
       "منتجات الأطفال",
       "صليب صلبان"
     ],
-    "thumbnail": "/assets/thumbnails/320/iota-plain-cross-20cm-12.webp"
+    "thumbnail": "/assets/thumbnails/320/iota-plain-cross-20cm-12-1fe0b97936.webp",
+    "isBestSeller": false
   },
   {
     "id": "iota-plain-cross-20cm-13",
@@ -2227,8 +2301,8 @@
         "quantity": 1000
       }
     ],
-    "mainCategory": "crosses",
-    "subCategory": "wooden-crosses",
+    "mainCategory": "الصلبان",
+    "subCategory": "صلبان خشب",
     "slug": "صليب-يوتا-ساده-20-سم-موديل-13",
     "subcategory": "wooden-crosses",
     "collections": [
@@ -2250,7 +2324,8 @@
       "منتجات الأطفال",
       "صليب صلبان"
     ],
-    "thumbnail": "/assets/thumbnails/320/iota-plain-cross-20cm-13.webp"
+    "thumbnail": "/assets/thumbnails/320/iota-plain-cross-20cm-13-8ab8fe1bfd.webp",
+    "isBestSeller": false
   },
   {
     "id": "iota-plain-cross-20cm-14",
@@ -2291,8 +2366,8 @@
         "quantity": 1000
       }
     ],
-    "mainCategory": "crosses",
-    "subCategory": "wooden-crosses",
+    "mainCategory": "الصلبان",
+    "subCategory": "صلبان خشب",
     "slug": "صليب-يوتا-ساده-20-سم-موديل-14",
     "subcategory": "wooden-crosses",
     "collections": [
@@ -2314,7 +2389,8 @@
       "منتجات الأطفال",
       "صليب صلبان"
     ],
-    "thumbnail": "/assets/thumbnails/320/iota-plain-cross-20cm-14.webp"
+    "thumbnail": "/assets/thumbnails/320/iota-plain-cross-20cm-14-623b96b9d6.webp",
+    "isBestSeller": false
   },
   {
     "id": "iota-plain-cross-20cm-15",
@@ -2355,8 +2431,8 @@
         "quantity": 1000
       }
     ],
-    "mainCategory": "crosses",
-    "subCategory": "wooden-crosses",
+    "mainCategory": "الصلبان",
+    "subCategory": "صلبان خشب",
     "slug": "صليب-يوتا-ساده-20-سم-موديل-15",
     "subcategory": "wooden-crosses",
     "collections": [
@@ -2378,7 +2454,8 @@
       "منتجات الأطفال",
       "صليب صلبان"
     ],
-    "thumbnail": "/assets/thumbnails/320/iota-plain-cross-20cm-15.webp"
+    "thumbnail": "/assets/thumbnails/320/iota-plain-cross-20cm-15-20f163d4d3.webp",
+    "isBestSeller": false
   },
   {
     "id": "iota-plain-cross-20cm-16",
@@ -2419,8 +2496,8 @@
         "quantity": 1000
       }
     ],
-    "mainCategory": "crosses",
-    "subCategory": "wooden-crosses",
+    "mainCategory": "الصلبان",
+    "subCategory": "صلبان خشب",
     "slug": "صليب-يوتا-ساده-20-سم-موديل-16",
     "subcategory": "wooden-crosses",
     "collections": [
@@ -2442,7 +2519,8 @@
       "منتجات الأطفال",
       "صليب صلبان"
     ],
-    "thumbnail": "/assets/thumbnails/320/iota-plain-cross-20cm-16.webp"
+    "thumbnail": "/assets/thumbnails/320/iota-plain-cross-20cm-16-128b4abe77.webp",
+    "isBestSeller": false
   },
   {
     "id": "iota-plain-cross-20cm-17",
@@ -2483,8 +2561,8 @@
         "quantity": 1000
       }
     ],
-    "mainCategory": "crosses",
-    "subCategory": "wooden-crosses",
+    "mainCategory": "الصلبان",
+    "subCategory": "صلبان خشب",
     "slug": "صليب-يوتا-ساده-20-سم-موديل-17",
     "subcategory": "wooden-crosses",
     "collections": [
@@ -2506,7 +2584,8 @@
       "منتجات الأطفال",
       "صليب صلبان"
     ],
-    "thumbnail": "/assets/thumbnails/320/iota-plain-cross-20cm-17.webp"
+    "thumbnail": "/assets/thumbnails/320/iota-plain-cross-20cm-17-c03939f815.webp",
+    "isBestSeller": false
   },
   {
     "id": "custom-1783032232212",
@@ -2567,8 +2646,8 @@
         "quantity": null
       }
     ],
-    "mainCategory": "occasions-service",
-    "subCategory": "christian-games",
+    "mainCategory": "المناسبات والخدمة",
+    "subCategory": "ألعاب مسيحية",
     "slug": "لون-تلوين-اليوتا",
     "subcategory": "christian-games",
     "collections": [
@@ -2586,7 +2665,349 @@
       "منتجات الأطفال",
       "هدايا اكسسوارات إكسسوارات"
     ],
-    "thumbnail": "/assets/thumbnails/320/custom-1783032232212.webp"
+    "thumbnail": "/assets/thumbnails/320/custom-1783032232212-6e4eca1edc.webp",
+    "isBestSeller": false
+  },
+  {
+    "id": "custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642-copy-1783007465321-copy-1783296428133-copy-1783296505870-copy-1783296547191-copy-1783296594080-copy-1783296672538-copy-1783296711318",
+    "name": "صليب يوتا مادلية موديل 13",
+    "category": "icons",
+    "label": "يوتا",
+    "description": "ميدالية يوتا خشبية موديل 13 جاهزة للتلوين والأنشطة الكنسية.",
+    "price": 20,
+    "priceNote": "",
+    "stock": "متاح",
+    "badge": "يوتا",
+    "image": "assets/optimized/products/gallery/product-1-1313-20260706001215-20c811.webp",
+    "tags": [
+      "يوتا",
+      "مادليات",
+      "خشب طبقات",
+      "فن",
+      "تلوين"
+    ],
+    "images": [
+      "assets/optimized/products/gallery/product-1-1313-20260706001215-20c811.webp",
+      "assets/optimized/products/gallery/product-1-13-20260706001209-c66b79.webp"
+    ],
+    "options": [],
+    "variants": [
+      {
+        "id": "custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642-copy-1783007465321-copy-1783296428133-copy-1783296505870-copy-1783296547191-copy-1783296594080-copy-1783296672538-copy-1783296711318-variant-1",
+        "title": "الاختيار الافتراضي",
+        "options": {},
+        "price": 20,
+        "compareAtPrice": null,
+        "available": true,
+        "image": null,
+        "images": [],
+        "sku": "",
+        "quantity": 1000
+      }
+    ],
+    "mainCategory": "الصلبان",
+    "subCategory": "مادليات اليوطا",
+    "slug": "صليب-يوتا-مادليه-موديل-13",
+    "subcategory": "yota-medallions",
+    "collections": [
+      "هدايا الخدمة",
+      "منتجات الأطفال"
+    ],
+    "searchKeywords": [
+      "صليب يوتا مادلية موديل 13",
+      "يوتا",
+      "مادليات",
+      "تلوين",
+      "crosses",
+      "wooden-crosses"
+    ],
+    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D9%85%D8%A7%D8%AF%D9%84%D9%8A%D9%87-%D9%85%D9%88%D8%AF%D9%8A%D9%84-13",
+    "thumbnail": "/assets/thumbnails/320/custom-1782980654479-copy-1782982056347-copy-17829869845-5e38645658a5-25bd7474b7.webp",
+    "isBestSeller": false
+  },
+  {
+    "id": "custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642-copy-1783007465321-copy-1783296428133-copy-1783296505870-copy-1783296547191-copy-1783296594080-copy-1783296672538",
+    "name": "صليب يوتا مادلية موديل 12",
+    "category": "icons",
+    "label": "يوتا",
+    "description": "ميدالية يوتا خشبية موديل 12 جاهزة للتلوين والأنشطة الكنسية.",
+    "price": 20,
+    "priceNote": "",
+    "stock": "متاح",
+    "badge": "يوتا",
+    "image": "assets/optimized/products/gallery/product-1-1212-20260706001137-05ea06.webp",
+    "tags": [
+      "يوتا",
+      "مادليات",
+      "خشب طبقات",
+      "فن",
+      "تلوين"
+    ],
+    "images": [
+      "assets/optimized/products/gallery/product-1-1212-20260706001137-05ea06.webp",
+      "assets/optimized/products/gallery/product-1-12-20260706001132-8e3c59.webp"
+    ],
+    "options": [],
+    "variants": [
+      {
+        "id": "custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642-copy-1783007465321-copy-1783296428133-copy-1783296505870-copy-1783296547191-copy-1783296594080-copy-1783296672538-variant-1",
+        "title": "الاختيار الافتراضي",
+        "options": {},
+        "price": 20,
+        "compareAtPrice": null,
+        "available": true,
+        "image": null,
+        "images": [],
+        "sku": "",
+        "quantity": 1000
+      }
+    ],
+    "mainCategory": "الصلبان",
+    "subCategory": "مادليات اليوطا",
+    "slug": "صليب-يوتا-مادليه-موديل-12",
+    "subcategory": "yota-medallions",
+    "collections": [
+      "هدايا الخدمة",
+      "منتجات الأطفال"
+    ],
+    "searchKeywords": [
+      "صليب يوتا مادلية موديل 12",
+      "يوتا",
+      "مادليات",
+      "تلوين",
+      "crosses",
+      "wooden-crosses"
+    ],
+    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D9%85%D8%A7%D8%AF%D9%84%D9%8A%D9%87-%D9%85%D9%88%D8%AF%D9%8A%D9%84-12",
+    "thumbnail": "/assets/thumbnails/320/custom-1782980654479-copy-1782982056347-copy-17829869845-5f7b997ab9ed-0dfafc8e90.webp",
+    "isBestSeller": false
+  },
+  {
+    "id": "custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642-copy-1783007465321-copy-1783296428133-copy-1783296505870-copy-1783296547191-copy-1783296594080",
+    "name": "صليب يوتا مادلية موديل 11",
+    "category": "icons",
+    "label": "يوتا",
+    "description": "ميدالية يوتا خشبية موديل 11 جاهزة للتلوين والأنشطة الكنسية.",
+    "price": 20,
+    "priceNote": "",
+    "stock": "متاح",
+    "badge": "يوتا",
+    "image": "assets/optimized/products/gallery/product-1-1111-20260706001045-b19fff.webp",
+    "tags": [
+      "يوتا",
+      "مادليات",
+      "خشب طبقات",
+      "فن",
+      "تلوين"
+    ],
+    "images": [
+      "assets/optimized/products/gallery/product-1-1111-20260706001045-b19fff.webp",
+      "assets/optimized/products/gallery/product-1-111-20260706001040-551702.webp"
+    ],
+    "options": [],
+    "variants": [
+      {
+        "id": "custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642-copy-1783007465321-copy-1783296428133-copy-1783296505870-copy-1783296547191-copy-1783296594080-variant-1",
+        "title": "الاختيار الافتراضي",
+        "options": {},
+        "price": 20,
+        "compareAtPrice": null,
+        "available": true,
+        "image": null,
+        "images": [],
+        "sku": "",
+        "quantity": 1000
+      }
+    ],
+    "mainCategory": "الصلبان",
+    "subCategory": "مادليات اليوطا",
+    "slug": "صليب-يوتا-مادليه-موديل-11",
+    "subcategory": "yota-medallions",
+    "collections": [
+      "هدايا الخدمة",
+      "منتجات الأطفال"
+    ],
+    "searchKeywords": [
+      "صليب يوتا مادلية موديل 11",
+      "يوتا",
+      "مادليات",
+      "تلوين",
+      "crosses",
+      "wooden-crosses"
+    ],
+    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D9%85%D8%A7%D8%AF%D9%84%D9%8A%D9%87-%D9%85%D9%88%D8%AF%D9%8A%D9%84-11",
+    "thumbnail": "/assets/thumbnails/320/custom-1782980654479-copy-1782982056347-copy-17829869845-33a97b4f9c6c-ee3083c19f.webp",
+    "isBestSeller": false
+  },
+  {
+    "id": "custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642-copy-1783007465321-copy-1783296428133-copy-1783296505870-copy-1783296547191",
+    "name": "صليب يوتا مادلية موديل 10",
+    "category": "icons",
+    "label": "يوتا",
+    "description": "ميدالية يوتا خشبية موديل 10 جاهزة للتلوين والأنشطة الكنسية.",
+    "price": 20,
+    "priceNote": "",
+    "stock": "متاح",
+    "badge": "يوتا",
+    "image": "assets/optimized/products/gallery/product-1-1010-20260706000934-a00e6c.webp",
+    "tags": [
+      "يوتا",
+      "مادليات",
+      "خشب طبقات",
+      "فن",
+      "تلوين"
+    ],
+    "images": [
+      "assets/optimized/products/gallery/product-1-1010-20260706000934-a00e6c.webp",
+      "assets/optimized/products/gallery/product-1-10-20260706000929-216758.webp"
+    ],
+    "options": [],
+    "variants": [
+      {
+        "id": "custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642-copy-1783007465321-copy-1783296428133-copy-1783296505870-copy-1783296547191-variant-1",
+        "title": "الاختيار الافتراضي",
+        "options": {},
+        "price": 20,
+        "compareAtPrice": null,
+        "available": true,
+        "image": null,
+        "images": [],
+        "sku": "",
+        "quantity": 1000
+      }
+    ],
+    "mainCategory": "الصلبان",
+    "subCategory": "مادليات اليوطا",
+    "slug": "صليب-يوتا-مادليه-موديل-10",
+    "subcategory": "yota-medallions",
+    "collections": [
+      "هدايا الخدمة",
+      "منتجات الأطفال"
+    ],
+    "searchKeywords": [
+      "صليب يوتا مادلية موديل 10",
+      "يوتا",
+      "مادليات",
+      "تلوين",
+      "crosses",
+      "wooden-crosses"
+    ],
+    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D9%85%D8%A7%D8%AF%D9%84%D9%8A%D9%87-%D9%85%D9%88%D8%AF%D9%8A%D9%84-10",
+    "thumbnail": "/assets/thumbnails/320/custom-1782980654479-copy-1782982056347-copy-17829869845-0975d45c9eaa-f5e23e5fa5.webp",
+    "isBestSeller": false
+  },
+  {
+    "id": "custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642-copy-1783007465321-copy-1783296428133-copy-1783296505870",
+    "name": "صليب يوتا مادلية موديل 9",
+    "category": "icons",
+    "label": "يوتا",
+    "description": "ميدالية يوتا خشبية موديل 9 جاهزة للتلوين والأنشطة الكنسية.",
+    "price": 20,
+    "priceNote": "",
+    "stock": "متاح",
+    "badge": "يوتا",
+    "image": "assets/optimized/products/gallery/product-1-99-20260706000851-a4d842.webp",
+    "tags": [
+      "يوتا",
+      "مادليات",
+      "خشب طبقات",
+      "فن",
+      "تلوين"
+    ],
+    "images": [
+      "assets/optimized/products/gallery/product-1-99-20260706000851-a4d842.webp",
+      "assets/optimized/products/gallery/product-1-9-20260706000846-4473bb.webp"
+    ],
+    "options": [],
+    "variants": [
+      {
+        "id": "custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642-copy-1783007465321-copy-1783296428133-copy-1783296505870-variant-1",
+        "title": "الاختيار الافتراضي",
+        "options": {},
+        "price": 20,
+        "compareAtPrice": null,
+        "available": true,
+        "image": null,
+        "images": [],
+        "sku": "",
+        "quantity": 1000
+      }
+    ],
+    "mainCategory": "الصلبان",
+    "subCategory": "مادليات اليوطا",
+    "slug": "صليب-يوتا-مادليه-موديل-9",
+    "subcategory": "yota-medallions",
+    "collections": [
+      "هدايا الخدمة",
+      "منتجات الأطفال"
+    ],
+    "searchKeywords": [
+      "صليب يوتا مادلية موديل 9",
+      "يوتا",
+      "مادليات",
+      "تلوين",
+      "crosses",
+      "wooden-crosses"
+    ],
+    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D9%85%D8%A7%D8%AF%D9%84%D9%8A%D9%87-%D9%85%D9%88%D8%AF%D9%8A%D9%84-9",
+    "thumbnail": "/assets/thumbnails/320/custom-1782980654479-copy-1782982056347-copy-17829869845-dcc772f77412-ea8cd3486c.webp",
+    "isBestSeller": false
+  },
+  {
+    "id": "custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642-copy-1783007465321-copy-1783296428133",
+    "name": "صليب يوتا مادلية موديل 8",
+    "category": "icons",
+    "label": "يوتا",
+    "description": "ميدالية يوتا خشبية موديل 8 جاهزة للتلوين والأنشطة الكنسية.",
+    "price": 20,
+    "priceNote": "",
+    "stock": "متاح",
+    "badge": "يوتا",
+    "image": "coloring/yota-08/base.png",
+    "tags": [
+      "يوتا",
+      "مادليات",
+      "خشب طبقات",
+      "فن",
+      "تلوين"
+    ],
+    "images": [
+      "coloring/yota-08/base.png"
+    ],
+    "options": [],
+    "variants": [
+      {
+        "id": "custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642-copy-1783007465321-copy-1783296428133-variant-1",
+        "title": "الاختيار الافتراضي",
+        "options": {},
+        "price": 20,
+        "compareAtPrice": null,
+        "available": true,
+        "image": null,
+        "images": [],
+        "sku": "",
+        "quantity": 1000
+      }
+    ],
+    "mainCategory": "الصلبان",
+    "subCategory": "مادليات اليوطا",
+    "slug": "صليب-يوتا-مادليه-موديل-8",
+    "subcategory": "yota-medallions",
+    "collections": [
+      "هدايا الخدمة",
+      "منتجات الأطفال"
+    ],
+    "searchKeywords": [
+      "صليب يوتا مادلية موديل 8",
+      "يوتا",
+      "مادليات",
+      "تلوين",
+      "crosses",
+      "wooden-crosses"
+    ],
+    "thumbnail": "/assets/thumbnails/320/custom-1782980654479-copy-1782982056347-copy-17829869845-2fa461f37b7b-7ba242aebe.webp",
+    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D9%85%D8%A7%D8%AF%D9%84%D9%8A%D9%87-%D9%85%D9%88%D8%AF%D9%8A%D9%84-8",
+    "isBestSeller": false
   },
   {
     "id": "custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642-copy-1783007465321",
@@ -2629,10 +3050,10 @@
         "quantity": 1000
       }
     ],
-    "mainCategory": "crosses",
-    "subCategory": "wooden-crosses",
+    "mainCategory": "الصلبان",
+    "subCategory": "مادليات اليوطا",
     "slug": "صليب-يوتا-مادليه-موديل-7",
-    "subcategory": "wooden-crosses",
+    "subcategory": "yota-medallions",
     "collections": [
       "هدايا الخدمة",
       "منتجات الأطفال"
@@ -2654,7 +3075,8 @@
       "منتجات الأطفال",
       "صليب صلبان"
     ],
-    "thumbnail": "/assets/thumbnails/320/custom-1782980654479-copy-1782982056347-copy-17829869845-2312c0cc7a1d.webp"
+    "thumbnail": "/assets/thumbnails/320/custom-1782980654479-copy-1782982056347-copy-17829869845-2312c0cc7a1d-9a691378af.webp",
+    "isBestSeller": false
   },
   {
     "id": "custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642",
@@ -2697,10 +3119,10 @@
         "quantity": 1000
       }
     ],
-    "mainCategory": "crosses",
-    "subCategory": "wooden-crosses",
+    "mainCategory": "الصلبان",
+    "subCategory": "مادليات اليوطا",
     "slug": "صليب-يوتا-مادليه-موديل-6",
-    "subcategory": "wooden-crosses",
+    "subcategory": "yota-medallions",
     "collections": [
       "هدايا الخدمة",
       "منتجات الأطفال"
@@ -2722,7 +3144,8 @@
       "منتجات الأطفال",
       "صليب صلبان"
     ],
-    "thumbnail": "/assets/thumbnails/320/custom-1782980654479-copy-1782982056347-copy-17829869845-3271eee54927.webp"
+    "thumbnail": "/assets/thumbnails/320/custom-1782980654479-copy-1782982056347-copy-17829869845-3271eee54927-6947ccac58.webp",
+    "isBestSeller": false
   },
   {
     "id": "custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119",
@@ -2765,10 +3188,10 @@
         "quantity": 1000
       }
     ],
-    "mainCategory": "crosses",
-    "subCategory": "wooden-crosses",
+    "mainCategory": "الصلبان",
+    "subCategory": "مادليات اليوطا",
     "slug": "صليب-يوتا-مادليه-موديل-5",
-    "subcategory": "wooden-crosses",
+    "subcategory": "yota-medallions",
     "collections": [
       "هدايا الخدمة",
       "منتجات الأطفال"
@@ -2790,7 +3213,8 @@
       "منتجات الأطفال",
       "صليب صلبان"
     ],
-    "thumbnail": "/assets/thumbnails/320/custom-1782980654479-copy-1782982056347-copy-17829869845-637a7199e62a.webp"
+    "thumbnail": "/assets/thumbnails/320/custom-1782980654479-copy-1782982056347-copy-17829869845-637a7199e62a-9f47684279.webp",
+    "isBestSeller": false
   },
   {
     "id": "custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699",
@@ -2833,10 +3257,10 @@
         "quantity": 1000
       }
     ],
-    "mainCategory": "crosses",
-    "subCategory": "wooden-crosses",
+    "mainCategory": "الصلبان",
+    "subCategory": "مادليات اليوطا",
     "slug": "صليب-يوتا-مادليه-موديل-4",
-    "subcategory": "wooden-crosses",
+    "subcategory": "yota-medallions",
     "collections": [
       "هدايا الخدمة",
       "منتجات الأطفال"
@@ -2858,7 +3282,8 @@
       "منتجات الأطفال",
       "صليب صلبان"
     ],
-    "thumbnail": "/assets/thumbnails/320/custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699.webp"
+    "thumbnail": "/assets/thumbnails/320/custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-e2df40786e.webp",
+    "isBestSeller": false
   },
   {
     "id": "custom-1782980654479-copy-1782982056347-copy-1782986984554",
@@ -2901,10 +3326,10 @@
         "quantity": 1000
       }
     ],
-    "mainCategory": "crosses",
-    "subCategory": "wooden-crosses",
+    "mainCategory": "الصلبان",
+    "subCategory": "مادليات اليوطا",
     "slug": "صليب-يوتا-مادليه-موديل-3",
-    "subcategory": "wooden-crosses",
+    "subcategory": "yota-medallions",
     "collections": [
       "هدايا الخدمة",
       "منتجات الأطفال"
@@ -2926,7 +3351,8 @@
       "منتجات الأطفال",
       "صليب صلبان"
     ],
-    "thumbnail": "/assets/thumbnails/320/custom-1782980654479-copy-1782982056347-copy-1782986984554.webp"
+    "thumbnail": "/assets/thumbnails/320/custom-1782980654479-copy-1782982056347-copy-1782986984554-1802523968.webp",
+    "isBestSeller": false
   },
   {
     "id": "custom-1782980654479-copy-1782982056347",
@@ -2969,10 +3395,10 @@
         "quantity": 1000
       }
     ],
-    "mainCategory": "crosses",
-    "subCategory": "wooden-crosses",
+    "mainCategory": "الصلبان",
+    "subCategory": "مادليات اليوطا",
     "slug": "صليب-يوتا-مادليه-موديل-2",
-    "subcategory": "wooden-crosses",
+    "subcategory": "yota-medallions",
     "collections": [
       "هدايا الخدمة",
       "منتجات الأطفال"
@@ -2994,7 +3420,8 @@
       "منتجات الأطفال",
       "صليب صلبان"
     ],
-    "thumbnail": "/assets/thumbnails/320/custom-1782980654479-copy-1782982056347.webp"
+    "thumbnail": "/assets/thumbnails/320/custom-1782980654479-copy-1782982056347-f605fed915.webp",
+    "isBestSeller": false
   },
   {
     "id": "custom-1782980654479",
@@ -3002,26 +3429,134 @@
     "coloringMaskUrl": "assets/coloring/iota-medal-1/region-mask.png?v=2",
     "coloringOutlineUrl": "assets/coloring/iota-medal-1/outline.png?v=2",
     "coloringRegions": [
-      { "id": "region-1", "maskColor": [1, 0, 0] },
-      { "id": "region-2", "maskColor": [2, 0, 0] },
-      { "id": "region-3", "maskColor": [3, 0, 0] },
-      { "id": "region-4", "maskColor": [4, 0, 0] },
-      { "id": "region-5", "maskColor": [5, 0, 0] },
-      { "id": "region-6", "maskColor": [6, 0, 0] },
-      { "id": "region-7", "maskColor": [7, 0, 0] },
-      { "id": "region-8", "maskColor": [8, 0, 0] },
-      { "id": "region-9", "maskColor": [9, 0, 0] },
-      { "id": "region-10", "maskColor": [10, 0, 0] },
-      { "id": "region-11", "maskColor": [11, 0, 0] },
-      { "id": "region-12", "maskColor": [12, 0, 0] },
-      { "id": "region-13", "maskColor": [13, 0, 0] }
+      {
+        "id": "region-1",
+        "maskColor": [
+          1,
+          0,
+          0
+        ]
+      },
+      {
+        "id": "region-2",
+        "maskColor": [
+          2,
+          0,
+          0
+        ]
+      },
+      {
+        "id": "region-3",
+        "maskColor": [
+          3,
+          0,
+          0
+        ]
+      },
+      {
+        "id": "region-4",
+        "maskColor": [
+          4,
+          0,
+          0
+        ]
+      },
+      {
+        "id": "region-5",
+        "maskColor": [
+          5,
+          0,
+          0
+        ]
+      },
+      {
+        "id": "region-6",
+        "maskColor": [
+          6,
+          0,
+          0
+        ]
+      },
+      {
+        "id": "region-7",
+        "maskColor": [
+          7,
+          0,
+          0
+        ]
+      },
+      {
+        "id": "region-8",
+        "maskColor": [
+          8,
+          0,
+          0
+        ]
+      },
+      {
+        "id": "region-9",
+        "maskColor": [
+          9,
+          0,
+          0
+        ]
+      },
+      {
+        "id": "region-10",
+        "maskColor": [
+          10,
+          0,
+          0
+        ]
+      },
+      {
+        "id": "region-11",
+        "maskColor": [
+          11,
+          0,
+          0
+        ]
+      },
+      {
+        "id": "region-12",
+        "maskColor": [
+          12,
+          0,
+          0
+        ]
+      },
+      {
+        "id": "region-13",
+        "maskColor": [
+          13,
+          0,
+          0
+        ]
+      }
     ],
     "symmetryGroups": [
-      ["region-2", "region-3", "region-4", "region-5"],
-      ["region-6", "region-7"],
-      ["region-8", "region-9"],
-      ["region-10", "region-11"],
-      ["region-12", "region-13"]
+      [
+        "region-2",
+        "region-3",
+        "region-4",
+        "region-5"
+      ],
+      [
+        "region-6",
+        "region-7"
+      ],
+      [
+        "region-8",
+        "region-9"
+      ],
+      [
+        "region-10",
+        "region-11"
+      ],
+      [
+        "region-12",
+        "region-13"
+      ]
     ],
     "name": "صليب يوتا مادلية موديل 1",
     "category": "icons",
@@ -3062,10 +3597,10 @@
         "quantity": 1000
       }
     ],
-    "mainCategory": "crosses",
-    "subCategory": "wooden-crosses",
+    "mainCategory": "الصلبان",
+    "subCategory": "مادليات اليوطا",
     "slug": "صليب-يوتا-مادليه-موديل-1",
-    "subcategory": "wooden-crosses",
+    "subcategory": "yota-medallions",
     "collections": [
       "هدايا الخدمة",
       "منتجات الأطفال"
@@ -3087,7 +3622,8 @@
       "منتجات الأطفال",
       "صليب صلبان"
     ],
-    "thumbnail": "/assets/thumbnails/320/custom-1782980654479.webp"
+    "thumbnail": "/assets/thumbnails/320/custom-1782980654479-c623b41cb6.webp",
+    "isBestSeller": false
   },
   {
     "id": "custom-1782306615168-copy-1782306883366-copy-1782307173548-copy-1782307256776-copy-1782307341493-copy-1782310276272-copy-1782310382795-copy-1782310383710",
@@ -3132,8 +3668,8 @@
         "quantity": 10
       }
     ],
-    "mainCategory": "books-rituals",
-    "subCategory": "katameros",
+    "mainCategory": "الكتب والطقوس",
+    "subCategory": "القطمارس",
     "slug": "قطمارس-البصخه-عربي-دير-الشهيد-العظيم-مارمينا-العجايبي-بمريوط",
     "subcategory": "katameros",
     "collections": [],
@@ -3149,7 +3685,8 @@
       "books-rituals",
       "katameros"
     ],
-    "thumbnail": "/assets/thumbnails/320/custom-1782306615168-copy-1782306883366-copy-17823071735-6f172e54a823.webp"
+    "thumbnail": "/assets/thumbnails/320/custom-1782306615168-copy-1782306883366-copy-17823071735-6f172e54a823-c89fa97d86.webp",
+    "isBestSeller": false
   },
   {
     "id": "custom-1782306615168-copy-1782306883366-copy-1782307173548-copy-1782307256776-copy-1782307341493-copy-1782310276272-copy-1782310382795",
@@ -3192,8 +3729,8 @@
         "quantity": 10
       }
     ],
-    "mainCategory": "books-rituals",
-    "subCategory": "katameros",
+    "mainCategory": "الكتب والطقوس",
+    "subCategory": "القطمارس",
     "slug": "قطمارس-الصوم-الكبير-عربي-دير-الشهيد-العظيم-مارمينا-العجايبي-بمريوط-نسخه",
     "subcategory": "katameros",
     "collections": [],
@@ -3209,7 +3746,8 @@
       "books-rituals",
       "katameros"
     ],
-    "thumbnail": "/assets/thumbnails/320/custom-1782306615168-copy-1782306883366-copy-17823071735-7ae337b321d8.webp"
+    "thumbnail": "/assets/thumbnails/320/custom-1782306615168-copy-1782306883366-copy-17823071735-7ae337b321d8-e042013472.webp",
+    "isBestSeller": false
   },
   {
     "id": "custom-1782306615168-copy-1782306883366-copy-1782307173548-copy-1782307256776-copy-1782307341493-copy-1782310276272",
@@ -3250,8 +3788,8 @@
         "quantity": 10
       }
     ],
-    "mainCategory": "books-rituals",
-    "subCategory": "katameros",
+    "mainCategory": "الكتب والطقوس",
+    "subCategory": "القطمارس",
     "slug": "قطمارس-الخمسين-قبطي-دير-الشهيد-العظيم-مارمينا-العجايبي-بمريوط",
     "subcategory": "katameros",
     "collections": [],
@@ -3267,7 +3805,8 @@
       "books-rituals",
       "katameros"
     ],
-    "thumbnail": "/assets/thumbnails/320/custom-1782306615168-copy-1782306883366-copy-17823071735-ad7073398948.webp"
+    "thumbnail": "/assets/thumbnails/320/custom-1782306615168-copy-1782306883366-copy-17823071735-ad7073398948-7006c56779.webp",
+    "isBestSeller": false
   },
   {
     "id": "custom-1782306615168-copy-1782306883366-copy-1782307173548-copy-1782307256776-copy-1782307341493",
@@ -3308,8 +3847,8 @@
         "quantity": 10
       }
     ],
-    "mainCategory": "books-rituals",
-    "subCategory": "katameros",
+    "mainCategory": "الكتب والطقوس",
+    "subCategory": "القطمارس",
     "slug": "قطمارس-الخمسين-عربي-دير-الشهيد-العظيم-مارمينا-العجايبي-بمريوط",
     "subcategory": "katameros",
     "collections": [],
@@ -3325,7 +3864,8 @@
       "books-rituals",
       "katameros"
     ],
-    "thumbnail": "/assets/thumbnails/320/custom-1782306615168-copy-1782306883366-copy-17823071735-b3a276ee680b.webp"
+    "thumbnail": "/assets/thumbnails/320/custom-1782306615168-copy-1782306883366-copy-17823071735-b3a276ee680b-2c3a044b6f.webp",
+    "isBestSeller": false
   },
   {
     "id": "custom-1782306615168-copy-1782306883366-copy-1782307173548-copy-1782307256776",
@@ -3366,8 +3906,8 @@
         "quantity": 10
       }
     ],
-    "mainCategory": "books-rituals",
-    "subCategory": "katameros",
+    "mainCategory": "الكتب والطقوس",
+    "subCategory": "القطمارس",
     "slug": "قطمارس-الاحاد-عربي-دير-الشهيد-العظيم-مارمينا-العجايبي-بمريوط",
     "subcategory": "katameros",
     "collections": [],
@@ -3383,7 +3923,8 @@
       "books-rituals",
       "katameros"
     ],
-    "thumbnail": "/assets/thumbnails/320/custom-1782306615168-copy-1782306883366-copy-1782307173548-copy-1782307256776.webp"
+    "thumbnail": "/assets/thumbnails/320/custom-1782306615168-copy-1782306883366-copy-1782307173548-copy-1782307256776-546a321340.webp",
+    "isBestSeller": false
   },
   {
     "id": "custom-1782306615168-copy-1782306883366-copy-1782307173548",
@@ -3426,8 +3967,8 @@
         "quantity": 10
       }
     ],
-    "mainCategory": "books-rituals",
-    "subCategory": "katameros",
+    "mainCategory": "الكتب والطقوس",
+    "subCategory": "القطمارس",
     "slug": "قطمارس-الاحاد-قبطي-دير-الشهيد-العظيم-مارمينا-العجايبي-بمريوط",
     "subcategory": "katameros",
     "collections": [],
@@ -3443,7 +3984,8 @@
       "books-rituals",
       "katameros"
     ],
-    "thumbnail": "/assets/thumbnails/320/custom-1782306615168-copy-1782306883366-copy-1782307173548.webp"
+    "thumbnail": "/assets/thumbnails/320/custom-1782306615168-copy-1782306883366-copy-1782307173548-786930ad92.webp",
+    "isBestSeller": false
   },
   {
     "id": "custom-1782306615168-copy-1782306883366",
@@ -3484,8 +4026,8 @@
         "quantity": 10
       }
     ],
-    "mainCategory": "books-rituals",
-    "subCategory": "katameros",
+    "mainCategory": "الكتب والطقوس",
+    "subCategory": "القطمارس",
     "slug": "قطمارس-الايام-السنوي-قبطي-دير-الشهيد-العظيم-مارمينا-العجايبي-بمريوط",
     "subcategory": "katameros",
     "collections": [],
@@ -3501,7 +4043,8 @@
       "books-rituals",
       "katameros"
     ],
-    "thumbnail": "/assets/thumbnails/320/custom-1782306615168-copy-1782306883366.webp"
+    "thumbnail": "/assets/thumbnails/320/custom-1782306615168-copy-1782306883366-1fcb7d2ffb.webp",
+    "isBestSeller": false
   },
   {
     "id": "custom-1782306615168",
@@ -3542,8 +4085,8 @@
         "quantity": 10
       }
     ],
-    "mainCategory": "books-rituals",
-    "subCategory": "katameros",
+    "mainCategory": "الكتب والطقوس",
+    "subCategory": "القطمارس",
     "slug": "قطمارس-الايام-السنوي-عربي-نسخه-دير-الشهيد-العظيم-مارمينا-العجايبي-بمريوط",
     "subcategory": "katameros",
     "collections": [],
@@ -3559,7 +4102,8 @@
       "books-rituals",
       "katameros"
     ],
-    "thumbnail": "/assets/thumbnails/320/custom-1782306615168.webp"
+    "thumbnail": "/assets/thumbnails/320/custom-1782306615168-2adf86e699.webp",
+    "isBestSeller": false
   },
   {
     "id": "custom-1782079632185",
@@ -3597,8 +4141,8 @@
         "quantity": 1
       }
     ],
-    "mainCategory": "candles-lamps",
-    "subCategory": "church-candles",
+    "mainCategory": "الشمع والبخور",
+    "subCategory": "شمع الكنيسة",
     "slug": "شمع-ايقونات",
     "subcategory": "church-candles",
     "collections": [],
@@ -3610,7 +4154,8 @@
       "شموع",
       "candles-incense"
     ],
-    "thumbnail": "/assets/thumbnails/320/custom-1782079632185.webp"
+    "thumbnail": "/assets/thumbnails/320/custom-1782079632185-dbf58527ec.webp",
+    "isBestSeller": false
   },
   {
     "id": "old-10123915690291",
@@ -3651,8 +4196,8 @@
         "quantity": 10
       }
     ],
-    "mainCategory": "candles-lamps",
-    "subCategory": "church-incense",
+    "mainCategory": "الشمع والبخور",
+    "subCategory": "بخور كنسي",
     "slug": "علبه-بخور-نحاس-ذهبي-بصليب",
     "subcategory": "church-incense",
     "collections": [],
@@ -3666,7 +4211,8 @@
       "candles-incense",
       "incense-sets"
     ],
-    "thumbnail": "/assets/thumbnails/320/old-10123915690291.webp"
+    "thumbnail": "/assets/thumbnails/320/old-10123915690291-b5c421e6be.webp",
+    "isBestSeller": false
   },
   {
     "id": "old-10123914805555",
@@ -3707,8 +4253,8 @@
         "quantity": 10
       }
     ],
-    "mainCategory": "candles-lamps",
-    "subCategory": "church-incense",
+    "mainCategory": "الشمع والبخور",
+    "subCategory": "بخور كنسي",
     "slug": "علبه-بخور-نحاس-فضي-بصليب",
     "subcategory": "church-incense",
     "collections": [],
@@ -3722,7 +4268,8 @@
       "candles-incense",
       "incense-sets"
     ],
-    "thumbnail": "/assets/thumbnails/320/old-10123914805555.webp"
+    "thumbnail": "/assets/thumbnails/320/old-10123914805555-7912fa8991.webp",
+    "isBestSeller": false
   },
   {
     "id": "old-10123913003315",
@@ -3764,8 +4311,8 @@
         "quantity": 10
       }
     ],
-    "mainCategory": "candles-lamps",
-    "subCategory": "church-incense",
+    "mainCategory": "الشمع والبخور",
+    "subCategory": "بخور كنسي",
     "slug": "علبه-بخور-نحاس-فضي-فص-ملون",
     "subcategory": "church-incense",
     "collections": [],
@@ -3779,7 +4326,8 @@
       "candles-incense",
       "incense-sets"
     ],
-    "thumbnail": "/assets/thumbnails/320/old-10123913003315.webp"
+    "thumbnail": "/assets/thumbnails/320/old-10123913003315-5162073e07.webp",
+    "isBestSeller": false
   },
   {
     "id": "old-10121340551475",
@@ -3858,8 +4406,8 @@
         "quantity": 11
       }
     ],
-    "mainCategory": "altar-vessels",
-    "subCategory": "service-plates",
+    "mainCategory": "المذبح والأواني المقدسة",
+    "subCategory": "أطباق الخدمة",
     "slug": "تريانتو-ستانلس",
     "subcategory": "service-plates",
     "collections": [
@@ -3877,7 +4425,8 @@
       "service-tools",
       "مستلزمات المذبح"
     ],
-    "thumbnail": "/assets/thumbnails/320/old-10121340551475.webp"
+    "thumbnail": "/assets/thumbnails/320/old-10121340551475-073dba79ff.webp",
+    "isBestSeller": false
   },
   {
     "id": "old-10121339568435",
@@ -4018,8 +4567,8 @@
         "quantity": 10
       }
     ],
-    "mainCategory": "altar-vessels",
-    "subCategory": "service-plates",
+    "mainCategory": "المذبح والأواني المقدسة",
+    "subCategory": "أطباق الخدمة",
     "slug": "دف-18-سم-نحاس-ذهبي-تقيل",
     "isBestSeller": true,
     "subcategory": "service-plates",
@@ -4038,7 +4587,7 @@
       "service-tools",
       "مستلزمات المذبح"
     ],
-    "thumbnail": "/assets/thumbnails/320/old-10121339568435.webp"
+    "thumbnail": "/assets/thumbnails/320/old-10121339568435-271c95e029.webp"
   },
   {
     "id": "old-10121173303603",
@@ -4509,8 +5058,8 @@
         "quantity": null
       }
     ],
-    "mainCategory": "books-rituals",
-    "subCategory": "book-accessories",
+    "mainCategory": "الكتب والطقوس",
+    "subCategory": "فواصل وجرابات الكتب",
     "slug": "جراب-للكتاب-المقدس",
     "subcategory": "book-accessories",
     "collections": [],
@@ -4527,7 +5076,8 @@
       "books-rituals",
       "liturgical-books"
     ],
-    "thumbnail": "/assets/thumbnails/320/old-10121173303603.webp"
+    "thumbnail": "/assets/thumbnails/320/old-10121173303603-c1d79032b1.webp",
+    "isBestSeller": false
   },
   {
     "id": "old-10120837660979",
@@ -4567,8 +5117,8 @@
         "quantity": 12
       }
     ],
-    "mainCategory": "crosses",
-    "subCategory": "processional-crosses",
+    "mainCategory": "الصلبان",
+    "subCategory": "صلبان الزفة",
     "slug": "صليب-زفه-نحاس-طبقتين-بفصوص-ملونه",
     "isBestSeller": true,
     "subcategory": "processional-crosses",
@@ -4588,7 +5138,7 @@
       "هدايا الخدمة",
       "صليب صلبان"
     ],
-    "thumbnail": "/assets/thumbnails/320/old-10120837660979.webp"
+    "thumbnail": "/assets/thumbnails/320/old-10120837660979-34de3283de.webp"
   },
   {
     "id": "old-10120837300531",
@@ -4628,8 +5178,8 @@
         "quantity": 12
       }
     ],
-    "mainCategory": "crosses",
-    "subCategory": "processional-crosses",
+    "mainCategory": "الصلبان",
+    "subCategory": "صلبان الزفة",
     "slug": "صليب-زفه-نحاس-طبقتين",
     "isBestSeller": true,
     "subcategory": "processional-crosses",
@@ -4649,7 +5199,7 @@
       "هدايا الخدمة",
       "صليب صلبان"
     ],
-    "thumbnail": "/assets/thumbnails/320/old-10120837300531.webp"
+    "thumbnail": "/assets/thumbnails/320/old-10120837300531-7235cc9d06.webp"
   },
   {
     "id": "old-10120836481331",
@@ -4689,8 +5239,8 @@
         "quantity": 12
       }
     ],
-    "mainCategory": "crosses",
-    "subCategory": "processional-crosses",
+    "mainCategory": "الصلبان",
+    "subCategory": "صلبان الزفة",
     "slug": "صليب-زفه-نحاس-رفيع-بفص-الوان",
     "isBestSeller": true,
     "subcategory": "processional-crosses",
@@ -4710,7 +5260,7 @@
       "هدايا الخدمة",
       "صليب صلبان"
     ],
-    "thumbnail": "/assets/thumbnails/320/old-10120836481331.webp"
+    "thumbnail": "/assets/thumbnails/320/old-10120836481331-e1ebd3262a.webp"
   },
   {
     "id": "old-10120836317491",
@@ -4750,8 +5300,8 @@
         "quantity": 12
       }
     ],
-    "mainCategory": "crosses",
-    "subCategory": "processional-crosses",
+    "mainCategory": "الصلبان",
+    "subCategory": "صلبان الزفة",
     "slug": "صليب-زفه-نحاس-اركت-بالمصلوب",
     "subcategory": "processional-crosses",
     "collections": [
@@ -4770,7 +5320,8 @@
       "هدايا الخدمة",
       "صليب صلبان"
     ],
-    "thumbnail": "/assets/thumbnails/320/old-10120836317491.webp"
+    "thumbnail": "/assets/thumbnails/320/old-10120836317491-f7cc6ce316.webp",
+    "isBestSeller": false
   },
   {
     "id": "old-10120834908467",
@@ -4809,8 +5360,8 @@
         "quantity": 12
       }
     ],
-    "mainCategory": "crosses",
-    "subCategory": "processional-crosses",
+    "mainCategory": "الصلبان",
+    "subCategory": "صلبان الزفة",
     "slug": "صليب-زفه-نحاس-اركت-ذهبي",
     "subcategory": "processional-crosses",
     "collections": [
@@ -4829,7 +5380,8 @@
       "هدايا الخدمة",
       "صليب صلبان"
     ],
-    "thumbnail": "/assets/thumbnails/320/old-10120834908467.webp"
+    "thumbnail": "/assets/thumbnails/320/old-10120834908467-66ead60910.webp",
+    "isBestSeller": false
   },
   {
     "id": "old-10070727688499",
@@ -4873,8 +5425,8 @@
         "quantity": 12
       }
     ],
-    "mainCategory": "candles-lamps",
-    "subCategory": "candlesticks",
+    "mainCategory": "الشمع والبخور",
+    "subCategory": "شمعدانات",
     "slug": "شمعدان-مذبح-كبير",
     "subcategory": "candlesticks",
     "collections": [
@@ -4891,7 +5443,8 @@
       "candlesticks",
       "مستلزمات المذبح"
     ],
-    "thumbnail": "/assets/thumbnails/320/old-10070727688499.webp"
+    "thumbnail": "/assets/thumbnails/320/old-10070727688499-0115af7de8.webp",
+    "isBestSeller": false
   },
   {
     "id": "old-10070727000371",
@@ -4962,8 +5515,8 @@
         "quantity": null
       }
     ],
-    "mainCategory": "candles-lamps",
-    "subCategory": "church-candles",
+    "mainCategory": "الشمع والبخور",
+    "subCategory": "شمع الكنيسة",
     "slug": "شمعه-شحن",
     "subcategory": "church-candles",
     "collections": [],
@@ -4977,7 +5530,8 @@
       "candles-incense",
       "candles"
     ],
-    "thumbnail": "/assets/thumbnails/320/old-10070727000371.webp"
+    "thumbnail": "/assets/thumbnails/320/old-10070727000371-84f381678e.webp",
+    "isBestSeller": false
   },
   {
     "id": "old-10070726574387",
@@ -5016,8 +5570,8 @@
         "quantity": 12
       }
     ],
-    "mainCategory": "candles-lamps",
-    "subCategory": "church-candles",
+    "mainCategory": "الشمع والبخور",
+    "subCategory": "شمع الكنيسة",
     "slug": "شمعه-شماس-شكل-صليب",
     "subcategory": "church-candles",
     "collections": [],
@@ -5030,7 +5584,8 @@
       "candles-incense",
       "candles"
     ],
-    "thumbnail": "/assets/thumbnails/320/old-10070726574387.webp"
+    "thumbnail": "/assets/thumbnails/320/old-10070726574387-72ddda3eca.webp",
+    "isBestSeller": false
   },
   {
     "id": "old-10070704980275",
@@ -5115,8 +5670,8 @@
         "quantity": null
       }
     ],
-    "mainCategory": "candles-lamps",
-    "subCategory": "candlesticks",
+    "mainCategory": "الشمع والبخور",
+    "subCategory": "شمعدانات",
     "slug": "شمعدان-منجليه",
     "subcategory": "candlesticks",
     "collections": [
@@ -5134,7 +5689,8 @@
       "candlesticks",
       "مستلزمات المذبح"
     ],
-    "thumbnail": "/assets/thumbnails/320/old-10070704980275.webp"
+    "thumbnail": "/assets/thumbnails/320/old-10070704980275-6512085330.webp",
+    "isBestSeller": false
   },
   {
     "id": "old-10070671687987",
@@ -5224,8 +5780,8 @@
         "quantity": null
       }
     ],
-    "mainCategory": "crosses",
-    "subCategory": "altar-crosses",
+    "mainCategory": "الصلبان",
+    "subCategory": "صلبان مذبح",
     "slug": "صليب-افنوتي-شحن-بالوصله",
     "subcategory": "altar-crosses",
     "collections": [
@@ -5246,7 +5802,8 @@
       "هدايا الخدمة",
       "صليب صلبان"
     ],
-    "thumbnail": "/assets/thumbnails/320/old-10070671687987.webp"
+    "thumbnail": "/assets/thumbnails/320/old-10070671687987-d7b240dd09.webp",
+    "isBestSeller": false
   },
   {
     "id": "old-10068218806579",
@@ -5287,8 +5844,8 @@
         "quantity": null
       }
     ],
-    "mainCategory": "altar-vessels",
-    "subCategory": "relic-boxes",
+    "mainCategory": "المذبح والأواني المقدسة",
+    "subCategory": "حق الذخيرة",
     "slug": "حق-ذخيره-كبير-نحاس-مطلي-نيكل",
     "subcategory": "relic-boxes",
     "collections": [
@@ -5304,7 +5861,8 @@
       "relic-boxes",
       "مستلزمات المذبح"
     ],
-    "thumbnail": "/assets/thumbnails/320/old-10068218806579.webp"
+    "thumbnail": "/assets/thumbnails/320/old-10068218806579-e543754d56.webp",
+    "isBestSeller": false
   },
   {
     "id": "old-10068217561395",
@@ -5345,8 +5903,8 @@
         "quantity": null
       }
     ],
-    "mainCategory": "altar-vessels",
-    "subCategory": "relic-boxes",
+    "mainCategory": "المذبح والأواني المقدسة",
+    "subCategory": "حق الذخيرة",
     "slug": "حق-ذخيره-صغير-نحاس-مطلي-نيكل",
     "subcategory": "relic-boxes",
     "collections": [
@@ -5362,7 +5920,8 @@
       "relic-boxes",
       "مستلزمات المذبح"
     ],
-    "thumbnail": "/assets/thumbnails/320/old-10068217561395.webp"
+    "thumbnail": "/assets/thumbnails/320/old-10068217561395-06a079a7af.webp",
+    "isBestSeller": false
   },
   {
     "id": "old-10068215628083",
@@ -5403,8 +5962,8 @@
         "quantity": null
       }
     ],
-    "mainCategory": "altar-vessels",
-    "subCategory": "relic-boxes",
+    "mainCategory": "المذبح والأواني المقدسة",
+    "subCategory": "حق الذخيرة",
     "slug": "حق-ذخيره-استانلس-صغير",
     "subcategory": "relic-boxes",
     "collections": [
@@ -5420,7 +5979,8 @@
       "relic-boxes",
       "مستلزمات المذبح"
     ],
-    "thumbnail": "/assets/thumbnails/320/old-10068215628083.webp"
+    "thumbnail": "/assets/thumbnails/320/old-10068215628083-b9268cd5cf.webp",
+    "isBestSeller": false
   },
   {
     "id": "old-10068213006643",
@@ -5462,8 +6022,8 @@
         "quantity": null
       }
     ],
-    "mainCategory": "altar-vessels",
-    "subCategory": "relic-boxes",
+    "mainCategory": "المذبح والأواني المقدسة",
+    "subCategory": "حق الذخيرة",
     "slug": "حق-ذخيره-استانلس-وسط",
     "subcategory": "relic-boxes",
     "collections": [
@@ -5479,7 +6039,8 @@
       "relic-boxes",
       "مستلزمات المذبح"
     ],
-    "thumbnail": "/assets/thumbnails/320/old-10068213006643.webp"
+    "thumbnail": "/assets/thumbnails/320/old-10068213006643-d9b3b784ba.webp",
+    "isBestSeller": false
   },
   {
     "id": "old-10068212646195",
@@ -5520,8 +6081,8 @@
         "quantity": null
       }
     ],
-    "mainCategory": "altar-vessels",
-    "subCategory": "relic-boxes",
+    "mainCategory": "المذبح والأواني المقدسة",
+    "subCategory": "حق الذخيرة",
     "slug": "حق-ذخيره-استانلس-صغير-old-10068212646195",
     "subcategory": "relic-boxes",
     "collections": [
@@ -5537,7 +6098,8 @@
       "relic-boxes",
       "مستلزمات المذبح"
     ],
-    "thumbnail": "/assets/thumbnails/320/old-10068212646195.webp"
+    "thumbnail": "/assets/thumbnails/320/old-10068212646195-0cf9b23a43.webp",
+    "isBestSeller": false
   },
   {
     "id": "old-10067794067763",
@@ -5620,8 +6182,8 @@
         "quantity": 10
       }
     ],
-    "mainCategory": "altar-vessels",
-    "subCategory": "altar-sets",
+    "mainCategory": "المذبح والأواني المقدسة",
+    "subCategory": "أطقم أواني المذبح",
     "slug": "ابريق-نحاس-ذهبي",
     "isBestSeller": true,
     "subcategory": "altar-sets",
@@ -5640,7 +6202,7 @@
       "altar-vessels",
       "مستلزمات المذبح"
     ],
-    "thumbnail": "/assets/thumbnails/320/old-10067794067763.webp"
+    "thumbnail": "/assets/thumbnails/320/old-10067794067763-61f3ae9ff3.webp"
   },
   {
     "id": "old-10067690586419",
@@ -5682,8 +6244,8 @@
         "quantity": 10
       }
     ],
-    "mainCategory": "candles-lamps",
-    "subCategory": "church-incense",
+    "mainCategory": "الشمع والبخور",
+    "subCategory": "بخور كنسي",
     "slug": "علبه-بخور-من-النحاس-شكل-دايري",
     "subcategory": "church-incense",
     "collections": [],
@@ -5697,7 +6259,8 @@
       "candles-incense",
       "incense-sets"
     ],
-    "thumbnail": "/assets/thumbnails/320/old-10067690586419.webp"
+    "thumbnail": "/assets/thumbnails/320/old-10067690586419-441a5c13a6.webp",
+    "isBestSeller": false
   },
   {
     "id": "old-10067690225971",
@@ -5740,8 +6303,8 @@
         "quantity": 10
       }
     ],
-    "mainCategory": "candles-lamps",
-    "subCategory": "church-incense",
+    "mainCategory": "الشمع والبخور",
+    "subCategory": "بخور كنسي",
     "slug": "علبه-بخور-نحاس-علي-شكل-صليب",
     "subcategory": "church-incense",
     "collections": [],
@@ -5755,7 +6318,8 @@
       "candles-incense",
       "incense-sets"
     ],
-    "thumbnail": "/assets/thumbnails/320/old-10067690225971.webp"
+    "thumbnail": "/assets/thumbnails/320/old-10067690225971-821b194da2.webp",
+    "isBestSeller": false
   },
   {
     "id": "old-10067689472307",
@@ -5798,8 +6362,8 @@
         "quantity": 10
       }
     ],
-    "mainCategory": "candles-lamps",
-    "subCategory": "church-incense",
+    "mainCategory": "الشمع والبخور",
+    "subCategory": "بخور كنسي",
     "slug": "علبه-بخور-نحاس-علي-شكل-صندوق-كنز",
     "subcategory": "church-incense",
     "collections": [],
@@ -5813,7 +6377,8 @@
       "candles-incense",
       "incense-sets"
     ],
-    "thumbnail": "/assets/thumbnails/320/old-10067689472307.webp"
+    "thumbnail": "/assets/thumbnails/320/old-10067689472307-7a573ec039.webp",
+    "isBestSeller": false
   },
   {
     "id": "old-10067686162739",
@@ -5899,8 +6464,8 @@
         "quantity": null
       }
     ],
-    "mainCategory": "candles-lamps",
-    "subCategory": "church-incense",
+    "mainCategory": "الشمع والبخور",
+    "subCategory": "بخور كنسي",
     "slug": "علبه-بخور-نحاس-شكل-صندوق-عادي",
     "subcategory": "church-incense",
     "collections": [],
@@ -5916,7 +6481,8 @@
       "candles-incense",
       "incense-sets"
     ],
-    "thumbnail": "/assets/thumbnails/320/old-10067686162739.webp"
+    "thumbnail": "/assets/thumbnails/320/old-10067686162739-d4d363744a.webp",
+    "isBestSeller": false
   },
   {
     "id": "old-10062404354355",
@@ -5960,8 +6526,8 @@
         "quantity": 12
       }
     ],
-    "mainCategory": "candles-lamps",
-    "subCategory": "church-incense",
+    "mainCategory": "الشمع والبخور",
+    "subCategory": "بخور كنسي",
     "slug": "علبه-بخور-نحاس-صغيره-شكل-مستطيل",
     "subcategory": "church-incense",
     "collections": [],
@@ -5975,7 +6541,8 @@
       "candles-incense",
       "incense-sets"
     ],
-    "thumbnail": "/assets/thumbnails/320/old-10062404354355.webp"
+    "thumbnail": "/assets/thumbnails/320/old-10062404354355-bda1c54984.webp",
+    "isBestSeller": false
   },
   {
     "id": "old-10062400258355",
@@ -6018,8 +6585,8 @@
         "quantity": 12
       }
     ],
-    "mainCategory": "candles-lamps",
-    "subCategory": "church-incense",
+    "mainCategory": "الشمع والبخور",
+    "subCategory": "بخور كنسي",
     "slug": "علبه-بخور-نحاس-كبيره-شكل-مستطيل",
     "subcategory": "church-incense",
     "collections": [],
@@ -6033,7 +6600,8 @@
       "candles-incense",
       "incense-sets"
     ],
-    "thumbnail": "/assets/thumbnails/320/old-10062400258355.webp"
+    "thumbnail": "/assets/thumbnails/320/old-10062400258355-cc3a324968.webp",
+    "isBestSeller": false
   },
   {
     "id": "reliquary-tubes-papa-kyrillos",
@@ -6168,8 +6736,8 @@
         "quantity": null
       }
     ],
-    "mainCategory": "altar-vessels",
-    "subCategory": "relic-boxes",
+    "mainCategory": "المذبح والأواني المقدسة",
+    "subCategory": "حق الذخيرة",
     "slug": "انابيب-رفات-قديسين-زان",
     "subcategory": "relic-boxes",
     "collections": [
@@ -6188,7 +6756,8 @@
       "relic-boxes",
       "مستلزمات المذبح"
     ],
-    "thumbnail": "/assets/thumbnails/320/reliquary-tubes-papa-kyrillos.webp"
+    "thumbnail": "/assets/thumbnails/320/reliquary-tubes-papa-kyrillos-9d06df299d.webp",
+    "isBestSeller": false
   },
   {
     "id": "incense-chat-1500-kg",
@@ -6306,8 +6875,8 @@
         "quantity": null
       }
     ],
-    "mainCategory": "candles-lamps",
-    "subCategory": "church-incense",
+    "mainCategory": "الشمع والبخور",
+    "subCategory": "بخور كنسي",
     "slug": "بخور-كنسي-فاخر",
     "subcategory": "church-incense",
     "collections": [],
@@ -6321,7 +6890,8 @@
       "candles-incense",
       "incense"
     ],
-    "thumbnail": "/assets/thumbnails/320/incense-chat-1500-kg.webp"
+    "thumbnail": "/assets/thumbnails/320/incense-chat-1500-kg-367761602d.webp",
+    "isBestSeller": false
   },
   {
     "id": "old-9840433955123",
@@ -6361,8 +6931,8 @@
         "quantity": 12
       }
     ],
-    "mainCategory": "candles-lamps",
-    "subCategory": "candlesticks",
+    "mainCategory": "الشمع والبخور",
+    "subCategory": "شمعدانات",
     "slug": "زوج-شمعدان-نحاس-ذهبي-كهرباء-شكل-الورده-كبير",
     "subcategory": "candlesticks",
     "collections": [
@@ -6379,7 +6949,8 @@
       "candlesticks",
       "مستلزمات المذبح"
     ],
-    "thumbnail": "/assets/thumbnails/320/old-9840433955123.webp"
+    "thumbnail": "/assets/thumbnails/320/old-9840433955123-290c0d1550.webp",
+    "isBestSeller": false
   },
   {
     "id": "old-9840425500979",
@@ -6420,8 +6991,8 @@
         "quantity": 12
       }
     ],
-    "mainCategory": "candles-lamps",
-    "subCategory": "candlesticks",
+    "mainCategory": "الشمع والبخور",
+    "subCategory": "شمعدانات",
     "slug": "شمعدان-نحاس-ذهبي-سوسته",
     "subcategory": "candlesticks",
     "collections": [
@@ -6438,7 +7009,8 @@
       "candlesticks",
       "مستلزمات المذبح"
     ],
-    "thumbnail": "/assets/thumbnails/320/old-9840425500979.webp"
+    "thumbnail": "/assets/thumbnails/320/old-9840425500979-9419d3e79c.webp",
+    "isBestSeller": false
   },
   {
     "id": "old-9840420749619",
@@ -6480,8 +7052,8 @@
         "quantity": 12
       }
     ],
-    "mainCategory": "candles-lamps",
-    "subCategory": "candlesticks",
+    "mainCategory": "الشمع والبخور",
+    "subCategory": "شمعدانات",
     "slug": "زوج-شمعدان-نحاس-ذهبي-شكل-الورده-صغير",
     "subcategory": "candlesticks",
     "collections": [
@@ -6497,7 +7069,8 @@
       "candlesticks",
       "مستلزمات المذبح"
     ],
-    "thumbnail": "/assets/thumbnails/320/old-9840420749619.webp"
+    "thumbnail": "/assets/thumbnails/320/old-9840420749619-631b589de7.webp",
+    "isBestSeller": false
   },
   {
     "id": "old-9840413475123",
@@ -6539,8 +7112,8 @@
         "quantity": 12
       }
     ],
-    "mainCategory": "candles-lamps",
-    "subCategory": "candlesticks",
+    "mainCategory": "الشمع والبخور",
+    "subCategory": "شمعدانات",
     "slug": "زوج-شمعدان-نحاس-ذهبي-شكل-الخروف",
     "subcategory": "candlesticks",
     "collections": [
@@ -6556,7 +7129,8 @@
       "candlesticks",
       "مستلزمات المذبح"
     ],
-    "thumbnail": "/assets/thumbnails/320/old-9840413475123.webp"
+    "thumbnail": "/assets/thumbnails/320/old-9840413475123-b65b92a5fb.webp",
+    "isBestSeller": false
   },
   {
     "id": "old-9840407806259",
@@ -6599,8 +7173,8 @@
         "quantity": 12
       }
     ],
-    "mainCategory": "candles-lamps",
-    "subCategory": "candlesticks",
+    "mainCategory": "الشمع والبخور",
+    "subCategory": "شمعدانات",
     "slug": "زوج-شمعدان-برج-ايفل-نحاس-ذهبي-ثقيل",
     "subcategory": "candlesticks",
     "collections": [
@@ -6616,7 +7190,8 @@
       "candlesticks",
       "مستلزمات المذبح"
     ],
-    "thumbnail": "/assets/thumbnails/320/old-9840407806259.webp"
+    "thumbnail": "/assets/thumbnails/320/old-9840407806259-f3d4eed21c.webp",
+    "isBestSeller": false
   },
   {
     "id": "old-9762774024499",
@@ -6657,12 +7232,13 @@
         "quantity": 1
       }
     ],
-    "mainCategory": "altar-vessels",
-    "subCategory": "service-plates",
+    "mainCategory": "المذبح والأواني المقدسة",
+    "subCategory": "أطباق الخدمة",
     "slug": "بشاره-ذهبي-يوناني",
     "subcategory": "service-plates",
     "collections": [
-      "مستلزمات المذبح"
+      "مستلزمات المذبح",
+      "greek-vessels"
     ],
     "searchKeywords": [
       "بشارة ذهبي يوناني",
@@ -6674,7 +7250,8 @@
       "service-tools",
       "مستلزمات المذبح"
     ],
-    "thumbnail": "/assets/thumbnails/320/old-9762774024499.webp"
+    "thumbnail": "/assets/thumbnails/320/old-9762774024499-bd156fed47.webp",
+    "isBestSeller": false
   },
   {
     "id": "old-9762760196403",
@@ -6745,8 +7322,8 @@
         "quantity": null
       }
     ],
-    "mainCategory": "altar-vessels",
-    "subCategory": "censers",
+    "mainCategory": "المذبح والأواني المقدسة",
+    "subCategory": "الشوريات",
     "slug": "شوريه-نحاس-ذهبي-يوناني",
     "isBestSeller": true,
     "subcategory": "censers",
@@ -6765,7 +7342,7 @@
       "candles-incense",
       "incense"
     ],
-    "thumbnail": "/assets/thumbnails/320/old-9762760196403.webp"
+    "thumbnail": "/assets/thumbnails/320/old-9762760196403-525bbbd634.webp"
   },
   {
     "id": "old-9762682011955",
@@ -6836,13 +7413,14 @@
         "quantity": 1
       }
     ],
-    "mainCategory": "altar-vessels",
-    "subCategory": "altar-sets",
+    "mainCategory": "المذبح والأواني المقدسة",
+    "subCategory": "أطقم أواني المذبح",
     "slug": "طقم-اواني-مذبح-ذهبي-يوناني",
     "isBestSeller": true,
     "subcategory": "altar-sets",
     "collections": [
-      "مستلزمات المذبح"
+      "مستلزمات المذبح",
+      "greek-vessels"
     ],
     "searchKeywords": [
       "طقم أواني مذبح ذهبي يوناني",
@@ -6855,7 +7433,7 @@
       "altar-vessels",
       "مستلزمات المذبح"
     ],
-    "thumbnail": "/assets/thumbnails/320/old-9762682011955.webp"
+    "thumbnail": "/assets/thumbnails/320/old-9762682011955-5c97d4b331.webp"
   },
   {
     "id": "old-9757475930419",
@@ -6893,8 +7471,8 @@
         "quantity": null
       }
     ],
-    "mainCategory": "crosses",
-    "subCategory": "pectoral-crosses",
+    "mainCategory": "الصلبان",
+    "subCategory": "صلبان صدر",
     "slug": "ايقونه-صليب-صدر-يوناني-ذهبي",
     "isBestSeller": true,
     "subcategory": "pectoral-crosses",
@@ -6912,7 +7490,7 @@
       "هدايا الخدمة",
       "صليب صلبان"
     ],
-    "thumbnail": "/assets/thumbnails/320/old-9757475930419.webp"
+    "thumbnail": "/assets/thumbnails/320/old-9757475930419-f8e29ca6c2.webp"
   },
   {
     "id": "stole-red-gold-01",
@@ -7199,8 +7777,8 @@
         "quantity": 100
       }
     ],
-    "mainCategory": "church-vestments",
-    "subCategory": "stoles",
+    "mainCategory": "الملابس والأقمشة الكنسية",
+    "subCategory": "البطرشيلات",
     "slug": "بطرشيل-كنسي-احمر-ذهبي-موديل-1",
     "subcategory": "stoles",
     "collections": [],
@@ -7215,7 +7793,8 @@
       "church-vestments",
       "stoles"
     ],
-    "thumbnail": "/assets/thumbnails/320/stole-red-gold-01.webp"
+    "thumbnail": "/assets/thumbnails/320/stole-red-gold-01-dc32599727.webp",
+    "isBestSeller": false
   },
   {
     "id": "stole-red-gold-02",
@@ -7502,8 +8081,8 @@
         "quantity": 100
       }
     ],
-    "mainCategory": "church-vestments",
-    "subCategory": "stoles",
+    "mainCategory": "الملابس والأقمشة الكنسية",
+    "subCategory": "البطرشيلات",
     "slug": "بطرشيل-كنسي-احمر-ذهبي-موديل-2",
     "subcategory": "stoles",
     "collections": [],
@@ -7518,7 +8097,8 @@
       "church-vestments",
       "stoles"
     ],
-    "thumbnail": "/assets/thumbnails/320/stole-red-gold-02.webp"
+    "thumbnail": "/assets/thumbnails/320/stole-red-gold-02-410621467a.webp",
+    "isBestSeller": false
   },
   {
     "id": "stole-red-gold-03",
@@ -7805,8 +8385,8 @@
         "quantity": 100
       }
     ],
-    "mainCategory": "church-vestments",
-    "subCategory": "stoles",
+    "mainCategory": "الملابس والأقمشة الكنسية",
+    "subCategory": "البطرشيلات",
     "slug": "بطرشيل-كنسي-احمر-ذهبي-موديل-3",
     "subcategory": "stoles",
     "collections": [],
@@ -7821,7 +8401,8 @@
       "church-vestments",
       "stoles"
     ],
-    "thumbnail": "/assets/thumbnails/320/stole-red-gold-03.webp"
+    "thumbnail": "/assets/thumbnails/320/stole-red-gold-03-6d549d1866.webp",
+    "isBestSeller": false
   },
   {
     "id": "stole-red-gold-04",
@@ -8108,8 +8689,8 @@
         "quantity": 100
       }
     ],
-    "mainCategory": "church-vestments",
-    "subCategory": "stoles",
+    "mainCategory": "الملابس والأقمشة الكنسية",
+    "subCategory": "البطرشيلات",
     "slug": "بطرشيل-كنسي-احمر-ذهبي-موديل-4",
     "subcategory": "stoles",
     "collections": [],
@@ -8124,7 +8705,8 @@
       "church-vestments",
       "stoles"
     ],
-    "thumbnail": "/assets/thumbnails/320/stole-red-gold-04.webp"
+    "thumbnail": "/assets/thumbnails/320/stole-red-gold-04-02125026df.webp",
+    "isBestSeller": false
   },
   {
     "id": "custom-1783272387022",
@@ -8187,8 +8769,8 @@
         "quantity": 1000
       }
     ],
-    "mainCategory": "occasions-service",
-    "subCategory": "crafts-coloring",
+    "mainCategory": "المناسبات والخدمة",
+    "subCategory": "تلوين وأشغال يدوية",
     "slug": "الوان-اليوطا",
     "subcategory": "crafts-coloring",
     "collections": [
@@ -8205,6 +8787,425 @@
       "منتجات الأطفال",
       "هدايا اكسسوارات إكسسوارات"
     ],
-    "thumbnail": "/assets/thumbnails/320/custom-1783272387022.webp"
+    "thumbnail": "/assets/thumbnails/320/custom-1783272387022-17b429120a.webp",
+    "isBestSeller": false
+  },
+  {
+    "id": "tasbeha-giza-annual-psalmody",
+    "name": "الإبصلمودية المقدسة السنوية – مطرانية الجيزة",
+    "category": "books",
+    "label": "كتب التسبحة",
+    "shortDescription": "كتاب الإبصلمودية المقدسة السنوية باللغتين القبطية والعربية، إصدار مطرانية الأقباط الأرثوذكس بالجيزة، وطباعة دير الشهيد العظيم مارمينا العجائبي بمريوط.",
+    "description": "كتاب الإبصلمودية المقدسة السنوية لمتابعة وصلوات التسبحة السنوية، ويحتوي على النصوص باللغتين القبطية والعربية.\n\nمناسب للشمامسة والخدام ولكل من يرغب في متابعة التسبحة داخل الكنيسة أو في الصلاة الشخصية.\n\nالإصدار: مطرانية الأقباط الأرثوذكس بالجيزة\nالطباعة: دير الشهيد العظيم مارمينا العجائبي بمريوط\nاللغات: قبطي – عربي",
+    "price": 300,
+    "image": "assets/optimized/products/gallery/tasbeha-giza-annual-psalmody.webp",
+    "seoTitle": "الإبصلمودية السنوية قبطي وعربي – مطرانية الجيزة",
+    "seoDescription": "كتاب الإبصلمودية المقدسة السنوية قبطي وعربي، إصدار مطرانية الجيزة وطباعة دير مارمينا العجائبي بمريوط.",
+    "slug": "الابصلموديه-المقدسه-السنويه-مطرانيه-الجيزه",
+    "searchKeywords": [
+      "الإبصلمودية المقدسة السنوية",
+      "مطرانية الجيزة",
+      "كتب التسبحة",
+      "تسبحة سنوية",
+      "قبطي",
+      "عربي"
+    ],
+    "priceNote": "",
+    "stock": "متاح",
+    "badge": "كتب التسبحة",
+    "url": "https://popekyrillos.store/products/%D8%A7%D9%84%D8%A7%D8%A8%D8%B5%D9%84%D9%85%D9%88%D8%AF%D9%8A%D9%87-%D8%A7%D9%84%D9%85%D9%82%D8%AF%D8%B3%D9%87-%D8%A7%D9%84%D8%B3%D9%86%D9%88%D9%8A%D9%87-%D9%85%D8%B7%D8%B1%D8%A7%D9%86%D9%8A%D9%87-%D8%A7%D9%84%D8%AC%D9%8A%D8%B2%D9%87",
+    "tags": [
+      "كتب",
+      "كتب التسبحة",
+      "تسبحة",
+      "الكتب والطقوس"
+    ],
+    "images": [
+      "assets/optimized/products/gallery/tasbeha-giza-annual-psalmody.webp"
+    ],
+    "options": [],
+    "variants": [
+      {
+        "id": "tasbeha-giza-annual-psalmody-variant-1",
+        "title": "الاختيار الافتراضي",
+        "options": {},
+        "price": 300,
+        "compareAtPrice": null,
+        "available": true,
+        "image": "assets/optimized/products/gallery/tasbeha-giza-annual-psalmody.webp",
+        "images": [
+          "assets/optimized/products/gallery/tasbeha-giza-annual-psalmody.webp"
+        ],
+        "sku": "",
+        "quantity": 100
+      }
+    ],
+    "mainCategory": "الكتب والطقوس",
+    "subCategory": "كتب التسبحة",
+    "subcategory": "tasbeha-books",
+    "collections": [],
+    "thumbnail": "/assets/thumbnails/320/tasbeha-giza-annual-psalmody-e25c1a88c2.webp",
+    "isBestSeller": false
+  },
+  {
+    "id": "tasbeha-ezbet-elnakhl-midnight",
+    "name": "تسبحة نصف الليل السنوي – كنيسة العذراء عزبة النخل",
+    "category": "books",
+    "label": "كتب التسبحة",
+    "shortDescription": "كتاب تسبحة نصف الليل السنوي للآحاد والأيام، يحتوي على النصوص بالقبطي والعربي والقبطي المعرب، إنتاج كنيسة السيدة العذراء مريم بعزبة النخل.",
+    "description": "كتاب تسبحة نصف الليل السنوي – الآحاد والأيام، مُعد لتسهيل متابعة التسبحة وصلواتها.\n\nيتميز بوجود النصوص بثلاث صيغ:\n- القبطي\n- العربي\n- القبطي المُعَرَّب\n\nمما يجعله مناسبًا أيضًا لمن يرغب في تعلم نطق وقراءة النصوص القبطية.\n\nالإصدار: كنيسة السيدة العذراء مريم بعزبة النخل\nاللغات: قبطي – عربي – قبطي مُعَرَّب",
+    "price": 120,
+    "image": "assets/optimized/products/gallery/tasbeha-ezbet-elnakhl-midnight.webp",
+    "seoTitle": "كتاب التسبحة السنوية قبطي وعربي ومعرب – عزبة النخل",
+    "seoDescription": "كتاب تسبحة نصف الليل السنوي للآحاد والأيام، قبطي وعربي وقبطي معرب، إنتاج كنيسة السيدة العذراء بعزبة النخل.",
+    "slug": "تسبحه-نصف-الليل-السنوي-كنيسه-العذراء-عزبه-النخل",
+    "searchKeywords": [
+      "تسبحة نصف الليل السنوي",
+      "كنيسة العذراء عزبة النخل",
+      "كتب التسبحة",
+      "الآحاد والأيام",
+      "قبطي معرب"
+    ],
+    "priceNote": "",
+    "stock": "متاح",
+    "badge": "كتب التسبحة",
+    "url": "https://popekyrillos.store/products/%D8%AA%D8%B3%D8%A8%D8%AD%D9%87-%D9%86%D8%B5%D9%81-%D8%A7%D9%84%D9%84%D9%8A%D9%84-%D8%A7%D9%84%D8%B3%D9%86%D9%88%D9%8A-%D9%83%D9%86%D9%8A%D8%B3%D9%87-%D8%A7%D9%84%D8%B9%D8%B0%D8%B1%D8%A7%D8%A1-%D8%B9%D8%B2%D8%A8%D9%87-%D8%A7%D9%84%D9%86%D8%AE%D9%84",
+    "tags": [
+      "كتب",
+      "كتب التسبحة",
+      "تسبحة",
+      "الكتب والطقوس"
+    ],
+    "images": [
+      "assets/optimized/products/gallery/tasbeha-ezbet-elnakhl-midnight.webp"
+    ],
+    "options": [],
+    "variants": [
+      {
+        "id": "tasbeha-ezbet-elnakhl-midnight-variant-1",
+        "title": "الاختيار الافتراضي",
+        "options": {},
+        "price": 120,
+        "compareAtPrice": null,
+        "available": true,
+        "image": "assets/optimized/products/gallery/tasbeha-ezbet-elnakhl-midnight.webp",
+        "images": [
+          "assets/optimized/products/gallery/tasbeha-ezbet-elnakhl-midnight.webp"
+        ],
+        "sku": "",
+        "quantity": 100
+      }
+    ],
+    "mainCategory": "الكتب والطقوس",
+    "subCategory": "كتب التسبحة",
+    "subcategory": "tasbeha-books",
+    "collections": [],
+    "thumbnail": "/assets/thumbnails/320/tasbeha-ezbet-elnakhl-midnight-b7983cad2f.webp",
+    "isBestSeller": false
+  },
+  {
+    "id": "tasbeha-nahdet-elkanayes-annual-psalmody",
+    "name": "الإبصلمودية المقدسة السنوية – جمعية نهضة الكنائس",
+    "category": "books",
+    "label": "كتب التسبحة",
+    "shortDescription": "كتاب الإبصلمودية المقدسة السنوية باللغتين القبطية والعربية، إنتاج جمعية نهضة الكنائس، مناسب لمتابعة وصلوات التسبحة السنوية.",
+    "description": "كتاب الإبصلمودية المقدسة السنوية ويضم نصوص التسبحة السنوية باللغتين القبطية والعربية.\n\nمناسب للشمامسة والخدام وللاستخدام الكنسي والشخصي في متابعة وصلوات التسبحة على مدار السنة.\n\nالإصدار: جمعية نهضة الكنائس\nاللغات: قبطي – عربي",
+    "price": 300,
+    "image": "assets/optimized/products/gallery/tasbeha-nahdet-elkanayes-annual-psalmody.webp",
+    "seoTitle": "الإبصلمودية المقدسة السنوية قبطي وعربي – نهضة الكنائس",
+    "seoDescription": "كتاب الإبصلمودية المقدسة السنوية بالقبطي والعربي، إنتاج جمعية نهضة الكنائس، لمتابعة وصلوات التسبحة السنوية.",
+    "slug": "الابصلموديه-المقدسه-السنويه-جمعيه-نهضه-الكنايس",
+    "searchKeywords": [
+      "الإبصلمودية المقدسة السنوية",
+      "جمعية نهضة الكنائس",
+      "كتب التسبحة",
+      "تسبحة سنوية",
+      "قبطي",
+      "عربي"
+    ],
+    "priceNote": "",
+    "stock": "متاح",
+    "badge": "كتب التسبحة",
+    "url": "https://popekyrillos.store/products/%D8%A7%D9%84%D8%A7%D8%A8%D8%B5%D9%84%D9%85%D9%88%D8%AF%D9%8A%D9%87-%D8%A7%D9%84%D9%85%D9%82%D8%AF%D8%B3%D9%87-%D8%A7%D9%84%D8%B3%D9%86%D9%88%D9%8A%D9%87-%D8%AC%D9%85%D8%B9%D9%8A%D9%87-%D9%86%D9%87%D8%B6%D9%87-%D8%A7%D9%84%D9%83%D9%86%D8%A7%D9%8A%D8%B3",
+    "tags": [
+      "كتب",
+      "كتب التسبحة",
+      "تسبحة",
+      "الكتب والطقوس"
+    ],
+    "images": [
+      "assets/optimized/products/gallery/tasbeha-nahdet-elkanayes-annual-psalmody.webp"
+    ],
+    "options": [],
+    "variants": [
+      {
+        "id": "tasbeha-nahdet-elkanayes-annual-psalmody-variant-1",
+        "title": "الاختيار الافتراضي",
+        "options": {},
+        "price": 300,
+        "compareAtPrice": null,
+        "available": true,
+        "image": "assets/optimized/products/gallery/tasbeha-nahdet-elkanayes-annual-psalmody.webp",
+        "images": [
+          "assets/optimized/products/gallery/tasbeha-nahdet-elkanayes-annual-psalmody.webp"
+        ],
+        "sku": "",
+        "quantity": 100
+      }
+    ],
+    "mainCategory": "الكتب والطقوس",
+    "subCategory": "كتب التسبحة",
+    "subcategory": "tasbeha-books",
+    "collections": [],
+    "thumbnail": "/assets/thumbnails/320/tasbeha-nahdet-elkanayes-annual-psalmody-1a3eb0a2e8.webp",
+    "isBestSeller": false
+  },
+  {
+    "id": "custom-1783845396877-copy-1783846824668-copy-1783847655782-copy-1783847802907",
+    "name": "شورية نحاس كبيرة",
+    "category": "brass",
+    "label": "نحاسيات",
+    "description": "شورية كنسية مصنوعة من النحاس بتصميم قبطي فاخر وتشطيب ذهبي لامع، مزينة بنقوش بارزة وصلبان ملونة تضيف لها شكلًا مميزًا وأنيقًا. مزودة بسلاسل معدنية قوية وغطاء متحرك لسهولة وضع الفحم والبخور أثناء الاستخدام.\n\nتجمع الشورية بين الطابع الكنسي التقليدي والصناعة المصرية، وتناسب الاستخدام داخل الكنيسة أو المنزل، كما تُعد هدية قيمة للمناسبات الروحية والكنسية.\n\nالمميزات:\n\nمصنوعة من النحاس.\nصناعة مصرية.\nتشطيب ذهبي لامع.\nزخارف ونقوش كنسية بارزة.\nمزودة بصلبان وتفاصيل ملونة.\nسلاسل متينة لسهولة الحمل والاستخدام.\nغطاء متحرك لوضع الفحم والبخور.\n\nالعناية بالمنتج:\nتُنظف بقطعة قماش ناعمة وجافة، مع تجنب المنظفات القوية أو الأدوات الخشنة للحفاظ على اللمعان والتفاصيل الزخرفية.",
+    "price": 2700,
+    "priceNote": "",
+    "stock": "متاح",
+    "badge": "شورية",
+    "isBestSeller": false,
+    "image": "assets/optimized/products/gallery/product-1-1-20260712091730-31cc54.webp",
+    "url": "https://popekyrillos.store/?product=custom-1783845396877-copy-1783846824668-copy-1783847655782-copy-1783847802907",
+    "tags": [
+      "نحاس",
+      "شورية",
+      "بخور",
+      "مبخرة",
+      "مجمرة",
+      "فحم"
+    ],
+    "images": [
+      "assets/optimized/products/gallery/product-1-1-20260712091730-31cc54.webp",
+      "assets/optimized/products/gallery/product-1-2-20260712091735-daeaca.webp",
+      "assets/optimized/products/gallery/product-1-3-20260712091740-79d450.webp",
+      "assets/optimized/products/gallery/product-1-4-20260712091745-18b98b.webp",
+      "assets/optimized/products/gallery/product-1-5-20260712091750-f93f90.webp"
+    ],
+    "options": [],
+    "variants": [
+      {
+        "id": "custom-1783845396877-copy-1783846824668-copy-1783847655782-copy-1783847802907-variant-1",
+        "title": "الاختيار الافتراضي",
+        "options": {},
+        "price": 2700,
+        "compareAtPrice": null,
+        "available": true,
+        "image": null,
+        "images": [],
+        "sku": "",
+        "quantity": null
+      }
+    ],
+    "mainCategory": "altar-vessels",
+    "subCategory": "censers",
+    "subcategory": "censers",
+    "collections": [
+      "مستلزمات المذبح"
+    ],
+    "searchKeywords": [
+      "شورية نحاس كبيرة",
+      "نحاسيات",
+      "نحاس",
+      "شورية",
+      "بخور",
+      "مبخرة",
+      "مجمرة",
+      "فحم",
+      "altar-tools",
+      "service-tools",
+      "مستلزمات المذبح"
+    ]
+  },
+  {
+    "id": "custom-1783845396877-copy-1783846824668-copy-1783847655782",
+    "name": "شورية نحاس وسط",
+    "category": "brass",
+    "label": "نحاسيات",
+    "description": "شورية كنسية مصنوعة من النحاس بتصميم قبطي فاخر وتشطيب ذهبي لامع، مزينة بنقوش بارزة وصلبان ملونة تضيف لها شكلًا مميزًا وأنيقًا. مزودة بسلاسل معدنية قوية وغطاء متحرك لسهولة وضع الفحم والبخور أثناء الاستخدام.\n\nتجمع الشورية بين الطابع الكنسي التقليدي والصناعة المصرية، وتناسب الاستخدام داخل الكنيسة أو المنزل، كما تُعد هدية قيمة للمناسبات الروحية والكنسية.\n\nالمميزات:\n\nمصنوعة من النحاس.\nصناعة مصرية.\nتشطيب ذهبي لامع.\nزخارف ونقوش كنسية بارزة.\nمزودة بصلبان وتفاصيل ملونة.\nسلاسل متينة لسهولة الحمل والاستخدام.\nغطاء متحرك لوضع الفحم والبخور.\n\nالعناية بالمنتج:\nتُنظف بقطعة قماش ناعمة وجافة، مع تجنب المنظفات القوية أو الأدوات الخشنة للحفاظ على اللمعان والتفاصيل الزخرفية.",
+    "price": 2100,
+    "priceNote": "",
+    "stock": "متاح",
+    "badge": "شورية",
+    "isBestSeller": false,
+    "image": "assets/optimized/products/gallery/product-1-1-20260712091530-47ffa3.webp",
+    "url": "https://popekyrillos.store/?product=custom-1783845396877-copy-1783846824668-copy-1783847655782",
+    "tags": [
+      "نحاس",
+      "شورية",
+      "بخور",
+      "مبخرة",
+      "مجمرة",
+      "فحم"
+    ],
+    "images": [
+      "assets/optimized/products/gallery/product-1-1-20260712091530-47ffa3.webp",
+      "assets/optimized/products/gallery/product-1-2-20260712091535-f0e981.webp",
+      "assets/optimized/products/gallery/product-1-3-20260712091540-c4b286.webp",
+      "assets/optimized/products/gallery/product-1-4-20260712091546-6b90d5.webp"
+    ],
+    "options": [],
+    "variants": [
+      {
+        "id": "custom-1783845396877-copy-1783846824668-copy-1783847655782-variant-1",
+        "title": "الاختيار الافتراضي",
+        "options": {},
+        "price": 2100,
+        "compareAtPrice": null,
+        "available": true,
+        "image": null,
+        "images": [],
+        "sku": "",
+        "quantity": null
+      }
+    ],
+    "mainCategory": "altar-vessels",
+    "subCategory": "censers",
+    "subcategory": "censers",
+    "collections": [
+      "مستلزمات المذبح"
+    ],
+    "searchKeywords": [
+      "شورية نحاس وسط",
+      "نحاسيات",
+      "نحاس",
+      "شورية",
+      "بخور",
+      "مبخرة",
+      "مجمرة",
+      "فحم",
+      "altar-tools",
+      "service-tools",
+      "مستلزمات المذبح"
+    ]
+  },
+  {
+    "id": "custom-1783845396877-copy-1783846824668",
+    "name": "شورية ستانلس وسط",
+    "category": "brass",
+    "label": "نحاسيات",
+    "description": "شورية أنيقة مصنوعة من الستانلس ستيل اللامع، بتصميم كنسي مميز يجمع بين الشكل التقليدي والمتانة. مزودة بغطاء متحرك وسلاسل قوية لتسهيل الحمل والاستخدام أثناء الصلاة والتبخير.\n\nتتميز بسطح فضي لامع سهل التنظيف ومقاوم للصدأ، ما يجعلها مناسبة للاستخدام في الكنيسة أو المنزل، كما تصلح كهدية قيمة للمناسبات الكنسية.\n\nالمميزات:\n\nمصنوعة من الستانلس ستيل.\nلون فضي لامع.\nسلاسل معدنية متينة.\nغطاء متحرك لسهولة وضع الفحم والبخور.\nتصميم كنسي أنيق وعملي.\nسهلة التنظيف والحفاظ عليها.\n\nالعناية بالمنتج:\nتُنظف بقطعة قماش ناعمة، ويُفضل تجنب المنظفات الخشنة للحفاظ على لمعان الستانلس.",
+    "price": 837,
+    "priceNote": "",
+    "stock": "متاح",
+    "badge": "شورية",
+    "isBestSeller": false,
+    "image": "assets/optimized/products/gallery/product-1-2-20260712090103-704d2d.webp",
+    "url": "https://popekyrillos.store/?product=custom-1783845396877-copy-1783846824668",
+    "tags": [
+      "ستانلس",
+      "شورية",
+      "بخور",
+      "مبخرة",
+      "مجمرة",
+      "فحم"
+    ],
+    "images": [
+      "assets/optimized/products/gallery/product-1-2-20260712090103-704d2d.webp",
+      "assets/optimized/products/gallery/product-1-1-20260712090058-a21ee6.webp",
+      "assets/optimized/products/gallery/product-1-3-20260712090108-9d97ff.webp"
+    ],
+    "options": [],
+    "variants": [
+      {
+        "id": "custom-1783845396877-copy-1783846824668-variant-1",
+        "title": "الاختيار الافتراضي",
+        "options": {},
+        "price": 837,
+        "compareAtPrice": null,
+        "available": true,
+        "image": null,
+        "images": [],
+        "sku": "",
+        "quantity": null
+      }
+    ],
+    "mainCategory": "altar-vessels",
+    "subCategory": "censers",
+    "subcategory": "censers",
+    "collections": [
+      "مستلزمات المذبح"
+    ],
+    "searchKeywords": [
+      "شورية ستانلس وسط",
+      "نحاسيات",
+      "ستانلس",
+      "شورية",
+      "بخور",
+      "مبخرة",
+      "مجمرة",
+      "فحم",
+      "altar-tools",
+      "service-tools",
+      "مستلزمات المذبح"
+    ]
+  },
+  {
+    "id": "custom-1783845396877",
+    "name": "شورية ستانلس كبيرة",
+    "category": "brass",
+    "label": "نحاسيات",
+    "description": "شورية أنيقة مصنوعة من الستانلس ستيل اللامع، بتصميم كنسي مميز يجمع بين الشكل التقليدي والمتانة. مزودة بغطاء متحرك وسلاسل قوية لتسهيل الحمل والاستخدام أثناء الصلاة والتبخير.\n\nتتميز بسطح فضي لامع سهل التنظيف ومقاوم للصدأ، ما يجعلها مناسبة للاستخدام في الكنيسة أو المنزل، كما تصلح كهدية قيمة للمناسبات الكنسية.\n\nالمميزات:\n\nمصنوعة من الستانلس ستيل.\nلون فضي لامع.\nسلاسل معدنية متينة.\nغطاء متحرك لسهولة وضع الفحم والبخور.\nتصميم كنسي أنيق وعملي.\nسهلة التنظيف والحفاظ عليها.\n\nالعناية بالمنتج:\nتُنظف بقطعة قماش ناعمة، ويُفضل تجنب المنظفات الخشنة للحفاظ على لمعان الستانلس.",
+    "price": 960,
+    "priceNote": "",
+    "stock": "متاح",
+    "badge": "شورية",
+    "isBestSeller": false,
+    "image": "assets/optimized/products/gallery/product-1-1-20260712085718-f59b28.webp",
+    "url": "https://popekyrillos.store/?product=custom-1783845396877",
+    "tags": [
+      "ستانلس",
+      "شورية",
+      "بخور",
+      "مبخرة",
+      "مجمرة",
+      "فحم"
+    ],
+    "images": [
+      "assets/optimized/products/gallery/product-1-1-20260712085718-f59b28.webp",
+      "assets/optimized/products/gallery/product-1-2-20260712085734-2a7467.webp",
+      "assets/optimized/products/gallery/product-1-3-20260712085740-cc1e54.webp",
+      "assets/optimized/products/gallery/product-1-4-20260712085745-ac5662.webp"
+    ],
+    "options": [],
+    "variants": [
+      {
+        "id": "custom-1783845396877-variant-1783845396877-1",
+        "title": "الاختيار الافتراضي",
+        "options": {},
+        "price": 960,
+        "compareAtPrice": null,
+        "available": true,
+        "image": null,
+        "images": [],
+        "sku": "",
+        "quantity": null
+      }
+    ],
+    "mainCategory": "altar-vessels",
+    "subCategory": "censers",
+    "subcategory": "censers",
+    "collections": [
+      "مستلزمات المذبح"
+    ],
+    "searchKeywords": [
+      "شورية ستانلس كبيرة",
+      "نحاسيات",
+      "ستانلس",
+      "شورية",
+      "بخور",
+      "مبخرة",
+      "مجمرة",
+      "فحم",
+      "altar-tools",
+      "service-tools",
+      "مستلزمات المذبح"
+    ]
   }
 ]
