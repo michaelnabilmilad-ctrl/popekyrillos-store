@@ -4595,8 +4595,8 @@
     "category": "books",
     "label": "كتب وطقوس",
     "description": "جراب مميز وعملي للكتاب المقدس يجمع بين الحماية والأناقة. يتوفر بثلاثة مقاسات مختلفة تناسب جميع أحجام الكتب المقدسة، مما يضمن ملاءمة مثالية لاحتياجاتك. اختر من بين ألوان جذابة وراقية تعكس ذوقك الشخصي وتضيف لمسة جمالية لمكتبتك أو حقيبتك. مصنوع بمواد متينة توفر حماية فعالة من الأتربة والرطوبة والتلف اليومي. مثالي كهدية قيمة لأحبائك أو لاستخدامك الشخصي في الكنيسة أو المنزل.\n\nالاختيارات والأسعار:\nSmall 13*19 cm / أسود: ٦٠ ج.م (غير متاح حاليا)\nSmall 13*19 cm / أزرق: ٦٠ ج.م\nSmall 13*19 cm / أحمر: ٦٠ ج.م\nSmall 13*19 cm / وردي: ٦٠ ج.م\nSmall 13*19 cm / بنفسجي: ٦٠ ج.م\nSmall 13*19 cm / أخضر: ٦٠ ج.م\nSmall 13*19 cm / رمادي: ٦٠ ج.م (غير متاح حاليا)\nSmall 13*19 cm / فيروزي: ٦٠ ج.م (غير متاح حاليا)\nMedium 15*22 cm / أسود: ٨٠ ج.م\nMedium 15*22 cm / أزرق: ٨٠ ج.م (غير متاح حاليا)\nMedium 15*22 cm / أحمر: ٨٠ ج.م\nMedium 15*22 cm / وردي: ٨٠ ج.م\nMedium 15*22 cm / بنفسجي: ٨٠ ج.م (غير متاح حاليا)\nMedium 15*22 cm / أخضر: ٨٠ ج.م\nMedium 15*22 cm / رمادي: ٦٠ ج.م\nMedium 15*22 cm / فيروزي: ٦٠ ج.م\nLarge with hand 20*30 cm / أسود: ١٣٠ ج.م (غير متاح حاليا)\nLarge with hand 20*30 cm / أزرق: ١٣٠ ج.م\nLarge with hand 20*30 cm / أحمر: ١٣٠ ج.م\nLarge with hand 20*30 cm / وردي: ١٣٠ ج.م (غير متاح حاليا)\nLarge with hand 20*30 cm / بنفسجي: ١٣٠ ج.م (غير متاح حاليا)\nLarge with hand 20*30 cm / أخضر: ١٣٠ ج.م\nLarge with hand 20*30 cm / رمادي: ٦٠ ج.م (غير متاح حاليا)\nLarge with hand 20*30 cm / فيروزي: ٦٠ ج.م (غير متاح حاليا)",
-    "price": 60,
-    "priceNote": "يبدأ من ٦٠ ج.م حتى ١٣٠ ج.م",
+    "price": 70,
+    "priceNote": "يبدأ من ٧٠ ج.م حتى ١٤٠ ج.م",
     "stock": "متاح",
     "badge": "جرابات كتاب مقدس",
     "image": "assets/optimized/products/gallery/006-10121173303603-01.webp",
@@ -4656,7 +4656,7 @@
           "المقاس": "صغير 13*19 سم",
           "اللون": "أسود"
         },
-        "price": 60,
+        "price": 70,
         "compareAtPrice": null,
         "available": false,
         "image": "assets/optimized/products/gallery/006-10121173303603-07.webp",
@@ -4673,7 +4673,7 @@
           "المقاس": "صغير 13*19 سم",
           "اللون": "أزرق"
         },
-        "price": 60,
+        "price": 70,
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/006-10121173303603-01.webp",
@@ -4690,7 +4690,7 @@
           "المقاس": "صغير 13*19 سم",
           "اللون": "أحمر"
         },
-        "price": 60,
+        "price": 70,
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/006-10121173303603-04.webp",
@@ -4707,7 +4707,7 @@
           "المقاس": "صغير 13*19 سم",
           "اللون": "وردي"
         },
-        "price": 60,
+        "price": 70,
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/006-10121173303603-09.webp",
@@ -4724,7 +4724,7 @@
           "المقاس": "صغير 13*19 سم",
           "اللون": "بنفسجي"
         },
-        "price": 60,
+        "price": 70,
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/006-10121173303603-08.webp",
@@ -4741,7 +4741,7 @@
           "المقاس": "صغير 13*19 سم",
           "اللون": "أخضر"
         },
-        "price": 60,
+        "price": 70,
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/006-10121173303603-06.webp",
@@ -4758,7 +4758,7 @@
           "المقاس": "صغير 13*19 سم",
           "اللون": "رمادي"
         },
-        "price": 60,
+        "price": 70,
         "compareAtPrice": null,
         "available": false,
         "image": "assets/optimized/products/gallery/006-10121173303603-11.webp",
@@ -4775,7 +4775,7 @@
           "المقاس": "صغير 13*19 سم",
           "اللون": "فيروزي"
         },
-        "price": 60,
+        "price": 70,
         "compareAtPrice": null,
         "available": false,
         "image": "assets/optimized/products/gallery/006-10121173303603-12.webp",
@@ -4792,7 +4792,7 @@
           "المقاس": "متوسط 15*22 سم",
           "اللون": "أسود"
         },
-        "price": 80,
+        "price": 90,
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/006-10121173303603-07.webp",
@@ -4809,7 +4809,7 @@
           "المقاس": "متوسط 15*22 سم",
           "اللون": "أزرق"
         },
-        "price": 80,
+        "price": 90,
         "compareAtPrice": 90,
         "available": false,
         "image": "assets/optimized/products/gallery/006-10121173303603-01.webp",
@@ -4826,7 +4826,7 @@
           "المقاس": "متوسط 15*22 سم",
           "اللون": "أحمر"
         },
-        "price": 80,
+        "price": 90,
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/006-10121173303603-04.webp",
@@ -4843,7 +4843,7 @@
           "المقاس": "متوسط 15*22 سم",
           "اللون": "وردي"
         },
-        "price": 80,
+        "price": 90,
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/006-10121173303603-09.webp",
@@ -4860,7 +4860,7 @@
           "المقاس": "متوسط 15*22 سم",
           "اللون": "بنفسجي"
         },
-        "price": 80,
+        "price": 90,
         "compareAtPrice": null,
         "available": false,
         "image": "assets/optimized/products/gallery/006-10121173303603-08.webp",
@@ -4877,7 +4877,7 @@
           "المقاس": "متوسط 15*22 سم",
           "اللون": "أخضر"
         },
-        "price": 80,
+        "price": 90,
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/006-10121173303603-06.webp",
@@ -4894,7 +4894,7 @@
           "المقاس": "متوسط 15*22 سم",
           "اللون": "رمادي"
         },
-        "price": 60,
+        "price": 90,
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/006-10121173303603-11.webp",
@@ -4911,7 +4911,7 @@
           "المقاس": "متوسط 15*22 سم",
           "اللون": "فيروزي"
         },
-        "price": 60,
+        "price": 90,
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/006-10121173303603-12.webp",
@@ -4928,7 +4928,7 @@
           "المقاس": "كبير بيد 20*30 سم",
           "اللون": "أسود"
         },
-        "price": 130,
+        "price": 140,
         "compareAtPrice": null,
         "available": false,
         "image": "assets/optimized/products/gallery/006-10121173303603-07.webp",
@@ -4945,7 +4945,7 @@
           "المقاس": "كبير بيد 20*30 سم",
           "اللون": "أزرق"
         },
-        "price": 130,
+        "price": 140,
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/006-10121173303603-01.webp",
@@ -4962,7 +4962,7 @@
           "المقاس": "كبير بيد 20*30 سم",
           "اللون": "أحمر"
         },
-        "price": 130,
+        "price": 140,
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/006-10121173303603-04.webp",
@@ -4979,7 +4979,7 @@
           "المقاس": "كبير بيد 20*30 سم",
           "اللون": "وردي"
         },
-        "price": 130,
+        "price": 140,
         "compareAtPrice": null,
         "available": false,
         "image": "assets/optimized/products/gallery/006-10121173303603-09.webp",
@@ -4996,7 +4996,7 @@
           "المقاس": "كبير بيد 20*30 سم",
           "اللون": "بنفسجي"
         },
-        "price": 130,
+        "price": 140,
         "compareAtPrice": null,
         "available": false,
         "image": "assets/optimized/products/gallery/006-10121173303603-08.webp",
@@ -5013,7 +5013,7 @@
           "المقاس": "كبير بيد 20*30 سم",
           "اللون": "أخضر"
         },
-        "price": 130,
+        "price": 140,
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/006-10121173303603-06.webp",
@@ -5030,7 +5030,7 @@
           "المقاس": "كبير بيد 20*30 سم",
           "اللون": "رمادي"
         },
-        "price": 60,
+        "price": 140,
         "compareAtPrice": null,
         "available": false,
         "image": "assets/optimized/products/gallery/006-10121173303603-11.webp",
@@ -5047,7 +5047,7 @@
           "المقاس": "كبير بيد 20*30 سم",
           "اللون": "فيروزي"
         },
-        "price": 60,
+        "price": 140,
         "compareAtPrice": null,
         "available": false,
         "image": "assets/optimized/products/gallery/006-10121173303603-12.webp",
@@ -9208,4 +9208,4 @@
       "مستلزمات المذبح"
     ]
   }
-]
+]\n
