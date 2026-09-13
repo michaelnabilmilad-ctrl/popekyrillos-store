@@ -301,7 +301,7 @@
     "subCategory": "ألعاب مسيحية",
     "updatedAt": "2026-07-04T18:38:24+03:00",
     "slug": "تحدي-التغيير",
-    "subcategory": "christian-games",
+    "subcategory": "meeting-games",
     "collections": [
       "هدايا الخدمة",
       "منتجات الأطفال"
@@ -361,7 +361,7 @@
     "subCategory": "كروت وبوك مارك",
     "updatedAt": "2026-07-04T18:38:24+03:00",
     "slug": "٥-بوك-مارك-٥-free",
-    "subcategory": "cards-bookmarks",
+    "subcategory": "bookmarks",
     "collections": [
       "هدايا الخدمة",
       "منتجات الأطفال"
@@ -422,7 +422,7 @@
     "subCategory": "أجندات ونوت",
     "updatedAt": "2026-07-04T18:38:24+03:00",
     "slug": "جورنالينج-اتبعه-٣٦٥-يوم",
-    "subcategory": "notebooks-planners",
+    "subcategory": "planners",
     "collections": [
       "هدايا الخدمة"
     ],
@@ -481,7 +481,7 @@
     "subCategory": "كروت وبوك مارك",
     "updatedAt": "2026-07-04T18:38:24+03:00",
     "slug": "بوك-مارك",
-    "subcategory": "cards-bookmarks",
+    "subcategory": "bookmarks",
     "collections": [
       "هدايا الخدمة",
       "منتجات الأطفال"
@@ -540,7 +540,7 @@
     "subCategory": "كروت وبوك مارك",
     "updatedAt": "2026-07-04T18:38:24+03:00",
     "slug": "بوك-مارك-داود",
-    "subcategory": "cards-bookmarks",
+    "subcategory": "bookmarks",
     "collections": [
       "هدايا الخدمة",
       "منتجات الأطفال"
@@ -780,7 +780,7 @@
     "subCategory": "كروت وبوك مارك",
     "updatedAt": "2026-07-04T18:38:24+03:00",
     "slug": "بوك-مارك-مزمور-١١٧",
-    "subcategory": "cards-bookmarks",
+    "subcategory": "bookmarks",
     "collections": [
       "هدايا الخدمة",
       "منتجات الأطفال"
@@ -840,7 +840,7 @@
     "subCategory": "كروت وبوك مارك",
     "updatedAt": "2026-07-04T18:38:24+03:00",
     "slug": "بوك-مارك-رحلتك",
-    "subcategory": "cards-bookmarks",
+    "subcategory": "bookmarks",
     "collections": [
       "هدايا الخدمة",
       "منتجات الأطفال"
@@ -900,7 +900,7 @@
     "subCategory": "كروت وبوك مارك",
     "updatedAt": "2026-07-04T18:38:24+03:00",
     "slug": "بوك-مارك-الصليب",
-    "subcategory": "cards-bookmarks",
+    "subcategory": "bookmarks",
     "collections": [
       "هدايا الخدمة",
       "منتجات الأطفال"
@@ -960,7 +960,7 @@
     "subCategory": "كروت وبوك مارك",
     "updatedAt": "2026-07-04T18:38:24+03:00",
     "slug": "بوك-مارك-اتبعه",
-    "subcategory": "cards-bookmarks",
+    "subcategory": "bookmarks",
     "collections": [
       "هدايا الخدمة",
       "منتجات الأطفال"
@@ -1021,7 +1021,7 @@
     "subCategory": "كروت وبوك مارك",
     "updatedAt": "2026-07-04T18:38:24+03:00",
     "slug": "بوك-مارك-صلاه-يسوع",
-    "subcategory": "cards-bookmarks",
+    "subcategory": "bookmarks",
     "collections": [
       "هدايا الخدمة",
       "منتجات الأطفال"
@@ -1081,7 +1081,7 @@
     "subCategory": "كروت وبوك مارك",
     "updatedAt": "2026-07-04T18:38:24+03:00",
     "slug": "بوك-مارك-بابا-يسوع",
-    "subcategory": "cards-bookmarks",
+    "subcategory": "bookmarks",
     "collections": [
       "هدايا الخدمة",
       "منتجات الأطفال"
@@ -1141,7 +1141,7 @@
     "subCategory": "أجندات ونوت",
     "updatedAt": "2026-07-04T18:38:24+03:00",
     "slug": "نوت-بوك-اتبعه-في-صلاتي-اجنده",
-    "subcategory": "notebooks-planners",
+    "subcategory": "notebooks",
     "collections": [
       "هدايا الخدمة"
     ],
@@ -1191,7 +1191,7 @@
         "available": true,
         "image": null,
         "images": [],
-        "sku": "",
+        "sku": "PK-PRAYER-WIRE",
         "quantity": null
       }
     ],
@@ -1199,7 +1199,7 @@
     "subCategory": "أجندات ونوت",
     "updatedAt": "2026-07-04T18:38:24+03:00",
     "slug": "نوت-بوك-اتبعه-في-صلاه-سلك",
-    "subcategory": "notebooks-planners",
+    "subcategory": "notebooks",
     "collections": [
       "هدايا الخدمة"
     ],
@@ -1249,7 +1249,7 @@
         "available": true,
         "image": null,
         "images": [],
-        "sku": "",
+        "sku": "PK-CARDS",
         "quantity": null
       }
     ],
@@ -1257,7 +1257,7 @@
     "subCategory": "ألعاب مسيحية",
     "updatedAt": "2026-07-04T18:38:24+03:00",
     "slug": "اتبعه-في-تحدياتي",
-    "subcategory": "christian-games",
+    "subcategory": "meeting-games",
     "collections": [
       "هدايا الخدمة",
       "منتجات الأطفال"
@@ -1318,7 +1318,7 @@
     "subCategory": "ألعاب مسيحية",
     "updatedAt": "2026-07-04T18:38:24+03:00",
     "slug": "باكدج-اتبعه",
-    "subcategory": "christian-games",
+    "subcategory": "meeting-games",
     "collections": [
       "هدايا الخدمة",
       "منتجات الأطفال"
@@ -1379,7 +1379,7 @@
     "subCategory": "كروت وبوك مارك",
     "updatedAt": "2026-07-04T18:38:24+03:00",
     "slug": "كارت-منظم-لمواعيد-سر-الاعتراف",
-    "subcategory": "cards-bookmarks",
+    "subcategory": "cards",
     "collections": [
       "هدايا الخدمة",
       "منتجات الأطفال"
@@ -1464,7 +1464,7 @@
     "subCategory": "أجندات ونوت",
     "updatedAt": "2026-07-04T18:38:24+03:00",
     "slug": "اتبعه-رحله-٢١٤-يوم",
-    "subcategory": "notebooks-planners",
+    "subcategory": "planners",
     "collections": [
       "هدايا الخدمة"
     ],
@@ -1493,7 +1493,7 @@
     "stock": "متاح",
     "badge": "يوتا",
     "image": "assets/products/gallery/iota-plain-cross-20cm-model-1.webp",
-    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D9%87-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-1",
+    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D8%A9-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-1",
     "tags": [
       "يوتا",
       "صلبان يوتا",
@@ -1523,7 +1523,7 @@
     ],
     "mainCategory": "الصلبان",
     "subCategory": "صلبان خشب",
-    "slug": "صليب-يوتا-ساده-20-سم-موديل-1",
+    "slug": "صليب-يوتا-سادة-20-سم-موديل-1",
     "subcategory": "wooden-crosses",
     "collections": [
       "هدايا الخدمة",
@@ -1558,7 +1558,7 @@
     "stock": "متاح",
     "badge": "يوتا",
     "image": "assets/products/gallery/iota-plain-cross-20cm-model-2.webp",
-    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D9%87-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-2",
+    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D8%A9-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-2",
     "tags": [
       "يوتا",
       "صلبان يوتا",
@@ -1588,7 +1588,7 @@
     ],
     "mainCategory": "الصلبان",
     "subCategory": "صلبان خشب",
-    "slug": "صليب-يوتا-ساده-20-سم-موديل-2",
+    "slug": "صليب-يوتا-سادة-20-سم-موديل-2",
     "subcategory": "wooden-crosses",
     "collections": [
       "هدايا الخدمة",
@@ -1618,12 +1618,12 @@
     "category": "icons",
     "label": "يوتا",
     "description": "صليب يوتا سادة مصنوع من خشب الزان، بطول 20 سم، مناسب للتلوين والأنشطة الكنسية ومدارس الأحد والخلوات.",
-    "price": 84,
+    "price": 104,
     "priceNote": "يتم التجهيز خلال أسبوع",
     "stock": "متاح",
     "badge": "يوتا",
     "image": "assets/products/gallery/iota-plain-cross-20cm-model-3.webp",
-    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D9%87-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-3",
+    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D8%A9-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-3",
     "tags": [
       "يوتا",
       "صلبان يوتا",
@@ -1642,7 +1642,7 @@
         "id": "iota-plain-cross-20cm-3-variant-1",
         "title": "الاختيار الافتراضي",
         "options": {},
-        "price": 84,
+        "price": 104,
         "compareAtPrice": null,
         "available": true,
         "image": null,
@@ -1653,7 +1653,7 @@
     ],
     "mainCategory": "الصلبان",
     "subCategory": "صلبان خشب",
-    "slug": "صليب-يوتا-ساده-20-سم-موديل-3",
+    "slug": "صليب-يوتا-سادة-20-سم-موديل-3",
     "subcategory": "wooden-crosses",
     "collections": [
       "هدايا الخدمة",
@@ -1688,7 +1688,7 @@
     "stock": "متاح",
     "badge": "يوتا",
     "image": "assets/products/gallery/iota-plain-cross-20cm-model-4.webp",
-    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D9%87-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-4",
+    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D8%A9-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-4",
     "tags": [
       "يوتا",
       "صلبان يوتا",
@@ -1718,7 +1718,7 @@
     ],
     "mainCategory": "الصلبان",
     "subCategory": "صلبان خشب",
-    "slug": "صليب-يوتا-ساده-20-سم-موديل-4",
+    "slug": "صليب-يوتا-سادة-20-سم-موديل-4",
     "subcategory": "wooden-crosses",
     "collections": [
       "هدايا الخدمة",
@@ -1753,7 +1753,7 @@
     "stock": "متاح",
     "badge": "يوتا",
     "image": "assets/products/gallery/iota-plain-cross-20cm-model-5.webp",
-    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D9%87-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-5",
+    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D8%A9-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-5",
     "tags": [
       "يوتا",
       "صلبان يوتا",
@@ -1783,7 +1783,7 @@
     ],
     "mainCategory": "الصلبان",
     "subCategory": "صلبان خشب",
-    "slug": "صليب-يوتا-ساده-20-سم-موديل-5",
+    "slug": "صليب-يوتا-سادة-20-سم-موديل-5",
     "subcategory": "wooden-crosses",
     "collections": [
       "هدايا الخدمة",
@@ -1818,7 +1818,7 @@
     "stock": "متاح",
     "badge": "يوتا",
     "image": "assets/products/gallery/iota-plain-cross-20cm-model-6.webp",
-    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D9%87-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-6",
+    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D8%A9-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-6",
     "tags": [
       "يوتا",
       "صلبان يوتا",
@@ -1848,7 +1848,7 @@
     ],
     "mainCategory": "الصلبان",
     "subCategory": "صلبان خشب",
-    "slug": "صليب-يوتا-ساده-20-سم-موديل-6",
+    "slug": "صليب-يوتا-سادة-20-سم-موديل-6",
     "subcategory": "wooden-crosses",
     "collections": [
       "هدايا الخدمة",
@@ -1883,7 +1883,7 @@
     "stock": "متاح",
     "badge": "يوتا",
     "image": "assets/products/gallery/iota-plain-cross-20cm-model-7.webp",
-    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D9%87-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-7",
+    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D8%A9-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-7",
     "tags": [
       "يوتا",
       "صلبان يوتا",
@@ -1913,7 +1913,7 @@
     ],
     "mainCategory": "الصلبان",
     "subCategory": "صلبان خشب",
-    "slug": "صليب-يوتا-ساده-20-سم-موديل-7",
+    "slug": "صليب-يوتا-سادة-20-سم-موديل-7",
     "subcategory": "wooden-crosses",
     "collections": [
       "هدايا الخدمة",
@@ -1943,12 +1943,12 @@
     "category": "icons",
     "label": "يوتا",
     "description": "صليب يوتا سادة مصنوع من خشب الزان، بطول 20 سم، مناسب للتلوين والأنشطة الكنسية ومدارس الأحد والخلوات.",
-    "price": 84,
+    "price": 104,
     "priceNote": "يتم التجهيز خلال أسبوع",
     "stock": "متاح",
     "badge": "يوتا",
     "image": "assets/products/gallery/iota-plain-cross-20cm-model-8.webp",
-    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D9%87-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-8",
+    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D8%A9-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-8",
     "tags": [
       "يوتا",
       "صلبان يوتا",
@@ -1967,7 +1967,7 @@
         "id": "iota-plain-cross-20cm-8-variant-1",
         "title": "الاختيار الافتراضي",
         "options": {},
-        "price": 84,
+        "price": 104,
         "compareAtPrice": null,
         "available": true,
         "image": null,
@@ -1978,7 +1978,7 @@
     ],
     "mainCategory": "الصلبان",
     "subCategory": "صلبان خشب",
-    "slug": "صليب-يوتا-ساده-20-سم-موديل-8",
+    "slug": "صليب-يوتا-سادة-20-سم-موديل-8",
     "subcategory": "wooden-crosses",
     "collections": [
       "هدايا الخدمة",
@@ -2013,7 +2013,7 @@
     "stock": "متاح",
     "badge": "يوتا",
     "image": "assets/products/gallery/iota-plain-cross-20cm-model-9.webp",
-    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D9%87-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-9",
+    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D8%A9-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-9",
     "tags": [
       "يوتا",
       "صلبان يوتا",
@@ -2043,7 +2043,7 @@
     ],
     "mainCategory": "الصلبان",
     "subCategory": "صلبان خشب",
-    "slug": "صليب-يوتا-ساده-20-سم-موديل-9",
+    "slug": "صليب-يوتا-سادة-20-سم-موديل-9",
     "subcategory": "wooden-crosses",
     "collections": [
       "هدايا الخدمة",
@@ -2078,7 +2078,7 @@
     "stock": "متاح",
     "badge": "يوتا",
     "image": "assets/products/gallery/iota-plain-cross-20cm-model-10.webp",
-    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D9%87-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-10",
+    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D8%A9-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-10",
     "tags": [
       "يوتا",
       "صلبان يوتا",
@@ -2108,7 +2108,7 @@
     ],
     "mainCategory": "الصلبان",
     "subCategory": "صلبان خشب",
-    "slug": "صليب-يوتا-ساده-20-سم-موديل-10",
+    "slug": "صليب-يوتا-سادة-20-سم-موديل-10",
     "subcategory": "wooden-crosses",
     "collections": [
       "هدايا الخدمة",
@@ -2138,12 +2138,12 @@
     "category": "icons",
     "label": "يوتا",
     "description": "صليب يوتا سادة مصنوع من خشب الزان، بطول 20 سم، مناسب للتلوين والأنشطة الكنسية ومدارس الأحد والخلوات.",
-    "price": 84,
+    "price": 104,
     "priceNote": "يتم التجهيز خلال أسبوع",
     "stock": "متاح",
     "badge": "يوتا",
     "image": "assets/products/gallery/iota-plain-cross-20cm-model-11.webp",
-    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D9%87-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-11",
+    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D8%A9-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-11",
     "tags": [
       "يوتا",
       "صلبان يوتا",
@@ -2162,7 +2162,7 @@
         "id": "iota-plain-cross-20cm-11-variant-1",
         "title": "الاختيار الافتراضي",
         "options": {},
-        "price": 84,
+        "price": 104,
         "compareAtPrice": null,
         "available": true,
         "image": null,
@@ -2173,7 +2173,7 @@
     ],
     "mainCategory": "الصلبان",
     "subCategory": "صلبان خشب",
-    "slug": "صليب-يوتا-ساده-20-سم-موديل-11",
+    "slug": "صليب-يوتا-سادة-20-سم-موديل-11",
     "subcategory": "wooden-crosses",
     "collections": [
       "هدايا الخدمة",
@@ -2208,7 +2208,7 @@
     "stock": "متاح",
     "badge": "يوتا",
     "image": "assets/products/gallery/iota-plain-cross-20cm-model-12.webp",
-    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D9%87-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-12",
+    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D8%A9-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-12",
     "tags": [
       "يوتا",
       "صلبان يوتا",
@@ -2238,7 +2238,7 @@
     ],
     "mainCategory": "الصلبان",
     "subCategory": "صلبان خشب",
-    "slug": "صليب-يوتا-ساده-20-سم-موديل-12",
+    "slug": "صليب-يوتا-سادة-20-سم-موديل-12",
     "subcategory": "wooden-crosses",
     "collections": [
       "هدايا الخدمة",
@@ -2273,7 +2273,7 @@
     "stock": "متاح",
     "badge": "يوتا",
     "image": "assets/products/gallery/iota-plain-cross-20cm-model-13.webp",
-    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D9%87-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-13",
+    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D8%A9-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-13",
     "tags": [
       "يوتا",
       "صلبان يوتا",
@@ -2303,7 +2303,7 @@
     ],
     "mainCategory": "الصلبان",
     "subCategory": "صلبان خشب",
-    "slug": "صليب-يوتا-ساده-20-سم-موديل-13",
+    "slug": "صليب-يوتا-سادة-20-سم-موديل-13",
     "subcategory": "wooden-crosses",
     "collections": [
       "هدايا الخدمة",
@@ -2338,7 +2338,7 @@
     "stock": "متاح",
     "badge": "يوتا",
     "image": "assets/products/gallery/iota-plain-cross-20cm-model-14.webp",
-    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D9%87-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-14",
+    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D8%A9-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-14",
     "tags": [
       "يوتا",
       "صلبان يوتا",
@@ -2368,7 +2368,7 @@
     ],
     "mainCategory": "الصلبان",
     "subCategory": "صلبان خشب",
-    "slug": "صليب-يوتا-ساده-20-سم-موديل-14",
+    "slug": "صليب-يوتا-سادة-20-سم-موديل-14",
     "subcategory": "wooden-crosses",
     "collections": [
       "هدايا الخدمة",
@@ -2403,7 +2403,7 @@
     "stock": "متاح",
     "badge": "يوتا",
     "image": "assets/products/gallery/iota-plain-cross-20cm-model-15.webp",
-    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D9%87-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-15",
+    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D8%A9-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-15",
     "tags": [
       "يوتا",
       "صلبان يوتا",
@@ -2433,7 +2433,7 @@
     ],
     "mainCategory": "الصلبان",
     "subCategory": "صلبان خشب",
-    "slug": "صليب-يوتا-ساده-20-سم-موديل-15",
+    "slug": "صليب-يوتا-سادة-20-سم-موديل-15",
     "subcategory": "wooden-crosses",
     "collections": [
       "هدايا الخدمة",
@@ -2463,12 +2463,12 @@
     "category": "icons",
     "label": "يوتا",
     "description": "صليب يوتا سادة مصنوع من خشب الزان، بطول 20 سم، مناسب للتلوين والأنشطة الكنسية ومدارس الأحد والخلوات.",
-    "price": 84,
+    "price": 104,
     "priceNote": "يتم التجهيز خلال أسبوع",
     "stock": "متاح",
     "badge": "يوتا",
     "image": "assets/products/gallery/iota-plain-cross-20cm-model-16.webp",
-    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D9%87-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-16",
+    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D8%A9-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-16",
     "tags": [
       "يوتا",
       "صلبان يوتا",
@@ -2487,7 +2487,7 @@
         "id": "iota-plain-cross-20cm-16-variant-1",
         "title": "الاختيار الافتراضي",
         "options": {},
-        "price": 84,
+        "price": 104,
         "compareAtPrice": null,
         "available": true,
         "image": null,
@@ -2498,7 +2498,7 @@
     ],
     "mainCategory": "الصلبان",
     "subCategory": "صلبان خشب",
-    "slug": "صليب-يوتا-ساده-20-سم-موديل-16",
+    "slug": "صليب-يوتا-سادة-20-سم-موديل-16",
     "subcategory": "wooden-crosses",
     "collections": [
       "هدايا الخدمة",
@@ -2533,7 +2533,7 @@
     "stock": "متاح",
     "badge": "يوتا",
     "image": "assets/products/gallery/iota-plain-cross-20cm-model-17.webp",
-    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D9%87-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-17",
+    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D8%A9-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-17",
     "tags": [
       "يوتا",
       "صلبان يوتا",
@@ -2563,7 +2563,7 @@
     ],
     "mainCategory": "الصلبان",
     "subCategory": "صلبان خشب",
-    "slug": "صليب-يوتا-ساده-20-سم-موديل-17",
+    "slug": "صليب-يوتا-سادة-20-سم-موديل-17",
     "subcategory": "wooden-crosses",
     "collections": [
       "هدايا الخدمة",
@@ -2673,7 +2673,7 @@
     "name": "صليب يوتا مادلية موديل 13",
     "category": "icons",
     "label": "يوتا",
-    "description": "ميدالية يوتا خشبية موديل 13 جاهزة للتلوين والأنشطة الكنسية.",
+    "description": "وّل وقت النشاط إلى تجربة ممتعة ومفيدة مع ميداليات فن اليوتا الجاهزة للتلوين، بتصميمات قبطية مميزة تساعد الأطفال والشباب على التعبير عن إبداعهم وصناعة هدية تذكارية بأيديهم.\n\nمناسبة للأنشطة الفنية خلال مدارس الأحد، والخدمات، والمؤتمرات، والخلوات والأيام الروحية. يمكن تلوينها بسهولة بالألوان المناسبة، ثم استخدامها كميدالية شخصية أو تقديمها كهدية تذكارية جميلة للمخدومين.\n\nتتميز الميداليات بأنها:\n\nجاهزة للتلوين والاستخدام مباشرة.\nمناسبة للأطفال والشباب ومختلف المراحل العمرية.\nنشاط جماعي ممتع وسهل التنفيذ.\nتساعد على تنمية التركيز والإبداع والمهارات اليدوية.\nتذكار مميز يحتفظ به المخدوم بعد انتهاء اليوم الروحي.\n\nاختيار مثالي للخدام الباحثين عن نشاط بسيط، هادف ومحبوب داخل الخدمة أو الخلوة الروحية.",
     "price": 20,
     "priceNote": "",
     "stock": "متاح",
@@ -2684,7 +2684,11 @@
       "مادليات",
       "خشب طبقات",
       "فن",
-      "تلوين"
+      "تلوين",
+      "يوطا",
+      "الأيقونات والبراويز",
+      "أيقونات صغيرة",
+      "أيقونات وهدايا"
     ],
     "images": [
       "assets/optimized/products/gallery/product-1-1313-20260706001215-20c811.webp",
@@ -2707,7 +2711,7 @@
     ],
     "mainCategory": "الصلبان",
     "subCategory": "مادليات اليوطا",
-    "slug": "صليب-يوتا-مادليه-موديل-13",
+    "slug": "صليب-يوتا-مادليه-موديل-7",
     "subcategory": "yota-medallions",
     "collections": [
       "هدايا الخدمة",
@@ -2717,11 +2721,19 @@
       "صليب يوتا مادلية موديل 13",
       "يوتا",
       "مادليات",
+      "خشب طبقات",
+      "فن",
       "تلوين",
+      "يوطا",
+      "الأيقونات والبراويز",
+      "أيقونات صغيرة",
+      "أيقونات وهدايا",
       "crosses",
-      "wooden-crosses"
+      "wooden-crosses",
+      "هدايا الخدمة",
+      "منتجات الأطفال"
     ],
-    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D9%85%D8%A7%D8%AF%D9%84%D9%8A%D9%87-%D9%85%D9%88%D8%AF%D9%8A%D9%84-13",
+    "url": "https://popekyrillos.store/?product=custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642-copy-1783007465321-copy-1783296428133-copy-1783296505870-copy-1783296547191-copy-1783296594080-copy-1783296672538-copy-1783296711318",
     "thumbnail": "/assets/thumbnails/320/custom-1782980654479-copy-1782982056347-copy-17829869845-5e38645658a5-25bd7474b7.webp",
     "isBestSeller": false
   },
@@ -2730,7 +2742,7 @@
     "name": "صليب يوتا مادلية موديل 12",
     "category": "icons",
     "label": "يوتا",
-    "description": "ميدالية يوتا خشبية موديل 12 جاهزة للتلوين والأنشطة الكنسية.",
+    "description": "وّل وقت النشاط إلى تجربة ممتعة ومفيدة مع ميداليات فن اليوتا الجاهزة للتلوين، بتصميمات قبطية مميزة تساعد الأطفال والشباب على التعبير عن إبداعهم وصناعة هدية تذكارية بأيديهم.\n\nمناسبة للأنشطة الفنية خلال مدارس الأحد، والخدمات، والمؤتمرات، والخلوات والأيام الروحية. يمكن تلوينها بسهولة بالألوان المناسبة، ثم استخدامها كميدالية شخصية أو تقديمها كهدية تذكارية جميلة للمخدومين.\n\nتتميز الميداليات بأنها:\n\nجاهزة للتلوين والاستخدام مباشرة.\nمناسبة للأطفال والشباب ومختلف المراحل العمرية.\nنشاط جماعي ممتع وسهل التنفيذ.\nتساعد على تنمية التركيز والإبداع والمهارات اليدوية.\nتذكار مميز يحتفظ به المخدوم بعد انتهاء اليوم الروحي.\n\nاختيار مثالي للخدام الباحثين عن نشاط بسيط، هادف ومحبوب داخل الخدمة أو الخلوة الروحية.",
     "price": 20,
     "priceNote": "",
     "stock": "متاح",
@@ -2741,7 +2753,11 @@
       "مادليات",
       "خشب طبقات",
       "فن",
-      "تلوين"
+      "تلوين",
+      "يوطا",
+      "الأيقونات والبراويز",
+      "أيقونات صغيرة",
+      "أيقونات وهدايا"
     ],
     "images": [
       "assets/optimized/products/gallery/product-1-1212-20260706001137-05ea06.webp",
@@ -2764,7 +2780,7 @@
     ],
     "mainCategory": "الصلبان",
     "subCategory": "مادليات اليوطا",
-    "slug": "صليب-يوتا-مادليه-موديل-12",
+    "slug": "صليب-يوتا-مادليه-موديل-7",
     "subcategory": "yota-medallions",
     "collections": [
       "هدايا الخدمة",
@@ -2774,11 +2790,19 @@
       "صليب يوتا مادلية موديل 12",
       "يوتا",
       "مادليات",
+      "خشب طبقات",
+      "فن",
       "تلوين",
+      "يوطا",
+      "الأيقونات والبراويز",
+      "أيقونات صغيرة",
+      "أيقونات وهدايا",
       "crosses",
-      "wooden-crosses"
+      "wooden-crosses",
+      "هدايا الخدمة",
+      "منتجات الأطفال"
     ],
-    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D9%85%D8%A7%D8%AF%D9%84%D9%8A%D9%87-%D9%85%D9%88%D8%AF%D9%8A%D9%84-12",
+    "url": "https://popekyrillos.store/?product=custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642-copy-1783007465321-copy-1783296428133-copy-1783296505870-copy-1783296547191-copy-1783296594080-copy-1783296672538",
     "thumbnail": "/assets/thumbnails/320/custom-1782980654479-copy-1782982056347-copy-17829869845-5f7b997ab9ed-0dfafc8e90.webp",
     "isBestSeller": false
   },
@@ -2787,7 +2811,7 @@
     "name": "صليب يوتا مادلية موديل 11",
     "category": "icons",
     "label": "يوتا",
-    "description": "ميدالية يوتا خشبية موديل 11 جاهزة للتلوين والأنشطة الكنسية.",
+    "description": "وّل وقت النشاط إلى تجربة ممتعة ومفيدة مع ميداليات فن اليوتا الجاهزة للتلوين، بتصميمات قبطية مميزة تساعد الأطفال والشباب على التعبير عن إبداعهم وصناعة هدية تذكارية بأيديهم.\n\nمناسبة للأنشطة الفنية خلال مدارس الأحد، والخدمات، والمؤتمرات، والخلوات والأيام الروحية. يمكن تلوينها بسهولة بالألوان المناسبة، ثم استخدامها كميدالية شخصية أو تقديمها كهدية تذكارية جميلة للمخدومين.\n\nتتميز الميداليات بأنها:\n\nجاهزة للتلوين والاستخدام مباشرة.\nمناسبة للأطفال والشباب ومختلف المراحل العمرية.\nنشاط جماعي ممتع وسهل التنفيذ.\nتساعد على تنمية التركيز والإبداع والمهارات اليدوية.\nتذكار مميز يحتفظ به المخدوم بعد انتهاء اليوم الروحي.\n\nاختيار مثالي للخدام الباحثين عن نشاط بسيط، هادف ومحبوب داخل الخدمة أو الخلوة الروحية.",
     "price": 20,
     "priceNote": "",
     "stock": "متاح",
@@ -2798,7 +2822,11 @@
       "مادليات",
       "خشب طبقات",
       "فن",
-      "تلوين"
+      "تلوين",
+      "يوطا",
+      "الأيقونات والبراويز",
+      "أيقونات صغيرة",
+      "أيقونات وهدايا"
     ],
     "images": [
       "assets/optimized/products/gallery/product-1-1111-20260706001045-b19fff.webp",
@@ -2821,7 +2849,7 @@
     ],
     "mainCategory": "الصلبان",
     "subCategory": "مادليات اليوطا",
-    "slug": "صليب-يوتا-مادليه-موديل-11",
+    "slug": "صليب-يوتا-مادليه-موديل-7",
     "subcategory": "yota-medallions",
     "collections": [
       "هدايا الخدمة",
@@ -2831,11 +2859,19 @@
       "صليب يوتا مادلية موديل 11",
       "يوتا",
       "مادليات",
+      "خشب طبقات",
+      "فن",
       "تلوين",
+      "يوطا",
+      "الأيقونات والبراويز",
+      "أيقونات صغيرة",
+      "أيقونات وهدايا",
       "crosses",
-      "wooden-crosses"
+      "wooden-crosses",
+      "هدايا الخدمة",
+      "منتجات الأطفال"
     ],
-    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D9%85%D8%A7%D8%AF%D9%84%D9%8A%D9%87-%D9%85%D9%88%D8%AF%D9%8A%D9%84-11",
+    "url": "https://popekyrillos.store/?product=custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642-copy-1783007465321-copy-1783296428133-copy-1783296505870-copy-1783296547191-copy-1783296594080",
     "thumbnail": "/assets/thumbnails/320/custom-1782980654479-copy-1782982056347-copy-17829869845-33a97b4f9c6c-ee3083c19f.webp",
     "isBestSeller": false
   },
@@ -2844,7 +2880,7 @@
     "name": "صليب يوتا مادلية موديل 10",
     "category": "icons",
     "label": "يوتا",
-    "description": "ميدالية يوتا خشبية موديل 10 جاهزة للتلوين والأنشطة الكنسية.",
+    "description": "وّل وقت النشاط إلى تجربة ممتعة ومفيدة مع ميداليات فن اليوتا الجاهزة للتلوين، بتصميمات قبطية مميزة تساعد الأطفال والشباب على التعبير عن إبداعهم وصناعة هدية تذكارية بأيديهم.\n\nمناسبة للأنشطة الفنية خلال مدارس الأحد، والخدمات، والمؤتمرات، والخلوات والأيام الروحية. يمكن تلوينها بسهولة بالألوان المناسبة، ثم استخدامها كميدالية شخصية أو تقديمها كهدية تذكارية جميلة للمخدومين.\n\nتتميز الميداليات بأنها:\n\nجاهزة للتلوين والاستخدام مباشرة.\nمناسبة للأطفال والشباب ومختلف المراحل العمرية.\nنشاط جماعي ممتع وسهل التنفيذ.\nتساعد على تنمية التركيز والإبداع والمهارات اليدوية.\nتذكار مميز يحتفظ به المخدوم بعد انتهاء اليوم الروحي.\n\nاختيار مثالي للخدام الباحثين عن نشاط بسيط، هادف ومحبوب داخل الخدمة أو الخلوة الروحية.",
     "price": 20,
     "priceNote": "",
     "stock": "متاح",
@@ -2855,7 +2891,11 @@
       "مادليات",
       "خشب طبقات",
       "فن",
-      "تلوين"
+      "تلوين",
+      "يوطا",
+      "الأيقونات والبراويز",
+      "أيقونات صغيرة",
+      "أيقونات وهدايا"
     ],
     "images": [
       "assets/optimized/products/gallery/product-1-1010-20260706000934-a00e6c.webp",
@@ -2878,7 +2918,7 @@
     ],
     "mainCategory": "الصلبان",
     "subCategory": "مادليات اليوطا",
-    "slug": "صليب-يوتا-مادليه-موديل-10",
+    "slug": "صليب-يوتا-مادليه-موديل-7",
     "subcategory": "yota-medallions",
     "collections": [
       "هدايا الخدمة",
@@ -2888,11 +2928,19 @@
       "صليب يوتا مادلية موديل 10",
       "يوتا",
       "مادليات",
+      "خشب طبقات",
+      "فن",
       "تلوين",
+      "يوطا",
+      "الأيقونات والبراويز",
+      "أيقونات صغيرة",
+      "أيقونات وهدايا",
       "crosses",
-      "wooden-crosses"
+      "wooden-crosses",
+      "هدايا الخدمة",
+      "منتجات الأطفال"
     ],
-    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D9%85%D8%A7%D8%AF%D9%84%D9%8A%D9%87-%D9%85%D9%88%D8%AF%D9%8A%D9%84-10",
+    "url": "https://popekyrillos.store/?product=custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642-copy-1783007465321-copy-1783296428133-copy-1783296505870-copy-1783296547191",
     "thumbnail": "/assets/thumbnails/320/custom-1782980654479-copy-1782982056347-copy-17829869845-0975d45c9eaa-f5e23e5fa5.webp",
     "isBestSeller": false
   },
@@ -2901,7 +2949,7 @@
     "name": "صليب يوتا مادلية موديل 9",
     "category": "icons",
     "label": "يوتا",
-    "description": "ميدالية يوتا خشبية موديل 9 جاهزة للتلوين والأنشطة الكنسية.",
+    "description": "وّل وقت النشاط إلى تجربة ممتعة ومفيدة مع ميداليات فن اليوتا الجاهزة للتلوين، بتصميمات قبطية مميزة تساعد الأطفال والشباب على التعبير عن إبداعهم وصناعة هدية تذكارية بأيديهم.\n\nمناسبة للأنشطة الفنية خلال مدارس الأحد، والخدمات، والمؤتمرات، والخلوات والأيام الروحية. يمكن تلوينها بسهولة بالألوان المناسبة، ثم استخدامها كميدالية شخصية أو تقديمها كهدية تذكارية جميلة للمخدومين.\n\nتتميز الميداليات بأنها:\n\nجاهزة للتلوين والاستخدام مباشرة.\nمناسبة للأطفال والشباب ومختلف المراحل العمرية.\nنشاط جماعي ممتع وسهل التنفيذ.\nتساعد على تنمية التركيز والإبداع والمهارات اليدوية.\nتذكار مميز يحتفظ به المخدوم بعد انتهاء اليوم الروحي.\n\nاختيار مثالي للخدام الباحثين عن نشاط بسيط، هادف ومحبوب داخل الخدمة أو الخلوة الروحية.",
     "price": 20,
     "priceNote": "",
     "stock": "متاح",
@@ -2912,7 +2960,11 @@
       "مادليات",
       "خشب طبقات",
       "فن",
-      "تلوين"
+      "تلوين",
+      "يوطا",
+      "الأيقونات والبراويز",
+      "أيقونات صغيرة",
+      "أيقونات وهدايا"
     ],
     "images": [
       "assets/optimized/products/gallery/product-1-99-20260706000851-a4d842.webp",
@@ -2935,7 +2987,7 @@
     ],
     "mainCategory": "الصلبان",
     "subCategory": "مادليات اليوطا",
-    "slug": "صليب-يوتا-مادليه-موديل-9",
+    "slug": "صليب-يوتا-مادليه-موديل-7",
     "subcategory": "yota-medallions",
     "collections": [
       "هدايا الخدمة",
@@ -2945,11 +2997,19 @@
       "صليب يوتا مادلية موديل 9",
       "يوتا",
       "مادليات",
+      "خشب طبقات",
+      "فن",
       "تلوين",
+      "يوطا",
+      "الأيقونات والبراويز",
+      "أيقونات صغيرة",
+      "أيقونات وهدايا",
       "crosses",
-      "wooden-crosses"
+      "wooden-crosses",
+      "هدايا الخدمة",
+      "منتجات الأطفال"
     ],
-    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D9%85%D8%A7%D8%AF%D9%84%D9%8A%D9%87-%D9%85%D9%88%D8%AF%D9%8A%D9%84-9",
+    "url": "https://popekyrillos.store/?product=custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642-copy-1783007465321-copy-1783296428133-copy-1783296505870",
     "thumbnail": "/assets/thumbnails/320/custom-1782980654479-copy-1782982056347-copy-17829869845-dcc772f77412-ea8cd3486c.webp",
     "isBestSeller": false
   },
@@ -2958,21 +3018,26 @@
     "name": "صليب يوتا مادلية موديل 8",
     "category": "icons",
     "label": "يوتا",
-    "description": "ميدالية يوتا خشبية موديل 8 جاهزة للتلوين والأنشطة الكنسية.",
+    "description": "وّل وقت النشاط إلى تجربة ممتعة ومفيدة مع ميداليات فن اليوتا الجاهزة للتلوين، بتصميمات قبطية مميزة تساعد الأطفال والشباب على التعبير عن إبداعهم وصناعة هدية تذكارية بأيديهم.\n\nمناسبة للأنشطة الفنية خلال مدارس الأحد، والخدمات، والمؤتمرات، والخلوات والأيام الروحية. يمكن تلوينها بسهولة بالألوان المناسبة، ثم استخدامها كميدالية شخصية أو تقديمها كهدية تذكارية جميلة للمخدومين.\n\nتتميز الميداليات بأنها:\n\nجاهزة للتلوين والاستخدام مباشرة.\nمناسبة للأطفال والشباب ومختلف المراحل العمرية.\nنشاط جماعي ممتع وسهل التنفيذ.\nتساعد على تنمية التركيز والإبداع والمهارات اليدوية.\nتذكار مميز يحتفظ به المخدوم بعد انتهاء اليوم الروحي.\n\nاختيار مثالي للخدام الباحثين عن نشاط بسيط، هادف ومحبوب داخل الخدمة أو الخلوة الروحية.",
     "price": 20,
     "priceNote": "",
     "stock": "متاح",
     "badge": "يوتا",
-    "image": "coloring/yota-08/base.png",
+    "image": "assets/optimized/products/gallery/product-1-88-20260706000805-8a1934.webp",
     "tags": [
       "يوتا",
       "مادليات",
       "خشب طبقات",
       "فن",
-      "تلوين"
+      "تلوين",
+      "يوطا",
+      "الأيقونات والبراويز",
+      "أيقونات صغيرة",
+      "أيقونات وهدايا"
     ],
     "images": [
-      "coloring/yota-08/base.png"
+      "assets/optimized/products/gallery/product-1-88-20260706000805-8a1934.webp",
+      "assets/optimized/products/gallery/product-1-8-20260706000800-af4496.webp"
     ],
     "options": [],
     "variants": [
@@ -2991,7 +3056,7 @@
     ],
     "mainCategory": "الصلبان",
     "subCategory": "مادليات اليوطا",
-    "slug": "صليب-يوتا-مادليه-موديل-8",
+    "slug": "صليب-يوتا-مادليه-موديل-7",
     "subcategory": "yota-medallions",
     "collections": [
       "هدايا الخدمة",
@@ -3001,12 +3066,20 @@
       "صليب يوتا مادلية موديل 8",
       "يوتا",
       "مادليات",
+      "خشب طبقات",
+      "فن",
       "تلوين",
+      "يوطا",
+      "الأيقونات والبراويز",
+      "أيقونات صغيرة",
+      "أيقونات وهدايا",
       "crosses",
-      "wooden-crosses"
+      "wooden-crosses",
+      "هدايا الخدمة",
+      "منتجات الأطفال"
     ],
     "thumbnail": "/assets/thumbnails/320/custom-1782980654479-copy-1782982056347-copy-17829869845-2fa461f37b7b-7ba242aebe.webp",
-    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D9%85%D8%A7%D8%AF%D9%84%D9%8A%D9%87-%D9%85%D9%88%D8%AF%D9%8A%D9%84-8",
+    "url": "https://popekyrillos.store/?product=custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642-copy-1783007465321-copy-1783296428133",
     "isBestSeller": false
   },
   {
@@ -3019,7 +3092,7 @@
     "priceNote": "",
     "stock": "متاح",
     "badge": "يوتا",
-    "image": "assets/optimized/products/gallery/product-1-7-20260702155122-9f46d4.webp",
+    "image": "assets/optimized/products/gallery/product-25-71-20260705044317-41c7bc.webp",
     "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D9%85%D8%A7%D8%AF%D9%84%D9%8A%D9%87-%D9%85%D9%88%D8%AF%D9%8A%D9%84-7",
     "tags": [
       "يوتا",
@@ -3033,6 +3106,7 @@
       "أيقونات وهدايا"
     ],
     "images": [
+      "assets/optimized/products/gallery/product-25-71-20260705044317-41c7bc.webp",
       "assets/optimized/products/gallery/product-1-7-20260702155122-9f46d4.webp"
     ],
     "options": [],
@@ -3088,7 +3162,7 @@
     "priceNote": "",
     "stock": "متاح",
     "badge": "يوتا",
-    "image": "assets/optimized/products/gallery/product-1-6-20260702155054-4c2515.webp",
+    "image": "assets/optimized/products/gallery/product-26-61-20260705054933-58526e.webp",
     "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D9%85%D8%A7%D8%AF%D9%84%D9%8A%D9%87-%D9%85%D9%88%D8%AF%D9%8A%D9%84-6",
     "tags": [
       "يوتا",
@@ -3102,6 +3176,7 @@
       "أيقونات وهدايا"
     ],
     "images": [
+      "assets/optimized/products/gallery/product-26-61-20260705054933-58526e.webp",
       "assets/optimized/products/gallery/product-1-6-20260702155054-4c2515.webp"
     ],
     "options": [],
@@ -3157,7 +3232,7 @@
     "priceNote": "",
     "stock": "متاح",
     "badge": "يوتا",
-    "image": "assets/optimized/products/gallery/product-1-5-20260702155020-88d93d.webp",
+    "image": "assets/optimized/products/gallery/product-27-51-20260705055006-c95c52.webp",
     "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D9%85%D8%A7%D8%AF%D9%84%D9%8A%D9%87-%D9%85%D9%88%D8%AF%D9%8A%D9%84-5",
     "tags": [
       "يوتا",
@@ -3171,6 +3246,7 @@
       "أيقونات وهدايا"
     ],
     "images": [
+      "assets/optimized/products/gallery/product-27-51-20260705055006-c95c52.webp",
       "assets/optimized/products/gallery/product-1-5-20260702155020-88d93d.webp"
     ],
     "options": [],
@@ -3226,7 +3302,7 @@
     "priceNote": "",
     "stock": "متاح",
     "badge": "يوتا",
-    "image": "assets/optimized/products/gallery/product-1-4-20260702154908-1f32ba.webp",
+    "image": "assets/optimized/products/gallery/product-35-41-20260706002340-38080e.webp",
     "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D9%85%D8%A7%D8%AF%D9%84%D9%8A%D9%87-%D9%85%D9%88%D8%AF%D9%8A%D9%84-4",
     "tags": [
       "يوتا",
@@ -3240,6 +3316,7 @@
       "أيقونات وهدايا"
     ],
     "images": [
+      "assets/optimized/products/gallery/product-35-41-20260706002340-38080e.webp",
       "assets/optimized/products/gallery/product-1-4-20260702154908-1f32ba.webp"
     ],
     "options": [],
@@ -3295,7 +3372,7 @@
     "priceNote": "",
     "stock": "متاح",
     "badge": "يوتا",
-    "image": "assets/optimized/products/gallery/product-1-3-20260702101011-89b158.webp",
+    "image": "assets/optimized/products/gallery/product-29-31-20260705055116-60bf4e.webp",
     "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D9%85%D8%A7%D8%AF%D9%84%D9%8A%D9%87-%D9%85%D9%88%D8%AF%D9%8A%D9%84-3",
     "tags": [
       "يوتا",
@@ -3309,6 +3386,7 @@
       "أيقونات وهدايا"
     ],
     "images": [
+      "assets/optimized/products/gallery/product-29-31-20260705055116-60bf4e.webp",
       "assets/optimized/products/gallery/product-1-3-20260702101011-89b158.webp"
     ],
     "options": [],
@@ -3364,7 +3442,7 @@
     "priceNote": "",
     "stock": "متاح",
     "badge": "يوتا",
-    "image": "assets/optimized/products/gallery/product-1-2-20260702085747-85666b.webp",
+    "image": "assets/optimized/products/gallery/product-30-21-20260705055141-055485.webp",
     "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D9%85%D8%A7%D8%AF%D9%84%D9%8A%D9%87-%D9%85%D9%88%D8%AF%D9%8A%D9%84-2",
     "tags": [
       "يوتا",
@@ -3378,6 +3456,7 @@
       "أيقونات وهدايا"
     ],
     "images": [
+      "assets/optimized/products/gallery/product-30-21-20260705055141-055485.webp",
       "assets/optimized/products/gallery/product-1-2-20260702085747-85666b.webp"
     ],
     "options": [],
@@ -3425,139 +3504,6 @@
   },
   {
     "id": "custom-1782980654479",
-    "coloringBaseImageUrl": "assets/coloring/iota-medal-1/base.webp",
-    "coloringMaskUrl": "assets/coloring/iota-medal-1/region-mask.png?v=2",
-    "coloringOutlineUrl": "assets/coloring/iota-medal-1/outline.png?v=2",
-    "coloringRegions": [
-      {
-        "id": "region-1",
-        "maskColor": [
-          1,
-          0,
-          0
-        ]
-      },
-      {
-        "id": "region-2",
-        "maskColor": [
-          2,
-          0,
-          0
-        ]
-      },
-      {
-        "id": "region-3",
-        "maskColor": [
-          3,
-          0,
-          0
-        ]
-      },
-      {
-        "id": "region-4",
-        "maskColor": [
-          4,
-          0,
-          0
-        ]
-      },
-      {
-        "id": "region-5",
-        "maskColor": [
-          5,
-          0,
-          0
-        ]
-      },
-      {
-        "id": "region-6",
-        "maskColor": [
-          6,
-          0,
-          0
-        ]
-      },
-      {
-        "id": "region-7",
-        "maskColor": [
-          7,
-          0,
-          0
-        ]
-      },
-      {
-        "id": "region-8",
-        "maskColor": [
-          8,
-          0,
-          0
-        ]
-      },
-      {
-        "id": "region-9",
-        "maskColor": [
-          9,
-          0,
-          0
-        ]
-      },
-      {
-        "id": "region-10",
-        "maskColor": [
-          10,
-          0,
-          0
-        ]
-      },
-      {
-        "id": "region-11",
-        "maskColor": [
-          11,
-          0,
-          0
-        ]
-      },
-      {
-        "id": "region-12",
-        "maskColor": [
-          12,
-          0,
-          0
-        ]
-      },
-      {
-        "id": "region-13",
-        "maskColor": [
-          13,
-          0,
-          0
-        ]
-      }
-    ],
-    "symmetryGroups": [
-      [
-        "region-2",
-        "region-3",
-        "region-4",
-        "region-5"
-      ],
-      [
-        "region-6",
-        "region-7"
-      ],
-      [
-        "region-8",
-        "region-9"
-      ],
-      [
-        "region-10",
-        "region-11"
-      ],
-      [
-        "region-12",
-        "region-13"
-      ]
-    ],
     "name": "صليب يوتا مادلية موديل 1",
     "category": "icons",
     "label": "يوتا",
@@ -3566,7 +3512,7 @@
     "priceNote": "",
     "stock": "متاح",
     "badge": "يوتا",
-    "image": "assets/optimized/products/gallery/product-1-1-20260702084720-6a46f9.webp",
+    "image": "assets/optimized/products/gallery/product-31-11-20260705055205-367876.webp",
     "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D9%85%D8%A7%D8%AF%D9%84%D9%8A%D9%87-%D9%85%D9%88%D8%AF%D9%8A%D9%84-1",
     "tags": [
       "يوتا",
@@ -3580,6 +3526,7 @@
       "أيقونات وهدايا"
     ],
     "images": [
+      "assets/optimized/products/gallery/product-31-11-20260705055205-367876.webp",
       "assets/optimized/products/gallery/product-1-1-20260702084720-6a46f9.webp"
     ],
     "options": [],
@@ -4409,7 +4356,7 @@
     "mainCategory": "المذبح والأواني المقدسة",
     "subCategory": "أطباق الخدمة",
     "slug": "تريانتو-ستانلس",
-    "subcategory": "service-plates",
+    "subcategory": "service-tools",
     "collections": [
       "مستلزمات المذبح"
     ],
@@ -4570,8 +4517,8 @@
     "mainCategory": "المذبح والأواني المقدسة",
     "subCategory": "أطباق الخدمة",
     "slug": "دف-18-سم-نحاس-ذهبي-تقيل",
-    "isBestSeller": true,
-    "subcategory": "service-plates",
+    "isBestSeller": false,
+    "subcategory": "service-tools",
     "collections": [
       "مستلزمات المذبح"
     ],
@@ -5120,7 +5067,7 @@
     "mainCategory": "الصلبان",
     "subCategory": "صلبان الزفة",
     "slug": "صليب-زفه-نحاس-طبقتين-بفصوص-ملونه",
-    "isBestSeller": true,
+    "isBestSeller": false,
     "subcategory": "processional-crosses",
     "collections": [
       "مستلزمات المذبح",
@@ -5181,7 +5128,7 @@
     "mainCategory": "الصلبان",
     "subCategory": "صلبان الزفة",
     "slug": "صليب-زفه-نحاس-طبقتين",
-    "isBestSeller": true,
+    "isBestSeller": false,
     "subcategory": "processional-crosses",
     "collections": [
       "مستلزمات المذبح",
@@ -5224,25 +5171,51 @@
       "assets/optimized/products/gallery/009-10120836481331-02.webp",
       "assets/optimized/products/gallery/009-10120836481331-03.webp"
     ],
-    "options": [],
+    "options": [
+      {
+        "name": "الاختيار",
+        "values": [
+          "كبير",
+          "صغير"
+        ]
+      }
+    ],
     "variants": [
       {
         "id": "old-53152749027635",
-        "title": "الاختيار الافتراضي",
-        "options": {},
-        "price": 3960,
+        "title": "كبير",
+        "options": {
+          "الاختيار": "كبير"
+        },
+        "price": 4200,
         "compareAtPrice": 4620,
         "available": true,
         "image": null,
         "images": [],
         "sku": "",
         "quantity": 12
+      },
+      {
+        "id": "old-10120836481331-variant-1785099528262-2",
+        "title": "صغير",
+        "options": {
+          "الاختيار": "صغير"
+        },
+        "price": 3600,
+        "compareAtPrice": null,
+        "available": true,
+        "image": "assets/optimized/products/gallery/009-10120836481331-01.webp",
+        "images": [
+          "assets/optimized/products/gallery/009-10120836481331-01.webp"
+        ],
+        "sku": "",
+        "quantity": null
       }
     ],
     "mainCategory": "الصلبان",
     "subCategory": "صلبان الزفة",
     "slug": "صليب-زفه-نحاس-رفيع-بفص-الوان",
-    "isBestSeller": true,
+    "isBestSeller": false,
     "subcategory": "processional-crosses",
     "collections": [
       "مستلزمات المذبح",
@@ -5872,7 +5845,7 @@
     "description": "حُق ذخيرة صغير مصنوع من النحاس عالي الجودة مع طلاء نيكل متين يوفر حماية فائقة ضد الصدأ والتآكل. تصميمه المدمج يجعله مثاليًا لحفظ الجسد والدم للمناولة خارج الكنيسة\nمقاس قطر 5.5 * ارتفاع 4.5 سم",
     "price": 330,
     "priceNote": "",
-    "stock": "متاح",
+    "stock": "غير متاح حاليا",
     "badge": "حُق ذخيرة",
     "image": "assets/optimized/products/gallery/018-10068217561395-01.webp",
     "url": "https://popekyrillos.store/products/%D8%AD%D9%82-%D8%B0%D8%AE%D9%8A%D8%B1%D9%87-%D8%B5%D8%BA%D9%8A%D8%B1-%D9%86%D8%AD%D8%A7%D8%B3-%D9%85%D8%B7%D9%84%D9%8A-%D9%86%D9%8A%D9%83%D9%84",
@@ -5896,7 +5869,7 @@
         "options": {},
         "price": 330,
         "compareAtPrice": 385,
-        "available": true,
+        "available": false,
         "image": null,
         "images": [],
         "sku": "",
@@ -5931,7 +5904,7 @@
     "description": "حُق ذخيرة من الستانلس ستيل، مصمم خصيصًا لخدمات المناولة الكنيسة. يجمع بين الحجم المضغوط والوزن الخفيف، مما يضمن سهولة الحمل والنقل أثناء التناول خارج الكنيسة. مادة الستانلس ستيل توفر مقاومة عالية للتآكل والصدأ، مع الحفاظ على لمعان احترافي. التصميم الكلاسيكي يعكس الوقار والقدسية المطلوبة في الخدمات الدينية، بينما يسهل تنظيفه وصيانته بكفاءة عالية.\nمقاس 7.5 قطر * ارتفاع 4.5 سم",
     "price": 360,
     "priceNote": "",
-    "stock": "متاح",
+    "stock": "غير متاح حاليا",
     "badge": "حُق ذخيرة",
     "image": "assets/optimized/products/gallery/019-10068215628083-01.webp",
     "url": "https://popekyrillos.store/products/%D8%AD%D9%82-%D8%B0%D8%AE%D9%8A%D8%B1%D9%87-%D8%A7%D8%B3%D8%AA%D8%A7%D9%86%D9%84%D8%B3-%D8%B5%D8%BA%D9%8A%D8%B1",
@@ -5955,7 +5928,7 @@
         "options": {},
         "price": 360,
         "compareAtPrice": 420,
-        "available": true,
+        "available": false,
         "image": null,
         "images": [],
         "sku": "",
@@ -5990,7 +5963,7 @@
     "description": "حُق ذخيرة من الستانلس ستيل، مصمم خصيصًا لخدمات المناولة الكنيسة. يجمع بين الحجم المضغوط والوزن الخفيف، مما يضمن سهولة الحمل والنقل أثناء التناول خارج الكنيسة. مادة الستانلس ستيل توفر مقاومة عالية للتآكل والصدأ، مع الحفاظ على لمعان احترافي. التصميم الكلاسيكي يعكس الوقار والقدسية المطلوبة في الخدمات الدينية، بينما يسهل تنظيفه وصيانته بكفاءة عالية.\nمقاس قطر 7 سم * ارتفاع 3.5 سم",
     "price": 300,
     "priceNote": "",
-    "stock": "متاح",
+    "stock": "غير متاح حاليا",
     "badge": "حُق ذخيرة",
     "image": "assets/optimized/products/gallery/020-10068213006643-01.webp",
     "url": "https://popekyrillos.store/products/%D8%AD%D9%82-%D8%B0%D8%AE%D9%8A%D8%B1%D9%87-%D8%A7%D8%B3%D8%AA%D8%A7%D9%86%D9%84%D8%B3-%D9%88%D8%B3%D8%B7",
@@ -6015,7 +5988,7 @@
         "options": {},
         "price": 300,
         "compareAtPrice": 350,
-        "available": true,
+        "available": false,
         "image": null,
         "images": [],
         "sku": "",
@@ -6050,7 +6023,7 @@
     "description": "حُق ذخيرة من الستانلس ستيل، مصمم خصيصًا لخدمات المناولة الكنيسة. يجمع بين الحجم المضغوط والوزن الخفيف، مما يضمن سهولة الحمل والنقل أثناء التناول خارج الكنيسة. مادة الستانلس ستيل توفر مقاومة عالية للتآكل والصدأ، مع الحفاظ على لمعان احترافي. التصميم الكلاسيكي يعكس الوقار والقدسية المطلوبة في الخدمات الدينية، بينما يسهل تنظيفه وصيانته بكفاءة عالية.\nمقاس 6 سم قطر * 4 سم ارتفاع",
     "price": 240,
     "priceNote": "",
-    "stock": "متاح",
+    "stock": "غير متاح حاليا",
     "badge": "حُق ذخيرة",
     "image": "assets/optimized/products/gallery/021-10068212646195-01.webp",
     "url": "https://popekyrillos.store/products/%D8%AD%D9%82-%D8%B0%D8%AE%D9%8A%D8%B1%D9%87-%D8%A7%D8%B3%D8%AA%D8%A7%D9%86%D9%84%D8%B3-%D8%B5%D8%BA%D9%8A%D8%B1-old-10068212646195",
@@ -6074,7 +6047,7 @@
         "options": {},
         "price": 240,
         "compareAtPrice": 280,
-        "available": true,
+        "available": false,
         "image": null,
         "images": [],
         "sku": "",
@@ -6185,8 +6158,8 @@
     "mainCategory": "المذبح والأواني المقدسة",
     "subCategory": "أطقم أواني المذبح",
     "slug": "ابريق-نحاس-ذهبي",
-    "isBestSeller": true,
-    "subcategory": "altar-sets",
+    "isBestSeller": false,
+    "subcategory": "altar-vessels",
     "collections": [
       "مستلزمات المذبح"
     ],
@@ -6611,7 +6584,7 @@
     "description": "أنابيب رفات القديسين مصنوعة من خشب الزان عالي الجودة، تتميز بتصميم مجوف من الداخل وفتحة علوية تسهل الاستخدام والحماية. توفر هذه الأنابيب متانة فائقة ومقاومة طبيعية بفضل خشب الزان المختار بعناية، مما يضمن حفظ الرفات بصورة آمنة ومحترمة. تصميمها الدقيق يعكس خبرة في الصنع ويضمن استخدامها في البيئات الروحية بأعلى معايير الجودة.\nاختر المقاس المناسب من الاختيارات.",
     "price": 144,
     "priceNote": "",
-    "stock": "متاح",
+    "stock": "غير متاح حاليا",
     "badge": "نحاسيات",
     "image": "assets/optimized/products/reliquary-tubes-papa-kyrillos.jpg",
     "url": "https://popekyrillos.store/products/%D8%A7%D9%86%D8%A7%D8%A8%D9%8A%D8%A8-%D8%B1%D9%81%D8%A7%D8%AA-%D9%82%D8%AF%D9%8A%D8%B3%D9%8A%D9%86-%D8%B2%D8%A7%D9%86",
@@ -6648,7 +6621,7 @@
         },
         "price": 462,
         "compareAtPrice": null,
-        "available": true,
+        "available": false,
         "image": "assets/optimized/products/gallery/029-9841772396851-01.webp",
         "images": [
           "assets/optimized/products/gallery/029-9841772396851-01.webp",
@@ -6667,7 +6640,7 @@
         },
         "price": 330,
         "compareAtPrice": null,
-        "available": true,
+        "available": false,
         "image": "assets/optimized/products/gallery/030-9841770725683-01.webp",
         "images": [
           "assets/optimized/products/gallery/030-9841770725683-01.webp",
@@ -6686,7 +6659,7 @@
         },
         "price": 234,
         "compareAtPrice": null,
-        "available": true,
+        "available": false,
         "image": "assets/optimized/products/gallery/031-9841769054515-01.webp",
         "images": [
           "assets/optimized/products/gallery/031-9841769054515-01.webp",
@@ -6705,7 +6678,7 @@
         },
         "price": 180,
         "compareAtPrice": null,
-        "available": true,
+        "available": false,
         "image": "assets/optimized/products/gallery/032-9841765515571-01.webp",
         "images": [
           "assets/optimized/products/gallery/032-9841765515571-01.webp",
@@ -6724,7 +6697,7 @@
         },
         "price": 144,
         "compareAtPrice": null,
-        "available": true,
+        "available": false,
         "image": "assets/optimized/products/gallery/033-9841763516723-01.webp",
         "images": [
           "assets/optimized/products/gallery/033-9841763516723-01.webp",
@@ -6901,7 +6874,7 @@
     "description": "زوج شمعدان مصنوع من النحاس المصري الثقيل ومطلي أيضاً باللون الذهبي حتي يضمن شكل جميل\nطول الشمعدان 50 سم",
     "price": 6720,
     "priceNote": "",
-    "stock": "غير متاح حاليا",
+    "stock": "متاح",
     "badge": "شموع وبخور",
     "image": "assets/optimized/products/gallery/034-9840433955123-01.webp",
     "url": "https://popekyrillos.store/products/%D8%B2%D9%88%D8%AC-%D8%B4%D9%85%D8%B9%D8%AF%D8%A7%D9%86-%D9%86%D8%AD%D8%A7%D8%B3-%D8%B0%D9%87%D8%A8%D9%8A-%D9%83%D9%87%D8%B1%D8%A8%D8%A7%D8%A1-%D8%B4%D9%83%D9%84-%D8%A7%D9%84%D9%88%D8%B1%D8%AF%D9%87-%D9%83%D8%A8%D9%8A%D8%B1",
@@ -6924,7 +6897,7 @@
         "options": {},
         "price": 6720,
         "compareAtPrice": null,
-        "available": false,
+        "available": true,
         "image": null,
         "images": [],
         "sku": "",
@@ -6960,7 +6933,7 @@
     "description": "زوج شمعدان مصنوع من النحاس المصري الثقيل ومطلي أيضاً باللون الذهبي حتي يضمن شكل جميل\nالشمعدان له جزء معدان بداخله سوستة يتم ادخال الشمعة به\nطول الشمعدان 46 سم",
     "price": 3000,
     "priceNote": "",
-    "stock": "غير متاح حاليا",
+    "stock": "متاح",
     "badge": "شموع وبخور",
     "image": "assets/optimized/products/gallery/035-9840425500979-01.webp",
     "url": "https://popekyrillos.store/products/%D8%B4%D9%85%D8%B9%D8%AF%D8%A7%D9%86-%D9%86%D8%AD%D8%A7%D8%B3-%D8%B0%D9%87%D8%A8%D9%8A-%D8%B3%D9%88%D8%B3%D8%AA%D9%87",
@@ -6984,7 +6957,7 @@
         "options": {},
         "price": 3000,
         "compareAtPrice": null,
-        "available": false,
+        "available": true,
         "image": null,
         "images": [],
         "sku": "",
@@ -7201,7 +7174,7 @@
     "description": "بشارة ذهبية يونانية مطلية بماء الذهب، تُستخدم في الكنيسة الأرثوذكسية خلال الطقوس. تتميز بتصميمها الأنيق وجودة تصنيعها العالية التي تضمن دوامها وجمالها، مما يعكس قدسية المناسبة ويضيف رونقاً خاصاً للعبادة.",
     "price": 15000,
     "priceNote": "",
-    "stock": "متاح",
+    "stock": "غير متاح حاليا",
     "badge": "نحاسيات",
     "image": "assets/optimized/products/gallery/039-9762774024499-01.webp",
     "url": "https://popekyrillos.store/products/%D8%A8%D8%B4%D8%A7%D8%B1%D9%87-%D8%B0%D9%87%D8%A8%D9%8A-%D9%8A%D9%88%D9%86%D8%A7%D9%86%D9%8A",
@@ -7225,7 +7198,7 @@
         "options": {},
         "price": 15000,
         "compareAtPrice": 16000,
-        "available": true,
+        "available": false,
         "image": null,
         "images": [],
         "sku": "",
@@ -7235,7 +7208,7 @@
     "mainCategory": "المذبح والأواني المقدسة",
     "subCategory": "أطباق الخدمة",
     "slug": "بشاره-ذهبي-يوناني",
-    "subcategory": "service-plates",
+    "subcategory": "service-tools",
     "collections": [
       "مستلزمات المذبح",
       "greek-vessels"
@@ -7325,7 +7298,7 @@
     "mainCategory": "المذبح والأواني المقدسة",
     "subCategory": "الشوريات",
     "slug": "شوريه-نحاس-ذهبي-يوناني",
-    "isBestSeller": true,
+    "isBestSeller": false,
     "subcategory": "censers",
     "collections": [
       "greek-vessels"
@@ -7354,7 +7327,7 @@
     "priceNote": "يبدأ من ٢٦٬٥٠٠ ج.م حتى ٣٢٬٠٠٠ ج.م",
     "stock": "متاح",
     "badge": "نحاسيات",
-    "image": "assets/optimized/products/gallery/041-9762682011955-01.webp",
+    "image": "assets/optimized/products/gallery/product-78-2-20260705061752-ad9508.webp",
     "url": "https://popekyrillos.store/products/%D8%B7%D9%82%D9%85-%D8%A7%D9%88%D8%A7%D9%86%D9%8A-%D9%85%D8%B0%D8%A8%D8%AD-%D8%B0%D9%87%D8%A8%D9%8A-%D9%8A%D9%88%D9%86%D8%A7%D9%86%D9%8A",
     "tags": [
       "نحاسيات",
@@ -7364,11 +7337,10 @@
       "أواني المذبح"
     ],
     "images": [
-      "assets/optimized/products/gallery/041-9762682011955-01.webp",
-      "assets/optimized/products/gallery/041-9762682011955-02.webp",
-      "assets/optimized/products/gallery/041-9762682011955-03.webp",
-      "assets/optimized/products/gallery/041-9762682011955-04.webp",
-      "assets/optimized/products/gallery/041-9762682011955-05.webp"
+      "assets/optimized/products/gallery/product-78-2-20260705061752-ad9508.webp",
+      "assets/optimized/products/gallery/product-78-1-20260705061723-bf32c3.webp",
+      "assets/optimized/products/gallery/product-78-3-20260705061653-c60736.webp",
+      "assets/optimized/products/gallery/product-78-4-20260705061658-b5d4ff.webp"
     ],
     "options": [
       {
@@ -7416,8 +7388,8 @@
     "mainCategory": "المذبح والأواني المقدسة",
     "subCategory": "أطقم أواني المذبح",
     "slug": "طقم-اواني-مذبح-ذهبي-يوناني",
-    "isBestSeller": true,
-    "subcategory": "altar-sets",
+    "isBestSeller": false,
+    "subcategory": "altar-vessels",
     "collections": [
       "مستلزمات المذبح",
       "greek-vessels"
@@ -7443,7 +7415,7 @@
     "description": "أيقونة صليب صدر يوناني للكهنة\nمقاس طول 12 في عرض سبعة\nطول السلسلة متر ونص",
     "price": 5000,
     "priceNote": "",
-    "stock": "متاح",
+    "stock": "غير متاح حاليا",
     "badge": "أيقونات وهدايا",
     "image": "assets/optimized/products/gallery/042-9757475930419-01.webp",
     "url": "https://popekyrillos.store/products/%D8%A7%D9%8A%D9%82%D9%88%D9%86%D9%87-%D8%B5%D9%84%D9%8A%D8%A8-%D8%B5%D8%AF%D8%B1-%D9%8A%D9%88%D9%86%D8%A7%D9%86%D9%8A-%D8%B0%D9%87%D8%A8%D9%8A",
@@ -7464,7 +7436,7 @@
         "options": {},
         "price": 5000,
         "compareAtPrice": 6000,
-        "available": true,
+        "available": false,
         "image": null,
         "images": [],
         "sku": "123",
@@ -7474,7 +7446,7 @@
     "mainCategory": "الصلبان",
     "subCategory": "صلبان صدر",
     "slug": "ايقونه-صليب-صدر-يوناني-ذهبي",
-    "isBestSeller": true,
+    "isBestSeller": false,
     "subcategory": "pectoral-crosses",
     "collections": [
       "هدايا الخدمة"
@@ -8713,25 +8685,45 @@
     "name": "ألوان اليوطا",
     "category": "brass",
     "label": "نحاسيات",
-    "description": "وصف المنتج\n\nألوان تلوين صلبان اليوتا\nألوان جاهزة للاستخدام، مناسبة لتلوين صلبان وميداليات اليوتا خلال مدارس الأحد والخلوات والأنشطة الكنسية. تأتي كل عبوة بسن دقيق يساعد على التحكم في اللون وتنفيذ التفاصيل الصغيرة بسهولة، مع غطاء محكم للحفاظ على اللون.\n\nالألوان المتاحة:\nأحمر – أسود – أبيض – أصفر – أخضر – فضي – نبيتي – لبني – بني – بيج – برتقالي.\n\nمميزات المنتج:\n\nألوان واضحة وزاهية.\nسهلة الاستخدام للأطفال والخدام.\nسن دقيق للتلوين والتفاصيل.\nمناسبة للأنشطة والمسابقات والهدايا.\nتُباع العبوات بالألوان بصورة منفردة.\n\nتنبيه: يُفضّل رجّ العبوة جيدًا قبل الاستخدام وإغلاقها بإحكام بعد الانتهاء.",
-    "price": 70,
+    "description": "وصف المنتج\n\n30 مللي من ألوان تلوين صلبان اليوتا\nألوان جاهزة للاستخدام، مناسبة لتلوين صلبان وميداليات اليوتا خلال مدارس الأحد والخلوات والأنشطة الكنسية. تأتي كل عبوة بسن دقيق يساعد على التحكم في اللون وتنفيذ التفاصيل الصغيرة بسهولة، مع غطاء محكم للحفاظ على اللون.\nالعبوة تكفي لتلوين 20-30 مادلية\n\nالألوان المتاحة:\nأحمر – أسود – أبيض – أصفر – أخضر – فضي – دهبي – نبيتي – لبني – بني – بيج – برتقالي.\n\nمميزات المنتج:\n\nألوان واضحة وزاهية.\nسهلة الاستخدام للأطفال والخدام.\nسن دقيق للتلوين والتفاصيل.\nمناسبة للأنشطة والمسابقات والهدايا.\nتُباع العبوات بالألوان بصورة منفردة.\n\nتنبيه: يُفضّل رجّ العبوة جيدًا قبل الاستخدام وإغلاقها بإحكام بعد الانتهاء.",
+    "price": 50,
     "priceNote": "",
     "stock": "متاح",
     "badge": "يوتا",
     "image": "assets/optimized/products/gallery/product-1-image-20260705172724-e7fdfd.webp",
-    "url": "https://popekyrillos.store/products/%D8%A7%D9%84%D9%88%D8%A7%D9%86-%D8%A7%D9%84%D9%8A%D9%88%D8%B7%D8%A7",
+    "url": "https://popekyrillos.store/?product=custom-1783272387022",
     "tags": [],
     "images": [
       "assets/optimized/products/gallery/product-1-image-20260705172724-e7fdfd.webp",
       "assets/optimized/products/gallery/product-1-image-20260705172735-c0297e.webp",
-      "assets/optimized/products/gallery/product-1-image-20260705172741-9b13e8.webp"
+      "assets/optimized/products/gallery/product-1-image-20260705172741-9b13e8.webp",
+      "assets/optimized/products/gallery/product-1-image-20260705225937-8e1017.webp",
+      "assets/optimized/products/gallery/product-1-image-20260705225933-bc8e0d.webp",
+      "assets/optimized/products/gallery/product-1-image-20260705225926-f19abc.webp",
+      "assets/optimized/products/gallery/product-1-image-20260705225941-a78b23.webp",
+      "assets/optimized/products/gallery/product-1-image-20260705225945-288b80.webp",
+      "assets/optimized/products/gallery/product-1-image-20260705225949-f7ff38.webp",
+      "assets/optimized/products/gallery/product-1-image-20260705225953-cc24fd.webp",
+      "assets/optimized/products/gallery/product-1-image-20260705225957-b91fba.webp",
+      "assets/optimized/products/gallery/product-1-image-20260705230001-5400b2.webp",
+      "assets/optimized/products/gallery/product-1-image-20260705230800-9d7e97.webp"
     ],
     "options": [
       {
         "name": "الاختيار",
         "values": [
           "أبيض",
-          "أحمر"
+          "أحمر",
+          "أصفر",
+          "أسود",
+          "أخضر",
+          "أزرق",
+          "برتقالي",
+          "بني",
+          "بيج",
+          "فضي",
+          "لبني",
+          "نبيتي"
         ]
       }
     ],
@@ -8742,7 +8734,7 @@
         "options": {
           "الاختيار": "أبيض"
         },
-        "price": 70,
+        "price": 50,
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/product-1-image-20260705172735-c0297e.webp",
@@ -8758,7 +8750,7 @@
         "options": {
           "الاختيار": "أحمر"
         },
-        "price": 70,
+        "price": 50,
         "compareAtPrice": null,
         "available": true,
         "image": "assets/optimized/products/gallery/product-1-image-20260705172741-9b13e8.webp",
@@ -8767,11 +8759,170 @@
         ],
         "sku": "",
         "quantity": 1000
+      },
+      {
+        "id": "custom-1783272387022-variant-1783292468540-3",
+        "title": "أصفر",
+        "options": {
+          "الاختيار": "أصفر"
+        },
+        "price": 50,
+        "compareAtPrice": null,
+        "available": true,
+        "image": "assets/optimized/products/gallery/product-1-image-20260705225937-8e1017.webp",
+        "images": [
+          "assets/optimized/products/gallery/product-1-image-20260705225937-8e1017.webp"
+        ],
+        "sku": "",
+        "quantity": 1000
+      },
+      {
+        "id": "custom-1783272387022-variant-1783292500079-4",
+        "title": "أسود",
+        "options": {
+          "الاختيار": "أسود"
+        },
+        "price": 50,
+        "compareAtPrice": null,
+        "available": true,
+        "image": "assets/optimized/products/gallery/product-1-image-20260705225933-bc8e0d.webp",
+        "images": [
+          "assets/optimized/products/gallery/product-1-image-20260705225933-bc8e0d.webp"
+        ],
+        "sku": "",
+        "quantity": 1000
+      },
+      {
+        "id": "custom-1783272387022-variant-1783292533863-5",
+        "title": "أخضر",
+        "options": {
+          "الاختيار": "أخضر"
+        },
+        "price": 50,
+        "compareAtPrice": null,
+        "available": true,
+        "image": "assets/optimized/products/gallery/product-1-image-20260705225926-f19abc.webp",
+        "images": [
+          "assets/optimized/products/gallery/product-1-image-20260705225926-f19abc.webp"
+        ],
+        "sku": "",
+        "quantity": 1002
+      },
+      {
+        "id": "custom-1783272387022-variant-1783292858876-12",
+        "title": "أزرق",
+        "options": {
+          "الاختيار": "أزرق"
+        },
+        "price": 50,
+        "compareAtPrice": null,
+        "available": true,
+        "image": "assets/optimized/products/gallery/product-1-image-20260705230800-9d7e97.webp",
+        "images": [
+          "assets/optimized/products/gallery/product-1-image-20260705230800-9d7e97.webp"
+        ],
+        "sku": "",
+        "quantity": 1002
+      },
+      {
+        "id": "custom-1783272387022-variant-1783292556755-6",
+        "title": "برتقالي",
+        "options": {
+          "الاختيار": "برتقالي"
+        },
+        "price": 50,
+        "compareAtPrice": null,
+        "available": true,
+        "image": "assets/optimized/products/gallery/product-1-image-20260705225941-a78b23.webp",
+        "images": [
+          "assets/optimized/products/gallery/product-1-image-20260705225941-a78b23.webp"
+        ],
+        "sku": "",
+        "quantity": 1000
+      },
+      {
+        "id": "custom-1783272387022-variant-1783292560930-7",
+        "title": "بني",
+        "options": {
+          "الاختيار": "بني"
+        },
+        "price": 50,
+        "compareAtPrice": 0,
+        "available": true,
+        "image": "assets/optimized/products/gallery/product-1-image-20260705225945-288b80.webp",
+        "images": [
+          "assets/optimized/products/gallery/product-1-image-20260705225945-288b80.webp"
+        ],
+        "sku": "",
+        "quantity": 1001
+      },
+      {
+        "id": "custom-1783272387022-variant-1783292561964-8",
+        "title": "بيج",
+        "options": {
+          "الاختيار": "بيج"
+        },
+        "price": 50,
+        "compareAtPrice": null,
+        "available": true,
+        "image": "assets/optimized/products/gallery/product-1-image-20260705225949-f7ff38.webp",
+        "images": [
+          "assets/optimized/products/gallery/product-1-image-20260705225949-f7ff38.webp"
+        ],
+        "sku": "",
+        "quantity": 1000
+      },
+      {
+        "id": "custom-1783272387022-variant-1783292562876-9",
+        "title": "فضي",
+        "options": {
+          "الاختيار": "فضي"
+        },
+        "price": 50,
+        "compareAtPrice": null,
+        "available": true,
+        "image": "assets/optimized/products/gallery/product-1-image-20260705225953-cc24fd.webp",
+        "images": [
+          "assets/optimized/products/gallery/product-1-image-20260705225953-cc24fd.webp"
+        ],
+        "sku": "",
+        "quantity": 1003
+      },
+      {
+        "id": "custom-1783272387022-variant-1783292566140-10",
+        "title": "لبني",
+        "options": {
+          "الاختيار": "لبني"
+        },
+        "price": 50,
+        "compareAtPrice": null,
+        "available": true,
+        "image": "assets/optimized/products/gallery/product-1-image-20260705225957-b91fba.webp",
+        "images": [
+          "assets/optimized/products/gallery/product-1-image-20260705225957-b91fba.webp"
+        ],
+        "sku": "",
+        "quantity": 998
+      },
+      {
+        "id": "custom-1783272387022-variant-1783292566938-11",
+        "title": "نبيتي",
+        "options": {
+          "الاختيار": "نبيتي"
+        },
+        "price": 50,
+        "compareAtPrice": null,
+        "available": true,
+        "image": "assets/optimized/products/gallery/product-1-image-20260705230001-5400b2.webp",
+        "images": [
+          "assets/optimized/products/gallery/product-1-image-20260705230001-5400b2.webp"
+        ],
+        "sku": "",
+        "quantity": 1000
       }
     ],
     "mainCategory": "المناسبات والخدمة",
     "subCategory": "تلوين وأشغال يدوية",
-    "slug": "الوان-اليوطا",
     "subcategory": "crafts-coloring",
     "collections": [
       "هدايا الخدمة",
