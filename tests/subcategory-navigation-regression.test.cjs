@@ -3,6 +3,7 @@ const assert = require("node:assert/strict");
 const fs = require("node:fs");
 
 const source = fs.readFileSync("script.js", "utf8");
+const worker = fs.readFileSync("cloudflare-worker.js", "utf8");
 
 function functionSource(name, nextName) {
   const start = source.indexOf(`function ${name}`);
@@ -53,4 +54,11 @@ test("all-subcategories card receives a stable image and keeps its parent catego
   const cardRenderer = functionSource("renderSubcategoryCards", "updateFilterButtons");
   assert.match(cardRenderer, /taxonomy\?\.categoryImage\?\.\(category\)/);
   assert.match(cardRenderer, /data-subcategory-card="\$\{escapeHtml\(card\.id\)\}"/);
+});
+
+test("compact catalog products retain Greek collection membership", () => {
+  const dtoStart = worker.indexOf("function catalogDto");
+  const dtoEnd = worker.indexOf("async function loadThumbnailManifest", dtoStart);
+  const dto = worker.slice(dtoStart, dtoEnd);
+  assert.match(dto, /collections: catalogCollectionIds\(product\)/);
 });

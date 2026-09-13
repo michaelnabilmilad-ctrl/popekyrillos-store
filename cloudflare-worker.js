@@ -387,7 +387,8 @@ function catalogDto(product, thumbnailManifest) {
     thumbnail: catalogThumbnail(product, thumbnailManifest),
     availability: hasAvailableVariant(product) ? "available" : "unavailable",
     category: catalogMainCategoryId(product),
-    subcategory: product?.subcategory || product?.subCategory || ""
+    subcategory: product?.subcategory || product?.subCategory || "",
+    collections: catalogCollectionIds(product)
   };
 }
 
