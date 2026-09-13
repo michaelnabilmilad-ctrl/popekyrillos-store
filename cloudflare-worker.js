@@ -1,5 +1,4 @@
 import "./category-migration.js";
-import { customerOrdersResponse, ensureOrderAccess, purchaseSnapshot, checkoutReceipt, acquireOrderLock, releaseOrderLock, readCustomerOrderRecord, writeOrderUnderLock } from "./functions/_customer-orders.js";
 import { onRequest as createBostaDelivery } from "./functions/api/create-bosta-delivery.js";
 import { onRequest as createPaymobIntention } from "./functions/api/create-paymob-intention.js";
 import { onRequest as paymobWebhook } from "./functions/api/paymob-webhook.js";
@@ -7,7 +6,7 @@ import { onRequest as uploadProductImage } from "./functions/api/upload-product-
 import { onRequest as updateProducts } from "./functions/api/update-products.js";
 import { onRequest as updateTaxonomy } from "./functions/api/update-taxonomy.js";
 import { bestSellersResponse } from "./functions/api/best-sellers.js";
-import { withYotaColoringConfig } from "./coloringDesigns.js";
+import { coloringDesignForProduct } from "./coloringDesigns.js";
 import { backfillAirtableOrderProducts } from "./functions/_airtable-order-backfill.js";
 import {
   AIRTABLE_PRODUCT_SKU_FIELD,
@@ -23,7 +22,6 @@ const canonicalHostname = "popekyrillos.store";
 const allowedOrdersOrigin = "https://popekyrillos.store";
 const AIRTABLE_ORDER_DETAIL_IMAGE_FIELD = "صورة المنتج المختارة";
 const staticRewrites = {
-  "/track-order": "/track-order.html",
   "/cart": "/cart.html",
   "/coloring-game": "/coloring-game.html",
   "/checkout": "/checkout.html",
@@ -39,7 +37,32 @@ const staticRewrites = {
 };
 const htmlRoutePaths = new Set(["/", "/products", "/contact"]);
 function withProductColoringConfig(product) {
-  return withYotaColoringConfig(product);
+  const design = coloringDesignForProduct(product);
+  if (!design) return product;
+  // Product data is the source of truth when it already contains a complete,
+  // deployable coloring model. This also keeps older public /assets models
+  // working while a newer generated model is being rolled out.
+  const hasEmbeddedColoringConfig = Boolean(
+    product?.coloringBaseImageUrl &&
+    product?.coloringMaskUrl &&
+    product?.coloringOutlineUrl &&
+    (product?.coloringRegionsUrl || product?.coloringRegions?.length)
+  );
+  if (hasEmbeddedColoringConfig) return product;
+  const version = encodeURIComponent(design.modelVersion);
+  return {
+    ...product,
+    coloringModelId: design.id,
+    coloringModelName: design.name,
+    coloringModelVersion: design.modelVersion,
+    coloringBaseImageUrl: `${design.basePath}?v=${version}`,
+    coloringMaskUrl: `${design.regionsPath}?v=${version}`,
+    coloringOutlineUrl: `${design.outlinePath}?v=${version}`,
+    coloringRegionsUrl: `${design.regionsDataPath}?v=${version}`,
+    ...(design.regionOverridesPath
+      ? { coloringRegionOverridesUrl: `${design.regionOverridesPath}?v=${version}` }
+      : {})
+  };
 }
 
 let productsCache = null;
@@ -359,10 +382,7 @@ function catalogDto(product, thumbnailManifest) {
     thumbnail: catalogThumbnail(product, thumbnailManifest),
     availability: hasAvailableVariant(product) ? "available" : "unavailable",
     category: catalogMainCategoryId(product),
-    subcategory: product?.subcategory || product?.subCategory || "",
-    collections: Array.isArray(product?.collections) ? product.collections : [],
-    badge: product?.badge || "",
-    label: product?.label || ""
+    subcategory: product?.subcategory || product?.subCategory || ""
   };
 }
 
@@ -622,16 +642,11 @@ async function githubAssetFallbackResponse(pathname, env) {
   return new Response(response.body, { status: response.status, headers });
 }
 
-export function productByIdOrSlug(products, value = "") {
+function productByIdOrSlug(products, value = "") {
   const decoded = decodeURIComponent(String(value || ""));
   const normalized = normalizeSlug(decoded);
   return (
-    products.find((product) => product.id === decoded) ||
-    // Copied catalog records can retain another product's stale slug. Prefer
-    // the product whose own name canonically describes the requested route;
-    // only then fall back to stored slug fields for legacy/custom routes.
-    products.find((product) => normalizeSlug(localized(product?.name)) === normalized) ||
-    products.find((product) => product.slug === decoded) ||
+    products.find((product) => product.id === decoded || product.slug === decoded) ||
     products.find((product) => productSlug(product) === normalized || normalizeSlug(product.id) === normalized) ||
     null
   );
@@ -785,18 +800,10 @@ function metaCsvRow(product) {
   if (excludedReasons.length) return { row: "", excludedReasons };
 
   return {
-    row: [
-      id,
-      title,
-      csvDescription(product?.description, title),
-      hasAvailableVariant(product) ? "in stock" : "out of stock",
-      "new",
-      feedMoney(pricing.salePrice ?? pricing.price),
-      canonicalProductUrl(product),
-      images[0],
-      "مكتبة البابا كيرلس",
-      feedProductType(product)
-    ].map(csvCell).join(","),
+    row: [id, title, csvDescription(product?.description, title),
+      hasAvailableVariant(product) ? "in stock" : "out of stock", "new",
+      feedMoney(pricing.salePrice ?? pricing.price), canonicalProductUrl(product), images[0],
+      "مكتبة البابا كيرلس", feedProductType(product)].map(csvCell).join(","),
     excludedReasons: []
   };
 }
@@ -805,7 +812,6 @@ function metaProductFeedCsv(products) {
   const rows = [];
   const excluded = [];
   const seenIds = new Set();
-
   products.filter(isVisibleCatalogProduct).forEach((product) => {
     try {
       const result = metaCsvRow(product);
@@ -827,28 +833,20 @@ function metaProductFeedCsv(products) {
       console.warn(`Meta CSV feed failed product ${id || "(missing id)"}`, error);
     }
   });
-
-  return {
-    csv: `\uFEFF${[metaCsvHeaders.join(","), ...rows].join("\r\n")}\r\n`,
-    includedCount: rows.length,
-    excluded
-  };
+  return { csv: `\uFEFF${[metaCsvHeaders.join(","), ...rows].join("\r\n")}\r\n`, includedCount: rows.length, excluded };
 }
 
 async function metaProductFeedResponse(request, env) {
   const products = await loadProducts(env, request, { maxAgeMs: 60000 });
   const result = metaProductFeedCsv(products);
-  return new Response(result.csv, {
-    status: 200,
-    headers: {
-      "Content-Type": "text/csv; charset=utf-8",
-      "Content-Disposition": 'inline; filename="meta-product-feed.csv"',
-      "Cache-Control": "public, max-age=60, stale-while-revalidate=300",
-      "X-Content-Type-Options": "nosniff",
-      "X-Catalog-Feed-Included": String(result.includedCount),
-      "X-Catalog-Feed-Excluded": String(result.excluded.length)
-    }
-  });
+  return new Response(result.csv, { status: 200, headers: {
+    "Content-Type": "text/csv; charset=utf-8",
+    "Content-Disposition": 'inline; filename="meta-product-feed.csv"',
+    "Cache-Control": "public, max-age=60, stale-while-revalidate=300",
+    "X-Content-Type-Options": "nosniff",
+    "X-Catalog-Feed-Included": String(result.includedCount),
+    "X-Catalog-Feed-Excluded": String(result.excluded.length)
+  }});
 }
 
 function catalogFeedItem(product, { includePrice = true } = {}) {
@@ -1005,8 +1003,8 @@ function ensureUtf8ContentType(headers, pathname = "") {
 }
 
 function productMetaTags(product) {
-  const titleText = localized(product.seoTitle) || `${localized(product.name)} | مكتبة البابا كيرلس`;
-  const descriptionText = localized(product.seoDescription) || productDescription(product);
+  const titleText = `${localized(product.name)} | مكتبة البابا كيرلس`;
+  const descriptionText = productDescription(product);
   const canonical = canonicalProductUrl(product);
   const image = absoluteAssetUrl(productImages(product)[0] || "assets/optimized/hero-papa-kyrillos-products.webp");
   const price = productPrice(product);
@@ -1089,7 +1087,7 @@ ${tags.title}${tags.description}${tags.extra}
 <header class="site-header" data-elevated="false"><div class="brand-cluster"><a class="brand" href="/" aria-label="مكتبة البابا كيرلس"><span class="brand-logo-wrap"><img src="/assets/optimized/logo-papa-kyrillos-original.webp" alt="" width="160" height="160" decoding="async"></span><span><strong>مكتبة البابا كيرلس</strong><small>مستلزمات الكنائس والخدمة</small></span></a></div><nav class="main-nav" aria-label="التنقل الرئيسي"><a href="/#categories">الأقسام</a><a href="/#catalog">المنتجات</a></nav><div class="header-actions"><a class="cart-toggle" href="/cart" aria-label="فتح السلة"><span>السلة</span><span class="cart-count" data-cart-count>0</span></a></div></header>
 <main class="product-route-main"><a class="product-route-back" href="/#catalog">العودة إلى المنتجات</a><div id="product-detail" aria-label="${name}"></div><section class="product-route-related" aria-labelledby="related-title"><h2 id="related-title">منتجات مشابهة</h2><div class="product-grid" data-related-products></div></section></main>
 <footer class="product-route-footer"><strong>مكتبة البابا كيرلس</strong><span>مستلزمات الكنائس والخدمة</span><a href="/policies">السياسات</a><a href="https://wa.me/201016125589">تواصل معنا</a></footer>
-<div class="toast" data-toast role="status" aria-live="polite"></div><script id="product-data" type="application/json">${safeProduct}</script><script src="/yota-colors.js?v=4" defer></script><script src="/product-page.js?v=21" defer></script></body></html>`;
+<div class="toast" data-toast role="status" aria-live="polite"></div><script id="product-data" type="application/json">${safeProduct}</script><script src="/yota-colors.js?v=3" defer></script><script src="/product-page.js?v=20" defer></script></body></html>`;
   return new Response(html, {
     status: 200,
     headers: {
@@ -1701,7 +1699,7 @@ function adminOrdersJson(payload, init = {}) {
   return Response.json(payload, {
     ...init,
     headers: {
-      "Cache-Control": "private, no-store",
+      "Cache-Control": "public, max-age=60, stale-while-revalidate=300",
       "X-Content-Type-Options": "nosniff",
       ...(init.headers || {})
     }
@@ -1790,19 +1788,22 @@ async function updateAdminOrder(context, recordId) {
   const { fields, errors } = validateAdminOrderPatch(payload);
   if (errors.length || !Object.keys(fields).length) return adminOrdersJson({ error: "invalid_fields", fields: errors, message: "قيم التحديث غير صالحة." }, { status: 400 });
 
-  let owner;
-  let release = true;
   try {
-    owner = await acquireOrderLock(env, recordId);
-    const current = await readCustomerOrderRecord(env, recordId);
-    const updated = await writeOrderUnderLock(env, current, fields, "admin");
-    return adminOrdersJson({ order: serializeOrderRecord(updated) });
+    const response = await fetch(airtableOrdersUrl(env, recordId), {
+      method: "PATCH",
+      headers: { Authorization: `Bearer ${env.AIRTABLE_TOKEN}`, "Content-Type": "application/json" },
+      body: JSON.stringify({ fields, typecast: false })
+    });
+    const text = await response.text();
+    if (!response.ok) {
+      const error = safeAirtableError(text);
+      console.error("Airtable admin order update failed", { recordId, status: response.status, errorType: error.type, errorMessage: error.message });
+      return adminOrdersJson({ error: "airtable_update_failed", message: "تعذر حفظ تعديلات الأوردر." }, { status: 502 });
+    }
+    return adminOrdersJson({ order: serializeOrderRecord(text ? JSON.parse(text) : {}) });
   } catch (error) {
-    if (error.keepOrderLock) release = false;
     console.error("Unexpected admin order update failure", { recordId, message: error.message });
-    return adminOrdersJson({ error: "order_update_failed", message: error.publicStatus ? error.message : "تعذر حفظ التعديلات حاليًا." }, { status: error.publicStatus || 500 });
-  } finally {
-    if (owner && release) await releaseOrderLock(env, recordId, owner);
+    return adminOrdersJson({ error: "order_update_failed", message: "تعذر حفظ التعديلات حاليًا." }, { status: 500 });
   }
 }
 
@@ -2026,8 +2027,6 @@ async function createOrderResponse(context) {
   const tableName = encodeURIComponent(airtableTableName);
   const airtableUrl = `https://api.airtable.com/v0/${encodeURIComponent(String(env.AIRTABLE_BASE_ID).trim())}/${tableName}`;
   let recordId = "";
-  let mayRestoreRequestState = false;
-  let orderCompleted = false;
 
   try {
     await initializeOrderIdempotency(env);
@@ -2037,7 +2036,6 @@ async function createOrderResponse(context) {
     let savedRequest = await env.ANALYTICS_DB.prepare(
       "SELECT status, airtable_order_id, detail_count FROM website_order_requests WHERE request_id = ?"
     ).bind(requestId).first();
-    mayRestoreRequestState = Boolean(reservation.meta?.changes);
 
     if (!reservation.meta?.changes) {
       if (savedRequest?.status === "completed" && savedRequest.airtable_order_id) {
@@ -2045,15 +2043,13 @@ async function createOrderResponse(context) {
         return orderJsonResponse(request, {
           ok: true,
           requestId,
-          ...await checkoutReceipt(env, savedRequest.airtable_order_id, order.phone),
+          recordId: savedRequest.airtable_order_id,
           detailCount: savedRequest.detail_count,
           duplicate: true
         });
       }
       if (savedRequest?.status === "order_created" && savedRequest.airtable_order_id) {
-        await checkoutReceipt(env, savedRequest.airtable_order_id, order.phone);
         recordId = savedRequest.airtable_order_id;
-        mayRestoreRequestState = true;
       } else {
         return orderJsonResponse(request, {
           error: "order_in_progress",
@@ -2080,7 +2076,6 @@ async function createOrderResponse(context) {
       }, { requestId, operation: "create_order", tableName: airtableTableName, fieldNames });
       recordId = airtableData.records?.[0]?.id || "";
       if (!recordId) throw Object.assign(new Error("Airtable did not return the created order ID"), { code: "airtable_create_failed" });
-      await ensureOrderAccess(env, recordId, purchaseSnapshot(order, normalizedItems.items));
       await env.ANALYTICS_DB.prepare(
         "UPDATE website_order_requests SET status = 'order_created', airtable_order_id = ?, updated_at = CURRENT_TIMESTAMP WHERE request_id = ?"
       ).bind(recordId, requestId).run();
@@ -2107,22 +2102,18 @@ async function createOrderResponse(context) {
     await env.ANALYTICS_DB.prepare(
       "UPDATE website_order_requests SET status = 'completed', detail_count = ?, updated_at = CURRENT_TIMESTAMP WHERE request_id = ?"
     ).bind(detailIds.length, requestId).run();
-    orderCompleted = true;
     console.log("Airtable order details created", { requestId, recordId, detailCount: detailIds.length });
     return orderJsonResponse(request, {
       ok: true,
       requestId,
-      ...await checkoutReceipt(env, recordId, order.phone),
+      recordId,
       detailCount: detailIds.length,
       unresolvedCount: 0
     });
   } catch (error) {
     console.error("Unexpected /api/orders failure", { requestId, recordId, code: error.code || "", sku: error.sku || "", message: error.message });
     try {
-      if (!mayRestoreRequestState || orderCompleted) {
-        // A receipt/read failure must never reopen a completed checkout, nor
-        // may an unauthenticated retry change another request's state.
-      } else if (recordId) {
+      if (recordId) {
         await env.ANALYTICS_DB.prepare(
           "UPDATE website_order_requests SET status = 'order_created', updated_at = CURRENT_TIMESTAMP WHERE request_id = ?"
         ).bind(requestId).run();
@@ -2136,7 +2127,9 @@ async function createOrderResponse(context) {
       request,
       {
         error: recordId ? "order_detail_create_failed" : "order_create_failed",
-        message: error.publicStatus === 404 ? "الطلب غير موجود أو بيانات الطلب غير صحيحة." : "تعذر تأكيد الطلب حاليًا. حاول مرة أخرى بنفس الطلب أو تواصل معنا."
+        message: recordId
+          ? `تم إنشاء الطلب ولكن تعذر حفظ تفاصيل المنتجات (${error.airtableType || error.code || "detail_failed"}).`
+          : `تعذر إنشاء الطلب (${error.airtableType || error.code || "order_failed"}).`
       },
       { status: 502 }
     );
@@ -2295,8 +2288,7 @@ async function analyticsDashboardResponse(request, env) {
 
 async function recordWorkerError(env, request, error) {
   try {
-    const page = new URL(request.url).pathname.replace(/\/(order|api\/customer-orders)\/[a-f0-9]{64}/, "/$1/[redacted]");
-    await storeAnalyticsEvent(env, { page }, { event: "worker_error", errorType: "worker", errorMessage: error?.message || "Worker error" });
+    await storeAnalyticsEvent(env, { page: new URL(request.url).pathname }, { event: "worker_error", errorType: "worker", errorMessage: error?.message || "Worker error" });
   } catch (analyticsError) {
     console.error("Worker analytics logging failed", { message: analyticsText(analyticsError.message, 200) });
   }
@@ -2368,15 +2360,6 @@ async function handleRequest(request, env, ctx) {
     if (url.pathname === "/api/create-bosta-delivery") return createBostaDelivery(context);
     if (url.pathname === "/api/paymob-webhook") return paymobWebhook(context);
     if (url.pathname === "/api/orders") return createOrderResponse(context);
-    if (url.pathname.startsWith("/api/customer-orders/")) return customerOrdersResponse(context, url.pathname);
-    if (url.pathname.startsWith("/order/") || url.pathname === "/order.html") {
-      const response = await htmlResponse(request, env, "/order.html", { private: true });
-      const headers = new Headers(response.headers);
-      headers.set("Cache-Control", "private, no-store");
-      headers.set("Referrer-Policy", "no-referrer");
-      headers.set("X-Robots-Tag", "noindex, nofollow");
-      return new Response(response.body, { status: response.status, headers });
-    }
     if (url.pathname === "/api/best-sellers") {
       const products = await loadProducts(env, request, { maxAgeMs: 60000 });
       return bestSellersResponse(context, products);
@@ -2400,7 +2383,7 @@ async function handleRequest(request, env, ctx) {
     }
 
     if (staticRewrites[url.pathname]) {
-      const isPrivate = ["/track-order", "/cart", "/checkout", "/payment", "/order-success", "/payment-success", "/payment-failed", "/payment-pending"].includes(url.pathname);
+      const isPrivate = ["/cart", "/checkout", "/payment", "/order-success", "/payment-success", "/payment-failed", "/payment-pending"].includes(url.pathname);
       const responseOptions = isPrivate ? { private: true } : { canonicalUrl: `${canonicalOrigin}${url.pathname}` };
       if (url.pathname === "/coloring-game") responseOptions.assetPath = "/coloring-game/index.html";
       return htmlResponse(request, env, staticRewrites[url.pathname], responseOptions);
@@ -2410,21 +2393,7 @@ async function handleRequest(request, env, ctx) {
       return htmlResponse(request, env, "/index.html", { canonicalUrl: `${canonicalOrigin}${url.pathname === "/" ? "/" : url.pathname}` });
     }
 
-    // Cloudflare's static binding keys coloring assets by pathname. Preserve the
-    // public cache-busting URL while resolving the deployed file without its
-    // query string, otherwise product-page URLs such as base.png?v=yota-10-v1
-    // are treated as missing.
-    const assetRequest = url.pathname.startsWith("/coloring/") && url.search
-      ? rewriteGetRequest(request, url.pathname.replace(/\/$/, ""))
-      : request;
-    if (assetRequest !== request) {
-      const normalizedUrl = new URL(assetRequest.url);
-      normalizedUrl.search = "";
-      const normalizedRequest = new Request(normalizedUrl.toString(), assetRequest);
-      const assetResponse = await env.ASSETS.fetch(normalizedRequest);
-      return withAssetCacheHeaders(assetResponse, url.pathname);
-    }
-    const assetResponse = await env.ASSETS.fetch(assetRequest);
+    const assetResponse = await env.ASSETS.fetch(request);
     if (assetResponse.status === 404 && isProductUploadAsset(url.pathname)) {
       const githubAsset = await githubAssetFallbackResponse(url.pathname, env);
       if (githubAsset) return githubAsset;
