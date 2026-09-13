@@ -22,6 +22,7 @@
   const state = {
     products: [],
     newProductIds: new Set(),
+    deletedProductIds: new Set(),
     taxonomy: [],
     taxonomyMain: "",
     taxonomyStatus: "loading",
@@ -585,6 +586,7 @@
         body: JSON.stringify({
           products,
           newProductIds: [...state.newProductIds],
+          deletedProductIds: [...state.deletedProductIds],
           message: `Update products from admin ${new Date().toISOString()}`
         })
       });
@@ -596,6 +598,7 @@
 
       state.products = Array.isArray(result.products) ? result.products : products;
       state.newProductIds.clear();
+      state.deletedProductIds.clear();
       state.dirty = false;
       renderAll(`تم نشر المنتجات. Commit: ${(result.commitSha || "").slice(0, 7)}`);
       showToast("تم حفظ المنتجات بدون تشغيل Cloudflare build. التحديث يظهر خلال ثواني قليلة.");
@@ -1124,6 +1127,7 @@
   function setProducts(products, message) {
     state.products = Array.isArray(products) ? products.map(window.POPE_KYRILLOS_CATEGORY_MIGRATION.product) : [];
     state.newProductIds.clear();
+    state.deletedProductIds.clear();
     state.selectedId = state.products[0]?.id || "";
     state.dirty = false;
     fillCategoryFilter();
@@ -2304,7 +2308,7 @@ function updateProductField(product, element) {
     if (!confirmed) return;
 
     state.products = state.products.filter((item) => item.id !== product.id);
-    state.newProductIds.delete(product.id);
+    if (!state.newProductIds.delete(product.id)) state.deletedProductIds.add(product.id);
     state.selectedId = state.products[0]?.id || "";
     markDirty();
     fillCategoryFilter();

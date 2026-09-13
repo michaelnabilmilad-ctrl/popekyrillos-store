@@ -34,6 +34,12 @@ function utf8ToBase64(value) {
   return btoa(binary);
 }
 
+function base64ToUtf8(value) {
+  const binary = atob(String(value || "").replace(/\s+/g, ""));
+  const bytes = Uint8Array.from(binary, (character) => character.charCodeAt(0));
+  return new TextDecoder().decode(bytes);
+}
+
 async function githubFetch(config, path, options = {}) {
   const response = await fetch(`https://api.github.com/repos/${config.owner}/${config.repo}${path}`, {
     ...options,
@@ -133,6 +139,7 @@ function validateProducts(products) {
     throw Object.assign(new Error("products must be an array."), { statusCode: 400 });
   }
 
+  const ids = new Set();
   for (const [index, product] of products.entries()) {
     if (!product || typeof product !== "object" || Array.isArray(product)) {
       throw Object.assign(new Error(`Invalid product at index ${index}.`), { statusCode: 400 });
@@ -141,7 +148,49 @@ function validateProducts(products) {
     if (!product.id || !product.name) {
       throw Object.assign(new Error(`Product at index ${index} must include id and name.`), { statusCode: 400 });
     }
+
+    const id = String(product.id);
+    if (ids.has(id)) {
+      throw Object.assign(new Error(`Duplicate product id: ${id}.`), { statusCode: 400 });
+    }
+    ids.add(id);
   }
+}
+
+async function loadCanonicalProducts(config) {
+  const file = await githubFetch(
+    config,
+    `/contents/products.json?ref=${encodeURIComponent(config.branch)}`
+  );
+  const products = JSON.parse(base64ToUtf8(file.content));
+  validateProducts(products);
+  return products;
+}
+
+function mergeCatalog(currentProducts, incomingProducts, deletedProductIds = []) {
+  const deletedIds = new Set(deletedProductIds.map(String));
+  const incomingById = new Map(incomingProducts.map((product) => [String(product.id), product]));
+  const currentIds = new Set(currentProducts.map((product) => String(product.id)));
+  const undeclaredMissing = currentProducts
+    .filter((product) => !incomingById.has(String(product.id)) && !deletedIds.has(String(product.id)))
+    .map((product) => String(product.id));
+
+  if (undeclaredMissing.length) {
+    throw Object.assign(
+      new Error(`Catalog safety check rejected the save: ${undeclaredMissing.length} existing product(s) were omitted without an explicit delete.`),
+      { statusCode: 409, omittedProductIds: undeclaredMissing }
+    );
+  }
+
+  const merged = currentProducts
+    .filter((product) => !deletedIds.has(String(product.id)))
+    .map((product) => incomingById.get(String(product.id)) || product);
+
+  for (const product of incomingProducts) {
+    if (!currentIds.has(String(product.id))) merged.push(product);
+  }
+
+  return merged;
 }
 
 export async function onRequest(context) {
@@ -152,10 +201,15 @@ export async function onRequest(context) {
 
   try {
     const body = await request.json();
-    const products = body.products;
-    validateProducts(products);
+    const incomingProducts = body.products;
+    validateProducts(incomingProducts);
 
     const config = githubConfig(env);
+    const currentProducts = await loadCanonicalProducts(config);
+    const explicitReplacement = body.operation === "full-replacement" && body.confirm === "REPLACE_FULL_CATALOG";
+    const products = explicitReplacement
+      ? incomingProducts
+      : mergeCatalog(currentProducts, incomingProducts, Array.isArray(body.deletedProductIds) ? body.deletedProductIds : []);
     const content = `${JSON.stringify(products, null, 2)}\n`;
     const encodedContent = utf8ToBase64(content);
     const message = String(body.message || `Update products from admin ${new Date().toISOString()}`).slice(0, 180);
@@ -171,6 +225,9 @@ export async function onRequest(context) {
       commitUrl: result.html_url || "",
       path: "products.json",
       branch: config.branch,
+      products,
+      previousCount: currentProducts.length,
+      savedCount: products.length,
       message: "products.json was committed to GitHub."
     });
   } catch (error) {
@@ -185,6 +242,7 @@ export async function onRequest(context) {
 
     return jsonResponse(statusCode, {
       error: error.message || "Failed to update products.json.",
+      omittedProductIds: error.omittedProductIds || [],
       providerStatus: error.providerStatus || null,
       providerData: error.providerData || null
     });
