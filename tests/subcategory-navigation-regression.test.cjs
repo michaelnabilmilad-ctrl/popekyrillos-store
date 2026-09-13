@@ -47,6 +47,9 @@ test("sibling thumbnails come from canonical navigation metadata, not filtered r
   const loader = functionSource("loadCatalogPage", "openHeaderSearch");
   assert.match(imageResolver, /catalogSubcategoryImages/);
   assert.match(imageResolver, /taxonomy\?\.categoryImage/);
+  assert.ok(imageResolver.indexOf("subcategory?.manualImage") < imageResolver.indexOf("catalogSubcategoryImages"));
+  assert.ok(imageResolver.indexOf("catalogSubcategoryImages") < imageResolver.indexOf("taxonomy?.categoryImage?.(subcategory)"));
+  assert.doesNotMatch(imageResolver, /getConfiguredImage/);
   assert.match(loader, /payload\.subcategoryImages/);
 });
 

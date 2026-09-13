@@ -1430,10 +1430,17 @@ function renderLabelFilterOptions() {
 }
 
 function subcategoryCardImage(subcategory, category) {
-  const configured = taxonomy?.categoryImage?.(subcategory) || "";
-  if (configured) return configured;
-  const canonicalImage = catalogSubcategoryImages?.[category?.id]?.[subcategory?.id] || "";
-  if (canonicalImage) return canonicalImage;
+  const imagePolicy = window.POPE_KYRILLOS_SUBCATEGORY_IMAGE_POLICY;
+  const validImage = imagePolicy?.validImageValue || ((value) => typeof value === "string" ? value.trim() : "");
+  const manuallyAssignedImage = validImage(subcategory?.manualImage);
+  if (manuallyAssignedImage) return manuallyAssignedImage;
+
+  // This is the image the storefront historically resolved from the complete
+  // category catalog. It is supplied independently of the active filters, so
+  // selecting a sibling cannot replace or remove a card's established image.
+  const historicalImage = validImage(catalogSubcategoryImages?.[category?.id]?.[subcategory?.id]);
+  if (historicalImage) return historicalImage;
+
   const choice = window.POPE_KYRILLOS_SUBCATEGORY_IMAGE_POLICY?.chooseImage({
     categoryId: category?.id || "",
     subcategory,
@@ -1441,10 +1448,12 @@ function subcategoryCardImage(subcategory, category) {
     getMainId: productMainCategoryId,
     getSubId: productSubCategoryId,
     getImages: getProductImages,
-    getConfiguredImage: (item) => taxonomy?.categoryImage?.(item) || "",
     isActive: (product) => product?.published !== false && product?.deleted !== true && hasAvailableVariant(product)
   });
-  return choice?.image || taxonomy?.categoryImage?.(category) || "assets/optimized/hero-papa-kyrillos-products.webp";
+  if (choice?.image) return choice.image;
+
+  const taxonomyImage = taxonomy?.categoryImage?.(subcategory) || "";
+  return taxonomyImage || taxonomy?.categoryImage?.(category) || "assets/optimized/hero-papa-kyrillos-products.webp";
 }
 
 function renderSubcategoryCards() {
