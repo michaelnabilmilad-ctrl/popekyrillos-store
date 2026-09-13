@@ -279,6 +279,11 @@ function hasAvailableVariant(product) {
   return product?.stock !== "غير متاح حاليا" && product?.available !== false;
 }
 
+function isCatalogProductVisible(product) {
+  return product?.active !== false && product?.hidden !== true && product?.deleted !== true
+    && product?.published !== false && hasAvailableVariant(product);
+}
+
 function productDescription(product) {
   return cleanDescription(localized(product?.description)) || "تفاصيل المنتج من مكتبة البابا كيرلس.";
 }
@@ -510,7 +515,7 @@ function catalogMainCategoryId(product) {
 }
 
 function catalogProductMatches(product, params) {
-  if (!hasAvailableVariant(product)) return false;
+  if (!isCatalogProductVisible(product)) return false;
   const migrated = globalThis.POPE_KYRILLOS_CATEGORY_MIGRATION.route(params.get("category") || "all", params.get("subcategory") || "");
   const category = migrated.category;
   const subcategory = migrated.label;
@@ -546,13 +551,15 @@ async function catalogApiResponse(request, env, ctx) {
   cacheUrl.searchParams.set("thumbnails", "plain-iota-v2");
   [...url.searchParams.entries()].sort(([a], [b]) => a.localeCompare(b)).forEach(([key, value]) => cacheUrl.searchParams.append(key, value));
   const allProducts = await loadProducts(env, request, { maxAgeMs: 600000 });
-  const categoryCounts = allProducts.filter(hasAvailableVariant).reduce((counts, product) => {
+  const thumbnailManifest = await loadThumbnailManifest(env, request);
+  const navigationProducts = allProducts.filter(isCatalogProductVisible);
+  const categoryCounts = navigationProducts.reduce((counts, product) => {
     const categoryId = catalogMainCategoryId(product);
     counts[categoryId] = (counts[categoryId] || 0) + 1;
     if (catalogCollectionIds(product).length) counts["greek-collection"] = (counts["greek-collection"] || 0) + 1;
     return counts;
   }, {});
-  const subcategoryCounts = allProducts.filter(hasAvailableVariant).reduce((counts, product) => {
+  const subcategoryCounts = navigationProducts.reduce((counts, product) => {
     const categoryId = catalogMainCategoryId(product);
     const subcategoryId = String(product?.subcategory || product?.subCategory || product?.label || "").trim();
     if (!subcategoryId) return counts;
@@ -564,7 +571,21 @@ async function catalogApiResponse(request, env, ctx) {
     });
     return counts;
   }, {});
-  const thumbnailManifest = await loadThumbnailManifest(env, request);
+  const subcategoryImages = navigationProducts.reduce((images, product) => {
+    const image = catalogThumbnail(product, thumbnailManifest);
+    if (!image) return images;
+    const categoryId = catalogMainCategoryId(product);
+    const subcategoryId = String(product?.subcategory || product?.subCategory || product?.label || "").trim();
+    if (subcategoryId) {
+      images[categoryId] ||= {};
+      images[categoryId][subcategoryId] ||= image;
+    }
+    catalogCollectionIds(product).forEach((collectionId) => {
+      images["greek-collection"] ||= {};
+      images["greek-collection"][collectionId] ||= image;
+    });
+    return images;
+  }, {});
   if (productsCacheSha) cacheUrl.searchParams.set("v", productsCacheSha);
   const cacheKey = new Request(cacheUrl.toString(), { method: "GET" });
   const edgeCache = caches.default;
@@ -576,7 +597,7 @@ async function catalogApiResponse(request, env, ctx) {
     matched.sort((first, second) => catalogSearchScore(first, search) - catalogSearchScore(second, search));
   }
   const start = (page - 1) * limit;
-  const body = JSON.stringify({ items: matched.slice(start, start + limit).map((product) => catalogDto(product, thumbnailManifest)), page, limit, total: matched.length, hasMore: start + limit < matched.length, categoryCounts, subcategoryCounts });
+  const body = JSON.stringify({ items: matched.slice(start, start + limit).map((product) => catalogDto(product, thumbnailManifest)), page, limit, total: matched.length, hasMore: start + limit < matched.length, categoryCounts, subcategoryCounts, subcategoryImages });
   const response = new Response(body, { headers: { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "public, max-age=0, must-revalidate", "CDN-Cache-Control": "public, max-age=600, stale-while-revalidate=300" } });
   ctx.waitUntil(edgeCache.put(cacheKey, response.clone()));
   return response;

@@ -6,7 +6,7 @@ const choose=(subcategory,products)=>chooseImage({categoryId:"occasions-service"
 
 test("manual category image has first priority",()=>{
   const choice=choose({id:"tote-bags",manualImage:"assets/manual.webp"},[product("bag","occasions-service","tote-bags","assets/bag.webp")]);
-  assert.equal(choice.image,"assets/manual.webp"); assert.equal(choice.source,"manual");
+  assert.equal(choice.image,"assets/manual.webp"); assert.equal(choice.source,"configured");
 });
 test("manually selected representative must belong to the exact main and subcategory IDs",()=>assert.equal(choose({id:"tote-bags",representativeProductId:"bag-2"},[product("bag-1","occasions-service","tote-bags","assets/one.webp"),product("bag-2","occasions-service","tote-bags","assets/two.webp")]).image,"assets/two.webp"));
 test("empty category stays blank",()=>assert.equal(choose({id:"empty"},[]).image,""));

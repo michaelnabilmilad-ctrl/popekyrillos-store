@@ -28,7 +28,8 @@ test("subcategory controls use full-category counts instead of filtered products
 
   assert.match(cardRenderer, /fullCategoryProductCount\(categoryId\)/);
   assert.match(cardRenderer, /fullSubcategoryProductCount\(categoryId, label\.id\)/);
-  assert.doesNotMatch(cardRenderer, /filter\(\(card\).*card\.count > 0/s);
+  assert.match(cardRenderer, /filter\(\(label\) => fullSubcategoryProductCount\(categoryId, label\.id\) > 0\)/);
+  assert.match(cardRenderer, /catalogSubcategoryCountsLoaded/);
 });
 
 test("the selected subcategory only controls active state and product filtering", () => {
@@ -38,4 +39,18 @@ test("the selected subcategory only controls active state and product filtering"
   assert.match(cardRenderer, /const activeLabel = state\.labelFilter \|\| "";/);
   assert.match(cardRenderer, /active: activeLabel === label\.id/);
   assert.match(productFilter, /productMatchesSubcategory\(product, state\.labelFilter\)/);
+});
+
+test("sibling thumbnails come from canonical navigation metadata, not filtered results", () => {
+  const imageResolver = functionSource("subcategoryCardImage", "renderSubcategoryCards");
+  const loader = functionSource("loadCatalogPage", "openHeaderSearch");
+  assert.match(imageResolver, /catalogSubcategoryImages/);
+  assert.match(imageResolver, /taxonomy\?\.categoryImage/);
+  assert.match(loader, /payload\.subcategoryImages/);
+});
+
+test("all-subcategories card receives a stable image and keeps its parent category", () => {
+  const cardRenderer = functionSource("renderSubcategoryCards", "updateFilterButtons");
+  assert.match(cardRenderer, /taxonomy\?\.categoryImage\?\.\(category\)/);
+  assert.match(cardRenderer, /data-subcategory-card="\$\{escapeHtml\(card\.id\)\}"/);
 });

@@ -93,6 +93,7 @@ let catalogCategoryCounts = {};
 let catalogCategoryCountsLoaded = false;
 let catalogSubcategoryCounts = {};
 let catalogSubcategoryCountsLoaded = false;
+let catalogSubcategoryImages = {};
 let catalogRequestController = null;
 let staticCatalogProducts = null;
 let bestSellerProducts = [];
@@ -1322,8 +1323,6 @@ function availableProducts() {
   return products.filter(hasAvailableVariant);
 }
 
-const alwaysVisibleSubcategoryIds = new Set(["iota-plain-hand-crosses", "plain-cross-medals"]);
-
 function buildSubcategoryCounts(items = []) {
   return items.filter(hasAvailableVariant).reduce((counts, product) => {
     productCategoryMemberships(product).forEach(({ categoryId, subcategoryId }) => {
@@ -1331,6 +1330,18 @@ function buildSubcategoryCounts(items = []) {
       counts[categoryId][subcategoryId] = (counts[categoryId][subcategoryId] || 0) + 1;
     });
     return counts;
+  }, {});
+}
+
+function buildSubcategoryImages(items = []) {
+  return items.filter(hasAvailableVariant).reduce((images, product) => {
+    const image = getProductImages(product)[0] || "";
+    if (!image) return images;
+    productCategoryMemberships(product).forEach(({ categoryId, subcategoryId }) => {
+      images[categoryId] ||= {};
+      images[categoryId][subcategoryId] ||= image;
+    });
+    return images;
   }, {});
 }
 
@@ -1402,7 +1413,8 @@ function renderMainFilterOptions() {
 
 function renderLabelFilterOptions() {
   if (!labelFilterSelect) return;
-  const labels = orderedLabelsForCurrentFilter();
+  const categoryId = normalizeCategoryFilter(state.filter || "all");
+  const labels = orderedLabelsForCurrentFilter().filter((label) => categoryId === "all" || fullSubcategoryProductCount(categoryId, label.id) > 0);
   if (state.labelFilter && !labels.some((label) => label.id === state.labelFilter || label.name === state.labelFilter)) {
     state.labelFilter = "";
   }
@@ -1418,10 +1430,10 @@ function renderLabelFilterOptions() {
 }
 
 function subcategoryCardImage(subcategory, category) {
-  if (category?.id === "greek-collection") {
-    const product = availableProducts().find((item) => productMatchesCategory(item, category.id) && productMatchesSubcategory(item, subcategory.id) && getProductImages(item).length);
-    return product ? getProductImages(product)[0] : "";
-  }
+  const configured = taxonomy?.categoryImage?.(subcategory) || "";
+  if (configured) return configured;
+  const canonicalImage = catalogSubcategoryImages?.[category?.id]?.[subcategory?.id] || "";
+  if (canonicalImage) return canonicalImage;
   const choice = window.POPE_KYRILLOS_SUBCATEGORY_IMAGE_POLICY?.chooseImage({
     categoryId: category?.id || "",
     subcategory,
@@ -1429,9 +1441,10 @@ function subcategoryCardImage(subcategory, category) {
     getMainId: productMainCategoryId,
     getSubId: productSubCategoryId,
     getImages: getProductImages,
+    getConfiguredImage: (item) => taxonomy?.categoryImage?.(item) || "",
     isActive: (product) => product?.published !== false && product?.deleted !== true && hasAvailableVariant(product)
   });
-  return choice?.image || "";
+  return choice?.image || taxonomy?.categoryImage?.(category) || "assets/optimized/hero-papa-kyrillos-products.webp";
 }
 
 function renderSubcategoryCards() {
@@ -1445,7 +1458,14 @@ function renderSubcategoryCards() {
   }
 
   const category = taxonomy?.categoryById?.get(categoryId);
-  const labels = orderedLabelsForCategory(categoryId);
+  if (!catalogSubcategoryCountsLoaded) {
+    subcategoryCards.hidden = true;
+    subcategoryCards.innerHTML = "";
+    return;
+  }
+
+  const labels = orderedLabelsForCategory(categoryId)
+    .filter((label) => fullSubcategoryProductCount(categoryId, label.id) > 0);
   if (!labels.length) {
     subcategoryCards.hidden = true;
     subcategoryCards.innerHTML = "";
@@ -1459,7 +1479,7 @@ function renderSubcategoryCards() {
       id: "",
       name: t("labelAll"),
       count: allCount,
-      image: "",
+      image: taxonomy?.categoryImage?.(category) || labels.map((label) => subcategoryCardImage(label, category)).find(Boolean) || "assets/optimized/hero-papa-kyrillos-products.webp",
       active: !activeLabel
     },
     ...labels.map((label) => ({
@@ -5203,6 +5223,7 @@ async function loadCatalogPage({ reset = false } = {}) {
     catalogCategoryCounts = catalogCategoryCountsLoaded ? payload.categoryCounts : {};
     catalogSubcategoryCountsLoaded = Boolean(payload.subcategoryCounts && typeof payload.subcategoryCounts === "object");
     catalogSubcategoryCounts = catalogSubcategoryCountsLoaded ? payload.subcategoryCounts : {};
+    catalogSubcategoryImages = payload.subcategoryImages && typeof payload.subcategoryImages === "object" ? payload.subcategoryImages : {};
     const received = (Array.isArray(payload.items) ? payload.items : []).map((item) => ({ ...item, image: item.thumbnail, stock: item.availability === "available" ? "متاح" : "غير متاح حاليا", mainCategory: item.category, subCategory: item.subcategory, label: item.subcategory }));
     products = reset ? received : [...products, ...received];
     catalogPage = Number(payload.page) || nextPage;
@@ -5224,6 +5245,7 @@ async function loadCatalogPage({ reset = false } = {}) {
       catalogCategoryCountsLoaded = true;
       catalogSubcategoryCounts = buildSubcategoryCounts(staticCatalogProducts);
       catalogSubcategoryCountsLoaded = true;
+      catalogSubcategoryImages = buildSubcategoryImages(staticCatalogProducts);
       state.visibleProductCount = reset ? productBatchSize : state.visibleProductCount + productBatchSize;
       catalogTotal = getFilteredProducts().length;
       catalogHasMore = state.visibleProductCount < catalogTotal;
@@ -5235,6 +5257,7 @@ async function loadCatalogPage({ reset = false } = {}) {
       catalogCategoryCountsLoaded = true;
       catalogSubcategoryCounts = buildSubcategoryCounts(products);
       catalogSubcategoryCountsLoaded = true;
+      catalogSubcategoryImages = buildSubcategoryImages(products);
       catalogTotal = getFilteredProducts().length;
       catalogHasMore = state.visibleProductCount < catalogTotal;
       productsAssetVersion = "fallback";

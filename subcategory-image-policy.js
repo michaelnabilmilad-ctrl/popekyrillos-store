@@ -6,9 +6,9 @@
     return image;
   }
 
-  function chooseImage({ categoryId, subcategory, products, getMainId, getSubId, getImages, isActive }) {
-    const manualImage = validImageValue(subcategory?.manualImage);
-    if (manualImage) return { image: manualImage, source: "manual", productId: "" };
+  function chooseImage({ categoryId, subcategory, products, getMainId, getSubId, getImages, isActive, getConfiguredImage }) {
+    const configuredImage = validImageValue(typeof getConfiguredImage === "function" ? getConfiguredImage(subcategory) : subcategory?.manualImage);
+    if (configuredImage) return { image: configuredImage, source: "configured", productId: "" };
     if (!categoryId || !subcategory?.id) return { image: "", source: "none", productId: "" };
 
     const eligible = (products || []).filter((product) => getMainId(product) === categoryId

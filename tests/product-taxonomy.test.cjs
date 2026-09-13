@@ -111,10 +111,10 @@ test("an old cached taxonomy is replaced without touching cart or login storage"
   assert.equal(migratedWithoutVersion.testStorage.get("pope-kyrillos-auth:user"), "auth-still-here");
 });
 
-test("new empty cross subcategories remain visible in storefront cards and filters", () => {
+test("empty subcategories are hidden from storefront cards and filters", () => {
   const source = fs.readFileSync("script.js", "utf8");
-  assert.match(source, /alwaysVisibleSubcategoryIds = new Set\(\["iota-plain-hand-crosses", "plain-cross-medals"\]\)/);
-  assert.match(source, /alwaysVisibleSubcategoryIds\.has\(subcategory\.id\)/);
+  assert.doesNotMatch(source, /alwaysVisibleSubcategoryIds/);
+  assert.match(source, /filter\(\(label\) => fullSubcategoryProductCount\(categoryId, label\.id\) > 0\)/);
 });
 
 test("Yota medallions retain a stable Crosses child ID and product assignments", () => {
