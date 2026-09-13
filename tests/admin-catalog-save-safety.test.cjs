@@ -7,7 +7,7 @@ const admin = fs.readFileSync("admin.js", "utf8");
 const endpoint = fs.readFileSync("functions/api/update-products.js", "utf8");
 const mergeSource = endpoint.slice(
   endpoint.indexOf("function mergeCatalog"),
-  endpoint.indexOf("\n\nexport async function onRequest")
+  endpoint.indexOf("export async function onRequest")
 );
 const mergeCatalog = vm.runInNewContext(`${mergeSource}; mergeCatalog`);
 const fullCatalog = Array.from({ length: 110 }, (_, index) => ({
