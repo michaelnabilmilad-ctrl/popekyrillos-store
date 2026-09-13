@@ -1126,7 +1126,7 @@ function mainCategoryProductCount(categoryId) {
   }
   if (!catalogCategoryCountsLoaded) return null;
   return new Set(availableProducts()
-    .filter((product) => productMainCategoryId(product) === categoryId)
+    .filter((product) => productMatchesCategory(product, categoryId))
     .map((product) => product.id))
     .size;
 }
@@ -1283,14 +1283,35 @@ function productSubCategoryName(product) {
   return taxonomy?.subcategoryNameFromId?.(id) || product?.subcategory || product?.subCategory || product?.label || "";
 }
 
+function productCollectionIds(product) {
+  return [...new Set((Array.isArray(product?.collections) ? product.collections : [])
+    .map((value) => taxonomy?.subcategoryIdFromName?.(value) || value)
+    .filter((value) => taxonomy?.subcategoryById?.has(value)))];
+}
+
+function isGreekCollectionProduct(product) {
+  return productCollectionIds(product).some((id) => id.startsWith("greek-"));
+}
+
+function productCategoryMemberships(product) {
+  const memberships = [{ categoryId: productMainCategoryId(product), subcategoryId: productSubCategoryId(product) }];
+  productCollectionIds(product).forEach((subcategoryId) => {
+    const categoryId = taxonomy?.subcategoryById?.get(subcategoryId)?.mainId || "";
+    if (categoryId) memberships.push({ categoryId, subcategoryId });
+  });
+  return memberships.filter((membership, index, all) => membership.categoryId && membership.subcategoryId
+    && all.findIndex((item) => item.categoryId === membership.categoryId && item.subcategoryId === membership.subcategoryId) === index);
+}
+
 function productMatchesCategory(product, category = "all") {
   const normalized = normalizeCategoryFilter(category);
-  return normalized === "all" || productMainCategoryId(product) === normalized;
+  return normalized === "all" || productCategoryMemberships(product).some((membership) => membership.categoryId === normalized);
 }
 
 function productMatchesSubcategory(product, subcategory = "") {
   if (!subcategory) return true;
-  return productSubCategoryId(product) === subcategory || product?.subcategory === subcategory || product?.subCategory === subcategory || product?.label === subcategory;
+  return productSubCategoryId(product) === subcategory || productCollectionIds(product).includes(subcategory)
+    || product?.subcategory === subcategory || product?.subCategory === subcategory || product?.label === subcategory;
 }
 
 function visibleMainCategories() {
@@ -1301,13 +1322,14 @@ function availableProducts() {
   return products.filter(hasAvailableVariant);
 }
 
+const alwaysVisibleSubcategoryIds = new Set(["iota-plain-hand-crosses", "plain-cross-medals"]);
+
 function buildSubcategoryCounts(items = []) {
   return items.filter(hasAvailableVariant).reduce((counts, product) => {
-    const categoryId = productMainCategoryId(product);
-    const subcategoryId = productSubCategoryId(product);
-    if (!categoryId || !subcategoryId) return counts;
-    counts[categoryId] ||= {};
-    counts[categoryId][subcategoryId] = (counts[categoryId][subcategoryId] || 0) + 1;
+    productCategoryMemberships(product).forEach(({ categoryId, subcategoryId }) => {
+      counts[categoryId] ||= {};
+      counts[categoryId][subcategoryId] = (counts[categoryId][subcategoryId] || 0) + 1;
+    });
     return counts;
   }, {});
 }
@@ -1320,9 +1342,7 @@ function subcategoryProductCount(categoryId, subcategoryId) {
 function orderedLabelsForCategory(category) {
   const normalized = normalizeCategoryFilter(category);
   const categoryMeta = taxonomy?.categoryById?.get(normalized);
-  if (categoryMeta) {
-    return categoryMeta.subcategories;
-  }
+  if (categoryMeta) return categoryMeta.subcategories;
 
   const labels = [...new Set(availableProducts().filter((product) => product.category === category).map((product) => product.label).filter(Boolean))];
   const preferred = catalogLabelOrder[category] || [];
@@ -1398,6 +1418,10 @@ function renderLabelFilterOptions() {
 }
 
 function subcategoryCardImage(subcategory, category) {
+  if (category?.id === "greek-collection") {
+    const product = availableProducts().find((item) => productMatchesCategory(item, category.id) && productMatchesSubcategory(item, subcategory.id) && getProductImages(item).length);
+    return product ? getProductImages(product)[0] : "";
+  }
   const choice = window.POPE_KYRILLOS_SUBCATEGORY_IMAGE_POLICY?.chooseImage({
     categoryId: category?.id || "",
     subcategory,
@@ -1545,10 +1569,10 @@ function renderShopMenu() {
   const groups = categories
     .map((category) => {
       const labels = orderedLabelsForCategory(category.id);
-      const categoryCount = availableProducts().filter((product) => productMainCategoryId(product) === category.id).length;
+      const categoryCount = availableProducts().filter((product) => productMatchesCategory(product, category.id)).length;
       const labelButtons = labels
         .map((label) => {
-          const labelCount = availableProducts().filter((product) => productMainCategoryId(product) === category.id && productMatchesSubcategory(product, label.id)).length;
+          const labelCount = availableProducts().filter((product) => productMatchesCategory(product, category.id) && productMatchesSubcategory(product, label.id)).length;
           const active = normalizeCategoryFilter(state.filter) === category.id && state.labelFilter === label.id;
           return `
             <button class="shop-subcategory ${active ? "active" : ""}" type="button" data-shop-category="${escapeHtml(category.id)}" data-shop-label="${escapeHtml(label.id)}">
@@ -2822,13 +2846,8 @@ function productCardChoicesHtml(product) {
   `;
 }
 
-const catalogColoringDesignByProductId = new Map([
-  ["custom-1782980654479", "yota-01"],
-  ["custom-1782980654479-copy-1782982056347", "yota-02"]
-]);
-
 function catalogColoringDesignId(product) {
-  return product?.coloringModelId || catalogColoringDesignByProductId.get(String(product?.id || "")) || "";
+  return product?.coloringModelId || "";
 }
 
 function productCardPurchaseHtml(product, { popular = false } = {}) {
@@ -3246,6 +3265,7 @@ function renderProducts() {
         <article class="product-card" data-card-product="${productId}">
           <div class="product-visual ${hasImage ? "has-image" : ""}" style="--visual-bg: ${product.bg || "#efe6d6"}; --visual-bg-2: ${product.bg2 || "#d6e5dc"}; --visual-fg: ${product.fg || "#0c6b68"}">
             <span class="product-badge">${escapeHtml(localized(product.badge || product.stock || t("available")))}</span>
+            ${isGreekCollectionProduct(product) ? `<span class="greek-collection-badge">🇬🇷 ${escapeHtml(isEnglish() ? "Greek Collection" : "المجموعة اليونانية")}</span>` : ""}
             ${visual}
           </div>
           <div class="product-info">
@@ -3335,12 +3355,24 @@ function isIotaMedalProduct(product) {
   return /(?:يوتا|يوطا)/.test(searchable) && /(?:مادلي|ميدالي)/.test(searchable);
 }
 
-function coloringGameHtml(_image, productName) {
+function coloringGameHtml(product, productName) {
   const colors = (Array.isArray(window.YOTA_COLORS) ? window.YOTA_COLORS : [])
     .filter((color) => color.available !== false);
   const label = isEnglish() ? "Color the Iota medal" : "لوّن مادلية اليوتا";
   return `
-    <section class="iota-coloring-game" data-coloring-game hidden>
+    <section
+      class="iota-coloring-game"
+      data-coloring-game
+      data-coloring-model-id="${escapeHtml(product.coloringModelId || "")}"
+      data-coloring-product-id="${escapeHtml(product.id || "")}"
+      data-coloring-product-slug="${escapeHtml(product.slug || "")}"
+      data-coloring-product-title="${escapeHtml(productName)}"
+      data-coloring-base-url="${escapeHtml(product.coloringBaseImageUrl || "")}"
+      data-coloring-mask-url="${escapeHtml(product.coloringMaskUrl || "")}"
+      data-coloring-outline-url="${escapeHtml(product.coloringOutlineUrl || "")}"
+      data-loaded-coloring-model-id=""
+      hidden
+    >
       <div class="iota-coloring-header">
         <div>
           <strong>${label}</strong>
@@ -3376,6 +3408,7 @@ function coloringGameHtml(_image, productName) {
   `;
 }
 
+let coloringLoadRequest = 0;
 function initializeColoringGame(panel) {
   if (!panel || panel.dataset.ready === "true") return;
   const canvas = panel.querySelector("[data-coloring-canvas]");
@@ -3388,11 +3421,21 @@ function initializeColoringGame(panel) {
     image.onerror = reject;
     image.src = source;
   });
+  const modelId = String(panel.dataset.coloringModelId || "").trim();
+  const baseUrl = String(panel.dataset.coloringBaseUrl || "").trim();
+  const maskUrl = String(panel.dataset.coloringMaskUrl || "").trim();
+  const outlineUrl = String(panel.dataset.coloringOutlineUrl || "").trim();
+  if (!modelId || !baseUrl || !maskUrl || !outlineUrl) {
+    if (loading) loading.textContent = isEnglish() ? "The drawing could not be opened." : "تعذر فتح الرسمة.";
+    return;
+  }
+  const requestId = ++coloringLoadRequest;
   Promise.all([
-    loadLayer("/coloring/yota-01/base.png"),
-    loadLayer("/coloring/yota-01/regions.png"),
-    loadLayer("/coloring/yota-01/outline.png")
+    loadLayer(baseUrl),
+    loadLayer(maskUrl),
+    loadLayer(outlineUrl)
   ]).then(([baseImage, regionsImage, outlineImage]) => {
+    if (requestId !== coloringLoadRequest || !panel.isConnected) return;
     if (baseImage.naturalWidth !== regionsImage.naturalWidth || baseImage.naturalHeight !== regionsImage.naturalHeight ||
         baseImage.naturalWidth !== outlineImage.naturalWidth || baseImage.naturalHeight !== outlineImage.naturalHeight) {
       throw new Error("Coloring layers must have identical dimensions.");
@@ -3415,7 +3458,7 @@ function initializeColoringGame(panel) {
       pixelsByRegion.get(regionId).push(pixel);
     }
     const colorsByRegion = {};
-    let color = window.YOTA_COLORS?.find((entry) => entry.available !== false)?.hex || "#D00101";
+    let color = window.YOTA_COLORS?.find((entry) => entry.available !== false)?.hex || "#C20000";
     let erasing = false;
     const render = () => {
       const colorLayer = context.createImageData(canvas.width, canvas.height);
@@ -3483,6 +3526,7 @@ function initializeColoringGame(panel) {
       link.click();
     });
 
+    panel.dataset.loadedColoringModelId = modelId;
     panel.dataset.ready = "true";
     if (loading) loading.hidden = true;
     render();
@@ -3624,7 +3668,7 @@ function renderProductModal() {
   productModalBody.innerHTML = `
     <div class="product-modal-media">
       ${media}
-      ${hasColoringGame ? coloringGameHtml(activeDetailImage, productDisplayName) : ""}
+      ${hasColoringGame ? coloringGameHtml(product, productDisplayName) : ""}
     </div>
     <div class="product-modal-copy">
       <p class="eyebrow">${escapeHtml(localized(product.label || "منتج"))}</p>
@@ -3647,7 +3691,7 @@ function renderProductModal() {
       </div>
       <p class="modal-description">${formatDescriptionHtml(description)}</p>
       ${hasColoringGame ? `
-        <button class="button iota-coloring-launch" type="button" data-coloring-open>
+        <button class="button iota-coloring-launch" type="button" data-coloring-open data-coloring-url="/coloring-game?design=${encodeURIComponent(product.coloringModelId || "")}">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4Z"/></svg>
           ${isEnglish() ? "Play: color this medal" : "العب ولوّن المادلية دي"}
         </button>
@@ -5640,6 +5684,10 @@ productModal.addEventListener("click", (event) => {
 
   const coloringOpenButton = event.target.closest("[data-coloring-open]");
   if (coloringOpenButton) {
+    if (coloringOpenButton.dataset.coloringUrl) {
+      window.location.href = coloringOpenButton.dataset.coloringUrl;
+      return;
+    }
     const media = productModalBody.querySelector(".product-modal-media");
     const panel = media?.querySelector("[data-coloring-game]");
     if (media && panel) {

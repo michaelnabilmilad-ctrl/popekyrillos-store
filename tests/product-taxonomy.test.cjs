@@ -22,11 +22,11 @@ function loadTaxonomy(storedTaxonomy = null, storedVersion = 2026081701, extraSt
   return context.window.POPE_KYRILLOS_TAXONOMY;
 }
 
-test("exposes exactly the eight requested customer categories", () => {
+test("exposes the configured customer categories including the Greek collection", () => {
   const taxonomy = loadTaxonomy();
   assert.deepEqual(
     Array.from(taxonomy.customerCategories(), (category) => category.id),
-    ["altar-vessels", "candles-lamps", "church-vestments", "crosses", "icons-frames", "books-rituals", "occasions-service", "church-equipment"]
+    ["altar-vessels", "candles-lamps", "church-vestments", "crosses", "icons-frames", "books-rituals", "occasions-service", "church-equipment", "greek-collection"]
   );
 });
 
@@ -93,7 +93,7 @@ test("an old cached taxonomy is replaced without touching cart or login storage"
   });
   assert.deepEqual(
     Array.from(migrated.customerCategories(), (category) => category.id),
-    ["altar-vessels", "candles-lamps", "church-vestments", "crosses", "icons-frames", "books-rituals", "occasions-service", "church-equipment"]
+    ["altar-vessels", "candles-lamps", "church-vestments", "crosses", "icons-frames", "books-rituals", "occasions-service", "church-equipment", "greek-collection"]
   );
   assert.equal(migrated.categoryById.get("altar-vessels").name, "المذبح والأواني المقدسة");
   assert.equal(migrated.testStorage.get("pope-kyrillos-taxonomy-version"), String(migrated.CURRENT_TAXONOMY_VERSION));
@@ -105,18 +105,29 @@ test("an old cached taxonomy is replaced without touching cart or login storage"
     "pope-kyrillos-cart": "cart-still-here",
     "pope-kyrillos-auth:user": "auth-still-here"
   });
-  assert.equal(migratedWithoutVersion.customerCategories().length, 8);
+  assert.equal(migratedWithoutVersion.customerCategories().length, 9);
   assert.equal(migratedWithoutVersion.testStorage.get("pope-kyrillos-taxonomy-version"), String(migratedWithoutVersion.CURRENT_TAXONOMY_VERSION));
   assert.equal(migratedWithoutVersion.testStorage.get("pope-kyrillos-cart"), "cart-still-here");
   assert.equal(migratedWithoutVersion.testStorage.get("pope-kyrillos-auth:user"), "auth-still-here");
 });
 
-test("all canonical subcategories remain visible in storefront cards and filters", () => {
+test("new empty cross subcategories remain visible in storefront cards and filters", () => {
   const source = fs.readFileSync("script.js", "utf8");
-  const start = source.indexOf("function orderedLabelsForCategory");
-  const end = source.indexOf("function productsForCurrentCategory", start);
-  const renderer = source.slice(start, end);
-  assert.match(renderer, /return categoryMeta\.subcategories;/);
+  assert.match(source, /alwaysVisibleSubcategoryIds = new Set\(\["iota-plain-hand-crosses", "plain-cross-medals"\]\)/);
+  assert.match(source, /alwaysVisibleSubcategoryIds\.has\(subcategory\.id\)/);
+});
+
+test("Yota medallions retain a stable Crosses child ID and product assignments", () => {
+  const taxonomy = loadTaxonomy();
+  const subcategory = taxonomy.subcategoryById.get("yota-medallions");
+  assert.equal(subcategory?.name, "الميداليات");
+  assert.equal(subcategory?.mainId, "crosses");
+
+  const products = JSON.parse(fs.readFileSync("products.json", "utf8"));
+  const medallions = products.filter((product) => /^صليب يوتا مادلي[ةه] موديل \d+$/.test(product.name || ""));
+  assert.equal(medallions.length, 13);
+  assert.ok(medallions.every((product) => product.mainCategory === "crosses"));
+  assert.ok(medallions.every((product) => product.subCategory === "yota-medallions" && product.subcategory === "yota-medallions"));
 });
 
 test("legacy gifts URL maps to occasions and tote bag card uses the stable meeting-gifts ID", () => {

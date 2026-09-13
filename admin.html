@@ -6,7 +6,7 @@
     <meta name="robots" content="noindex, nofollow">
     <title>إدارة منتجات مكتبة البابا كيرلس</title>
     <link rel="icon" href="data:,">
-    <link rel="stylesheet" href="/admin.css?v=asset-1971e4b68c6d">
+    <link rel="stylesheet" href="/admin.css?v=asset-c6d012185baa">
   </head>
   <body>
     <header class="admin-topbar">
@@ -63,6 +63,13 @@
           </select>
           <select data-sub-category-filter aria-label="فلترة حسب القسم الفرعي">
             <option value="all">كل الأقسام الفرعية</option>
+          </select>
+          <select data-collection-filter aria-label="فلترة حسب المجموعة الإضافية">
+            <option value="all">كل المجموعات</option>
+            <option value="greek-collection">المجموعة اليونانية</option>
+            <option value="greek-vessels">الأواني اليونانية</option>
+            <option value="greek-wedding-crowns">أكاليل الأفراح اليونانية</option>
+            <option value="greek-clergy-crosses">الصلبان اليونانية للأساقفة والكهنة</option>
           </select>
           <select data-stock-filter aria-label="فلترة حسب التوفر">
             <option value="all">كل حالات التوفر</option>
@@ -134,6 +141,11 @@
                 <label><span>القسم الرئيسي</span><select data-field="mainCategory" required></select></label>
                 <label><span>القسم الفرعي</span><select data-field="subCategory" required></select></label>
                 <label><span>الحالة</span><select data-field="stock"><option value="متاح">متاح</option><option value="غير متاح حاليا">غير متاح حاليا</option></select></label>
+                <section class="greek-collection-editor" aria-labelledby="greek-collection-title">
+                  <div class="greek-collection-editor-heading"><strong id="greek-collection-title">المجموعة اليونانية</strong><small>مجموعة إضافية — لا تغيّر القسم الرئيسي أو الفرعي للمنتج</small></div>
+                  <label class="check-row greek-collection-toggle"><input type="checkbox" data-field="isGreekCollection"><span>منتج يوناني</span></label>
+                  <label data-greek-collection-field hidden><span>القسم داخل المجموعة اليونانية:</span><select data-field="greekCollection"><option value="greek-vessels">الأواني اليونانية</option><option value="greek-wedding-crowns">أكاليل الأفراح اليونانية</option><option value="greek-clergy-crosses">الصلبان اليونانية للأساقفة والكهنة</option></select></label>
+                </section>
               </div>
             </details>
 
@@ -241,9 +253,9 @@
     <input type="file" data-image-upload accept="image/*" multiple hidden>
     <div class="toast" data-toast hidden></div>
 
-    <script src="/subcategory-image-policy.js?v=asset-1971e4b68c6d" defer></script>
-    <script src="/category-migration.js?v=asset-1971e4b68c6d" defer></script>
-    <script src="/category-taxonomy.js?v=asset-1971e4b68c6d" defer></script>
-    <script src="/admin.js?v=asset-1971e4b68c6d" defer></script>
+    <script src="/subcategory-image-policy.js?v=asset-c6d012185baa" defer></script>
+    <script src="/category-migration.js?v=asset-c6d012185baa" defer></script>
+    <script src="/category-taxonomy.js?v=asset-c6d012185baa" defer></script>
+    <script src="/admin.js?v=asset-c6d012185baa" defer></script>
   </body>
 </html>

@@ -9,6 +9,7 @@
   ];
 
   const TAXONOMY_DRAFT_KEY = "pope-kyrillos-admin-taxonomy-draft";
+  const GREEK_COLLECTION_IDS = new Set(["greek-vessels", "greek-wedding-crowns", "greek-clergy-crosses"]);
   const legacyCategoryToMainCategory = {
     brass: "altar-tools",
     candles: "candles-incense",
@@ -34,6 +35,7 @@
     categoryFilter: "all",
     mainCategoryFilter: "all",
     subCategoryFilter: "all",
+    collectionFilter: "all",
     stockFilter: "all",
     needsReviewOnly: false,
     adminView: "products",
@@ -52,6 +54,7 @@
     categoryFilter: document.querySelector("[data-category-filter]"),
     mainCategoryFilter: document.querySelector("[data-main-category-filter]"),
     subCategoryFilter: document.querySelector("[data-sub-category-filter]"),
+    collectionFilter: document.querySelector("[data-collection-filter]"),
     stockFilter: document.querySelector("[data-stock-filter]"),
     needsReviewFilter: document.querySelector("[data-needs-review-filter]"),
     editor: document.querySelector("[data-editor]"),
@@ -101,6 +104,10 @@
   });
   elements.subCategoryFilter?.addEventListener("change", (event) => {
     state.subCategoryFilter = event.target.value;
+    renderProductList();
+  });
+  elements.collectionFilter?.addEventListener("change", (event) => {
+    state.collectionFilter = event.target.value;
     renderProductList();
   });
   elements.stockFilter?.addEventListener("change", (event) => {
@@ -304,6 +311,12 @@
   }
 
   async function handleActionClick(event) {
+    const editButton = event.target.closest("[data-select-product]");
+    if (editButton) {
+      event.preventDefault();
+      return openFullProductEditor(editButton.dataset.selectProduct);
+    }
+
     const button = event.target.closest("[data-action]");
     if (!button) return;
 
@@ -1018,6 +1031,10 @@
     return state.taxonomy || [];
   }
 
+  function primaryTaxonomyCategoriesForAdmin() {
+    return taxonomyCategoriesForAdmin().filter((category) => category.id !== "greek-collection");
+  }
+
   function findTaxonomyCategory(value = "") {
     return taxonomyCategoriesForAdmin().find((category) => category.id === value || category.name === value) || null;
   }
@@ -1112,6 +1129,7 @@
     fillCategoryFilter();
     fillMainCategoryFilter();
     fillSubCategoryFilter();
+    fillCollectionFilter();
     renderAll(message);
   }
 
@@ -1120,11 +1138,12 @@
   categorySelect.innerHTML = categories.map((category) => `<option value="${escapeHtml(category.id)}">${escapeHtml(category.label)}</option>`).join("");
   const mainSelect = elements.editor.querySelector("[data-field='mainCategory']");
   if (mainSelect) {
-    mainSelect.innerHTML = taxonomyCategoriesForAdmin().map((category) => `<option value="${escapeHtml(category.name)}">${escapeHtml(category.name)}</option>`).join("");
+    mainSelect.innerHTML = primaryTaxonomyCategoriesForAdmin().map((category) => `<option value="${escapeHtml(category.name)}">${escapeHtml(category.name)}</option>`).join("");
   }
   fillCategoryFilter();
   fillMainCategoryFilter();
   fillSubCategoryFilter();
+  fillCollectionFilter();
   renderTaxonomyManager();
 }
 
@@ -1150,7 +1169,7 @@
     });
     elements.mainCategoryFilter.innerHTML = [
       `<option value="all">كل الأقسام الرئيسية (${state.products.length})</option>`,
-      ...taxonomyCategoriesForAdmin().map((category) => `<option value="${escapeHtml(category.name)}">${escapeHtml(category.name)} (${counts.get(category.name) || 0})</option>`)
+      ...primaryTaxonomyCategoriesForAdmin().map((category) => `<option value="${escapeHtml(category.name)}">${escapeHtml(category.name)} (${counts.get(category.name) || 0})</option>`)
     ].join("");
     elements.mainCategoryFilter.value = state.mainCategoryFilter;
   }
@@ -1160,7 +1179,7 @@
     const selectedMain = state.mainCategoryFilter === "all" ? "" : state.mainCategoryFilter;
     const subcategories = selectedMain
       ? taxonomySubcategories(selectedMain) || []
-      : taxonomyCategoriesForAdmin().flatMap((category) => category.subcategories || []);
+      : primaryTaxonomyCategoriesForAdmin().flatMap((category) => category.subcategories || []);
     const counts = new Map();
     state.products.forEach((product) => {
       const name = subCategoryName(product);
@@ -1171,6 +1190,35 @@
       ...subcategories.map((subcategory) => `<option value="${escapeHtml(subcategory.name)}">${escapeHtml(subcategory.name)} (${counts.get(subcategory.name) || 0})</option>`)
     ].join("");
     elements.subCategoryFilter.value = state.subCategoryFilter;
+  }
+
+  function greekCollectionId(product) {
+    return (Array.isArray(product?.collections) ? product.collections : []).find((collection) => GREEK_COLLECTION_IDS.has(collection)) || "";
+  }
+
+  function fillCollectionFilter() {
+    if (!elements.collectionFilter) return;
+    const names = new Map([
+      ["greek-vessels", "الأواني اليونانية"],
+      ["greek-wedding-crowns", "أكاليل الأفراح اليونانية"],
+      ["greek-clergy-crosses", "الصلبان اليونانية للأساقفة والكهنة"]
+    ]);
+    const counts = new Map([...GREEK_COLLECTION_IDS].map((id) => [id, 0]));
+    let greekCount = 0;
+    state.products.forEach((product) => {
+      const collectionId = greekCollectionId(product);
+      if (!collectionId) return;
+      greekCount += 1;
+      counts.set(collectionId, (counts.get(collectionId) || 0) + 1);
+    });
+    elements.collectionFilter.innerHTML = [
+      `<option value="all">كل المجموعات (${greekCount})</option>`,
+      `<option value="greek-collection">المجموعة اليونانية (${greekCount})</option>`,
+      ...[...GREEK_COLLECTION_IDS].map((id) => `<option value="${id}">${escapeHtml(names.get(id))} (${counts.get(id) || 0})</option>`)
+    ].join("");
+    elements.collectionFilter.value = [...elements.collectionFilter.options].some((option) => option.value === state.collectionFilter)
+      ? state.collectionFilter
+      : "all";
   }
 
   function fillSubCategorySelect(product) {
@@ -1511,7 +1559,7 @@
     const mainSelect = elements.editor.querySelector("[data-field='mainCategory']");
     if (mainSelect) {
       const selected = mainSelect.value;
-      mainSelect.innerHTML = taxonomyCategoriesForAdmin().map((category) => `<option value="${escapeHtml(category.name)}">${escapeHtml(category.name)}</option>`).join("");
+      mainSelect.innerHTML = primaryTaxonomyCategoriesForAdmin().map((category) => `<option value="${escapeHtml(category.name)}">${escapeHtml(category.name)}</option>`).join("");
       mainSelect.value = [...mainSelect.options].some((option) => option.value === selected) ? selected : mainSelect.options[0]?.value || "";
     }
     fillMainCategoryFilter();
@@ -1554,31 +1602,37 @@
     const selected = product.id === state.selectedId ? " active" : "";
     const price = product.price ? `${formatNumber(product.price)} ج.م` : "بدون سعر";
     const reviewBadge = needsReview(product) ? " - يحتاج مراجعة" : "";
+    const greekBadge = greekCollectionId(product) ? `<b class="greek-admin-badge">🇬🇷 المجموعة اليونانية</b>` : "";
     const quantity = totalProductQuantity(product);
     const image = product.images?.[0] || product.image || "assets/optimized/hero-products-collage.webp";
     return `<article class="product-table-row${selected}" role="row" data-product-row="${escapeAttribute(product.id)}">
       <span><input type="checkbox" aria-label="اختيار ${escapeAttribute(product.name || "المنتج")}"></span>
       <span><img src="${escapeAttribute(previewAssetUrl(image))}" alt="" loading="lazy" decoding="async"></span>
-      <button class="product-name-cell" type="button" data-select-product="${escapeAttribute(product.id)}"><strong>${escapeHtml(product.name || "منتج بدون اسم")}</strong><small>${escapeHtml(firstProductSku(product) || product.id)}</small>${reviewBadge ? `<b class="review-badge">يحتاج مراجعة</b>` : ""}</button>
+      <button class="product-name-cell" type="button" data-select-product="${escapeAttribute(product.id)}"><strong>${escapeHtml(product.name || "منتج بدون اسم")}</strong><small>${escapeHtml(firstProductSku(product) || product.id)}</small>${reviewBadge ? `<b class="review-badge">يحتاج مراجعة</b>` : ""}${greekBadge}</button>
       <span>${escapeHtml(taxonomyLine)}</span><strong>${escapeHtml(price)}</strong><span>${quantity === null ? "—" : formatNumber(quantity)}</span>
       <span class="status-pill ${product.stock === "غير متاح حاليا" ? "is-out" : ""}">${escapeHtml(product.stock || "متاح")}</span>
       <span class="row-actions"><button type="button" data-select-product="${escapeAttribute(product.id)}">تعديل</button><button type="button" data-action="quick-edit" data-product-id="${escapeAttribute(product.id)}">تعديل سريع</button><button type="button" data-action="duplicate-product-row" data-product-id="${escapeAttribute(product.id)}">تكرار</button><button type="button" data-action="toggle-product-visibility" data-product-id="${escapeAttribute(product.id)}">${product.stock === "غير متاح حاليا" ? "إظهار" : "إخفاء"}</button><button class="danger-link" type="button" data-action="delete-product-row" data-product-id="${escapeAttribute(product.id)}">حذف</button></span>
     </article>`;
   }).join("")}</div>`;
-
-  elements.productList.querySelectorAll("[data-select-product]").forEach((button) => {
-    button.addEventListener("click", () => {
-      state.selectedId = button.dataset.selectProduct;
-      renderProductList();
-      renderEditor();
-      if (window.matchMedia("(max-width: 820px)").matches) document.body.classList.remove("sidebar-mobile-open");
-    });
-  });
 }
+
+  function openFullProductEditor(productId) {
+    const product = state.products.find((item) => item.id === productId);
+    if (!product) return;
+
+    state.selectedId = product.id;
+    renderProductList();
+    renderEditor();
+    if (window.matchMedia("(max-width: 820px)").matches) document.body.classList.remove("sidebar-mobile-open");
+
+    requestAnimationFrame(() => {
+      elements.editor.closest(".editor-panel")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  }
 
   function filteredProducts() {
   return state.products.filter((product) => {
-    const searchText = [product.id, product.sku, product.name, product.label, product.badge, product.description, product.mainCategory, product.subCategory, ...(product.tags || []), ...(product.variants || []).map((variant) => variant.sku)]
+    const searchText = [product.id, product.sku, product.name, product.label, product.badge, product.description, product.mainCategory, product.subCategory, ...(product.collections || []), ...(product.tags || []), ...(product.variants || []).map((variant) => variant.sku)]
       .filter(Boolean)
       .join(" ")
       .toLowerCase();
@@ -1586,10 +1640,13 @@
     const matchesCategory = state.categoryFilter === "all" || product.category === state.categoryFilter;
     const matchesMain = state.mainCategoryFilter === "all" || mainCategoryName(product) === state.mainCategoryFilter;
     const matchesSub = state.subCategoryFilter === "all" || subCategoryName(product) === state.subCategoryFilter;
+    const collectionId = greekCollectionId(product);
+    const matchesCollection = state.collectionFilter === "all"
+      || (state.collectionFilter === "greek-collection" ? Boolean(collectionId) : collectionId === state.collectionFilter);
     const matchesReview = !state.needsReviewOnly || needsReview(product);
     const isOut = product.stock === "غير متاح حاليا" || (totalProductQuantity(product) === 0);
     const matchesStock = state.stockFilter === "all" || (state.stockFilter === "out" ? isOut : !isOut);
-    return matchesSearch && matchesCategory && matchesMain && matchesSub && matchesReview && matchesStock;
+    return matchesSearch && matchesCategory && matchesMain && matchesSub && matchesCollection && matchesReview && matchesStock;
   });
 }
 
@@ -1671,12 +1728,15 @@
     state.categoryFilter = "all";
     state.mainCategoryFilter = "all";
     state.subCategoryFilter = "all";
+    state.collectionFilter = "all";
     state.stockFilter = "all";
     state.needsReviewOnly = false;
     if (elements.search) elements.search.value = "";
     if (elements.mainCategoryFilter) elements.mainCategoryFilter.value = "all";
     fillSubCategoryFilter();
     if (elements.subCategoryFilter) elements.subCategoryFilter.value = "all";
+    fillCollectionFilter();
+    if (elements.collectionFilter) elements.collectionFilter.value = "all";
     if (elements.stockFilter) elements.stockFilter.value = "all";
     if (elements.needsReviewFilter) elements.needsReviewFilter.checked = false;
     renderProductList();
@@ -1791,6 +1851,11 @@
     setValue("mainCategory", mainCategoryOptionValue(product.mainCategory, product.category));
     fillSubCategorySelect(product);
     setValue("subCategory", subCategoryOptionValue(product.subCategory));
+    const greekCollection = greekCollectionId(product);
+    setValue("isGreekCollection", Boolean(greekCollection));
+    setValue("greekCollection", greekCollection || "greek-vessels");
+    const greekCollectionField = elements.editor.querySelector("[data-greek-collection-field]");
+    if (greekCollectionField) greekCollectionField.hidden = !greekCollection;
     setValue("badge", product.badge);
     setValue("stock", product.stock || "متاح");
     setValue("price", product.price ?? "");
@@ -1960,13 +2025,29 @@
 
 function updateProductField(product, element) {
   const field = element.dataset.field;
-  if (field === "isBestSeller") {
-    product.isBestSeller = element.checked === true;
+  if (field === "isGreekCollection") {
+    product.collections = unique((product.collections || []).filter((collection) => !GREEK_COLLECTION_IDS.has(collection)));
+    if (element.checked) product.collections.push(elements.editor.querySelector("[data-field='greekCollection']")?.value || "greek-vessels");
+    const greekCollectionField = elements.editor.querySelector("[data-greek-collection-field]");
+    if (greekCollectionField) greekCollectionField.hidden = !element.checked;
+    fillCollectionFilter();
     renderProductList();
     return;
   }
 
   const value = element.value;
+  if (field === "greekCollection") {
+    product.collections = unique([...(product.collections || []).filter((collection) => !GREEK_COLLECTION_IDS.has(collection)), value]);
+    fillCollectionFilter();
+    renderProductList();
+    return;
+  }
+
+  if (field === "isBestSeller") {
+    product.isBestSeller = element.checked === true;
+    renderProductList();
+    return;
+  }
 
   if (field === "id") {
     const oldId = product.id;
@@ -2133,6 +2214,7 @@ function updateProductField(product, element) {
       image: "",
       url: `https://popekyrillos.store/?product=${id}`,
       tags: [],
+      collections: [],
       images: [],
       options: [],
       variants: []
@@ -2350,6 +2432,7 @@ function updateProductField(product, element) {
   function ensureProductShape(product) {
   product.images = Array.isArray(product.images) ? product.images : [product.image].filter(Boolean);
   product.tags = Array.isArray(product.tags) ? product.tags : [];
+  product.collections = Array.isArray(product.collections) ? product.collections : [];
   product.options = Array.isArray(product.options) ? product.options : [];
   product.variants = Array.isArray(product.variants) ? product.variants : [];
   product.isBestSeller = product.isBestSeller === true;
@@ -2395,6 +2478,7 @@ function updateProductField(product, element) {
     product.badge = product.badge || product.label || product.subCategory || "";
     product.isBestSeller = product.isBestSeller === true;
     product.tags = unique(product.tags || []);
+    product.collections = unique(product.collections || []);
     product.images = unique((product.images || []).map(normalizeImagePath).filter(Boolean));
     product.image = product.images[0] || normalizeImagePath(product.image) || "";
     product.url = product.url || `https://popekyrillos.store/?product=${product.id}`;

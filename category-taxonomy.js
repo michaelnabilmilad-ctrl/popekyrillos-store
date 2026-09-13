@@ -314,6 +314,10 @@
         "subcategoryImage": "assets/optimized/products/processional-cross.webp"
       },
       {
+        "id": "yota-medallions",
+        "name": "الميداليات"
+      },
+      {
         "id": "pectoral-crosses",
         "name": "صلبان صدر",
         "subcategoryImage": "assets/optimized/products/processional-cross.webp"
@@ -803,6 +807,19 @@
         "name": "طلب عرض سعر",
         "subcategoryImage": "assets/optimized/hero-products-collage.webp"
       }
+    ]
+  },
+  {
+    "id": "greek-collection",
+    "name": "المجموعة اليونانية",
+    "description": "منتجات يونانية مميزة",
+    "subcategoryImage": "assets/optimized/products/communion-set.webp",
+    "visible": true,
+    "homeVisible": true,
+    "subcategories": [
+      { "id": "greek-vessels", "name": "الأواني اليونانية", "subcategoryImage": "assets/optimized/products/communion-set.webp" },
+      { "id": "greek-wedding-crowns", "name": "أكاليل الأفراح اليونانية", "subcategoryImage": "assets/optimized/hero-products-collage.webp" },
+      { "id": "greek-clergy-crosses", "name": "الصلبان اليونانية للأساقفة والكهنة", "subcategoryImage": "assets/optimized/hero-products-collage.webp" }
     ]
   },
   {
