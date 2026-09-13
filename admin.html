@@ -6,7 +6,7 @@
     <meta name="robots" content="noindex, nofollow">
     <title>إدارة منتجات مكتبة البابا كيرلس</title>
     <link rel="icon" href="data:,">
-    <link rel="stylesheet" href="/admin.css?v=asset-c6d012185baa">
+    <link rel="stylesheet" href="/admin.css?v=asset-bddaf19c5c18">
   </head>
   <body>
     <header class="admin-topbar">
@@ -243,6 +243,11 @@
           <label><span>الكمية</span><input name="quantity" type="number" min="0"></label>
           <label><span>القسم الرئيسي</span><select name="mainCategory"></select></label>
           <label><span>القسم الفرعي</span><select name="subCategory"></select></label>
+          <section class="quick-edit-greek" aria-labelledby="quick-edit-greek-title">
+            <div><strong id="quick-edit-greek-title">المجموعة اليونانية</strong><small>مجموعة إضافية — لا تغيّر القسم الرئيسي أو الفرعي</small></div>
+            <label class="check-row"><input type="checkbox" name="isGreekCollection"><span>منتج يوناني</span></label>
+            <label data-quick-edit-greek-field hidden><span>القسم داخل المجموعة اليونانية</span><select name="greekCollection"><option value="greek-vessels">الأواني اليونانية</option><option value="greek-wedding-crowns">أكاليل الأفراح اليونانية</option><option value="greek-clergy-crosses">الصلبان اليونانية للأساقفة والكهنة</option></select></label>
+          </section>
           <label><span>الحالة</span><select name="stock"><option value="متاح">متاح</option><option value="غير متاح حاليا">نفد من المخزون</option></select></label>
         </div>
         <footer><button class="button ghost" value="cancel">إلغاء</button><button class="button" value="save" data-action="save-quick-edit">حفظ</button></footer>
@@ -253,9 +258,9 @@
     <input type="file" data-image-upload accept="image/*" multiple hidden>
     <div class="toast" data-toast hidden></div>
 
-    <script src="/subcategory-image-policy.js?v=asset-c6d012185baa" defer></script>
-    <script src="/category-migration.js?v=asset-c6d012185baa" defer></script>
-    <script src="/category-taxonomy.js?v=asset-c6d012185baa" defer></script>
-    <script src="/admin.js?v=asset-c6d012185baa" defer></script>
+    <script src="/subcategory-image-policy.js?v=asset-bddaf19c5c18" defer></script>
+    <script src="/category-migration.js?v=asset-bddaf19c5c18" defer></script>
+    <script src="/category-taxonomy.js?v=asset-bddaf19c5c18" defer></script>
+    <script src="/admin.js?v=asset-bddaf19c5c18" defer></script>
   </body>
 </html>

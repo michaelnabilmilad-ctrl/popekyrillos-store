@@ -64,6 +64,20 @@ test("Admin exposes a dedicated counted Greek collection filter", () => {
   assert.match(admin, /collectionId === state\.collectionFilter/);
 });
 
+test("Quick Edit reads and writes the same Greek collections field", () => {
+  const html = read("admin.html");
+  const admin = read("admin.js");
+
+  assert.match(html, /data-quick-edit-greek-field/);
+  assert.match(html, /name="isGreekCollection"/);
+  assert.match(html, /name="greekCollection"/);
+  assert.match(admin, /const greekCollection = greekCollectionId\(product\)/);
+  assert.match(admin, /form\.elements\.isGreekCollection\.checked = Boolean\(greekCollection\)/);
+  assert.match(admin, /product\.collections = unique\(\(product\.collections \|\| \[\]\)\.filter/);
+  assert.match(admin, /if \(form\.elements\.isGreekCollection\.checked\) product\.collections\.push/);
+  assert.match(admin, /fillCollectionFilter\(\);\s*renderProductList\(\);/);
+});
+
 test("one product keeps its identity and primary taxonomy when assigned to Greek vessels", () => {
   const product = {
     id: "shared-product-id",

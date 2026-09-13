@@ -52,6 +52,11 @@
 .quick-edit-dialog header, .quick-edit-dialog footer { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
 .quick-edit-dialog header h2 { margin: 0; }
 .quick-edit-dialog footer { justify-content: flex-start; margin-top: 20px; }
+.quick-edit-greek { grid-column: 1 / -1; display: grid; grid-template-columns: minmax(190px, 1fr) minmax(150px, .7fr) minmax(240px, 1.25fr); gap: 12px; align-items: end; padding: 16px; border: 1px solid rgba(20, 82, 145, .22); border-radius: 12px; background: #f4f9ff; }
+.quick-edit-greek > div { display: grid; gap: 3px; }
+.quick-edit-greek strong { color: #145291; font-size: 17px; }
+.quick-edit-greek small { color: var(--muted); line-height: 1.5; }
+.quick-edit-greek .check-row { min-height: 44px; padding: 9px 11px; border-radius: 9px; background: #fff; }
 [data-admin-view]:not([data-admin-view="products"]) .product-sidebar, [data-admin-view]:not([data-admin-view="products"]) .editor-panel, [data-admin-view]:not([data-admin-view="products"]) .product-actions-bar { display: none; }
 [data-view-section] { display: none; }
 [data-admin-view="taxonomy"] [data-view-section="taxonomy"], [data-admin-view="airtable"] [data-view-section="airtable"], [data-admin-view="settings"] [data-view-section="settings"] { display: block; }
@@ -83,6 +88,7 @@
   .sidebar-head-actions .button { width: 100%; }
   .admin-save-bar { align-items: stretch; flex-direction: column; }
   .admin-save-bar > div { display: grid; grid-template-columns: repeat(3, 1fr); }
+  .quick-edit-greek { grid-template-columns: 1fr; align-items: stretch; }
 }
 
 :root {

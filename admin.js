@@ -1770,10 +1770,18 @@
     form.elements.price.value = product.price ?? "";
     form.elements.quantity.value = totalProductQuantity(product) ?? "";
     form.elements.stock.value = product.stock || "متاح";
-    form.elements.mainCategory.innerHTML = taxonomyCategoriesForAdmin().map((category) => `<option value="${escapeAttribute(category.name)}">${escapeHtml(category.name)}</option>`).join("");
+    form.elements.mainCategory.innerHTML = primaryTaxonomyCategoriesForAdmin().map((category) => `<option value="${escapeAttribute(category.name)}">${escapeHtml(category.name)}</option>`).join("");
     form.elements.mainCategory.value = mainCategoryOptionValue(product.mainCategory, product.category);
     fillQuickEditSubcategories(form, product.subCategory);
     form.elements.mainCategory.onchange = () => fillQuickEditSubcategories(form, "");
+    const greekCollection = greekCollectionId(product);
+    form.elements.isGreekCollection.checked = Boolean(greekCollection);
+    form.elements.greekCollection.value = greekCollection || "greek-vessels";
+    const greekField = form.querySelector("[data-quick-edit-greek-field]");
+    if (greekField) greekField.hidden = !greekCollection;
+    form.elements.isGreekCollection.onchange = () => {
+      if (greekField) greekField.hidden = !form.elements.isGreekCollection.checked;
+    };
     elements.quickEditDialog.showModal();
   }
 
@@ -1793,11 +1801,14 @@
     product.mainCategory = form.elements.mainCategory.value;
     product.subCategory = form.elements.subCategory.value;
     product.subcategory = taxonomySubcategoryIdFromName(product.subCategory) || product.subCategory;
+    product.collections = unique((product.collections || []).filter((collection) => !GREEK_COLLECTION_IDS.has(collection)));
+    if (form.elements.isGreekCollection.checked) product.collections.push(form.elements.greekCollection.value || "greek-vessels");
     product.stock = form.elements.stock.value;
     const quantity = numberOrNull(form.elements.quantity.value);
     if ((product.variants || []).length === 1) product.variants[0].quantity = quantity;
     (product.variants || []).forEach((variant) => { variant.available = product.stock !== "غير متاح حاليا"; });
     markDirty();
+    fillCollectionFilter();
     renderProductList();
     if (state.selectedId === product.id) renderEditor();
     elements.quickEditDialog.close();
