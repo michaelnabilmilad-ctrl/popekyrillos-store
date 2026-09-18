@@ -103,6 +103,7 @@ const productDetailsRequests = new Map();
 let authInitPromise = null;
 let authConfigPromise = null;
 let productsAssetVersion = "";
+let cartWriteClock = 0;
 let galleryPointerStart = null;
 let gallerySwipeSuppressUntil = 0;
 let galleryWheelSuppressUntil = 0;
@@ -2535,7 +2536,7 @@ function renderPopularProducts() {
                 height="320"
                 loading="${loading}"
                 decoding="async"
-                onerror="this.src='${escapeHtml(versionedAssetUrl("assets/optimized/hero-products-collage.webp", productsAssetVersion || "1"))}'"
+                onerror="this.onerror=null;this.removeAttribute('srcset');this.removeAttribute('sizes');this.src='${escapeHtml(versionedAssetUrl("assets/optimized/hero-products-collage.webp", productsAssetVersion || "1"))}'"
               >
             </div>
             <div class="popular-product-info">
@@ -3057,16 +3058,17 @@ function cartMapFromPayload(items = []) {
 function readCartRecord(key) {
   try {
     const raw = localStorage.getItem(key);
-    if (!raw) return { key, cart: new Map(), updatedAt: 0 };
+    if (!raw) return { key, cart: new Map(), updatedAt: 0, exists: false };
     const data = JSON.parse(raw);
     return {
       key,
       cart: cartMapFromPayload(data.items || data),
-      updatedAt: Date.parse(data.updatedAt || "") || 0
+      updatedAt: Date.parse(data.updatedAt || "") || 0,
+      exists: true
     };
   } catch (error) {
     console.warn("Could not load saved cart.", error);
-    return { key, cart: new Map(), updatedAt: 0 };
+    return { key, cart: new Map(), updatedAt: 0, exists: false };
   }
 }
 
@@ -3126,17 +3128,24 @@ function loadCartFromLocal(key = currentCartStorageKey()) {
   return readCartRecord(key).cart;
 }
 
+function nextCartTimestamp(key) {
+  const storedUpdatedAt = readCartRecord(key).updatedAt;
+  cartWriteClock = Math.max(Date.now(), storedUpdatedAt + 1, cartWriteClock + 1);
+  return new Date(cartWriteClock).toISOString();
+}
+
 function saveCartToLocal(key = currentCartStorageKey(), map = state.cart) {
   try {
+    const updatedAt = nextCartTimestamp(key);
     localStorage.setItem(
       key,
       JSON.stringify({
         items: cartPayloadFromMap(map),
-        updatedAt: new Date().toISOString()
+        updatedAt
       })
     );
     setActiveCartStorageKey(key);
-    localStorage.setItem(cartSyncStorageKey, JSON.stringify({ key, updatedAt: new Date().toISOString() }));
+    localStorage.setItem(cartSyncStorageKey, JSON.stringify({ key, updatedAt }));
   } catch (error) {
     console.warn("Could not save cart locally.", error);
   }
@@ -3157,23 +3166,13 @@ function localCartCandidateKeys(user = effectiveAuthUser()) {
 }
 
 function preferredLocalCartRecord(user = effectiveAuthUser()) {
-  try {
-    const activeKey = localStorage.getItem(activeCartStorageKey);
-    if (isAllowedCartStorageKey(activeKey, user)) {
-      const active = readCartRecord(activeKey);
-      if (cartHasItems(active.cart)) return active;
-    }
-  } catch {
-    // Local storage availability varies in private browsing.
-  }
-
   const selected = localCartCandidateKeys(user)
     .map(readCartRecord)
-    .filter((record) => cartHasItems(record.cart))
+    .filter((record) => record.exists || record.updatedAt > 0)
     .sort((a, b) => b.updatedAt - a.updatedAt)[0];
   if (selected) return selected;
   const fallbackKey = user?.uid ? `${userCartStoragePrefix}${user.uid}` : guestCartStorageKey;
-  return { key: fallbackKey, cart: new Map(), updatedAt: 0 };
+  return { key: fallbackKey, cart: new Map(), updatedAt: 0, exists: false };
 }
 
 function loadGuestCart() {
@@ -4765,20 +4764,18 @@ async function applySignedInCart(user) {
     cartFingerprint(guestRecord.cart) === currentFingerprint ? guestRecord.updatedAt : 0,
     cartFingerprint(userLocalRecord.cart) === currentFingerprint ? userLocalRecord.updatedAt : 0
   );
-  const currentRecord = cartHasItems(state.cart)
-    ? { key: userCartKey, cart: state.cart, updatedAt: currentUpdatedAt }
-    : null;
+  const currentRecord = { key: userCartKey, cart: state.cart, updatedAt: currentUpdatedAt, exists: true };
   const localRecord = [guestRecord, userLocalRecord, currentRecord]
     .filter(Boolean)
-    .filter((record) => cartHasItems(record.cart))
-    .sort((a, b) => b.updatedAt - a.updatedAt)[0] || { key: userCartKey, cart: new Map(), updatedAt: 0 };
+    .filter((record) => record.exists || record.updatedAt > 0)
+    .sort((a, b) => b.updatedAt - a.updatedAt)[0] || { key: userCartKey, cart: new Map(), updatedAt: 0, exists: false };
   const localCart = localRecord.cart;
   const remoteResult = await loadRemoteCartRecord(user);
   const remoteCart = remoteResult.cart;
   const hasRemoteCart = cartHasItems(remoteCart);
   const hasGuestCart = cartHasItems(guestRecord.cart);
   const hasLocalCart = cartHasItems(localCart);
-  const localIsNewer = hasLocalCart && localRecord.updatedAt > (remoteResult.updatedAt || 0);
+  const localIsNewer = localRecord.updatedAt > (remoteResult.updatedAt || 0);
 
   if (remoteResult.ok && hasRemoteCart) {
     state.cart = localIsNewer ? localCart : remoteCart;

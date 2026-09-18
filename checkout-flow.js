@@ -36,6 +36,7 @@ const formatter = new Intl.NumberFormat("ar-EG");
 let products = [];
 let cart = new Map();
 let cartItemMetadata = new Map();
+let cartWriteClock = 0;
 clearCorruptedBrowserStorage();
 let customer = loadCustomer();
 let checkoutAuthServicesPromise = null;
@@ -177,13 +178,19 @@ function mergeCartMaps(first, second) {
 function readCartRecord(key) {
   try {
     const raw = localStorage.getItem(key);
-    if (!raw) return { key, cart: new Map(), updatedAt: 0 };
+    if (!raw) return { key, cart: new Map(), updatedAt: 0, exists: false };
     const data = JSON.parse(raw);
     const updatedAt = Date.parse(data.updatedAt || "") || 0;
-    return { key, cart: cartMapFromPayload(data.items || data), updatedAt };
+    return { key, cart: cartMapFromPayload(data.items || data), updatedAt, exists: true };
   } catch {
-    return { key, cart: new Map(), updatedAt: 0 };
+    return { key, cart: new Map(), updatedAt: 0, exists: false };
   }
+}
+
+function nextCartTimestamp(key) {
+  const storedUpdatedAt = readCartRecord(key).updatedAt;
+  cartWriteClock = Math.max(Date.now(), storedUpdatedAt + 1, cartWriteClock + 1);
+  return new Date(cartWriteClock).toISOString();
 }
 
 function loadCachedAuthUser() {
@@ -240,12 +247,13 @@ function isAllowedCartStorageKey(key, user = loadCachedAuthUser()) {
 
 function saveCartRecord(key, map) {
   try {
+    const updatedAt = nextCartTimestamp(key);
     localStorage.setItem(
       key,
-      JSON.stringify({ items: cartPayloadFromMap(map), updatedAt: new Date().toISOString() })
+      JSON.stringify({ items: cartPayloadFromMap(map), updatedAt })
     );
     setActiveCartKey(key);
-    localStorage.setItem(cartSyncStorageKey, JSON.stringify({ key, updatedAt: new Date().toISOString() }));
+    localStorage.setItem(cartSyncStorageKey, JSON.stringify({ key, updatedAt }));
   } catch {
     // Ignore localStorage write failures.
   }
@@ -301,15 +309,9 @@ function savedCartKeys(user = loadCachedAuthUser()) {
 }
 
 function loadCart(user = loadCachedAuthUser()) {
-  const activeKey = localStorage.getItem(activeCartStorageKey);
-  if (isAllowedCartStorageKey(activeKey, user)) {
-    const active = readCartRecord(activeKey);
-    if (cartHasItems(active.cart)) return active.cart;
-  }
-
   const records = savedCartKeys(user)
     .map(readCartRecord)
-    .filter((record) => cartHasItems(record.cart))
+    .filter((record) => record.exists || record.updatedAt > 0)
     .sort((a, b) => b.updatedAt - a.updatedAt);
   const selected = records[0];
   if (!selected) return new Map();
@@ -321,12 +323,7 @@ function saveCart() {
   const activeKey = localStorage.getItem(activeCartStorageKey);
   const cachedUser = loadCachedAuthUser();
   const targetKey = isAllowedCartStorageKey(activeKey, cachedUser) ? activeKey : currentUserCartStorageKey(cachedUser);
-  localStorage.setItem(
-    targetKey,
-    JSON.stringify({ items: cartPayloadFromMap(), updatedAt: new Date().toISOString() })
-  );
-  setActiveCartKey(targetKey);
-  localStorage.setItem(cartSyncStorageKey, JSON.stringify({ key: targetKey, updatedAt: new Date().toISOString() }));
+  saveCartRecord(targetKey, cart);
   saveCurrentCheckoutCartRemote();
 }
 
@@ -513,11 +510,11 @@ async function restoreSignedInCheckoutCart() {
     cartFingerprint(guestRecord.cart) === currentFingerprint ? guestRecord.updatedAt : 0,
     cartFingerprint(userLocalRecord.cart) === currentFingerprint ? userLocalRecord.updatedAt : 0
   );
-  const currentRecord = cartHasItems(cart) ? { key: userCartKey, cart, updatedAt: currentUpdatedAt } : null;
+  const currentRecord = { key: userCartKey, cart, updatedAt: currentUpdatedAt, exists: true };
   const localRecord = [guestRecord, userLocalRecord, currentRecord]
     .filter(Boolean)
-    .filter((record) => cartHasItems(record.cart))
-    .sort((a, b) => b.updatedAt - a.updatedAt)[0] || { key: userCartKey, cart: new Map(), updatedAt: 0 };
+    .filter((record) => record.exists || record.updatedAt > 0)
+    .sort((a, b) => b.updatedAt - a.updatedAt)[0] || { key: userCartKey, cart: new Map(), updatedAt: 0, exists: false };
   const localCart = localRecord.cart;
   const remoteResult =
     services && realUser?.getIdToken ? await loadRemoteCartRecordForCheckout(services, realUser) : { ok: false, cart: new Map() };
@@ -525,7 +522,7 @@ async function restoreSignedInCheckoutCart() {
   const hasRemoteCart = cartHasItems(remoteCart);
   const hasGuestCart = cartHasItems(guestRecord.cart);
   const hasLocalCart = cartHasItems(localCart);
-  const localIsNewer = hasLocalCart && localRecord.updatedAt > (remoteResult.updatedAt || 0);
+  const localIsNewer = localRecord.updatedAt > (remoteResult.updatedAt || 0);
   let signedInCart = remoteResult.ok && hasRemoteCart ? (localIsNewer ? localCart : remoteCart) : localCart;
 
   saveCartRecord(userCartKey, signedInCart);
@@ -1193,10 +1190,29 @@ function bindPaymentPage() {
   });
 }
 
+function applyCheckoutCartSync(changed) {
+  if (!changed) return;
+  cart = loadCart();
+  setCartCount();
+  renderCartPage();
+  renderOrderSummary();
+}
+
+function scheduleCheckoutCartSync() {
+  const run = () => restoreSignedInCheckoutCart()
+    .then(applyCheckoutCartSync)
+    .catch((error) => console.warn("Could not sync checkout cart.", error));
+  if ("requestIdleCallback" in window) {
+    window.requestIdleCallback(run, { timeout: 4000 });
+  } else {
+    window.setTimeout(run, 3000);
+  }
+}
+
 async function initCheckoutFlow() {
   cart = loadCart();
   setCartCount();
-  const syncCartPromise = restoreSignedInCheckoutCart();
+  let syncedBeforeRender = false;
   try {
     const response = await fetch(`/products.json?v=${Date.now()}`, { cache: "no-store" });
     products = await response.json();
@@ -1204,7 +1220,9 @@ async function initCheckoutFlow() {
     products = [];
   }
   if (!cartEntries().length && !isCartPage()) {
+    const syncCartPromise = restoreSignedInCheckoutCart();
     await Promise.race([syncCartPromise, new Promise((resolve) => window.setTimeout(resolve, 2500))]);
+    syncedBeforeRender = true;
     cart = loadCart();
     setCartCount();
   }
@@ -1219,15 +1237,7 @@ async function initCheckoutFlow() {
   bindCartPage();
   bindCheckoutPage();
   bindPaymentPage();
-  syncCartPromise
-    .then((changed) => {
-      if (!changed) return;
-      cart = loadCart();
-      setCartCount();
-      renderCartPage();
-      renderOrderSummary();
-    })
-    .catch((error) => console.warn("Could not sync checkout cart.", error));
+  if (!syncedBeforeRender) scheduleCheckoutCartSync();
 }
 
 window.addEventListener("storage", (event) => {

@@ -1409,6 +1409,17 @@ body[data-lang="en"] .category-art {
   display: none;
 }
 
+@media (min-width: 821px) {
+  .is-category-route .subcategory-card-grid {
+    min-height: 300px;
+  }
+
+  .is-category-route .subcategory-card-grid[hidden] {
+    display: grid;
+    visibility: hidden;
+  }
+}
+
 .subcategory-card {
   display: grid;
   gap: 10px;
@@ -4724,7 +4735,7 @@ body.account-open .scrim {
     background:
       linear-gradient(180deg, rgba(5, 18, 23, 0.24) 0%, rgba(5, 18, 23, 0.42) 42%, rgba(5, 18, 23, 0.78) 100%),
       linear-gradient(90deg, rgba(5, 18, 23, 0.04) 0%, rgba(5, 18, 23, 0.26) 42%, rgba(5, 18, 23, 0.82) 100%),
-      url("assets/optimized/hero-papa-kyrillos-products-mobile.webp") 35% center / cover no-repeat;
+      url("assets/optimized/hero-papa-kyrillos-products.webp") 35% center / cover no-repeat;
   }
 
   .hero h1 {
