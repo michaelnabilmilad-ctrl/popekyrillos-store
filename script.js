@@ -95,6 +95,7 @@ let catalogSubcategoryCounts = {};
 let catalogSubcategoryCountsLoaded = false;
 let catalogSubcategoryImages = {};
 let catalogRequestController = null;
+let catalogRequestSequence = 0;
 let staticCatalogProducts = null;
 let bestSellerProducts = [];
 const productDetailsCache = new Map();
@@ -1878,6 +1879,16 @@ function productShareUrl(productId) {
   return url.toString();
 }
 
+function quickViewUrl(productId, image = "") {
+  const product = getProduct(productId);
+  const url = new URL(window.location.href);
+  url.searchParams.delete("product");
+  url.searchParams.delete("image");
+  if (product) url.searchParams.set("quickview", productSlug(product) || product.id);
+  if (image) url.searchParams.set("image", image);
+  return sameOriginHistoryPath(url.toString());
+}
+
 function sameOriginHistoryPath(value = "") {
   const url = new URL(value || "/", window.location.href);
   return `${url.pathname}${url.search}${url.hash}`;
@@ -2112,6 +2123,8 @@ function productIdFromUrl() {
     const idProduct = url.searchParams.get("id") || url.searchParams.get("product");
     if (idProduct) return getProduct(idProduct)?.id || productFromSlug(idProduct)?.id || idProduct;
   }
+  const quickViewProduct = url.searchParams.get("quickview");
+  if (quickViewProduct) return getProduct(quickViewProduct)?.id || productFromSlug(quickViewProduct)?.id || quickViewProduct;
   const queryProduct = url.searchParams.get("product");
   if (queryProduct) return getProduct(queryProduct)?.id || productFromSlug(queryProduct)?.id || queryProduct;
   const hashMatch = decodeURIComponent(url.hash || "").match(/^#product=(.+)$/);
@@ -2155,9 +2168,7 @@ function setCatalogSearchUrl(query = "", { replace = true } = {}) {
 
 function setProductImageUrl(productId, image) {
   if (!productId || !image) return;
-  const url = new URL(productShareUrl(productId));
-  url.searchParams.set("image", image);
-  const nextUrl = sameOriginHistoryPath(url.toString());
+  const nextUrl = quickViewUrl(productId, image);
   if (nextUrl === `${window.location.pathname}${window.location.search}${window.location.hash}`) return;
   window.history.pushState({ productId, image }, "", nextUrl);
 }
@@ -2219,7 +2230,7 @@ function setCatalogUrl(category = "all", label = "", { replace = false } = {}) {
 }
 
 function setProductUrl(productId) {
-  const url = sameOriginHistoryPath(productShareUrl(productId));
+  const url = quickViewUrl(productId);
   if (url === `${window.location.pathname}${window.location.search}${window.location.hash}`) return;
   window.history.pushState({ productId }, "", url);
 }
@@ -2229,13 +2240,17 @@ function clearProductUrl() {
   const hadProductUrl =
     url.pathname.startsWith("/products/") ||
     url.pathname.startsWith("/product/") ||
+    url.searchParams.has("quickview") ||
     url.searchParams.has("product") ||
     url.searchParams.has("image") ||
     decodeURIComponent(url.hash || "").startsWith("#product=");
   if (!hadProductUrl) return;
-  const nextUrl = new URL("/", canonicalOrigin);
-  nextUrl.hash = "catalog";
-  window.history.replaceState({}, "", sameOriginHistoryPath(nextUrl.toString()));
+  url.searchParams.delete("quickview");
+  url.searchParams.delete("product");
+  url.searchParams.delete("image");
+  if (url.pathname.startsWith("/products/") || url.pathname.startsWith("/product/")) url.pathname = "/";
+  if (!url.hash) url.hash = "catalog";
+  window.history.replaceState({}, "", sameOriginHistoryPath(url.toString()));
 }
 
 function escapeHtml(value = "") {
@@ -5196,6 +5211,7 @@ async function loadProducts() {
   renderShopMenu();
   renderCart();
   updatePageMeta();
+  openProductFromUrl();
 }
 
 function catalogApiUrl(page = 1) {
@@ -5221,13 +5237,34 @@ async function loadCatalogPage({ reset = false } = {}) {
   }
 
   const nextPage = reset ? 1 : catalogPage + 1;
+  const endpoint = catalogApiUrl(nextPage);
+  const requestSequence = ++catalogRequestSequence;
   catalogRequestController?.abort();
-  catalogRequestController = new AbortController();
+  const controller = new AbortController();
+  catalogRequestController = controller;
   try {
     if (loadMoreButton) loadMoreButton.disabled = true;
-    const response = await fetch(catalogApiUrl(nextPage), { cache: "default", signal: catalogRequestController.signal });
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    let response;
+    for (let attempt = 0; attempt < 2; attempt += 1) {
+      try {
+        response = await fetch(endpoint, { cache: "default", signal: controller.signal });
+        if (!response.ok) {
+          const httpError = new Error(`HTTP ${response.status}`);
+          httpError.status = response.status;
+          throw httpError;
+        }
+        break;
+      } catch (error) {
+        if (error?.name === "AbortError") throw error;
+        const status = Number(error?.status) || 0;
+        const retryable = error instanceof TypeError || status === 408 || status === 429 || status >= 500;
+        if (!retryable || attempt === 1) throw error;
+        await new Promise((resolve) => setTimeout(resolve, 250));
+      }
+    }
     const payload = await response.json();
+    if (!payload || !Array.isArray(payload.items)) throw new Error("Invalid catalog JSON shape");
+    if (requestSequence !== catalogRequestSequence) return;
     catalogCategoryCountsLoaded = Boolean(payload.categoryCounts && typeof payload.categoryCounts === "object");
     catalogCategoryCounts = catalogCategoryCountsLoaded ? payload.categoryCounts : {};
     catalogSubcategoryCountsLoaded = Boolean(payload.subcategoryCounts && typeof payload.subcategoryCounts === "object");
@@ -5242,11 +5279,22 @@ async function loadCatalogPage({ reset = false } = {}) {
     productsAssetVersion = response.headers.get("ETag") || response.headers.get("Last-Modified") || "products";
   } catch (error) {
     if (error?.name === "AbortError") return;
-    console.warn("Could not load the catalog API; loading the static catalog.", error);
+    console.error("Catalog request failed; trying the deployed catalog asset.", {
+      endpoint,
+      status: Number(error?.status) || null,
+      exception: error?.message || String(error),
+      route: `${window.location.pathname}${window.location.search}${window.location.hash}`
+    });
     try {
-      const response = await fetch(`/products.json?v=${encodeURIComponent(catalogSchemaVersion)}`, { cache: "default" });
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const fallbackEndpoint = `/products.json?v=${encodeURIComponent(catalogSchemaVersion)}`;
+      const response = await fetch(fallbackEndpoint, { cache: "no-cache", signal: controller.signal });
+      if (!response.ok) {
+        const httpError = new Error(`HTTP ${response.status}`);
+        httpError.status = response.status;
+        throw httpError;
+      }
       const payload = await response.json();
+      if (requestSequence !== catalogRequestSequence) return;
       staticCatalogProducts = Array.isArray(payload) ? payload : Array.isArray(payload.products) ? payload.products : [];
       if (!staticCatalogProducts.length) throw new Error("Static catalog is empty");
       products = staticCatalogProducts;
@@ -5260,8 +5308,14 @@ async function loadCatalogPage({ reset = false } = {}) {
       catalogHasMore = state.visibleProductCount < catalogTotal;
       productsAssetVersion = response.headers.get("ETag") || response.headers.get("Last-Modified") || "products-json";
     } catch (staticError) {
-      console.warn("Could not load products.json, using fallback products.", staticError);
-      if (reset) products = fallbackProducts.slice();
+      if (staticError?.name === "AbortError") return;
+      console.error("Deployed catalog fallback failed; retaining the last successful catalog.", {
+        endpoint: `/products.json?v=${catalogSchemaVersion}`,
+        status: Number(staticError?.status) || null,
+        exception: staticError?.message || String(staticError),
+        route: `${window.location.pathname}${window.location.search}${window.location.hash}`
+      });
+      if (reset && !products.length) products = fallbackProducts.slice();
       catalogCategoryCounts = {};
       catalogCategoryCountsLoaded = true;
       catalogSubcategoryCounts = buildSubcategoryCounts(products);
@@ -5272,9 +5326,28 @@ async function loadCatalogPage({ reset = false } = {}) {
       productsAssetVersion = "fallback";
     }
   } finally {
-    if (loadMoreButton) loadMoreButton.disabled = false;
+    if (catalogRequestController === controller) {
+      catalogRequestController = null;
+      if (loadMoreButton) loadMoreButton.disabled = false;
+    }
   }
+  if (requestSequence !== catalogRequestSequence) return;
   renderProducts();
+}
+
+async function unregisterLegacyServiceWorkers() {
+  if (!("serviceWorker" in navigator)) return;
+  try {
+    const registrations = await navigator.serviceWorker.getRegistrations();
+    const sameOriginRegistrations = registrations.filter((registration) => {
+      try { return new URL(registration.scope).origin === window.location.origin; }
+      catch { return false; }
+    });
+    const results = await Promise.all(sameOriginRegistrations.map((registration) => registration.unregister()));
+    if (results.some(Boolean)) console.info("Removed a legacy service worker; current page continues without forced reload.");
+  } catch (error) {
+    console.warn("Could not inspect legacy service workers.", { exception: error?.message || String(error), route: window.location.pathname });
+  }
 }
 
 function openHeaderSearch(focusInput = true) {
@@ -6210,6 +6283,7 @@ window.addEventListener("storage", (event) => {
 });
 
 clearCorruptedBrowserStorage();
+void unregisterLegacyServiceWorkers();
 loadGuestCart();
 applyLanguage();
 updateFloatingShopButton();
