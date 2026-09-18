@@ -852,7 +852,7 @@ body.shop-toggle-floating .hero-shop-button {
 
 .category-skeleton {
   display: block;
-  min-height: 178px;
+  min-height: 226px;
   border: 1px solid var(--line);
   border-radius: var(--radius);
   background: linear-gradient(100deg, #f0ece3 20%, #fffdf7 38%, #f0ece3 56%);
@@ -1389,6 +1389,17 @@ body[data-lang="en"] .category-art {
   outline: none;
 }
 
+@media (min-width: 1121px) {
+  .catalog-filters {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) auto;
+  }
+
+  .catalog-filter-group {
+    min-width: 0;
+  }
+}
+
 .subcategory-card-grid {
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
@@ -1415,7 +1426,7 @@ body[data-lang="en"] .category-art {
   }
 
   .is-category-route .subcategory-card-grid[hidden] {
-    display: grid;
+    display: grid !important;
     visibility: hidden;
   }
 }
@@ -1555,6 +1566,38 @@ body[data-lang="en"] .category-art {
   overflow: hidden;
   box-shadow: 0 12px 26px rgba(14, 32, 39, 0.06);
   transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+}
+
+.catalog-product-skeleton {
+  min-width: 0;
+  pointer-events: none;
+}
+
+.catalog-product-skeleton-media {
+  display: block;
+  aspect-ratio: 1 / 1;
+  background:
+    linear-gradient(100deg, transparent 20%, rgba(255, 255, 255, 0.72) 38%, transparent 56%),
+    #e9e4d9;
+  background-size: 220% 100%;
+  animation: category-skeleton-shimmer 1.25s ease-in-out infinite;
+}
+
+.catalog-product-skeleton-body {
+  display: block;
+  min-height: 260px;
+  border-top: 1px solid rgba(222, 216, 203, 0.72);
+  background:
+    linear-gradient(#e9e4d9 0 0) 16px 22px / 42% 12px no-repeat,
+    linear-gradient(#e9e4d9 0 0) 16px 52px / 72% 22px no-repeat,
+    linear-gradient(#e9e4d9 0 0) 16px 102px / calc(100% - 32px) 44px no-repeat,
+    linear-gradient(#e9e4d9 0 0) 16px 160px / calc(100% - 32px) 44px no-repeat,
+    linear-gradient(#e9e4d9 0 0) 16px 218px / calc(100% - 32px) 38px no-repeat,
+    var(--surface);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .catalog-product-skeleton-media { animation: none; }
 }
 
 .product-card:hover,
@@ -4814,6 +4857,10 @@ body.account-open .scrim {
   .category-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 8px;
+  }
+
+  .category-skeleton {
+    min-height: 132px;
   }
 
   .category-tile {

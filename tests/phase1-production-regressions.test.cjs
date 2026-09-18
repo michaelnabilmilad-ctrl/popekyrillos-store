@@ -24,7 +24,20 @@ test("a failed responsive thumbnail falls back once without retaining broken src
 test("category routes reserve the subcategory row before async catalog rendering", () => {
   assert.match(html, /is-category-route/);
   assert.match(css, /\.is-category-route \.subcategory-card-grid\s*\{\s*min-height:\s*300px/);
-  assert.match(css, /\.is-category-route \.subcategory-card-grid\[hidden\][\s\S]*visibility:\s*hidden/);
+  assert.match(css, /\.is-category-route \.subcategory-card-grid\[hidden\][\s\S]*display:\s*grid\s*!important[\s\S]*visibility:\s*hidden/);
+});
+
+test("category routes reserve the async product grid with responsive skeleton cards", () => {
+  assert.match(html, /data-products aria-busy="true"/);
+  assert.equal((html.match(/class="product-card catalog-product-skeleton"/g) || []).length, 8);
+  assert.match(css, /\.catalog-product-skeleton-media[\s\S]*aspect-ratio:\s*1\s*\/\s*1/);
+  assert.match(css, /\.catalog-product-skeleton-body[\s\S]*min-height:\s*260px/);
+  assert.match(css, /\.category-skeleton\s*\{[\s\S]*?min-height:\s*226px/);
+  assert.match(css, /@media \(max-width:\s*680px\)[\s\S]*?\.category-skeleton\s*\{\s*min-height:\s*132px/);
+  assert.match(storefront, /productGrid\.setAttribute\("aria-busy", "false"\)/);
+  assert.match(storefront, /!catalogSubcategoryCountsLoaded && productGrid\.querySelector\("\.catalog-product-skeleton"\)/);
+  assert.match(storefront, /category-count-placeholder/);
+  assert.match(css, /@media \(min-width:\s*1121px\)[\s\S]*?grid-template-columns:\s*repeat\(4, minmax\(0, 1fr\)\) auto/);
 });
 
 test("checkout remote cart synchronization is moved off the critical render path", () => {

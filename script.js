@@ -1113,7 +1113,9 @@ function ensureMainCategoryTiles() {
   // collapse the homepage to the "all" tile only.
   const tiles = visibleMainCategories().map((category) => {
     const count = mainCategoryProductCount(category.id);
-    const countText = count === null ? "" : `<small>${displayText(formatter.format(count))} ${isEnglish() ? "products" : "منتج"}</small>`;
+    const countText = count === null
+      ? '<small class="category-count-placeholder" aria-hidden="true">&nbsp;</small>'
+      : `<small>${displayText(formatter.format(count))} ${isEnglish() ? "products" : "منتج"}</small>`;
     return `<a class="category-tile ${normalizeCategoryFilter(state.filter) === category.id ? "active" : ""}" href="/category/${escapeHtml(category.id)}#catalog" data-filter="${escapeHtml(category.id)}">
       ${mainCategoryTileArt(category)}
       <strong>${escapeHtml(localized(category.name))}</strong>${countText}</a>`;
@@ -3247,7 +3249,9 @@ function renderProducts() {
   const items = filteredItems.slice(0, state.visibleProductCount);
 
   if (!items.length) {
+    if (!catalogSubcategoryCountsLoaded && productGrid.querySelector(".catalog-product-skeleton")) return;
     productGrid.innerHTML = "";
+    productGrid.setAttribute("aria-busy", "false");
     if (loadMoreButton) loadMoreButton.hidden = true;
     return;
   }
@@ -3323,6 +3327,7 @@ function renderProducts() {
       `;
     })
     .join("");
+  productGrid.setAttribute("aria-busy", "false");
 
   if (loadMoreButton) {
     loadMoreButton.hidden = !catalogHasMore;
