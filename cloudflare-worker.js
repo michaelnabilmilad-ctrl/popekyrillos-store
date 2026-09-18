@@ -948,7 +948,7 @@ async function htmlResponse(request, env, pathname = "/index.html", init = {}) {
   const response = await env.ASSETS.fetch(rewriteGetRequest(request, assetPath));
   const headers = new Headers(response.headers);
   ensureUtf8ContentType(headers, pathname);
-  headers.set("Cache-Control", init.private ? "private, no-store" : "public, max-age=60, stale-while-revalidate=300");
+  headers.set("Cache-Control", init.private ? "private, no-store" : "no-cache, must-revalidate");
   headers.set("X-Content-Type-Options", "nosniff");
   if (request.method === "HEAD") return new Response(null, { status: init.status || response.status, headers });
   if (headers.get("Content-Type")?.includes("text/html") && init.canonicalUrl) {
@@ -1038,7 +1038,11 @@ function withAssetCacheHeaders(response, pathname) {
     headers.set("Cache-Control", "public, max-age=2592000, stale-while-revalidate=86400");
   } else if (/\.[a-f0-9]{8,}\.(?:js|css|woff2|webp|avif)$/i.test(pathname)) {
     headers.set("Cache-Control", "public, max-age=31536000, immutable");
-  } else if (/\.(?:js|css|woff2)$/i.test(pathname)) {
+  } else if (/\.(?:js|css)$/i.test(pathname)) {
+    // These filenames are not content hashed. Revalidate them so an old tab
+    // cannot combine stale executable code with a newer HTML/data contract.
+    headers.set("Cache-Control", "no-cache, must-revalidate");
+  } else if (/\.woff2$/i.test(pathname)) {
     headers.set("Cache-Control", "public, max-age=3600, stale-while-revalidate=86400");
   }
   return new Response(response.body, { status: response.status, headers });

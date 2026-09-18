@@ -45,7 +45,14 @@ async function minifyFile(sourcePath, targetPath) {
 }
 
 async function minifyScripts() {
-  await minifyFile("script.js", "script.min.js");
+  // Keep the storefront taxonomy and its consumer in one versioned artifact.
+  // Loading them as two independent scripts allowed a transient/cache failure
+  // to leave products usable while categories were permanently unavailable.
+  const storefrontSource = `${read("category-taxonomy.js")}\n${read("script.js")}`;
+  const result = await terser.minify(storefrontSource, { compress: true, mangle: true });
+  if (result.error) throw result.error;
+  if (!result.code) throw new Error("Terser did not produce script.min.js content.");
+  write("script.min.js", `${result.code}\n`);
   await minifyFile("checkout-flow.js", "checkout-flow.min.js");
 }
 
