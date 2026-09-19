@@ -1,0 +1,152 @@
+{
+  "modelId": "yota-08",
+  "modelVersion": "yota-08-v1",
+  "regions": {
+    "region-1": {
+      "logicalRegionId": "region-1",
+      "similarShapeGroup": null,
+      "regionKind": "decorative"
+    },
+    "region-2": {
+      "logicalRegionId": "region-2",
+      "similarShapeGroup": null,
+      "regionKind": "decorative"
+    },
+    "region-3": {
+      "logicalRegionId": "region-3",
+      "similarShapeGroup": null,
+      "regionKind": "decorative"
+    },
+    "region-4": {
+      "logicalRegionId": "region-4",
+      "similarShapeGroup": null,
+      "regionKind": "decorative"
+    },
+    "region-5": {
+      "logicalRegionId": "region-5",
+      "similarShapeGroup": null,
+      "regionKind": "decorative"
+    },
+    "region-6": {
+      "logicalRegionId": "region-6",
+      "similarShapeGroup": null,
+      "regionKind": "decorative"
+    },
+    "region-7": {
+      "logicalRegionId": "region-7",
+      "similarShapeGroup": null,
+      "regionKind": "decorative"
+    },
+    "region-8": {
+      "logicalRegionId": "region-8",
+      "similarShapeGroup": null,
+      "regionKind": "decorative"
+    },
+    "region-9": {
+      "logicalRegionId": "region-9",
+      "similarShapeGroup": null,
+      "regionKind": "decorative"
+    },
+    "region-10": {
+      "logicalRegionId": "region-10",
+      "similarShapeGroup": null,
+      "regionKind": "decorative"
+    },
+    "region-11": {
+      "logicalRegionId": "region-11",
+      "similarShapeGroup": null,
+      "regionKind": "decorative"
+    },
+    "region-12": {
+      "logicalRegionId": "region-12",
+      "similarShapeGroup": null,
+      "regionKind": "decorative"
+    },
+    "region-13": {
+      "logicalRegionId": "region-13",
+      "similarShapeGroup": null,
+      "regionKind": "decorative"
+    }
+  },
+  "logicalShapes": {
+    "region-1": [
+      "region-1"
+    ],
+    "region-2": [
+      "region-2"
+    ],
+    "region-3": [
+      "region-3"
+    ],
+    "region-4": [
+      "region-4"
+    ],
+    "region-5": [
+      "region-5"
+    ],
+    "region-6": [
+      "region-6"
+    ],
+    "region-7": [
+      "region-7"
+    ],
+    "region-8": [
+      "region-8"
+    ],
+    "region-9": [
+      "region-9"
+    ],
+    "region-10": [
+      "region-10"
+    ],
+    "region-11": [
+      "region-11"
+    ],
+    "region-12": [
+      "region-12"
+    ],
+    "region-13": [
+      "region-13"
+    ]
+  },
+  "similarShapeGroups": {
+    "outer-stars": [
+      "region-1",
+      "region-6",
+      "region-7",
+      "region-13"
+    ],
+    "inner-corners": [
+      "region-2",
+      "region-5",
+      "region-9",
+      "region-12"
+    ],
+    "inner-arms": [
+      "region-3",
+      "region-4",
+      "region-10",
+      "region-11"
+    ]
+  },
+  "groups": {
+    "outer-stars": [
+      "region-1",
+      "region-6",
+      "region-7",
+      "region-13"
+    ],
+    "inner-corners": [
+      "region-2",
+      "region-5",
+      "region-9",
+      "region-12"
+    ],
+    "inner-arms": [
+      "region-3",
+      "region-4",
+      "region-10",
+      "region-11"
+    ]
+  }
+}

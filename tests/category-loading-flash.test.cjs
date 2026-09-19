@@ -23,15 +23,14 @@ test("storefront taxonomy is bundled with its consumer instead of loaded as an i
   assert.match(preparation, /read\("category-taxonomy\.js"\).*read\("script\.js"\)/s);
 });
 
+test("taxonomy responses must revalidate instead of serving stale category data", () => {
+  assert.match(worker, /"Cache-Control": "no-cache, must-revalidate"/);
+  assert.match(worker, /status: source \? 200 : 503/);
+});
+
 test("catalog requests ignore aborts, retry only transient failures and retain successful data", () => {
   assert.match(script, /error\?\.name === "AbortError"/);
   assert.match(script, /status === 408 \|\| status === 429 \|\| status >= 500/);
   assert.match(script, /if \(reset && !products\.length\) products = fallbackProducts\.slice\(\)/);
   assert.match(script, /endpoint,[\s\S]*status:[\s\S]*exception:[\s\S]*route:/);
 });
-
-test("taxonomy responses must revalidate instead of serving stale category data", () => {
-  assert.match(worker, /"Cache-Control": "no-cache, must-revalidate"/);
-  assert.match(worker, /status: source \? 200 : 503/);
-});
-

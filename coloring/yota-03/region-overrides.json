@@ -1,6 +1,6 @@
 {
   "modelId": "yota-03",
-  "modelVersion": "yota-03-v7",
+  "modelVersion": "yota-03-v9",
   "regions": {
     "region-1": {
       "logicalRegionId": "region-1",

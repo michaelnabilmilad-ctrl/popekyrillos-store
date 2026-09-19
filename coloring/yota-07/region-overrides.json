@@ -1,0 +1,108 @@
+{
+  "modelId": "yota-07",
+  "modelVersion": "yota-07-v5",
+  "regions": {
+    "region-1": {
+      "logicalRegionId": "outer-top-cross",
+      "similarShapeGroup": "outer-crosses",
+      "regionKind": "decorative"
+    },
+    "region-2": {
+      "logicalRegionId": "outer-left-cross",
+      "similarShapeGroup": "outer-crosses",
+      "regionKind": "decorative"
+    },
+    "region-3": {
+      "logicalRegionId": "outer-right-cross",
+      "similarShapeGroup": "outer-crosses",
+      "regionKind": "decorative"
+    },
+    "region-4": {
+      "logicalRegionId": "outer-bottom-cross",
+      "similarShapeGroup": "outer-crosses",
+      "regionKind": "decorative"
+    },
+    "region-5": {
+      "logicalRegionId": "center-top-star",
+      "similarShapeGroup": "center-cardinal-stars",
+      "regionKind": "decorative"
+    },
+    "region-6": {
+      "logicalRegionId": "center-left-star",
+      "similarShapeGroup": "center-cardinal-stars",
+      "regionKind": "decorative"
+    },
+    "region-7": {
+      "logicalRegionId": "center-core",
+      "similarShapeGroup": null,
+      "regionKind": "decorative"
+    },
+    "region-8": {
+      "logicalRegionId": "center-right-star",
+      "similarShapeGroup": "center-cardinal-stars",
+      "regionKind": "decorative"
+    },
+    "region-9": {
+      "logicalRegionId": "center-bottom-star",
+      "similarShapeGroup": "center-cardinal-stars",
+      "regionKind": "decorative"
+    }
+  },
+  "logicalShapes": {
+    "outer-top-cross": [
+      "region-1"
+    ],
+    "outer-left-cross": [
+      "region-2"
+    ],
+    "outer-right-cross": [
+      "region-3"
+    ],
+    "outer-bottom-cross": [
+      "region-4"
+    ],
+    "center-top-star": [
+      "region-5"
+    ],
+    "center-left-star": [
+      "region-6"
+    ],
+    "center-core": [
+      "region-7"
+    ],
+    "center-right-star": [
+      "region-8"
+    ],
+    "center-bottom-star": [
+      "region-9"
+    ]
+  },
+  "similarShapeGroups": {
+    "outer-crosses": [
+      "outer-top-cross",
+      "outer-left-cross",
+      "outer-right-cross",
+      "outer-bottom-cross"
+    ],
+    "center-cardinal-stars": [
+      "center-top-star",
+      "center-left-star",
+      "center-right-star",
+      "center-bottom-star"
+    ]
+  },
+  "groups": {
+    "outer-crosses": [
+      "outer-top-cross",
+      "outer-left-cross",
+      "outer-right-cross",
+      "outer-bottom-cross"
+    ],
+    "center-cardinal-stars": [
+      "center-top-star",
+      "center-left-star",
+      "center-right-star",
+      "center-bottom-star"
+    ]
+  }
+}

@@ -1,5 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { d1Database } from "./helpers/customer-order-fixture.mjs";
 import {
   createAirtableOrderDetails,
   createOrderResponse,
@@ -24,7 +25,8 @@ test("normalizes one item and keeps quantity as one detail row", () => {
       option: "",
       notes: "",
       quantity: 3,
-      unitPrice: 25
+      unitPrice: 25,
+      imageUrl: "", variantName: "", designId: "", designName: "", selectedColors: {}, customizationId: "", customization: { selectedColors: {} }
     }],
     errors: []
   });
@@ -151,8 +153,10 @@ test("refuses to create a detail row without a product name", async () => {
 
 test("mixed SKU and permanent-id checkout links every row and retries safely", async () => {
   const state = new Map();
+  const trackingDatabase = d1Database();
   const database = {
     prepare(sql) {
+      if (sql.includes("customer_order_")) return trackingDatabase.prepare(sql);
       return {
         values: [],
         bind(...values) { this.values = values; return this; },
@@ -195,6 +199,7 @@ test("mixed SKU and permanent-id checkout links every row and retries safely", a
   let detailRequest;
   globalThis.fetch = async (url, init = {}) => {
     const path = new URL(url).pathname;
+    if (!init.method && path.endsWith("/Orders/recOrder1")) return Response.json({ id: "recOrder1", fields: { "Order ID": 1, Phone: "01000000000" } });
     if (!init.method && path.includes(encodeURIComponent("المنتجات"))) {
       return new Response(JSON.stringify({ records: [{ id: "recProduct1" }] }));
     }
@@ -250,8 +255,10 @@ test("mixed SKU and permanent-id checkout links every row and retries safely", a
 
 test("detail creation failure never returns checkout success", async () => {
   const state = new Map();
+  const trackingDatabase = d1Database();
   const database = {
     prepare(sql) {
+      if (sql.includes("customer_order_")) return trackingDatabase.prepare(sql);
       return {
         values: [],
         bind(...values) { this.values = values; return this; },

@@ -1,0 +1,11 @@
+{
+  "modelId": "yota-01",
+  "modelVersion": "yota-01-v6",
+  "logicalShapes": {},
+  "similarShapeGroups": {
+    "border-outer-loops": ["region-1", "region-4", "region-5", "region-8", "region-9", "region-12", "region-13", "region-16", "region-17", "region-20", "region-21", "region-24", "region-27", "region-32", "region-33", "region-40", "region-41", "region-44", "region-49", "region-52", "region-55", "region-60", "region-61", "region-64", "region-65", "region-68", "region-69", "region-72", "region-73", "region-76", "region-77", "region-80", "region-81"],
+    "border-inner-circles": ["region-2", "region-3", "region-6", "region-7", "region-10", "region-11", "region-14", "region-15", "region-18", "region-19", "region-22", "region-23", "region-28", "region-31", "region-34", "region-39", "region-42", "region-43", "region-50", "region-51", "region-56", "region-57", "region-62", "region-63", "region-66", "region-67", "region-70", "region-71", "region-74", "region-75", "region-78", "region-79", "region-82"],
+    "center-small-squares": ["region-25", "region-26", "region-35", "region-36", "region-37", "region-38", "region-45", "region-46", "region-47", "region-48", "region-58", "region-59"],
+    "center-corner-l": ["region-29", "region-30", "region-53", "region-54"]
+  }
+}

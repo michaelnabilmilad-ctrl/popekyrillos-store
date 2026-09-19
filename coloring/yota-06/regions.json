@@ -1,0 +1,192 @@
+{
+  "modelId": "yota-06",
+  "modelName": "ميدالية يوتا 6",
+  "modelVersion": "yota-06-v2",
+  "paintMode": "replace-source-color",
+  "totalRegions": 7,
+  "regions": [
+    {
+      "id": "region-1",
+      "regionId": "region-1",
+      "maskColor": [
+        1,
+        0,
+        173
+      ],
+      "pixelCount": 3324,
+      "centerX": 619,
+      "centerY": 658,
+      "bounds": {
+        "x": 570,
+        "y": 607,
+        "width": 99,
+        "height": 102
+      },
+      "sampleX": 620,
+      "sampleY": 620,
+      "regionKind": "decorative",
+      "logicalRegionId": "outer-top-cross",
+      "shapeGroup": "outer-crosses",
+      "geometryType": "enclosed-decoration",
+      "enabled": true,
+      "label": "outer-top-cross"
+    },
+    {
+      "id": "region-2",
+      "regionId": "region-2",
+      "maskColor": [
+        2,
+        0,
+        173
+      ],
+      "pixelCount": 3283,
+      "centerX": 466,
+      "centerY": 815,
+      "bounds": {
+        "x": 417,
+        "y": 764,
+        "width": 98,
+        "height": 102
+      },
+      "sampleX": 430,
+      "sampleY": 815,
+      "regionKind": "decorative",
+      "logicalRegionId": "outer-left-cross",
+      "shapeGroup": "outer-crosses",
+      "geometryType": "enclosed-decoration",
+      "enabled": true,
+      "label": "outer-left-cross"
+    },
+    {
+      "id": "region-3",
+      "regionId": "region-3",
+      "maskColor": [
+        3,
+        0,
+        173
+      ],
+      "pixelCount": 8053,
+      "centerX": 620,
+      "centerY": 813,
+      "bounds": {
+        "x": 546,
+        "y": 737,
+        "width": 149,
+        "height": 153
+      },
+      "sampleX": 620,
+      "sampleY": 750,
+      "regionKind": "decorative",
+      "logicalRegionId": "central-cross",
+      "shapeGroup": null,
+      "geometryType": "enclosed-decoration",
+      "enabled": true,
+      "label": "central-cross"
+    },
+    {
+      "id": "region-4",
+      "regionId": "region-4",
+      "maskColor": [
+        4,
+        0,
+        173
+      ],
+      "pixelCount": 3482,
+      "centerX": 776,
+      "centerY": 814,
+      "bounds": {
+        "x": 727,
+        "y": 762,
+        "width": 100,
+        "height": 104
+      },
+      "sampleX": 780,
+      "sampleY": 815,
+      "regionKind": "decorative",
+      "logicalRegionId": "outer-right-cross",
+      "shapeGroup": "outer-crosses",
+      "geometryType": "enclosed-decoration",
+      "enabled": true,
+      "label": "outer-right-cross"
+    },
+    {
+      "id": "region-5",
+      "regionId": "region-5",
+      "maskColor": [
+        5,
+        0,
+        173
+      ],
+      "pixelCount": 666,
+      "centerX": 621,
+      "centerY": 939,
+      "bounds": {
+        "x": 603,
+        "y": 921,
+        "width": 37,
+        "height": 37
+      },
+      "sampleX": 620,
+      "sampleY": 940,
+      "regionKind": "decorative",
+      "logicalRegionId": "stem-small-upper",
+      "shapeGroup": "stem-small-crosses",
+      "geometryType": "enclosed-decoration",
+      "enabled": true,
+      "label": "stem-small-upper"
+    },
+    {
+      "id": "region-6",
+      "regionId": "region-6",
+      "maskColor": [
+        6,
+        0,
+        173
+      ],
+      "pixelCount": 702,
+      "centerX": 622,
+      "centerY": 1001,
+      "bounds": {
+        "x": 604,
+        "y": 982,
+        "width": 37,
+        "height": 38
+      },
+      "sampleX": 620,
+      "sampleY": 1000,
+      "regionKind": "decorative",
+      "logicalRegionId": "stem-small-lower",
+      "shapeGroup": "stem-small-crosses",
+      "geometryType": "enclosed-decoration",
+      "enabled": true,
+      "label": "stem-small-lower"
+    },
+    {
+      "id": "region-7",
+      "regionId": "region-7",
+      "maskColor": [
+        7,
+        0,
+        173
+      ],
+      "pixelCount": 4050,
+      "centerX": 622,
+      "centerY": 1113,
+      "bounds": {
+        "x": 569,
+        "y": 1058,
+        "width": 108,
+        "height": 111
+      },
+      "sampleX": 620,
+      "sampleY": 1080,
+      "regionKind": "decorative",
+      "logicalRegionId": "outer-bottom-cross",
+      "shapeGroup": "outer-crosses",
+      "geometryType": "enclosed-decoration",
+      "enabled": true,
+      "label": "outer-bottom-cross"
+    }
+  ],
+  "shapeGroups": []
+}

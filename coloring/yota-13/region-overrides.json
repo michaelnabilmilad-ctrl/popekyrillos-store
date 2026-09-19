@@ -1,0 +1,462 @@
+{
+  "modelId": "yota-13",
+  "modelVersion": "yota-13-v1",
+  "logicalShapes": {
+    "region-1": [
+      "region-1"
+    ],
+    "region-2": [
+      "region-2"
+    ],
+    "region-3": [
+      "region-3"
+    ],
+    "region-4": [
+      "region-4"
+    ],
+    "region-5": [
+      "region-5"
+    ],
+    "region-6": [
+      "region-6"
+    ],
+    "region-7": [
+      "region-7"
+    ],
+    "region-8": [
+      "region-8"
+    ],
+    "region-9": [
+      "region-9"
+    ],
+    "region-10": [
+      "region-10"
+    ],
+    "region-11": [
+      "region-11"
+    ],
+    "region-12": [
+      "region-12"
+    ],
+    "region-13": [
+      "region-13"
+    ],
+    "region-14": [
+      "region-14"
+    ],
+    "region-15": [
+      "region-15"
+    ],
+    "region-16": [
+      "region-16"
+    ],
+    "region-17": [
+      "region-17"
+    ],
+    "region-18": [
+      "region-18"
+    ],
+    "region-19": [
+      "region-19"
+    ],
+    "region-20": [
+      "region-20"
+    ],
+    "region-21": [
+      "region-21"
+    ],
+    "region-22": [
+      "region-22"
+    ],
+    "region-23": [
+      "region-23"
+    ],
+    "region-24": [
+      "region-24"
+    ],
+    "region-25": [
+      "region-25"
+    ],
+    "region-26": [
+      "region-26"
+    ],
+    "region-27": [
+      "region-27"
+    ],
+    "region-28": [
+      "region-28"
+    ],
+    "region-29": [
+      "region-29"
+    ],
+    "region-30": [
+      "region-30"
+    ],
+    "region-31": [
+      "region-31"
+    ],
+    "region-32": [
+      "region-32"
+    ],
+    "region-33": [
+      "region-33"
+    ],
+    "region-34": [
+      "region-34"
+    ],
+    "region-35": [
+      "region-35"
+    ],
+    "region-36": [
+      "region-36"
+    ],
+    "region-37": [
+      "region-37"
+    ],
+    "region-38": [
+      "region-38"
+    ]
+  },
+  "similarShapeGroups": {
+    "matching-1": [
+      "region-1",
+      "region-18",
+      "region-38",
+      "region-22"
+    ],
+    "matching-2": [
+      "region-2",
+      "region-21",
+      "region-37",
+      "region-17"
+    ],
+    "matching-3": [
+      "region-3",
+      "region-13",
+      "region-36",
+      "region-26"
+    ],
+    "matching-4": [
+      "region-4",
+      "region-24",
+      "region-35",
+      "region-15"
+    ],
+    "matching-5": [
+      "region-5",
+      "region-27",
+      "region-34",
+      "region-12"
+    ],
+    "matching-6": [
+      "region-6",
+      "region-11",
+      "region-33",
+      "region-28"
+    ],
+    "matching-7": [
+      "region-7",
+      "region-29",
+      "region-31",
+      "region-10"
+    ],
+    "matching-8": [
+      "region-8",
+      "region-9",
+      "region-32",
+      "region-30"
+    ],
+    "matching-9": [
+      "region-14",
+      "region-16",
+      "region-25",
+      "region-23"
+    ]
+  },
+  "groups": {
+    "matching-1": [
+      "region-1",
+      "region-18",
+      "region-38",
+      "region-22"
+    ],
+    "matching-2": [
+      "region-2",
+      "region-21",
+      "region-37",
+      "region-17"
+    ],
+    "matching-3": [
+      "region-3",
+      "region-13",
+      "region-36",
+      "region-26"
+    ],
+    "matching-4": [
+      "region-4",
+      "region-24",
+      "region-35",
+      "region-15"
+    ],
+    "matching-5": [
+      "region-5",
+      "region-27",
+      "region-34",
+      "region-12"
+    ],
+    "matching-6": [
+      "region-6",
+      "region-11",
+      "region-33",
+      "region-28"
+    ],
+    "matching-7": [
+      "region-7",
+      "region-29",
+      "region-31",
+      "region-10"
+    ],
+    "matching-8": [
+      "region-8",
+      "region-9",
+      "region-32",
+      "region-30"
+    ],
+    "matching-9": [
+      "region-14",
+      "region-16",
+      "region-25",
+      "region-23"
+    ]
+  },
+  "regions": {
+    "region-1": {
+      "logicalRegionId": "region-1",
+      "similarShapeGroup": "matching-1",
+      "geometryType": "matching-1",
+      "regionKind": "decorative"
+    },
+    "region-2": {
+      "logicalRegionId": "region-2",
+      "similarShapeGroup": "matching-2",
+      "geometryType": "matching-2",
+      "regionKind": "decorative"
+    },
+    "region-3": {
+      "logicalRegionId": "region-3",
+      "similarShapeGroup": "matching-3",
+      "geometryType": "matching-3",
+      "regionKind": "decorative"
+    },
+    "region-4": {
+      "logicalRegionId": "region-4",
+      "similarShapeGroup": "matching-4",
+      "geometryType": "matching-4",
+      "regionKind": "decorative"
+    },
+    "region-5": {
+      "logicalRegionId": "region-5",
+      "similarShapeGroup": "matching-5",
+      "geometryType": "matching-5",
+      "regionKind": "decorative"
+    },
+    "region-6": {
+      "logicalRegionId": "region-6",
+      "similarShapeGroup": "matching-6",
+      "geometryType": "matching-6",
+      "regionKind": "decorative"
+    },
+    "region-7": {
+      "logicalRegionId": "region-7",
+      "similarShapeGroup": "matching-7",
+      "geometryType": "matching-7",
+      "regionKind": "decorative"
+    },
+    "region-8": {
+      "logicalRegionId": "region-8",
+      "similarShapeGroup": "matching-8",
+      "geometryType": "matching-8",
+      "regionKind": "decorative"
+    },
+    "region-9": {
+      "logicalRegionId": "region-9",
+      "similarShapeGroup": "matching-8",
+      "geometryType": "matching-8",
+      "regionKind": "decorative"
+    },
+    "region-10": {
+      "logicalRegionId": "region-10",
+      "similarShapeGroup": "matching-7",
+      "geometryType": "matching-7",
+      "regionKind": "decorative"
+    },
+    "region-11": {
+      "logicalRegionId": "region-11",
+      "similarShapeGroup": "matching-6",
+      "geometryType": "matching-6",
+      "regionKind": "decorative"
+    },
+    "region-12": {
+      "logicalRegionId": "region-12",
+      "similarShapeGroup": "matching-5",
+      "geometryType": "matching-5",
+      "regionKind": "decorative"
+    },
+    "region-13": {
+      "logicalRegionId": "region-13",
+      "similarShapeGroup": "matching-3",
+      "geometryType": "matching-3",
+      "regionKind": "decorative"
+    },
+    "region-14": {
+      "logicalRegionId": "region-14",
+      "similarShapeGroup": "matching-9",
+      "geometryType": "matching-9",
+      "regionKind": "decorative"
+    },
+    "region-15": {
+      "logicalRegionId": "region-15",
+      "similarShapeGroup": "matching-4",
+      "geometryType": "matching-4",
+      "regionKind": "decorative"
+    },
+    "region-16": {
+      "logicalRegionId": "region-16",
+      "similarShapeGroup": "matching-9",
+      "geometryType": "matching-9",
+      "regionKind": "decorative"
+    },
+    "region-17": {
+      "logicalRegionId": "region-17",
+      "similarShapeGroup": "matching-2",
+      "geometryType": "matching-2",
+      "regionKind": "decorative"
+    },
+    "region-18": {
+      "logicalRegionId": "region-18",
+      "similarShapeGroup": "matching-1",
+      "geometryType": "matching-1",
+      "regionKind": "decorative"
+    },
+    "region-19": {
+      "logicalRegionId": "region-19",
+      "similarShapeGroup": null,
+      "geometryType": "outer-continuous-band",
+      "regionKind": "decorative"
+    },
+    "region-20": {
+      "logicalRegionId": "region-20",
+      "similarShapeGroup": null,
+      "geometryType": "inner-continuous-band",
+      "regionKind": "decorative"
+    },
+    "region-21": {
+      "logicalRegionId": "region-21",
+      "similarShapeGroup": "matching-2",
+      "geometryType": "matching-2",
+      "regionKind": "decorative"
+    },
+    "region-22": {
+      "logicalRegionId": "region-22",
+      "similarShapeGroup": "matching-1",
+      "geometryType": "matching-1",
+      "regionKind": "decorative"
+    },
+    "region-23": {
+      "logicalRegionId": "region-23",
+      "similarShapeGroup": "matching-9",
+      "geometryType": "matching-9",
+      "regionKind": "decorative"
+    },
+    "region-24": {
+      "logicalRegionId": "region-24",
+      "similarShapeGroup": "matching-4",
+      "geometryType": "matching-4",
+      "regionKind": "decorative"
+    },
+    "region-25": {
+      "logicalRegionId": "region-25",
+      "similarShapeGroup": "matching-9",
+      "geometryType": "matching-9",
+      "regionKind": "decorative"
+    },
+    "region-26": {
+      "logicalRegionId": "region-26",
+      "similarShapeGroup": "matching-3",
+      "geometryType": "matching-3",
+      "regionKind": "decorative"
+    },
+    "region-27": {
+      "logicalRegionId": "region-27",
+      "similarShapeGroup": "matching-5",
+      "geometryType": "matching-5",
+      "regionKind": "decorative"
+    },
+    "region-28": {
+      "logicalRegionId": "region-28",
+      "similarShapeGroup": "matching-6",
+      "geometryType": "matching-6",
+      "regionKind": "decorative"
+    },
+    "region-29": {
+      "logicalRegionId": "region-29",
+      "similarShapeGroup": "matching-7",
+      "geometryType": "matching-7",
+      "regionKind": "decorative"
+    },
+    "region-30": {
+      "logicalRegionId": "region-30",
+      "similarShapeGroup": "matching-8",
+      "geometryType": "matching-8",
+      "regionKind": "decorative"
+    },
+    "region-31": {
+      "logicalRegionId": "region-31",
+      "similarShapeGroup": "matching-7",
+      "geometryType": "matching-7",
+      "regionKind": "decorative"
+    },
+    "region-32": {
+      "logicalRegionId": "region-32",
+      "similarShapeGroup": "matching-8",
+      "geometryType": "matching-8",
+      "regionKind": "decorative"
+    },
+    "region-33": {
+      "logicalRegionId": "region-33",
+      "similarShapeGroup": "matching-6",
+      "geometryType": "matching-6",
+      "regionKind": "decorative"
+    },
+    "region-34": {
+      "logicalRegionId": "region-34",
+      "similarShapeGroup": "matching-5",
+      "geometryType": "matching-5",
+      "regionKind": "decorative"
+    },
+    "region-35": {
+      "logicalRegionId": "region-35",
+      "similarShapeGroup": "matching-4",
+      "geometryType": "matching-4",
+      "regionKind": "decorative"
+    },
+    "region-36": {
+      "logicalRegionId": "region-36",
+      "similarShapeGroup": "matching-3",
+      "geometryType": "matching-3",
+      "regionKind": "decorative"
+    },
+    "region-37": {
+      "logicalRegionId": "region-37",
+      "similarShapeGroup": "matching-2",
+      "geometryType": "matching-2",
+      "regionKind": "decorative"
+    },
+    "region-38": {
+      "logicalRegionId": "region-38",
+      "similarShapeGroup": "matching-1",
+      "geometryType": "matching-1",
+      "regionKind": "decorative"
+    }
+  }
+}

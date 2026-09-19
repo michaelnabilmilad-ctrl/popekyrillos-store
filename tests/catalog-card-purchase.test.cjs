@@ -26,14 +26,16 @@ test("catalog add action is delegated once and cannot navigate or bubble", () =>
 });
 
 test("coloring is a separate explicit card action and selects the requested design", () => {
-  assert.match(script, /\["custom-1782980654479", "yota-01"\]/);
-  assert.match(script, /\["custom-1782980654479-copy-1782982056347", "yota-02"\]/);
+  assert.match(script, /return product\?\.coloringModelId \|\| ""/);
+  assert.doesNotMatch(script, /catalogColoringDesignByProductId/);
   assert.match(script, /const coloringDesignId = catalogColoringDesignId\(product\)/);
   assert.match(script, /type="button" data-card-coloring/);
   assert.match(script, /\/coloring-game\?design=/);
   assert.doesNotMatch(script, /coloring-game\?design=\$\{[^\n]+&product=/);
   assert.match(script, /const coloringButton = event\.target\.closest\("\[data-card-coloring\]"\);[\s\S]*?event\.preventDefault\(\);\s*event\.stopPropagation\(\);/);
   assert.match(coloringGame, /const requestedDesign = designs\.find/);
-  assert.match(coloringGame, /loadDesign\(requestedDesign\)/);
-  assert.match(coloringPage, /import \{ COLORING_DESIGNS \} from "\/coloringDesigns\.js"/);
+  assert.doesNotMatch(coloringGame, /\|\| designs\[0\]/);
+  assert.match(coloringGame, /loadDesign\(requestedDesign, "replace"\)/);
+  assert.match(coloringPage, /import \{ COLORING_DESIGNS \} from "\/coloringDesigns\.js\?v=22"/);
+  assert.match(coloringPage, /import\("\/coloring-game\.js\?v=9"\)/);
 });

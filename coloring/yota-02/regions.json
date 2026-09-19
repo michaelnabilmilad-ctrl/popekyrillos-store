@@ -1,7 +1,7 @@
 {
   "modelId": "yota-02",
   "modelName": "ميدالية يوتا 2",
-  "modelVersion": "yota-02-v14",
+  "modelVersion": "yota-02-v15",
   "totalRegions": 50,
   "regions": [
     {
@@ -212,14 +212,14 @@
         0,
         147
       ],
-      "pixelCount": 919,
-      "centerX": 499,
-      "centerY": 725,
+      "pixelCount": 2882,
+      "centerX": 515,
+      "centerY": 703,
       "bounds": {
-        "x": 478,
-        "y": 689,
-        "width": 50,
-        "height": 59
+        "x": 476,
+        "y": 663,
+        "width": 86,
+        "height": 88
       },
       "sampleX": 496,
       "sampleY": 725,

@@ -33,3 +33,29 @@ test("every subcategory image is rendered immediately and independently of activ
   const css=fs.readFileSync("styles.css","utf8");
   assert.match(css,/\.subcategory-card-image img\s*\{[^}]*display:\s*block;[^}]*visibility:\s*visible;[^}]*opacity:\s*1;/s);
 });
+test("subcategory navigation keeps sibling cards sourced from unfiltered catalog counts",()=>{
+  const source=fs.readFileSync("script.js","utf8");
+  const labels=source.slice(source.indexOf("function orderedLabelsForCategory"),source.indexOf("function productsForCurrentCategory"));
+  assert.match(labels,/subcategoryProductCount\(normalized, subcategory\.id\)/);
+  assert.match(labels,/totalCount > 0/);
+  assert.doesNotMatch(labels,/productMatchesSubcategory\(product, state\.labelFilter\)/);
+  assert.match(source,/payload\.subcategoryCounts/);
+  assert.match(source,/catalogSubcategoryCounts = catalogSubcategoryCountsLoaded \? payload\.subcategoryCounts : \{\}/);
+});
+test("catalog API computes subcategory counts before applying request filters",()=>{
+  const worker=fs.readFileSync("cloudflare-worker.js","utf8");
+  const endpoint=worker.slice(worker.indexOf("async function catalogApiResponse"),worker.indexOf("async function productApiResponse"));
+  assert.ok(endpoint.indexOf("const subcategoryCounts = allProducts.filter(hasAvailableVariant)") < endpoint.indexOf("const matched ="));
+  assert.match(endpoint,/categoryCounts, subcategoryCounts/);
+});
+test("crosses navigation keeps wooden crosses and Iota medals visible through every selection",()=>{
+  const counts=new Map([["wooden-crosses",12],["yota-medallions",9],["pectoral-crosses",4]]);
+  const visibleSiblingIds=()=>[...counts].filter(([,count])=>count>0).map(([id])=>id).sort();
+  const initial=visibleSiblingIds();
+  assert.ok(initial.includes("wooden-crosses"));
+  assert.ok(initial.includes("yota-medallions"));
+  for(const selected of ["yota-medallions","wooden-crosses","yota-medallions"]){
+    assert.ok(initial.includes(selected));
+    assert.deepEqual(visibleSiblingIds(),initial);
+  }
+});

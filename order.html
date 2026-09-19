@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="referrer" content="no-referrer">
+  <title>تفاصيل طلبك | مكتبة البابا كيرلس</title>
+  <link rel="stylesheet" href="/customer-orders.css?v=1">
+  <script src="/customer-orders.js?v=1" defer></script>
+</head>
+<body>
+  <header class="store-header"><a href="/" class="brand">مكتبة البابا كيرلس<span>كتب ومستلزمات كنسية</span></a><a href="/track-order">متابعة طلب آخر ←</a></header>
+  <main class="tracking-shell" data-order-page>
+    <p class="eyebrow">متابعة طلبك</p>
+    <h1>تفاصيل الطلب</h1>
+    <p class="message" data-message role="status" aria-live="polite">جارٍ تحميل الطلب…</p>
+    <button type="button" class="secondary" data-retry hidden>إعادة المحاولة</button>
+    <div data-order-content hidden>
+      <section class="panel status-panel"><div><p>حالة الطلب الحالية</p><h2 data-status></h2><p data-created></p></div><button class="secondary" data-refresh type="button">تحديث الحالة</button></section>
+      <div class="order-grid">
+        <section class="panel"><h2>بيانات الاستلام</h2><dl data-customer></dl></section>
+        <section class="panel"><h2>ملخص الطلب</h2><dl data-totals></dl><p class="help" data-shipping-note></p></section>
+      </div>
+      <section class="panel"><h2>المنتجات</h2><p class="help">الأسعار المعروضة هي الأسعار المحفوظة في طلبك.</p><div class="order-items" data-items></div></section>
+      <section class="panel" data-history-panel hidden><h2>سجل حالة الطلب</h2><ol class="history" data-history></ol></section>
+      <section class="panel cancel-panel"><p data-cancel-message></p><button class="danger" type="button" data-cancel hidden>إلغاء الطلب</button><p class="help">احتفظ برابط الطلب في مكان آمن؛ من يملك الرابط يستطيع عرض بياناته.</p></section>
+    </div>
+    <noscript>يرجى تفعيل JavaScript لمتابعة طلبك.</noscript>
+  </main>
+  <dialog aria-labelledby="cancel-title" aria-describedby="cancel-description" data-confirm>
+    <h2 id="cancel-title">هل أنت متأكد من إلغاء الطلب؟</h2>
+    <p id="cancel-description">سيبقى الطلب وتفاصيله محفوظين بعد الإلغاء.</p>
+    <p class="message" data-confirm-message role="status"></p>
+    <div class="dialog-actions"><button class="danger" type="button" data-confirm-cancel>نعم، إلغاء الطلب</button><button class="secondary" type="button" data-back autofocus>رجوع</button></div>
+  </dialog>
+  <footer>مكتبة البابا كيرلس · <a href="/#contact">تواصل معنا</a></footer>
+</body>
+</html>

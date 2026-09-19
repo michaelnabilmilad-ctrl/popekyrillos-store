@@ -1,0 +1,590 @@
+{
+  "modelId": "yota-04",
+  "modelVersion": "yota-04-v2",
+  "regions": {
+    "region-1": {
+      "logicalRegionId": "outer-knot-top",
+      "similarShapeGroup": "outer-knot-quarters",
+      "regionKind": "decorative"
+    },
+    "region-2": {
+      "logicalRegionId": "knot-opening-01",
+      "similarShapeGroup": "knot-openings",
+      "regionKind": "decorative"
+    },
+    "region-3": {
+      "logicalRegionId": "outer-knot-top",
+      "similarShapeGroup": "outer-knot-quarters",
+      "regionKind": "decorative"
+    },
+    "region-4": {
+      "logicalRegionId": "knot-opening-02",
+      "similarShapeGroup": "knot-openings",
+      "regionKind": "decorative"
+    },
+    "region-5": {
+      "logicalRegionId": "middle-knot-top",
+      "similarShapeGroup": "middle-knot-quarters",
+      "regionKind": "decorative"
+    },
+    "region-6": {
+      "logicalRegionId": "outer-knot-top",
+      "similarShapeGroup": "outer-knot-quarters",
+      "regionKind": "decorative"
+    },
+    "region-7": {
+      "logicalRegionId": "middle-knot-top",
+      "similarShapeGroup": "middle-knot-quarters",
+      "regionKind": "decorative"
+    },
+    "region-8": {
+      "logicalRegionId": "knot-opening-03",
+      "similarShapeGroup": "knot-openings",
+      "regionKind": "decorative"
+    },
+    "region-9": {
+      "logicalRegionId": "outer-knot-top",
+      "similarShapeGroup": "outer-knot-quarters",
+      "regionKind": "decorative"
+    },
+    "region-10": {
+      "logicalRegionId": "knot-opening-04",
+      "similarShapeGroup": "knot-openings",
+      "regionKind": "decorative"
+    },
+    "region-11": {
+      "logicalRegionId": "middle-knot-top",
+      "similarShapeGroup": "middle-knot-quarters",
+      "regionKind": "decorative"
+    },
+    "region-12": {
+      "logicalRegionId": "middle-knot-top",
+      "similarShapeGroup": "middle-knot-quarters",
+      "regionKind": "decorative"
+    },
+    "region-13": {
+      "logicalRegionId": "knot-opening-05",
+      "similarShapeGroup": "knot-openings",
+      "regionKind": "decorative"
+    },
+    "region-14": {
+      "logicalRegionId": "knot-opening-06",
+      "similarShapeGroup": "knot-openings",
+      "regionKind": "decorative"
+    },
+    "region-15": {
+      "logicalRegionId": "middle-knot-top",
+      "similarShapeGroup": "middle-knot-quarters",
+      "regionKind": "decorative"
+    },
+    "region-16": {
+      "logicalRegionId": "outer-knot-right",
+      "similarShapeGroup": "outer-knot-quarters",
+      "regionKind": "decorative"
+    },
+    "region-17": {
+      "logicalRegionId": "middle-knot-left",
+      "similarShapeGroup": "middle-knot-quarters",
+      "regionKind": "decorative"
+    },
+    "region-18": {
+      "logicalRegionId": "small-square-01",
+      "similarShapeGroup": "small-squares",
+      "regionKind": "decorative"
+    },
+    "region-19": {
+      "logicalRegionId": "small-square-02",
+      "similarShapeGroup": "small-squares",
+      "regionKind": "decorative"
+    },
+    "region-20": {
+      "logicalRegionId": "knot-opening-07",
+      "similarShapeGroup": "knot-openings",
+      "regionKind": "decorative"
+    },
+    "region-21": {
+      "logicalRegionId": "middle-knot-right",
+      "similarShapeGroup": "middle-knot-quarters",
+      "regionKind": "decorative"
+    },
+    "region-22": {
+      "logicalRegionId": "middle-knot-left",
+      "similarShapeGroup": "middle-knot-quarters",
+      "regionKind": "decorative"
+    },
+    "region-23": {
+      "logicalRegionId": "inner-block-upper-left",
+      "similarShapeGroup": "inner-blocks",
+      "regionKind": "decorative"
+    },
+    "region-24": {
+      "logicalRegionId": "inner-block-upper-right",
+      "similarShapeGroup": "inner-blocks",
+      "regionKind": "decorative"
+    },
+    "region-25": {
+      "logicalRegionId": "outer-knot-right",
+      "similarShapeGroup": "outer-knot-quarters",
+      "regionKind": "decorative"
+    },
+    "region-26": {
+      "logicalRegionId": "knot-opening-08",
+      "similarShapeGroup": "knot-openings",
+      "regionKind": "decorative"
+    },
+    "region-27": {
+      "logicalRegionId": "middle-knot-right",
+      "similarShapeGroup": "middle-knot-quarters",
+      "regionKind": "decorative"
+    },
+    "region-28": {
+      "logicalRegionId": "outer-knot-left",
+      "similarShapeGroup": "outer-knot-quarters",
+      "regionKind": "decorative"
+    },
+    "region-29": {
+      "logicalRegionId": "small-square-03",
+      "similarShapeGroup": "small-squares",
+      "regionKind": "decorative"
+    },
+    "region-30": {
+      "logicalRegionId": "small-square-04",
+      "similarShapeGroup": "small-squares",
+      "regionKind": "decorative"
+    },
+    "region-31": {
+      "logicalRegionId": "small-square-05",
+      "similarShapeGroup": "small-squares",
+      "regionKind": "decorative"
+    },
+    "region-32": {
+      "logicalRegionId": "small-square-06",
+      "similarShapeGroup": "small-squares",
+      "regionKind": "decorative"
+    },
+    "region-33": {
+      "logicalRegionId": "middle-knot-left",
+      "similarShapeGroup": "middle-knot-quarters",
+      "regionKind": "decorative"
+    },
+    "region-34": {
+      "logicalRegionId": "middle-knot-right",
+      "similarShapeGroup": "middle-knot-quarters",
+      "regionKind": "decorative"
+    },
+    "region-35": {
+      "logicalRegionId": "outer-knot-left",
+      "similarShapeGroup": "outer-knot-quarters",
+      "regionKind": "decorative"
+    },
+    "region-36": {
+      "logicalRegionId": "middle-knot-right",
+      "similarShapeGroup": "middle-knot-quarters",
+      "regionKind": "decorative"
+    },
+    "region-37": {
+      "logicalRegionId": "central-cross",
+      "similarShapeGroup": null,
+      "regionKind": "decorative"
+    },
+    "region-38": {
+      "logicalRegionId": "outer-knot-right",
+      "similarShapeGroup": "outer-knot-quarters",
+      "regionKind": "decorative"
+    },
+    "region-39": {
+      "logicalRegionId": "knot-opening-09",
+      "similarShapeGroup": "knot-openings",
+      "regionKind": "decorative"
+    },
+    "region-40": {
+      "logicalRegionId": "middle-knot-left",
+      "similarShapeGroup": "middle-knot-quarters",
+      "regionKind": "decorative"
+    },
+    "region-41": {
+      "logicalRegionId": "small-square-07",
+      "similarShapeGroup": "small-squares",
+      "regionKind": "decorative"
+    },
+    "region-42": {
+      "logicalRegionId": "small-square-08",
+      "similarShapeGroup": "small-squares",
+      "regionKind": "decorative"
+    },
+    "region-43": {
+      "logicalRegionId": "small-square-09",
+      "similarShapeGroup": "small-squares",
+      "regionKind": "decorative"
+    },
+    "region-44": {
+      "logicalRegionId": "small-square-10",
+      "similarShapeGroup": "small-squares",
+      "regionKind": "decorative"
+    },
+    "region-45": {
+      "logicalRegionId": "middle-knot-right",
+      "similarShapeGroup": "middle-knot-quarters",
+      "regionKind": "decorative"
+    },
+    "region-46": {
+      "logicalRegionId": "middle-knot-right",
+      "similarShapeGroup": "middle-knot-quarters",
+      "regionKind": "decorative"
+    },
+    "region-47": {
+      "logicalRegionId": "inner-block-lower-left",
+      "similarShapeGroup": "inner-blocks",
+      "regionKind": "decorative"
+    },
+    "region-48": {
+      "logicalRegionId": "inner-block-lower-right",
+      "similarShapeGroup": "inner-blocks",
+      "regionKind": "decorative"
+    },
+    "region-49": {
+      "logicalRegionId": "outer-knot-right",
+      "similarShapeGroup": "outer-knot-quarters",
+      "regionKind": "decorative"
+    },
+    "region-50": {
+      "logicalRegionId": "middle-knot-right",
+      "similarShapeGroup": "middle-knot-quarters",
+      "regionKind": "decorative"
+    },
+    "region-51": {
+      "logicalRegionId": "middle-knot-left",
+      "similarShapeGroup": "middle-knot-quarters",
+      "regionKind": "decorative"
+    },
+    "region-52": {
+      "logicalRegionId": "small-square-11",
+      "similarShapeGroup": "small-squares",
+      "regionKind": "decorative"
+    },
+    "region-53": {
+      "logicalRegionId": "small-square-12",
+      "similarShapeGroup": "small-squares",
+      "regionKind": "decorative"
+    },
+    "region-54": {
+      "logicalRegionId": "outer-knot-right",
+      "similarShapeGroup": "outer-knot-quarters",
+      "regionKind": "decorative"
+    },
+    "region-55": {
+      "logicalRegionId": "middle-knot-bottom",
+      "similarShapeGroup": "middle-knot-quarters",
+      "regionKind": "decorative"
+    },
+    "region-56": {
+      "logicalRegionId": "knot-opening-10",
+      "similarShapeGroup": "knot-openings",
+      "regionKind": "decorative"
+    },
+    "region-57": {
+      "logicalRegionId": "middle-knot-bottom",
+      "similarShapeGroup": "middle-knot-quarters",
+      "regionKind": "decorative"
+    },
+    "region-58": {
+      "logicalRegionId": "outer-knot-bottom",
+      "similarShapeGroup": "outer-knot-quarters",
+      "regionKind": "decorative"
+    },
+    "region-59": {
+      "logicalRegionId": "outer-knot-bottom",
+      "similarShapeGroup": "outer-knot-quarters",
+      "regionKind": "decorative"
+    },
+    "region-60": {
+      "logicalRegionId": "middle-knot-bottom",
+      "similarShapeGroup": "middle-knot-quarters",
+      "regionKind": "decorative"
+    },
+    "region-61": {
+      "logicalRegionId": "knot-opening-11",
+      "similarShapeGroup": "knot-openings",
+      "regionKind": "decorative"
+    },
+    "region-62": {
+      "logicalRegionId": "knot-opening-12",
+      "similarShapeGroup": "knot-openings",
+      "regionKind": "decorative"
+    },
+    "region-63": {
+      "logicalRegionId": "middle-knot-bottom",
+      "similarShapeGroup": "middle-knot-quarters",
+      "regionKind": "decorative"
+    },
+    "region-64": {
+      "logicalRegionId": "outer-knot-bottom",
+      "similarShapeGroup": "outer-knot-quarters",
+      "regionKind": "decorative"
+    },
+    "region-65": {
+      "logicalRegionId": "middle-knot-bottom",
+      "similarShapeGroup": "middle-knot-quarters",
+      "regionKind": "decorative"
+    },
+    "region-66": {
+      "logicalRegionId": "outer-knot-bottom",
+      "similarShapeGroup": "outer-knot-quarters",
+      "regionKind": "decorative"
+    },
+    "region-67": {
+      "logicalRegionId": "knot-opening-13",
+      "similarShapeGroup": "knot-openings",
+      "regionKind": "decorative"
+    },
+    "region-68": {
+      "logicalRegionId": "outer-knot-bottom",
+      "similarShapeGroup": "outer-knot-quarters",
+      "regionKind": "decorative"
+    }
+  },
+  "logicalShapes": {
+    "outer-knot-top": [
+      "region-1",
+      "region-3",
+      "region-6",
+      "region-9"
+    ],
+    "knot-opening-01": [
+      "region-2"
+    ],
+    "knot-opening-02": [
+      "region-4"
+    ],
+    "middle-knot-top": [
+      "region-5",
+      "region-7",
+      "region-11",
+      "region-12",
+      "region-15"
+    ],
+    "knot-opening-03": [
+      "region-8"
+    ],
+    "knot-opening-04": [
+      "region-10"
+    ],
+    "knot-opening-05": [
+      "region-13"
+    ],
+    "knot-opening-06": [
+      "region-14"
+    ],
+    "outer-knot-right": [
+      "region-16",
+      "region-25",
+      "region-38",
+      "region-49",
+      "region-54"
+    ],
+    "middle-knot-left": [
+      "region-17",
+      "region-22",
+      "region-33",
+      "region-40",
+      "region-51"
+    ],
+    "small-square-01": [
+      "region-18"
+    ],
+    "small-square-02": [
+      "region-19"
+    ],
+    "knot-opening-07": [
+      "region-20"
+    ],
+    "middle-knot-right": [
+      "region-21",
+      "region-27",
+      "region-34",
+      "region-36",
+      "region-45",
+      "region-46",
+      "region-50"
+    ],
+    "inner-block-upper-left": [
+      "region-23"
+    ],
+    "inner-block-upper-right": [
+      "region-24"
+    ],
+    "knot-opening-08": [
+      "region-26"
+    ],
+    "outer-knot-left": [
+      "region-28",
+      "region-35"
+    ],
+    "small-square-03": [
+      "region-29"
+    ],
+    "small-square-04": [
+      "region-30"
+    ],
+    "small-square-05": [
+      "region-31"
+    ],
+    "small-square-06": [
+      "region-32"
+    ],
+    "central-cross": [
+      "region-37"
+    ],
+    "knot-opening-09": [
+      "region-39"
+    ],
+    "small-square-07": [
+      "region-41"
+    ],
+    "small-square-08": [
+      "region-42"
+    ],
+    "small-square-09": [
+      "region-43"
+    ],
+    "small-square-10": [
+      "region-44"
+    ],
+    "inner-block-lower-left": [
+      "region-47"
+    ],
+    "inner-block-lower-right": [
+      "region-48"
+    ],
+    "small-square-11": [
+      "region-52"
+    ],
+    "small-square-12": [
+      "region-53"
+    ],
+    "middle-knot-bottom": [
+      "region-55",
+      "region-57",
+      "region-60",
+      "region-63",
+      "region-65"
+    ],
+    "knot-opening-10": [
+      "region-56"
+    ],
+    "outer-knot-bottom": [
+      "region-58",
+      "region-59",
+      "region-64",
+      "region-66",
+      "region-68"
+    ],
+    "knot-opening-11": [
+      "region-61"
+    ],
+    "knot-opening-12": [
+      "region-62"
+    ],
+    "knot-opening-13": [
+      "region-67"
+    ]
+  },
+  "similarShapeGroups": {
+    "inner-blocks": [
+      "inner-block-lower-left",
+      "inner-block-lower-right",
+      "inner-block-upper-left",
+      "inner-block-upper-right"
+    ],
+    "small-squares": [
+      "small-square-01",
+      "small-square-02",
+      "small-square-03",
+      "small-square-04",
+      "small-square-05",
+      "small-square-06",
+      "small-square-07",
+      "small-square-08",
+      "small-square-09",
+      "small-square-10",
+      "small-square-11",
+      "small-square-12"
+    ],
+    "knot-openings": [
+      "knot-opening-01",
+      "knot-opening-02",
+      "knot-opening-03",
+      "knot-opening-04",
+      "knot-opening-05",
+      "knot-opening-06",
+      "knot-opening-07",
+      "knot-opening-08",
+      "knot-opening-09",
+      "knot-opening-10",
+      "knot-opening-11",
+      "knot-opening-12",
+      "knot-opening-13"
+    ],
+    "middle-knot-quarters": [
+      "middle-knot-top",
+      "middle-knot-right",
+      "middle-knot-bottom",
+      "middle-knot-left"
+    ],
+    "outer-knot-quarters": [
+      "outer-knot-top",
+      "outer-knot-right",
+      "outer-knot-bottom",
+      "outer-knot-left"
+    ]
+  },
+  "groups": {
+    "inner-blocks": [
+      "inner-block-lower-left",
+      "inner-block-lower-right",
+      "inner-block-upper-left",
+      "inner-block-upper-right"
+    ],
+    "small-squares": [
+      "small-square-01",
+      "small-square-02",
+      "small-square-03",
+      "small-square-04",
+      "small-square-05",
+      "small-square-06",
+      "small-square-07",
+      "small-square-08",
+      "small-square-09",
+      "small-square-10",
+      "small-square-11",
+      "small-square-12"
+    ],
+    "knot-openings": [
+      "knot-opening-01",
+      "knot-opening-02",
+      "knot-opening-03",
+      "knot-opening-04",
+      "knot-opening-05",
+      "knot-opening-06",
+      "knot-opening-07",
+      "knot-opening-08",
+      "knot-opening-09",
+      "knot-opening-10",
+      "knot-opening-11",
+      "knot-opening-12",
+      "knot-opening-13"
+    ],
+    "middle-knot-quarters": [
+      "middle-knot-top",
+      "middle-knot-right",
+      "middle-knot-bottom",
+      "middle-knot-left"
+    ],
+    "outer-knot-quarters": [
+      "outer-knot-top",
+      "outer-knot-right",
+      "outer-knot-bottom",
+      "outer-knot-left"
+    ]
+  }
+}

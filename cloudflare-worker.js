@@ -668,7 +668,12 @@ function productByIdOrSlug(products, value = "") {
   const decoded = decodeURIComponent(String(value || ""));
   const normalized = normalizeSlug(decoded);
   return (
-    products.find((product) => product.id === decoded || product.slug === decoded) ||
+    products.find((product) => product.id === decoded) ||
+    // Copied catalog records can retain another product's stale slug. Prefer
+    // the product whose own name canonically describes the requested route;
+    // only then fall back to stored slug fields for legacy/custom routes.
+    products.find((product) => normalizeSlug(localized(product?.name)) === normalized) ||
+    products.find((product) => product.slug === decoded) ||
     products.find((product) => productSlug(product) === normalized || normalizeSlug(product.id) === normalized) ||
     null
   );
@@ -2437,6 +2442,7 @@ export {
   metaProductFeedCsv,
   metaProductFeedResponse,
   normalizeOrderItems,
+  productByIdOrSlug,
   resolveAirtableProducts
 };
 

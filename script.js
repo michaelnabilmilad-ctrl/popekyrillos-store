@@ -3613,7 +3613,8 @@ function renderProductModal() {
   const productName = escapeHtml(productDisplayName);
   const shareUrl = productShareUrl(product.id);
   const whatsappShareUrl = `https://wa.me/?text=${encodeURIComponent(t("productShareMessage", { name: productDisplayName, url: shareUrl }))}`;
-  const hasColoringGame = isIotaMedalProduct(product) && Boolean(activeImage);
+  const coloringDesignId = catalogColoringDesignId(product);
+  const hasColoringGame = Boolean(coloringDesignId && activeImage);
 
   const media = activeImage
     ? `
@@ -3739,7 +3740,7 @@ function renderProductModal() {
       </div>
       <p class="modal-description">${formatDescriptionHtml(description)}</p>
       ${hasColoringGame ? `
-        <button class="button iota-coloring-launch" type="button" data-coloring-open data-coloring-url="/coloring-game?design=${encodeURIComponent(product.coloringModelId || "")}">
+        <button class="button iota-coloring-launch" type="button" data-coloring-open data-coloring-url="/coloring-game?design=${encodeURIComponent(coloringDesignId)}">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4Z"/></svg>
           ${isEnglish() ? "Play: color this medal" : "العب ولوّن المادلية دي"}
         </button>

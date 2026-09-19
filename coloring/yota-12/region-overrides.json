@@ -1,0 +1,702 @@
+{
+  "modelId": "yota-12",
+  "modelVersion": "yota-12-v2",
+  "regions": {
+    "region-1": {
+      "logicalRegionId": "region-1",
+      "similarShapeGroup": "rotational-shape-01",
+      "geometryType": "rotational-shape-01",
+      "regionKind": "decorative"
+    },
+    "region-2": {
+      "logicalRegionId": "region-2",
+      "similarShapeGroup": "rotational-shape-02",
+      "geometryType": "rotational-shape-02",
+      "regionKind": "decorative"
+    },
+    "region-3": {
+      "logicalRegionId": "region-3",
+      "similarShapeGroup": "rotational-shape-03",
+      "geometryType": "rotational-shape-03",
+      "regionKind": "decorative"
+    },
+    "region-4": {
+      "logicalRegionId": "region-4",
+      "similarShapeGroup": "rotational-shape-04",
+      "geometryType": "rotational-shape-04",
+      "regionKind": "decorative"
+    },
+    "region-5": {
+      "logicalRegionId": "region-5",
+      "similarShapeGroup": "rotational-shape-05",
+      "geometryType": "rotational-shape-05",
+      "regionKind": "decorative"
+    },
+    "region-6": {
+      "logicalRegionId": "region-6",
+      "similarShapeGroup": "rotational-shape-06",
+      "geometryType": "rotational-shape-06",
+      "regionKind": "decorative"
+    },
+    "region-7": {
+      "logicalRegionId": "region-7",
+      "similarShapeGroup": "rotational-shape-07",
+      "geometryType": "rotational-shape-07",
+      "regionKind": "decorative"
+    },
+    "region-8": {
+      "logicalRegionId": "region-8",
+      "similarShapeGroup": "rotational-shape-08",
+      "geometryType": "rotational-shape-08",
+      "regionKind": "decorative"
+    },
+    "region-9": {
+      "logicalRegionId": "region-9",
+      "similarShapeGroup": "rotational-shape-09",
+      "geometryType": "rotational-shape-09",
+      "regionKind": "decorative"
+    },
+    "region-10": {
+      "logicalRegionId": "region-10",
+      "similarShapeGroup": "rotational-shape-10",
+      "geometryType": "rotational-shape-10",
+      "regionKind": "decorative"
+    },
+    "region-11": {
+      "logicalRegionId": "region-11",
+      "similarShapeGroup": "rotational-shape-11",
+      "geometryType": "rotational-shape-11",
+      "regionKind": "decorative"
+    },
+    "region-12": {
+      "logicalRegionId": "region-12",
+      "similarShapeGroup": "rotational-shape-12",
+      "geometryType": "rotational-shape-12",
+      "regionKind": "decorative"
+    },
+    "region-13": {
+      "logicalRegionId": "region-13",
+      "similarShapeGroup": "rotational-shape-13",
+      "geometryType": "rotational-shape-13",
+      "regionKind": "decorative"
+    },
+    "region-14": {
+      "logicalRegionId": "region-14",
+      "similarShapeGroup": "rotational-shape-13",
+      "geometryType": "rotational-shape-13",
+      "regionKind": "decorative"
+    },
+    "region-15": {
+      "logicalRegionId": "region-15",
+      "similarShapeGroup": "rotational-shape-12",
+      "geometryType": "rotational-shape-12",
+      "regionKind": "decorative"
+    },
+    "region-16": {
+      "logicalRegionId": "region-16",
+      "similarShapeGroup": "rotational-shape-14",
+      "geometryType": "rotational-shape-14",
+      "regionKind": "decorative"
+    },
+    "region-17": {
+      "logicalRegionId": "region-17",
+      "similarShapeGroup": "rotational-shape-10",
+      "geometryType": "rotational-shape-10",
+      "regionKind": "decorative"
+    },
+    "region-18": {
+      "logicalRegionId": "region-18",
+      "similarShapeGroup": "rotational-shape-09",
+      "geometryType": "rotational-shape-09",
+      "regionKind": "decorative"
+    },
+    "region-19": {
+      "logicalRegionId": "region-19",
+      "similarShapeGroup": "rotational-shape-07",
+      "geometryType": "rotational-shape-07",
+      "regionKind": "decorative"
+    },
+    "region-20": {
+      "logicalRegionId": "region-20",
+      "similarShapeGroup": "rotational-shape-06",
+      "geometryType": "rotational-shape-06",
+      "regionKind": "decorative"
+    },
+    "region-21": {
+      "logicalRegionId": "region-21",
+      "similarShapeGroup": "rotational-shape-05",
+      "geometryType": "rotational-shape-05",
+      "regionKind": "decorative"
+    },
+    "region-22": {
+      "logicalRegionId": "region-22",
+      "similarShapeGroup": "rotational-shape-11",
+      "geometryType": "rotational-shape-11",
+      "regionKind": "decorative"
+    },
+    "region-23": {
+      "logicalRegionId": "region-23",
+      "similarShapeGroup": "rotational-shape-03",
+      "geometryType": "rotational-shape-03",
+      "regionKind": "decorative"
+    },
+    "region-24": {
+      "logicalRegionId": "region-24",
+      "similarShapeGroup": "rotational-shape-04",
+      "geometryType": "rotational-shape-04",
+      "regionKind": "decorative"
+    },
+    "region-25": {
+      "logicalRegionId": "region-25",
+      "similarShapeGroup": "rotational-shape-14",
+      "geometryType": "rotational-shape-14",
+      "regionKind": "decorative"
+    },
+    "region-26": {
+      "logicalRegionId": "region-26",
+      "similarShapeGroup": null,
+      "geometryType": "center-cross",
+      "regionKind": "decorative"
+    },
+    "region-27": {
+      "logicalRegionId": "region-27",
+      "similarShapeGroup": "rotational-shape-02",
+      "geometryType": "rotational-shape-02",
+      "regionKind": "decorative"
+    },
+    "region-28": {
+      "logicalRegionId": "region-28",
+      "similarShapeGroup": "rotational-shape-08",
+      "geometryType": "rotational-shape-08",
+      "regionKind": "decorative"
+    },
+    "region-29": {
+      "logicalRegionId": "region-29",
+      "similarShapeGroup": "rotational-shape-01",
+      "geometryType": "rotational-shape-01",
+      "regionKind": "decorative"
+    },
+    "region-30": {
+      "logicalRegionId": "region-30",
+      "similarShapeGroup": null,
+      "geometryType": "outer-stepped-frame",
+      "regionKind": "decorative"
+    },
+    "region-31": {
+      "logicalRegionId": "region-31",
+      "similarShapeGroup": "rotational-shape-01",
+      "geometryType": "rotational-shape-01",
+      "regionKind": "decorative"
+    },
+    "region-32": {
+      "logicalRegionId": "region-32",
+      "similarShapeGroup": "rotational-shape-08",
+      "geometryType": "rotational-shape-08",
+      "regionKind": "decorative"
+    },
+    "region-33": {
+      "logicalRegionId": "region-33",
+      "similarShapeGroup": "rotational-shape-02",
+      "geometryType": "rotational-shape-02",
+      "regionKind": "decorative"
+    },
+    "region-34": {
+      "logicalRegionId": "region-34",
+      "similarShapeGroup": "rotational-shape-14",
+      "geometryType": "rotational-shape-14",
+      "regionKind": "decorative"
+    },
+    "region-35": {
+      "logicalRegionId": "region-35",
+      "similarShapeGroup": "rotational-shape-04",
+      "geometryType": "rotational-shape-04",
+      "regionKind": "decorative"
+    },
+    "region-36": {
+      "logicalRegionId": "region-36",
+      "similarShapeGroup": "rotational-shape-11",
+      "geometryType": "rotational-shape-11",
+      "regionKind": "decorative"
+    },
+    "region-37": {
+      "logicalRegionId": "region-37",
+      "similarShapeGroup": "rotational-shape-03",
+      "geometryType": "rotational-shape-03",
+      "regionKind": "decorative"
+    },
+    "region-38": {
+      "logicalRegionId": "region-38",
+      "similarShapeGroup": "rotational-shape-05",
+      "geometryType": "rotational-shape-05",
+      "regionKind": "decorative"
+    },
+    "region-39": {
+      "logicalRegionId": "region-39",
+      "similarShapeGroup": "rotational-shape-06",
+      "geometryType": "rotational-shape-06",
+      "regionKind": "decorative"
+    },
+    "region-40": {
+      "logicalRegionId": "region-40",
+      "similarShapeGroup": "rotational-shape-07",
+      "geometryType": "rotational-shape-07",
+      "regionKind": "decorative"
+    },
+    "region-41": {
+      "logicalRegionId": "region-41",
+      "similarShapeGroup": "rotational-shape-09",
+      "geometryType": "rotational-shape-09",
+      "regionKind": "decorative"
+    },
+    "region-42": {
+      "logicalRegionId": "region-42",
+      "similarShapeGroup": "rotational-shape-10",
+      "geometryType": "rotational-shape-10",
+      "regionKind": "decorative"
+    },
+    "region-43": {
+      "logicalRegionId": "region-43",
+      "similarShapeGroup": "rotational-shape-14",
+      "geometryType": "rotational-shape-14",
+      "regionKind": "decorative"
+    },
+    "region-44": {
+      "logicalRegionId": "region-44",
+      "similarShapeGroup": "rotational-shape-12",
+      "geometryType": "rotational-shape-12",
+      "regionKind": "decorative"
+    },
+    "region-45": {
+      "logicalRegionId": "region-45",
+      "similarShapeGroup": "rotational-shape-13",
+      "geometryType": "rotational-shape-13",
+      "regionKind": "decorative"
+    },
+    "region-46": {
+      "logicalRegionId": "region-46",
+      "similarShapeGroup": "rotational-shape-13",
+      "geometryType": "rotational-shape-13",
+      "regionKind": "decorative"
+    },
+    "region-47": {
+      "logicalRegionId": "region-47",
+      "similarShapeGroup": "rotational-shape-12",
+      "geometryType": "rotational-shape-12",
+      "regionKind": "decorative"
+    },
+    "region-48": {
+      "logicalRegionId": "region-48",
+      "similarShapeGroup": "rotational-shape-11",
+      "geometryType": "rotational-shape-11",
+      "regionKind": "decorative"
+    },
+    "region-49": {
+      "logicalRegionId": "region-49",
+      "similarShapeGroup": "rotational-shape-10",
+      "geometryType": "rotational-shape-10",
+      "regionKind": "decorative"
+    },
+    "region-50": {
+      "logicalRegionId": "region-50",
+      "similarShapeGroup": "rotational-shape-09",
+      "geometryType": "rotational-shape-09",
+      "regionKind": "decorative"
+    },
+    "region-51": {
+      "logicalRegionId": "region-51",
+      "similarShapeGroup": "rotational-shape-08",
+      "geometryType": "rotational-shape-08",
+      "regionKind": "decorative"
+    },
+    "region-52": {
+      "logicalRegionId": "region-52",
+      "similarShapeGroup": "rotational-shape-07",
+      "geometryType": "rotational-shape-07",
+      "regionKind": "decorative"
+    },
+    "region-53": {
+      "logicalRegionId": "region-53",
+      "similarShapeGroup": "rotational-shape-06",
+      "geometryType": "rotational-shape-06",
+      "regionKind": "decorative"
+    },
+    "region-54": {
+      "logicalRegionId": "region-54",
+      "similarShapeGroup": "rotational-shape-05",
+      "geometryType": "rotational-shape-05",
+      "regionKind": "decorative"
+    },
+    "region-55": {
+      "logicalRegionId": "region-55",
+      "similarShapeGroup": "rotational-shape-04",
+      "geometryType": "rotational-shape-04",
+      "regionKind": "decorative"
+    },
+    "region-56": {
+      "logicalRegionId": "region-56",
+      "similarShapeGroup": "rotational-shape-03",
+      "geometryType": "rotational-shape-03",
+      "regionKind": "decorative"
+    },
+    "region-57": {
+      "logicalRegionId": "region-57",
+      "similarShapeGroup": "rotational-shape-02",
+      "geometryType": "rotational-shape-02",
+      "regionKind": "decorative"
+    },
+    "region-58": {
+      "logicalRegionId": "region-58",
+      "similarShapeGroup": "rotational-shape-01",
+      "geometryType": "rotational-shape-01",
+      "regionKind": "decorative"
+    }
+  },
+  "logicalShapes": {
+    "region-1": [
+      "region-1"
+    ],
+    "region-2": [
+      "region-2"
+    ],
+    "region-3": [
+      "region-3"
+    ],
+    "region-4": [
+      "region-4"
+    ],
+    "region-5": [
+      "region-5"
+    ],
+    "region-6": [
+      "region-6"
+    ],
+    "region-7": [
+      "region-7"
+    ],
+    "region-8": [
+      "region-8"
+    ],
+    "region-9": [
+      "region-9"
+    ],
+    "region-10": [
+      "region-10"
+    ],
+    "region-11": [
+      "region-11"
+    ],
+    "region-12": [
+      "region-12"
+    ],
+    "region-13": [
+      "region-13"
+    ],
+    "region-14": [
+      "region-14"
+    ],
+    "region-15": [
+      "region-15"
+    ],
+    "region-16": [
+      "region-16"
+    ],
+    "region-17": [
+      "region-17"
+    ],
+    "region-18": [
+      "region-18"
+    ],
+    "region-19": [
+      "region-19"
+    ],
+    "region-20": [
+      "region-20"
+    ],
+    "region-21": [
+      "region-21"
+    ],
+    "region-22": [
+      "region-22"
+    ],
+    "region-23": [
+      "region-23"
+    ],
+    "region-24": [
+      "region-24"
+    ],
+    "region-25": [
+      "region-25"
+    ],
+    "region-26": [
+      "region-26"
+    ],
+    "region-27": [
+      "region-27"
+    ],
+    "region-28": [
+      "region-28"
+    ],
+    "region-29": [
+      "region-29"
+    ],
+    "region-30": [
+      "region-30"
+    ],
+    "region-31": [
+      "region-31"
+    ],
+    "region-32": [
+      "region-32"
+    ],
+    "region-33": [
+      "region-33"
+    ],
+    "region-34": [
+      "region-34"
+    ],
+    "region-35": [
+      "region-35"
+    ],
+    "region-36": [
+      "region-36"
+    ],
+    "region-37": [
+      "region-37"
+    ],
+    "region-38": [
+      "region-38"
+    ],
+    "region-39": [
+      "region-39"
+    ],
+    "region-40": [
+      "region-40"
+    ],
+    "region-41": [
+      "region-41"
+    ],
+    "region-42": [
+      "region-42"
+    ],
+    "region-43": [
+      "region-43"
+    ],
+    "region-44": [
+      "region-44"
+    ],
+    "region-45": [
+      "region-45"
+    ],
+    "region-46": [
+      "region-46"
+    ],
+    "region-47": [
+      "region-47"
+    ],
+    "region-48": [
+      "region-48"
+    ],
+    "region-49": [
+      "region-49"
+    ],
+    "region-50": [
+      "region-50"
+    ],
+    "region-51": [
+      "region-51"
+    ],
+    "region-52": [
+      "region-52"
+    ],
+    "region-53": [
+      "region-53"
+    ],
+    "region-54": [
+      "region-54"
+    ],
+    "region-55": [
+      "region-55"
+    ],
+    "region-56": [
+      "region-56"
+    ],
+    "region-57": [
+      "region-57"
+    ],
+    "region-58": [
+      "region-58"
+    ]
+  },
+  "similarShapeGroups": {
+    "rotational-shape-01": [
+      "region-1",
+      "region-29",
+      "region-58",
+      "region-31"
+    ],
+    "rotational-shape-02": [
+      "region-2",
+      "region-33",
+      "region-57",
+      "region-27"
+    ],
+    "rotational-shape-03": [
+      "region-3",
+      "region-23",
+      "region-56",
+      "region-37"
+    ],
+    "rotational-shape-04": [
+      "region-4",
+      "region-35",
+      "region-55",
+      "region-24"
+    ],
+    "rotational-shape-05": [
+      "region-5",
+      "region-21",
+      "region-54",
+      "region-38"
+    ],
+    "rotational-shape-06": [
+      "region-6",
+      "region-39",
+      "region-53",
+      "region-20"
+    ],
+    "rotational-shape-07": [
+      "region-7",
+      "region-19",
+      "region-52",
+      "region-40"
+    ],
+    "rotational-shape-08": [
+      "region-8",
+      "region-32",
+      "region-51",
+      "region-28"
+    ],
+    "rotational-shape-09": [
+      "region-9",
+      "region-41",
+      "region-50",
+      "region-18"
+    ],
+    "rotational-shape-10": [
+      "region-10",
+      "region-17",
+      "region-49",
+      "region-42"
+    ],
+    "rotational-shape-11": [
+      "region-11",
+      "region-36",
+      "region-48",
+      "region-22"
+    ],
+    "rotational-shape-12": [
+      "region-12",
+      "region-44",
+      "region-47",
+      "region-15"
+    ],
+    "rotational-shape-13": [
+      "region-13",
+      "region-14",
+      "region-46",
+      "region-45"
+    ],
+    "rotational-shape-14": [
+      "region-16",
+      "region-34",
+      "region-43",
+      "region-25"
+    ]
+  },
+  "groups": {
+    "rotational-shape-01": [
+      "region-1",
+      "region-29",
+      "region-58",
+      "region-31"
+    ],
+    "rotational-shape-02": [
+      "region-2",
+      "region-33",
+      "region-57",
+      "region-27"
+    ],
+    "rotational-shape-03": [
+      "region-3",
+      "region-23",
+      "region-56",
+      "region-37"
+    ],
+    "rotational-shape-04": [
+      "region-4",
+      "region-35",
+      "region-55",
+      "region-24"
+    ],
+    "rotational-shape-05": [
+      "region-5",
+      "region-21",
+      "region-54",
+      "region-38"
+    ],
+    "rotational-shape-06": [
+      "region-6",
+      "region-39",
+      "region-53",
+      "region-20"
+    ],
+    "rotational-shape-07": [
+      "region-7",
+      "region-19",
+      "region-52",
+      "region-40"
+    ],
+    "rotational-shape-08": [
+      "region-8",
+      "region-32",
+      "region-51",
+      "region-28"
+    ],
+    "rotational-shape-09": [
+      "region-9",
+      "region-41",
+      "region-50",
+      "region-18"
+    ],
+    "rotational-shape-10": [
+      "region-10",
+      "region-17",
+      "region-49",
+      "region-42"
+    ],
+    "rotational-shape-11": [
+      "region-11",
+      "region-36",
+      "region-48",
+      "region-22"
+    ],
+    "rotational-shape-12": [
+      "region-12",
+      "region-44",
+      "region-47",
+      "region-15"
+    ],
+    "rotational-shape-13": [
+      "region-13",
+      "region-14",
+      "region-46",
+      "region-45"
+    ],
+    "rotational-shape-14": [
+      "region-16",
+      "region-34",
+      "region-43",
+      "region-25"
+    ]
+  }
+}

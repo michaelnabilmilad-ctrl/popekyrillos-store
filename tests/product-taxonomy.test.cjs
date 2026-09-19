@@ -130,6 +130,19 @@ test("Yota medallions retain a stable Crosses child ID and product assignments",
   assert.ok(medallions.every((product) => product.subCategory === "yota-medallions" && product.subcategory === "yota-medallions"));
 });
 
+test("Yota medallions retain a stable Crosses child ID and product assignments", () => {
+  const taxonomy = loadTaxonomy();
+  const subcategory = taxonomy.subcategoryById.get("yota-medallions");
+  assert.equal(subcategory?.name, "الميداليات");
+  assert.equal(subcategory?.mainId, "crosses");
+
+  const products = JSON.parse(fs.readFileSync("products.json", "utf8"));
+  const medallions = products.filter((product) => /^صليب يوتا مادلي[ةه] موديل \d+$/.test(product.name || ""));
+  assert.equal(medallions.length, 13);
+  assert.ok(medallions.every((product) => product.mainCategory === "crosses"));
+  assert.ok(medallions.every((product) => product.subCategory === "yota-medallions" && product.subcategory === "yota-medallions"));
+});
+
 test("legacy gifts URL maps to occasions and tote bag card uses the stable meeting-gifts ID", () => {
   const taxonomy = loadTaxonomy();
   assert.equal(taxonomy.categoryById.get("occasions-service").subcategories.find((item) => item.id === "meeting-gifts").name, "توتي باج وشنط");

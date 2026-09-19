@@ -1,0 +1,88 @@
+{
+  "modelId": "yota-06",
+  "modelVersion": "yota-06-v2",
+  "regions": {
+    "region-1": {
+      "logicalRegionId": "outer-top-cross",
+      "similarShapeGroup": "outer-crosses",
+      "regionKind": "decorative"
+    },
+    "region-2": {
+      "logicalRegionId": "outer-left-cross",
+      "similarShapeGroup": "outer-crosses",
+      "regionKind": "decorative"
+    },
+    "region-3": {
+      "logicalRegionId": "central-cross",
+      "similarShapeGroup": null,
+      "regionKind": "decorative"
+    },
+    "region-4": {
+      "logicalRegionId": "outer-right-cross",
+      "similarShapeGroup": "outer-crosses",
+      "regionKind": "decorative"
+    },
+    "region-5": {
+      "logicalRegionId": "stem-small-upper",
+      "similarShapeGroup": "stem-small-crosses",
+      "regionKind": "decorative"
+    },
+    "region-6": {
+      "logicalRegionId": "stem-small-lower",
+      "similarShapeGroup": "stem-small-crosses",
+      "regionKind": "decorative"
+    },
+    "region-7": {
+      "logicalRegionId": "outer-bottom-cross",
+      "similarShapeGroup": "outer-crosses",
+      "regionKind": "decorative"
+    }
+  },
+  "logicalShapes": {
+    "outer-top-cross": [
+      "region-1"
+    ],
+    "outer-left-cross": [
+      "region-2"
+    ],
+    "central-cross": [
+      "region-3"
+    ],
+    "outer-right-cross": [
+      "region-4"
+    ],
+    "stem-small-upper": [
+      "region-5"
+    ],
+    "stem-small-lower": [
+      "region-6"
+    ],
+    "outer-bottom-cross": [
+      "region-7"
+    ]
+  },
+  "similarShapeGroups": {
+    "outer-crosses": [
+      "outer-top-cross",
+      "outer-left-cross",
+      "outer-right-cross",
+      "outer-bottom-cross"
+    ],
+    "stem-small-crosses": [
+      "stem-small-upper",
+      "stem-small-lower"
+    ]
+  },
+  "groups": {
+    "outer-crosses": [
+      "outer-top-cross",
+      "outer-left-cross",
+      "outer-right-cross",
+      "outer-bottom-cross"
+    ],
+    "stem-small-crosses": [
+      "stem-small-upper",
+      "stem-small-lower"
+    ]
+  }
+}

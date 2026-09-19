@@ -1013,7 +1013,7 @@ function clearCheckoutRequestId(requestId) {
 }
 
 function completedOrderId(data = {}) {
-  return data.recordId || data.orderId || data.id || "";
+  return data.orderId || data.publicOrderToken || "";
 }
 
 function assertCompletedOrder(data, expectedDetailCount) {
@@ -1161,8 +1161,9 @@ function bindPaymentPage() {
           completedEntries.forEach((item) => trackCheckoutEvent("order_success", { ...checkoutAnalyticsItem(item), eventId: requestId }));
           if (status) status.textContent = t("orderSubmitReady");
           window.open(whatsappUrl, "_blank", "noopener");
-          const publicOrderId = orderResult.requestId || completedOrderId(orderResult);
-          window.location.href = `/order-success?orderId=${encodeURIComponent(publicOrderId)}`;
+          const publicOrderId = completedOrderId(orderResult);
+          const trackingToken = /^[a-f0-9]{64}$/.test(orderResult.publicOrderToken || "") ? orderResult.publicOrderToken : "";
+          window.location.href = `/order-success?orderId=${encodeURIComponent(publicOrderId)}${trackingToken ? `#${trackingToken}` : ""}`;
         } catch (error) {
           const errorMessage = error?.message || t("orderSubmitFailed");
           trackCheckoutEvent("order_failed", { eventId: requestId, errorType: "checkout", errorMessage, paymentMethod: method });

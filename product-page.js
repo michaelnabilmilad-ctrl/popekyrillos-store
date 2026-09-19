@@ -306,10 +306,10 @@ function coloringMarkup() {
   if (!hasColoringGame) return "";
   const colors = yotaColors.filter((color) => color.available !== false);
   return `
-    <button class="button product-coloring-launch" type="button" data-coloring-open>✏️ العب ولوّن المادلية دي</button>
-    <section class="product-coloring-game" data-coloring-game hidden>
+    <button class="button product-coloring-launch" type="button" data-coloring-open data-coloring-model-id="${escapeHtml(product.coloringModelId || "")}">✏️ العب ولوّن المادلية دي</button>
+    <section class="product-coloring-game" data-coloring-game data-selected-coloring-model-id="${escapeHtml(product.coloringModelId || "")}" data-loaded-coloring-model-id="" hidden>
       <div class="product-coloring-heading">
-        <div><strong>لوّن مادلية اليوتا</strong><small>اختار لون واضغط داخل أي جزء لتلوينه بالكامل</small></div>
+        <div><strong>لوّن مادلية اليوتا</strong><small>اختار لون واضغط داخل أي جزء لتلوينه بالكامل</small><small data-testid="loaded-coloring-model-id">ID: ${escapeHtml(product.coloringModelId || "")}</small></div>
         <button type="button" data-coloring-close aria-label="إغلاق لعبة التلوين">×</button>
       </div>
       <div class="product-coloring-stage">
@@ -486,6 +486,7 @@ function initializeColoringGame(panel) {
       throw new Error(`Coloring model mismatch: product=${configuredModelId}, regions=${regionModelId}`);
     }
     const activeModelId = regionModelId || configuredModelId;
+    panel.dataset.loadedColoringModelId = activeModelId;
     const activeModelVersion = String(regionData.modelVersion || product.coloringModelVersion || "unversioned");
     coloringStorageKey = `yota-coloring-design-${activeModelId}:${activeModelVersion}:${product.id || "product"}`;
     coloringStorageVersion = activeModelVersion;
@@ -662,7 +663,7 @@ function initializeColoringGame(panel) {
     let activePaint = yotaColors.find((color) => color.available !== false) || {
       id: "red",
       name: "أحمر",
-      hex: "#D00101"
+      hex: "#C20000"
     };
     let erasing = false;
     let highlightedRegionId = "";

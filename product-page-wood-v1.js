@@ -496,7 +496,7 @@ function initializeColoringGame(panel) {
     let activePaint = yotaColors.find((color) => color.available !== false) || {
       id: "red",
       name: "أحمر",
-      hex: "#D00101"
+      hex: "#C20000"
     };
     let erasing = false;
     let highlightedRegionId = "";

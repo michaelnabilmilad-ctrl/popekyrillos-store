@@ -1,0 +1,244 @@
+{
+  "modelId": "yota-07",
+  "modelName": "ميدالية يوتا 7",
+  "modelVersion": "yota-07-v4",
+  "paintMode": "replace-source-color",
+  "totalRegions": 9,
+  "regions": [
+    {
+      "id": "region-1",
+      "regionId": "region-1",
+      "maskColor": [
+        1,
+        0,
+        197
+      ],
+      "pixelCount": 8231,
+      "centerX": 618,
+      "centerY": 682,
+      "bounds": {
+        "x": 547,
+        "y": 611,
+        "width": 143,
+        "height": 143
+      },
+      "sampleX": 618,
+      "sampleY": 682,
+      "regionKind": "decorative",
+      "logicalRegionId": "outer-top-cross",
+      "shapeGroup": "outer-crosses",
+      "geometryType": "enclosed-decoration",
+      "enabled": true,
+      "label": "outer-top-cross"
+    },
+    {
+      "id": "region-2",
+      "regionId": "region-2",
+      "maskColor": [
+        2,
+        0,
+        197
+      ],
+      "pixelCount": 8447,
+      "centerX": 432,
+      "centerY": 866,
+      "bounds": {
+        "x": 358,
+        "y": 793,
+        "width": 143,
+        "height": 145
+      },
+      "sampleX": 430,
+      "sampleY": 865,
+      "regionKind": "decorative",
+      "logicalRegionId": "outer-left-cross",
+      "shapeGroup": "outer-crosses",
+      "geometryType": "enclosed-decoration",
+      "enabled": true,
+      "label": "outer-left-cross"
+    },
+    {
+      "id": "region-3",
+      "regionId": "region-3",
+      "maskColor": [
+        3,
+        0,
+        197
+      ],
+      "pixelCount": 8556,
+      "centerX": 803,
+      "centerY": 865,
+      "bounds": {
+        "x": 734,
+        "y": 793,
+        "width": 144,
+        "height": 144
+      },
+      "sampleX": 804,
+      "sampleY": 865,
+      "regionKind": "decorative",
+      "logicalRegionId": "outer-right-cross",
+      "shapeGroup": "outer-crosses",
+      "geometryType": "enclosed-decoration",
+      "enabled": true,
+      "label": "outer-right-cross"
+    },
+    {
+      "id": "region-4",
+      "regionId": "region-4",
+      "maskColor": [
+        4,
+        0,
+        197
+      ],
+      "pixelCount": 8764,
+      "centerX": 617,
+      "centerY": 1054,
+      "bounds": {
+        "x": 547,
+        "y": 979,
+        "width": 144,
+        "height": 148
+      },
+      "sampleX": 618,
+      "sampleY": 1052,
+      "regionKind": "decorative",
+      "logicalRegionId": "outer-bottom-cross",
+      "shapeGroup": "outer-crosses",
+      "geometryType": "enclosed-decoration",
+      "enabled": true,
+      "label": "outer-bottom-cross"
+    },
+    {
+      "id": "region-5",
+      "regionId": "region-5",
+      "maskColor": [
+        5,
+        0,
+        197
+      ],
+      "pixelCount": 2165,
+      "centerX": 616,
+      "centerY": 805,
+      "bounds": {
+        "x": 584,
+        "y": 776,
+        "width": 66,
+        "height": 57
+      },
+      "sampleX": 617,
+      "sampleY": 803,
+      "regionKind": "decorative",
+      "logicalRegionId": "center-top-star",
+      "shapeGroup": "center-cardinal-stars",
+      "geometryType": "enclosed-decoration",
+      "enabled": true,
+      "label": "center-top-star"
+    },
+    {
+      "id": "region-6",
+      "regionId": "region-6",
+      "maskColor": [
+        6,
+        0,
+        197
+      ],
+      "pixelCount": 1982,
+      "centerX": 555,
+      "centerY": 864,
+      "bounds": {
+        "x": 526,
+        "y": 832,
+        "width": 54,
+        "height": 67
+      },
+      "sampleX": 554,
+      "sampleY": 864,
+      "regionKind": "decorative",
+      "logicalRegionId": "center-left-star",
+      "shapeGroup": "center-cardinal-stars",
+      "geometryType": "enclosed-decoration",
+      "enabled": true,
+      "label": "center-left-star"
+    },
+    {
+      "id": "region-7",
+      "regionId": "region-7",
+      "maskColor": [
+        7,
+        0,
+        197
+      ],
+      "pixelCount": 4624,
+      "centerX": 618,
+      "centerY": 861,
+      "bounds": {
+        "x": 575,
+        "y": 823,
+        "width": 83,
+        "height": 83
+      },
+      "sampleX": 618,
+      "sampleY": 865,
+      "regionKind": "decorative",
+      "logicalRegionId": "center-core",
+      "shapeGroup": null,
+      "geometryType": "enclosed-decoration",
+      "enabled": true,
+      "label": "center-core"
+    },
+    {
+      "id": "region-8",
+      "regionId": "region-8",
+      "maskColor": [
+        8,
+        0,
+        197
+      ],
+      "pixelCount": 2077,
+      "centerX": 677,
+      "centerY": 867,
+      "bounds": {
+        "x": 646,
+        "y": 831,
+        "width": 62,
+        "height": 68
+      },
+      "sampleX": 679,
+      "sampleY": 865,
+      "regionKind": "decorative",
+      "logicalRegionId": "center-right-star",
+      "shapeGroup": "center-cardinal-stars",
+      "geometryType": "enclosed-decoration",
+      "enabled": true,
+      "label": "center-right-star"
+    },
+    {
+      "id": "region-9",
+      "regionId": "region-9",
+      "maskColor": [
+        9,
+        0,
+        197
+      ],
+      "pixelCount": 2412,
+      "centerX": 612,
+      "centerY": 921,
+      "bounds": {
+        "x": 575,
+        "y": 888,
+        "width": 76,
+        "height": 69
+      },
+      "sampleX": 617,
+      "sampleY": 927,
+      "regionKind": "decorative",
+      "logicalRegionId": "center-bottom-star",
+      "shapeGroup": "center-cardinal-stars",
+      "geometryType": "enclosed-decoration",
+      "enabled": true,
+      "label": "center-bottom-star"
+    }
+  ],
+  "shapeGroups": []
+}

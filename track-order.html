@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="referrer" content="no-referrer">
+  <title>متابعة طلبك | مكتبة البابا كيرلس</title>
+  <link rel="stylesheet" href="/customer-orders.css?v=1">
+  <script src="/customer-orders.js?v=1" defer></script>
+</head>
+<body>
+  <header class="store-header"><a href="/" class="brand">مكتبة البابا كيرلس<span>كتب ومستلزمات كنسية</span></a><a href="/">العودة للمتجر ←</a></header>
+  <main class="tracking-shell lookup-shell">
+    <p class="eyebrow">طلباتك في مكان واحد</p>
+    <h1>متابعة طلبك</h1>
+    <p class="intro">راجع تفاصيل طلبك وحالته باستخدام رقم الطلب والموبايل المسجّل وقت الشراء.</p>
+    <section class="panel">
+      <form data-lookup>
+        <label for="order-number">رقم الطلب</label>
+        <input id="order-number" name="orderNumber" inputmode="numeric" maxlength="12" placeholder="مثال: 101" required autocomplete="off" dir="ltr">
+        <label for="order-phone">رقم الموبايل المستخدم في الطلب</label>
+        <input id="order-phone" name="phone" type="tel" maxlength="24" placeholder="01012345678" required autocomplete="tel" dir="ltr">
+        <button class="primary" type="submit">عرض الطلب</button>
+        <p class="message" data-message role="status" aria-live="polite"></p>
+      </form>
+    </section>
+    <p class="help">رقم الطلب موجود في صفحة تأكيد الطلب. لو محتاج مساعدة، <a href="/#contact">تواصل معنا</a>.</p>
+    <noscript>يرجى تفعيل JavaScript لمتابعة طلبك.</noscript>
+  </main>
+  <footer>مكتبة البابا كيرلس · شكرًا لثقتك بنا</footer>
+</body>
+</html>

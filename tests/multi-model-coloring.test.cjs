@@ -97,7 +97,7 @@ test("yota-02 metadata defines raw regions, logical shapes, and similar-shape gr
   const overrides = JSON.parse(fs.readFileSync(path.join(directory, "region-overrides.json"), "utf8"));
   const validIds = new Set(data.regions.map((region) => region.regionId || region.id));
   assert.equal(overrides.modelId, "yota-02");
-  assert.equal(overrides.modelVersion, "yota-02-v14");
+  assert.equal(overrides.modelVersion, "yota-02-v15");
   Object.entries(overrides.groups).forEach(([group, ids]) => {
     assert.equal(ids.length, new Set(ids).size, `${group} contains duplicate IDs`);
     ids.forEach((id) => {
@@ -108,7 +108,7 @@ test("yota-02 metadata defines raw regions, logical shapes, and similar-shape gr
     assert.ok(validIds.has(id), `${id} override does not exist`);
     assert.equal(typeof metadata, "object");
   });
-  assert.equal(data.modelVersion, "yota-02-v14");
+  assert.equal(data.modelVersion, "yota-02-v15");
   assert.equal(data.totalRegions, 50);
   assert.deepEqual(data.shapeGroups, []);
   assert.ok(data.regions.every((region) => region.shapeGroup === null));
@@ -231,21 +231,17 @@ test("all website Yota medallions are represented without sharing masks", async 
   const products = (Array.isArray(productsData) ? productsData : productsData.products || productsData.items || [])
     .filter((product) => /يوتا.*مادلية|مادلية.*يوتا/i.test(String(product.name || "")));
   const registry = await import(`${pathToFileURL(path.join(root, "coloringDesigns.js")).href}?audit=${Date.now()}`);
-  assert.equal(products.length, 7);
-  assert.equal(registry.COLORING_DESIGNS.length, products.length);
-  assert.deepEqual(
-    new Set(registry.COLORING_DESIGNS.map((design) => design.productId)),
-    new Set(products.map((product) => product.id))
-  );
+  assert.equal(products.length, 13);
+  assert.equal(registry.COLORING_DESIGNS.length, 13);
+  assert.deepEqual(new Set(registry.COLORING_DESIGNS.slice(0, 13).map((design) => design.productId)), new Set(products.map((product) => product.id)));
 
   const ready = registry.COLORING_DESIGNS.filter((design) => design.enabled !== false);
   const pending = registry.COLORING_DESIGNS.filter((design) => design.enabled === false);
-  assert.deepEqual(ready.map((design) => design.id), ["yota-01", "yota-02", "yota-03"]);
-  assert.deepEqual(pending.map((design) => design.id), ["yota-04", "yota-05", "yota-06", "yota-07"]);
+  assert.deepEqual(ready.map((design) => design.id), ["yota-01", "yota-02", "yota-03", "yota-04", "yota-05", "yota-06", "yota-07", "yota-08", "yota-09", "yota-10", "yota-11", "yota-12", "yota-13"]);
+  assert.deepEqual(pending.map((design) => design.id), []);
   assert.equal(new Set(ready.map((design) => design.regionsPath)).size, ready.length);
   pending.forEach((design) => {
-    assert.equal(design.status, "missing-region-assets");
-    assert.ok(design.missingAssets.includes("regions.png"));
+    assert.equal(design.status, "needs-visual-review");
     assert.equal(registry.coloringDesignForProduct({ id: design.productId }), null);
   });
 });
@@ -266,8 +262,8 @@ test("current product ID overrides stale copied coloring configuration", async (
     ...staleModelOneFields
   });
   assert.equal(modelTwo.coloringModelId, "yota-02");
-  assert.match(modelTwo.coloringBaseImageUrl, /^\/coloring\/yota-02\/base\.png\?v=yota-02-v14$/);
-  assert.match(modelTwo.coloringMaskUrl, /^\/coloring\/yota-02\/regions\.png\?v=yota-02-v14$/);
+  assert.match(modelTwo.coloringBaseImageUrl, /^\/coloring\/yota-02\/base\.png\?v=yota-02-v15$/);
+  assert.match(modelTwo.coloringMaskUrl, /^\/coloring\/yota-02\/regions\.png\?v=yota-02-v15$/);
   assert.equal(modelTwo.coloringRegions, undefined);
 
   const modelThree = registry.withYotaColoringConfig({
@@ -275,8 +271,8 @@ test("current product ID overrides stale copied coloring configuration", async (
     ...staleModelOneFields
   });
   assert.equal(modelThree.coloringModelId, "yota-03");
-  assert.match(modelThree.coloringBaseImageUrl, /^\/coloring\/yota-03\/base\.png\?v=yota-03-v7$/);
-  assert.match(modelThree.coloringMaskUrl, /^\/coloring\/yota-03\/regions\.png\?v=yota-03-v7$/);
+  assert.match(modelThree.coloringBaseImageUrl, /^\/coloring\/yota-03\/base\.png\?v=yota-03-v9$/);
+  assert.match(modelThree.coloringMaskUrl, /^\/coloring\/yota-03\/regions\.png\?v=yota-03-v9$/);
 });
 
 test("model 3 colors decorative fills only", () => {
@@ -284,7 +280,7 @@ test("model 3 colors decorative fills only", () => {
   const data = JSON.parse(fs.readFileSync(path.join(directory, "regions.json"), "utf8"));
   const overrides = JSON.parse(fs.readFileSync(path.join(directory, "region-overrides.json"), "utf8"));
   const source = fs.readFileSync(path.join(root, "product-page.js"), "utf8");
-  assert.equal(data.modelVersion, "yota-03-v7");
+  assert.equal(data.modelVersion, "yota-03-v9");
   assert.equal(data.paintMode, "replace-source-color");
   assert.equal(data.ignoreNeutralWatermark, undefined);
   assert.equal(data.totalRegions, 13);
