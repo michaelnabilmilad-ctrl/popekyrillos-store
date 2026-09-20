@@ -31,7 +31,7 @@
     <link rel="preload" href="/assets/optimized/hero-papa-kyrillos-products.webp" as="image" type="image/webp" media="(max-width: 720px)" fetchpriority="high" />
     <link rel="preload" href="/assets/optimized/hero-papa-kyrillos-products.webp" as="image" type="image/webp" media="(min-width: 721px)" fetchpriority="high" />
     <link rel="preload" href="/assets/fonts/ge-ss-two-bold.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="stylesheet" href="/styles.min.css?v=asset-a89c8c312015" />
+    <link rel="stylesheet" href="/styles.min.css?v=asset-df8b98fb1642" />
     <script>document.documentElement.classList.toggle("is-home-route", /^\/(?:index\.html)?$/.test(location.pathname));document.documentElement.classList.toggle("is-category-route", /^\/category(?:\/|$)/.test(location.pathname));</script>
   </head>
   <body dir="rtl">
@@ -199,7 +199,19 @@
       </section>
 
       <section class="section catalog" id="catalog" aria-label="منتجات مختارة للطلب">
-        <div class="catalog-filters" data-catalog-filters>
+        <header class="mobile-catalog-heading" data-mobile-catalog-heading hidden>
+          <a href="/">الرئيسية</a><span aria-hidden="true">/</span><small data-mobile-catalog-breadcrumb>المنتجات</small>
+          <h1 data-mobile-catalog-title>المنتجات</h1>
+        </header>
+        <button class="mobile-filter-toggle" type="button" data-mobile-filter-toggle aria-expanded="false" aria-controls="catalog-mobile-filters">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M7 12h10M10 18h4" /></svg>
+          <span>فلترة وترتيب</span>
+        </button>
+        <div class="catalog-filters" id="catalog-mobile-filters" data-catalog-filters>
+          <div class="mobile-filter-head">
+            <strong>فلترة وترتيب المنتجات</strong>
+            <button type="button" data-mobile-filter-close aria-label="إغلاق الفلاتر">×</button>
+          </div>
           <div class="catalog-filter-group">
             <label for="catalog-main-filter" data-filter-main-label>القسم الرئيسي</label>
             <select id="catalog-main-filter" data-main-filter>
@@ -230,6 +242,7 @@
             </select>
           </div>
           <button class="catalog-filter-reset" type="button" data-reset-catalog-filters>مسح الفلاتر</button>
+          <button class="button primary mobile-filter-apply" type="button" data-mobile-filter-apply>عرض النتائج</button>
         </div>
         <div class="subcategory-card-grid" data-subcategory-cards hidden></div>
         <div class="product-grid" data-products aria-busy="true">
@@ -370,6 +383,15 @@
           </svg>
         </button>
       </div>
+      <nav class="mobile-drawer-links" aria-label="روابط المتجر">
+        <a href="/">الرئيسية</a>
+        <a href="#catalog">جميع المنتجات</a>
+        <a href="#categories">الأقسام</a>
+        <a href="#services">الخدمات</a>
+        <button type="button" data-mobile-account>حسابي</button>
+        <a href="/track-order">تتبع الطلب</a>
+        <a href="#contact">التواصل معنا</a>
+      </nav>
       <div class="shop-menu-list" data-shop-menu-list></div>
     </aside>
 
@@ -517,12 +539,20 @@
     </section>
     <div class="scrim" data-scrim></div>
 
+    <nav class="mobile-bottom-nav" aria-label="التنقل السريع">
+      <a href="/" aria-label="الرئيسية"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 11 9-8 9 8v10h-6v-6H9v6H3Z" /></svg><span>الرئيسية</span></a>
+      <button type="button" data-mobile-categories aria-label="الأقسام"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z" /></svg><span>الأقسام</span></button>
+      <button type="button" data-mobile-search aria-label="بحث"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><span>بحث</span></button>
+      <button type="button" data-mobile-account aria-label="حسابي"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><span>حسابي</span></button>
+      <a href="/cart" class="mobile-cart-nav" aria-label="السلة"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6h15l-2 8H8L6 3H3"/><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/></svg><span>السلة</span><b class="cart-count" data-cart-count>0</b></a>
+    </nav>
+
     <div class="toast" data-toast role="status" aria-live="polite"></div>
-    <script src="/analytics-config.js?v=asset-a89c8c312015" defer></script>
-    <script src="/analytics.js?v=asset-a89c8c312015" defer></script>
-    <script src="/category-migration.js?v=asset-a89c8c312015" defer></script>
-    <script src="/subcategory-image-policy.js?v=asset-a89c8c312015" defer></script>
-    <script src="/yota-colors.js?v=asset-a89c8c312015" defer></script>
-    <script src="/script.min.js?v=asset-a89c8c312015" defer></script>
+    <script src="/analytics-config.js?v=asset-df8b98fb1642" defer></script>
+    <script src="/analytics.js?v=asset-df8b98fb1642" defer></script>
+    <script src="/category-migration.js?v=asset-df8b98fb1642" defer></script>
+    <script src="/subcategory-image-policy.js?v=asset-df8b98fb1642" defer></script>
+    <script src="/yota-colors.js?v=asset-df8b98fb1642" defer></script>
+    <script src="/script.min.js?v=asset-df8b98fb1642" defer></script>
   </body>
 </html>
