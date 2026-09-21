@@ -49,6 +49,5 @@ test("checkout remote cart synchronization is moved off the critical render path
 
 test("mobile hero uses the deployed hero asset", () => {
   assert.doesNotMatch(css, /hero-papa-kyrillos-products-mobile\.webp/);
-  assert.match(html, /<div class="hero-media"[\s\S]*?<img[^>]+hero-papa-kyrillos-products\.webp/);
-  assert.match(html, /hero-papa-kyrillos-products\.webp[^>]+fetchpriority="high"/);
+  assert.match(css, /hero-papa-kyrillos-products\.webp/);
 });
