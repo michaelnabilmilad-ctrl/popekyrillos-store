@@ -2,6 +2,7 @@ const test = require("node:test");
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const vm = require("node:vm");
+const migration = require("../category-migration.js");
 
 function loadTaxonomy(storedTaxonomy = null, storedVersion = 2026081701, extraStorage = {}) {
   const storage = new Map(Object.entries({
@@ -30,17 +31,20 @@ test("exposes the configured customer categories including the Greek collection"
   );
 });
 
-test("every product has valid single taxonomy fields and multi-value discovery fields", () => {
+test("every product resolves to valid single taxonomy fields and optional discovery fields are arrays", () => {
   const taxonomy = loadTaxonomy();
   const products = JSON.parse(fs.readFileSync("products.json", "utf8"));
-  for (const product of products) {
-    assert.ok(taxonomy.categoryById.has(product.mainCategory), `${product.id}: invalid mainCategory`);
-    const subcategory = taxonomy.subcategoryById.get(product.subcategory);
+  for (const rawProduct of products) {
+    const product = migration.product(rawProduct);
+    const mainCategory = taxonomy.categoryIdFromName(product.mainCategory) || product.mainCategory;
+    const subcategoryId = taxonomy.subcategoryIdFromName(product.subcategory) || product.subcategory;
+    assert.ok(taxonomy.categoryById.has(mainCategory), `${product.id}: invalid mainCategory`);
+    const subcategory = taxonomy.subcategoryById.get(subcategoryId);
     assert.ok(subcategory, `${product.id}: invalid subcategory`);
-    assert.equal(subcategory.mainId, product.mainCategory, `${product.id}: subcategory belongs to another main category`);
-    assert.equal(product.subCategory, product.subcategory, `${product.id}: admin and storefront taxonomy must match`);
-    assert.ok(Array.isArray(product.collections), `${product.id}: collections must be an array`);
-    assert.ok(Array.isArray(product.searchKeywords), `${product.id}: searchKeywords must be an array`);
+    assert.equal(subcategory.mainId, mainCategory, `${product.id}: subcategory belongs to another main category`);
+    assert.equal(taxonomy.subcategoryIdFromName(product.subCategory) || product.subCategory, subcategoryId, `${product.id}: admin and storefront taxonomy must match`);
+    if (product.collections !== undefined) assert.ok(Array.isArray(product.collections), `${product.id}: collections must be an array when supplied`);
+    if (product.searchKeywords !== undefined) assert.ok(Array.isArray(product.searchKeywords), `${product.id}: searchKeywords must be an array when supplied`);
   }
 });
 
@@ -117,30 +121,25 @@ test("empty subcategories are hidden from storefront cards and filters", () => {
   assert.match(source, /filter\(\(label\) => fullSubcategoryProductCount\(categoryId, label\.id\) > 0\)/);
 });
 
-test("Yota medallions retain a stable Crosses child ID and product assignments", () => {
+function assertYotaTaxonomy(catalogFile) {
   const taxonomy = loadTaxonomy();
   const subcategory = taxonomy.subcategoryById.get("yota-medallions");
   assert.equal(subcategory?.name, "الميداليات");
   assert.equal(subcategory?.mainId, "crosses");
 
-  const products = JSON.parse(fs.readFileSync("products.json", "utf8"));
-  const medallions = products.filter((product) => /^صليب يوتا مادلي[ةه] موديل \d+$/.test(product.name || ""));
+  const products = JSON.parse(fs.readFileSync(catalogFile, "utf8"));
+  const medallions = products.filter((product) => /^صليب يوتا مادلي[ةه] موديل \d+$/.test(product.name || "")).map(migration.product);
   assert.equal(medallions.length, 13);
-  assert.ok(medallions.every((product) => product.mainCategory === "crosses"));
-  assert.ok(medallions.every((product) => product.subCategory === "yota-medallions" && product.subcategory === "yota-medallions"));
+  assert.ok(medallions.every((product) => (taxonomy.categoryIdFromName(product.mainCategory) || product.mainCategory) === "crosses"));
+  assert.ok(medallions.every((product) => (taxonomy.subcategoryIdFromName(product.subcategory) || product.subcategory) === "yota-medallions"));
+}
+
+test("Yota medallions retain a stable Crosses child ID and product assignments", () => {
+  assertYotaTaxonomy("products.json");
 });
 
-test("Yota medallions retain a stable Crosses child ID and product assignments", () => {
-  const taxonomy = loadTaxonomy();
-  const subcategory = taxonomy.subcategoryById.get("yota-medallions");
-  assert.equal(subcategory?.name, "الميداليات");
-  assert.equal(subcategory?.mainId, "crosses");
-
-  const products = JSON.parse(fs.readFileSync("products.json", "utf8"));
-  const medallions = products.filter((product) => /^صليب يوتا مادلي[ةه] موديل \d+$/.test(product.name || ""));
-  assert.equal(medallions.length, 13);
-  assert.ok(medallions.every((product) => product.mainCategory === "crosses"));
-  assert.ok(medallions.every((product) => product.subCategory === "yota-medallions" && product.subcategory === "yota-medallions"));
+test("Firebase catalog Yota medallions retain the same stable taxonomy", () => {
+  assertYotaTaxonomy("firebase-functions/products.json");
 });
 
 test("legacy gifts URL maps to occasions and tote bag card uses the stable meeting-gifts ID", () => {

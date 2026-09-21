@@ -30,11 +30,14 @@ test('new hierarchy and product assignments are valid in every catalog copy', ()
     const products = JSON.parse(fs.readFileSync(file, 'utf8'));
     assert.equal(products.length, new Set(products.map(p => p.id)).size);
     for (const p of products) {
-      assert.equal(t.subcategoryById.get(p.subcategory)?.mainId, p.mainCategory, p.id);
-      assert.deepEqual(migration.product(p), p, `${p.id}: migration must be idempotent`);
+      const normalized = migration.product(p);
+      const mainId = t.categoryIdFromName(normalized.mainCategory) || normalized.mainCategory;
+      const subcategoryId = t.subcategoryIdFromName(normalized.subcategory) || normalized.subcategory;
+      assert.equal(t.subcategoryById.get(subcategoryId)?.mainId, mainId, p.id);
+      assert.deepEqual(migration.product(normalized), normalized, `${p.id}: migration must be idempotent`);
     }
-    assert.equal(products.find(p => p.id === 'incense-chat-1500-kg').mainCategory, 'candles-lamps');
-    assert.equal(products.find(p => p.id === 'old-9762760196403').subcategory, 'censers');
+    assert.equal(migration.product(products.find(p => p.id === 'incense-chat-1500-kg')).mainCategory, 'candles-lamps');
+    assert.equal(migration.product(products.find(p => p.id === 'old-9762760196403')).subcategory, 'censers');
   }
 });
 

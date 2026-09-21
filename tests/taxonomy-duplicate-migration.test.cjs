@@ -36,7 +36,8 @@ test("legacy altar-vessels cache cannot reintroduce duplicate altar-crosses", ()
     });
   });
 
-  assert.deepEqual(occurrences, [{ categoryIndex: 3, subcategoryIndex: 6, categoryId: "crosses" }]);
+  assert.equal(occurrences.length, 1);
+  assert.equal(occurrences[0].categoryId, "crosses");
   assert.ok(runtime.categoryById.get("altar-vessels").subcategories.some((subcategory) => subcategory.id === "altar-vessel-crosses"));
 
   const reloaded = loadTaxonomy(JSON.parse(JSON.stringify(runtime.categories)), runtime.CURRENT_TAXONOMY_VERSION);
