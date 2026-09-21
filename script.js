@@ -99,6 +99,7 @@ let catalogRequestController = null;
 let catalogRequestSequence = 0;
 let staticCatalogProducts = null;
 let bestSellerProducts = [];
+let bestSellerProductsLoaded = false;
 const productDetailsCache = new Map();
 const productDetailsRequests = new Map();
 let authInitPromise = null;
@@ -2536,6 +2537,8 @@ async function loadBestSellerProducts() {
   } catch (error) {
     console.warn("Could not load Airtable best sellers; using newest available products.", error);
     bestSellerProducts = localNewestProducts(8);
+  } finally {
+    bestSellerProductsLoaded = true;
   }
 }
 
@@ -2582,6 +2585,11 @@ function renderPopularProducts() {
 
   const popularProducts = getPopularProducts(9);
   if (!popularProducts.length) {
+    if (!bestSellerProductsLoaded) {
+      popularProductsSection.hidden = false;
+      popularProductsSection.setAttribute("aria-busy", "true");
+      return;
+    }
     popularProductsSection.hidden = true;
     popularProductsSection.innerHTML = "";
     popularProductsSection.removeAttribute("aria-busy");
@@ -3385,7 +3393,7 @@ function renderProducts() {
         ? `
           <div class="product-gallery ${galleryImages.length > 1 ? "has-thumbs" : ""}">
             <div class="product-gallery-main">
-              <img class="product-photo" data-main-image="${productId}" data-main-raw-image="${escapeHtml(galleryImages[0])}" src="${escapeHtml(mainCardImage)}" ${mainCardSrcset ? `srcset="${mainCardSrcset}" sizes="(max-width: 720px) 92vw, (max-width: 1100px) 44vw, 360px"` : ""} alt="${productName}" width="600" height="600" loading="${imageLoading}" decoding="async"${imagePriority} draggable="false" />
+              <img class="product-photo" data-main-image="${productId}" data-main-raw-image="${escapeHtml(galleryImages[0])}" src="${escapeHtml(mainCardImage)}" ${mainCardSrcset ? `srcset="${mainCardSrcset}" sizes="(max-width: 680px) calc(50vw - 19px), (max-width: 1100px) 44vw, 360px"` : ""} alt="${productName}" width="600" height="600" loading="${imageLoading}" decoding="async"${imagePriority} draggable="false" />
             </div>
             ${thumbnails}
           </div>

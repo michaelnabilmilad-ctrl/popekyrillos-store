@@ -31,7 +31,7 @@
     <link rel="preload" href="/assets/optimized/hero-papa-kyrillos-products.webp" as="image" type="image/webp" media="(max-width: 720px)" fetchpriority="high" />
     <link rel="preload" href="/assets/optimized/hero-papa-kyrillos-products.webp" as="image" type="image/webp" media="(min-width: 721px)" fetchpriority="high" />
     <link rel="preload" href="/assets/fonts/ge-ss-two-bold.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="stylesheet" href="/styles.min.css?v=asset-0e7e32d51b7d" />
+    <link rel="stylesheet" href="/styles.min.css?v=asset-3c2ad777b069" />
     <script>document.documentElement.classList.toggle("is-home-route", /^\/(?:index\.html)?$/.test(location.pathname));document.documentElement.classList.toggle("is-category-route", /^\/category(?:\/|$)/.test(location.pathname));</script>
   </head>
   <body dir="rtl">
@@ -39,7 +39,7 @@
       <div class="brand-cluster">
         <a class="brand" href="/" aria-label="مكتبة البابا كيرلس">
           <span class="brand-logo-wrap" aria-hidden="true">
-            <img src="/assets/optimized/logo-papa-kyrillos-original.webp" alt="" width="160" height="160" decoding="async" />
+            <img src="/assets/optimized/logo-papa-kyrillos-64.webp" srcset="/assets/optimized/logo-papa-kyrillos-64.webp 64w, /assets/optimized/logo-papa-kyrillos-128.webp 128w" sizes="38px" alt="" width="160" height="160" decoding="async" />
           </span>
           <span>
             <strong>مكتبة البابا كيرلس</strong>
@@ -178,7 +178,26 @@
         </div>
       </section>
 
-      <section class="section popular-products" data-popular-products aria-labelledby="popular-products-title" hidden></section>
+      <section class="section popular-products" data-popular-products aria-labelledby="popular-products-title" aria-busy="true">
+        <div class="popular-products-head">
+          <p class="eyebrow">الأكثر طلباً</p>
+          <div>
+            <h2 id="popular-products-title">المنتجات الأكثر مبيعًا</h2>
+            <p>ترتيب تلقائي مبني على كميات المبيعات المؤكدة</p>
+          </div>
+        </div>
+        <div class="popular-products-grid" aria-hidden="true">
+          <article class="popular-product-card popular-product-skeleton"><div class="popular-product-media"></div><div class="popular-skeleton-line short"></div><div class="popular-skeleton-line"></div><div class="popular-skeleton-line price"></div><div class="popular-skeleton-button"></div></article>
+          <article class="popular-product-card popular-product-skeleton"><div class="popular-product-media"></div><div class="popular-skeleton-line short"></div><div class="popular-skeleton-line"></div><div class="popular-skeleton-line price"></div><div class="popular-skeleton-button"></div></article>
+          <article class="popular-product-card popular-product-skeleton"><div class="popular-product-media"></div><div class="popular-skeleton-line short"></div><div class="popular-skeleton-line"></div><div class="popular-skeleton-line price"></div><div class="popular-skeleton-button"></div></article>
+          <article class="popular-product-card popular-product-skeleton"><div class="popular-product-media"></div><div class="popular-skeleton-line short"></div><div class="popular-skeleton-line"></div><div class="popular-skeleton-line price"></div><div class="popular-skeleton-button"></div></article>
+          <article class="popular-product-card popular-product-skeleton"><div class="popular-product-media"></div><div class="popular-skeleton-line short"></div><div class="popular-skeleton-line"></div><div class="popular-skeleton-line price"></div><div class="popular-skeleton-button"></div></article>
+          <article class="popular-product-card popular-product-skeleton"><div class="popular-product-media"></div><div class="popular-skeleton-line short"></div><div class="popular-skeleton-line"></div><div class="popular-skeleton-line price"></div><div class="popular-skeleton-button"></div></article>
+          <article class="popular-product-card popular-product-skeleton"><div class="popular-product-media"></div><div class="popular-skeleton-line short"></div><div class="popular-skeleton-line"></div><div class="popular-skeleton-line price"></div><div class="popular-skeleton-button"></div></article>
+          <article class="popular-product-card popular-product-skeleton"><div class="popular-product-media"></div><div class="popular-skeleton-line short"></div><div class="popular-skeleton-line"></div><div class="popular-skeleton-line price"></div><div class="popular-skeleton-button"></div></article>
+          <article class="popular-product-card popular-product-skeleton"><div class="popular-product-media"></div><div class="popular-skeleton-line short"></div><div class="popular-skeleton-line"></div><div class="popular-skeleton-line price"></div><div class="popular-skeleton-button"></div></article>
+        </div>
+      </section>
 
       <section class="section categories" id="categories" aria-labelledby="categories-title">
         <div class="section-head">
@@ -486,7 +505,7 @@
         <div class="account-body">
           <div class="account-hero">
             <span class="account-logo" aria-hidden="true">
-              <img src="/assets/logo-papa-kyrillos-original.jpeg" alt="" width="160" height="160" loading="lazy" decoding="async" />
+              <img src="/assets/optimized/logo-papa-kyrillos-160.webp" srcset="/assets/optimized/logo-papa-kyrillos-160.webp 160w, /assets/optimized/logo-papa-kyrillos-320.webp 320w" sizes="160px" alt="" width="160" height="160" loading="lazy" decoding="async" />
             </span>
             <div>
               <p class="eyebrow">حساب العميل</p>
@@ -548,11 +567,11 @@
     </nav>
 
     <div class="toast" data-toast role="status" aria-live="polite"></div>
-    <script src="/analytics-config.js?v=asset-0e7e32d51b7d" defer></script>
-    <script src="/analytics.js?v=asset-0e7e32d51b7d" defer></script>
-    <script src="/category-migration.js?v=asset-0e7e32d51b7d" defer></script>
-    <script src="/subcategory-image-policy.js?v=asset-0e7e32d51b7d" defer></script>
-    <script src="/yota-colors.js?v=asset-0e7e32d51b7d" defer></script>
-    <script src="/script.min.js?v=asset-0e7e32d51b7d" defer></script>
+    <script src="/analytics-config.js?v=asset-3c2ad777b069" defer></script>
+    <script src="/analytics.js?v=asset-3c2ad777b069" defer></script>
+    <script src="/category-migration.js?v=asset-3c2ad777b069" defer></script>
+    <script src="/subcategory-image-policy.js?v=asset-3c2ad777b069" defer></script>
+    <script src="/yota-colors.js?v=asset-3c2ad777b069" defer></script>
+    <script src="/script.min.js?v=asset-3c2ad777b069" defer></script>
   </body>
 </html>
