@@ -11,6 +11,7 @@ const html = fs.readFileSync("index.html", "utf8");
 test("customer-facing processional cross name has one canonical source label", () => {
   assert.doesNotMatch(taxonomy, /صلبان مواكب/);
   assert.match(taxonomy, /صلبان الزفة/);
+  assert.match(taxonomy, /item\?\.id === "processional-crosses"/);
 });
 
 test("homepage product count is dynamic", () => {

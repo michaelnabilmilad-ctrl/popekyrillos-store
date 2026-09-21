@@ -1417,6 +1417,11 @@ function fullSubcategoryProductCount(categoryId, subcategoryId) {
   return productsForCurrentCategory().filter((product) => productMatchesSubcategory(product, subcategoryId)).length;
 }
 
+function allCategoriesSubcategoryProductCount(subcategoryId) {
+  if (!catalogSubcategoryCountsLoaded) return 0;
+  return Object.values(catalogSubcategoryCounts).reduce((total, counts) => total + (Number(counts?.[subcategoryId]) || 0), 0);
+}
+
 function orderedLabelsForCurrentFilter() {
   const normalized = normalizeCategoryFilter(state.filter || "all");
   if (normalized !== "all") return orderedLabelsForCategory(normalized);
@@ -1449,7 +1454,12 @@ function renderMainFilterOptions() {
 function renderLabelFilterOptions() {
   if (!labelFilterSelect) return;
   const categoryId = normalizeCategoryFilter(state.filter || "all");
-  const labels = orderedLabelsForCurrentFilter().filter((label) => categoryId === "all" || fullSubcategoryProductCount(categoryId, label.id) > 0);
+  const labels = orderedLabelsForCurrentFilter().filter((label) => {
+    const totalCount = categoryId === "all"
+      ? allCategoriesSubcategoryProductCount(label.id)
+      : fullSubcategoryProductCount(categoryId, label.id);
+    return totalCount > 0;
+  });
   if (state.labelFilter && !labels.some((label) => label.id === state.labelFilter || label.name === state.labelFilter)) {
     state.labelFilter = "";
   }
@@ -1458,7 +1468,9 @@ function renderLabelFilterOptions() {
   allOption.dataset.labelOptionAll = "";
   labelFilterSelect.replaceChildren(allOption);
   labels.forEach((label) => {
-    const count = fullSubcategoryProductCount(normalizeCategoryFilter(state.filter || "all"), label.id);
+    const count = categoryId === "all"
+      ? allCategoriesSubcategoryProductCount(label.id)
+      : fullSubcategoryProductCount(categoryId, label.id);
     labelFilterSelect.append(new Option(`${localized(label.name)} (${displayText(formatter.format(count))})`, label.id));
   });
   labelFilterSelect.value = state.labelFilter || "";

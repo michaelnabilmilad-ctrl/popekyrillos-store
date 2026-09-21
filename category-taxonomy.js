@@ -871,6 +871,9 @@
     if (categoryId === "altar-vessels" && item?.id === "altar-crosses") {
       return { ...item, id: "altar-vessel-crosses" };
     }
+    if (categoryId === "crosses" && item?.id === "processional-crosses") {
+      return { ...item, name: "صلبان الزفة" };
+    }
     return item;
   };
   const mergeSubcategories = (categoryId, defaults = [], overrides = []) => {
