@@ -1,0 +1,884 @@
+{
+  "generatedAt": "2026-09-21T15:06:37.380Z",
+  "source": "products.json",
+  "totals": {
+    "records": 115,
+    "published": 115,
+    "activePublishedAvailable": 105
+  },
+  "categoryCounts": {
+    "altar-vessels": 12,
+    "candles-lamps": 19,
+    "church-vestments": 4,
+    "crosses": 36,
+    "icons-frames": 0,
+    "books-rituals": 13,
+    "occasions-service": 21,
+    "church-equipment": 0,
+    "greek-collection": 3,
+    "uncategorized": 0
+  },
+  "emptyCategories": [
+    {
+      "id": "icons-frames",
+      "name": "الأيقونات والبراويز"
+    },
+    {
+      "id": "church-equipment",
+      "name": "تجهيز الكنائس والطلبات الخاصة"
+    }
+  ],
+  "emptySubcategories": [
+    {
+      "categoryId": "altar-vessels",
+      "category": "المذبح والأواني المقدسة",
+      "id": "lamps",
+      "name": "القناديل"
+    },
+    {
+      "categoryId": "altar-vessels",
+      "category": "المذبح والأواني المقدسة",
+      "id": "altar-sets",
+      "name": "أطقم أواني المذبح"
+    },
+    {
+      "categoryId": "altar-vessels",
+      "category": "المذبح والأواني المقدسة",
+      "id": "chalices",
+      "name": "الكؤوس"
+    },
+    {
+      "categoryId": "altar-vessels",
+      "category": "المذبح والأواني المقدسة",
+      "id": "trays-stars",
+      "name": "الصواني والنجوم"
+    },
+    {
+      "categoryId": "altar-vessels",
+      "category": "المذبح والأواني المقدسة",
+      "id": "mystir",
+      "name": "المستير"
+    },
+    {
+      "categoryId": "altar-vessels",
+      "category": "المذبح والأواني المقدسة",
+      "id": "water-wine-cruets",
+      "name": "قوارير الماء والخمر"
+    },
+    {
+      "categoryId": "altar-vessels",
+      "category": "المذبح والأواني المقدسة",
+      "id": "communion-bread-boxes",
+      "name": "بيوت القربان"
+    },
+    {
+      "categoryId": "altar-vessels",
+      "category": "المذبح والأواني المقدسة",
+      "id": "holy-oil-vessels",
+      "name": "أواني الميرون والزيوت"
+    },
+    {
+      "categoryId": "altar-vessels",
+      "category": "المذبح والأواني المقدسة",
+      "id": "laqan-vessels",
+      "name": "أواني اللقان"
+    },
+    {
+      "categoryId": "altar-vessels",
+      "category": "المذبح والأواني المقدسة",
+      "id": "service-plates",
+      "name": "أطباق الخدمة"
+    },
+    {
+      "categoryId": "altar-vessels",
+      "category": "المذبح والأواني المقدسة",
+      "id": "altar-vessel-crosses",
+      "name": "صلبان المذبح"
+    },
+    {
+      "categoryId": "altar-vessels",
+      "category": "المذبح والأواني المقدسة",
+      "id": "altar-candlesticks",
+      "name": "شمعدانات المذبح"
+    },
+    {
+      "categoryId": "altar-vessels",
+      "category": "المذبح والأواني المقدسة",
+      "id": "gospel-stands",
+      "name": "حوامل الإنجيل والبشارة"
+    },
+    {
+      "categoryId": "altar-vessels",
+      "category": "المذبح والأواني المقدسة",
+      "id": "vessel-cases",
+      "name": "شنط وصناديق حفظ الأواني"
+    },
+    {
+      "categoryId": "candles-lamps",
+      "category": "الشمع والبخور",
+      "id": "altar-candles",
+      "name": "شمع المذبح"
+    },
+    {
+      "categoryId": "candles-lamps",
+      "category": "الشمع والبخور",
+      "id": "wedding-candles",
+      "name": "شمع الإكليل"
+    },
+    {
+      "categoryId": "candles-lamps",
+      "category": "الشمع والبخور",
+      "id": "baptism-candles",
+      "name": "شمع المعمودية"
+    },
+    {
+      "categoryId": "candles-lamps",
+      "category": "الشمع والبخور",
+      "id": "holy-week-candles",
+      "name": "شمع أسبوع الآلام"
+    },
+    {
+      "categoryId": "candles-lamps",
+      "category": "الشمع والبخور",
+      "id": "resurrection-candles",
+      "name": "شمع القيامة"
+    },
+    {
+      "categoryId": "candles-lamps",
+      "category": "الشمع والبخور",
+      "id": "beeswax-candles",
+      "name": "شمع النحل"
+    },
+    {
+      "categoryId": "candles-lamps",
+      "category": "الشمع والبخور",
+      "id": "candle-holders",
+      "name": "حوامل شمع"
+    },
+    {
+      "categoryId": "candles-lamps",
+      "category": "الشمع والبخور",
+      "id": "incense-boxes",
+      "name": "حق البخور"
+    },
+    {
+      "categoryId": "candles-lamps",
+      "category": "الشمع والبخور",
+      "id": "incense-spoons",
+      "name": "ملاعق البخور"
+    },
+    {
+      "categoryId": "candles-lamps",
+      "category": "الشمع والبخور",
+      "id": "greek-incense",
+      "name": "بخور يوناني"
+    },
+    {
+      "categoryId": "candles-lamps",
+      "category": "الشمع والبخور",
+      "id": "natural-incense",
+      "name": "لبان وبخور طبيعي"
+    },
+    {
+      "categoryId": "candles-lamps",
+      "category": "الشمع والبخور",
+      "id": "charcoal",
+      "name": "الفحم"
+    },
+    {
+      "categoryId": "candles-lamps",
+      "category": "الشمع والبخور",
+      "id": "aparaka",
+      "name": "الأباركة والعطور الكنسية"
+    },
+    {
+      "categoryId": "candles-lamps",
+      "category": "الشمع والبخور",
+      "id": "hanout",
+      "name": "الحنوط"
+    },
+    {
+      "categoryId": "church-vestments",
+      "category": "الملابس والأقمشة الكنسية",
+      "id": "priest-clothing",
+      "name": "ملابس الكهنة"
+    },
+    {
+      "categoryId": "church-vestments",
+      "category": "الملابس والأقمشة الكنسية",
+      "id": "priest-tonias",
+      "name": "التوني الكهنوتية"
+    },
+    {
+      "categoryId": "church-vestments",
+      "category": "الملابس والأقمشة الكنسية",
+      "id": "copes",
+      "name": "البرانس"
+    },
+    {
+      "categoryId": "church-vestments",
+      "category": "الملابس والأقمشة الكنسية",
+      "id": "sleeves-belts",
+      "name": "الأكمام والأحزمة"
+    },
+    {
+      "categoryId": "church-vestments",
+      "category": "الملابس والأقمشة الكنسية",
+      "id": "bishop-clothing",
+      "name": "ملابس الأساقفة"
+    },
+    {
+      "categoryId": "church-vestments",
+      "category": "الملابس والأقمشة الكنسية",
+      "id": "deacon-clothing",
+      "name": "ملابس الشمامسة"
+    },
+    {
+      "categoryId": "church-vestments",
+      "category": "الملابس والأقمشة الكنسية",
+      "id": "adult-deacon-tonias",
+      "name": "توني الشمامسة للكبار"
+    },
+    {
+      "categoryId": "church-vestments",
+      "category": "الملابس والأقمشة الكنسية",
+      "id": "children-deacon-tonias",
+      "name": "توني الشمامسة للأطفال"
+    },
+    {
+      "categoryId": "church-vestments",
+      "category": "الملابس والأقمشة الكنسية",
+      "id": "choir-clothing",
+      "name": "ملابس الكورال"
+    },
+    {
+      "categoryId": "church-vestments",
+      "category": "الملابس والأقمشة الكنسية",
+      "id": "baptism-clothing",
+      "name": "ملابس المعمودية"
+    },
+    {
+      "categoryId": "church-vestments",
+      "category": "الملابس والأقمشة الكنسية",
+      "id": "sanctuary-curtains",
+      "name": "ستر وستائر الهيكل"
+    },
+    {
+      "categoryId": "church-vestments",
+      "category": "الملابس والأقمشة الكنسية",
+      "id": "altar-cloths",
+      "name": "مفارش المذبح"
+    },
+    {
+      "categoryId": "church-vestments",
+      "category": "الملابس والأقمشة الكنسية",
+      "id": "chalice-covers",
+      "name": "أغطية الكأس والصينية"
+    },
+    {
+      "categoryId": "church-vestments",
+      "category": "الملابس والأقمشة الكنسية",
+      "id": "prospharine",
+      "name": "الإبروسفارين"
+    },
+    {
+      "categoryId": "church-vestments",
+      "category": "الملابس والأقمشة الكنسية",
+      "id": "service-towels",
+      "name": "مناديل الخدمة"
+    },
+    {
+      "categoryId": "church-vestments",
+      "category": "الملابس والأقمشة الكنسية",
+      "id": "gospel-covers",
+      "name": "أغطية المنجليات وحوامل الإنجيل"
+    },
+    {
+      "categoryId": "church-vestments",
+      "category": "الملابس والأقمشة الكنسية",
+      "id": "flags-banners",
+      "name": "الرايات والبيارق"
+    },
+    {
+      "categoryId": "church-vestments",
+      "category": "الملابس والأقمشة الكنسية",
+      "id": "custom-embroidery",
+      "name": "تطريز وتنفيذ بالطلب"
+    },
+    {
+      "categoryId": "crosses",
+      "category": "الصلبان",
+      "id": "hand-crosses",
+      "name": "صلبان يد"
+    },
+    {
+      "categoryId": "crosses",
+      "category": "الصلبان",
+      "id": "iota-plain-hand-crosses",
+      "name": "صلبان يد يوتا سادة"
+    },
+    {
+      "categoryId": "crosses",
+      "category": "الصلبان",
+      "id": "plain-cross-medals",
+      "name": "صلبان ميداليات سادة"
+    },
+    {
+      "categoryId": "crosses",
+      "category": "الصلبان",
+      "id": "pectoral-crosses",
+      "name": "صلبان صدر"
+    },
+    {
+      "categoryId": "crosses",
+      "category": "الصلبان",
+      "id": "priest-crosses",
+      "name": "صلبان كهنة"
+    },
+    {
+      "categoryId": "crosses",
+      "category": "الصلبان",
+      "id": "deacon-crosses",
+      "name": "صلبان شمامسة"
+    },
+    {
+      "categoryId": "crosses",
+      "category": "الصلبان",
+      "id": "wall-crosses",
+      "name": "صلبان حائط"
+    },
+    {
+      "categoryId": "crosses",
+      "category": "الصلبان",
+      "id": "desk-crosses",
+      "name": "صلبان مكتب"
+    },
+    {
+      "categoryId": "crosses",
+      "category": "الصلبان",
+      "id": "car-crosses",
+      "name": "صلبان سيارات"
+    },
+    {
+      "categoryId": "crosses",
+      "category": "الصلبان",
+      "id": "brass-crosses",
+      "name": "صلبان نحاس"
+    },
+    {
+      "categoryId": "crosses",
+      "category": "الصلبان",
+      "id": "stainless-crosses",
+      "name": "صلبان ستانلس"
+    },
+    {
+      "categoryId": "crosses",
+      "category": "الصلبان",
+      "id": "silver-crosses",
+      "name": "صلبان فضة"
+    },
+    {
+      "categoryId": "crosses",
+      "category": "الصلبان",
+      "id": "iota-crosses",
+      "name": "صلبان فن اليوتا"
+    },
+    {
+      "categoryId": "crosses",
+      "category": "الصلبان",
+      "id": "colored-crosses",
+      "name": "صلبان ملونة"
+    },
+    {
+      "categoryId": "crosses",
+      "category": "الصلبان",
+      "id": "personalized-crosses",
+      "name": "صلبان محفورة بالاسم"
+    },
+    {
+      "categoryId": "crosses",
+      "category": "الصلبان",
+      "id": "giveaway-crosses",
+      "name": "صلبان توزيعات"
+    },
+    {
+      "categoryId": "crosses",
+      "category": "الصلبان",
+      "id": "cross-boxes",
+      "name": "علب وحوامل الصلبان"
+    },
+    {
+      "categoryId": "icons-frames",
+      "category": "الأيقونات والبراويز",
+      "id": "christ-icons",
+      "name": "أيقونات السيد المسيح"
+    },
+    {
+      "categoryId": "icons-frames",
+      "category": "الأيقونات والبراويز",
+      "id": "mary-icons",
+      "name": "أيقونات السيدة العذراء"
+    },
+    {
+      "categoryId": "icons-frames",
+      "category": "الأيقونات والبراويز",
+      "id": "angel-icons",
+      "name": "أيقونات الملائكة"
+    },
+    {
+      "categoryId": "icons-frames",
+      "category": "الأيقونات والبراويز",
+      "id": "apostle-icons",
+      "name": "أيقونات الرسل"
+    },
+    {
+      "categoryId": "icons-frames",
+      "category": "الأيقونات والبراويز",
+      "id": "saint-icons",
+      "name": "أيقونات القديسين"
+    },
+    {
+      "categoryId": "icons-frames",
+      "category": "الأيقونات والبراويز",
+      "id": "martyr-icons",
+      "name": "أيقونات الشهداء"
+    },
+    {
+      "categoryId": "icons-frames",
+      "category": "الأيقونات والبراويز",
+      "id": "feast-icons",
+      "name": "أيقونات الأعياد"
+    },
+    {
+      "categoryId": "icons-frames",
+      "category": "الأيقونات والبراويز",
+      "id": "holy-family-icons",
+      "name": "أيقونات العائلة المقدسة"
+    },
+    {
+      "categoryId": "icons-frames",
+      "category": "الأيقونات والبراويز",
+      "id": "wooden-icons",
+      "name": "أيقونات خشب"
+    },
+    {
+      "categoryId": "icons-frames",
+      "category": "الأيقونات والبراويز",
+      "id": "metal-icons",
+      "name": "أيقونات معدن"
+    },
+    {
+      "categoryId": "icons-frames",
+      "category": "الأيقونات والبراويز",
+      "id": "glass-icons",
+      "name": "أيقونات زجاج"
+    },
+    {
+      "categoryId": "icons-frames",
+      "category": "الأيقونات والبراويز",
+      "id": "wall-icons",
+      "name": "أيقونات حائط"
+    },
+    {
+      "categoryId": "icons-frames",
+      "category": "الأيقونات والبراويز",
+      "id": "desk-icons",
+      "name": "أيقونات مكتب"
+    },
+    {
+      "categoryId": "icons-frames",
+      "category": "الأيقونات والبراويز",
+      "id": "car-icons",
+      "name": "أيقونات سيارة"
+    },
+    {
+      "categoryId": "icons-frames",
+      "category": "الأيقونات والبراويز",
+      "id": "giveaway-icons",
+      "name": "أيقونات توزيعات"
+    },
+    {
+      "categoryId": "icons-frames",
+      "category": "الأيقونات والبراويز",
+      "id": "multi-icons",
+      "name": "أيقونات ثنائية وثلاثية"
+    },
+    {
+      "categoryId": "icons-frames",
+      "category": "الأيقونات والبراويز",
+      "id": "frames",
+      "name": "براويز"
+    },
+    {
+      "categoryId": "icons-frames",
+      "category": "الأيقونات والبراويز",
+      "id": "icon-stands",
+      "name": "حوامل الأيقونات"
+    },
+    {
+      "categoryId": "icons-frames",
+      "category": "الأيقونات والبراويز",
+      "id": "icon-lamps",
+      "name": "قناديل الأيقونات"
+    },
+    {
+      "categoryId": "icons-frames",
+      "category": "الأيقونات والبراويز",
+      "id": "custom-icons",
+      "name": "أيقونات حسب الطلب"
+    },
+    {
+      "categoryId": "books-rituals",
+      "category": "الكتب والطقوس",
+      "id": "bibles",
+      "name": "الكتاب المقدس"
+    },
+    {
+      "categoryId": "books-rituals",
+      "category": "الكتب والطقوس",
+      "id": "new-testament",
+      "name": "العهد الجديد"
+    },
+    {
+      "categoryId": "books-rituals",
+      "category": "الكتب والطقوس",
+      "id": "agpeya-prayers",
+      "name": "الأجبية"
+    },
+    {
+      "categoryId": "books-rituals",
+      "category": "الكتب والطقوس",
+      "id": "kholagy",
+      "name": "الخولاجي"
+    },
+    {
+      "categoryId": "books-rituals",
+      "category": "الكتب والطقوس",
+      "id": "synaxarium",
+      "name": "السنكسار"
+    },
+    {
+      "categoryId": "books-rituals",
+      "category": "الكتب والطقوس",
+      "id": "psalmody",
+      "name": "الإبصلمودية"
+    },
+    {
+      "categoryId": "books-rituals",
+      "category": "الكتب والطقوس",
+      "id": "liturgy-books",
+      "name": "كتب القداس"
+    },
+    {
+      "categoryId": "books-rituals",
+      "category": "الكتب والطقوس",
+      "id": "holy-week-books",
+      "name": "كتب أسبوع الآلام"
+    },
+    {
+      "categoryId": "books-rituals",
+      "category": "الكتب والطقوس",
+      "id": "hymns-books",
+      "name": "كتب الألحان"
+    },
+    {
+      "categoryId": "books-rituals",
+      "category": "الكتب والطقوس",
+      "id": "theology-books",
+      "name": "كتب العقيدة واللاهوت"
+    },
+    {
+      "categoryId": "books-rituals",
+      "category": "الكتب والطقوس",
+      "id": "fathers-books",
+      "name": "كتب الآباء"
+    },
+    {
+      "categoryId": "books-rituals",
+      "category": "الكتب والطقوس",
+      "id": "saints-lives",
+      "name": "سير القديسين"
+    },
+    {
+      "categoryId": "books-rituals",
+      "category": "الكتب والطقوس",
+      "id": "children-books",
+      "name": "كتب الأطفال"
+    },
+    {
+      "categoryId": "books-rituals",
+      "category": "الكتب والطقوس",
+      "id": "illustrated-stories",
+      "name": "قصص مصورة"
+    },
+    {
+      "categoryId": "books-rituals",
+      "category": "الكتب والطقوس",
+      "id": "youth-ministry-books",
+      "name": "كتب الشباب والخدمة"
+    },
+    {
+      "categoryId": "books-rituals",
+      "category": "الكتب والطقوس",
+      "id": "family-books",
+      "name": "كتب الأسرة والزواج"
+    },
+    {
+      "categoryId": "books-rituals",
+      "category": "الكتب والطقوس",
+      "id": "prayer-books",
+      "name": "كتب الصلاة والتأمل"
+    },
+    {
+      "categoryId": "books-rituals",
+      "category": "الكتب والطقوس",
+      "id": "english-books",
+      "name": "كتب باللغة الإنجليزية"
+    },
+    {
+      "categoryId": "books-rituals",
+      "category": "الكتب والطقوس",
+      "id": "booklets",
+      "name": "كتيبات وتوزيعات"
+    },
+    {
+      "categoryId": "books-rituals",
+      "category": "الكتب والطقوس",
+      "id": "book-stands",
+      "name": "حوامل الكتب"
+    },
+    {
+      "categoryId": "occasions-service",
+      "category": "المناسبات والخدمة",
+      "id": "baptism-supplies",
+      "name": "مستلزمات المعمودية"
+    },
+    {
+      "categoryId": "occasions-service",
+      "category": "المناسبات والخدمة",
+      "id": "wedding-supplies",
+      "name": "مستلزمات الإكليل"
+    },
+    {
+      "categoryId": "occasions-service",
+      "category": "المناسبات والخدمة",
+      "id": "sunday-school-gifts",
+      "name": "هدايا مدارس الأحد"
+    },
+    {
+      "categoryId": "occasions-service",
+      "category": "المناسبات والخدمة",
+      "id": "notebooks-planners",
+      "name": "أجندات ونوت"
+    },
+    {
+      "categoryId": "occasions-service",
+      "category": "المناسبات والخدمة",
+      "id": "cards-bookmarks",
+      "name": "كروت وبوك مارك"
+    },
+    {
+      "categoryId": "occasions-service",
+      "category": "المناسبات والخدمة",
+      "id": "medals-bracelets",
+      "name": "ميداليات وأساور"
+    },
+    {
+      "categoryId": "occasions-service",
+      "category": "المناسبات والخدمة",
+      "id": "conference-gifts",
+      "name": "هدايا المؤتمرات"
+    },
+    {
+      "categoryId": "occasions-service",
+      "category": "المناسبات والخدمة",
+      "id": "seasonal-products",
+      "name": "المواسم والأعياد"
+    },
+    {
+      "categoryId": "church-equipment",
+      "category": "تجهيز الكنائس والطلبات الخاصة",
+      "id": "icon-gospel-stands",
+      "name": "حوامل الأيقونات والإنجيل"
+    },
+    {
+      "categoryId": "church-equipment",
+      "category": "تجهيز الكنائس والطلبات الخاصة",
+      "id": "lecterns",
+      "name": "منجليات"
+    },
+    {
+      "categoryId": "church-equipment",
+      "category": "تجهيز الكنائس والطلبات الخاصة",
+      "id": "clergy-chairs",
+      "name": "كراسي الكهنة والأساقفة"
+    },
+    {
+      "categoryId": "church-equipment",
+      "category": "تجهيز الكنائس والطلبات الخاصة",
+      "id": "deacon-seats",
+      "name": "مقاعد الشمامسة"
+    },
+    {
+      "categoryId": "church-equipment",
+      "category": "تجهيز الكنائس والطلبات الخاصة",
+      "id": "vessel-cabinets",
+      "name": "دواليب حفظ الأواني"
+    },
+    {
+      "categoryId": "church-equipment",
+      "category": "تجهيز الكنائس والطلبات الخاصة",
+      "id": "floor-candle-stands",
+      "name": "حوامل الشمع الأرضية"
+    },
+    {
+      "categoryId": "church-equipment",
+      "category": "تجهيز الكنائس والطلبات الخاصة",
+      "id": "donation-boxes",
+      "name": "صناديق التبرعات"
+    },
+    {
+      "categoryId": "church-equipment",
+      "category": "تجهيز الكنائس والطلبات الخاصة",
+      "id": "baptism-fonts",
+      "name": "أجران المعمودية"
+    },
+    {
+      "categoryId": "church-equipment",
+      "category": "تجهيز الكنائس والطلبات الخاصة",
+      "id": "bells",
+      "name": "الأجراس"
+    },
+    {
+      "categoryId": "church-equipment",
+      "category": "تجهيز الكنائس والطلبات الخاصة",
+      "id": "chandeliers",
+      "name": "النجف والثريات"
+    },
+    {
+      "categoryId": "church-equipment",
+      "category": "تجهيز الكنائس والطلبات الخاصة",
+      "id": "church-lighting",
+      "name": "وحدات الإضاءة الكنسية"
+    },
+    {
+      "categoryId": "church-equipment",
+      "category": "تجهيز الكنائس والطلبات الخاصة",
+      "id": "iconostasis",
+      "name": "أبواب وأحجبة الهيكل"
+    },
+    {
+      "categoryId": "church-equipment",
+      "category": "تجهيز الكنائس والطلبات الخاصة",
+      "id": "procession-flags",
+      "name": "أعلام وبيارق المواكب"
+    },
+    {
+      "categoryId": "church-equipment",
+      "category": "تجهيز الكنائس والطلبات الخاصة",
+      "id": "church-libraries",
+      "name": "تجهيز مكتبات الكنائس"
+    },
+    {
+      "categoryId": "church-equipment",
+      "category": "تجهيز الكنائس والطلبات الخاصة",
+      "id": "custom-woodwork",
+      "name": "تصنيع خشب حسب الطلب"
+    },
+    {
+      "categoryId": "church-equipment",
+      "category": "تجهيز الكنائس والطلبات الخاصة",
+      "id": "custom-metalwork",
+      "name": "تصنيع معدن حسب الطلب"
+    },
+    {
+      "categoryId": "church-equipment",
+      "category": "تجهيز الكنائس والطلبات الخاصة",
+      "id": "new-church-package",
+      "name": "تجهيز كنيسة جديدة"
+    },
+    {
+      "categoryId": "church-equipment",
+      "category": "تجهيز الكنائس والطلبات الخاصة",
+      "id": "quote-request",
+      "name": "طلب عرض سعر"
+    },
+    {
+      "categoryId": "greek-collection",
+      "category": "المجموعة اليونانية",
+      "id": "greek-wedding-crowns",
+      "name": "أكاليل الأفراح اليونانية"
+    },
+    {
+      "categoryId": "greek-collection",
+      "category": "المجموعة اليونانية",
+      "id": "greek-clergy-crosses",
+      "name": "الصلبان اليونانية للأساقفة والكهنة"
+    },
+    {
+      "categoryId": "uncategorized",
+      "category": "غير مصنف",
+      "id": "needs-review",
+      "name": "يحتاج مراجعة"
+    }
+  ],
+  "duplicateGroupsActive": [],
+  "duplicateGroupsAllRecords": [
+    {
+      "signature": "شنطه اتبعه|120",
+      "products": [
+        {
+          "id": "atb3ho-10618130956453",
+          "sku": "",
+          "name": "شنطه اتبعه",
+          "price": 120,
+          "stock": "متاح",
+          "active": true,
+          "slug": "شنطه-اتبعه"
+        },
+        {
+          "id": "atb3ho-10618127974565",
+          "sku": "",
+          "name": "شنطه اتبعه",
+          "price": 120,
+          "stock": "غير متاح حاليا",
+          "active": false,
+          "slug": "شنطه-اتبعه-3ho-10618127974565"
+        }
+      ]
+    }
+  ],
+  "duplicateIds": [],
+  "duplicateSkus": [],
+  "duplicateSlugs": [],
+  "internalLabels": [
+    {
+      "id": "custom-1782306615168-copy-1782306883366-copy-1782307173548-copy-1782307256776-copy-1782307341493-copy-1782310276272-copy-1782310382795",
+      "sku": "",
+      "name": "قطمارس الصوم الكبير – عربي– دير الشهيد العظيم مارمينا العجائبي بمريوط - نسخة",
+      "active": true
+    },
+    {
+      "id": "custom-1782306615168",
+      "sku": "",
+      "name": "قطمارس الأيام السنوي – عربي – نسخة دير الشهيد العظيم مارمينا العجائبي بمريوط",
+      "active": true
+    }
+  ],
+  "mappingFlags": [
+    {
+      "id": "old-10121340551475",
+      "name": "تريانتو ستانلس",
+      "mainCategory": "المذبح والأواني المقدسة",
+      "subcategory": "service-tools",
+      "stock": "متاح"
+    },
+    {
+      "id": "old-10121339568435",
+      "name": "دف 18 سم نحاس ذهبي تقيل",
+      "mainCategory": "المذبح والأواني المقدسة",
+      "subcategory": "service-tools",
+      "stock": "متاح"
+    }
+  ]
+}

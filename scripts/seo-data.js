@@ -31,7 +31,8 @@ function baseSlug(value = "") {
 function productSlug(product, used = new Set()) {
   const nameSlug = baseSlug(localized(product?.name));
   const idSlug = baseSlug(product?.id || "");
-  let candidate = product?.slug ? baseSlug(product.slug) : nameSlug;
+  const isYotaModel = /^صليب يوتا مادلي[ةه] موديل (?:[1-9]|1[0-3])$/u.test(normalizeArabic(localized(product?.name)).trim());
+  let candidate = isYotaModel ? nameSlug : product?.slug ? baseSlug(product.slug) : nameSlug;
   if (!candidate || candidate.length < 2) candidate = idSlug || String(product?.id || "product");
 
   const root = candidate.slice(0, 120).replace(/-+$/g, "") || idSlug || "product";

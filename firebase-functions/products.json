@@ -11,7 +11,7 @@
     "badge": "حامل",
     "isBestSeller": false,
     "image": "assets/optimized/products/gallery/product-1-2-20260913124121-cb366f.webp",
-    "url": "https://popekyrillos.store/?product=custom-1789302819968",
+    "url": "https://popekyrillos.store/products/%D8%AD%D8%A7%D9%85%D9%84-%D8%B4%D9%88%D8%B1%D9%8A%D8%A7%D8%AA-%D9%86%D8%AD%D8%A7%D8%B3-180-%D8%B3%D9%85",
     "tags": [],
     "collections": [],
     "images": [
@@ -36,7 +36,8 @@
     "mainCategory": "المذبح والأواني المقدسة",
     "subCategory": "الشوريات",
     "subcategory": "censers",
-    "sku": "PK-A7C2F8E6DE8F49FA8A96D0E6CCAB49A3"
+    "sku": "PK-A7C2F8E6DE8F49FA8A96D0E6CCAB49A3",
+    "slug": "حامل-شوريات-نحاس-180-سم"
   },
   {
     "id": "atb3ho-10618130956453",
@@ -1493,7 +1494,7 @@
     "stock": "متاح",
     "badge": "يوتا",
     "image": "assets/products/gallery/iota-plain-cross-20cm-model-1.webp",
-    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D8%A9-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-1",
+    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D9%87-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-1",
     "tags": [
       "يوتا",
       "صلبان يوتا",
@@ -1523,7 +1524,7 @@
     ],
     "mainCategory": "الصلبان",
     "subCategory": "صلبان خشب",
-    "slug": "صليب-يوتا-سادة-20-سم-موديل-1",
+    "slug": "صليب-يوتا-ساده-20-سم-موديل-1",
     "subcategory": "wooden-crosses",
     "collections": [
       "هدايا الخدمة",
@@ -1558,7 +1559,7 @@
     "stock": "متاح",
     "badge": "يوتا",
     "image": "assets/products/gallery/iota-plain-cross-20cm-model-2.webp",
-    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D8%A9-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-2",
+    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D9%87-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-2",
     "tags": [
       "يوتا",
       "صلبان يوتا",
@@ -1588,7 +1589,7 @@
     ],
     "mainCategory": "الصلبان",
     "subCategory": "صلبان خشب",
-    "slug": "صليب-يوتا-سادة-20-سم-موديل-2",
+    "slug": "صليب-يوتا-ساده-20-سم-موديل-2",
     "subcategory": "wooden-crosses",
     "collections": [
       "هدايا الخدمة",
@@ -1623,7 +1624,7 @@
     "stock": "متاح",
     "badge": "يوتا",
     "image": "assets/products/gallery/iota-plain-cross-20cm-model-3.webp",
-    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D8%A9-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-3",
+    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D9%87-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-3",
     "tags": [
       "يوتا",
       "صلبان يوتا",
@@ -1653,7 +1654,7 @@
     ],
     "mainCategory": "الصلبان",
     "subCategory": "صلبان خشب",
-    "slug": "صليب-يوتا-سادة-20-سم-موديل-3",
+    "slug": "صليب-يوتا-ساده-20-سم-موديل-3",
     "subcategory": "wooden-crosses",
     "collections": [
       "هدايا الخدمة",
@@ -1688,7 +1689,7 @@
     "stock": "متاح",
     "badge": "يوتا",
     "image": "assets/products/gallery/iota-plain-cross-20cm-model-4.webp",
-    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D8%A9-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-4",
+    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D9%87-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-4",
     "tags": [
       "يوتا",
       "صلبان يوتا",
@@ -1718,7 +1719,7 @@
     ],
     "mainCategory": "الصلبان",
     "subCategory": "صلبان خشب",
-    "slug": "صليب-يوتا-سادة-20-سم-موديل-4",
+    "slug": "صليب-يوتا-ساده-20-سم-موديل-4",
     "subcategory": "wooden-crosses",
     "collections": [
       "هدايا الخدمة",
@@ -1753,7 +1754,7 @@
     "stock": "متاح",
     "badge": "يوتا",
     "image": "assets/products/gallery/iota-plain-cross-20cm-model-5.webp",
-    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D8%A9-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-5",
+    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D9%87-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-5",
     "tags": [
       "يوتا",
       "صلبان يوتا",
@@ -1783,7 +1784,7 @@
     ],
     "mainCategory": "الصلبان",
     "subCategory": "صلبان خشب",
-    "slug": "صليب-يوتا-سادة-20-سم-موديل-5",
+    "slug": "صليب-يوتا-ساده-20-سم-موديل-5",
     "subcategory": "wooden-crosses",
     "collections": [
       "هدايا الخدمة",
@@ -1818,7 +1819,7 @@
     "stock": "متاح",
     "badge": "يوتا",
     "image": "assets/products/gallery/iota-plain-cross-20cm-model-6.webp",
-    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D8%A9-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-6",
+    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D9%87-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-6",
     "tags": [
       "يوتا",
       "صلبان يوتا",
@@ -1848,7 +1849,7 @@
     ],
     "mainCategory": "الصلبان",
     "subCategory": "صلبان خشب",
-    "slug": "صليب-يوتا-سادة-20-سم-موديل-6",
+    "slug": "صليب-يوتا-ساده-20-سم-موديل-6",
     "subcategory": "wooden-crosses",
     "collections": [
       "هدايا الخدمة",
@@ -1883,7 +1884,7 @@
     "stock": "متاح",
     "badge": "يوتا",
     "image": "assets/products/gallery/iota-plain-cross-20cm-model-7.webp",
-    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D8%A9-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-7",
+    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D9%87-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-7",
     "tags": [
       "يوتا",
       "صلبان يوتا",
@@ -1913,7 +1914,7 @@
     ],
     "mainCategory": "الصلبان",
     "subCategory": "صلبان خشب",
-    "slug": "صليب-يوتا-سادة-20-سم-موديل-7",
+    "slug": "صليب-يوتا-ساده-20-سم-موديل-7",
     "subcategory": "wooden-crosses",
     "collections": [
       "هدايا الخدمة",
@@ -1948,7 +1949,7 @@
     "stock": "متاح",
     "badge": "يوتا",
     "image": "assets/products/gallery/iota-plain-cross-20cm-model-8.webp",
-    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D8%A9-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-8",
+    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D9%87-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-8",
     "tags": [
       "يوتا",
       "صلبان يوتا",
@@ -1978,7 +1979,7 @@
     ],
     "mainCategory": "الصلبان",
     "subCategory": "صلبان خشب",
-    "slug": "صليب-يوتا-سادة-20-سم-موديل-8",
+    "slug": "صليب-يوتا-ساده-20-سم-موديل-8",
     "subcategory": "wooden-crosses",
     "collections": [
       "هدايا الخدمة",
@@ -2013,7 +2014,7 @@
     "stock": "متاح",
     "badge": "يوتا",
     "image": "assets/products/gallery/iota-plain-cross-20cm-model-9.webp",
-    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D8%A9-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-9",
+    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D9%87-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-9",
     "tags": [
       "يوتا",
       "صلبان يوتا",
@@ -2043,7 +2044,7 @@
     ],
     "mainCategory": "الصلبان",
     "subCategory": "صلبان خشب",
-    "slug": "صليب-يوتا-سادة-20-سم-موديل-9",
+    "slug": "صليب-يوتا-ساده-20-سم-موديل-9",
     "subcategory": "wooden-crosses",
     "collections": [
       "هدايا الخدمة",
@@ -2078,7 +2079,7 @@
     "stock": "متاح",
     "badge": "يوتا",
     "image": "assets/products/gallery/iota-plain-cross-20cm-model-10.webp",
-    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D8%A9-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-10",
+    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D9%87-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-10",
     "tags": [
       "يوتا",
       "صلبان يوتا",
@@ -2108,7 +2109,7 @@
     ],
     "mainCategory": "الصلبان",
     "subCategory": "صلبان خشب",
-    "slug": "صليب-يوتا-سادة-20-سم-موديل-10",
+    "slug": "صليب-يوتا-ساده-20-سم-موديل-10",
     "subcategory": "wooden-crosses",
     "collections": [
       "هدايا الخدمة",
@@ -2143,7 +2144,7 @@
     "stock": "متاح",
     "badge": "يوتا",
     "image": "assets/products/gallery/iota-plain-cross-20cm-model-11.webp",
-    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D8%A9-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-11",
+    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D9%87-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-11",
     "tags": [
       "يوتا",
       "صلبان يوتا",
@@ -2173,7 +2174,7 @@
     ],
     "mainCategory": "الصلبان",
     "subCategory": "صلبان خشب",
-    "slug": "صليب-يوتا-سادة-20-سم-موديل-11",
+    "slug": "صليب-يوتا-ساده-20-سم-موديل-11",
     "subcategory": "wooden-crosses",
     "collections": [
       "هدايا الخدمة",
@@ -2208,7 +2209,7 @@
     "stock": "متاح",
     "badge": "يوتا",
     "image": "assets/products/gallery/iota-plain-cross-20cm-model-12.webp",
-    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D8%A9-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-12",
+    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D9%87-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-12",
     "tags": [
       "يوتا",
       "صلبان يوتا",
@@ -2238,7 +2239,7 @@
     ],
     "mainCategory": "الصلبان",
     "subCategory": "صلبان خشب",
-    "slug": "صليب-يوتا-سادة-20-سم-موديل-12",
+    "slug": "صليب-يوتا-ساده-20-سم-موديل-12",
     "subcategory": "wooden-crosses",
     "collections": [
       "هدايا الخدمة",
@@ -2273,7 +2274,7 @@
     "stock": "متاح",
     "badge": "يوتا",
     "image": "assets/products/gallery/iota-plain-cross-20cm-model-13.webp",
-    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D8%A9-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-13",
+    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D9%87-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-13",
     "tags": [
       "يوتا",
       "صلبان يوتا",
@@ -2303,7 +2304,7 @@
     ],
     "mainCategory": "الصلبان",
     "subCategory": "صلبان خشب",
-    "slug": "صليب-يوتا-سادة-20-سم-موديل-13",
+    "slug": "صليب-يوتا-ساده-20-سم-موديل-13",
     "subcategory": "wooden-crosses",
     "collections": [
       "هدايا الخدمة",
@@ -2338,7 +2339,7 @@
     "stock": "متاح",
     "badge": "يوتا",
     "image": "assets/products/gallery/iota-plain-cross-20cm-model-14.webp",
-    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D8%A9-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-14",
+    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D9%87-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-14",
     "tags": [
       "يوتا",
       "صلبان يوتا",
@@ -2368,7 +2369,7 @@
     ],
     "mainCategory": "الصلبان",
     "subCategory": "صلبان خشب",
-    "slug": "صليب-يوتا-سادة-20-سم-موديل-14",
+    "slug": "صليب-يوتا-ساده-20-سم-موديل-14",
     "subcategory": "wooden-crosses",
     "collections": [
       "هدايا الخدمة",
@@ -2403,7 +2404,7 @@
     "stock": "متاح",
     "badge": "يوتا",
     "image": "assets/products/gallery/iota-plain-cross-20cm-model-15.webp",
-    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D8%A9-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-15",
+    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D9%87-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-15",
     "tags": [
       "يوتا",
       "صلبان يوتا",
@@ -2433,7 +2434,7 @@
     ],
     "mainCategory": "الصلبان",
     "subCategory": "صلبان خشب",
-    "slug": "صليب-يوتا-سادة-20-سم-موديل-15",
+    "slug": "صليب-يوتا-ساده-20-سم-موديل-15",
     "subcategory": "wooden-crosses",
     "collections": [
       "هدايا الخدمة",
@@ -2468,7 +2469,7 @@
     "stock": "متاح",
     "badge": "يوتا",
     "image": "assets/products/gallery/iota-plain-cross-20cm-model-16.webp",
-    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D8%A9-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-16",
+    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D9%87-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-16",
     "tags": [
       "يوتا",
       "صلبان يوتا",
@@ -2498,7 +2499,7 @@
     ],
     "mainCategory": "الصلبان",
     "subCategory": "صلبان خشب",
-    "slug": "صليب-يوتا-سادة-20-سم-موديل-16",
+    "slug": "صليب-يوتا-ساده-20-سم-موديل-16",
     "subcategory": "wooden-crosses",
     "collections": [
       "هدايا الخدمة",
@@ -2533,7 +2534,7 @@
     "stock": "متاح",
     "badge": "يوتا",
     "image": "assets/products/gallery/iota-plain-cross-20cm-model-17.webp",
-    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D8%A9-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-17",
+    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D8%B3%D8%A7%D8%AF%D9%87-20-%D8%B3%D9%85-%D9%85%D9%88%D8%AF%D9%8A%D9%84-17",
     "tags": [
       "يوتا",
       "صلبان يوتا",
@@ -2563,7 +2564,7 @@
     ],
     "mainCategory": "الصلبان",
     "subCategory": "صلبان خشب",
-    "slug": "صليب-يوتا-سادة-20-سم-موديل-17",
+    "slug": "صليب-يوتا-ساده-20-سم-موديل-17",
     "subcategory": "wooden-crosses",
     "collections": [
       "هدايا الخدمة",
@@ -2711,7 +2712,7 @@
     ],
     "mainCategory": "الصلبان",
     "subCategory": "مادليات اليوطا",
-    "slug": "صليب-يوتا-مادليه-موديل-7",
+    "slug": "صليب-يوتا-مادليه-موديل-13",
     "subcategory": "yota-medallions",
     "collections": [
       "هدايا الخدمة",
@@ -2733,7 +2734,7 @@
       "هدايا الخدمة",
       "منتجات الأطفال"
     ],
-    "url": "https://popekyrillos.store/?product=custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642-copy-1783007465321-copy-1783296428133-copy-1783296505870-copy-1783296547191-copy-1783296594080-copy-1783296672538-copy-1783296711318",
+    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D9%85%D8%A7%D8%AF%D9%84%D9%8A%D9%87-%D9%85%D9%88%D8%AF%D9%8A%D9%84-13",
     "thumbnail": "/assets/thumbnails/320/custom-1782980654479-copy-1782982056347-copy-17829869845-5e38645658a5-25bd7474b7.webp",
     "isBestSeller": false
   },
@@ -2780,7 +2781,7 @@
     ],
     "mainCategory": "الصلبان",
     "subCategory": "مادليات اليوطا",
-    "slug": "صليب-يوتا-مادليه-موديل-7",
+    "slug": "صليب-يوتا-مادليه-موديل-12",
     "subcategory": "yota-medallions",
     "collections": [
       "هدايا الخدمة",
@@ -2802,7 +2803,7 @@
       "هدايا الخدمة",
       "منتجات الأطفال"
     ],
-    "url": "https://popekyrillos.store/?product=custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642-copy-1783007465321-copy-1783296428133-copy-1783296505870-copy-1783296547191-copy-1783296594080-copy-1783296672538",
+    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D9%85%D8%A7%D8%AF%D9%84%D9%8A%D9%87-%D9%85%D9%88%D8%AF%D9%8A%D9%84-12",
     "thumbnail": "/assets/thumbnails/320/custom-1782980654479-copy-1782982056347-copy-17829869845-5f7b997ab9ed-0dfafc8e90.webp",
     "isBestSeller": false
   },
@@ -2849,7 +2850,7 @@
     ],
     "mainCategory": "الصلبان",
     "subCategory": "مادليات اليوطا",
-    "slug": "صليب-يوتا-مادليه-موديل-7",
+    "slug": "صليب-يوتا-مادليه-موديل-11",
     "subcategory": "yota-medallions",
     "collections": [
       "هدايا الخدمة",
@@ -2871,7 +2872,7 @@
       "هدايا الخدمة",
       "منتجات الأطفال"
     ],
-    "url": "https://popekyrillos.store/?product=custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642-copy-1783007465321-copy-1783296428133-copy-1783296505870-copy-1783296547191-copy-1783296594080",
+    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D9%85%D8%A7%D8%AF%D9%84%D9%8A%D9%87-%D9%85%D9%88%D8%AF%D9%8A%D9%84-11",
     "thumbnail": "/assets/thumbnails/320/custom-1782980654479-copy-1782982056347-copy-17829869845-33a97b4f9c6c-ee3083c19f.webp",
     "isBestSeller": false
   },
@@ -2918,7 +2919,7 @@
     ],
     "mainCategory": "الصلبان",
     "subCategory": "مادليات اليوطا",
-    "slug": "صليب-يوتا-مادليه-موديل-7",
+    "slug": "صليب-يوتا-مادليه-موديل-10",
     "subcategory": "yota-medallions",
     "collections": [
       "هدايا الخدمة",
@@ -2940,7 +2941,7 @@
       "هدايا الخدمة",
       "منتجات الأطفال"
     ],
-    "url": "https://popekyrillos.store/?product=custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642-copy-1783007465321-copy-1783296428133-copy-1783296505870-copy-1783296547191",
+    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D9%85%D8%A7%D8%AF%D9%84%D9%8A%D9%87-%D9%85%D9%88%D8%AF%D9%8A%D9%84-10",
     "thumbnail": "/assets/thumbnails/320/custom-1782980654479-copy-1782982056347-copy-17829869845-0975d45c9eaa-f5e23e5fa5.webp",
     "isBestSeller": false
   },
@@ -2987,7 +2988,7 @@
     ],
     "mainCategory": "الصلبان",
     "subCategory": "مادليات اليوطا",
-    "slug": "صليب-يوتا-مادليه-موديل-7",
+    "slug": "صليب-يوتا-مادليه-موديل-9",
     "subcategory": "yota-medallions",
     "collections": [
       "هدايا الخدمة",
@@ -3009,7 +3010,7 @@
       "هدايا الخدمة",
       "منتجات الأطفال"
     ],
-    "url": "https://popekyrillos.store/?product=custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642-copy-1783007465321-copy-1783296428133-copy-1783296505870",
+    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D9%85%D8%A7%D8%AF%D9%84%D9%8A%D9%87-%D9%85%D9%88%D8%AF%D9%8A%D9%84-9",
     "thumbnail": "/assets/thumbnails/320/custom-1782980654479-copy-1782982056347-copy-17829869845-dcc772f77412-ea8cd3486c.webp",
     "isBestSeller": false
   },
@@ -3056,7 +3057,7 @@
     ],
     "mainCategory": "الصلبان",
     "subCategory": "مادليات اليوطا",
-    "slug": "صليب-يوتا-مادليه-موديل-7",
+    "slug": "صليب-يوتا-مادليه-موديل-8",
     "subcategory": "yota-medallions",
     "collections": [
       "هدايا الخدمة",
@@ -3079,7 +3080,7 @@
       "منتجات الأطفال"
     ],
     "thumbnail": "/assets/thumbnails/320/custom-1782980654479-copy-1782982056347-copy-17829869845-2fa461f37b7b-7ba242aebe.webp",
-    "url": "https://popekyrillos.store/?product=custom-1782980654479-copy-1782982056347-copy-1782986984554-copy-1783007327699-copy-1783007378119-copy-1783007431642-copy-1783007465321-copy-1783296428133",
+    "url": "https://popekyrillos.store/products/%D8%B5%D9%84%D9%8A%D8%A8-%D9%8A%D9%88%D8%AA%D8%A7-%D9%85%D8%A7%D8%AF%D9%84%D9%8A%D9%87-%D9%85%D9%88%D8%AF%D9%8A%D9%84-8",
     "isBestSeller": false
   },
   {
@@ -8691,7 +8692,7 @@
     "stock": "متاح",
     "badge": "يوتا",
     "image": "assets/optimized/products/gallery/product-1-image-20260705172724-e7fdfd.webp",
-    "url": "https://popekyrillos.store/?product=custom-1783272387022",
+    "url": "https://popekyrillos.store/products/%D8%A7%D9%84%D9%88%D8%A7%D9%86-%D8%A7%D9%84%D9%8A%D9%88%D8%B7%D8%A7",
     "tags": [],
     "images": [
       "assets/optimized/products/gallery/product-1-image-20260705172724-e7fdfd.webp",
@@ -8939,7 +8940,8 @@
       "هدايا اكسسوارات إكسسوارات"
     ],
     "thumbnail": "/assets/thumbnails/320/custom-1783272387022-17b429120a.webp",
-    "isBestSeller": false
+    "isBestSeller": false,
+    "slug": "الوان-اليوطا"
   },
   {
     "id": "tasbeha-giza-annual-psalmody",
@@ -9123,7 +9125,7 @@
     "badge": "شورية",
     "isBestSeller": false,
     "image": "assets/optimized/products/gallery/product-1-1-20260712091730-31cc54.webp",
-    "url": "https://popekyrillos.store/?product=custom-1783845396877-copy-1783846824668-copy-1783847655782-copy-1783847802907",
+    "url": "https://popekyrillos.store/products/%D8%B4%D9%88%D8%B1%D9%8A%D9%87-%D9%86%D8%AD%D8%A7%D8%B3-%D9%83%D8%A8%D9%8A%D8%B1%D9%87",
     "tags": [
       "نحاس",
       "شورية",
@@ -9172,7 +9174,8 @@
       "altar-tools",
       "service-tools",
       "مستلزمات المذبح"
-    ]
+    ],
+    "slug": "شوريه-نحاس-كبيره"
   },
   {
     "id": "custom-1783845396877-copy-1783846824668-copy-1783847655782",
@@ -9186,7 +9189,7 @@
     "badge": "شورية",
     "isBestSeller": false,
     "image": "assets/optimized/products/gallery/product-1-1-20260712091530-47ffa3.webp",
-    "url": "https://popekyrillos.store/?product=custom-1783845396877-copy-1783846824668-copy-1783847655782",
+    "url": "https://popekyrillos.store/products/%D8%B4%D9%88%D8%B1%D9%8A%D9%87-%D9%86%D8%AD%D8%A7%D8%B3-%D9%88%D8%B3%D8%B7",
     "tags": [
       "نحاس",
       "شورية",
@@ -9234,7 +9237,8 @@
       "altar-tools",
       "service-tools",
       "مستلزمات المذبح"
-    ]
+    ],
+    "slug": "شوريه-نحاس-وسط"
   },
   {
     "id": "custom-1783845396877-copy-1783846824668",
@@ -9248,7 +9252,7 @@
     "badge": "شورية",
     "isBestSeller": false,
     "image": "assets/optimized/products/gallery/product-1-2-20260712090103-704d2d.webp",
-    "url": "https://popekyrillos.store/?product=custom-1783845396877-copy-1783846824668",
+    "url": "https://popekyrillos.store/products/%D8%B4%D9%88%D8%B1%D9%8A%D9%87-%D8%B3%D8%AA%D8%A7%D9%86%D9%84%D8%B3-%D9%88%D8%B3%D8%B7",
     "tags": [
       "ستانلس",
       "شورية",
@@ -9295,7 +9299,8 @@
       "altar-tools",
       "service-tools",
       "مستلزمات المذبح"
-    ]
+    ],
+    "slug": "شوريه-ستانلس-وسط"
   },
   {
     "id": "custom-1783845396877",
@@ -9309,7 +9314,7 @@
     "badge": "شورية",
     "isBestSeller": false,
     "image": "assets/optimized/products/gallery/product-1-1-20260712085718-f59b28.webp",
-    "url": "https://popekyrillos.store/?product=custom-1783845396877",
+    "url": "https://popekyrillos.store/products/%D8%B4%D9%88%D8%B1%D9%8A%D9%87-%D8%B3%D8%AA%D8%A7%D9%86%D9%84%D8%B3-%D9%83%D8%A8%D9%8A%D8%B1%D9%87",
     "tags": [
       "ستانلس",
       "شورية",
@@ -9357,6 +9362,7 @@
       "altar-tools",
       "service-tools",
       "مستلزمات المذبح"
-    ]
+    ],
+    "slug": "شوريه-ستانلس-كبيره"
   }
 ]

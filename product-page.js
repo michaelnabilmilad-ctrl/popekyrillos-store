@@ -165,7 +165,8 @@ function imageMarkup(source, index, className = "", purpose = "thumbnail") {
   const displaySource = responsive ? productThumbnailUrl(purpose === "main" ? 640 : 320) : assetUrl(source);
   const loading = purpose === "main" ? 'fetchpriority="high"' : 'loading="lazy"';
   const sizes = responsive ? ` srcset="${responsive}" sizes="${purpose === "main" ? "(max-width: 760px) calc(100vw - 32px), 540px" : "72px"}"` : "";
-  return `<img class="${className}" src="${escapeHtml(displaySource)}"${sizes} alt="${index === 0 ? escapeHtml(text(product.name)) : ""}" width="800" height="800" ${loading} decoding="async">`;
+  const imageAlt = index === 0 ? text(product.name) : `صورة ${index + 1} من ${text(product.name)}`;
+  return `<img class="${className}" src="${escapeHtml(displaySource)}"${sizes} alt="${escapeHtml(imageAlt)}" width="800" height="800" ${loading} decoding="async">`;
 }
 
 function applyRouteZoom() {

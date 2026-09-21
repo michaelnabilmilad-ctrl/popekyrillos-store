@@ -1328,11 +1328,31 @@ function productMatchesSubcategory(product, subcategory = "") {
 }
 
 function visibleMainCategories() {
-  return taxonomyReady ? taxonomyCategories : [];
+  if (!taxonomyReady || !catalogCategoryCountsLoaded) return [];
+  return taxonomyCategories.filter((category) => mainCategoryProductCount(category.id) > 0);
 }
 
 function availableProducts() {
-  return products.filter(hasAvailableVariant);
+  return dedupeCatalogProducts(products.filter((product) => product?.active !== false && product?.hidden !== true && product?.deleted !== true && product?.published !== false && hasAvailableVariant(product)));
+}
+
+function duplicateCatalogKey(product) {
+  const sku = String(product?.sku || "").trim().toLowerCase();
+  if (sku) return `sku:${sku}`;
+  const name = normalizeSearchText(localized(product?.name || ""));
+  const price = productPrice(product) ?? "";
+  const image = String(getProductImages(product)[0] || "").replace(/[?#].*$/, "").toLowerCase();
+  return name && image ? `fallback:${name}|${price}|${image}` : `id:${product?.id || ""}`;
+}
+
+function dedupeCatalogProducts(items = []) {
+  const seen = new Set();
+  return items.filter((product) => {
+    const key = duplicateCatalogKey(product);
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
 }
 
 function buildSubcategoryCounts(items = []) {
@@ -1365,7 +1385,10 @@ function subcategoryProductCount(categoryId, subcategoryId) {
 function orderedLabelsForCategory(category) {
   const normalized = normalizeCategoryFilter(category);
   const categoryMeta = taxonomy?.categoryById?.get(normalized);
-  if (categoryMeta) return categoryMeta.subcategories;
+  if (categoryMeta) return categoryMeta.subcategories.filter((subcategory) => {
+    const totalCount = subcategoryProductCount(normalized, subcategory.id);
+    return totalCount > 0;
+  });
 
   const labels = [...new Set(availableProducts().filter((product) => product.category === category).map((product) => product.label).filter(Boolean))];
   const preferred = catalogLabelOrder[category] || [];
@@ -1538,7 +1561,7 @@ function renderSubcategoryCards() {
       aria-pressed="${card.active ? "true" : "false"}"
     >
       <span class="subcategory-card-image${card.image ? "" : " is-empty"}">
-        ${card.image ? `<img src="${escapeHtml(versionedAssetUrl(card.image, productsAssetVersion || "1"))}" alt="" width="320" height="320" loading="lazy" decoding="async" />` : ""}
+        ${card.image ? `<img src="${escapeHtml(versionedAssetUrl(card.image, productsAssetVersion || "1"))}" alt="${escapeHtml(card.name)}" width="320" height="320" loading="lazy" decoding="async" />` : ""}
       </span>
       <span class="subcategory-card-body">
         <strong>${escapeHtml(card.name)}</strong>
@@ -1609,7 +1632,8 @@ function renderShopMenu() {
   const allCount = availableProducts().length;
   const groups = categories
     .map((category) => {
-      const labels = orderedLabelsForCategory(category.id);
+      const labels = orderedLabelsForCategory(category.id)
+        .filter((label) => fullSubcategoryProductCount(category.id, label.id) > 0);
       const categoryCount = availableProducts().filter((product) => productMatchesCategory(product, category.id)).length;
       const labelButtons = labels
         .map((label) => {
@@ -1689,7 +1713,7 @@ function applyLanguage({ render = true } = {}) {
   setText("[data-shop-menu-subtitle]", t("shopMenuSubtitle"));
   const metricBlocks = document.querySelectorAll(".hero-metrics > div");
   if (metricBlocks[0]) {
-    metricBlocks[0].querySelector("strong").textContent = isEnglish() ? "120+" : "+120";
+    updateActiveProductCount();
     metricBlocks[0].querySelector("span").textContent = t("metricProducts");
   }
   if (metricBlocks[1]) {
@@ -2247,6 +2271,15 @@ function setProductUrl(productId) {
   window.history.pushState({ productId }, "", url);
 }
 
+function updateActiveProductCount() {
+  const target = document.querySelector("[data-active-product-count]") || document.querySelector(".hero-metrics > div strong");
+  if (!target) return;
+  const count = catalogCategoryCountsLoaded
+    ? Object.entries(catalogCategoryCounts).filter(([id]) => id !== "greek-collection" && id !== "uncategorized").reduce((sum, [, value]) => sum + (Number(value) || 0), 0)
+    : availableProducts().length;
+  target.textContent = displayText(formatter.format(count));
+}
+
 function clearProductUrl() {
   const url = new URL(window.location.href);
   const hadProductUrl =
@@ -2325,18 +2358,40 @@ function updateIndexingMeta({ noindex = false } = {}) {
 
 function updatePageMeta(product = null) {
   const isProduct = Boolean(product);
-  const canonicalUrl = isProduct ? `${canonicalOrigin}${canonicalProductPath(product)}` : `${canonicalOrigin}/`;
-  const title = isProduct ? `${displayText(localized(product.name))} | ${t("brandName")}` : t("documentTitle");
-  const description = pageDescription(product);
+  const routeFilter = catalogFilterFromUrl();
+  const isCategory = !isProduct && routeFilter.category !== "all";
+  const category = isCategory ? taxonomy?.categoryById?.get(routeFilter.category) : null;
+  const subcategory = routeFilter.label ? taxonomy?.subcategoryById?.get(routeFilter.label) : null;
+  const categoryName = localized(subcategory?.name || category?.name || "");
+  const categoryCount = isCategory
+    ? (routeFilter.label ? fullSubcategoryProductCount(routeFilter.category, routeFilter.label) : mainCategoryProductCount(routeFilter.category))
+    : null;
+  const canonicalUrl = isProduct
+    ? `${canonicalOrigin}${canonicalProductPath(product)}`
+    : isCategory
+      ? categoryShareUrl(routeFilter.category, routeFilter.label).split("#")[0]
+      : `${canonicalOrigin}/`;
+  const title = isProduct
+    ? `${displayText(localized(product.name))} | ${t("brandName")}`
+    : isCategory
+      ? `${categoryName} | ${t("brandName")}`
+      : t("documentTitle");
+  const description = isCategory
+    ? (categoryCount > 0
+        ? `تصفح ${categoryName} من مكتبة البابا كيرلس. ${displayText(formatter.format(categoryCount))} منتج متاح للخدمة والكنائس مع صور وأسعار محدثة.`
+        : `قسم ${categoryName} في مكتبة البابا كيرلس. ستظهر المنتجات هنا عند توفرها.`)
+    : pageDescription(product);
   const image = isProduct
     ? absoluteUrl(productImageUrl(getProductImages(product)[0] || "", product).split("?")[0])
+    : isCategory
+      ? absoluteUrl(subcategoryCardImage(subcategory, category))
     : absoluteUrl("assets/optimized/hero-papa-kyrillos-products.webp");
   const price = isProduct ? productPrice(product) : null;
   const availability = isProduct && hasAvailableVariant(product) ? "https://schema.org/InStock" : "https://schema.org/OutOfStock";
 
   document.title = title;
   setCanonical(canonicalUrl);
-  updateIndexingMeta({ noindex: false });
+  updateIndexingMeta({ noindex: isCategory && categoryCount === 0 });
   setMetaTag('meta[name="description"]', { name: "description", content: description });
   setMetaTag('meta[property="og:type"]', { property: "og:type", content: isProduct ? "product" : "website" });
   setMetaTag('meta[property="og:title"]', { property: "og:title", content: title });
@@ -3251,6 +3306,8 @@ function syncCatalogFilterControls() {
 }
 
 function renderProducts() {
+  updateActiveProductCount();
+  updatePageMeta();
   products = applySharedYotaColors(products);
   ensureMainCategoryTiles();
   syncCatalogFilterControls();
@@ -3296,7 +3353,7 @@ function renderProducts() {
                     aria-label="${escapeHtml(t("showImageLabel", { index: displayText(formatter.format(index + 1)), name: productDisplayName }))}"
                     aria-pressed="${index === 0 ? "true" : "false"}"
                   >
-                    <img src="${escapeHtml(thumbImage)}" alt="" width="72" height="72" loading="lazy" decoding="async" draggable="false" />
+                    <img src="${escapeHtml(thumbImage)}" alt="${escapeHtml(`صورة ${index + 1} من ${productDisplayName}`)}" width="72" height="72" loading="lazy" decoding="async" draggable="false" />
                   </button>
                 `;
                 }
@@ -3655,7 +3712,7 @@ function renderProductModal() {
                       aria-label="${escapeHtml(t("showImageLabel", { index: displayText(formatter.format(index + 1)), name: productDisplayName }))}"
                       aria-pressed="${isActive ? "true" : "false"}"
                     >
-                      <img src="${escapeHtml(productCardImageUrl(image, product, 144))}" alt="" width="72" height="72" loading="lazy" decoding="async" fetchpriority="low" draggable="false" />
+                      <img src="${escapeHtml(productCardImageUrl(image, product, 144))}" alt="${escapeHtml(`صورة ${index + 1} من ${displayText(localized(product.name))}`)}" width="72" height="72" loading="lazy" decoding="async" fetchpriority="low" draggable="false" />
                     </button>
                   `;
                 })
@@ -4503,7 +4560,7 @@ function renderMiniCart(entries, total, rawCount, hasUnpriced) {
       const image = item.variant?.image || getVariantImages(item.variant)[0] || getProductImages(item.product)[0] || "";
       const imageUrl = image ? productImageUrl(image, item.product) : "";
       const thumb = imageUrl
-        ? `<img class="mini-cart-thumb" src="${escapeHtml(imageUrl)}" alt="" width="108" height="108" loading="lazy" decoding="async" />`
+        ? `<img class="mini-cart-thumb" src="${escapeHtml(imageUrl)}" alt="${escapeHtml(displayText(localized(product.name)))}" width="108" height="108" loading="lazy" decoding="async" />`
         : `<span class="mini-cart-thumb mini-cart-thumb-empty" aria-hidden="true"></span>`;
       const qtyText = displayText(formatter.format(item.qty));
       const priceText = item.price === null ? t("askPrice") : money(item.price);
@@ -5336,7 +5393,7 @@ async function loadCatalogPage({ reset = false } = {}) {
       }
       const payload = await response.json();
       if (requestSequence !== catalogRequestSequence) return;
-      staticCatalogProducts = Array.isArray(payload) ? payload : Array.isArray(payload.products) ? payload.products : [];
+      staticCatalogProducts = dedupeCatalogProducts(Array.isArray(payload) ? payload : Array.isArray(payload.products) ? payload.products : []);
       if (!staticCatalogProducts.length) throw new Error("Static catalog is empty");
       products = staticCatalogProducts;
       catalogCategoryCounts = {};

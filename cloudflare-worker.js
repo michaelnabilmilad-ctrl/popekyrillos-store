@@ -232,7 +232,9 @@ function localized(value) {
 }
 
 function productSlug(product) {
-  return normalizeSlug(product?.slug || localized(product?.name) || product?.id || "");
+  const name = localized(product?.name);
+  const isYotaModel = /^صليب يوتا مادلي[ةه] موديل (?:[1-9]|1[0-3])$/u.test(normalizeSlug(name).replace(/-/g, " "));
+  return normalizeSlug(isYotaModel ? name : product?.slug || name || product?.id || "");
 }
 
 function canonicalProductPath(product) {
@@ -282,6 +284,25 @@ function hasAvailableVariant(product) {
 function isCatalogProductVisible(product) {
   return product?.active !== false && product?.hidden !== true && product?.deleted !== true
     && product?.published !== false && hasAvailableVariant(product);
+}
+
+function catalogDuplicateKey(product) {
+  const sku = String(product?.sku || "").trim().toLowerCase();
+  if (sku) return `sku:${sku}`;
+  const name = normalizedSearch(localized(product?.name));
+  const price = productPrice(product) ?? "";
+  const image = String(productImages(product)[0] || "").replace(/[?#].*$/, "").toLowerCase();
+  return name && image ? `fallback:${name}|${price}|${image}` : `id:${product?.id || ""}`;
+}
+
+function uniqueCatalogProducts(products) {
+  const seen = new Set();
+  return products.filter((product) => {
+    const key = catalogDuplicateKey(product);
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
 }
 
 function productDescription(product) {
@@ -553,7 +574,7 @@ async function catalogApiResponse(request, env, ctx) {
   [...url.searchParams.entries()].sort(([a], [b]) => a.localeCompare(b)).forEach(([key, value]) => cacheUrl.searchParams.append(key, value));
   const allProducts = await loadProducts(env, request, { maxAgeMs: 600000 });
   const thumbnailManifest = await loadThumbnailManifest(env, request);
-  const navigationProducts = allProducts.filter(isCatalogProductVisible);
+  const navigationProducts = uniqueCatalogProducts(allProducts.filter(isCatalogProductVisible));
   const categoryCounts = navigationProducts.reduce((counts, product) => {
     const categoryId = catalogMainCategoryId(product);
     counts[categoryId] = (counts[categoryId] || 0) + 1;
@@ -593,7 +614,7 @@ async function catalogApiResponse(request, env, ctx) {
   const cached = await edgeCache.match(cacheKey);
   if (cached) return cached;
   const search = normalizedSearch(url.searchParams.get("search") || "");
-  const matched = sortCatalogProducts(allProducts.filter((product) => catalogProductMatches(product, url.searchParams)), url.searchParams.get("sort") || "default");
+  const matched = sortCatalogProducts(uniqueCatalogProducts(allProducts.filter((product) => catalogProductMatches(product, url.searchParams))), url.searchParams.get("sort") || "default");
   if (search && !["price-asc", "price-desc"].includes(url.searchParams.get("sort") || "default")) {
     matched.sort((first, second) => catalogSearchScore(first, search) - catalogSearchScore(second, search));
   }
@@ -1077,6 +1098,67 @@ function productMetaTags(product) {
   };
 }
 
+const categorySeoNames = {
+  "altar-vessels": "المذبح والأواني المقدسة",
+  "candles-lamps": "الشمع والقناديل",
+  "church-vestments": "الملابس والأقمشة الكنسية",
+  crosses: "الصلبان",
+  "icons-frames": "الأيقونات والبراويز",
+  "books-rituals": "الكتب والطقوس",
+  "occasions-service": "المناسبات والخدمة",
+  "church-equipment": "تجهيز الكنائس والطلبات الخاصة",
+  "greek-collection": "المجموعة اليونانية"
+};
+
+function categoryPageMetaTags(url, products) {
+  const segments = url.pathname.split("/").filter(Boolean).map(decodeURIComponent);
+  const categoryId = segments[1] || "all";
+  const subcategoryId = segments[2] || "";
+  const params = new URLSearchParams({ category: categoryId });
+  if (subcategoryId) params.set("subcategory", subcategoryId);
+  const matched = uniqueCatalogProducts(products.filter((product) => catalogProductMatches(product, params)));
+  const first = matched[0];
+  const categoryName = categorySeoNames[categoryId] || categoryId;
+  const subcategoryName = subcategoryId
+    ? localized(first?.subCategory || first?.label) || subcategoryId
+    : "";
+  const pageName = subcategoryName || categoryName;
+  const titleText = `${pageName} | مكتبة البابا كيرلس`;
+  const descriptionText = matched.length
+    ? `تصفح ${pageName} من مكتبة البابا كيرلس. ${matched.length} منتج متاح للخدمة والكنائس مع صور وأسعار محدثة.`
+    : `قسم ${pageName} في مكتبة البابا كيرلس. ستظهر المنتجات هنا عند توفرها.`;
+  const canonical = `${canonicalOrigin}${url.pathname.replace(/\/+$/, "") || "/"}`;
+  const image = absoluteAssetUrl(productImages(first)[0] || "assets/optimized/hero-papa-kyrillos-products.webp");
+  return {
+    title: `<title>${escapeHtml(titleText)}</title>`,
+    description: `<meta name="description" content="${escapeHtml(descriptionText)}" />`,
+    extra: [
+      `<link rel="canonical" href="${escapeHtml(canonical)}" />`,
+      `<meta name="robots" content="${matched.length ? "index, follow" : "noindex, follow"}" />`,
+      '<meta property="og:type" content="website" />',
+      `<meta property="og:title" content="${escapeHtml(titleText)}" />`,
+      `<meta property="og:description" content="${escapeHtml(descriptionText)}" />`,
+      `<meta property="og:url" content="${escapeHtml(canonical)}" />`,
+      `<meta property="og:image" content="${escapeHtml(image)}" />`,
+      '<meta name="twitter:card" content="summary_large_image" />',
+      `<meta name="twitter:title" content="${escapeHtml(titleText)}" />`,
+      `<meta name="twitter:description" content="${escapeHtml(descriptionText)}" />`,
+      `<meta name="twitter:image" content="${escapeHtml(image)}" />`
+    ].join("\n    ")
+  };
+}
+
+async function categoryPageResponse(request, env, products) {
+  const response = await env.ASSETS.fetch(rewriteGetRequest(request, "/"));
+  const headers = new Headers(response.headers);
+  headers.set("Content-Type", "text/html; charset=utf-8");
+  headers.set("Cache-Control", "no-cache, must-revalidate");
+  headers.set("X-Content-Type-Options", "nosniff");
+  if (request.method === "HEAD") return new Response(null, { status: response.status, headers });
+  const tags = categoryPageMetaTags(new URL(request.url), products);
+  return new Response(injectHead(await response.text(), tags), { status: response.status, headers });
+}
+
 async function htmlResponse(request, env, pathname = "/index.html", init = {}) {
   const assetPath = init.assetPath || (pathname === "/index.html" ? "/" : pathname.replace(/\.html$/, ""));
   const response = await env.ASSETS.fetch(rewriteGetRequest(request, assetPath));
@@ -1114,7 +1196,7 @@ ${tags.title}${tags.description}${tags.extra}
 <header class="site-header" data-elevated="false"><div class="brand-cluster"><a class="brand" href="/" aria-label="مكتبة البابا كيرلس"><span class="brand-logo-wrap"><img src="/assets/optimized/logo-papa-kyrillos-original.webp" alt="" width="160" height="160" decoding="async"></span><span><strong>مكتبة البابا كيرلس</strong><small>مستلزمات الكنائس والخدمة</small></span></a></div><nav class="main-nav" aria-label="التنقل الرئيسي"><a href="/#categories">الأقسام</a><a href="/#catalog">المنتجات</a></nav><div class="header-actions"><a class="cart-toggle" href="/cart" aria-label="فتح السلة"><span>السلة</span><span class="cart-count" data-cart-count>0</span></a></div></header>
 <main class="product-route-main"><a class="product-route-back" href="/#catalog">العودة إلى المنتجات</a><div id="product-detail" aria-label="${name}"></div><section class="product-route-related" aria-labelledby="related-title"><h2 id="related-title">منتجات مشابهة</h2><div class="product-grid" data-related-products></div></section></main>
 <footer class="product-route-footer"><strong>مكتبة البابا كيرلس</strong><span>مستلزمات الكنائس والخدمة</span><a href="/policies">السياسات</a><a href="https://wa.me/201016125589">تواصل معنا</a></footer>
-<div class="toast" data-toast role="status" aria-live="polite"></div><script id="product-data" type="application/json">${safeProduct}</script><script src="/yota-colors.js?v=3" defer></script><script src="/product-page.js?v=20" defer></script></body></html>`;
+<div class="toast" data-toast role="status" aria-live="polite"></div><script id="product-data" type="application/json">${safeProduct}</script><script src="/yota-colors.js?v=3" defer></script><script src="/product-page.js?v=21" defer></script></body></html>`;
   return new Response(html, {
     status: 200,
     headers: {
@@ -2420,7 +2502,12 @@ async function handleRequest(request, env, ctx) {
       return htmlResponse(request, env, staticRewrites[url.pathname], responseOptions);
     }
 
-    if (htmlRoutePaths.has(url.pathname) || url.pathname.startsWith("/category/")) {
+    if (url.pathname.startsWith("/category/")) {
+      const products = await loadProducts(env, request, { maxAgeMs: 60000 });
+      return categoryPageResponse(request, env, products);
+    }
+
+    if (htmlRoutePaths.has(url.pathname)) {
       return htmlResponse(request, env, "/index.html", { canonicalUrl: `${canonicalOrigin}${url.pathname === "/" ? "/" : url.pathname}` });
     }
 

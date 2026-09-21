@@ -339,7 +339,7 @@
       },
       {
         "id": "processional-crosses",
-        "name": "صلبان مواكب",
+        "name": "صلبان الزفة",
         "subcategoryImage": "assets/optimized/products/processional-cross.webp"
       },
       {

@@ -9,9 +9,15 @@ test("main category tiles and filters use the shared taxonomy source", () => {
   const renderer = script.match(/function ensureMainCategoryTiles\(\) \{[\s\S]*?\n\}/)?.[0] || "";
   assert.match(renderer, /visibleMainCategories\(\)\.map/);
   assert.doesNotMatch(renderer, /taxonomyCategories\.map/);
-  assert.match(script, /return taxonomyReady \? taxonomyCategories : \[\]/);
+  assert.match(script, /if \(!taxonomyReady \|\| !catalogCategoryCountsLoaded\) return \[\]/);
+  assert.match(script, /taxonomyCategories\.filter\(\(category\) => mainCategoryProductCount\(category\.id\) > 0\)/);
   assert.doesNotMatch(script, /taxonomy\?\.defaultCategories/);
   assert.doesNotMatch(script, /const catalogCategoryOrder/);
+});
+
+test("empty subcategories never render in navigation or cards", () => {
+  assert.match(script, /orderedLabelsForCategory\(category\.id\)[\s\S]*?fullSubcategoryProductCount\(category\.id, label\.id\) > 0/);
+  assert.match(script, /orderedLabelsForCategory\(categoryId\)[\s\S]*?fullSubcategoryProductCount\(categoryId, label\.id\) > 0/);
 });
 
 test("category counts stay hidden until complete counts or static products load", () => {
