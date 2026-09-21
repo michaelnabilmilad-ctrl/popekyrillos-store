@@ -13,11 +13,12 @@ function functionSource(name, nextName) {
   return source.slice(start, end);
 }
 
-test("available subcategories come from the full taxonomy", () => {
+test("available subcategories come from the full taxonomy and exclude live zero-count entries", () => {
   const renderer = functionSource("orderedLabelsForCategory", "productsForCurrentCategory");
-  assert.match(renderer, /return categoryMeta\.subcategories;/);
+  assert.match(renderer, /return categoryMeta\.subcategories\.filter/);
   const canonicalBranch = renderer.slice(0, renderer.indexOf("const labels ="));
-  assert.doesNotMatch(canonicalBranch, /subcategoryProductCount|availableProducts|state\.labelFilter/);
+  assert.match(canonicalBranch, /subcategoryProductCount\(normalized, subcategory\.id\)/);
+  assert.doesNotMatch(canonicalBranch, /availableProducts|state\.labelFilter/);
 });
 
 test("subcategory controls use full-category counts instead of filtered products", () => {

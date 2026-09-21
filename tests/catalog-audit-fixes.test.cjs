@@ -18,6 +18,9 @@ test("homepage product count is dynamic", () => {
   assert.doesNotMatch(html, />\+120</);
   assert.match(html, /data-active-product-count/);
   assert.match(storefront, /function updateActiveProductCount/);
+  assert.match(storefront, /function activeCatalogProductCount/);
+  assert.match(storefront, /const categoryCount = fullCategoryProductCount\(category\.id\)/);
+  assert.match(storefront, /const labelCount = fullSubcategoryProductCount\(category\.id, label\.id\)/);
 });
 
 test("catalog APIs and static fallback suppress exact unintended duplicates", () => {

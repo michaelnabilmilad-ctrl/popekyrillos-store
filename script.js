@@ -1422,6 +1422,13 @@ function allCategoriesSubcategoryProductCount(subcategoryId) {
   return Object.values(catalogSubcategoryCounts).reduce((total, counts) => total + (Number(counts?.[subcategoryId]) || 0), 0);
 }
 
+function activeCatalogProductCount() {
+  if (!catalogCategoryCountsLoaded) return availableProducts().length;
+  return Object.entries(catalogCategoryCounts)
+    .filter(([id]) => id !== "greek-collection" && id !== "uncategorized")
+    .reduce((sum, [, value]) => sum + (Number(value) || 0), 0);
+}
+
 function orderedLabelsForCurrentFilter() {
   const normalized = normalizeCategoryFilter(state.filter || "all");
   if (normalized !== "all") return orderedLabelsForCategory(normalized);
@@ -1641,15 +1648,15 @@ function renderShopMenu() {
     return;
   }
   const categories = visibleMainCategories();
-  const allCount = availableProducts().length;
+  const allCount = activeCatalogProductCount();
   const groups = categories
     .map((category) => {
       const labels = orderedLabelsForCategory(category.id)
         .filter((label) => fullSubcategoryProductCount(category.id, label.id) > 0);
-      const categoryCount = availableProducts().filter((product) => productMatchesCategory(product, category.id)).length;
+      const categoryCount = fullCategoryProductCount(category.id);
       const labelButtons = labels
         .map((label) => {
-          const labelCount = availableProducts().filter((product) => productMatchesCategory(product, category.id) && productMatchesSubcategory(product, label.id)).length;
+          const labelCount = fullSubcategoryProductCount(category.id, label.id);
           const active = normalizeCategoryFilter(state.filter) === category.id && state.labelFilter === label.id;
           return `
             <button class="shop-subcategory ${active ? "active" : ""}" type="button" data-shop-category="${escapeHtml(category.id)}" data-shop-label="${escapeHtml(label.id)}">
@@ -2286,9 +2293,7 @@ function setProductUrl(productId) {
 function updateActiveProductCount() {
   const target = document.querySelector("[data-active-product-count]") || document.querySelector(".hero-metrics > div strong");
   if (!target) return;
-  const count = catalogCategoryCountsLoaded
-    ? Object.entries(catalogCategoryCounts).filter(([id]) => id !== "greek-collection" && id !== "uncategorized").reduce((sum, [, value]) => sum + (Number(value) || 0), 0)
-    : availableProducts().length;
+  const count = activeCatalogProductCount();
   target.textContent = displayText(formatter.format(count));
 }
 
