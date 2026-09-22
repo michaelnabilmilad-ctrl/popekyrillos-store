@@ -568,7 +568,7 @@
                   "id": "tasbeha-books",
                   "name": "كتب التسبحة",
                   "subcategoryImage": "assets/optimized/products/gallery/baskha-araby.webp",
-                  "manualImage": "assets/optimized/products/gallery/taxonomy-tasbeha-books-image-20260922083741-512087.webp"
+                  "manualImage": "assets/optimized/products/gallery/taxonomy-tasbeha-books-image-20260922085412-aa5aff.webp"
               },
               {
                   "id": "holy-week-books",
@@ -856,7 +856,7 @@
   ];
   const TAXONOMY_STORAGE_KEY = "pope-kyrillos-taxonomy";
   const TAXONOMY_VERSION_STORAGE_KEY = "pope-kyrillos-taxonomy-version";
-  const CURRENT_TAXONOMY_VERSION = 1790066311706;
+  const CURRENT_TAXONOMY_VERSION = 1790067272295;
   const categories = (() => {
     try {
       const storedVersion = Number(localStorage.getItem(TAXONOMY_VERSION_STORAGE_KEY) || 0);
