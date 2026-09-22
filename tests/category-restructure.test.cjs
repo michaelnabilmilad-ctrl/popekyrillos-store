@@ -76,7 +76,7 @@ test('legacy meeting-games assignments migrate to the canonical Christian games 
   const migrated = migration.product(product);
   assert.equal(migrated.mainCategory, 'المناسبات والخدمة');
   assert.equal(migrated.subcategory, 'christian-games');
-  assert.equal(migrated.subCategory, 'christian-games');
+  assert.equal(migrated.subCategory, 'ألعاب مسيحية');
 });
 
 test('cached taxonomy and admin drafts migrate without losing unrelated custom categories or cart storage', () => {

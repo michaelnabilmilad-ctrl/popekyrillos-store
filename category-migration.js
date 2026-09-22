@@ -79,7 +79,7 @@
     else if (["censers-incense", "الشوريات والبخور"].includes(main)) next = { category: "candles-lamps", label: incenseIds.has(sub) ? sub : "church-incense" };
     else if (["الشمع والقناديل", "الشمع والبخور"].includes(main)) next = route(main, sub);
     else if (incenseIds.has(sub)) next = route(main, sub);
-    else if (sub !== rawSub) next = { category: main, label: sub };
+    else if (sub !== rawSub) return { ...item, subcategory: sub };
     if (!next || (main === next.category && sub === next.label && item.subCategory === next.label)) return item;
     return { ...item, mainCategory: next.category, subcategory: next.label, subCategory: next.label };
   }
