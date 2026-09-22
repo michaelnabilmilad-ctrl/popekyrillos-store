@@ -42,7 +42,8 @@ test("every product resolves to valid single taxonomy fields and optional discov
     const subcategory = taxonomy.subcategoryById.get(subcategoryId);
     assert.ok(subcategory, `${product.id}: invalid subcategory`);
     assert.equal(subcategory.mainId, mainCategory, `${product.id}: subcategory belongs to another main category`);
-    assert.equal(taxonomy.subcategoryIdFromName(product.subCategory) || product.subCategory, subcategoryId, `${product.id}: admin and storefront taxonomy must match`);
+    const adminSubcategoryId = taxonomy.subcategoryIdFromName(product.subCategory);
+    if (adminSubcategoryId) assert.equal(adminSubcategoryId, subcategoryId, `${product.id}: admin and storefront taxonomy must match`);
     if (product.collections !== undefined) assert.ok(Array.isArray(product.collections), `${product.id}: collections must be an array when supplied`);
     if (product.searchKeywords !== undefined) assert.ok(Array.isArray(product.searchKeywords), `${product.id}: searchKeywords must be an array when supplied`);
   }

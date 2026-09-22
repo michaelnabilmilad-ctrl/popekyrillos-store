@@ -8,6 +8,7 @@ import { onRequest as updateTaxonomy } from "./functions/api/update-taxonomy.js"
 import { bestSellersResponse } from "./functions/api/best-sellers.js";
 import { coloringDesignForProduct } from "./coloringDesigns.js";
 import { backfillAirtableOrderProducts } from "./functions/_airtable-order-backfill.js";
+import { checkoutReceipt, customerOrdersResponse, ensureOrderAccess, purchaseSnapshot } from "./functions/_customer-orders.js";
 import {
   AIRTABLE_PRODUCT_SKU_FIELD,
   AIRTABLE_PRODUCT_NAME_FIELD,
@@ -2140,6 +2141,8 @@ async function createOrderResponse(context) {
   const tableName = encodeURIComponent(airtableTableName);
   const airtableUrl = `https://api.airtable.com/v0/${encodeURIComponent(String(env.AIRTABLE_BASE_ID).trim())}/${tableName}`;
   let recordId = "";
+  let orderDetailsCreated = false;
+  let completedDetailCount = 0;
 
   try {
     await initializeOrderIdempotency(env);
@@ -2153,13 +2156,16 @@ async function createOrderResponse(context) {
     if (!reservation.meta?.changes) {
       if (savedRequest?.status === "completed" && savedRequest.airtable_order_id) {
         console.info("Returning completed website order retry", { requestId, recordId: savedRequest.airtable_order_id });
-        return orderJsonResponse(request, {
-          ok: true,
-          requestId,
-          recordId: savedRequest.airtable_order_id,
-          detailCount: savedRequest.detail_count,
-          duplicate: true
-        });
+        try {
+          const receipt = await checkoutReceipt(env, savedRequest.airtable_order_id, order.phone);
+          return orderJsonResponse(request, { ok: true, requestId, ...receipt, detailCount: savedRequest.detail_count, duplicate: true });
+        } catch (error) {
+          console.error("Completed website order receipt lookup failed", { requestId, code: error.code || "", message: error.message });
+          return orderJsonResponse(request, {
+            error: "order_receipt_unavailable",
+            message: "تم تسجيل الطلب ولكن تعذر تحميل إيصال المتابعة حاليًا. حاول مرة أخرى بنفس بيانات الطلب."
+          }, { status: error.publicStatus || 502 });
+        }
       }
       if (savedRequest?.status === "order_created" && savedRequest.airtable_order_id) {
         recordId = savedRequest.airtable_order_id;
@@ -2212,19 +2218,38 @@ async function createOrderResponse(context) {
       throw unresolvedError;
     }
     const detailIds = await createAirtableOrderDetails(env, recordId, resolvedItems, { requestId, recordId });
+    orderDetailsCreated = true;
+    completedDetailCount = detailIds.length;
+    await ensureOrderAccess(env, recordId, purchaseSnapshot(order, normalizedItems.items));
     await env.ANALYTICS_DB.prepare(
       "UPDATE website_order_requests SET status = 'completed', detail_count = ?, updated_at = CURRENT_TIMESTAMP WHERE request_id = ?"
     ).bind(detailIds.length, requestId).run();
     console.log("Airtable order details created", { requestId, recordId, detailCount: detailIds.length });
-    return orderJsonResponse(request, {
-      ok: true,
-      requestId,
-      recordId,
-      detailCount: detailIds.length,
-      unresolvedCount: 0
-    });
+    try {
+      const receipt = await checkoutReceipt(env, recordId, order.phone);
+      return orderJsonResponse(request, { ok: true, requestId, ...receipt, detailCount: detailIds.length, duplicate: false });
+    } catch (error) {
+      console.error("Completed website order receipt lookup failed", { requestId, code: error.code || "", message: error.message });
+      return orderJsonResponse(request, {
+        error: "order_receipt_unavailable",
+        message: "تم تسجيل الطلب ولكن تعذر تحميل إيصال المتابعة حاليًا. حاول مرة أخرى بنفس بيانات الطلب."
+      }, { status: error.publicStatus || 502 });
+    }
   } catch (error) {
     console.error("Unexpected /api/orders failure", { requestId, recordId, code: error.code || "", sku: error.sku || "", message: error.message });
+    if (orderDetailsCreated) {
+      try {
+        await env.ANALYTICS_DB.prepare(
+          "UPDATE website_order_requests SET status = 'completed', detail_count = ?, updated_at = CURRENT_TIMESTAMP WHERE request_id = ?"
+        ).bind(completedDetailCount, requestId).run();
+      } catch (stateError) {
+        console.error("Could not preserve completed website order state", { requestId, recordId, message: stateError.message });
+      }
+      return orderJsonResponse(request, {
+        error: "order_receipt_unavailable",
+        message: "تم تسجيل الطلب ولكن تعذر تحميل إيصال المتابعة حاليًا. حاول مرة أخرى بنفس بيانات الطلب."
+      }, { status: 502 });
+    }
     try {
       if (recordId) {
         await env.ANALYTICS_DB.prepare(
@@ -2473,6 +2498,9 @@ async function handleRequest(request, env, ctx) {
     if (url.pathname === "/api/create-bosta-delivery") return createBostaDelivery(context);
     if (url.pathname === "/api/paymob-webhook") return paymobWebhook(context);
     if (url.pathname === "/api/orders") return createOrderResponse(context);
+    if (url.pathname === "/api/customer-orders/lookup" || url.pathname.startsWith("/api/customer-orders/")) {
+      return customerOrdersResponse(context, url.pathname);
+    }
     if (url.pathname === "/api/best-sellers") {
       const products = await loadProducts(env, request, { maxAgeMs: 60000 });
       return bestSellersResponse(context, products);
@@ -2506,6 +2534,9 @@ async function handleRequest(request, env, ctx) {
       const products = await loadProducts(env, request, { maxAgeMs: 60000 });
       return categoryPageResponse(request, env, products);
     }
+
+    if (url.pathname === "/track-order") return htmlResponse(request, env, "/track-order.html", { private: true });
+    if (/^\/order\/[a-f0-9]{64}$/.test(url.pathname)) return htmlResponse(request, env, "/order.html", { private: true });
 
     if (htmlRoutePaths.has(url.pathname)) {
       return htmlResponse(request, env, "/index.html", { canonicalUrl: `${canonicalOrigin}${url.pathname === "/" ? "/" : url.pathname}` });

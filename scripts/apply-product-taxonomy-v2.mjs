@@ -8,7 +8,7 @@ const products = JSON.parse(fs.readFileSync(target, "utf8"));
 const unique = (items) => [...new Set(items.map((item) => String(item || "").trim()).filter(Boolean))];
 const subcategoryAliases = new Map([
   ["شنط ومستلزمات روحية", "tote-bags"], ["كروت", "cards"], ["بوك مارك", "bookmarks"],
-  ["جورنالينج", "planners"], ["نوت بوك", "notebooks"], ["باكيدج", "meeting-games"],
+  ["جورنالينج", "planners"], ["نوت بوك", "notebooks"], ["باكيدج", "christian-games"],
   ["أيقونات صغيرة", "small-icons"], ["قطمارس", "katameros"], ["كتب طقسية", "liturgical-books"],
   ["شموع", "candles"], ["أطقم بخور", "incense-sets"], ["بخور", "incense"],
   ["أدوات خدمة", "service-tools"], ["شمعدانات", "candlesticks"], ["ذخائر وعلب", "relic-boxes"],
@@ -23,17 +23,17 @@ function classify(product) {
   if (/صليب إفنوتي|صليب افنوتي/.test(name)) return ["crosses", "altar-crosses"];
   if (/صليب صدر/.test(name)) return ["crosses", "pectoral-crosses"];
   if (/صليب يوتا|صليب يوطا/.test(name)) return ["crosses", "wooden-crosses"];
-  if (/لون تلوين اليوتا|ألوان اليوطا/.test(name)) return ["gifts-accessories", "meeting-games"];
+  if (/لون تلوين اليوتا|ألوان اليوطا/.test(name)) return ["gifts-accessories", "christian-games"];
   if (main === "منتجات أتبعه" || product.category === "atb3ho") {
     if (/بالاسم|بالإسم/.test(name)) return ["gifts-accessories", "personalized"];
     if (/بوك مارك/.test(name) || sub === "بوك مارك") return ["gifts-accessories", "bookmarks"];
     if (/نوت بوك|نوت\b/.test(name) || sub === "نوت بوك") return ["gifts-accessories", "notebooks"];
     if (/جورنال|أجندة|اجندة/.test(name) || sub === "جورنالينج") return ["gifts-accessories", "planners"];
-    if (/تحدي|لعبة|ألعاب|باكدج/.test(name) || sub === "باكيدج") return ["gifts-accessories", "meeting-games"];
+    if (/تحدي|لعبة|ألعاب|باكدج/.test(name) || sub === "باكيدج") return ["gifts-accessories", "christian-games"];
     if (/كارت|كروت/.test(name) || sub === "كروت") return ["gifts-accessories", "cards"];
     return ["gifts-accessories", "tote-bags"];
   }
-  if (main === "الصلبان والهدايا") return ["gifts-accessories", "meeting-games"];
+  if (main === "الصلبان والهدايا") return ["gifts-accessories", "christian-games"];
   if (main === "الأيقونات والبراويز") return ["icons-frames", subcategoryAliases.get(sub) || "small-icons"];
   if (main === "الكتب والطقوس") return ["books-rituals", subcategoryAliases.get(sub) || "liturgical-books"];
   if (main === "الشمع والبخور") return ["candles-incense", subcategoryAliases.get(sub) || "incense"];
@@ -50,7 +50,7 @@ const migrated = products.map((product) => {
     ...(product.collections || []),
     mainCategory === "altar-tools" || ["altar-crosses", "processional-crosses"].includes(subcategory) ? "مستلزمات المذبح" : "",
     ["gifts-accessories", "crosses"].includes(mainCategory) ? "هدايا الخدمة" : "",
-    ["meeting-games", "cards", "bookmarks", "wooden-crosses"].includes(subcategory) ? "منتجات الأطفال" : ""
+    ["christian-games", "cards", "bookmarks", "wooden-crosses"].includes(subcategory) ? "منتجات الأطفال" : ""
   ]);
   const searchKeywords = unique([...(product.searchKeywords || []), product.name, product.label, ...(product.tags || []), mainCategory, subcategory, ...collections]);
   return { ...product, mainCategory, subcategory, subCategory: subcategory, collections, searchKeywords };

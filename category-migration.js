@@ -32,6 +32,26 @@
   "قطع غيار القناديل": "lamp-parts",
   "الشوريات": "censers",
   "القناديل": "lamps",
+  "meeting-games": "christian-games",
+  "cards": "cards-bookmarks",
+  "bookmarks": "cards-bookmarks",
+  "notebooks": "notebooks-planners",
+  "planners": "notebooks-planners",
+  "service-tools": "service-plates",
+  "altar-vessels": "altar-sets",
+  "stands": "icon-gospel-stands",
+  "candle-supplies": "wicks-floats",
+  "children-clothing": "children-deacon-tonias",
+  "curtains": "sanctuary-curtains",
+  "church-fabrics": "altar-cloths",
+  "complete-sets": "deacon-clothing",
+  "printed-icons": "saint-icons",
+  "saints-pictures": "saint-icons",
+  "small-icons": "giveaway-icons",
+  "metal-crosses": "brass-crosses",
+  "liturgical-books": "liturgy-books",
+  "spiritual-theology": "theology-books",
+  "coptic-books": "prayer-books",
   "candles": "church-candles",
   "incense-sets": "church-incense",
   "incense": "church-incense"
@@ -59,6 +79,7 @@
     else if (["censers-incense", "الشوريات والبخور"].includes(main)) next = { category: "candles-lamps", label: incenseIds.has(sub) ? sub : "church-incense" };
     else if (["الشمع والقناديل", "الشمع والبخور"].includes(main)) next = route(main, sub);
     else if (incenseIds.has(sub)) next = route(main, sub);
+    else if (sub !== rawSub) next = { category: main, label: sub };
     if (!next || (main === next.category && sub === next.label && item.subCategory === next.label)) return item;
     return { ...item, mainCategory: next.category, subcategory: next.label, subCategory: next.label };
   }

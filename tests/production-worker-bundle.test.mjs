@@ -36,11 +36,36 @@ async function createWebsiteOrder(fixture, requestId) {
   return result.body;
 }
 
+function websiteOrderBody(requestId, phone = "01012345678") {
+  return {
+    requestId,
+    customerName: "عميل bundle تجريبي",
+    phone,
+    address: "القاهرة",
+    paymentMethod: "Cash",
+    deliveryType: "Pickup",
+    total: 120,
+    products: [{ name: "كتاب", sku: "BOOK-1", quantity: 1, price: 120 }]
+  };
+}
+
 test("exact Wrangler production bundle exposes lookup/order/cancel and returns deducted stock once", async t => {
   const fixture = airtableFixture();
   fixture.env.ASSETS = { fetch: async () => new Response("asset") };
   t.mock.method(globalThis, "fetch", fixture.fetch);
   const receipt = await createWebsiteOrder(fixture, "bundle-deducted");
+  const replay = await call(fixture, "/api/orders", "POST", websiteOrderBody("bundle-deducted"));
+  assert.equal(replay.status, 200);
+  assert.equal(replay.body.publicOrderToken, receipt.publicOrderToken);
+  assert.equal(replay.body.duplicate, true);
+  assert.equal(replay.body.recordId, undefined);
+  assert.equal(fixture.creates, 1);
+  assert.equal(fixture.details.length, 1);
+  const wrongPhone = await call(fixture, "/api/orders", "POST", websiteOrderBody("bundle-deducted", "01099999999"));
+  assert.equal(wrongPhone.status, 404);
+  assert.equal(wrongPhone.body.publicOrderToken, undefined);
+  const trackingPage = await worker.fetch(request(`/order/${receipt.publicOrderToken}`), fixture.env, { waitUntil() {} });
+  assert.equal(trackingPage.status, 200);
   const order = [...fixture.orders.values()][0];
   order.fields["Order Status"] = "قيد التجهيز";
   fixture.details[0].fields["تم خصم المخزون؟"] = true;

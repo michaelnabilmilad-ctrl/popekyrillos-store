@@ -71,6 +71,14 @@ test('old product records migrate only taxonomy fields including misclassified c
   }
 });
 
+test('legacy meeting-games assignments migrate to the canonical Christian games child', () => {
+  const product = { id: 'legacy-game', name: 'تحدي', mainCategory: 'المناسبات والخدمة', subcategory: 'meeting-games', subCategory: 'ألعاب مسيحية' };
+  const migrated = migration.product(product);
+  assert.equal(migrated.mainCategory, 'المناسبات والخدمة');
+  assert.equal(migrated.subcategory, 'christian-games');
+  assert.equal(migrated.subCategory, 'christian-games');
+});
+
 test('cached taxonomy and admin drafts migrate without losing unrelated custom categories or cart storage', () => {
   const stored = JSON.parse(JSON.stringify(taxonomy().defaultCategories));
   const altar = stored.find(c => c.id === 'altar-vessels');

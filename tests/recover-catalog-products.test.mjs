@@ -33,3 +33,9 @@ test("catalog recovery never overwrites any field on an existing product", () =>
   assert.deepEqual(recovered.map((product) => product.id), ["missing"]);
   assert.deepEqual(merged.map((product) => product.id), ["existing", "missing"]);
 });
+
+test("recovered historical products cannot restore retired taxonomy IDs", () => {
+  const historical = [{ id: "legacy-game", name: "تحدي", subcategory: "meeting-games" }];
+  const { recovered } = recoverMissingProducts([], historical);
+  assert.equal(recovered[0].subcategory, "christian-games");
+});
