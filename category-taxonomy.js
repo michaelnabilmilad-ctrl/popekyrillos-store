@@ -9,6 +9,16 @@
           "homeVisible": true,
           "subcategories": [
               {
+                  "id": "censers",
+                  "name": "الشوريات",
+                  "subcategoryImage": "assets/optimized/products/incense-chat.webp"
+              },
+              {
+                  "id": "lamps",
+                  "name": "القناديل",
+                  "subcategoryImage": "assets/optimized/products/gallery/sham3.iconat.webp"
+              },
+              {
                   "id": "altar-sets",
                   "name": "أطقم أواني المذبح",
                   "subcategoryImage": "assets/optimized/products/communion-set.webp"
@@ -81,89 +91,9 @@
           ]
       },
       {
-          "id": "censers-incense",
-          "name": "الشوريات والبخور",
-          "description": "الشوريات والمباخر والبخور والفحم والعطور الكنسية",
-          "subcategoryImage": "assets/optimized/products/incense-chat.webp",
-          "visible": true,
-          "homeVisible": true,
-          "subcategories": [
-              {
-                  "id": "brass-censers",
-                  "name": "شوريات نحاس",
-                  "subcategoryImage": "assets/optimized/products/incense-chat.webp"
-              },
-              {
-                  "id": "stainless-censers",
-                  "name": "شوريات ستانلس",
-                  "subcategoryImage": "assets/optimized/products/incense-chat.webp"
-              },
-              {
-                  "id": "silver-gold-censers",
-                  "name": "شوريات فضي وذهبي",
-                  "subcategoryImage": "assets/optimized/products/incense-chat.webp"
-              },
-              {
-                  "id": "deacon-censers",
-                  "name": "شوريات شماسية",
-                  "subcategoryImage": "assets/optimized/products/incense-chat.webp"
-              },
-              {
-                  "id": "home-censers",
-                  "name": "مباخر منزلية",
-                  "subcategoryImage": "assets/optimized/products/incense-chat.webp"
-              },
-              {
-                  "id": "incense-boxes",
-                  "name": "حق البخور",
-                  "subcategoryImage": "assets/optimized/products/incense-chat.webp"
-              },
-              {
-                  "id": "incense-spoons",
-                  "name": "ملاعق البخور",
-                  "subcategoryImage": "assets/optimized/products/incense-chat.webp"
-              },
-              {
-                  "id": "church-incense",
-                  "name": "بخور كنسي",
-                  "subcategoryImage": "assets/optimized/products/incense-chat.webp"
-              },
-              {
-                  "id": "greek-incense",
-                  "name": "بخور يوناني",
-                  "subcategoryImage": "assets/optimized/products/incense-chat.webp"
-              },
-              {
-                  "id": "natural-incense",
-                  "name": "لبان وبخور طبيعي",
-                  "subcategoryImage": "assets/optimized/products/incense-chat.webp"
-              },
-              {
-                  "id": "charcoal",
-                  "name": "الفحم",
-                  "subcategoryImage": "assets/optimized/products/incense-chat.webp"
-              },
-              {
-                  "id": "aparaka",
-                  "name": "الأباركة والعطور الكنسية",
-                  "subcategoryImage": "assets/optimized/products/incense-chat.webp"
-              },
-              {
-                  "id": "hanout",
-                  "name": "الحنوط",
-                  "subcategoryImage": "assets/optimized/products/incense-chat.webp"
-              },
-              {
-                  "id": "censer-parts",
-                  "name": "أدوات وقطع غيار الشوريات",
-                  "subcategoryImage": "assets/optimized/products/incense-chat.webp"
-              }
-          ]
-      },
-      {
           "id": "candles-lamps",
-          "name": "الشمع والقناديل",
-          "description": "شموع الكنيسة والقناديل وزيوتها وقطع غيارها",
+          "name": "الشمع والبخور",
+          "description": "شموع الكنيسة والبخور والفحم والعطور الكنسية",
           "subcategoryImage": "assets/optimized/products/gallery/sham3.iconat.webp",
           "visible": true,
           "homeVisible": true,
@@ -214,39 +144,44 @@
                   "subcategoryImage": "assets/optimized/products/gallery/sham3.iconat.webp"
               },
               {
-                  "id": "hanging-lamps",
-                  "name": "قناديل معلقة",
-                  "subcategoryImage": "assets/optimized/products/gallery/sham3.iconat.webp"
+                  "id": "incense-boxes",
+                  "name": "حق البخور",
+                  "subcategoryImage": "assets/optimized/products/incense-chat.webp"
               },
               {
-                  "id": "wall-lamps",
-                  "name": "قناديل حائط",
-                  "subcategoryImage": "assets/optimized/products/gallery/sham3.iconat.webp"
+                  "id": "incense-spoons",
+                  "name": "ملاعق البخور",
+                  "subcategoryImage": "assets/optimized/products/incense-chat.webp"
               },
               {
-                  "id": "altar-lamps",
-                  "name": "قناديل المذبح",
-                  "subcategoryImage": "assets/optimized/products/gallery/sham3.iconat.webp"
+                  "id": "church-incense",
+                  "name": "بخور كنسي",
+                  "subcategoryImage": "assets/optimized/products/incense-chat.webp"
               },
               {
-                  "id": "lamp-glasses",
-                  "name": "كاسات القناديل",
-                  "subcategoryImage": "assets/optimized/products/gallery/sham3.iconat.webp"
+                  "id": "greek-incense",
+                  "name": "بخور يوناني",
+                  "subcategoryImage": "assets/optimized/products/incense-chat.webp"
               },
               {
-                  "id": "lamp-oil",
-                  "name": "زيت القناديل",
-                  "subcategoryImage": "assets/optimized/products/gallery/sham3.iconat.webp"
+                  "id": "natural-incense",
+                  "name": "لبان وبخور طبيعي",
+                  "subcategoryImage": "assets/optimized/products/incense-chat.webp"
               },
               {
-                  "id": "wicks-floats",
-                  "name": "الفتائل والعوامات",
-                  "subcategoryImage": "assets/optimized/products/gallery/sham3.iconat.webp"
+                  "id": "charcoal",
+                  "name": "الفحم",
+                  "subcategoryImage": "assets/optimized/products/incense-chat.webp"
               },
               {
-                  "id": "lamp-parts",
-                  "name": "قطع غيار القناديل",
-                  "subcategoryImage": "assets/optimized/products/gallery/sham3.iconat.webp"
+                  "id": "aparaka",
+                  "name": "الأباركة والعطور الكنسية",
+                  "subcategoryImage": "assets/optimized/products/incense-chat.webp"
+              },
+              {
+                  "id": "hanout",
+                  "name": "الحنوط",
+                  "subcategoryImage": "assets/optimized/products/incense-chat.webp"
               }
           ]
       },
@@ -369,12 +304,6 @@
                   "subcategoryImage": "assets/optimized/products/processional-cross.webp"
               },
               {
-                  "id": "yota-medallions",
-                  "name": "مادليات اليوطا",
-                  "disableProductImageFallback": true,
-                  "manualImage": "assets/optimized/products/gallery/taxonomy-yota-medallions-image-20260822192514-d126b0.webp"
-              },
-              {
                   "id": "iota-plain-hand-crosses",
                   "name": "صلبان يد يوتا سادة",
                   "subcategoryImage": "assets/optimized/products/processional-cross.webp"
@@ -383,6 +312,12 @@
                   "id": "plain-cross-medals",
                   "name": "صلبان ميداليات سادة",
                   "subcategoryImage": "assets/optimized/products/processional-cross.webp"
+              },
+              {
+                  "id": "yota-medallions",
+                  "name": "مادليات اليوطا",
+                  "disableProductImageFallback": true,
+                  "manualImage": "assets/optimized/products/gallery/taxonomy-yota-medallions-image-20260822192514-d126b0.webp"
               },
               {
                   "id": "pectoral-crosses",
@@ -632,7 +567,8 @@
               {
                   "id": "tasbeha-books",
                   "name": "كتب التسبحة",
-                  "subcategoryImage": "assets/optimized/products/gallery/baskha-araby.webp"
+                  "subcategoryImage": "assets/optimized/products/gallery/baskha-araby.webp",
+                  "manualImage": "assets/optimized/products/gallery/taxonomy-tasbeha-books-image-20260922083741-512087.webp"
               },
               {
                   "id": "holy-week-books",
@@ -877,6 +813,31 @@
           ]
       },
       {
+          "id": "greek-collection",
+          "name": "المجموعة اليونانية",
+          "description": "منتجات يونانية مميزة",
+          "subcategoryImage": "assets/optimized/products/communion-set.webp",
+          "visible": true,
+          "homeVisible": true,
+          "subcategories": [
+              {
+                  "id": "greek-vessels",
+                  "name": "الأواني اليونانية",
+                  "subcategoryImage": "assets/optimized/products/communion-set.webp"
+              },
+              {
+                  "id": "greek-wedding-crowns",
+                  "name": "أكاليل الأفراح اليونانية",
+                  "subcategoryImage": "assets/optimized/hero-products-collage.webp"
+              },
+              {
+                  "id": "greek-clergy-crosses",
+                  "name": "الصلبان اليونانية للأساقفة والكهنة",
+                  "subcategoryImage": "assets/optimized/hero-products-collage.webp"
+              }
+          ]
+      },
+      {
           "id": "uncategorized",
           "name": "غير مصنف",
           "description": "منتجات تحتاج مراجعة",
@@ -895,7 +856,7 @@
   ];
   const TAXONOMY_STORAGE_KEY = "pope-kyrillos-taxonomy";
   const TAXONOMY_VERSION_STORAGE_KEY = "pope-kyrillos-taxonomy-version";
-  const CURRENT_TAXONOMY_VERSION = 1787426895663;
+  const CURRENT_TAXONOMY_VERSION = 1790066287256;
   const categories = (() => {
     try {
       const storedVersion = Number(localStorage.getItem(TAXONOMY_VERSION_STORAGE_KEY) || 0);
