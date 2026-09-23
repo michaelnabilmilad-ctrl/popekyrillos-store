@@ -1,5 +1,1457 @@
 [
   {
+    "id": "popek-corian-cross-set-1",
+    "name": "طقم صلبان يد وصدر كوريان بالعلبة - موديل 1",
+    "category": "icons",
+    "label": "صلبان يد وصدر",
+    "description": "طقم صلبان يد وصدر من الكوريان، بديل الرخام المعروف بمتانته ومظهره الأنيق. يضم الطقم صليب يد وصليب صدر بسلسلة، ويأتي داخل علبة قطيفة مناسبة للحفظ والتقديم كهدية. طول صليب اليد نحو 21–22 سم، وقد توجد فروق بسيطة بحسب الموديل.",
+    "price": 770,
+    "priceNote": "السعر للطقم كاملًا بالعلبة",
+    "stock": "متاح",
+    "badge": "جديد",
+    "isBestSeller": false,
+    "image": "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-1-boxed.webp",
+    "images": [
+      "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-1-boxed.webp",
+      "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-1-unboxed.webp"
+    ],
+    "options": [],
+    "variants": [
+      {
+        "id": "popek-corian-cross-set-1-variant-1",
+        "title": "الاختيار الافتراضي",
+        "options": {},
+        "price": 770,
+        "compareAtPrice": null,
+        "available": true,
+        "image": null,
+        "images": [],
+        "sku": "POPEK-CORIAN-CROSS-01",
+        "quantity": null
+      }
+    ],
+    "mainCategory": "الصلبان",
+    "subCategory": "صلبان يد",
+    "subcategory": "hand-crosses",
+    "collections": [
+      "الصلبان",
+      "صلبان يد",
+      "صلبان صدر"
+    ],
+    "tags": [
+      "طقم صلبان",
+      "صليب يد",
+      "صليب صدر",
+      "كوريان",
+      "بديل الرخام",
+      "علبة قطيفة",
+      "موديل 1"
+    ],
+    "searchKeywords": [
+      "طقم صلبان يد وصدر كوريان بالعلبة موديل 1",
+      "طقم صلبان",
+      "صليب يد",
+      "صليب صدر",
+      "صلبان كوريان",
+      "بديل الرخام",
+      "علبة قطيفة",
+      "21 سم",
+      "22 سم",
+      "crosses",
+      "hand-crosses",
+      "pectoral-crosses",
+      "الصلبان"
+    ],
+    "slug": "طقم-صلبان-يد-وصدر-كوريان-موديل-1",
+    "thumbnail": "/assets/thumbnails/320/popek-corian-cross-set-1-cafe92f68c.webp"
+  },
+  {
+    "id": "popek-corian-cross-set-2",
+    "name": "طقم صلبان يد وصدر كوريان بالعلبة - موديل 2",
+    "category": "icons",
+    "label": "صلبان يد وصدر",
+    "description": "طقم صلبان يد وصدر من الكوريان، بديل الرخام المعروف بمتانته ومظهره الأنيق. يضم الطقم صليب يد وصليب صدر بسلسلة، ويأتي داخل علبة قطيفة مناسبة للحفظ والتقديم كهدية. طول صليب اليد نحو 21–22 سم، وقد توجد فروق بسيطة بحسب الموديل.",
+    "price": 770,
+    "priceNote": "السعر للطقم كاملًا بالعلبة",
+    "stock": "متاح",
+    "badge": "جديد",
+    "isBestSeller": false,
+    "image": "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-2-boxed.webp",
+    "images": [
+      "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-2-boxed.webp",
+      "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-2-unboxed.webp"
+    ],
+    "options": [],
+    "variants": [
+      {
+        "id": "popek-corian-cross-set-2-variant-1",
+        "title": "الاختيار الافتراضي",
+        "options": {},
+        "price": 770,
+        "compareAtPrice": null,
+        "available": true,
+        "image": null,
+        "images": [],
+        "sku": "POPEK-CORIAN-CROSS-02",
+        "quantity": null
+      }
+    ],
+    "mainCategory": "الصلبان",
+    "subCategory": "صلبان يد",
+    "subcategory": "hand-crosses",
+    "collections": [
+      "الصلبان",
+      "صلبان يد",
+      "صلبان صدر"
+    ],
+    "tags": [
+      "طقم صلبان",
+      "صليب يد",
+      "صليب صدر",
+      "كوريان",
+      "بديل الرخام",
+      "علبة قطيفة",
+      "موديل 2"
+    ],
+    "searchKeywords": [
+      "طقم صلبان يد وصدر كوريان بالعلبة موديل 2",
+      "طقم صلبان",
+      "صليب يد",
+      "صليب صدر",
+      "صلبان كوريان",
+      "بديل الرخام",
+      "علبة قطيفة",
+      "21 سم",
+      "22 سم",
+      "crosses",
+      "hand-crosses",
+      "pectoral-crosses",
+      "الصلبان"
+    ],
+    "slug": "طقم-صلبان-يد-وصدر-كوريان-موديل-2",
+    "thumbnail": "/assets/thumbnails/320/popek-corian-cross-set-2-146b75b26a.webp"
+  },
+  {
+    "id": "popek-corian-cross-set-3",
+    "name": "طقم صلبان يد وصدر كوريان بالعلبة - موديل 3",
+    "category": "icons",
+    "label": "صلبان يد وصدر",
+    "description": "طقم صلبان يد وصدر من الكوريان، بديل الرخام المعروف بمتانته ومظهره الأنيق. يضم الطقم صليب يد وصليب صدر بسلسلة، ويأتي داخل علبة قطيفة مناسبة للحفظ والتقديم كهدية. طول صليب اليد نحو 21–22 سم، وقد توجد فروق بسيطة بحسب الموديل.",
+    "price": 770,
+    "priceNote": "السعر للطقم كاملًا بالعلبة",
+    "stock": "متاح",
+    "badge": "جديد",
+    "isBestSeller": false,
+    "image": "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-3-boxed.webp",
+    "images": [
+      "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-3-boxed.webp",
+      "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-3-unboxed.webp"
+    ],
+    "options": [],
+    "variants": [
+      {
+        "id": "popek-corian-cross-set-3-variant-1",
+        "title": "الاختيار الافتراضي",
+        "options": {},
+        "price": 770,
+        "compareAtPrice": null,
+        "available": true,
+        "image": null,
+        "images": [],
+        "sku": "POPEK-CORIAN-CROSS-03",
+        "quantity": null
+      }
+    ],
+    "mainCategory": "الصلبان",
+    "subCategory": "صلبان يد",
+    "subcategory": "hand-crosses",
+    "collections": [
+      "الصلبان",
+      "صلبان يد",
+      "صلبان صدر"
+    ],
+    "tags": [
+      "طقم صلبان",
+      "صليب يد",
+      "صليب صدر",
+      "كوريان",
+      "بديل الرخام",
+      "علبة قطيفة",
+      "موديل 3"
+    ],
+    "searchKeywords": [
+      "طقم صلبان يد وصدر كوريان بالعلبة موديل 3",
+      "طقم صلبان",
+      "صليب يد",
+      "صليب صدر",
+      "صلبان كوريان",
+      "بديل الرخام",
+      "علبة قطيفة",
+      "21 سم",
+      "22 سم",
+      "crosses",
+      "hand-crosses",
+      "pectoral-crosses",
+      "الصلبان"
+    ],
+    "slug": "طقم-صلبان-يد-وصدر-كوريان-موديل-3",
+    "thumbnail": "/assets/thumbnails/320/popek-corian-cross-set-3-53daddef5e.webp"
+  },
+  {
+    "id": "popek-corian-cross-set-4",
+    "name": "طقم صلبان يد وصدر كوريان بالعلبة - موديل 4",
+    "category": "icons",
+    "label": "صلبان يد وصدر",
+    "description": "طقم صلبان يد وصدر من الكوريان، بديل الرخام المعروف بمتانته ومظهره الأنيق. يضم الطقم صليب يد وصليب صدر بسلسلة، ويأتي داخل علبة قطيفة مناسبة للحفظ والتقديم كهدية. طول صليب اليد نحو 21–22 سم، وقد توجد فروق بسيطة بحسب الموديل.",
+    "price": 770,
+    "priceNote": "السعر للطقم كاملًا بالعلبة",
+    "stock": "متاح",
+    "badge": "جديد",
+    "isBestSeller": false,
+    "image": "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-4-boxed.webp",
+    "images": [
+      "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-4-boxed.webp",
+      "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-4-unboxed.webp"
+    ],
+    "options": [],
+    "variants": [
+      {
+        "id": "popek-corian-cross-set-4-variant-1",
+        "title": "الاختيار الافتراضي",
+        "options": {},
+        "price": 770,
+        "compareAtPrice": null,
+        "available": true,
+        "image": null,
+        "images": [],
+        "sku": "POPEK-CORIAN-CROSS-04",
+        "quantity": null
+      }
+    ],
+    "mainCategory": "الصلبان",
+    "subCategory": "صلبان يد",
+    "subcategory": "hand-crosses",
+    "collections": [
+      "الصلبان",
+      "صلبان يد",
+      "صلبان صدر"
+    ],
+    "tags": [
+      "طقم صلبان",
+      "صليب يد",
+      "صليب صدر",
+      "كوريان",
+      "بديل الرخام",
+      "علبة قطيفة",
+      "موديل 4"
+    ],
+    "searchKeywords": [
+      "طقم صلبان يد وصدر كوريان بالعلبة موديل 4",
+      "طقم صلبان",
+      "صليب يد",
+      "صليب صدر",
+      "صلبان كوريان",
+      "بديل الرخام",
+      "علبة قطيفة",
+      "21 سم",
+      "22 سم",
+      "crosses",
+      "hand-crosses",
+      "pectoral-crosses",
+      "الصلبان"
+    ],
+    "slug": "طقم-صلبان-يد-وصدر-كوريان-موديل-4",
+    "thumbnail": "/assets/thumbnails/320/popek-corian-cross-set-4-42cc3a3281.webp"
+  },
+  {
+    "id": "popek-corian-cross-set-5",
+    "name": "طقم صلبان يد وصدر كوريان بالعلبة - موديل 5",
+    "category": "icons",
+    "label": "صلبان يد وصدر",
+    "description": "طقم صلبان يد وصدر من الكوريان، بديل الرخام المعروف بمتانته ومظهره الأنيق. يضم الطقم صليب يد وصليب صدر بسلسلة، ويأتي داخل علبة قطيفة مناسبة للحفظ والتقديم كهدية. طول صليب اليد نحو 21–22 سم، وقد توجد فروق بسيطة بحسب الموديل.",
+    "price": 770,
+    "priceNote": "السعر للطقم كاملًا بالعلبة",
+    "stock": "متاح",
+    "badge": "جديد",
+    "isBestSeller": false,
+    "image": "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-5-boxed.webp",
+    "images": [
+      "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-5-boxed.webp",
+      "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-5-unboxed.webp"
+    ],
+    "options": [],
+    "variants": [
+      {
+        "id": "popek-corian-cross-set-5-variant-1",
+        "title": "الاختيار الافتراضي",
+        "options": {},
+        "price": 770,
+        "compareAtPrice": null,
+        "available": true,
+        "image": null,
+        "images": [],
+        "sku": "POPEK-CORIAN-CROSS-05",
+        "quantity": null
+      }
+    ],
+    "mainCategory": "الصلبان",
+    "subCategory": "صلبان يد",
+    "subcategory": "hand-crosses",
+    "collections": [
+      "الصلبان",
+      "صلبان يد",
+      "صلبان صدر"
+    ],
+    "tags": [
+      "طقم صلبان",
+      "صليب يد",
+      "صليب صدر",
+      "كوريان",
+      "بديل الرخام",
+      "علبة قطيفة",
+      "موديل 5"
+    ],
+    "searchKeywords": [
+      "طقم صلبان يد وصدر كوريان بالعلبة موديل 5",
+      "طقم صلبان",
+      "صليب يد",
+      "صليب صدر",
+      "صلبان كوريان",
+      "بديل الرخام",
+      "علبة قطيفة",
+      "21 سم",
+      "22 سم",
+      "crosses",
+      "hand-crosses",
+      "pectoral-crosses",
+      "الصلبان"
+    ],
+    "slug": "طقم-صلبان-يد-وصدر-كوريان-موديل-5",
+    "thumbnail": "/assets/thumbnails/320/popek-corian-cross-set-5-77d2509e76.webp"
+  },
+  {
+    "id": "popek-corian-cross-set-6",
+    "name": "طقم صلبان يد وصدر كوريان بالعلبة - موديل 6",
+    "category": "icons",
+    "label": "صلبان يد وصدر",
+    "description": "طقم صلبان يد وصدر من الكوريان، بديل الرخام المعروف بمتانته ومظهره الأنيق. يضم الطقم صليب يد وصليب صدر بسلسلة، ويأتي داخل علبة قطيفة مناسبة للحفظ والتقديم كهدية. طول صليب اليد نحو 21–22 سم، وقد توجد فروق بسيطة بحسب الموديل.",
+    "price": 770,
+    "priceNote": "السعر للطقم كاملًا بالعلبة",
+    "stock": "متاح",
+    "badge": "جديد",
+    "isBestSeller": false,
+    "image": "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-6-boxed.webp",
+    "images": [
+      "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-6-boxed.webp",
+      "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-6-unboxed.webp"
+    ],
+    "options": [],
+    "variants": [
+      {
+        "id": "popek-corian-cross-set-6-variant-1",
+        "title": "الاختيار الافتراضي",
+        "options": {},
+        "price": 770,
+        "compareAtPrice": null,
+        "available": true,
+        "image": null,
+        "images": [],
+        "sku": "POPEK-CORIAN-CROSS-06",
+        "quantity": null
+      }
+    ],
+    "mainCategory": "الصلبان",
+    "subCategory": "صلبان يد",
+    "subcategory": "hand-crosses",
+    "collections": [
+      "الصلبان",
+      "صلبان يد",
+      "صلبان صدر"
+    ],
+    "tags": [
+      "طقم صلبان",
+      "صليب يد",
+      "صليب صدر",
+      "كوريان",
+      "بديل الرخام",
+      "علبة قطيفة",
+      "موديل 6"
+    ],
+    "searchKeywords": [
+      "طقم صلبان يد وصدر كوريان بالعلبة موديل 6",
+      "طقم صلبان",
+      "صليب يد",
+      "صليب صدر",
+      "صلبان كوريان",
+      "بديل الرخام",
+      "علبة قطيفة",
+      "21 سم",
+      "22 سم",
+      "crosses",
+      "hand-crosses",
+      "pectoral-crosses",
+      "الصلبان"
+    ],
+    "slug": "طقم-صلبان-يد-وصدر-كوريان-موديل-6",
+    "thumbnail": "/assets/thumbnails/320/popek-corian-cross-set-6-4a6132c53e.webp"
+  },
+  {
+    "id": "popek-corian-cross-set-7",
+    "name": "طقم صلبان يد وصدر كوريان بالعلبة - موديل 7",
+    "category": "icons",
+    "label": "صلبان يد وصدر",
+    "description": "طقم صلبان يد وصدر من الكوريان، بديل الرخام المعروف بمتانته ومظهره الأنيق. يضم الطقم صليب يد وصليب صدر بسلسلة، ويأتي داخل علبة قطيفة مناسبة للحفظ والتقديم كهدية. طول صليب اليد نحو 21–22 سم، وقد توجد فروق بسيطة بحسب الموديل.",
+    "price": 770,
+    "priceNote": "السعر للطقم كاملًا بالعلبة",
+    "stock": "متاح",
+    "badge": "جديد",
+    "isBestSeller": false,
+    "image": "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-7-boxed.webp",
+    "images": [
+      "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-7-boxed.webp",
+      "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-7-unboxed.webp"
+    ],
+    "options": [],
+    "variants": [
+      {
+        "id": "popek-corian-cross-set-7-variant-1",
+        "title": "الاختيار الافتراضي",
+        "options": {},
+        "price": 770,
+        "compareAtPrice": null,
+        "available": true,
+        "image": null,
+        "images": [],
+        "sku": "POPEK-CORIAN-CROSS-07",
+        "quantity": null
+      }
+    ],
+    "mainCategory": "الصلبان",
+    "subCategory": "صلبان يد",
+    "subcategory": "hand-crosses",
+    "collections": [
+      "الصلبان",
+      "صلبان يد",
+      "صلبان صدر"
+    ],
+    "tags": [
+      "طقم صلبان",
+      "صليب يد",
+      "صليب صدر",
+      "كوريان",
+      "بديل الرخام",
+      "علبة قطيفة",
+      "موديل 7"
+    ],
+    "searchKeywords": [
+      "طقم صلبان يد وصدر كوريان بالعلبة موديل 7",
+      "طقم صلبان",
+      "صليب يد",
+      "صليب صدر",
+      "صلبان كوريان",
+      "بديل الرخام",
+      "علبة قطيفة",
+      "21 سم",
+      "22 سم",
+      "crosses",
+      "hand-crosses",
+      "pectoral-crosses",
+      "الصلبان"
+    ],
+    "slug": "طقم-صلبان-يد-وصدر-كوريان-موديل-7",
+    "thumbnail": "/assets/thumbnails/320/popek-corian-cross-set-7-3cb5752873.webp"
+  },
+  {
+    "id": "popek-corian-cross-set-8",
+    "name": "طقم صلبان يد وصدر كوريان بالعلبة - موديل 8",
+    "category": "icons",
+    "label": "صلبان يد وصدر",
+    "description": "طقم صلبان يد وصدر من الكوريان، بديل الرخام المعروف بمتانته ومظهره الأنيق. يضم الطقم صليب يد وصليب صدر بسلسلة، ويأتي داخل علبة قطيفة مناسبة للحفظ والتقديم كهدية. طول صليب اليد نحو 21–22 سم، وقد توجد فروق بسيطة بحسب الموديل.",
+    "price": 770,
+    "priceNote": "السعر للطقم كاملًا بالعلبة",
+    "stock": "متاح",
+    "badge": "جديد",
+    "isBestSeller": false,
+    "image": "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-8-boxed.webp",
+    "images": [
+      "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-8-boxed.webp",
+      "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-8-unboxed.webp"
+    ],
+    "options": [],
+    "variants": [
+      {
+        "id": "popek-corian-cross-set-8-variant-1",
+        "title": "الاختيار الافتراضي",
+        "options": {},
+        "price": 770,
+        "compareAtPrice": null,
+        "available": true,
+        "image": null,
+        "images": [],
+        "sku": "POPEK-CORIAN-CROSS-08",
+        "quantity": null
+      }
+    ],
+    "mainCategory": "الصلبان",
+    "subCategory": "صلبان يد",
+    "subcategory": "hand-crosses",
+    "collections": [
+      "الصلبان",
+      "صلبان يد",
+      "صلبان صدر"
+    ],
+    "tags": [
+      "طقم صلبان",
+      "صليب يد",
+      "صليب صدر",
+      "كوريان",
+      "بديل الرخام",
+      "علبة قطيفة",
+      "موديل 8"
+    ],
+    "searchKeywords": [
+      "طقم صلبان يد وصدر كوريان بالعلبة موديل 8",
+      "طقم صلبان",
+      "صليب يد",
+      "صليب صدر",
+      "صلبان كوريان",
+      "بديل الرخام",
+      "علبة قطيفة",
+      "21 سم",
+      "22 سم",
+      "crosses",
+      "hand-crosses",
+      "pectoral-crosses",
+      "الصلبان"
+    ],
+    "slug": "طقم-صلبان-يد-وصدر-كوريان-موديل-8",
+    "thumbnail": "/assets/thumbnails/320/popek-corian-cross-set-8-940e6c0c27.webp"
+  },
+  {
+    "id": "popek-corian-cross-set-9",
+    "name": "طقم صلبان يد وصدر كوريان بالعلبة - موديل 9",
+    "category": "icons",
+    "label": "صلبان يد وصدر",
+    "description": "طقم صلبان يد وصدر من الكوريان، بديل الرخام المعروف بمتانته ومظهره الأنيق. يضم الطقم صليب يد وصليب صدر بسلسلة، ويأتي داخل علبة قطيفة مناسبة للحفظ والتقديم كهدية. طول صليب اليد نحو 21–22 سم، وقد توجد فروق بسيطة بحسب الموديل.",
+    "price": 770,
+    "priceNote": "السعر للطقم كاملًا بالعلبة",
+    "stock": "متاح",
+    "badge": "جديد",
+    "isBestSeller": false,
+    "image": "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-9-boxed.webp",
+    "images": [
+      "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-9-boxed.webp",
+      "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-9-unboxed.webp"
+    ],
+    "options": [],
+    "variants": [
+      {
+        "id": "popek-corian-cross-set-9-variant-1",
+        "title": "الاختيار الافتراضي",
+        "options": {},
+        "price": 770,
+        "compareAtPrice": null,
+        "available": true,
+        "image": null,
+        "images": [],
+        "sku": "POPEK-CORIAN-CROSS-09",
+        "quantity": null
+      }
+    ],
+    "mainCategory": "الصلبان",
+    "subCategory": "صلبان يد",
+    "subcategory": "hand-crosses",
+    "collections": [
+      "الصلبان",
+      "صلبان يد",
+      "صلبان صدر"
+    ],
+    "tags": [
+      "طقم صلبان",
+      "صليب يد",
+      "صليب صدر",
+      "كوريان",
+      "بديل الرخام",
+      "علبة قطيفة",
+      "موديل 9"
+    ],
+    "searchKeywords": [
+      "طقم صلبان يد وصدر كوريان بالعلبة موديل 9",
+      "طقم صلبان",
+      "صليب يد",
+      "صليب صدر",
+      "صلبان كوريان",
+      "بديل الرخام",
+      "علبة قطيفة",
+      "21 سم",
+      "22 سم",
+      "crosses",
+      "hand-crosses",
+      "pectoral-crosses",
+      "الصلبان"
+    ],
+    "slug": "طقم-صلبان-يد-وصدر-كوريان-موديل-9",
+    "thumbnail": "/assets/thumbnails/320/popek-corian-cross-set-9-225dc7d283.webp"
+  },
+  {
+    "id": "popek-corian-cross-set-10",
+    "name": "طقم صلبان يد وصدر كوريان بالعلبة - موديل 10",
+    "category": "icons",
+    "label": "صلبان يد وصدر",
+    "description": "طقم صلبان يد وصدر من الكوريان، بديل الرخام المعروف بمتانته ومظهره الأنيق. يضم الطقم صليب يد وصليب صدر بسلسلة، ويأتي داخل علبة قطيفة مناسبة للحفظ والتقديم كهدية. طول صليب اليد نحو 21–22 سم، وقد توجد فروق بسيطة بحسب الموديل.",
+    "price": 770,
+    "priceNote": "السعر للطقم كاملًا بالعلبة",
+    "stock": "متاح",
+    "badge": "جديد",
+    "isBestSeller": false,
+    "image": "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-10-boxed.webp",
+    "images": [
+      "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-10-boxed.webp",
+      "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-10-unboxed.webp"
+    ],
+    "options": [],
+    "variants": [
+      {
+        "id": "popek-corian-cross-set-10-variant-1",
+        "title": "الاختيار الافتراضي",
+        "options": {},
+        "price": 770,
+        "compareAtPrice": null,
+        "available": true,
+        "image": null,
+        "images": [],
+        "sku": "POPEK-CORIAN-CROSS-10",
+        "quantity": null
+      }
+    ],
+    "mainCategory": "الصلبان",
+    "subCategory": "صلبان يد",
+    "subcategory": "hand-crosses",
+    "collections": [
+      "الصلبان",
+      "صلبان يد",
+      "صلبان صدر"
+    ],
+    "tags": [
+      "طقم صلبان",
+      "صليب يد",
+      "صليب صدر",
+      "كوريان",
+      "بديل الرخام",
+      "علبة قطيفة",
+      "موديل 10"
+    ],
+    "searchKeywords": [
+      "طقم صلبان يد وصدر كوريان بالعلبة موديل 10",
+      "طقم صلبان",
+      "صليب يد",
+      "صليب صدر",
+      "صلبان كوريان",
+      "بديل الرخام",
+      "علبة قطيفة",
+      "21 سم",
+      "22 سم",
+      "crosses",
+      "hand-crosses",
+      "pectoral-crosses",
+      "الصلبان"
+    ],
+    "slug": "طقم-صلبان-يد-وصدر-كوريان-موديل-10",
+    "thumbnail": "/assets/thumbnails/320/popek-corian-cross-set-10-a8dffaf49c.webp"
+  },
+  {
+    "id": "popek-corian-cross-set-11",
+    "name": "طقم صلبان يد وصدر كوريان بالعلبة - موديل 11",
+    "category": "icons",
+    "label": "صلبان يد وصدر",
+    "description": "طقم صلبان يد وصدر من الكوريان، بديل الرخام المعروف بمتانته ومظهره الأنيق. يضم الطقم صليب يد وصليب صدر بسلسلة، ويأتي داخل علبة قطيفة مناسبة للحفظ والتقديم كهدية. طول صليب اليد نحو 21–22 سم، وقد توجد فروق بسيطة بحسب الموديل.",
+    "price": 770,
+    "priceNote": "السعر للطقم كاملًا بالعلبة",
+    "stock": "متاح",
+    "badge": "جديد",
+    "isBestSeller": false,
+    "image": "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-11-boxed.webp",
+    "images": [
+      "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-11-boxed.webp",
+      "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-11-unboxed.webp"
+    ],
+    "options": [],
+    "variants": [
+      {
+        "id": "popek-corian-cross-set-11-variant-1",
+        "title": "الاختيار الافتراضي",
+        "options": {},
+        "price": 770,
+        "compareAtPrice": null,
+        "available": true,
+        "image": null,
+        "images": [],
+        "sku": "POPEK-CORIAN-CROSS-11",
+        "quantity": null
+      }
+    ],
+    "mainCategory": "الصلبان",
+    "subCategory": "صلبان يد",
+    "subcategory": "hand-crosses",
+    "collections": [
+      "الصلبان",
+      "صلبان يد",
+      "صلبان صدر"
+    ],
+    "tags": [
+      "طقم صلبان",
+      "صليب يد",
+      "صليب صدر",
+      "كوريان",
+      "بديل الرخام",
+      "علبة قطيفة",
+      "موديل 11"
+    ],
+    "searchKeywords": [
+      "طقم صلبان يد وصدر كوريان بالعلبة موديل 11",
+      "طقم صلبان",
+      "صليب يد",
+      "صليب صدر",
+      "صلبان كوريان",
+      "بديل الرخام",
+      "علبة قطيفة",
+      "21 سم",
+      "22 سم",
+      "crosses",
+      "hand-crosses",
+      "pectoral-crosses",
+      "الصلبان"
+    ],
+    "slug": "طقم-صلبان-يد-وصدر-كوريان-موديل-11",
+    "thumbnail": "/assets/thumbnails/320/popek-corian-cross-set-11-1c305c21fe.webp"
+  },
+  {
+    "id": "popek-corian-cross-set-12",
+    "name": "طقم صلبان يد وصدر كوريان بالعلبة - موديل 12",
+    "category": "icons",
+    "label": "صلبان يد وصدر",
+    "description": "طقم صلبان يد وصدر من الكوريان، بديل الرخام المعروف بمتانته ومظهره الأنيق. يضم الطقم صليب يد وصليب صدر بسلسلة، ويأتي داخل علبة قطيفة مناسبة للحفظ والتقديم كهدية. طول صليب اليد نحو 21–22 سم، وقد توجد فروق بسيطة بحسب الموديل.",
+    "price": 770,
+    "priceNote": "السعر للطقم كاملًا بالعلبة",
+    "stock": "متاح",
+    "badge": "جديد",
+    "isBestSeller": false,
+    "image": "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-12-boxed.webp",
+    "images": [
+      "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-12-boxed.webp",
+      "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-12-unboxed.webp"
+    ],
+    "options": [],
+    "variants": [
+      {
+        "id": "popek-corian-cross-set-12-variant-1",
+        "title": "الاختيار الافتراضي",
+        "options": {},
+        "price": 770,
+        "compareAtPrice": null,
+        "available": true,
+        "image": null,
+        "images": [],
+        "sku": "POPEK-CORIAN-CROSS-12",
+        "quantity": null
+      }
+    ],
+    "mainCategory": "الصلبان",
+    "subCategory": "صلبان يد",
+    "subcategory": "hand-crosses",
+    "collections": [
+      "الصلبان",
+      "صلبان يد",
+      "صلبان صدر"
+    ],
+    "tags": [
+      "طقم صلبان",
+      "صليب يد",
+      "صليب صدر",
+      "كوريان",
+      "بديل الرخام",
+      "علبة قطيفة",
+      "موديل 12"
+    ],
+    "searchKeywords": [
+      "طقم صلبان يد وصدر كوريان بالعلبة موديل 12",
+      "طقم صلبان",
+      "صليب يد",
+      "صليب صدر",
+      "صلبان كوريان",
+      "بديل الرخام",
+      "علبة قطيفة",
+      "21 سم",
+      "22 سم",
+      "crosses",
+      "hand-crosses",
+      "pectoral-crosses",
+      "الصلبان"
+    ],
+    "slug": "طقم-صلبان-يد-وصدر-كوريان-موديل-12",
+    "thumbnail": "/assets/thumbnails/320/popek-corian-cross-set-12-38100522d9.webp"
+  },
+  {
+    "id": "popek-corian-cross-set-13",
+    "name": "طقم صلبان يد وصدر كوريان بالعلبة - موديل 13",
+    "category": "icons",
+    "label": "صلبان يد وصدر",
+    "description": "طقم صلبان يد وصدر من الكوريان، بديل الرخام المعروف بمتانته ومظهره الأنيق. يضم الطقم صليب يد وصليب صدر بسلسلة، ويأتي داخل علبة قطيفة مناسبة للحفظ والتقديم كهدية. طول صليب اليد نحو 21–22 سم، وقد توجد فروق بسيطة بحسب الموديل.",
+    "price": 770,
+    "priceNote": "السعر للطقم كاملًا بالعلبة",
+    "stock": "متاح",
+    "badge": "جديد",
+    "isBestSeller": false,
+    "image": "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-13-boxed.webp",
+    "images": [
+      "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-13-boxed.webp",
+      "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-13-unboxed.webp"
+    ],
+    "options": [],
+    "variants": [
+      {
+        "id": "popek-corian-cross-set-13-variant-1",
+        "title": "الاختيار الافتراضي",
+        "options": {},
+        "price": 770,
+        "compareAtPrice": null,
+        "available": true,
+        "image": null,
+        "images": [],
+        "sku": "POPEK-CORIAN-CROSS-13",
+        "quantity": null
+      }
+    ],
+    "mainCategory": "الصلبان",
+    "subCategory": "صلبان يد",
+    "subcategory": "hand-crosses",
+    "collections": [
+      "الصلبان",
+      "صلبان يد",
+      "صلبان صدر"
+    ],
+    "tags": [
+      "طقم صلبان",
+      "صليب يد",
+      "صليب صدر",
+      "كوريان",
+      "بديل الرخام",
+      "علبة قطيفة",
+      "موديل 13"
+    ],
+    "searchKeywords": [
+      "طقم صلبان يد وصدر كوريان بالعلبة موديل 13",
+      "طقم صلبان",
+      "صليب يد",
+      "صليب صدر",
+      "صلبان كوريان",
+      "بديل الرخام",
+      "علبة قطيفة",
+      "21 سم",
+      "22 سم",
+      "crosses",
+      "hand-crosses",
+      "pectoral-crosses",
+      "الصلبان"
+    ],
+    "slug": "طقم-صلبان-يد-وصدر-كوريان-موديل-13",
+    "thumbnail": "/assets/thumbnails/320/popek-corian-cross-set-13-670b7b82e1.webp"
+  },
+  {
+    "id": "popek-corian-cross-set-14",
+    "name": "طقم صلبان يد وصدر كوريان بالعلبة - موديل 14",
+    "category": "icons",
+    "label": "صلبان يد وصدر",
+    "description": "طقم صلبان يد وصدر من الكوريان، بديل الرخام المعروف بمتانته ومظهره الأنيق. يضم الطقم صليب يد وصليب صدر بسلسلة، ويأتي داخل علبة قطيفة مناسبة للحفظ والتقديم كهدية. طول صليب اليد نحو 21–22 سم، وقد توجد فروق بسيطة بحسب الموديل.",
+    "price": 770,
+    "priceNote": "السعر للطقم كاملًا بالعلبة",
+    "stock": "متاح",
+    "badge": "جديد",
+    "isBestSeller": false,
+    "image": "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-14-boxed.webp",
+    "images": [
+      "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-14-boxed.webp",
+      "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-14-unboxed.webp"
+    ],
+    "options": [],
+    "variants": [
+      {
+        "id": "popek-corian-cross-set-14-variant-1",
+        "title": "الاختيار الافتراضي",
+        "options": {},
+        "price": 770,
+        "compareAtPrice": null,
+        "available": true,
+        "image": null,
+        "images": [],
+        "sku": "POPEK-CORIAN-CROSS-14",
+        "quantity": null
+      }
+    ],
+    "mainCategory": "الصلبان",
+    "subCategory": "صلبان يد",
+    "subcategory": "hand-crosses",
+    "collections": [
+      "الصلبان",
+      "صلبان يد",
+      "صلبان صدر"
+    ],
+    "tags": [
+      "طقم صلبان",
+      "صليب يد",
+      "صليب صدر",
+      "كوريان",
+      "بديل الرخام",
+      "علبة قطيفة",
+      "موديل 14"
+    ],
+    "searchKeywords": [
+      "طقم صلبان يد وصدر كوريان بالعلبة موديل 14",
+      "طقم صلبان",
+      "صليب يد",
+      "صليب صدر",
+      "صلبان كوريان",
+      "بديل الرخام",
+      "علبة قطيفة",
+      "21 سم",
+      "22 سم",
+      "crosses",
+      "hand-crosses",
+      "pectoral-crosses",
+      "الصلبان"
+    ],
+    "slug": "طقم-صلبان-يد-وصدر-كوريان-موديل-14",
+    "thumbnail": "/assets/thumbnails/320/popek-corian-cross-set-14-96c18295fd.webp"
+  },
+  {
+    "id": "popek-corian-cross-set-15",
+    "name": "طقم صلبان يد وصدر كوريان بالعلبة - موديل 15",
+    "category": "icons",
+    "label": "صلبان يد وصدر",
+    "description": "طقم صلبان يد وصدر من الكوريان، بديل الرخام المعروف بمتانته ومظهره الأنيق. يضم الطقم صليب يد وصليب صدر بسلسلة، ويأتي داخل علبة قطيفة مناسبة للحفظ والتقديم كهدية. طول صليب اليد نحو 21–22 سم، وقد توجد فروق بسيطة بحسب الموديل.",
+    "price": 770,
+    "priceNote": "السعر للطقم كاملًا بالعلبة",
+    "stock": "متاح",
+    "badge": "جديد",
+    "isBestSeller": false,
+    "image": "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-15-boxed.webp",
+    "images": [
+      "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-15-boxed.webp",
+      "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-15-unboxed.webp"
+    ],
+    "options": [],
+    "variants": [
+      {
+        "id": "popek-corian-cross-set-15-variant-1",
+        "title": "الاختيار الافتراضي",
+        "options": {},
+        "price": 770,
+        "compareAtPrice": null,
+        "available": true,
+        "image": null,
+        "images": [],
+        "sku": "POPEK-CORIAN-CROSS-15",
+        "quantity": null
+      }
+    ],
+    "mainCategory": "الصلبان",
+    "subCategory": "صلبان يد",
+    "subcategory": "hand-crosses",
+    "collections": [
+      "الصلبان",
+      "صلبان يد",
+      "صلبان صدر"
+    ],
+    "tags": [
+      "طقم صلبان",
+      "صليب يد",
+      "صليب صدر",
+      "كوريان",
+      "بديل الرخام",
+      "علبة قطيفة",
+      "موديل 15"
+    ],
+    "searchKeywords": [
+      "طقم صلبان يد وصدر كوريان بالعلبة موديل 15",
+      "طقم صلبان",
+      "صليب يد",
+      "صليب صدر",
+      "صلبان كوريان",
+      "بديل الرخام",
+      "علبة قطيفة",
+      "21 سم",
+      "22 سم",
+      "crosses",
+      "hand-crosses",
+      "pectoral-crosses",
+      "الصلبان"
+    ],
+    "slug": "طقم-صلبان-يد-وصدر-كوريان-موديل-15",
+    "thumbnail": "/assets/thumbnails/320/popek-corian-cross-set-15-6833d1b2d9.webp"
+  },
+  {
+    "id": "popek-corian-cross-set-16",
+    "name": "طقم صلبان يد وصدر كوريان بالعلبة - موديل 16",
+    "category": "icons",
+    "label": "صلبان يد وصدر",
+    "description": "طقم صلبان يد وصدر من الكوريان، بديل الرخام المعروف بمتانته ومظهره الأنيق. يضم الطقم صليب يد وصليب صدر بسلسلة، ويأتي داخل علبة قطيفة مناسبة للحفظ والتقديم كهدية. طول صليب اليد نحو 21–22 سم، وقد توجد فروق بسيطة بحسب الموديل.",
+    "price": 770,
+    "priceNote": "السعر للطقم كاملًا بالعلبة",
+    "stock": "متاح",
+    "badge": "جديد",
+    "isBestSeller": false,
+    "image": "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-16-boxed.webp",
+    "images": [
+      "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-16-boxed.webp",
+      "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-16-unboxed.webp"
+    ],
+    "options": [],
+    "variants": [
+      {
+        "id": "popek-corian-cross-set-16-variant-1",
+        "title": "الاختيار الافتراضي",
+        "options": {},
+        "price": 770,
+        "compareAtPrice": null,
+        "available": true,
+        "image": null,
+        "images": [],
+        "sku": "POPEK-CORIAN-CROSS-16",
+        "quantity": null
+      }
+    ],
+    "mainCategory": "الصلبان",
+    "subCategory": "صلبان يد",
+    "subcategory": "hand-crosses",
+    "collections": [
+      "الصلبان",
+      "صلبان يد",
+      "صلبان صدر"
+    ],
+    "tags": [
+      "طقم صلبان",
+      "صليب يد",
+      "صليب صدر",
+      "كوريان",
+      "بديل الرخام",
+      "علبة قطيفة",
+      "موديل 16"
+    ],
+    "searchKeywords": [
+      "طقم صلبان يد وصدر كوريان بالعلبة موديل 16",
+      "طقم صلبان",
+      "صليب يد",
+      "صليب صدر",
+      "صلبان كوريان",
+      "بديل الرخام",
+      "علبة قطيفة",
+      "21 سم",
+      "22 سم",
+      "crosses",
+      "hand-crosses",
+      "pectoral-crosses",
+      "الصلبان"
+    ],
+    "slug": "طقم-صلبان-يد-وصدر-كوريان-موديل-16",
+    "thumbnail": "/assets/thumbnails/320/popek-corian-cross-set-16-f3710b5b1f.webp"
+  },
+  {
+    "id": "popek-corian-cross-set-17",
+    "name": "طقم صلبان يد وصدر كوريان بالعلبة - موديل 17",
+    "category": "icons",
+    "label": "صلبان يد وصدر",
+    "description": "طقم صلبان يد وصدر من الكوريان، بديل الرخام المعروف بمتانته ومظهره الأنيق. يضم الطقم صليب يد وصليب صدر بسلسلة، ويأتي داخل علبة قطيفة مناسبة للحفظ والتقديم كهدية. طول صليب اليد نحو 21–22 سم، وقد توجد فروق بسيطة بحسب الموديل.",
+    "price": 770,
+    "priceNote": "السعر للطقم كاملًا بالعلبة",
+    "stock": "متاح",
+    "badge": "جديد",
+    "isBestSeller": false,
+    "image": "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-17-boxed.webp",
+    "images": [
+      "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-17-boxed.webp",
+      "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-17-unboxed.webp"
+    ],
+    "options": [],
+    "variants": [
+      {
+        "id": "popek-corian-cross-set-17-variant-1",
+        "title": "الاختيار الافتراضي",
+        "options": {},
+        "price": 770,
+        "compareAtPrice": null,
+        "available": true,
+        "image": null,
+        "images": [],
+        "sku": "POPEK-CORIAN-CROSS-17",
+        "quantity": null
+      }
+    ],
+    "mainCategory": "الصلبان",
+    "subCategory": "صلبان يد",
+    "subcategory": "hand-crosses",
+    "collections": [
+      "الصلبان",
+      "صلبان يد",
+      "صلبان صدر"
+    ],
+    "tags": [
+      "طقم صلبان",
+      "صليب يد",
+      "صليب صدر",
+      "كوريان",
+      "بديل الرخام",
+      "علبة قطيفة",
+      "موديل 17"
+    ],
+    "searchKeywords": [
+      "طقم صلبان يد وصدر كوريان بالعلبة موديل 17",
+      "طقم صلبان",
+      "صليب يد",
+      "صليب صدر",
+      "صلبان كوريان",
+      "بديل الرخام",
+      "علبة قطيفة",
+      "21 سم",
+      "22 سم",
+      "crosses",
+      "hand-crosses",
+      "pectoral-crosses",
+      "الصلبان"
+    ],
+    "slug": "طقم-صلبان-يد-وصدر-كوريان-موديل-17",
+    "thumbnail": "/assets/thumbnails/320/popek-corian-cross-set-17-d55a322cba.webp"
+  },
+  {
+    "id": "popek-corian-cross-set-18",
+    "name": "طقم صلبان يد وصدر كوريان بالعلبة - موديل 18",
+    "category": "icons",
+    "label": "صلبان يد وصدر",
+    "description": "طقم صلبان يد وصدر من الكوريان، بديل الرخام المعروف بمتانته ومظهره الأنيق. يضم الطقم صليب يد وصليب صدر بسلسلة، ويأتي داخل علبة قطيفة مناسبة للحفظ والتقديم كهدية. طول صليب اليد نحو 21–22 سم، وقد توجد فروق بسيطة بحسب الموديل.",
+    "price": 770,
+    "priceNote": "السعر للطقم كاملًا بالعلبة",
+    "stock": "متاح",
+    "badge": "جديد",
+    "isBestSeller": false,
+    "image": "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-18-boxed.webp",
+    "images": [
+      "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-18-boxed.webp",
+      "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-18-unboxed.webp"
+    ],
+    "options": [],
+    "variants": [
+      {
+        "id": "popek-corian-cross-set-18-variant-1",
+        "title": "الاختيار الافتراضي",
+        "options": {},
+        "price": 770,
+        "compareAtPrice": null,
+        "available": true,
+        "image": null,
+        "images": [],
+        "sku": "POPEK-CORIAN-CROSS-18",
+        "quantity": null
+      }
+    ],
+    "mainCategory": "الصلبان",
+    "subCategory": "صلبان يد",
+    "subcategory": "hand-crosses",
+    "collections": [
+      "الصلبان",
+      "صلبان يد",
+      "صلبان صدر"
+    ],
+    "tags": [
+      "طقم صلبان",
+      "صليب يد",
+      "صليب صدر",
+      "كوريان",
+      "بديل الرخام",
+      "علبة قطيفة",
+      "موديل 18"
+    ],
+    "searchKeywords": [
+      "طقم صلبان يد وصدر كوريان بالعلبة موديل 18",
+      "طقم صلبان",
+      "صليب يد",
+      "صليب صدر",
+      "صلبان كوريان",
+      "بديل الرخام",
+      "علبة قطيفة",
+      "21 سم",
+      "22 سم",
+      "crosses",
+      "hand-crosses",
+      "pectoral-crosses",
+      "الصلبان"
+    ],
+    "slug": "طقم-صلبان-يد-وصدر-كوريان-موديل-18",
+    "thumbnail": "/assets/thumbnails/320/popek-corian-cross-set-18-5b8288dee5.webp"
+  },
+  {
+    "id": "popek-corian-cross-set-19",
+    "name": "طقم صلبان يد وصدر كوريان بالعلبة - موديل 19",
+    "category": "icons",
+    "label": "صلبان يد وصدر",
+    "description": "طقم صلبان يد وصدر من الكوريان، بديل الرخام المعروف بمتانته ومظهره الأنيق. يضم الطقم صليب يد وصليب صدر بسلسلة، ويأتي داخل علبة قطيفة مناسبة للحفظ والتقديم كهدية. طول صليب اليد نحو 21–22 سم، وقد توجد فروق بسيطة بحسب الموديل.",
+    "price": 770,
+    "priceNote": "السعر للطقم كاملًا بالعلبة",
+    "stock": "متاح",
+    "badge": "جديد",
+    "isBestSeller": false,
+    "image": "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-19-boxed.webp",
+    "images": [
+      "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-19-boxed.webp",
+      "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-19-unboxed.webp"
+    ],
+    "options": [],
+    "variants": [
+      {
+        "id": "popek-corian-cross-set-19-variant-1",
+        "title": "الاختيار الافتراضي",
+        "options": {},
+        "price": 770,
+        "compareAtPrice": null,
+        "available": true,
+        "image": null,
+        "images": [],
+        "sku": "POPEK-CORIAN-CROSS-19",
+        "quantity": null
+      }
+    ],
+    "mainCategory": "الصلبان",
+    "subCategory": "صلبان يد",
+    "subcategory": "hand-crosses",
+    "collections": [
+      "الصلبان",
+      "صلبان يد",
+      "صلبان صدر"
+    ],
+    "tags": [
+      "طقم صلبان",
+      "صليب يد",
+      "صليب صدر",
+      "كوريان",
+      "بديل الرخام",
+      "علبة قطيفة",
+      "موديل 19"
+    ],
+    "searchKeywords": [
+      "طقم صلبان يد وصدر كوريان بالعلبة موديل 19",
+      "طقم صلبان",
+      "صليب يد",
+      "صليب صدر",
+      "صلبان كوريان",
+      "بديل الرخام",
+      "علبة قطيفة",
+      "21 سم",
+      "22 سم",
+      "crosses",
+      "hand-crosses",
+      "pectoral-crosses",
+      "الصلبان"
+    ],
+    "slug": "طقم-صلبان-يد-وصدر-كوريان-موديل-19",
+    "thumbnail": "/assets/thumbnails/320/popek-corian-cross-set-19-f2b0f79e39.webp"
+  },
+  {
+    "id": "popek-corian-cross-set-20",
+    "name": "طقم صلبان يد وصدر كوريان بالعلبة - موديل 20",
+    "category": "icons",
+    "label": "صلبان يد وصدر",
+    "description": "طقم صلبان يد وصدر من الكوريان، بديل الرخام المعروف بمتانته ومظهره الأنيق. يضم الطقم صليب يد وصليب صدر بسلسلة، ويأتي داخل علبة قطيفة مناسبة للحفظ والتقديم كهدية. طول صليب اليد نحو 21–22 سم، وقد توجد فروق بسيطة بحسب الموديل.",
+    "price": 770,
+    "priceNote": "السعر للطقم كاملًا بالعلبة",
+    "stock": "متاح",
+    "badge": "جديد",
+    "isBestSeller": false,
+    "image": "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-20-boxed.webp",
+    "images": [
+      "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-20-boxed.webp",
+      "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-20-unboxed.webp"
+    ],
+    "options": [],
+    "variants": [
+      {
+        "id": "popek-corian-cross-set-20-variant-1",
+        "title": "الاختيار الافتراضي",
+        "options": {},
+        "price": 770,
+        "compareAtPrice": null,
+        "available": true,
+        "image": null,
+        "images": [],
+        "sku": "POPEK-CORIAN-CROSS-20",
+        "quantity": null
+      }
+    ],
+    "mainCategory": "الصلبان",
+    "subCategory": "صلبان يد",
+    "subcategory": "hand-crosses",
+    "collections": [
+      "الصلبان",
+      "صلبان يد",
+      "صلبان صدر"
+    ],
+    "tags": [
+      "طقم صلبان",
+      "صليب يد",
+      "صليب صدر",
+      "كوريان",
+      "بديل الرخام",
+      "علبة قطيفة",
+      "موديل 20"
+    ],
+    "searchKeywords": [
+      "طقم صلبان يد وصدر كوريان بالعلبة موديل 20",
+      "طقم صلبان",
+      "صليب يد",
+      "صليب صدر",
+      "صلبان كوريان",
+      "بديل الرخام",
+      "علبة قطيفة",
+      "21 سم",
+      "22 سم",
+      "crosses",
+      "hand-crosses",
+      "pectoral-crosses",
+      "الصلبان"
+    ],
+    "slug": "طقم-صلبان-يد-وصدر-كوريان-موديل-20",
+    "thumbnail": "/assets/thumbnails/320/popek-corian-cross-set-20-e46f121154.webp"
+  },
+  {
+    "id": "popek-corian-cross-set-21",
+    "name": "طقم صلبان يد وصدر كوريان بالعلبة - موديل 21",
+    "category": "icons",
+    "label": "صلبان يد وصدر",
+    "description": "طقم صلبان يد وصدر من الكوريان، بديل الرخام المعروف بمتانته ومظهره الأنيق. يضم الطقم صليب يد وصليب صدر بسلسلة، ويأتي داخل علبة قطيفة مناسبة للحفظ والتقديم كهدية. طول صليب اليد نحو 21–22 سم، وقد توجد فروق بسيطة بحسب الموديل.",
+    "price": 770,
+    "priceNote": "السعر للطقم كاملًا بالعلبة",
+    "stock": "متاح",
+    "badge": "جديد",
+    "isBestSeller": false,
+    "image": "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-21-boxed.webp",
+    "images": [
+      "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-21-boxed.webp",
+      "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-21-unboxed.webp"
+    ],
+    "options": [],
+    "variants": [
+      {
+        "id": "popek-corian-cross-set-21-variant-1",
+        "title": "الاختيار الافتراضي",
+        "options": {},
+        "price": 770,
+        "compareAtPrice": null,
+        "available": true,
+        "image": null,
+        "images": [],
+        "sku": "POPEK-CORIAN-CROSS-21",
+        "quantity": null
+      }
+    ],
+    "mainCategory": "الصلبان",
+    "subCategory": "صلبان يد",
+    "subcategory": "hand-crosses",
+    "collections": [
+      "الصلبان",
+      "صلبان يد",
+      "صلبان صدر"
+    ],
+    "tags": [
+      "طقم صلبان",
+      "صليب يد",
+      "صليب صدر",
+      "كوريان",
+      "بديل الرخام",
+      "علبة قطيفة",
+      "موديل 21"
+    ],
+    "searchKeywords": [
+      "طقم صلبان يد وصدر كوريان بالعلبة موديل 21",
+      "طقم صلبان",
+      "صليب يد",
+      "صليب صدر",
+      "صلبان كوريان",
+      "بديل الرخام",
+      "علبة قطيفة",
+      "21 سم",
+      "22 سم",
+      "crosses",
+      "hand-crosses",
+      "pectoral-crosses",
+      "الصلبان"
+    ],
+    "slug": "طقم-صلبان-يد-وصدر-كوريان-موديل-21",
+    "thumbnail": "/assets/thumbnails/320/popek-corian-cross-set-21-443e28d4b2.webp"
+  },
+  {
+    "id": "popek-corian-cross-set-22",
+    "name": "طقم صلبان يد وصدر كوريان بالعلبة - موديل 22",
+    "category": "icons",
+    "label": "صلبان يد وصدر",
+    "description": "طقم صلبان يد وصدر من الكوريان، بديل الرخام المعروف بمتانته ومظهره الأنيق. يضم الطقم صليب يد وصليب صدر بسلسلة، ويأتي داخل علبة قطيفة مناسبة للحفظ والتقديم كهدية. طول صليب اليد نحو 21–22 سم، وقد توجد فروق بسيطة بحسب الموديل.",
+    "price": 770,
+    "priceNote": "السعر للطقم كاملًا بالعلبة",
+    "stock": "متاح",
+    "badge": "جديد",
+    "isBestSeller": false,
+    "image": "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-22-boxed.webp",
+    "images": [
+      "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-22-boxed.webp",
+      "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-22-unboxed.webp"
+    ],
+    "options": [],
+    "variants": [
+      {
+        "id": "popek-corian-cross-set-22-variant-1",
+        "title": "الاختيار الافتراضي",
+        "options": {},
+        "price": 770,
+        "compareAtPrice": null,
+        "available": true,
+        "image": null,
+        "images": [],
+        "sku": "POPEK-CORIAN-CROSS-22",
+        "quantity": null
+      }
+    ],
+    "mainCategory": "الصلبان",
+    "subCategory": "صلبان يد",
+    "subcategory": "hand-crosses",
+    "collections": [
+      "الصلبان",
+      "صلبان يد",
+      "صلبان صدر"
+    ],
+    "tags": [
+      "طقم صلبان",
+      "صليب يد",
+      "صليب صدر",
+      "كوريان",
+      "بديل الرخام",
+      "علبة قطيفة",
+      "موديل 22"
+    ],
+    "searchKeywords": [
+      "طقم صلبان يد وصدر كوريان بالعلبة موديل 22",
+      "طقم صلبان",
+      "صليب يد",
+      "صليب صدر",
+      "صلبان كوريان",
+      "بديل الرخام",
+      "علبة قطيفة",
+      "21 سم",
+      "22 سم",
+      "crosses",
+      "hand-crosses",
+      "pectoral-crosses",
+      "الصلبان"
+    ],
+    "slug": "طقم-صلبان-يد-وصدر-كوريان-موديل-22",
+    "thumbnail": "/assets/thumbnails/320/popek-corian-cross-set-22-8921686861.webp"
+  },
+  {
     "id": "custom-1789302819968",
     "name": "حامل شوريات نحاس 180 سم",
     "category": "brass",
