@@ -568,7 +568,7 @@
                   "id": "tasbeha-books",
                   "name": "كتب التسبحة",
                   "subcategoryImage": "assets/optimized/products/gallery/baskha-araby.webp",
-                  "manualImage": "assets/optimized/products/gallery/taxonomy-tasbeha-books-image-20260923213943-22106b.webp"
+                  "customImage": "assets/optimized/products/gallery/taxonomy-tasbeha-books-image-20260923213943-22106b.webp"
               },
               {
                   "id": "holy-week-books",
