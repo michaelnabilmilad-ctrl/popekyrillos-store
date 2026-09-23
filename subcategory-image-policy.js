@@ -11,15 +11,6 @@
     const value = taxonomyItem.customImage
       || taxonomyItem.manualImage
       || taxonomyItem.taxonomyImage
-      || taxonomyItem.subcategoryImage
-      || taxonomyItem.imageUrl
-      || taxonomyItem.imageURL
-      || taxonomyItem.image_url
-      || taxonomyItem.image
-      || taxonomyItem.thumbnail
-      || taxonomyItem.thumbnailUrl
-      || taxonomyItem.cover
-      || taxonomyItem.categoryImage
       || "";
     return validImageValue(value);
   }

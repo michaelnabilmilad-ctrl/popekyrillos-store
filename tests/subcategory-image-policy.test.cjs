@@ -13,10 +13,26 @@ test("tasbeha custom taxonomy image wins over its representative product",()=>{
   const choice=chooseImage({categoryId:"books-rituals",subcategory:{id:"tasbeha-books",customImage:saved,representativeProductId:"tasbeha-product"},products:[product("tasbeha-product","books-rituals","tasbeha-books","assets/representative.webp")],getMainId:p=>p.mainCategory,getSubId:p=>p.subcategory,getImages:p=>p.images,isActive:()=>true});
   assert.equal(choice.image,saved); assert.equal(choice.source,"configured");
 });
-test("legacy taxonomy image fields remain readable and public paths become production URLs",()=>{
+test("legacy manual image remains readable and public paths become production URLs",()=>{
   assert.equal(configuredImage({manualImage:"assets/legacy.webp"}),"assets/legacy.webp");
   assert.equal(configuredImage({customImage:"public/assets/custom.webp"}),"/assets/custom.webp");
   assert.equal(configuredImage({customImage:"/public/assets/custom.webp"}),"/assets/custom.webp");
+});
+test("legacy subcategoryImage is not a custom image and cannot override an exact product",()=>{
+  const choice=choose({id:"tote-bags",subcategoryImage:"assets/wrong-sibling.webp"},[product("bag","occasions-service","tote-bags","assets/bag.webp")]);
+  assert.equal(configuredImage({subcategoryImage:"assets/wrong-sibling.webp"}),"");
+  assert.equal(choice.image,"assets/bag.webp");
+  assert.equal(choice.productId,"bag");
+});
+test("a sibling product can never represent book-accessories",()=>{
+  const products=[
+    product("katameros-book","books-rituals","katameros","assets/katameros.webp"),
+    product("book-cover","books-rituals","book-accessories","assets/book-cover.webp")
+  ];
+  const exact=chooseImage({categoryId:"books-rituals",subcategory:{id:"book-accessories",subcategoryImage:"assets/legacy-katameros.webp"},products,getMainId:p=>p.mainCategory,getSubId:p=>p.subcategory,getImages:p=>p.images,isActive:()=>true});
+  assert.deepEqual({image:exact.image,productId:exact.productId},{image:"assets/book-cover.webp",productId:"book-cover"});
+  const missing=chooseImage({categoryId:"books-rituals",subcategory:{id:"book-accessories"},products:[products[0]],getMainId:p=>p.mainCategory,getSubId:p=>p.subcategory,getImages:p=>p.images,isActive:()=>true});
+  assert.equal(missing.image,"");
 });
 test("manually selected representative must belong to the exact main and subcategory IDs",()=>assert.equal(choose({id:"tote-bags",representativeProductId:"bag-2"},[product("bag-1","occasions-service","tote-bags","assets/one.webp"),product("bag-2","occasions-service","tote-bags","assets/two.webp")]).image,"assets/two.webp"));
 test("empty category stays blank",()=>assert.equal(choose({id:"empty"},[]).image,""));
