@@ -3,12 +3,30 @@
     if (typeof value !== "string" || !value.trim()) return "";
     const image = value.trim();
     if (/^(?:javascript|data:text|blob):/i.test(image)) return "";
-    return image;
+    return image.replace(/^\/?public\//, "/");
+  }
+
+  function configuredImage(taxonomyItem) {
+    if (!taxonomyItem || typeof taxonomyItem !== "object") return "";
+    const value = taxonomyItem.customImage
+      || taxonomyItem.manualImage
+      || taxonomyItem.taxonomyImage
+      || taxonomyItem.subcategoryImage
+      || taxonomyItem.imageUrl
+      || taxonomyItem.imageURL
+      || taxonomyItem.image_url
+      || taxonomyItem.image
+      || taxonomyItem.thumbnail
+      || taxonomyItem.thumbnailUrl
+      || taxonomyItem.cover
+      || taxonomyItem.categoryImage
+      || "";
+    return validImageValue(value);
   }
 
   function chooseImage({ categoryId, subcategory, products, getMainId, getSubId, getImages, isActive, getConfiguredImage }) {
-    const configuredImage = validImageValue(typeof getConfiguredImage === "function" ? getConfiguredImage(subcategory) : subcategory?.manualImage);
-    if (configuredImage) return { image: configuredImage, source: "configured", productId: "" };
+    const customImage = validImageValue(typeof getConfiguredImage === "function" ? getConfiguredImage(subcategory) : configuredImage(subcategory));
+    if (customImage) return { image: customImage, source: "configured", productId: "" };
     if (!categoryId || !subcategory?.id) return { image: "", source: "none", productId: "" };
 
     const eligible = (products || []).filter((product) => getMainId(product) === categoryId
@@ -24,5 +42,5 @@
     return { image: "", source: "none", productId: "" };
   }
 
-  root.POPE_KYRILLOS_SUBCATEGORY_IMAGE_POLICY = { validImageValue, chooseImage };
+  root.POPE_KYRILLOS_SUBCATEGORY_IMAGE_POLICY = { validImageValue, configuredImage, chooseImage };
 })(typeof window === "object" ? window : globalThis);

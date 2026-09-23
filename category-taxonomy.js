@@ -901,7 +901,7 @@
   function subcategoryIdFromName(n){ return subcategoryByName.get(n)?.id || ""; } function subcategoryNameFromId(id){ return subcategoryById.get(id)?.name || ""; }
   function getSubcategories(v){ return (categoryById.get(v)||categoryByName.get(v))?.subcategories||[]; }
   function categoryImage(category){
-    const value = category?.manualImage || category?.subcategoryImage || category?.imageUrl || category?.imageURL || category?.image_url || category?.image || category?.thumbnail || category?.thumbnailUrl || category?.cover || category?.categoryImage || "";
+    const value = category?.customImage || category?.manualImage || category?.taxonomyImage || category?.subcategoryImage || category?.imageUrl || category?.imageURL || category?.image_url || category?.image || category?.thumbnail || category?.thumbnailUrl || category?.cover || category?.categoryImage || "";
     if (typeof value !== "string" || !value.trim() || /^(?:javascript|data:text|blob):/i.test(value.trim())) return "";
     return value.trim().replace(/^\/public\//, "/");
   }

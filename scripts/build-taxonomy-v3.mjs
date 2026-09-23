@@ -23,7 +23,7 @@ const image = {
   service: "assets/optimized/featured-service-bundle.webp",
   church: "assets/optimized/hero-products-collage.webp"
 };
-const c = (id, name, description, subcategoryImage, names) => ({ id, name, description, subcategoryImage, visible: true, homeVisible: true, subcategories: names.map(([sid, sname]) => ({ id: sid, name: sname, manualImage: "", representativeProductId: "" })) });
+const c = (id, name, description, subcategoryImage, names) => ({ id, name, description, subcategoryImage, visible: true, homeVisible: true, subcategories: names.map(([sid, sname]) => ({ id: sid, name: sname, customImage: "", representativeProductId: "" })) });
 const legacyCategories = [
   c("altar-vessels", "المذبح والأواني المقدسة", "أواني المذبح والذخيرة وأدوات الخدمة المقدسة", image.altar, [["altar-sets","أطقم أواني المذبح"],["chalices","الكؤوس"],["trays-stars","الصواني والنجوم"],["mystir","المستير"],["water-wine-cruets","قوارير الماء والخمر"],["relic-boxes","حق الذخيرة"],["communion-bread-boxes","بيوت القربان"],["holy-oil-vessels","أواني الميرون والزيوت"],["laqan-vessels","أواني اللقان"],["service-plates","أطباق الخدمة"],["altar-vessel-crosses","صلبان المذبح"],["altar-candlesticks","شمعدانات المذبح"],["gospel-stands","حوامل الإنجيل والبشارة"],["vessel-cases","شنط وصناديق حفظ الأواني"]]),
   c("censers-incense", "الشوريات والبخور", "الشوريات والمباخر والبخور والفحم والعطور الكنسية", image.incense, [["brass-censers","شوريات نحاس"],["stainless-censers","شوريات ستانلس"],["silver-gold-censers","شوريات فضي وذهبي"],["deacon-censers","شوريات شماسية"],["home-censers","مباخر منزلية"],["incense-boxes","حق البخور"],["incense-spoons","ملاعق البخور"],["church-incense","بخور كنسي"],["greek-incense","بخور يوناني"],["natural-incense","لبان وبخور طبيعي"],["charcoal","الفحم"],["aparaka","الأباركة والعطور الكنسية"],["hanout","الحنوط"],["censer-parts","أدوات وقطع غيار الشوريات"]]),
@@ -101,7 +101,7 @@ const safeSource = source
   )
   .replace(
     "  window.POPE_KYRILLOS_TAXONOMY=",
-    `  function categoryImage(category){ const value=category?.subcategoryImage||category?.imageUrl||category?.imageURL||category?.image_url||category?.image||category?.thumbnail||category?.thumbnailUrl||category?.cover||category?.categoryImage||""; if(typeof value!=="string"||!value.trim()||/^(?:javascript|data:text|blob):/i.test(value.trim())) return ""; return value.trim().replace(/^\\/public\\//,"/"); }
+    `  function categoryImage(category){ const value=category?.customImage||category?.manualImage||category?.taxonomyImage||category?.subcategoryImage||category?.imageUrl||category?.imageURL||category?.image_url||category?.image||category?.thumbnail||category?.thumbnailUrl||category?.cover||category?.categoryImage||""; if(typeof value!=="string"||!value.trim()||/^(?:javascript|data:text|blob):/i.test(value.trim())) return ""; return value.trim().replace(/^\\/public\\//,"/"); }
   window.POPE_KYRILLOS_TAXONOMY=`
   )
   .replace("window.POPE_KYRILLOS_TAXONOMY={categories,defaultCategories,", "window.POPE_KYRILLOS_TAXONOMY={categories,defaultCategories,CURRENT_TAXONOMY_VERSION,")

@@ -1147,6 +1147,10 @@ function mainCategoryProductCount(categoryId) {
 
 function mainCategoryTileArt(category) {
   const categoryId = typeof category === "string" ? category : category?.id || "";
+  const customImage = typeof category === "object" ? taxonomyCardConfiguredImage(category, { includeLegacy: false }) : "";
+  if (customImage) {
+    return `<span class="category-art category-art--photo"><img src="${escapeHtml(versionedAssetUrl(customImage, productsAssetVersion || "1"))}" alt="" width="320" height="320" loading="lazy" decoding="async"></span>`;
+  }
   const historicalArt = historicalMainCategoryArt(categoryId);
   if (historicalArt) return historicalArt;
   return mainCategoryFallbackArt(categoryId);
@@ -1487,14 +1491,8 @@ function renderLabelFilterOptions() {
 function subcategoryCardImage(subcategory, category) {
   const imagePolicy = window.POPE_KYRILLOS_SUBCATEGORY_IMAGE_POLICY;
   const validImage = imagePolicy?.validImageValue || ((value) => typeof value === "string" ? value.trim() : "");
-  const manuallyAssignedImage = validImage(subcategory?.manualImage);
-  if (manuallyAssignedImage) return manuallyAssignedImage;
-
-  // This is the image the storefront historically resolved from the complete
-  // category catalog. It is supplied independently of the active filters, so
-  // selecting a sibling cannot replace or remove a card's established image.
-  const historicalImage = validImage(catalogSubcategoryImages?.[category?.id]?.[subcategory?.id]);
-  if (historicalImage) return historicalImage;
+  const customImage = taxonomyCardConfiguredImage(subcategory);
+  if (customImage) return customImage;
 
   const choice = window.POPE_KYRILLOS_SUBCATEGORY_IMAGE_POLICY?.chooseImage({
     categoryId: category?.id || "",
@@ -1507,8 +1505,17 @@ function subcategoryCardImage(subcategory, category) {
   });
   if (choice?.image) return choice.image;
 
-  const taxonomyImage = taxonomy?.categoryImage?.(subcategory) || "";
-  return taxonomyImage || taxonomy?.categoryImage?.(category) || "assets/optimized/hero-papa-kyrillos-products.webp";
+  // The API derives this from the complete, unfiltered catalog, so it remains
+  // the representative product fallback when the current page is paginated.
+  const representativeImage = validImage(catalogSubcategoryImages?.[category?.id]?.[subcategory?.id]);
+  return representativeImage || "assets/optimized/hero-papa-kyrillos-products.webp";
+}
+
+function taxonomyCardConfiguredImage(item, { includeLegacy = true } = {}) {
+  const imagePolicy = window.POPE_KYRILLOS_SUBCATEGORY_IMAGE_POLICY;
+  if (!item || typeof item !== "object") return "";
+  if (includeLegacy) return imagePolicy?.configuredImage?.(item) || imagePolicy?.validImageValue?.(item.customImage || item.manualImage) || "";
+  return imagePolicy?.validImageValue?.(item.customImage || item.manualImage || item.taxonomyImage) || "";
 }
 
 function renderSubcategoryCards() {

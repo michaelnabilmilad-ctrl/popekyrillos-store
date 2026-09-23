@@ -46,10 +46,9 @@ async function minifyFile(sourcePath, targetPath) {
 }
 
 async function minifyScripts() {
-  // Keep the storefront taxonomy and its consumer in one versioned artifact.
-  // Loading them as two independent scripts allowed a transient/cache failure
-  // to leave products usable while categories were permanently unavailable.
-  const storefrontSource = `${read("category-taxonomy.js")}\n${read("script.js")}`;
+  // Taxonomy is live data published by Admin. Bundling a build-time copy here
+  // makes successful taxonomy publishes invisible until a full JS redeploy.
+  const storefrontSource = read("script.js");
   const result = await terser.minify(storefrontSource, { compress: true, mangle: true });
   if (result.error) throw result.error;
   if (!result.code) throw new Error("Terser did not produce script.min.js content.");

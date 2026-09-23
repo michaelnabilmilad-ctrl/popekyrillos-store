@@ -425,7 +425,8 @@
       const index = Number(button.closest("[data-taxonomy-sub-index]")?.dataset.taxonomySubIndex);
       const subcategory = selectedTaxonomyCategory()?.subcategories?.[index];
       if (subcategory && !Number.isNaN(index)) {
-        subcategory.manualImage = "";
+        subcategory.customImage = "";
+        delete subcategory.manualImage;
         renderTaxonomyManager();
         refreshTaxonomyDependentUi();
         showToast("تم حذف الصورة المخصصة محليًا. اضغط حفظ ونشر الأقسام لتطبيق التغيير.");
@@ -782,7 +783,8 @@
         throw new Error(result.error || result.message || `HTTP ${response.status}`);
       }
 
-      subcategory.manualImage = result.path;
+      subcategory.customImage = normalizeImagePath(result.path);
+      delete subcategory.manualImage;
       state.assetPreviewVersion = String(Date.now());
       renderTaxonomyManager();
       refreshTaxonomyDependentUi();
@@ -1269,7 +1271,8 @@
       getMainId: (product) => normalizeMainCategoryValue(product.mainCategory, product.category),
       getSubId: (product) => normalizeSubCategoryValue(product.subcategory || product.subCategory),
       getImages: categoryProductImages,
-      isActive: (product) => product?.published !== false && product?.deleted !== true && categoryProductHasAvailableVariant(product)
+      isActive: (product) => product?.published !== false && product?.deleted !== true && categoryProductHasAvailableVariant(product),
+      getConfiguredImage: (item) => window.POPE_KYRILLOS_SUBCATEGORY_IMAGE_POLICY?.configuredImage?.(item)
     }) || { image: "", source: "none", productId: "" };
   }
 
@@ -1378,15 +1381,15 @@
           <section class="taxonomy-manual-image">
             <strong>صورة مخصصة للقسم (اختياري)</strong>
             <div class="taxonomy-manual-preview">
-              ${subcategory.manualImage ? `<img src="${escapeAttribute(previewAssetUrl(subcategory.manualImage))}" alt="معاينة الصورة المخصصة" loading="lazy" decoding="async">` : `<span>لا توجد صورة مخصصة</span>`}
+              ${window.POPE_KYRILLOS_SUBCATEGORY_IMAGE_POLICY?.configuredImage?.(subcategory) ? `<img src="${escapeAttribute(previewAssetUrl(window.POPE_KYRILLOS_SUBCATEGORY_IMAGE_POLICY.configuredImage(subcategory)))}" alt="معاينة الصورة المخصصة" loading="lazy" decoding="async">` : `<span>لا توجد صورة مخصصة</span>`}
             </div>
             <label>
               <span class="sr-only">مسار الصورة المخصصة</span>
-              <input type="text" dir="ltr" data-taxonomy-field="manualImage" value="${escapeAttribute(subcategory.manualImage || "")}" placeholder="اتركه فارغًا لاستخدام منتج من نفس القسم">
+              <input type="text" dir="ltr" data-taxonomy-field="customImage" value="${escapeAttribute(subcategory.customImage || subcategory.manualImage || "")}" placeholder="اتركه فارغًا لاستخدام منتج من نفس القسم">
             </label>
             <div class="taxonomy-image-actions">
-              <button class="button small secondary" type="button" data-action="upload-taxonomy-image">${subcategory.manualImage ? "تغيير الصورة" : "رفع صورة"}</button>
-              <button class="button small ghost" type="button" data-action="remove-taxonomy-image" ${subcategory.manualImage ? "" : "disabled"}>حذف الصورة المخصصة</button>
+              <button class="button small secondary" type="button" data-action="upload-taxonomy-image">${subcategory.customImage || subcategory.manualImage ? "تغيير الصورة" : "رفع صورة"}</button>
+              <button class="button small ghost" type="button" data-action="remove-taxonomy-image" ${subcategory.customImage || subcategory.manualImage ? "" : "disabled"}>حذف الصورة المخصصة</button>
             </div>
             <small>إذا لم تضف صورة مخصصة، سيستخدم الموقع تلقائيًا صورة المنتج الممثل للقسم.</small>
           </section>
@@ -1474,14 +1477,15 @@
     if (field === "id") {
       subcategory.id = uniqueTaxonomySubcategoryId(slugLike(element.value) || `subcategory-${Date.now()}`, subcategory);
       if (element.value !== subcategory.id) element.value = subcategory.id;
-    } else if (field === "manualImage") {
-      subcategory.manualImage = normalizeImagePath(element.value);
-      if (element.value !== subcategory.manualImage) element.value = subcategory.manualImage;
+    } else if (field === "customImage") {
+      subcategory.customImage = normalizeImagePath(element.value);
+      delete subcategory.manualImage;
+      if (element.value !== subcategory.customImage) element.value = subcategory.customImage;
     } else {
       subcategory[field] = element.type === "checkbox" ? element.checked : element.value.trim();
     }
 
-    if (event.type === "change" && (field === "manualImage" || field === "representativeProductId")) {
+    if (event.type === "change" && (field === "customImage" || field === "representativeProductId")) {
       renderTaxonomyManager();
     }
     refreshTaxonomyDependentUi();
@@ -1512,7 +1516,7 @@
       id: uniqueTaxonomySubcategoryId(`custom-subcategory-${Date.now()}`),
       name: "قسم فرعي جديد",
       description: "",
-      manualImage: "",
+      customImage: "",
       representativeProductId: "",
       visible: true,
       homeVisible: true
@@ -2711,7 +2715,7 @@ function updateProductField(product, element) {
   }
 
   function categoryImage(category) {
-    const value = category?.subcategoryImage || category?.imageUrl || category?.imageURL || category?.image_url || category?.image || category?.thumbnail || category?.thumbnailUrl || category?.cover || category?.categoryImage || "";
+    const value = category?.customImage || category?.manualImage || category?.taxonomyImage || category?.subcategoryImage || category?.imageUrl || category?.imageURL || category?.image_url || category?.image || category?.thumbnail || category?.thumbnailUrl || category?.cover || category?.categoryImage || "";
     if (typeof value !== "string" || !value.trim() || /^(?:javascript|data:text|blob):/i.test(value.trim())) return "";
     return value.trim().replace(/^\\/public\\//, "/");
   }

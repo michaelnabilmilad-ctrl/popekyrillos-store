@@ -635,11 +635,23 @@ async function productApiResponse(request, env, product) {
 async function loadTaxonomySource(env, request, { maxAgeMs = 5000 } = {}) {
   if (taxonomyCache && Date.now() - taxonomyCacheTime < maxAgeMs) return taxonomyCache;
 
-  const response = await env.ASSETS.fetch(rewriteRequest(request, "/category-taxonomy.js"));
-  if (!response.ok) return "";
-  taxonomyCache = await response.text();
+  try {
+    const live = await githubFetchText(env, "category-taxonomy.js");
+    if (live?.text) {
+      taxonomyCache = live.text;
+      taxonomyCacheTime = Date.now();
+      taxonomyCacheSha = live.sha || "";
+      return taxonomyCache;
+    }
+  } catch (error) {
+    console.warn("Live taxonomy fetch failed; using deployed asset.", error?.message || error);
+  }
+
+  const fallback = await env.ASSETS.fetch(rewriteRequest(request, "/category-taxonomy.js"));
+  if (!fallback.ok) return "";
+  taxonomyCache = await fallback.text();
   taxonomyCacheTime = Date.now();
-  taxonomyCacheSha = response.headers.get("ETag") || "";
+  taxonomyCacheSha = fallback.headers.get("ETag") || "";
   return taxonomyCache;
 }
 

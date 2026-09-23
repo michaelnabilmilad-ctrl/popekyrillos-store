@@ -1,12 +1,22 @@
 const test=require("node:test"), assert=require("node:assert/strict"), fs=require("node:fs"), vm=require("node:vm");
 const context={}; vm.createContext(context); vm.runInContext(fs.readFileSync("subcategory-image-policy.js","utf8"),context);
-const {chooseImage}=context.POPE_KYRILLOS_SUBCATEGORY_IMAGE_POLICY;
+const {chooseImage,configuredImage}=context.POPE_KYRILLOS_SUBCATEGORY_IMAGE_POLICY;
 const product=(id,main,sub,image,extra={})=>({id,mainCategory:main,subcategory:sub,images:image?[image]:[],...extra});
 const choose=(subcategory,products)=>chooseImage({categoryId:"occasions-service",subcategory,products,getMainId:p=>p.mainCategory,getSubId:p=>p.subcategory,getImages:p=>p.images,isActive:p=>p.published!==false&&p.deleted!==true});
 
 test("manual category image has first priority",()=>{
   const choice=choose({id:"tote-bags",manualImage:"assets/manual.webp"},[product("bag","occasions-service","tote-bags","assets/bag.webp")]);
   assert.equal(choice.image,"assets/manual.webp"); assert.equal(choice.source,"configured");
+});
+test("tasbeha custom taxonomy image wins over its representative product",()=>{
+  const saved="assets/optimized/products/gallery/taxonomy-tasbeha-books-image-20260922083741-512087.webp";
+  const choice=chooseImage({categoryId:"books-rituals",subcategory:{id:"tasbeha-books",customImage:saved,representativeProductId:"tasbeha-product"},products:[product("tasbeha-product","books-rituals","tasbeha-books","assets/representative.webp")],getMainId:p=>p.mainCategory,getSubId:p=>p.subcategory,getImages:p=>p.images,isActive:()=>true});
+  assert.equal(choice.image,saved); assert.equal(choice.source,"configured");
+});
+test("legacy taxonomy image fields remain readable and public paths become production URLs",()=>{
+  assert.equal(configuredImage({manualImage:"assets/legacy.webp"}),"assets/legacy.webp");
+  assert.equal(configuredImage({customImage:"public/assets/custom.webp"}),"/assets/custom.webp");
+  assert.equal(configuredImage({customImage:"/public/assets/custom.webp"}),"/assets/custom.webp");
 });
 test("manually selected representative must belong to the exact main and subcategory IDs",()=>assert.equal(choose({id:"tote-bags",representativeProductId:"bag-2"},[product("bag-1","occasions-service","tote-bags","assets/one.webp"),product("bag-2","occasions-service","tote-bags","assets/two.webp")]).image,"assets/two.webp"));
 test("empty category stays blank",()=>assert.equal(choose({id:"empty"},[]).image,""));

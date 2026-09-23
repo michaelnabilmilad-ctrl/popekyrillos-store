@@ -47,10 +47,10 @@ test("sibling thumbnails come from canonical navigation metadata, not filtered r
   const imageResolver = functionSource("subcategoryCardImage", "renderSubcategoryCards");
   const loader = functionSource("loadCatalogPage", "openHeaderSearch");
   assert.match(imageResolver, /catalogSubcategoryImages/);
-  assert.match(imageResolver, /taxonomy\?\.categoryImage/);
-  assert.ok(imageResolver.indexOf("subcategory?.manualImage") < imageResolver.indexOf("catalogSubcategoryImages"));
-  assert.ok(imageResolver.indexOf("catalogSubcategoryImages") < imageResolver.indexOf("taxonomy?.categoryImage?.(subcategory)"));
-  assert.doesNotMatch(imageResolver, /getConfiguredImage/);
+  assert.match(imageResolver, /configuredImage/);
+  assert.ok(imageResolver.indexOf("customImage") < imageResolver.indexOf("catalogSubcategoryImages"));
+  assert.ok(imageResolver.indexOf("choice?.image") < imageResolver.indexOf("catalogSubcategoryImages"));
+  assert.match(imageResolver, /representativeImage \|\| "assets\/optimized\/hero-papa-kyrillos-products\.webp"/);
   assert.match(loader, /payload\.subcategoryImages/);
 });
 

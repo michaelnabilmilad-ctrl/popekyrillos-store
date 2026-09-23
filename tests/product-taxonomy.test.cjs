@@ -149,13 +149,15 @@ test("legacy gifts URL maps to occasions and tote bag card uses the stable meeti
   assert.match(fs.readFileSync("script.js", "utf8"), /"gifts-accessories": "occasions-service"/);
 });
 
-test("main category cards render the recovered historical artwork instead of product images", () => {
+test("main category cards use custom taxonomy images before recovered historical artwork", () => {
   const source = fs.readFileSync("script.js", "utf8");
   const start = source.indexOf("function ensureMainCategoryTiles()");
   const end = source.indexOf("function normalizeCategoryFilter", start);
   const renderer = source.slice(start, end);
   assert.match(renderer, /mainCategoryTileArt\(category\)/);
-  assert.doesNotMatch(renderer, /taxonomy\?\.categoryImage|category-art--photo|<img/);
+  assert.match(renderer, /taxonomyCardConfiguredImage\(category, \{ includeLegacy: false \}\)/);
+  assert.ok(renderer.indexOf("taxonomyCardConfiguredImage") < renderer.indexOf("historicalMainCategoryArt"));
+  assert.match(renderer, /category-art--photo/);
   assert.match(renderer, /categoryId === "altar-vessels"/);
   assert.match(renderer, /categoryId === "censers-incense" \|\| categoryId === "candles-lamps"/);
   assert.match(renderer, /categoryId === "church-vestments"/);
