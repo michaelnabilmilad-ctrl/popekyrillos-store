@@ -10870,5 +10870,43 @@
     "subCategory": "شمعدانات",
     "subcategory": "candlesticks",
     "sku": "PK-1098D665702C4521A6083B3D73FDFD16"
+  },
+  {
+    "id": "custom-1790452751789",
+    "name": "قراية مذبح نحاس",
+    "category": "brass",
+    "label": "نحاسيات",
+    "description": "قراية نحاس أنيقة بتصميم كنسي كلاسيكي، مزينة بزخارف نباتية وصلبان بارزة تضيف لها شكلًا مميزًا وفخمًا.\n\nتتميز بقاعدة ثابتة ومزخرفة، مع حامل علوي واسع مناسب لوضع الكتاب المقدس، القطمارس، كتب الصلوات والقراءات الكنسية بشكل واضح ومريح أثناء الاستخدام.\n\nالتصميم المفتوح في الجزء العلوي يساعد على إظهار الكتاب بشكل أنيق، مع تفاصيل نحاسية دقيقة ولمعة ذهبية تعطي القراية طابعًا كنسيًا مميزًا.\n\nالمميزات: خامة نحاس، لون ذهبي، زخارف كنسية دقيقة، صلبان مدمجة في التصميم، قاعدة ثابتة، وحامل مناسب للكتب الكنسية.\n\nمناسبة لـ: الكنائس، الهيكل، المذبح، الاجتماعات، ركن الصلاة، واستخدام الكتب الكنسية أثناء الصلوات والقراءات.\n\nطول القراية 40 سم",
+    "price": 7150,
+    "priceNote": "",
+    "stock": "متاح",
+    "badge": "نحاسيات",
+    "isBestSeller": false,
+    "image": "assets/optimized/products/gallery/product-1-image-20260926200044-6bb979.webp",
+    "url": "https://popekyrillos.store/?product=custom-1790452751789",
+    "tags": [],
+    "collections": [],
+    "images": [
+      "assets/optimized/products/gallery/product-1-image-20260926200044-6bb979.webp"
+    ],
+    "options": [],
+    "variants": [
+      {
+        "id": "custom-1790452751789-variant-1790452751789-1",
+        "title": "الاختيار الافتراضي",
+        "options": {},
+        "price": 7150,
+        "compareAtPrice": null,
+        "available": true,
+        "image": null,
+        "images": [],
+        "sku": "PK-FB9305BCF53D402B9E87F40329A2702E",
+        "quantity": null
+      }
+    ],
+    "mainCategory": "تجهيز الكنائس والطلبات الخاصة",
+    "subCategory": "حوامل الأيقونات والإنجيل",
+    "subcategory": "icon-gospel-stands",
+    "sku": "PK-1B9FE4C337BA4103AD5DF58E4CFC2A29"
   }
 ]
