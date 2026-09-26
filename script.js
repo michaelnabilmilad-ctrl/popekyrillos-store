@@ -20,7 +20,7 @@ const paymobIntentionEndpointPath = "/api/create-paymob-intention";
 const firebaseSdkVersion = "10.14.1";
 const productBatchSize = window.matchMedia("(max-width: 680px)").matches ? 8 : 24;
 if ("scrollRestoration" in window.history) window.history.scrollRestoration = "manual";
-const catalogSchemaVersion = "11";
+const catalogSchemaVersion = "12";
 const catalogVersion = Date.now().toString(36);
 const canonicalOrigin = "https://popekyrillos.store";
 const guestCartStorageKey = "pope-kyrillos-cart:guest";
@@ -1302,7 +1302,13 @@ function productSubCategoryName(product) {
 }
 
 function productCollectionIds(product) {
-  return [...new Set((Array.isArray(product?.collections) ? product.collections : [])
+  const explicitCollections = Array.isArray(product?.collections) ? product.collections : [];
+  const groupValues = [product?.group, product?.groupId, product?.groupSlug]
+    .flatMap((value) => value && typeof value === "object" ? [value.id, value.slug, value.code, value.name] : [value])
+    .map((value) => normalizeSearchText(value || ""));
+  const isGreekGroup = groupValues.some((value) => value === "gr" || value === "greek" || value === "greek collection" || value === "المجموعه اليونانيه");
+  const inferredCollections = isGreekGroup && productSubCategoryId(product) === "pectoral-crosses" ? ["greek-clergy-crosses"] : [];
+  return [...new Set([...explicitCollections, ...inferredCollections]
     .map((value) => taxonomy?.subcategoryIdFromName?.(value) || value)
     .filter((value) => taxonomy?.subcategoryById?.has(value)))];
 }
@@ -1338,26 +1344,7 @@ function visibleMainCategories() {
 }
 
 function availableProducts() {
-  return dedupeCatalogProducts(products.filter((product) => product?.active !== false && product?.hidden !== true && product?.deleted !== true && product?.published !== false && hasAvailableVariant(product)));
-}
-
-function duplicateCatalogKey(product) {
-  const sku = String(product?.sku || "").trim().toLowerCase();
-  if (sku) return `sku:${sku}`;
-  const name = normalizeSearchText(localized(product?.name || ""));
-  const price = productPrice(product) ?? "";
-  const image = String(getProductImages(product)[0] || "").replace(/[?#].*$/, "").toLowerCase();
-  return name && image ? `fallback:${name}|${price}|${image}` : `id:${product?.id || ""}`;
-}
-
-function dedupeCatalogProducts(items = []) {
-  const seen = new Set();
-  return items.filter((product) => {
-    const key = duplicateCatalogKey(product);
-    if (seen.has(key)) return false;
-    seen.add(key);
-    return true;
-  });
+  return products.filter((product) => product?.active !== false && product?.hidden !== true && product?.deleted !== true && product?.published !== false && hasAvailableVariant(product));
 }
 
 function buildSubcategoryCounts(items = []) {
@@ -5425,7 +5412,7 @@ async function loadCatalogPage({ reset = false } = {}) {
       }
       const payload = await response.json();
       if (requestSequence !== catalogRequestSequence) return;
-      staticCatalogProducts = dedupeCatalogProducts(Array.isArray(payload) ? payload : Array.isArray(payload.products) ? payload.products : []);
+      staticCatalogProducts = Array.isArray(payload) ? payload : Array.isArray(payload.products) ? payload.products : [];
       if (!staticCatalogProducts.length) throw new Error("Static catalog is empty");
       products = staticCatalogProducts;
       catalogCategoryCounts = {};

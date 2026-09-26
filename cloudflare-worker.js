@@ -287,25 +287,6 @@ function isCatalogProductVisible(product) {
     && product?.published !== false && hasAvailableVariant(product);
 }
 
-function catalogDuplicateKey(product) {
-  const sku = String(product?.sku || "").trim().toLowerCase();
-  if (sku) return `sku:${sku}`;
-  const name = normalizedSearch(localized(product?.name));
-  const price = productPrice(product) ?? "";
-  const image = String(productImages(product)[0] || "").replace(/[?#].*$/, "").toLowerCase();
-  return name && image ? `fallback:${name}|${price}|${image}` : `id:${product?.id || ""}`;
-}
-
-function uniqueCatalogProducts(products) {
-  const seen = new Set();
-  return products.filter((product) => {
-    const key = catalogDuplicateKey(product);
-    if (seen.has(key)) return false;
-    seen.add(key);
-    return true;
-  });
-}
-
 function productDescription(product) {
   return cleanDescription(localized(product?.description)) || "تفاصيل المنتج من مكتبة البابا كيرلس.";
 }
@@ -497,7 +478,14 @@ const catalogMainCategoryIds = [
 const greekCollectionSubcategoryIds = new Set(["greek-vessels", "greek-wedding-crowns", "greek-clergy-crosses"]);
 
 function catalogCollectionIds(product) {
-  return (Array.isArray(product?.collections) ? product.collections : []).map(String).filter((value) => greekCollectionSubcategoryIds.has(value));
+  const explicitCollections = Array.isArray(product?.collections) ? product.collections : [];
+  const groupValues = [product?.group, product?.groupId, product?.groupSlug]
+    .flatMap((value) => value && typeof value === "object" ? [value.id, value.slug, value.code, value.name] : [value])
+    .map((value) => normalizedSearch(value || ""));
+  const isGreekGroup = groupValues.some((value) => value === "gr" || value === "greek" || value === "greek collection" || value === "المجموعه اليونانيه");
+  const primarySubcategory = String(product?.subcategory || product?.subCategory || "");
+  const inferredCollections = isGreekGroup && primarySubcategory === "pectoral-crosses" ? ["greek-clergy-crosses"] : [];
+  return [...new Set([...explicitCollections, ...inferredCollections].map(String).filter((value) => greekCollectionSubcategoryIds.has(value)))];
 }
 
 const legacyCatalogCategoryIds = {
@@ -570,12 +558,12 @@ async function catalogApiResponse(request, env, ctx) {
   const page = Math.max(1, Math.trunc(Number(url.searchParams.get("page"))) || 1);
   const limit = Math.min(48, Math.max(1, Math.trunc(Number(url.searchParams.get("limit"))) || 12));
   const cacheUrl = new URL(url.origin + url.pathname);
-  cacheUrl.searchParams.set("schema", "15");
+  cacheUrl.searchParams.set("schema", "16");
   cacheUrl.searchParams.set("thumbnails", "plain-iota-v2");
   [...url.searchParams.entries()].sort(([a], [b]) => a.localeCompare(b)).forEach(([key, value]) => cacheUrl.searchParams.append(key, value));
   const allProducts = await loadProducts(env, request, { maxAgeMs: 600000 });
   const thumbnailManifest = await loadThumbnailManifest(env, request);
-  const navigationProducts = uniqueCatalogProducts(allProducts.filter(isCatalogProductVisible));
+  const navigationProducts = allProducts.filter(isCatalogProductVisible);
   const categoryCounts = navigationProducts.reduce((counts, product) => {
     const categoryId = catalogMainCategoryId(product);
     counts[categoryId] = (counts[categoryId] || 0) + 1;
@@ -615,7 +603,7 @@ async function catalogApiResponse(request, env, ctx) {
   const cached = await edgeCache.match(cacheKey);
   if (cached) return cached;
   const search = normalizedSearch(url.searchParams.get("search") || "");
-  const matched = sortCatalogProducts(uniqueCatalogProducts(allProducts.filter((product) => catalogProductMatches(product, url.searchParams))), url.searchParams.get("sort") || "default");
+  const matched = sortCatalogProducts(allProducts.filter((product) => catalogProductMatches(product, url.searchParams)), url.searchParams.get("sort") || "default");
   if (search && !["price-asc", "price-desc"].includes(url.searchParams.get("sort") || "default")) {
     matched.sort((first, second) => catalogSearchScore(first, search) - catalogSearchScore(second, search));
   }
@@ -1129,7 +1117,7 @@ function categoryPageMetaTags(url, products) {
   const subcategoryId = segments[2] || "";
   const params = new URLSearchParams({ category: categoryId });
   if (subcategoryId) params.set("subcategory", subcategoryId);
-  const matched = uniqueCatalogProducts(products.filter((product) => catalogProductMatches(product, params)));
+  const matched = products.filter((product) => catalogProductMatches(product, params));
   const first = matched[0];
   const categoryName = categorySeoNames[categoryId] || categoryId;
   const subcategoryName = subcategoryId

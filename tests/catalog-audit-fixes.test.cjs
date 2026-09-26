@@ -23,11 +23,15 @@ test("homepage product count is dynamic", () => {
   assert.match(storefront, /const labelCount = fullSubcategoryProductCount\(category\.id, label\.id\)/);
 });
 
-test("catalog APIs and static fallback suppress exact unintended duplicates", () => {
-  assert.match(worker, /function uniqueCatalogProducts/);
-  assert.match(worker, /uniqueCatalogProducts\(allProducts\.filter/);
-  assert.match(storefront, /function dedupeCatalogProducts/);
-  assert.match(storefront, /staticCatalogProducts = dedupeCatalogProducts/);
+test("catalog renders every visible product record without group-based or identity-based deduplication", () => {
+  const catalogEndpoint = worker.slice(worker.indexOf("async function catalogApiResponse"), worker.indexOf("async function productApiResponse"));
+  assert.doesNotMatch(worker, /function uniqueCatalogProducts|function catalogDuplicateKey/);
+  assert.doesNotMatch(storefront, /function dedupeCatalogProducts|function duplicateCatalogKey/);
+  assert.match(worker, /const navigationProducts = allProducts\.filter\(isCatalogProductVisible\)/);
+  assert.match(worker, /sortCatalogProducts\(allProducts\.filter\(\(product\) => catalogProductMatches/);
+  assert.match(storefront, /return products\.filter\(\(product\) => product\?\.active !== false/);
+  assert.match(storefront, /staticCatalogProducts = Array\.isArray\(payload\)/);
+  assert.doesNotMatch(catalogEndpoint, /groupId|groupSlug|product\?\.group|product\.group/);
 });
 
 test("category SEO noindexes empty routes and sitemap excludes inactive products", () => {

@@ -34,6 +34,21 @@ test("storefront and catalog API use collections without changing primary taxono
   assert.match(storefront, /productCollectionIds\(product\)\.includes\(subcategory\)/);
   assert.match(worker, /category === "greek-collection" && collectionIds\.length/);
   assert.match(worker, /counts\["greek-collection"\]\[collectionId\]/);
+  assert.match(storefront, /isGreekGroup && productSubCategoryId\(product\) === "pectoral-crosses" \? \["greek-clergy-crosses"\]/);
+  assert.match(worker, /isGreekGroup && primarySubcategory === "pectoral-crosses" \? \["greek-clergy-crosses"\]/);
+});
+
+test("Greek group compatibility is derived from group metadata, never product names or model counts", () => {
+  const storefront = fs.readFileSync("script.js", "utf8");
+  const worker = fs.readFileSync("cloudflare-worker.js", "utf8");
+  const collectionResolvers = [
+    storefront.slice(storefront.indexOf("function productCollectionIds"), storefront.indexOf("function isGreekCollectionProduct")),
+    worker.slice(worker.indexOf("function catalogCollectionIds"), worker.indexOf("const legacyCatalogCategoryIds"))
+  ];
+  for (const source of collectionResolvers) {
+    assert.match(source, /product\?\.group, product\?\.groupId, product\?\.groupSlug/);
+    assert.doesNotMatch(source, /موديل\s*[1-9]|صليب صدر يوناني/);
+  }
 });
 
 test("Admin saves Greek assignment in collections and keeps primary category controls", () => {
