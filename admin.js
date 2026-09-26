@@ -1806,6 +1806,7 @@
     if (!product || !form || !form.reportValidity()) return;
     product.name = form.elements.name.value.trim();
     product.price = numberOrNull(form.elements.price.value) ?? 0;
+    syncSingleDefaultVariant(product);
     product.mainCategory = form.elements.mainCategory.value;
     product.subCategory = form.elements.subCategory.value;
     product.subcategory = taxonomySubcategoryIdFromName(product.subCategory) || product.subCategory;
@@ -1885,7 +1886,7 @@
     setValue("images", arrayToLines(product.images?.length ? product.images : [product.image].filter(Boolean)));
     setValue("options", JSON.stringify(product.options || [], null, 2));
     const hasVariants = document.querySelector("[data-has-variants]");
-    if (hasVariants) hasVariants.checked = product.variants.length > 1 || product.variants.some((variant) => Object.keys(variant.options || {}).length);
+    if (hasVariants) hasVariants.checked = productHasVariants(product);
 
     renderImagePreview(product.images || []);
     renderVariants(product);
@@ -2301,8 +2302,11 @@ function updateProductField(product, element) {
   function toggleVariantsUi(event) {
     const product = currentProduct();
     if (!product) return;
+    product.hasVariants = event.currentTarget.checked;
     if (event.currentTarget.checked && !product.variants.length) product.variants.push(createVariant(product));
+    if (!event.currentTarget.checked) syncSingleDefaultVariant(product);
     elements.variantList.hidden = !event.currentTarget.checked;
+    markDirty();
   }
 
   function deleteProduct() {
@@ -2481,6 +2485,17 @@ function updateProductField(product, element) {
     variant.price = product.price ?? 0;
   }
 
+  function productHasVariants(product) {
+    if (product?.hasVariants === true) return true;
+    if (product?.hasVariants === false) return false;
+    const hasOptions = Array.isArray(product?.options) && product.options.some((option) =>
+      Array.isArray(option?.values) ? option.values.length > 0 : Boolean(option?.name)
+    );
+    if (hasOptions) return true;
+    const variants = Array.isArray(product?.variants) ? product.variants : [];
+    return variants.length > 1 || variants.some((variant) => Object.keys(variant?.options || {}).length > 0);
+  }
+
   function normalizeProducts(products) {
   return deepClone(products).map((product) => {
     ensureProductShape(product);
@@ -2492,6 +2507,7 @@ function updateProductField(product, element) {
     product.subCategory = subCategoryName(product);
     if (!product.mainCategory || !product.subCategory) throw new Error("لا يمكن حفظ منتج بدون قسم رئيسي وفرعي.");
     product.price = numberOrNull(product.price) ?? 0;
+    product.hasVariants = productHasVariants(product);
     product.priceNote = product.priceNote || "";
     product.stock = product.stock || "متاح";
     product.badge = product.badge || product.label || product.subCategory || "";
@@ -2504,6 +2520,7 @@ function updateProductField(product, element) {
     product.variants = product.variants.length ? product.variants : [createVariant(product)];
     removePlaceholderDefaultVariant(product);
     product.variants = product.variants.map((variant, index) => normalizeVariant(product, variant, index));
+    if (!product.hasVariants) syncSingleDefaultVariant(product);
     syncVariantTitleOptions(product);
     return product;
   });

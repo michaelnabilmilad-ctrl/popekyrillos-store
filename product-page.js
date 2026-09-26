@@ -53,9 +53,19 @@ const medalWoodVariants = [
   { id: "medal-wood-plywood", title: "خشب كونتر", price: 18, compareAtPrice: 20, discountRate: 0.1, available: true, options: { [medalWoodOptionName]: "كونتر" } },
   { id: "medal-wood-beech", title: "خشب زان", price: 27, compareAtPrice: 30, discountRate: 0.1, available: true, options: { [medalWoodOptionName]: "زان" } }
 ];
+const productHasVariants = (() => {
+  if (product?.hasVariants === true) return true;
+  if (product?.hasVariants === false) return false;
+  const hasOptions = Array.isArray(product?.options) && product.options.some((option) =>
+    Array.isArray(option?.values) ? option.values.length > 0 : Boolean(option?.name)
+  );
+  if (hasOptions) return true;
+  const savedVariants = Array.isArray(product?.variants) ? product.variants : [];
+  return savedVariants.length > 1 || savedVariants.some((variant) => Object.keys(variant?.options || {}).length > 0);
+})();
 const variants = isMedalProduct
   ? medalWoodVariants
-  : Array.isArray(product.variants) && product.variants.length
+  : productHasVariants && Array.isArray(product.variants) && product.variants.length
     ? product.variants
     : [{ id:"default", price:product.price, available:product.stock !== "غير متاح حاليا", options:{} }];
 const options = isMedalProduct

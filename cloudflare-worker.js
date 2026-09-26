@@ -256,8 +256,19 @@ function productImages(product) {
   return [];
 }
 
+function productHasVariants(product) {
+  if (product?.hasVariants === true) return true;
+  if (product?.hasVariants === false) return false;
+  const hasOptions = Array.isArray(product?.options) && product.options.some((option) =>
+    Array.isArray(option?.values) ? option.values.length > 0 : Boolean(option?.name)
+  );
+  if (hasOptions) return true;
+  const variants = Array.isArray(product?.variants) ? product.variants : [];
+  return variants.length > 1 || variants.some((variant) => Object.keys(variant?.options || {}).length > 0);
+}
+
 function productPrice(product) {
-  const variantPrices = Array.isArray(product?.variants)
+  const variantPrices = productHasVariants(product) && Array.isArray(product?.variants)
     ? product.variants.map((variant) => Number(variant.price)).filter((price) => Number.isFinite(price) && price > 0)
     : [];
   if (variantPrices.length) return Math.min(...variantPrices);
@@ -278,7 +289,7 @@ function isVariantAvailable(variant) {
 }
 
 function hasAvailableVariant(product) {
-  if (Array.isArray(product?.variants) && product.variants.length) return product.variants.some(isVariantAvailable);
+  if (productHasVariants(product) && Array.isArray(product?.variants) && product.variants.length) return product.variants.some(isVariantAvailable);
   return product?.stock !== "غير متاح حاليا" && product?.available !== false;
 }
 
@@ -364,12 +375,12 @@ async function loadProducts(env, request, { maxAgeMs = 5000 } = {}) {
 }
 
 async function productsJsonResponse(request, env) {
-  const products = await loadProducts(env, request, { maxAgeMs: 60000 });
+  const products = await loadProducts(env, request, { maxAgeMs: 0 });
   return new Response(JSON.stringify(products), {
     status: 200,
     headers: {
       "Content-Type": "application/json; charset=utf-8",
-      "Cache-Control": "public, max-age=60, stale-while-revalidate=300",
+      "Cache-Control": "no-cache, must-revalidate",
       ...(productsCacheSha ? { ETag: productsCacheSha } : {})
     }
   });
@@ -558,10 +569,10 @@ async function catalogApiResponse(request, env, ctx) {
   const page = Math.max(1, Math.trunc(Number(url.searchParams.get("page"))) || 1);
   const limit = Math.min(48, Math.max(1, Math.trunc(Number(url.searchParams.get("limit"))) || 12));
   const cacheUrl = new URL(url.origin + url.pathname);
-  cacheUrl.searchParams.set("schema", "16");
+  cacheUrl.searchParams.set("schema", "17");
   cacheUrl.searchParams.set("thumbnails", "plain-iota-v2");
   [...url.searchParams.entries()].sort(([a], [b]) => a.localeCompare(b)).forEach(([key, value]) => cacheUrl.searchParams.append(key, value));
-  const allProducts = await loadProducts(env, request, { maxAgeMs: 600000 });
+  const allProducts = await loadProducts(env, request, { maxAgeMs: 0 });
   const thumbnailManifest = await loadThumbnailManifest(env, request);
   const navigationProducts = allProducts.filter(isCatalogProductVisible);
   const categoryCounts = navigationProducts.reduce((counts, product) => {
@@ -616,7 +627,7 @@ async function catalogApiResponse(request, env, ctx) {
 
 async function productApiResponse(request, env, product) {
   return new Response(JSON.stringify(product), {
-    headers: { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "public, max-age=600, stale-while-revalidate=300" }
+    headers: { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-cache, must-revalidate" }
   });
 }
 
@@ -792,7 +803,7 @@ function feedImages(product) {
 }
 
 function feedPricing(product) {
-  const variants = Array.isArray(product?.variants) ? product.variants : [];
+  const variants = productHasVariants(product) && Array.isArray(product?.variants) ? product.variants : [];
   const candidates = variants.length
     ? variants
         .map((variant) => ({
@@ -1197,7 +1208,7 @@ ${tags.title}${tags.description}${tags.extra}
 <header class="site-header" data-elevated="false"><div class="brand-cluster"><a class="brand" href="/" aria-label="مكتبة البابا كيرلس"><span class="brand-logo-wrap"><img src="/assets/optimized/logo-papa-kyrillos-64.webp" srcset="/assets/optimized/logo-papa-kyrillos-64.webp 64w, /assets/optimized/logo-papa-kyrillos-128.webp 128w" sizes="50px" alt="" width="160" height="160" decoding="async"></span><span><strong>مكتبة البابا كيرلس</strong><small>مستلزمات الكنائس والخدمة</small></span></a></div><nav class="main-nav" aria-label="التنقل الرئيسي"><a href="/#categories">الأقسام</a><a href="/#catalog">المنتجات</a></nav><div class="header-actions"><a class="cart-toggle" href="/cart" aria-label="فتح السلة"><span>السلة</span><span class="cart-count" data-cart-count>0</span></a></div></header>
 <main class="product-route-main"><a class="product-route-back" href="/#catalog">العودة إلى المنتجات</a><div id="product-detail" aria-label="${name}"></div><section class="product-route-related" aria-labelledby="related-title"><h2 id="related-title">منتجات مشابهة</h2><div class="product-grid" data-related-products></div></section></main>
 <footer class="product-route-footer"><strong>مكتبة البابا كيرلس</strong><span>مستلزمات الكنائس والخدمة</span><a href="/policies">السياسات</a><a href="https://wa.me/201016125589">تواصل معنا</a></footer>
-<div class="toast" data-toast role="status" aria-live="polite"></div><script id="product-data" type="application/json">${safeProduct}</script><script src="/yota-colors.js?v=3" defer></script><script src="/product-page.js?v=21" defer></script></body></html>`;
+<div class="toast" data-toast role="status" aria-live="polite"></div><script id="product-data" type="application/json">${safeProduct}</script><script src="/yota-colors.js?v=3" defer></script><script src="/product-page.js?v=22" defer></script></body></html>`;
   return new Response(html, {
     status: 200,
     headers: {
@@ -2487,7 +2498,7 @@ async function handleRequest(request, env, ctx) {
 
     if (url.pathname === "/api/catalog") return catalogApiResponse(request, env, ctx);
     if (url.pathname.startsWith("/api/products/")) {
-      const products = await loadProducts(env, request, { maxAgeMs: 600000 });
+      const products = await loadProducts(env, request, { maxAgeMs: 0 });
       const product = withProductColoringConfig(productByIdOrSlug(products, url.pathname.slice("/api/products/".length)));
       return product ? productApiResponse(request, env, product) : new Response(JSON.stringify({ error: "not_found" }), { status: 404, headers: { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" } });
     }
@@ -2510,7 +2521,7 @@ async function handleRequest(request, env, ctx) {
     if (url.pathname === "/category-taxonomy.js") return taxonomyJsResponse(request, env);
 
     if (legacyProductUrl(url) || url.pathname.startsWith("/products/")) {
-      const products = await loadProducts(env, request);
+      const products = await loadProducts(env, request, { maxAgeMs: 0 });
       const matchedProduct = productFromUrl(products, url);
       const thumbnailManifest = matchedProduct ? await loadThumbnailManifest(env, request) : {};
       const product = matchedProduct

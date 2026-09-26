@@ -20,7 +20,7 @@ const paymobIntentionEndpointPath = "/api/create-paymob-intention";
 const firebaseSdkVersion = "10.14.1";
 const productBatchSize = window.matchMedia("(max-width: 680px)").matches ? 8 : 24;
 if ("scrollRestoration" in window.history) window.history.scrollRestoration = "manual";
-const catalogSchemaVersion = "12";
+const catalogSchemaVersion = "13";
 const catalogVersion = Date.now().toString(36);
 const canonicalOrigin = "https://popekyrillos.store";
 const guestCartStorageKey = "pope-kyrillos-cart:guest";
@@ -2862,6 +2862,17 @@ function productDetailImage(image = "") {
   return value;
 }
 
+function productHasVariants(product) {
+  if (product?.hasVariants === true) return true;
+  if (product?.hasVariants === false) return false;
+  const hasOptions = Array.isArray(product?.options) && product.options.some((option) =>
+    Array.isArray(option?.values) ? option.values.length > 0 : Boolean(option?.name)
+  );
+  if (hasOptions) return true;
+  const variants = Array.isArray(product?.variants) ? product.variants : [];
+  return variants.length > 1 || variants.some((variant) => Object.keys(variant?.options || {}).length > 0);
+}
+
 function getProductVariants(product) {
   if (isIotaMedalProduct(product)) {
     return [
@@ -2869,7 +2880,7 @@ function getProductVariants(product) {
       { id: "medal-wood-beech", title: "خشب زان", price: 27, compareAtPrice: 30, discountRate: 0.1, options: { "نوع الخشب": "زان" }, available: true }
     ];
   }
-  if (Array.isArray(product?.variants) && product.variants.length) return product.variants;
+  if (productHasVariants(product) && Array.isArray(product?.variants) && product.variants.length) return product.variants;
 
   return [
     {
@@ -2891,8 +2902,7 @@ function isVariantAvailable(variant, product = null) {
 }
 
 function hasProductChoices(product) {
-  if (Array.isArray(product?.options) && product.options.length > 0) return true;
-  return getProductVariants(product).filter((variant) => isVariantAvailable(variant, product)).length > 1;
+  return productHasVariants(product);
 }
 
 function hasAvailableVariant(product) {
