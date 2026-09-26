@@ -10946,5 +10946,45 @@
     "subCategory": "حوامل الإنجيل والبشارة",
     "subcategory": "gospel-stands",
     "sku": "PK-35A400E29A664C40B33761C87892A2D7"
+  },
+  {
+    "id": "custom-1790453371766",
+    "name": "صليب صدر يوناني للكاهن",
+    "category": "brass",
+    "label": "نحاسيات",
+    "description": "صليب صدر يوناني بتصميم كنسي مميز وفخم، مخصص لارتداء الكاهن، ويتميز بتفاصيل زخرفية دقيقة ولمسة ذهبية أنيقة.\n\nيتوسط الصليب أيقونة السيد المسيح المصلوب، ويحيط بها إطار مزخرف بتفاصيل دقيقة وفصوص لامعة تضيف له مظهرًا راقيًا ومميزًا. كما يأتي بتصميم علوي مزخرف وسلسلة مناسبة للارتداء حول الرقبة، مع قطعة متدلية أسفل الصليب تكمل الشكل الكنسي التقليدي.\n\nالمميزات: تصميم يوناني تقليدي، لون ذهبي فاخر، زخارف كنسية دقيقة، أيقونة للسيد المسيح في المنتصف، فصوص لامعة، وسلسلة للارتداء.\n\nمناسب لـ: الكهنة، الاستخدام أثناء الصلوات والقداسات والمناسبات الكنسية، كما يصلح كهدية كنسية مميزة للكاهن.",
+    "price": 7500,
+    "priceNote": "",
+    "stock": "متاح",
+    "badge": "نحاسيات",
+    "isBestSeller": false,
+    "image": "assets/optimized/products/gallery/product-1-1-20260926201010-5208fe.webp",
+    "url": "https://popekyrillos.store/?product=custom-1790453371766",
+    "tags": [],
+    "collections": [
+      "greek-clergy-crosses"
+    ],
+    "images": [
+      "assets/optimized/products/gallery/product-1-1-20260926201010-5208fe.webp"
+    ],
+    "options": [],
+    "variants": [
+      {
+        "id": "custom-1790453371766-variant-1790453371766-1",
+        "title": "الاختيار الافتراضي",
+        "options": {},
+        "price": 7500,
+        "compareAtPrice": null,
+        "available": true,
+        "image": null,
+        "images": [],
+        "sku": "PK-0EBD8667462E46FEBB9A14C7F8C32BC5",
+        "quantity": 1
+      }
+    ],
+    "mainCategory": "الصلبان",
+    "subCategory": "صلبان صدر",
+    "subcategory": "pectoral-crosses",
+    "sku": "PK-91FAAA082F50498CABA6B7D31ED7012F"
   }
 ]
