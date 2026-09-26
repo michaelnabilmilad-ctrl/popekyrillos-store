@@ -80,7 +80,7 @@ test("new cross subcategories merge into an older locally managed taxonomy witho
   crosses.subcategories = crosses.subcategories.filter((item) => !["iota-plain-hand-crosses", "plain-cross-medals"].includes(item.id));
   crosses.subcategories.push({ id: "custom-kept", name: "قسم محفوظ" });
 
-  const migrated = loadTaxonomy(stored);
+  const migrated = loadTaxonomy(stored, current.CURRENT_TAXONOMY_VERSION);
   const migratedIds = Array.from(migrated.categoryById.get("crosses").subcategories, (item) => item.id);
   assert.ok(migratedIds.includes("custom-kept"));
   assert.ok(migratedIds.includes("iota-plain-hand-crosses"));
@@ -137,6 +137,28 @@ function assertYotaTaxonomy(catalogFile) {
 
 test("Yota medallions retain a stable Crosses child ID and product assignments", () => {
   assertYotaTaxonomy("products.json");
+});
+
+test("church service tools use the canonical taxonomy ID and preserve every linked product", () => {
+  const taxonomy = loadTaxonomy();
+  const subcategory = taxonomy.subcategoryById.get("church-service-tools");
+  assert.equal(subcategory?.name, "آلات وأدوات الخدمة الكنسية");
+  assert.equal(subcategory?.mainId, "altar-vessels");
+  assert.equal(taxonomy.subcategoryById.has("service-plates"), false);
+
+  assert.deepEqual(migration.route("altar-vessels", "service-plates"), {
+    category: "altar-vessels",
+    label: "church-service-tools"
+  });
+
+  for (const catalogFile of ["products.json", "firebase-functions/products.json", "dist/products.json"]) {
+    const products = JSON.parse(fs.readFileSync(catalogFile, "utf8"));
+    const linked = products.filter((product) => product.subcategory === "church-service-tools");
+    assert.equal(linked.length, 3, `${catalogFile}: linked product count changed`);
+    assert.ok(linked.every((product) => product.subCategory === "آلات وأدوات الخدمة الكنسية"));
+    assert.ok(linked.some((product) => /تريانتو/.test(product.name)));
+    assert.ok(linked.some((product) => /دف/.test(product.name)));
+  }
 });
 
 test("Firebase catalog Yota medallions retain the same stable taxonomy", () => {

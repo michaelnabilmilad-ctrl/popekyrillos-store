@@ -3,6 +3,12 @@
   node_bundler = "esbuild"
 
 [[redirects]]
+  from = "/category/altar-vessels/service-plates"
+  to = "/category/altar-vessels/church-service-tools"
+  status = 301
+  force = true
+
+[[redirects]]
   from = "/payment-success"
   to = "/payment-success.html"
   status = 200

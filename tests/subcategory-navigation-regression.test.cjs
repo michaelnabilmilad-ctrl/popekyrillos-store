@@ -66,3 +66,8 @@ test("compact catalog products retain Greek collection membership", () => {
   const dto = worker.slice(dtoStart, dtoEnd);
   assert.match(dto, /collections: catalogCollectionIds\(product\)/);
 });
+
+test("the legacy service plates URL permanently redirects to church service tools", () => {
+  assert.match(worker, /url\.pathname === "\/category\/altar-vessels\/service-plates"/);
+  assert.match(worker, /url\.pathname = "\/category\/altar-vessels\/church-service-tools";[\s\S]*Response\.redirect\(url\.toString\(\), 301\)/);
+});

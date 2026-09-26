@@ -64,8 +64,8 @@
         "subcategoryImage": "assets/optimized/products/communion-set.webp"
       },
       {
-        "id": "service-plates",
-        "name": "أطباق الخدمة",
+        "id": "church-service-tools",
+        "name": "آلات وأدوات الخدمة الكنسية",
         "subcategoryImage": "assets/optimized/products/communion-set.webp"
       },
       {
@@ -868,6 +868,9 @@
   // or subcategories added in a later release.
   const storedCategories = Array.isArray(stored) ? stored : [];
   const migrateStoredSubcategory = (categoryId, item) => {
+    if (categoryId === "altar-vessels" && item?.id === "service-plates") {
+      return { ...item, id: "church-service-tools", name: "آلات وأدوات الخدمة الكنسية" };
+    }
     if (categoryId === "altar-vessels" && item?.id === "altar-crosses") {
       return { ...item, id: "altar-vessel-crosses" };
     }

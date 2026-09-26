@@ -2447,6 +2447,11 @@ async function handleRequest(request, env, ctx) {
     const url = new URL(request.url);
     const context = requestContext(request, env, ctx);
 
+    if (url.pathname === "/category/altar-vessels/service-plates") {
+      url.pathname = "/category/altar-vessels/church-service-tools";
+      return Response.redirect(url.toString(), 301);
+    }
+
     const forwardedProto = request.headers.get("X-Forwarded-Proto") || "";
     const isHttps = url.protocol === "https:" || forwardedProto === "https";
     const allowAnalyticsLocalTest =
