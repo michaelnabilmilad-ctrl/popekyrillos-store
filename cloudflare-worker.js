@@ -100,11 +100,12 @@ function githubRawUrl(config, path) {
   return `https://raw.githubusercontent.com/${config.owner}/${config.repo}/${encodeURIComponent(config.branch)}/${path.replace(/^\/+/, "")}`;
 }
 
-async function githubFetchText(env, path) {
+async function githubFetchText(env, path, { cacheBust = false } = {}) {
   const config = githubConfig(env);
+  const cacheSuffix = cacheBust ? `&v=${Date.now()}` : "";
 
   if (config.token) {
-    const response = await fetch(githubContentsUrl(config, path), {
+    const response = await fetch(`${githubContentsUrl(config, path)}${cacheSuffix}`, {
       headers: githubHeaders(config, "application/vnd.github.raw")
     });
     if (response.ok) {
@@ -635,7 +636,7 @@ async function loadTaxonomySource(env, request, { maxAgeMs = 5000 } = {}) {
   if (taxonomyCache && Date.now() - taxonomyCacheTime < maxAgeMs) return taxonomyCache;
 
   try {
-    const live = await githubFetchText(env, "category-taxonomy.js");
+    const live = await githubFetchText(env, "category-taxonomy.js", { cacheBust: true });
     if (live?.text) {
       taxonomyCache = live.text;
       taxonomyCacheTime = Date.now();
