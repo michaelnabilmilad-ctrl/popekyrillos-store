@@ -64,8 +64,8 @@
                   "subcategoryImage": "assets/optimized/products/communion-set.webp"
               },
               {
-                  "id": "service-plates",
-                  "name": "أطباق الخدمة",
+                  "id": "church-service-tools",
+                  "name": "آلات وأدوات الخدمة الكنسية",
                   "subcategoryImage": "assets/optimized/products/communion-set.webp"
               },
               {
