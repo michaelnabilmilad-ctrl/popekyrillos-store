@@ -28,8 +28,8 @@ test("storefront loads live taxonomy before its consumer instead of bundling a s
 test("taxonomy responses must revalidate instead of serving stale category data", () => {
   assert.match(worker, /"Cache-Control": "no-cache, must-revalidate"/);
   assert.match(worker, /status: source \? 200 : 503/);
-  assert.match(worker, /githubFetchText\(env, "category-taxonomy\.js"\)/);
-  assert.ok(worker.indexOf('githubFetchText(env, "category-taxonomy.js")') < worker.indexOf('env.ASSETS.fetch(rewriteRequest(request, "/category-taxonomy.js"))'));
+  assert.match(worker, /githubFetchText\(env, "category-taxonomy\.js", \{ cacheBust: true \}\)/);
+  assert.ok(worker.indexOf('githubFetchText(env, "category-taxonomy.js", { cacheBust: true })') < worker.indexOf('env.ASSETS.fetch(rewriteRequest(request, "/category-taxonomy.js"))'));
 });
 
 test("catalog requests ignore aborts, retry only transient failures and retain successful data", () => {
