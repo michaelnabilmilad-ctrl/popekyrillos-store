@@ -10908,5 +10908,43 @@
     "subCategory": "حوامل الأيقونات والإنجيل",
     "subcategory": "icon-gospel-stands",
     "sku": "PK-1B9FE4C337BA4103AD5DF58E4CFC2A29"
+  },
+  {
+    "id": "custom-1790452751789-copy-1790453108171",
+    "name": "قراية مذبح ستانلس",
+    "category": "brass",
+    "label": "نحاسيات",
+    "description": "قراية ستانلس بتصميم كنسي أنيق ولون ذهبي مميز، مزينة بتفريغات دقيقة على شكل صلبان وزخارف قبطية تضيف لها مظهرًا فخمًا ومناسبًا للاستخدام الكنسي.\n\nتتميز بحامل علوي واسع لوضع الكتاب المقدس، القطمارس، كتب القراءات والصلوات الكنسية بصورة ثابتة ومريحة أثناء القراءة، مع قاعدة دائرية عريضة تساعد على الثبات.\n\nالارتفاع الكلي: 40 سم.\n\nالمميزات: خامة ستانلس، لون ذهبي أنيق، ارتفاع 40 سم، زخارف وتفريغات قبطية، تصميم ثابت وعملي، وقاعدة قوية مناسبة للاستخدام المتكرر.\n\nمناسبة لـ: الكنائس، الهيكل، المذبح، الاجتماعات، ركن الصلاة، والقراءات الكنسية المختلفة.",
+    "price": 3250,
+    "priceNote": "",
+    "stock": "متاح",
+    "badge": "نحاسيات",
+    "isBestSeller": false,
+    "image": "assets/optimized/products/gallery/product-1-image-20260926200638-d5c505.webp",
+    "url": "https://popekyrillos.store/?product=custom-1790452751789-copy-1790453108171",
+    "tags": [],
+    "collections": [],
+    "images": [
+      "assets/optimized/products/gallery/product-1-image-20260926200638-d5c505.webp"
+    ],
+    "options": [],
+    "variants": [
+      {
+        "id": "custom-1790452751789-copy-1790453108171-variant-1",
+        "title": "الاختيار الافتراضي",
+        "options": {},
+        "price": 3250,
+        "compareAtPrice": null,
+        "available": true,
+        "image": null,
+        "images": [],
+        "sku": "PK-3ED7B05EC17548E9A1486B6C4B66E175",
+        "quantity": null
+      }
+    ],
+    "mainCategory": "المذبح والأواني المقدسة",
+    "subCategory": "حوامل الإنجيل والبشارة",
+    "subcategory": "gospel-stands",
+    "sku": "PK-35A400E29A664C40B33761C87892A2D7"
   }
 ]
