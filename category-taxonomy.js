@@ -45,7 +45,7 @@
       },
       {
         "id": "relic-boxes",
-        "name": "حق الذخيرة",
+        "name": "حافظات رفات القديسين",
         "subcategoryImage": "assets/optimized/products/communion-set.webp"
       },
       {
@@ -868,6 +868,9 @@
   // or subcategories added in a later release.
   const storedCategories = Array.isArray(stored) ? stored : [];
   const migrateStoredSubcategory = (categoryId, item) => {
+    if (categoryId === "altar-vessels" && item?.id === "relic-boxes") {
+      return { ...item, name: "حافظات رفات القديسين" };
+    }
     if (categoryId === "altar-vessels" && item?.id === "service-plates") {
       return { ...item, id: "church-service-tools", name: "آلات وأدوات الخدمة الكنسية" };
     }

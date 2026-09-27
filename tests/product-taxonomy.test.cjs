@@ -165,6 +165,20 @@ test("Firebase catalog Yota medallions retain the same stable taxonomy", () => {
   assertYotaTaxonomy("firebase-functions/products.json");
 });
 
+test("saints reliquaries use one stable taxonomy identity", () => {
+  const taxonomy = loadTaxonomy();
+  const subcategory = taxonomy.subcategoryById.get("relic-boxes");
+  assert.equal(subcategory?.name, "حافظات رفات القديسين");
+  assert.equal(subcategory?.mainId, "altar-vessels");
+  assert.equal(taxonomy.subcategoryIdFromName("حافظات رفات القديسين"), "relic-boxes");
+
+  const stored = JSON.parse(JSON.stringify(Array.from(taxonomy.defaultCategories)));
+  stored.find((category) => category.id === "altar-vessels")
+    .subcategories.find((item) => item.id === "relic-boxes").name = "حق الذخيرة";
+  const migrated = loadTaxonomy(stored, taxonomy.CURRENT_TAXONOMY_VERSION);
+  assert.equal(migrated.subcategoryById.get("relic-boxes")?.name, "حافظات رفات القديسين");
+});
+
 test("legacy gifts URL maps to occasions and tote bag card uses the stable meeting-gifts ID", () => {
   const taxonomy = loadTaxonomy();
   assert.equal(taxonomy.categoryById.get("occasions-service").subcategories.find((item) => item.id === "meeting-gifts").name, "توتي باج وشنط");

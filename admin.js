@@ -1114,7 +1114,7 @@
 
   function subCategoryName(product) {
     product = window.POPE_KYRILLOS_CATEGORY_MIGRATION.product(product);
-    let id = normalizeSubCategoryValue(product.subCategory);
+    let id = normalizeSubCategoryValue(product.subcategory || product.subCategory);
     if (id === "needs-review") {
       const inferred = inferredSubcategoryFromProduct(product);
       id = inferred?.id || id;
@@ -1227,16 +1227,21 @@
       : "all";
   }
 
-  function fillSubCategorySelect(product) {
+  function fillSubCategorySelect(product, selectDefault = false) {
     const mainSelect = elements.editor.querySelector("[data-field='mainCategory']");
     const subSelect = elements.editor.querySelector("[data-field='subCategory']");
     if (!subSelect) return;
     const mainValue = mainCategoryOptionValue(mainSelect?.value || product?.mainCategory, product?.category);
     const subcategories = taxonomySubcategories(mainValue) || taxonomySubcategories("غير مصنف") || [];
-    subSelect.innerHTML = subcategories.map((subcategory) => `<option value="${escapeHtml(subcategory.name)}">${escapeHtml(subcategory.name)}</option>`).join("");
-    const current = subCategoryOptionValue(product?.subCategory) || subcategories[0]?.name || "";
-    subSelect.value = subcategories.some((item) => item.name === current) ? current : subcategories[0]?.name || "";
-    if (product && subSelect.value) {
+    const storedValue = product?.subcategory || product?.subCategory || "";
+    const current = subCategoryOptionValue(storedValue);
+    const hasCurrent = subcategories.some((item) => item.name === current);
+    const orphanOption = current && !hasCurrent && !selectDefault
+      ? `<option value="${escapeHtml(current)}" disabled>${escapeHtml(current)} — تصنيف غير موجود</option>`
+      : "";
+    subSelect.innerHTML = `${orphanOption}${subcategories.map((subcategory) => `<option value="${escapeHtml(subcategory.name)}">${escapeHtml(subcategory.name)}</option>`).join("")}`;
+    subSelect.value = hasCurrent ? current : selectDefault ? subcategories[0]?.name || "" : current;
+    if (product && subSelect.value && (hasCurrent || selectDefault)) {
       product.subCategory = subSelect.value;
       product.subcategory = taxonomySubcategoryIdFromName(subSelect.value) || subSelect.value;
     }
@@ -2104,7 +2109,7 @@ function updateProductField(product, element) {
 
   if (field === "mainCategory") {
     product.mainCategory = mainCategoryOptionValue(value, product.category);
-    fillSubCategorySelect(product);
+    fillSubCategorySelect(product, true);
     fillMainCategoryFilter();
     fillSubCategoryFilter();
     renderProductList();
@@ -2453,15 +2458,20 @@ function updateProductField(product, element) {
   }
 
   function ensureProductShape(product) {
-  product.images = Array.isArray(product.images) ? product.images : [product.image].filter(Boolean);
-  product.tags = Array.isArray(product.tags) ? product.tags : [];
-  product.collections = Array.isArray(product.collections) ? product.collections : [];
-  product.options = Array.isArray(product.options) ? product.options : [];
-  product.variants = Array.isArray(product.variants) ? product.variants : [];
-  product.isBestSeller = product.isBestSeller === true;
-  product.mainCategory = mainCategoryName(product);
-  product.subCategory = subCategoryName(product);
-}
+    product.images = Array.isArray(product.images) ? product.images : [product.image].filter(Boolean);
+    product.tags = Array.isArray(product.tags) ? product.tags : [];
+    product.collections = Array.isArray(product.collections) ? product.collections : [];
+    product.options = Array.isArray(product.options) ? product.options : [];
+    product.variants = Array.isArray(product.variants) ? product.variants : [];
+    product.isBestSeller = product.isBestSeller === true;
+    product.mainCategory = mainCategoryName(product);
+    const storedSubcategory = product.subcategory || product.subCategory;
+    const canonicalSubcategory = findTaxonomySubcategory(storedSubcategory);
+    if (canonicalSubcategory) {
+      product.subcategory = canonicalSubcategory.id;
+      product.subCategory = canonicalSubcategory.name;
+    }
+  }
 
   function createVariant(product, index = 1) {
     return {

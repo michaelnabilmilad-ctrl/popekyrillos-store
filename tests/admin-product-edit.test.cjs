@@ -24,3 +24,11 @@ test("full Edit buttons are non-submit controls carrying the product id", () => 
 test("opening the full editor reveals the populated interface", () => {
   assert.match(source, /renderEditor\(\);[\s\S]*?scrollIntoView\(\{ behavior: "smooth", block: "start" \}\)/);
 });
+
+test("the editor preserves an unknown stored subcategory instead of silently selecting the first option", () => {
+  assert.match(source, /function fillSubCategorySelect\(product, selectDefault = false\)/);
+  assert.match(source, /product\?\.subcategory \|\| product\?\.subCategory/);
+  assert.match(source, /تصنيف غير موجود/);
+  assert.match(source, /fillSubCategorySelect\(product, true\)/);
+  assert.doesNotMatch(source, /const current = subCategoryOptionValue\(product\?\.subCategory\) \|\| subcategories\[0\]/);
+});
