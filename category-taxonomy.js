@@ -43,11 +43,11 @@
                   "name": "قوارير الماء والخمر",
                   "subcategoryImage": "assets/optimized/products/communion-set.webp"
               },
-              {
-                  "id": "relic-boxes",
-                  "name": "حق الذخيرة",
-                  "subcategoryImage": "assets/optimized/products/communion-set.webp"
-              },
+      {
+        "id": "relic-boxes",
+        "name": "حافظات رفات القديسين",
+        "subcategoryImage": "assets/optimized/products/communion-set.webp"
+      },
               {
                   "id": "communion-bread-boxes",
                   "name": "بيوت القربان",
