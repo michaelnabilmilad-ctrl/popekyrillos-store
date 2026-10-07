@@ -3,6 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "scripts": {
+    "check:assistant": "node --check assistant.js && node --check functions/api/assistant.js && node --test tests/assistant.test.mjs",
     "migrate:taxonomy": "node scripts/build-taxonomy-v3.mjs",
     "prepare:static": "node scripts/generate-responsive-assets.js && node scripts/generate-product-thumbnails.js && node scripts/prepare-static-assets.js",
     "build:cloudflare": "node scripts/generate-responsive-assets.js && node scripts/generate-product-thumbnails.js && node scripts/prepare-static-assets.js && node scripts/generate-seo-assets.js && node scripts/build-cloudflare.js",

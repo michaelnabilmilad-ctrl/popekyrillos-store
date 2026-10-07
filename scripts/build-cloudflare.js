@@ -6,6 +6,8 @@ const dist = path.join(root, "dist");
 
 const files = [
   "index.html",
+  "assistant.js",
+  "assistant.css",
   "cart.html",
   "checkout.html",
   "payment.html",
