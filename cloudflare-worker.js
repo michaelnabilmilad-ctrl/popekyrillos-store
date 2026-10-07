@@ -1,4 +1,6 @@
 import "./category-migration.js";
+import { assistantChatResponse, assistantConfigResponse } from "./functions/api/assistant.js";
+import { createAssistantTools } from "./functions/_assistant-tools.js";
 import { onRequest as createBostaDelivery } from "./functions/api/create-bosta-delivery.js";
 import { onRequest as createPaymobIntention } from "./functions/api/create-paymob-intention.js";
 import { onRequest as paymobWebhook } from "./functions/api/paymob-webhook.js";
@@ -100,13 +102,13 @@ function githubRawUrl(config, path) {
   return `https://raw.githubusercontent.com/${config.owner}/${config.repo}/${encodeURIComponent(config.branch)}/${path.replace(/^\/+/, "")}`;
 }
 
-async function githubFetchText(env, path, { cacheBust = false } = {}) {
+async function githubFetchText(env, path, { cacheBust = false, signal } = {}) {
   const config = githubConfig(env);
   const cacheSuffix = cacheBust ? `&v=${Date.now()}` : "";
 
   if (config.token) {
     const response = await fetch(`${githubContentsUrl(config, path)}${cacheSuffix}`, {
-      headers: githubHeaders(config, "application/vnd.github.raw")
+      headers: githubHeaders(config, "application/vnd.github.raw"), signal
     });
     if (response.ok) {
       return {
@@ -117,7 +119,7 @@ async function githubFetchText(env, path, { cacheBust = false } = {}) {
   }
 
   const response = await fetch(githubRawUrl(config, path), {
-    headers: { "User-Agent": "popekyrillos-store" }
+    headers: { "User-Agent": "popekyrillos-store" }, signal
   });
   if (!response.ok) throw new Error(`GitHub raw fetch failed with ${response.status}`);
   return {
@@ -351,11 +353,11 @@ function productSsrStyles() {
   <script>document.documentElement.classList.add("js-product-route");</script>`;
 }
 
-async function loadProducts(env, request, { maxAgeMs = 5000 } = {}) {
+async function loadProducts(env, request, { maxAgeMs = 5000, requireFresh = false, signal } = {}) {
   if (productsCache && Date.now() - productsCacheTime < maxAgeMs) return productsCache;
 
   try {
-    const latest = await githubFetchText(env, "products.json");
+    const latest = await githubFetchText(env, "products.json", { signal });
     const products = JSON.parse(latest.text);
     if (Array.isArray(products)) {
       productsCache = products.map(globalThis.POPE_KYRILLOS_CATEGORY_MIGRATION.product);
@@ -363,7 +365,9 @@ async function loadProducts(env, request, { maxAgeMs = 5000 } = {}) {
       productsCacheSha = latest.sha;
       return productsCache;
     }
+    if (requireFresh) throw new Error("Invalid current catalog");
   } catch (error) {
+    if (requireFresh) throw error;
     console.warn("Could not load products.json from GitHub, falling back to deployed assets.", error);
   }
 
@@ -1205,6 +1209,7 @@ async function productPageResponse(request, env, product) {
 ${tags.title}${tags.description}${tags.extra}
 <link rel="preload" href="/assets/fonts/ge-ss-two-bold.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/styles.min.css"><link rel="stylesheet" href="/product-page.css?v=13">
+<script src="/assistant.js?v=1" defer></script>
 </head><body class="standalone-product-page">
 <header class="site-header" data-elevated="false"><div class="brand-cluster"><a class="brand" href="/" aria-label="مكتبة البابا كيرلس"><span class="brand-logo-wrap"><img src="/assets/optimized/logo-papa-kyrillos-64.webp" srcset="/assets/optimized/logo-papa-kyrillos-64.webp 64w, /assets/optimized/logo-papa-kyrillos-128.webp 128w" sizes="50px" alt="" width="160" height="160" decoding="async"></span><span><strong>مكتبة البابا كيرلس</strong><small>مستلزمات الكنائس والخدمة</small></span></a></div><nav class="main-nav" aria-label="التنقل الرئيسي"><a href="/#categories">الأقسام</a><a href="/#catalog">المنتجات</a></nav><div class="header-actions"><a class="cart-toggle" href="/cart" aria-label="فتح السلة"><span>السلة</span><span class="cart-count" data-cart-count>0</span></a></div></header>
 <main class="product-route-main"><a class="product-route-back" href="/#catalog">العودة إلى المنتجات</a><div id="product-detail" aria-label="${name}"></div><section class="product-route-related" aria-labelledby="related-title"><h2 id="related-title">منتجات مشابهة</h2><div class="product-grid" data-related-products></div></section></main>
@@ -2502,6 +2507,20 @@ async function handleRequest(request, env, ctx) {
       if (url.pathname === "/admin/api/analytics") return analyticsDashboardResponse(request, env);
     }
 
+    if (url.pathname === "/api/assistant/config") return assistantConfigResponse(request, env);
+    if (url.pathname === "/api/assistant/chat") {
+      const tools = createAssistantTools({
+        getProducts: signal => loadProducts(env, request, { maxAgeMs: 0, requireFresh: true, signal }),
+        getPolicies: async signal => {
+          const response = await env.ASSETS.fetch(new Request(new URL("/policies", request.url), { signal }));
+          if (!response.ok) throw new Error("Policy unavailable");
+          return response.text();
+        },
+        price: productPrice, hasVariants: productHasVariants, productUrl: canonicalProductUrl,
+        searchScore: catalogSearchScore
+      });
+      return assistantChatResponse(context, tools);
+    }
     if (url.pathname === "/api/catalog") return catalogApiResponse(request, env, ctx);
     if (url.pathname.startsWith("/api/products/")) {
       const products = await loadProducts(env, request, { maxAgeMs: 0 });
