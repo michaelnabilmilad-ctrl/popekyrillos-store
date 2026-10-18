@@ -244,13 +244,15 @@
             </select>
           </div>
           <div class="catalog-filter-group">
-            <label for="catalog-price-filter" data-filter-price-label>السعر</label>
-            <select id="catalog-price-filter" data-price-filter>
-              <option value="all" data-price-option="all">كل الأسعار</option>
-              <option value="under-1000" data-price-option="under1000">أقل من 1000 ج.م</option>
-              <option value="1000-5000" data-price-option="1000to5000">من 1000 لـ 5000 ج.م</option>
-              <option value="over-5000" data-price-option="over5000">أكثر من 5000 ج.م</option>
-            </select>
+            <span data-filter-price-label>السعر (ج.م)</span>
+            <div class="price-range-fields">
+              <label><span data-price-from>من</span><input type="number" min="0" step="100" inputmode="numeric" data-price-min aria-label="أقل سعر" placeholder="0"></label>
+              <label><span data-price-to>إلى</span><input type="number" min="0" step="100" inputmode="numeric" data-price-max aria-label="أعلى سعر" placeholder="أي سعر"></label>
+            </div>
+            <div class="price-range-sliders" dir="ltr">
+              <input type="range" min="0" max="100" step="100" value="0" data-price-min-slider aria-label="أقل سعر">
+              <input type="range" min="0" max="100" step="100" value="100" data-price-max-slider aria-label="أعلى سعر">
+            </div>
           </div>
           <div class="catalog-filter-group">
             <label for="catalog-sort-filter" data-filter-sort-label>الترتيب</label>

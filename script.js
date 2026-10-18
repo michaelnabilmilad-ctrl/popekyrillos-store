@@ -123,6 +123,8 @@ const state = {
   labelFilter: "",
   search: "",
   priceFilter: "all",
+  priceMin: null,
+  priceMax: null,
   sortFilter: "default",
   visibleProductCount: productBatchSize,
   subcategoryCardsExpanded: false,
@@ -185,6 +187,11 @@ const searchInput = document.querySelector("#product-search");
 const mainFilterSelect = document.querySelector("[data-main-filter]");
 const labelFilterSelect = document.querySelector("[data-label-filter]");
 const priceFilterSelect = document.querySelector("[data-price-filter]");
+const priceMinInput = document.querySelector("[data-price-min]");
+const priceMaxInput = document.querySelector("[data-price-max]");
+const priceMinSlider = document.querySelector("[data-price-min-slider]");
+const priceMaxSlider = document.querySelector("[data-price-max-slider]");
+let catalogPriceBounds = null;
 const sortFilterSelect = document.querySelector("[data-sort-filter]");
 const resetCatalogFilters = document.querySelector("[data-reset-catalog-filters]");
 const subcategoryCards = document.querySelector("[data-subcategory-cards]");
@@ -2656,7 +2663,54 @@ function productPriceRange(product) {
   };
 }
 
+function resetPriceRangeForCategory() {
+  state.priceMin = null;
+  state.priceMax = null;
+  state.priceFilter = "all";
+  catalogPriceBounds = null;
+}
+
+function syncPriceRangeControls() {
+  if (!priceMinInput) return;
+  const prices = availableProducts().filter(product => productMatchesCategory(product, state.filter) && productMatchesSubcategory(product, state.labelFilter)).flatMap(product => {
+    const range = productPriceRange(product);
+    return [range.min, range.max].filter(value => value !== null);
+  });
+  const floor = Math.floor(catalogPriceBounds?.min ?? (prices.length ? Math.min(...prices) : 0));
+  const ceiling = Math.ceil(catalogPriceBounds?.max ?? (prices.length ? Math.max(...prices) : floor));
+  const span = ceiling - floor || 1;
+  if (state.priceMin !== null) state.priceMin = Math.max(floor, Math.min(ceiling, state.priceMin));
+  if (state.priceMax !== null) state.priceMax = Math.max(floor, Math.min(ceiling, state.priceMax));
+  for (const input of [priceMinInput, priceMaxInput]) { input.min = floor; input.max = ceiling; }
+  priceMinInput.placeholder = floor;
+  priceMaxInput.placeholder = ceiling;
+  priceMinInput.value = state.priceMin ?? floor;
+  priceMaxInput.value = state.priceMax ?? ceiling;
+
+  document.querySelector("[data-price-from]").textContent = isEnglish() ? "From" : "من";
+  document.querySelector("[data-price-to]").textContent = isEnglish() ? "To" : "إلى";
+  for (const [slider, value, label] of [[priceMinSlider, state.priceMin ?? floor, isEnglish() ? "Minimum price" : "أقل سعر"], [priceMaxSlider, state.priceMax ?? ceiling, isEnglish() ? "Maximum price" : "أعلى سعر"]]) {
+    slider.min = floor;
+    slider.max = ceiling;
+    slider.disabled = floor === ceiling;
+    slider.value = value;
+    slider.setAttribute("aria-label", label);
+    slider.setAttribute("aria-valuetext", money(value));
+  }
+  priceMinInput.setAttribute("aria-label", priceMinSlider.getAttribute("aria-label"));
+  priceMaxInput.setAttribute("aria-label", priceMaxSlider.getAttribute("aria-label"));
+  const track = priceMinSlider.parentElement;
+  track.style.setProperty("--price-start", (((state.priceMin ?? floor) - floor) / span * 100) + "%");
+  track.style.setProperty("--price-end", (((state.priceMax ?? ceiling) - floor) / span * 100) + "%");
+  priceMinSlider.style.zIndex = Number(priceMinSlider.value) >= (floor + ceiling) / 2 ? "3" : "2";
+}
+
 function matchesPriceFilter(product) {
+  if (state.priceMin !== null || state.priceMax !== null) {
+    const prices = getProductVariants(product).map(variant => variantPrice(variant, product)).filter(price => price !== null);
+    if (!prices.length) { const price = productPrice(product); if (price !== null) prices.push(price); }
+    return prices.some(price => price >= (state.priceMin ?? 0) && price <= (state.priceMax ?? Infinity));
+  }
   if (state.priceFilter === "all") return true;
   const { min, max } = productPriceRange(product);
   if (min === null || max === null) return false;
@@ -3329,6 +3383,7 @@ function syncCatalogFilterControls() {
   if (mainFilterSelect) mainFilterSelect.value = normalizeCategoryFilter(state.filter || "all");
   renderLabelFilterOptions();
   if (labelFilterSelect) labelFilterSelect.value = state.labelFilter || "";
+  syncPriceRangeControls();
   if (priceFilterSelect) priceFilterSelect.value = state.priceFilter;
   if (sortFilterSelect) sortFilterSelect.value = state.sortFilter;
   renderSubcategoryCards();
@@ -5273,6 +5328,7 @@ function updateFloatingShopButton() {
 }
 
 function applyCatalogFilter(category = "all", label = "", { updateUrl = true, scroll = true, replaceUrl = false, scrollTarget = "catalog" } = {}) {
+  resetPriceRangeForCategory();
   state.filter = normalizeCategoryFilter(category);
   state.labelFilter = label;
   state.visibleProductCount = productBatchSize;
@@ -5291,6 +5347,7 @@ function applyCatalogFilter(category = "all", label = "", { updateUrl = true, sc
 
 function applyCatalogFilterFromUrl({ render = true, scroll = false } = {}) {
   const { category, label } = catalogFilterFromUrl();
+  resetPriceRangeForCategory();
   state.filter = normalizeCategoryFilter(category);
   state.labelFilter = label;
   state.search = catalogSearchFromUrl();
@@ -5347,6 +5404,8 @@ function catalogApiUrl(page = 1) {
   if (state.labelFilter) params.set("subcategory", state.labelFilter);
   if (state.search.trim()) params.set("search", state.search.trim());
   if (state.priceFilter && state.priceFilter !== "all") params.set("price", state.priceFilter);
+  if (state.priceMin !== null) params.set("minPrice", state.priceMin);
+  if (state.priceMax !== null) params.set("maxPrice", state.priceMax);
   if (state.sortFilter && state.sortFilter !== "default") params.set("sort", state.sortFilter);
   return `/api/catalog?${params.toString()}`;
 }
@@ -5392,6 +5451,7 @@ async function loadCatalogPage({ reset = false } = {}) {
     const payload = await response.json();
     if (!payload || !Array.isArray(payload.items)) throw new Error("Invalid catalog JSON shape");
     if (requestSequence !== catalogRequestSequence) return;
+    catalogPriceBounds = payload.priceBounds || null;
     catalogCategoryCountsLoaded = Boolean(payload.categoryCounts && typeof payload.categoryCounts === "object");
     catalogCategoryCounts = catalogCategoryCountsLoaded ? payload.categoryCounts : {};
     catalogSubcategoryCountsLoaded = Boolean(payload.subcategoryCounts && typeof payload.subcategoryCounts === "object");
@@ -5565,6 +5625,31 @@ searchInput?.addEventListener("input", (event) => {
   if (state.search.trim()) openHeaderSearch(false);
 });
 
+function changePriceRange(source) {
+  const parse = input => input.value.trim() === "" ? null : Number.isFinite(Number(input.value)) ? Math.max(Number(input.min), Math.min(Number(input.max), Number(input.min) + Math.round((Number(input.value) - Number(input.min)) / 100) * 100)) : null;
+  const isSlider = source === priceMinSlider || source === priceMaxSlider;
+  state.priceMin = isSlider ? Number(priceMinSlider.value) : parse(priceMinInput);
+  state.priceMax = isSlider ? Number(priceMaxSlider.value) : parse(priceMaxInput);
+  if (state.priceMin !== null && state.priceMax !== null && state.priceMin > state.priceMax) {
+    if (source === priceMinInput || source === priceMinSlider) state.priceMax = state.priceMin;
+    else state.priceMin = state.priceMax;
+  }
+  state.priceFilter = "all";
+  state.visibleProductCount = productBatchSize;
+  syncPriceRangeControls();
+  void loadCatalogPage({ reset: true });
+}
+[priceMinInput, priceMaxInput, priceMinSlider, priceMaxSlider].forEach(control => control?.addEventListener("change", () => changePriceRange(control)));
+[priceMinSlider, priceMaxSlider].forEach(slider => slider?.addEventListener("input", () => {
+  const min = Math.min(Number(priceMinSlider.value), Number(priceMaxSlider.value));
+  const max = Math.max(Number(priceMinSlider.value), Number(priceMaxSlider.value));
+  priceMinInput.value = min;
+  priceMaxInput.value = max;
+  slider.parentElement.style.setProperty("--price-start", ((min - Number(slider.min)) / (Number(slider.max) - Number(slider.min) || 1) * 100) + "%");
+  slider.parentElement.style.setProperty("--price-end", ((max - Number(slider.min)) / (Number(slider.max) - Number(slider.min) || 1) * 100) + "%");
+}));
+
+
 priceFilterSelect?.addEventListener("change", (event) => {
   state.priceFilter = event.target.value || "all";
   state.visibleProductCount = productBatchSize;
@@ -5576,6 +5661,7 @@ mainFilterSelect?.addEventListener("change", (event) => {
 });
 
 labelFilterSelect?.addEventListener("change", (event) => {
+  resetPriceRangeForCategory();
   state.labelFilter = event.target.value || "";
   state.visibleProductCount = productBatchSize;
   void loadCatalogPage({ reset: true });
@@ -5609,6 +5695,8 @@ resetCatalogFilters?.addEventListener("click", () => {
   state.search = "";
   state.labelFilter = "";
   state.priceFilter = "all";
+  state.priceMin = null;
+  state.priceMax = null;
   state.sortFilter = "default";
   state.visibleProductCount = productBatchSize;
   if (searchInput) searchInput.value = "";

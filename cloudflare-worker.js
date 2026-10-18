@@ -403,6 +403,7 @@ function catalogDto(product, thumbnailManifest) {
     slug: productSlug(product),
     name: product?.name || "",
     price: productPrice(product),
+    variants: product.variants,
     thumbnail: catalogThumbnail(product, thumbnailManifest),
     availability: hasAvailableVariant(product) ? "available" : "unavailable",
     category: catalogMainCategoryId(product),
@@ -552,6 +553,13 @@ function catalogProductMatches(product, params) {
   const productSubcategory = String(product?.subcategory || product?.subCategory || "");
   const collectionIds = catalogCollectionIds(product);
   const amount = productPrice(product);
+  const minPrice = params.has("minPrice") ? Math.max(0, Number(params.get("minPrice"))) : 0;
+  const maxPrice = params.has("maxPrice") ? Number(params.get("maxPrice")) : Infinity;
+  if (params.has("minPrice") || params.has("maxPrice")) {
+    const prices = Array.isArray(product.variants) && product.variants.length ? product.variants.map(variant => Number(variant.price ?? product.price)).filter(value => Number.isFinite(value) && value > 0) : amount === null ? [] : [amount];
+    if (!prices.some(value => value >= minPrice && value <= maxPrice)) return false;
+  }
+
   if (category !== "all" && productCategory !== category && !(category === "greek-collection" && collectionIds.length)) return false;
   if (subcategory && productSubcategory !== subcategory && String(product?.label || "") !== subcategory && !collectionIds.includes(subcategory)) return false;
   if (price === "under-1000" && !(amount !== null && amount < 1000)) return false;
@@ -574,7 +582,7 @@ async function catalogApiResponse(request, env, ctx) {
   const page = Math.max(1, Math.trunc(Number(url.searchParams.get("page"))) || 1);
   const limit = Math.min(48, Math.max(1, Math.trunc(Number(url.searchParams.get("limit"))) || 12));
   const cacheUrl = new URL(url.origin + url.pathname);
-  cacheUrl.searchParams.set("schema", "17");
+  cacheUrl.searchParams.set("schema", "price-range-19");
   cacheUrl.searchParams.set("thumbnails", "plain-iota-v2");
   [...url.searchParams.entries()].sort(([a], [b]) => a.localeCompare(b)).forEach(([key, value]) => cacheUrl.searchParams.append(key, value));
   const allProducts = await loadProducts(env, request, { maxAgeMs: 0 });
@@ -623,8 +631,12 @@ async function catalogApiResponse(request, env, ctx) {
   if (search && !["price-asc", "price-desc"].includes(url.searchParams.get("sort") || "default")) {
     matched.sort((first, second) => catalogSearchScore(first, search) - catalogSearchScore(second, search));
   }
+  const boundsParams = new URLSearchParams(url.searchParams);
+  for (const key of ["price", "minPrice", "maxPrice", "search"]) boundsParams.delete(key);
+  const priced = allProducts.filter(product => catalogProductMatches(product, boundsParams)).flatMap(product => Array.isArray(product.variants) && product.variants.length ? product.variants.map(variant => Number(variant.price ?? product.price)).filter(value => Number.isFinite(value) && value > 0) : [productPrice(product)].filter(value => value !== null));
+  const priceBounds = { min: priced.length ? Math.min(...priced) : 0, max: priced.length ? Math.max(...priced) : 1 };
   const start = (page - 1) * limit;
-  const body = JSON.stringify({ items: matched.slice(start, start + limit).map((product) => catalogDto(product, thumbnailManifest)), page, limit, total: matched.length, hasMore: start + limit < matched.length, categoryCounts, subcategoryCounts, subcategoryImages });
+  const body = JSON.stringify({ items: matched.slice(start, start + limit).map((product) => catalogDto(product, thumbnailManifest)), page, limit, total: matched.length, hasMore: start + limit < matched.length, categoryCounts, subcategoryCounts, subcategoryImages, priceBounds });
   const response = new Response(body, { headers: { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "public, max-age=0, must-revalidate", "CDN-Cache-Control": "public, max-age=600, stale-while-revalidate=300" } });
   ctx.waitUntil(edgeCache.put(cacheKey, response.clone()));
   return response;
