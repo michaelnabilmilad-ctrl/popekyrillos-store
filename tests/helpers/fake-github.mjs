@@ -54,6 +54,12 @@ export function fakeGitHub(env, initialFiles, { fail } = {}) {
     const request = input instanceof Request ? input : new Request(input, init);
     const url = new URL(request.url);
     const method = request.method;
+    // The Worker's raw fallback for files the contents API did not return.
+    const rawPrefix = `/${env.GITHUB_OWNER}/${env.GITHUB_REPO}/${BRANCH}/`;
+    if (url.hostname === "raw.githubusercontent.com" && method === "GET" && url.pathname.startsWith(rawPrefix)) {
+      const content = currentFile(decodeURIComponent(url.pathname.slice(rawPrefix.length)));
+      return content ? new Response(fromBase64(content)) : new Response("404: Not Found", { status: 404 });
+    }
     if (url.hostname !== "api.github.com" || !url.pathname.startsWith(base)) {
       repo.unexpected.push(`${method} ${url.href}`);
       throw new Error(`Unexpected network request in test: ${method} ${url.href}`);

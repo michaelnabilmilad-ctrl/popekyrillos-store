@@ -700,10 +700,20 @@
         throw new Error(result.error || result.message || `HTTP ${response.status}`);
       }
 
+      const previousTaxonomy = state.originalTaxonomy;
       state.originalTaxonomy = deepClone(categoriesList);
       localStorage.removeItem(TAXONOMY_DRAFT_KEY);
-      renderAll(`تم نشر الأقسام. Commit: ${(result.commitSha || "").slice(0, 7)}`);
-      showToast("تم حفظ الأقسام وصورها. التحديث يظهر خلال ثواني قليلة.");
+      const commit = (result.commitSha || "").slice(0, 7);
+      renderAll(`تم حفظ الأقسام. Commit: ${commit}. جاري التأكد من ظهورها على الموقع...`);
+      if (elements.publishTaxonomyButton) elements.publishTaxonomyButton.textContent = "جاري التأكد من الموقع...";
+      const verification = await verifyPublishedTaxonomy(changedTaxonomyImages(previousTaxonomy, categoriesList));
+      if (verification.ok) {
+        renderStatus(`تم نشر الأقسام وظهرت على الموقع. Commit: ${commit}`);
+        showToast("تم نشر الأقسام وصورها وظهرت على الموقع.");
+      } else {
+        renderStatus(`اتحفظت الأقسام (Commit: ${commit}) لكن لسه ما ظهرتش على الموقع.`);
+        showToast(`اتحفظت الأقسام على GitHub، لكن لسه ما ظهرتش على الموقع: ${verification.message} جرّب تحديث الموقع بعد دقيقة.`);
+      }
     } catch (error) {
       showToast(`تعذر نشر الأقسام: ${error.message}`);
       console.error("Failed to publish category taxonomy:", error);
@@ -713,6 +723,49 @@
         elements.publishTaxonomyButton.textContent = previousText;
       }
     }
+  }
+
+  // Image paths (main and subcategory) that this publish adds or changes.
+  function changedTaxonomyImages(previousCategories, nextCategories) {
+    const imagesOf = (categories) => {
+      const images = new Map();
+      for (const category of categories || []) {
+        images.set(`main:${category.id}`, category.customImage || "");
+        for (const subcategory of category.subcategories || []) {
+          images.set(`sub:${category.id}/${subcategory.id}`, subcategory.customImage || subcategory.manualImage || "");
+        }
+      }
+      return images;
+    };
+    const before = imagesOf(previousCategories);
+    return [...new Set([...imagesOf(nextCategories)]
+      .filter(([key, image]) => image && image !== before.get(key))
+      .map(([, image]) => image))];
+  }
+
+  // After a publish, confirm the live site serves the new taxonomy and every
+  // changed image before reporting success (the Worker caches taxonomy ~5s).
+  async function verifyPublishedTaxonomy(images, { attempts = 8, delayMs = 2500 } = {}) {
+    let missing = images;
+    for (let attempt = 0; attempt < attempts; attempt += 1) {
+      if (attempt) await new Promise((resolve) => setTimeout(resolve, delayMs));
+      try {
+        const response = await fetch(`/category-taxonomy.js?verify=${Date.now()}`, { cache: "no-store" });
+        if (!response.ok) continue;
+        const source = await response.text();
+        const notInFile = images.filter((image) => !source.includes(image));
+        const unreachable = [];
+        for (const image of images.filter((item) => !notInFile.includes(item))) {
+          const imageResponse = await fetch(`/${image.replace(/^\/+/, "")}?verify=${Date.now()}`, { cache: "no-store" });
+          if (!imageResponse.ok || !(imageResponse.headers.get("Content-Type") || "").startsWith("image/")) unreachable.push(image);
+        }
+        missing = [...notInFile, ...unreachable];
+        if (!missing.length) return { ok: true, missing: [] };
+      } catch {
+        // Network hiccup; try again.
+      }
+    }
+    return { ok: false, missing, message: missing.length ? `${missing.length} صورة لم تظهر بعد.` : "تعذر قراءة الأقسام من الموقع." };
   }
 
   async function openTaxonomyImageUpload(index) {

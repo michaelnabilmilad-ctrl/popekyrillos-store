@@ -151,7 +151,56 @@ test("the admin shows success toasts only after a successful response", () => {
   }
 });
 
-test("publishing confirms the new images are live before saying it succeeded", { todo: "the success message relies on the GitHub commit only" }, () => {
+// admin.js verification helpers, with the admin page's relative fetches sent to the Worker.
+function adminVerifier(fetchImpl = (path, init) => worker.fetch(new Request(`${SITE}${path}`, init), env, ctx)) {
+  const context = { fetch: fetchImpl, setTimeout, Date, Map, Set, Promise };
+  vm.createContext(context);
+  vm.runInContext(["changedTaxonomyImages", "verifyPublishedTaxonomy"].map((name) => extractFunction(adminSource, name)).join("\n\n"), context);
+  return context;
+}
+
+test("changedTaxonomyImages lists only new or changed main and subcategory images", () => {
+  const before = baseTaxonomy();
+  const after = baseTaxonomy();
+  after[0].customImage = "assets/optimized/products/gallery/main-new.webp";
+  after[0].subcategories[0].customImage = "assets/optimized/products/gallery/sub-new.webp";
+  const { changedTaxonomyImages } = adminVerifier();
+  assert.deepEqual(JSON.parse(JSON.stringify(changedTaxonomyImages(before, after))), ["assets/optimized/products/gallery/main-new.webp", "assets/optimized/products/gallery/sub-new.webp"]);
+  assert.equal(changedTaxonomyImages(after, after).length, 0);
+});
+
+test("after a real publish the admin confirms the new image is live on the site", async (t) => {
+  installFakeGitHub(t, env, seedFiles());
+  const { result } = await uploadTaxonomyImage("hand-crosses");
+  const edited = baseTaxonomy();
+  edited[0].subcategories[0].customImage = result.path;
+  edited[0][adminMainImageField] = result.path;
+  assert.equal((await publishTaxonomy(edited)).response.status, 200);
+  const { changedTaxonomyImages, verifyPublishedTaxonomy } = adminVerifier();
+  const verification = await verifyPublishedTaxonomy(changedTaxonomyImages(baseTaxonomy(), edited), { attempts: 2, delayMs: 0 });
+  assert.equal(verification.ok, true, JSON.stringify(verification));
+});
+
+test("an image that never reached the site is reported instead of a success message", async (t) => {
+  installFakeGitHub(t, env, seedFiles());
+  const edited = baseTaxonomy();
+  edited[0][adminMainImageField] = "assets/optimized/products/gallery/never-uploaded.webp";
+  await publishTaxonomy(edited);
+  const verification = await adminVerifier().verifyPublishedTaxonomy(["assets/optimized/products/gallery/never-uploaded.webp"], { attempts: 2, delayMs: 0 });
+  assert.equal(verification.ok, false);
+  assert.deepEqual([...verification.missing], ["assets/optimized/products/gallery/never-uploaded.webp"]);
+});
+
+test("a site still serving the old taxonomy is reported as not live yet", async () => {
+  const stale = adminVerifier(async () => new Response("window.POPE_KYRILLOS_TAXONOMY = { categories: [] };", { status: 200 }));
+  const verification = await stale.verifyPublishedTaxonomy(["assets/optimized/products/gallery/new.webp"], { attempts: 2, delayMs: 0 });
+  assert.equal(verification.ok, false);
+});
+
+test("the admin says the categories are live only after verification succeeds", () => {
   const source = extractFunction(adminSource, "publishTaxonomyToSite");
-  assert.match(source, /category-taxonomy\.js\?[^"`]*verify|verifyPublishedTaxonomy/);
+  const verify = source.indexOf("await verifyPublishedTaxonomy(");
+  const liveToast = source.indexOf("وظهرت على الموقع.\")");
+  assert.ok(verify > 0 && liveToast > verify, "success toast comes after the live check");
+  assert.match(source, /if \(verification\.ok\)[\s\S]*else[\s\S]*لسه ما ظهرتش على الموقع/);
 });
