@@ -6,6 +6,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
+import vm from "node:vm";
 import { execSync } from "node:child_process";
 import { SITE, adminJsonPost, createAdminEnv, installFakeGitHub } from "./helpers/fake-github.mjs";
 
@@ -61,11 +62,15 @@ function baseProducts(categories = baseTaxonomy) {
   ];
 }
 
-function setup(t, categories = baseTaxonomy, products = baseProducts(categories)) {
-  return installFakeGitHub(t, env, {
+// Seeds the fake GitHub, then publishes the taxonomy through the admin endpoint so
+// the Worker's in-memory taxonomy (cached ~5s) never carries over between tests.
+async function setup(t, categories = baseTaxonomy, products = baseProducts(categories)) {
+  const github = installFakeGitHub(t, env, {
     "products.json": `${JSON.stringify(products, null, 2)}\n`,
     "category-taxonomy.js": adminTaxonomyFile(categories)
   });
+  await publishTaxonomy(categories);
+  return github;
 }
 
 async function publishTaxonomy(categories) {
@@ -91,14 +96,14 @@ async function catalogIds(query) {
 }
 
 test("baseline: products appear under their existing main and sub categories", async (t) => {
-  setup(t);
+  await setup(t);
   assert.deepEqual(await catalogIds("category=crosses"), ["cross-1", "cross-2"]);
   assert.deepEqual(await catalogIds("category=occasions-service"), ["gift-1"]);
   assert.deepEqual(await catalogIds("category=crosses&subcategory=hand-crosses"), ["cross-1", "cross-2"]);
 });
 
 test("the admin-generated taxonomy file publishes and evaluates to the edited categories", async (t) => {
-  const github = setup(t);
+  const github = await setup(t);
   const edited = clone(baseTaxonomy);
   edited[0].subcategories.push({ id: "pectoral-crosses", name: "صلبان صدر", visible: true, homeVisible: true });
   await publishTaxonomy(edited);
@@ -108,7 +113,7 @@ test("the admin-generated taxonomy file publishes and evaluates to the edited ca
 });
 
 test("a new subcategory under an existing main category shows its linked product", async (t) => {
-  setup(t);
+  await setup(t);
   const edited = clone(baseTaxonomy);
   edited[0].subcategories.push({ id: "pectoral-crosses", name: "صلبان صدر", visible: true, homeVisible: true });
   await publishTaxonomy(edited);
@@ -120,7 +125,7 @@ test("a new subcategory under an existing main category shows its linked product
 });
 
 test("renaming a subcategory keeps its products because the ID is stable", async (t) => {
-  setup(t);
+  await setup(t);
   const edited = clone(baseTaxonomy);
   edited[0].subcategories[0].name = "صلبان اليد الخشب";
   await publishTaxonomy(edited);
@@ -128,8 +133,8 @@ test("renaming a subcategory keeps its products because the ID is stable", async
   assert.deepEqual(await catalogIds("category=crosses&subcategory=hand-crosses"), ["cross-1", "cross-2"]);
 });
 
-test("renaming a main category keeps its products on the category page", { todo: "Worker resolves main categories by a hard-coded Arabic name list" }, async (t) => {
-  setup(t);
+test("renaming a main category keeps its products on the category page", async (t) => {
+  await setup(t);
   const edited = clone(baseTaxonomy);
   edited[1].name = "المناسبات والخدمة";
   await publishTaxonomy(edited);
@@ -137,8 +142,8 @@ test("renaming a main category keeps its products on the category page", { todo:
   assert.deepEqual(await catalogIds("category=occasions-service"), ["gift-1"]);
 });
 
-test("a new main category created in the admin shows the products linked to it", { todo: "new main IDs/names are unknown to the Worker; legacy `category` wins" }, async (t) => {
-  setup(t);
+test("a new main category created in the admin shows the products linked to it", async (t) => {
+  await setup(t);
   const edited = clone(baseTaxonomy);
   edited.push({ id: "custom-category-1790000000000", name: "قسم رئيسي جديد", visible: true, homeVisible: true, subcategories: [{ id: "custom-subcategory-1790000000001", name: "قسم فرعي جديد", visible: true, homeVisible: true }] });
   await publishTaxonomy(edited);
@@ -151,7 +156,7 @@ test("a new main category created in the admin shows the products linked to it",
 });
 
 test("publishing categories from a stale admin tab cannot silently undo a newer publish", { todo: "update-taxonomy overwrites the whole file without a base-version check" }, async (t) => {
-  const github = setup(t);
+  const github = await setup(t);
   const tabA = clone(baseTaxonomy);
   const tabB = clone(baseTaxonomy);
   tabA[0].subcategories.push({ id: "pectoral-crosses", name: "صلبان صدر", visible: true, homeVisible: true });
@@ -168,7 +173,7 @@ test("an old local admin draft cannot replace newer published categories on load
   assert.match(loader, /savedAt|baseVersion|CURRENT_TAXONOMY_VERSION/, "draft restore must compare against the live taxonomy version");
 });
 
-test("live catalog copy: every product is served under the main category its taxonomy name points to", { todo: "today 19 purchasable live products are hidden and 3 are filed under the wrong main category" }, async (t) => {
+test("live catalog copy: every product is served under the main category its taxonomy name points to", async (t) => {
   let products;
   let source;
   try {
@@ -179,6 +184,9 @@ test("live catalog copy: every product is served under the main category its tax
     return;
   }
   installFakeGitHub(t, env, { "products.json": JSON.stringify(products), "category-taxonomy.js": source });
+  // Re-publish the unchanged live file so the Worker drops any taxonomy cached by an earlier test.
+  const republish = await worker.fetch(adminJsonPost(env, "/admin/api/update-taxonomy", { categories: evaluateTaxonomy(source).categories, taxonomySource: source }), env, ctx);
+  assert.equal(republish.status, 200);
   const nameToId = new Map(evaluateTaxonomy(source).categories.map((category) => [category.name, category.id]));
   const served = new Map();
   for (const id of new Set(nameToId.values())) {
@@ -198,4 +206,69 @@ test("live catalog copy: every product is served under the main category its tax
   const hidden = products.filter((product) => nameToId.has(product.mainCategory) && !served.has(String(product.id))
     && product.published !== false && product.deleted !== true && product.hidden !== true && purchasable(product));
   assert.deepEqual({ misfiled: misfiled.map((product) => product.id), hidden: hidden.map((product) => product.id) }, { misfiled: [], hidden: [] });
+});
+
+test("renaming a main category without re-saving products keeps them on its page", async (t) => {
+  await setup(t);
+  const edited = clone(baseTaxonomy);
+  edited[1].name = "المناسبات والخدمة";
+  await publishTaxonomy(edited);
+  assert.deepEqual(await catalogIds("category=occasions-service"), ["gift-1"], "products still carry the old name");
+});
+
+test("moving a subcategory to another main category moves its products", async (t) => {
+  await setup(t);
+  const edited = clone(baseTaxonomy);
+  edited[1].subcategories.push(edited[0].subcategories.shift());
+  await publishTaxonomy(edited);
+  assert.deepEqual(await catalogIds("category=occasions-service"), ["cross-1", "cross-2", "gift-1"]);
+  assert.deepEqual(await catalogIds("category=crosses"), []);
+  assert.deepEqual(await catalogIds("category=occasions-service&subcategory=hand-crosses"), ["cross-1", "cross-2"]);
+});
+
+test("a taxonomy-only publish is not hidden behind a cached catalog response", async (t) => {
+  const store = new Map();
+  t.mock.method(globalThis.caches.default, "match", async (request) => store.get(request.url)?.clone() || null);
+  t.mock.method(globalThis.caches.default, "put", async (request, response) => { store.set(request.url, response); });
+  await setup(t);
+  assert.deepEqual(await catalogIds("category=occasions-service"), ["gift-1"]);
+  const edited = clone(baseTaxonomy);
+  edited[1].subcategories.push(edited[0].subcategories.shift());
+  await publishTaxonomy(edited);
+  assert.deepEqual(await catalogIds("category=occasions-service"), ["cross-1", "cross-2", "gift-1"]);
+});
+
+test("subcategory images are keyed by the main category ID, not its Arabic name", async (t) => {
+  await setup(t, baseTaxonomy, baseProducts().map((product) => ({ ...product, images: [`assets/optimized/products/gallery/${product.id}.webp`] })));
+  const response = await worker.fetch(new Request(`${SITE}/api/catalog?category=occasions-service&limit=48`), env, ctx);
+  const body = await response.json();
+  assert.ok(body.subcategoryImages["occasions-service"]?.["service-gifts"], JSON.stringify(Object.keys(body.subcategoryImages)));
+  assert.equal(body.subcategoryImages["الهدايا والإكسسوارات"], undefined);
+});
+
+test("when the live taxonomy cannot be read, the built-in category lists still work", async (t) => {
+  installFakeGitHub(t, env, {
+    "products.json": `${JSON.stringify(baseProducts(), null, 2)}\n`,
+    "category-taxonomy.js": "window.POPE_KYRILLOS_TAXONOMY = { not: 'parsable' }; const categories = [];"
+  });
+  const reseed = await worker.fetch(adminJsonPost(env, "/admin/api/update-taxonomy", {
+    categories: baseTaxonomy,
+    taxonomySource: "window.POPE_KYRILLOS_TAXONOMY = { broken: true }; const categories = [];"
+  }), env, ctx);
+  assert.equal(reseed.status, 200);
+  assert.deepEqual(await catalogIds("category=crosses"), ["cross-1", "cross-2"]);
+});
+
+test("the admin saves a product's main category from its subcategory's parent", () => {
+  const context = {
+    state: { taxonomy: clone(baseTaxonomy) }, legacyCategoryToMainCategory: {}, String, Array,
+    window: { POPE_KYRILLOS_CATEGORY_MIGRATION: { product: (item) => item } }
+  };
+  context.state.taxonomy[1].subcategories.push(context.state.taxonomy[0].subcategories.shift());
+  vm.createContext(context);
+  vm.runInContext(["taxonomyCategoriesForAdmin", "findTaxonomyCategory", "findTaxonomySubcategory", "taxonomyCategoryIdFromName",
+    "taxonomyCategoryNameFromId", "normalizeMainCategoryValue", "inferredSubcategoryFromProduct", "mainCategoryName"]
+    .map((name) => extractFunction(adminSource, name)).join("\n\n"), context);
+  assert.equal(context.mainCategoryName(productIn(baseTaxonomy, "cross-1", "crosses", "hand-crosses", "icons")), "الهدايا والإكسسوارات");
+  assert.equal(context.mainCategoryName(productIn(baseTaxonomy, "gift-1", "occasions-service", "service-gifts", "atb3ho")), "الهدايا والإكسسوارات");
 });

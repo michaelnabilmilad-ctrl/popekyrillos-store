@@ -1287,6 +1287,10 @@ function normalizeCategoryFilter(category = "all") {
 
 function productMainCategoryId(product) {
   product = window.POPE_KYRILLOS_CATEGORY_MIGRATION.product(product);
+  // Same rule as the Worker: the live parent of the (stable) subcategory ID wins,
+  // so renamed or moved categories keep their products before they are re-saved.
+  const parent = taxonomy?.subcategoryById?.get?.(product?.subcategory || "")?.mainId;
+  if (parent && parent !== "greek-collection") return parent;
   const raw = product?.mainCategory || "";
   return taxonomy?.categoryIdFromName?.(raw) || (taxonomy?.categoryById?.has(raw) ? raw : "") || legacyCategoryToMainCategory[product?.category] || "uncategorized";
 }

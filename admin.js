@@ -1157,6 +1157,10 @@
 
   function mainCategoryName(product) {
     product = window.POPE_KYRILLOS_CATEGORY_MIGRATION.product(product);
+    // A product's main category follows its subcategory (stable ID), matching the
+    // Worker and storefront, so moving a subcategory moves its products too.
+    const parent = findTaxonomySubcategory(product.subcategory || "")?.mainId;
+    if (parent && parent !== "greek-collection") return taxonomyCategoryNameFromId(parent) || product.mainCategory || "غير مصنف";
     let id = normalizeMainCategoryValue(product.mainCategory, product.category);
     if (id === "uncategorized") {
       const inferred = inferredSubcategoryFromProduct(product);

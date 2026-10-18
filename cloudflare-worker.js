@@ -535,8 +535,87 @@ const namedCatalogCategoryIds = {
   "تجهيزات الكنيسة": "church-equipment"
 };
 
+// Index of the live category-taxonomy.js (published from the admin), so new,
+// renamed or moved categories resolve without code changes. The hard-coded lists
+// below stay only as a fallback when the taxonomy cannot be read.
+let catalogTaxonomyIndex = null;
+let catalogTaxonomyIndexSource = "";
+
+// Reads the `defaultCategories = [...]` JSON literal without evaluating the file.
+function parseTaxonomyCategories(source = "") {
+  const marker = source.indexOf("defaultCategories =");
+  const start = marker >= 0 ? source.indexOf("[", marker) : -1;
+  if (start < 0) return null;
+  let depth = 0;
+  let quote = "";
+  let escaped = false;
+  for (let index = start; index < source.length; index += 1) {
+    const char = source[index];
+    if (quote) {
+      if (escaped) escaped = false;
+      else if (char === "\\") escaped = true;
+      else if (char === quote) quote = "";
+      continue;
+    }
+    if (char === "\"" || char === "'" || char === "`") quote = char;
+    else if (char === "[") depth += 1;
+    else if (char === "]" && --depth === 0) {
+      try {
+        const parsed = JSON.parse(source.slice(start, index + 1));
+        return Array.isArray(parsed) ? parsed : null;
+      } catch {
+        return null;
+      }
+    }
+  }
+  return null;
+}
+
+function buildCatalogTaxonomyIndex(categories = []) {
+  const mainIds = new Set();
+  const mainByName = new Map();
+  const mainBySubcategory = new Map();
+  let version = 2166136261;
+  for (const category of categories) {
+    if (!category?.id) continue;
+    mainIds.add(category.id);
+    if (category.name) mainByName.set(String(category.name).trim(), category.id);
+    // greek-collection groups products through `collections`, never as a parent.
+    if (category.id === "greek-collection") continue;
+    for (const subcategory of category.subcategories || []) {
+      if (subcategory?.id && !mainBySubcategory.has(subcategory.id)) mainBySubcategory.set(subcategory.id, category.id);
+    }
+  }
+  for (const char of JSON.stringify(categories)) version = Math.imul(version ^ char.charCodeAt(0), 16777619);
+  return { mainIds, mainByName, mainBySubcategory, version: (version >>> 0).toString(36) };
+}
+
+async function refreshCatalogTaxonomyIndex(env, request) {
+  try {
+    const source = await loadTaxonomySource(env, request, { maxAgeMs: 5000 });
+    if (source && source !== catalogTaxonomyIndexSource) {
+      const categories = parseTaxonomyCategories(source);
+      if (categories?.length) {
+        catalogTaxonomyIndex = buildCatalogTaxonomyIndex(categories);
+        catalogTaxonomyIndexSource = source;
+      }
+    }
+  } catch (error) {
+    console.warn("Could not index the live taxonomy; using built-in category lists.", error?.message || error);
+  }
+  return catalogTaxonomyIndex;
+}
+
 function catalogMainCategoryId(product) {
   const mainCategory = String(product?.mainCategory || "").trim();
+  const index = catalogTaxonomyIndex;
+  if (index) {
+    // The subcategory ID is stable across renames and moves, so its parent wins.
+    const parent = index.mainBySubcategory.get(String(product?.subcategory || "").trim());
+    if (parent) return parent;
+    if (index.mainIds.has(mainCategory)) return mainCategory;
+    if (index.mainByName.has(mainCategory)) return index.mainByName.get(mainCategory);
+  }
   if (catalogMainCategoryIds.includes(mainCategory)) return mainCategory;
   const discoveryValues = [
     ...(Array.isArray(product?.searchKeywords) ? product.searchKeywords : []),
@@ -595,6 +674,7 @@ async function catalogApiResponse(request, env, ctx) {
   cacheUrl.searchParams.set("thumbnails", "plain-iota-v2");
   [...url.searchParams.entries()].sort(([a], [b]) => a.localeCompare(b)).forEach(([key, value]) => cacheUrl.searchParams.append(key, value));
   const allProducts = await loadProducts(env, request, { maxAgeMs: 0 });
+  const taxonomyIndex = await refreshCatalogTaxonomyIndex(env, request);
   const thumbnailManifest = await loadThumbnailManifest(env, request);
   const navigationProducts = allProducts.filter(isCatalogProductVisible);
   const categoryCounts = navigationProducts.reduce((counts, product) => {
@@ -631,6 +711,8 @@ async function catalogApiResponse(request, env, ctx) {
     return images;
   }, {});
   if (productsCacheSha) cacheUrl.searchParams.set("v", productsCacheSha);
+  // A taxonomy-only publish must not be hidden behind a cached catalog response.
+  if (taxonomyIndex) cacheUrl.searchParams.set("taxonomy", taxonomyIndex.version);
   const cacheKey = new Request(cacheUrl.toString(), { method: "GET" });
   const edgeCache = caches.default;
   const cached = await edgeCache.match(cacheKey);
