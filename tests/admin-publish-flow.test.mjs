@@ -140,13 +140,74 @@ test("every admin write request is a same-origin JSON POST (contract the CSRF fi
   }
 });
 
-test("cross-site form-style POST to admin APIs is refused (phase 1.1)", { todo: "CSRF fix not implemented yet" }, async (t) => {
+const adminWriteEndpoints = [
+  ["POST", "/admin/api/update-products"],
+  ["POST", "/admin/api/update-taxonomy"],
+  ["POST", "/admin/api/upload-product-image"],
+  ["POST", "/admin/api/sync-airtable-product-media"],
+  ["POST", "/admin/api/backfill-airtable-order-products"],
+  ["PATCH", "/admin/api/orders/rec123"]
+];
+const forgedRequests = {
+  "cross-site text/plain (form or no-cors fetch)": { Origin: "https://attacker.example", "Content-Type": "text/plain" },
+  "cross-site form encoding": { Origin: "https://attacker.example", "Content-Type": "application/x-www-form-urlencoded" },
+  "cross-site JSON": { Origin: "https://attacker.example", "Content-Type": "application/json" },
+  "same origin but not JSON": { Origin: SITE, "Content-Type": "text/plain" },
+  "no Origin header": { "Content-Type": "application/json" },
+  "opaque null origin": { Origin: "null", "Content-Type": "application/json" }
+};
+
+test("forged admin writes are refused with 403 even with valid admin credentials", async (t) => {
   const github = setup(t);
-  const response = await worker.fetch(new Request(`${SITE}/admin/api/update-products`, {
-    method: "POST",
-    headers: { Authorization: adminAuthHeader(env), Origin: "https://attacker.example", "Content-Type": "text/plain" },
-    body: JSON.stringify(publishBody(seedProducts.map((product) => ({ ...product, price: 1 }))))
-  }), env, ctx);
-  assert.equal(response.status, 403);
-  assert.equal(github.repo.writes.length, 0);
+  const tampered = JSON.stringify(publishBody(seedProducts.map((product) => ({ ...product, price: 1 }))));
+  for (const [label, headers] of Object.entries(forgedRequests)) {
+    for (const [method, pathname] of adminWriteEndpoints) {
+      const response = await worker.fetch(new Request(`${SITE}${pathname}`, { method, headers: { Authorization: adminAuthHeader(env), ...headers }, body: tampered }), env, ctx);
+      assert.equal(response.status, 403, `${label} → ${method} ${pathname}`);
+      assert.equal((await response.json()).error, "forbidden_origin");
+    }
+  }
+  assert.equal(github.repo.writes.length, 0, "no forged request may reach GitHub");
+  assert.deepEqual(github.products(), seedProducts, "prices are untouched");
+});
+
+test("the password check still runs first: forged requests without credentials get 401", async (t) => {
+  setup(t);
+  const response = await worker.fetch(new Request(`${SITE}/admin/api/update-products`, { method: "POST", headers: forgedRequests["cross-site text/plain (form or no-cors fetch)"], body: "{}" }), env, ctx);
+  assert.equal(response.status, 401);
+});
+
+test("a JSON content type with a charset still counts as JSON", async (t) => {
+  const github = setup(t);
+  const edited = seedProducts.map((product) => product.id === "candle-1" ? { ...product, price: 95 } : product);
+  const response = await worker.fetch(post("/admin/api/update-products", publishBody(edited), { "Content-Type": "application/json; charset=utf-8" }), env, ctx);
+  assert.equal(response.status, 200);
+  assert.equal(github.products().find((product) => product.id === "candle-1").price, 95);
+});
+
+test("admin pages and read APIs are not blocked by the origin check", async (t) => {
+  setup(t);
+  for (const pathname of ["/admin/", "/admin/orders/", "/admin/analytics/", "/admin/api/orders", "/admin/api/analytics?days=7"]) {
+    const response = await worker.fetch(new Request(`${SITE}${pathname}`, { headers: { Authorization: adminAuthHeader(env) } }), env, ctx);
+    assert.notEqual(response.status, 403, pathname);
+    assert.notEqual(response.status, 401, pathname);
+  }
+});
+
+test("same-origin JSON writes to every admin endpoint pass the origin check", async (t) => {
+  setup(t);
+  for (const [method, pathname] of adminWriteEndpoints) {
+    const response = await worker.fetch(new Request(`${SITE}${pathname}`, {
+      method,
+      headers: { Authorization: adminAuthHeader(env), Origin: SITE, "Content-Type": "application/json" },
+      body: JSON.stringify({})
+    }), env, ctx);
+    assert.notEqual(response.status, 403, `${method} ${pathname} must reach its handler`);
+  }
+});
+
+test("customer storefront APIs are outside the admin origin check", async (t) => {
+  setup(t);
+  const response = await worker.fetch(new Request(`${SITE}/api/orders`, { method: "POST", headers: { "Content-Type": "application/json" }, body: "{}" }), env, ctx);
+  assert.notEqual((await response.clone().json().catch(() => ({}))).error, "forbidden_origin");
 });

@@ -190,6 +190,15 @@ function isProtectedAdminPath(pathname) {
   return pathname === "/admin" || pathname === "/admin.html" || pathname === "/admin.css" || pathname === "/admin.js" || pathname === "/admin-orders.js" || pathname.startsWith("/admin/");
 }
 
+// Browsers re-send cached Basic Auth credentials with cross-site requests, so admin
+// writes must also prove they come from the admin page itself: same Origin, and a
+// JSON body (which a cross-site form or no-cors fetch cannot send without preflight).
+function isSameOriginAdminWrite(request) {
+  if (["GET", "HEAD", "OPTIONS"].includes(request.method)) return true;
+  if (request.headers.get("Origin") !== new URL(request.url).origin) return false;
+  return (request.headers.get("Content-Type") || "").toLowerCase().startsWith("application/json");
+}
+
 function requestContext(request, env, ctx) {
   return {
     request,
@@ -2484,6 +2493,12 @@ async function handleRequest(request, env, ctx) {
 
     if (isProtectedAdminPath(url.pathname)) {
       if (!isAdminAuthorized(request, env)) return unauthorizedAdminResponse();
+      if (url.pathname.startsWith("/admin/api/") && !isSameOriginAdminWrite(request)) {
+        return new Response(JSON.stringify({ error: "forbidden_origin", message: "طلب غير مسموح." }), {
+          status: 403,
+          headers: { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" }
+        });
+      }
 
       if (url.pathname === "/admin" || url.pathname === "/admin.html") {
         url.pathname = "/admin/";
