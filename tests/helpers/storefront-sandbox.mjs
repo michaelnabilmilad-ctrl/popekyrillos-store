@@ -45,12 +45,18 @@ export class FakeStorage {
 // A shared "server": one document per signed-in user, like Firestore customerCarts/{uid}.
 export function fakeFirestore() {
   const docs = new Map();
-  let clock = Date.parse("2026-10-18T10:00:00Z");
+  // Server time follows the real clock (like Firestore's serverTimestamp) and only
+  // moves forward; tick() simulates time passing before the next server write.
+  let clock = Date.now();
+  let skew = 0;
   return {
     docs,
-    tick(ms = 1000) { clock += ms; return clock; },
+    tick(ms = 1000) { skew += ms; return Date.now() + skew; },
     read(uid) { return docs.get(uid) || null; },
-    write(uid, items) { docs.set(uid, { items: JSON.parse(JSON.stringify(items)), updatedAt: (clock += 1) }); }
+    write(uid, items) {
+      clock = Math.max(clock + 1, Date.now() + skew);
+      docs.set(uid, { items: JSON.parse(JSON.stringify(items)), updatedAt: clock });
+    }
   };
 }
 

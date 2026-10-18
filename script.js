@@ -4957,19 +4957,22 @@ async function loadRemoteCartRecord(user) {
   }
 }
 
-// Account cart on sign-in: start from the account (the server copy, or this
-// browser's copy of it when that has newer unsynced changes) and add every guest
-// line. Merging keeps the larger quantity, so repeating it never doubles items.
-// The guest cart is cleared only once the merged cart is safely on the server.
+// Account cart on sign-in: start from the server copy and add every guest line.
+// When this browser's copy of the account has newer unsynced changes (for example
+// edits made while the server was unreachable) it is merged in too, never used
+// instead of the server copy, so no account line is lost. Merging keeps the
+// larger quantity, so repeating it never doubles items. The guest cart is cleared
+// only once the merged cart is safely on the server.
 async function applySignedInCart(user) {
   const userCartKey = currentUserCartStorageKey(user);
   const before = cartFingerprint(state.cart);
   const guestRecord = readCartRecord(guestCartStorageKey);
   const userLocalRecord = readCartRecord(userCartKey);
   const remoteResult = await loadRemoteCartRecord(user);
-  const accountCart = remoteResult.ok && !(userLocalRecord.updatedAt > (remoteResult.updatedAt || 0))
-    ? remoteResult.cart
-    : userLocalRecord.cart;
+  const localHasNewerChanges = userLocalRecord.updatedAt > (remoteResult.updatedAt || 0);
+  const accountCart = !remoteResult.ok
+    ? userLocalRecord.cart
+    : localHasNewerChanges ? mergeCartMaps(remoteResult.cart, userLocalRecord.cart) : remoteResult.cart;
 
   state.cart = mergeCartMaps(accountCart, guestRecord.cart);
   saveCartToLocal(userCartKey, state.cart);

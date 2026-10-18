@@ -521,9 +521,10 @@ async function restoreSignedInCheckoutCart() {
   const userLocalRecord = readCartRecord(userCartKey);
   const remoteResult =
     services && realUser?.getIdToken ? await loadRemoteCartRecordForCheckout(services, realUser) : { ok: false, cart: new Map() };
-  const accountCart = remoteResult.ok && !(userLocalRecord.updatedAt > (remoteResult.updatedAt || 0))
-    ? remoteResult.cart
-    : userLocalRecord.cart;
+  const localHasNewerChanges = userLocalRecord.updatedAt > (remoteResult.updatedAt || 0);
+  const accountCart = !remoteResult.ok
+    ? userLocalRecord.cart
+    : localHasNewerChanges ? mergeCartMaps(remoteResult.cart, userLocalRecord.cart) : remoteResult.cart;
   const signedInCart = mergeCartMaps(accountCart, guestRecord.cart);
 
   saveCartRecord(userCartKey, signedInCart);
