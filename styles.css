@@ -5371,3 +5371,7 @@ body.account-open .scrim {
 .price-range-sliders input::-webkit-slider-thumb{appearance:none;width:24px;height:24px;border:3px solid #fff;border-radius:50%;background:var(--burgundy);box-shadow:0 0 0 1px var(--burgundy);pointer-events:auto;cursor:grab}
 .price-range-sliders input::-moz-range-thumb{width:20px;height:20px;border:3px solid #fff;border-radius:50%;background:var(--burgundy);pointer-events:auto;cursor:grab}
 .price-range-sliders input:focus-visible{outline:2px solid var(--teal-dark);outline-offset:4px;border-radius:8px}
+
+/* Cart lines whose product is no longer available stay visible with a notice. */
+.cart-unavailable{display:block;margin-top:4px;color:var(--burgundy);font-weight:700}
+.cart-unavailable-summary{margin:0 0 12px;padding:10px 12px;border:1px solid var(--burgundy);border-radius:10px;color:var(--burgundy);background:#fff5f5;font-weight:700}

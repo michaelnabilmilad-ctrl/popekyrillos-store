@@ -45,6 +45,8 @@ const translations = {
   available: "متاح",
   askPrice: "اسأل عن السعر",
   emptyCart: "السلة فارغة حاليا.",
+  unavailableLine: "غير متاح حاليًا — احذفه من السلة لإكمال الطلب",
+  unavailableBlock: "في السلة منتجات غير متاحة حاليًا. احذفها للمتابعة.",
   total: "الإجمالي",
   productsTotal: "إجمالي المنتجات",
   continueShopping: "الرجوع للتسوق",
@@ -585,6 +587,13 @@ function productImage(product) {
   return product?.image || "";
 }
 
+// Mirrors the storefront rule (script.js isVariantAvailable); the server re-checks at order time.
+function isCartLineUnavailable(product, variant) {
+  if (product?.stock === "غير متاح حاليا" || product?.stock === "Currently unavailable" || product?.available === false) return true;
+  if (variant?.quantity !== null && variant?.quantity !== undefined && variant?.quantity !== "" && Number(variant.quantity) <= 0) return true;
+  return variant?.available === false;
+}
+
 function cartEntries() {
   return [...cart.entries()]
     .map(([key, qty]) => {
@@ -605,14 +614,19 @@ function cartEntries() {
         basePrice: safeBasePrice,
         discount: safeBasePrice !== null && price !== null ? safeBasePrice - price : 0,
         optionText: variantOptionText(variant),
-        ...metadata
+        ...metadata,
+        unavailable: isCartLineUnavailable(product, variant)
       };
     })
     .filter(Boolean);
 }
 
+function cartHasUnavailableLines() {
+  return cartEntries().some((item) => item.unavailable);
+}
+
 function cartTotal() {
-  return cartEntries().reduce((sum, item) => sum + (item.price || 0) * item.qty, 0);
+  return cartEntries().reduce((sum, item) => sum + (item.unavailable ? 0 : (item.price || 0) * item.qty), 0);
 }
 
 function setCartCount() {
@@ -687,6 +701,7 @@ function renderCartPage() {
           <div>
             <h2>${escapeHtml(item.product.name)}</h2>
             ${item.optionText ? `<p>${escapeHtml(item.optionText)}</p>` : ""}
+            ${item.unavailable ? `<p class="cart-unavailable" role="status">${t("unavailableLine")}</p>` : ""}
             ${isMedalProduct(item.product) ? `<p class="cart-medal-pricing"><span>السعر الأساسي: <del>${money(item.basePrice)}</del></span><span>خصم الخدمات 10%: -${money(item.discount)}</span><strong>السعر النهائي: ${unitPrice}</strong><strong>الإجمالي: ${money(item.price * item.qty)}</strong></p>` : `<span>${unitPrice}</span>`}
           </div>
           <div class="cart-page-actions">
@@ -701,15 +716,20 @@ function renderCartPage() {
       `;
     })
     .join("");
+  if (entries.some((item) => item.unavailable)) {
+    list.insertAdjacentHTML("afterbegin", `<p class="cart-unavailable-summary" role="alert">${t("unavailableBlock")}</p>`);
+    document.querySelector("[data-cart-next]")?.setAttribute("aria-disabled", "true");
+  } else {
+    document.querySelector("[data-cart-next]")?.removeAttribute("aria-disabled");
+  }
   document.querySelector("[data-cart-page-total]").textContent = money(cartTotal());
-  document.querySelector("[data-cart-next]")?.removeAttribute("aria-disabled");
 }
 
 function bindCartPage() {
   const list = document.querySelector("[data-cart-page-items]");
   if (!list) return;
   document.querySelector("[data-cart-next]")?.addEventListener("click", (event) => {
-    if (!cartEntries().length) event.preventDefault();
+    if (!cartEntries().length || cartHasUnavailableLines()) event.preventDefault();
   });
   list.addEventListener("click", (event) => {
     const deltaButton = event.target.closest("[data-cart-delta]");
@@ -1116,6 +1136,10 @@ function bindPaymentPage() {
         }
         if (!method) {
           if (status) status.textContent = "\u0627\u0644\u062d\u0642\u0644 \u0627\u0644\u0645\u0637\u0644\u0648\u0628: \u0637\u0631\u064a\u0642\u0629 \u0627\u0644\u062f\u0641\u0639";
+          return;
+        }
+        if (cartHasUnavailableLines()) {
+          if (status) status.textContent = t("unavailableBlock");
           return;
         }
         const originalText = button.textContent;

@@ -444,6 +444,7 @@ const translations = {
     sendOrder: "إرسال الطلب",
     emptyProducts: "لا توجد منتجات مطابقة للبحث الحالي.",
     emptyCart: "السلة فارغة حاليا.",
+    cartLineUnavailable: "غير متاح حاليًا — احذفه من السلة لإكمال الطلب",
     cartLoading: "جاري تحميل بيانات السلة...",
     detailsAndPrices: "التفاصيل والأسعار",
     choices: "اختيارات",
@@ -709,6 +710,7 @@ const translations = {
     sendOrder: "Send order",
     emptyProducts: "No products match your current search.",
     emptyCart: "Your cart is empty.",
+    cartLineUnavailable: "Currently unavailable — remove it to complete the order",
     cartLoading: "Loading cart details...",
     detailsAndPrices: "Details and prices",
     choices: "Options",
@@ -4184,7 +4186,8 @@ function cartEntries() {
         qty,
         price: variantPrice(variant, product),
         optionText: variantOptionText(variant),
-        ...(cartItemMetadata.get(key) || {})
+        ...(cartItemMetadata.get(key) || {}),
+        unavailable: !isVariantAvailable(variant, product)
       };
     })
     .filter(Boolean);
@@ -4351,7 +4354,7 @@ async function authHeaders() {
 }
 
 function cartTotalAmount() {
-  return cartEntries().reduce((sum, item) => sum + (item.price || 0) * item.qty, 0);
+  return cartEntries().reduce((sum, item) => sum + (item.unavailable ? 0 : (item.price || 0) * item.qty), 0);
 }
 
 function orderLinesFromCart() {
@@ -4661,6 +4664,7 @@ function renderMiniCart(entries, total, rawCount, hasUnpriced) {
           <div>
             <strong>${escapeHtml(productName)}</strong>
             <small>${item.optionText ? `${escapeHtml(item.optionText)} · ` : ""}${qtyText} × ${priceText}</small>
+            ${item.unavailable ? `<small class="cart-unavailable" role="status">${t("cartLineUnavailable")}</small>` : ""}
           </div>
           <span class="mini-cart-price">${item.price === null ? t("askPrice") : money(item.price * item.qty)}</span>
         </article>
@@ -4674,7 +4678,7 @@ function renderCart() {
   renderDeliveryDetails();
   const entries = cartEntries();
   const rawCount = cartQuantityCount();
-  const total = entries.reduce((sum, item) => sum + (item.price || 0) * item.qty, 0);
+  const total = entries.reduce((sum, item) => sum + (item.unavailable ? 0 : (item.price || 0) * item.qty), 0);
   const hasUnpriced = entries.some((item) => item.price === null);
   const detailsReady = state.shippingConfirmed && state.shipping;
   const needsBostaShipping = detailsReady && state.shipping.deliveryMethod === "bosta";
@@ -4711,6 +4715,7 @@ function renderCart() {
             <h3>${escapeHtml(productName)}</h3>
             ${item.optionText ? `<p class="cart-variant">${escapeHtml(item.optionText)}</p>` : ""}
             <p>${money(item.price)} × ${displayText(formatter.format(item.qty))}</p>
+            ${item.unavailable ? `<p class="cart-unavailable" role="status">${t("cartLineUnavailable")}</p>` : ""}
           </div>
           <div class="qty-control" aria-label="${escapeHtml(t("quantityAdjustAria", { name: productName }))}">
             <button type="button" data-qty="${escapeHtml(item.key)}" data-delta="-1" aria-label="${t("decreaseQuantity")}">−</button>
