@@ -374,6 +374,14 @@ function firebaseConfig() {
   return window.POPE_KYRILLOS_FIREBASE_CONFIG || {};
 }
 
+// Local testing only; same guard as script.js connectLocalFirebaseEmulators.
+function connectLocalFirebaseEmulators(authModule, firestoreModule, auth, db) {
+  const emulator = firebaseConfig().emulator;
+  if (!emulator || !["127.0.0.1", "localhost"].includes(window.location.hostname)) return;
+  authModule.connectAuthEmulator(auth, emulator.authUrl, { disableWarnings: true });
+  firestoreModule.connectFirestoreEmulator(db, emulator.firestoreHost, Number(emulator.firestorePort));
+}
+
 function hasFirebaseConfig() {
   const config = firebaseConfig();
   return Boolean(config.apiKey && config.authDomain && config.projectId && config.appId);
@@ -391,10 +399,12 @@ async function checkoutAuthServices() {
     ]);
     const app = appModule.initializeApp(firebaseConfig());
     const auth = authModule.getAuth(app);
+    const db = firestoreModule.getFirestore(app);
+    connectLocalFirebaseEmulators(authModule, firestoreModule, auth, db);
     await authModule.setPersistence(auth, authModule.browserLocalPersistence);
     return {
       auth,
-      db: firestoreModule.getFirestore(app),
+      db,
       onAuthStateChanged: authModule.onAuthStateChanged,
       doc: firestoreModule.doc,
       getDoc: firestoreModule.getDoc,

@@ -4765,6 +4765,16 @@ function firebaseConfig() {
   return window.POPE_KYRILLOS_FIREBASE_CONFIG || {};
 }
 
+// Local testing only: point Auth and Firestore at the Firebase Emulator Suite when a
+// local config asks for it AND the page itself is served from this machine. The
+// production config has no `emulator` field, so this never runs on the live site.
+function connectLocalFirebaseEmulators(authModule, firestoreModule, auth, db) {
+  const emulator = firebaseConfig().emulator;
+  if (!emulator || !["127.0.0.1", "localhost"].includes(window.location.hostname)) return;
+  authModule.connectAuthEmulator(auth, emulator.authUrl, { disableWarnings: true });
+  firestoreModule.connectFirestoreEmulator(db, emulator.firestoreHost, Number(emulator.firestorePort));
+}
+
 function hasFirebaseConfig() {
   const config = firebaseConfig();
   return Boolean(config.apiKey && config.authDomain && config.projectId && config.appId);
@@ -4993,11 +5003,13 @@ async function initCustomerAuth() {
 
     const app = appModule.initializeApp(firebaseConfig());
     const auth = authModule.getAuth(app);
+    const db = firestoreModule.getFirestore(app);
+    connectLocalFirebaseEmulators(authModule, firestoreModule, auth, db);
     await authModule.setPersistence(auth, authModule.browserLocalPersistence);
 
     state.auth.services = {
       auth,
-      db: firestoreModule.getFirestore(app),
+      db,
       GoogleAuthProvider: authModule.GoogleAuthProvider,
       createUserWithEmailAndPassword: authModule.createUserWithEmailAndPassword,
       signInWithEmailAndPassword: authModule.signInWithEmailAndPassword,
