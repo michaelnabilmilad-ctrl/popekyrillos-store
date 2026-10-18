@@ -3257,18 +3257,17 @@ function withTimeout(promise, timeoutMs = 3500) {
 }
 
 function clampCartMap(map) {
+  // `products` only holds the current catalog page, so a missing product means
+  // "not loaded here", never "deleted". Unavailable lines stay too: the cart page
+  // and the server-side order check decide what can actually be ordered.
   const next = new Map();
   map.forEach((qty, key) => {
+    const safeQty = Math.max(1, Math.floor(Number(qty) || 1));
     const { productId, variantId } = parseCartKey(key);
     const product = getProduct(productId);
-    if (!product && products.length) return;
-
     const variant = product ? findVariant(product, variantId) : null;
-    if (variant && !isVariantAvailable(variant, product)) return;
-
     const max = variant ? variantQuantity(variant) : null;
-    const safeQty = Math.max(1, Math.floor(Number(qty) || 1));
-    next.set(key, max === null ? safeQty : Math.min(safeQty, max));
+    next.set(key, max ? Math.min(safeQty, max) : safeQty);
   });
   return next;
 }
@@ -4162,6 +4161,19 @@ function closeProductModal({ updateUrl = true } = {}) {
   if (updateUrl) clearProductUrl();
 }
 
+const cartDetailLookups = new Set();
+
+// Cart lines can point at products that are not on the current catalog page;
+// fetch those once so the mini cart and cart panel can show them.
+function loadMissingCartProductDetails() {
+  const missing = [...new Set([...state.cart.keys()].map((key) => parseCartKey(key).productId))]
+    .filter((productId) => productId && !getProduct(productId) && !cartDetailLookups.has(productId));
+  if (!missing.length) return;
+  missing.forEach((productId) => cartDetailLookups.add(productId));
+  Promise.allSettled(missing.map((productId) => loadProductDetails(productId)))
+    .then((results) => { if (results.some((result) => result.status === "fulfilled")) renderCart(); });
+}
+
 function cartEntries() {
   return [...state.cart.entries()]
     .map(([key, qty]) => {
@@ -4632,7 +4644,7 @@ function renderMiniCart(entries, total, rawCount, hasUnpriced) {
   }
 
   if (!entries.length) {
-    miniCartItems.innerHTML = `<div class="mini-cart-empty">${rawCount && !products.length ? t("cartLoading") : t("emptyCart")}</div>`;
+    miniCartItems.innerHTML = `<div class="mini-cart-empty">${rawCount ? t("cartLoading") : t("emptyCart")}</div>`;
     return;
   }
 
@@ -4673,6 +4685,7 @@ function renderCart() {
   const needsBostaShipping = detailsReady && state.shipping.deliveryMethod === "bosta";
 
   updateCartCount(rawCount);
+  loadMissingCartProductDetails();
   renderMiniCart(entries, total, rawCount, hasUnpriced);
   if (cartTotalBox) cartTotalBox.classList.remove("locked");
   if (cartTotalLabel) cartTotalLabel.textContent = t("totalReadyLabel");
@@ -4688,7 +4701,7 @@ function renderCart() {
   }
 
   if (!entries.length) {
-    cartItems.innerHTML = `<div class="empty-state">${rawCount && !products.length ? t("cartLoading") : t("emptyCart")}</div>`;
+    cartItems.innerHTML = `<div class="empty-state">${rawCount ? t("cartLoading") : t("emptyCart")}</div>`;
     whatsappLink?.setAttribute("href", "#");
     if (checkoutLabel) checkoutLabel.textContent = t("sendOrder");
     return;

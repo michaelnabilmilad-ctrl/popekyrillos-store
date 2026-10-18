@@ -26,7 +26,7 @@ test("guest cart survives closing and reopening the browser (localStorage persis
   assert.deepEqual(reopened.cart, { [KEY("book-1")]: 3 });
 });
 
-test("opening a catalog page that does not list a cart product keeps that product", { todo: "clampCartMap deletes lines missing from the current paginated catalog page" }, () => {
+test("opening a catalog page that does not list a cart product keeps that product", () => {
   const storage = new FakeStorage();
   const tab = storefrontTab({ storage, catalog: fullCatalog }).load().add("cross-1").add("censer-1");
   tab.showCatalogPage([book]);
@@ -34,11 +34,25 @@ test("opening a catalog page that does not list a cart product keeps that produc
   assert.deepEqual(reloaded.cart, { [KEY("cross-1")]: 1, [KEY("censer-1")]: 1 });
 });
 
-test("a product that becomes unavailable stays visible in the cart until checkout decides", { todo: "unavailable lines are silently removed instead of being flagged" }, () => {
+test("a product that becomes unavailable stays visible in the cart until checkout decides", () => {
   const storage = new FakeStorage();
   const tab = storefrontTab({ storage, catalog: fullCatalog }).load().add("cross-1").add("censer-1");
   tab.showCatalogPage([cross, { ...censer, stock: "غير متاح حاليا" }, book]);
   assert.ok(KEY("censer-1") in tab.cart, "the customer should see the line and a notice, not lose it");
+});
+
+test("a known stock limit still caps the quantity", () => {
+  const limited = { ...censer, variants: [{ id: "default", available: true, quantity: 2 }] };
+  const tab = storefrontTab({ storage: new FakeStorage(), catalog: [limited] }).load().add("censer-1", 5);
+  assert.equal(tab.cart[KEY("censer-1")], 2);
+});
+
+test("reloading on a page that lists only one product keeps every line across reloads", () => {
+  const storage = new FakeStorage();
+  storefrontTab({ storage, catalog: fullCatalog }).load().add("cross-1", 2).add("censer-1").add("book-1");
+  for (let reload = 0; reload < 3; reload += 1) storefrontTab({ storage, catalog: [book] }).load().showCatalogPage([book]);
+  const finalTab = storefrontTab({ storage, catalog: [] }).load();
+  assert.deepEqual(finalTab.cart, { [KEY("cross-1")]: 2, [KEY("censer-1")]: 1, [KEY("book-1")]: 1 });
 });
 
 test("signing in with an empty account keeps the guest items and saves them to the account", async () => {
