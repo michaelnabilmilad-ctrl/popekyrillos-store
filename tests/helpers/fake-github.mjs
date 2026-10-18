@@ -39,7 +39,8 @@ export function adminJsonPost(env, pathname, body, headers = {}) {
   });
 }
 
-export function fakeGitHub(env, initialFiles) {
+// `fail(method, path)` may return an HTTP status to simulate a GitHub failure.
+export function fakeGitHub(env, initialFiles, { fail } = {}) {
   const repo = { commits: new Map(), trees: new Map(), blobs: new Map(), head: "", writes: [], unexpected: [] };
   repo.trees.set("tree-0", new Map(Object.entries(initialFiles).map(([path, text]) => [path, toBase64(text)])));
   repo.commits.set("commit-0", { sha: "commit-0", tree: { sha: "tree-0" } });
@@ -60,6 +61,8 @@ export function fakeGitHub(env, initialFiles) {
     assert.equal(request.headers.get("Authorization"), `Bearer ${env.GITHUB_TOKEN}`);
     const path = url.pathname.slice(base.length);
     const body = method === "GET" ? null : await request.json();
+    const failureStatus = fail?.(method, path);
+    if (failureStatus) return Response.json({ message: `simulated GitHub failure ${failureStatus}` }, { status: failureStatus });
     if (method !== "GET") repo.writes.push({ method, path, body });
 
     if (method === "GET" && path.startsWith("/contents/")) {
@@ -113,8 +116,8 @@ export function fakeGitHub(env, initialFiles) {
   };
 }
 
-export function installFakeGitHub(t, env, initialFiles) {
-  const github = fakeGitHub(env, initialFiles);
+export function installFakeGitHub(t, env, initialFiles, options) {
+  const github = fakeGitHub(env, initialFiles, options);
   t.mock.method(globalThis, "fetch", github.handler);
   t.after(() => assert.deepEqual(github.repo.unexpected, [], "no request may leave the fake GitHub"));
   return github;
