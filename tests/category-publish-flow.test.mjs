@@ -8,7 +8,7 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import vm from "node:vm";
 import { execSync } from "node:child_process";
-import { SITE, adminJsonPost, createAdminEnv, installFakeGitHub } from "./helpers/fake-github.mjs";
+import { SITE, adminJsonPost, createAdminEnv, installFakeGitHub, liveTaxonomyVersion } from "./helpers/fake-github.mjs";
 
 globalThis.caches = { default: { async match() { return null; }, async put() {} } };
 
@@ -77,6 +77,7 @@ async function publishTaxonomy(categories) {
   const response = await worker.fetch(adminJsonPost(env, "/admin/api/update-taxonomy", {
     categories,
     taxonomySource: adminTaxonomyFile(categories),
+    baseVersion: liveTaxonomyVersion(),
     message: "Update category taxonomy from admin test"
   }), env, ctx);
   assert.equal(response.status, 200, await response.clone().text());
@@ -155,22 +156,77 @@ test("a new main category created in the admin shows the products linked to it",
   assert.deepEqual(await catalogIds("category=icons-frames"), [], "the product must not leak into the legacy icons category");
 });
 
-test("publishing categories from a stale admin tab cannot silently undo a newer publish", { todo: "update-taxonomy overwrites the whole file without a base-version check" }, async (t) => {
+test("publishing categories from a stale admin tab cannot silently undo a newer publish", async (t) => {
   const github = await setup(t);
+  const loadedVersion = liveTaxonomyVersion(); // both tabs opened the admin now
   const tabA = clone(baseTaxonomy);
   const tabB = clone(baseTaxonomy);
   tabA[0].subcategories.push({ id: "pectoral-crosses", name: "صلبان صدر", visible: true, homeVisible: true });
-  await publishTaxonomy(tabA);
+  const first = await worker.fetch(adminJsonPost(env, "/admin/api/update-taxonomy", { categories: tabA, taxonomySource: adminTaxonomyFile(tabA), baseVersion: loadedVersion }), env, ctx);
+  assert.equal(first.status, 200);
   tabB[1].subcategories[0].name = "هدايا";
-  const response = await worker.fetch(adminJsonPost(env, "/admin/api/update-taxonomy", { categories: tabB, taxonomySource: adminTaxonomyFile(tabB) }), env, ctx);
+  const stale = await worker.fetch(adminJsonPost(env, "/admin/api/update-taxonomy", { categories: tabB, taxonomySource: adminTaxonomyFile(tabB), baseVersion: loadedVersion }), env, ctx);
+  const result = await stale.json();
+  assert.equal(stale.status, 409);
+  assert.equal(result.code, "taxonomy_changed");
+  assert.match(result.error, /حدّث صفحة الإدارة/);
   const published = evaluateTaxonomy(github.text("category-taxonomy.js"));
-  const keptNewSub = published.categories[0].subcategories.some((item) => item.id === "pectoral-crosses");
-  assert.ok(response.status === 409 || keptNewSub, "the newer subcategory must survive or the stale publish must be rejected");
+  assert.ok(published.categories[0].subcategories.some((item) => item.id === "pectoral-crosses"), "the newer publish survives");
+  assert.equal(published.categories[1].subcategories[0].name, "هدايا الخدمة", "the stale change was not applied");
 });
 
-test("an old local admin draft cannot replace newer published categories on load", { todo: "loadCategoryTaxonomy prefers any valid localStorage draft over the live taxonomy" }, () => {
-  const loader = extractFunction(adminSource, "loadCategoryTaxonomy");
-  assert.match(loader, /savedAt|baseVersion|CURRENT_TAXONOMY_VERSION/, "draft restore must compare against the live taxonomy version");
+test("an admin page opened before a deploy (no baseVersion) cannot overwrite published categories", async (t) => {
+  const github = await setup(t);
+  const before = github.text("category-taxonomy.js");
+  const oldPage = await worker.fetch(adminJsonPost(env, "/admin/api/update-taxonomy", { categories: baseTaxonomy, taxonomySource: adminTaxonomyFile(baseTaxonomy) }), env, ctx);
+  assert.equal(oldPage.status, 409);
+  assert.equal(github.text("category-taxonomy.js"), before);
+});
+
+test("a publish from the current page succeeds and the next publish uses the new version", async (t) => {
+  await setup(t);
+  const first = clone(baseTaxonomy);
+  first[0].name = "الصلبان المقدسة";
+  await publishTaxonomy(first);
+  const second = clone(first);
+  second[0].name = "الصلبان";
+  await publishTaxonomy(second);
+  assert.deepEqual(await catalogIds("category=crosses"), ["cross-1", "cross-2"]);
+});
+
+function adminTaxonomyLoader({ liveVersion, draft }) {
+  const store = new Map(draft ? [["pope-kyrillos-admin-taxonomy-draft", JSON.stringify(draft)]] : []);
+  const toasts = [];
+  const context = {
+    state: {}, toasts, JSON, String, Array, console,
+    localStorage: { getItem: (key) => store.get(key) ?? null, setItem: (key, value) => store.set(key, value), removeItem: (key) => store.delete(key) },
+    window: { POPE_KYRILLOS_TAXONOMY: { categories: clone(baseTaxonomy), CURRENT_TAXONOMY_VERSION: liveVersion }, POPE_KYRILLOS_CATEGORY_MIGRATION: { categories: (list) => list } },
+    TAXONOMY_DRAFT_KEY: "pope-kyrillos-admin-taxonomy-draft",
+    deepClone: clone, validateTaxonomy: () => ({ ok: true }), renderTaxonomyManager() {}, refreshTaxonomyDependentUi() {},
+    showToast: (message) => toasts.push(message)
+  };
+  vm.createContext(context);
+  vm.runInContext(`async ${extractFunction(adminSource, "loadCategoryTaxonomy")}`, context); // extractor starts at "function"
+  return { context, store };
+}
+
+test("an old local admin draft cannot replace newer published categories on load", async () => {
+  const oldDraftCategories = clone(baseTaxonomy);
+  oldDraftCategories[0].name = "اسم قديم من مسودة";
+  const { context, store } = adminTaxonomyLoader({ liveVersion: 2000, draft: { baseVersion: "1000", categories: oldDraftCategories } });
+  await context.loadCategoryTaxonomy();
+  assert.equal(context.state.taxonomy[0].name, "الصلبان", "the live categories are shown");
+  assert.equal(context.state.taxonomyBaseVersion, "2000");
+  assert.equal(store.has("pope-kyrillos-admin-taxonomy-draft"), false, "the stale draft is discarded");
+  assert.match(context.toasts.join(" "), /مسودة أقسام قديمة/);
+});
+
+test("a draft made on the current live version is restored", async () => {
+  const draftCategories = clone(baseTaxonomy);
+  draftCategories[0].name = "تعديل غير منشور";
+  const { context } = adminTaxonomyLoader({ liveVersion: 2000, draft: { baseVersion: "2000", categories: draftCategories } });
+  await context.loadCategoryTaxonomy();
+  assert.equal(context.state.taxonomy[0].name, "تعديل غير منشور");
 });
 
 test("live catalog copy: every product is served under the main category its taxonomy name points to", async (t) => {
@@ -185,7 +241,7 @@ test("live catalog copy: every product is served under the main category its tax
   }
   installFakeGitHub(t, env, { "products.json": JSON.stringify(products), "category-taxonomy.js": source });
   // Re-publish the unchanged live file so the Worker drops any taxonomy cached by an earlier test.
-  const republish = await worker.fetch(adminJsonPost(env, "/admin/api/update-taxonomy", { categories: evaluateTaxonomy(source).categories, taxonomySource: source }), env, ctx);
+  const republish = await worker.fetch(adminJsonPost(env, "/admin/api/update-taxonomy", { categories: evaluateTaxonomy(source).categories, taxonomySource: source, baseVersion: liveTaxonomyVersion() }), env, ctx);
   assert.equal(republish.status, 200);
   const nameToId = new Map(evaluateTaxonomy(source).categories.map((category) => [category.name, category.id]));
   const served = new Map();

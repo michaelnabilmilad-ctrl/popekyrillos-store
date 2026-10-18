@@ -34,6 +34,26 @@ function utf8ToBase64(value) {
   return btoa(binary);
 }
 
+function base64ToUtf8(value) {
+  const binary = atob(String(value || "").replace(/\s+/g, ""));
+  return new TextDecoder().decode(Uint8Array.from(binary, (character) => character.charCodeAt(0)));
+}
+
+function taxonomyVersion(source = "") {
+  return /CURRENT_TAXONOMY_VERSION\s*=\s*(\d+)/.exec(String(source))?.[1] || "";
+}
+
+// Version of the taxonomy currently on the data branch ("" when it has none).
+async function currentTaxonomyVersion(config) {
+  try {
+    const file = await githubFetch(config, `/contents/category-taxonomy.js?ref=${encodeURIComponent(config.branch)}`);
+    return taxonomyVersion(base64ToUtf8(file.content));
+  } catch (error) {
+    if (error.statusCode === 404) return "";
+    throw error;
+  }
+}
+
 async function githubFetch(config, path, options = {}) {
   const response = await fetch(`https://api.github.com/repos/${config.owner}/${config.repo}${path}`, {
     ...options,
@@ -194,6 +214,17 @@ export async function onRequest(context) {
     validateTaxonomySource(body.taxonomySource);
 
     const config = githubConfig(env);
+    // Reject a publish from a page that loaded an older taxonomy (another tab,
+    // another device, or an admin page left open across a deploy), so it can
+    // never silently overwrite newer categories.
+    const liveVersion = await currentTaxonomyVersion(config);
+    if (liveVersion && String(body.baseVersion ?? "") !== liveVersion) {
+      return jsonResponse(409, {
+        error: "تم نشر أقسام أحدث بعد فتح هذه الصفحة. حدّث صفحة الإدارة وراجع التعديلات قبل النشر.",
+        code: "taxonomy_changed",
+        liveVersion
+      });
+    }
     const encodedContent = utf8ToBase64(`${body.taxonomySource.trim()}\n`);
     const message = String(body.message || `Update category taxonomy from admin ${new Date().toISOString()}`).slice(0, 180);
 

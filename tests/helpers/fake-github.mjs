@@ -122,8 +122,18 @@ export function fakeGitHub(env, initialFiles, { fail } = {}) {
   };
 }
 
+let latestFake = null;
+
+// CURRENT_TAXONOMY_VERSION of the taxonomy now on the fake data branch, i.e. the
+// baseVersion an admin page that just loaded it would send when publishing.
+export function liveTaxonomyVersion() {
+  const content = latestFake?.file("category-taxonomy.js");
+  return content ? (/CURRENT_TAXONOMY_VERSION\s*=\s*(\d+)/.exec(fromBase64(content))?.[1] || "") : "";
+}
+
 export function installFakeGitHub(t, env, initialFiles, options) {
   const github = fakeGitHub(env, initialFiles, options);
+  latestFake = github;
   t.mock.method(globalThis, "fetch", github.handler);
   t.after(() => assert.deepEqual(github.repo.unexpected, [], "no request may leave the fake GitHub"));
   return github;

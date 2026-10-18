@@ -174,10 +174,21 @@
       }
       const siteCategories = deepClone(loaded.categories);
       state.originalTaxonomy = deepClone(siteCategories);
+      // The live version this page is editing; publish sends it so the server can
+      // refuse to overwrite newer categories.
+      state.taxonomyBaseVersion = String(loaded.CURRENT_TAXONOMY_VERSION || "");
       let editableCategories = siteCategories;
       try {
         const draft = JSON.parse(localStorage.getItem(TAXONOMY_DRAFT_KEY) || "null");
-        if (Array.isArray(draft?.categories) && validateTaxonomy(draft.categories).ok) editableCategories = window.POPE_KYRILLOS_CATEGORY_MIGRATION.categories(draft.categories);
+        // A draft is only restored onto the same live version it was made from;
+        // an older draft would bring back categories that were changed since.
+        const draftMatchesLive = String(draft?.baseVersion || "") === state.taxonomyBaseVersion;
+        if (Array.isArray(draft?.categories) && draftMatchesLive && validateTaxonomy(draft.categories).ok) {
+          editableCategories = window.POPE_KYRILLOS_CATEGORY_MIGRATION.categories(draft.categories);
+        } else if (draft) {
+          localStorage.removeItem(TAXONOMY_DRAFT_KEY);
+          if (Array.isArray(draft?.categories)) showToast("تم تجاهل مسودة أقسام قديمة لأن الأقسام اتنشرت بعدها. الأقسام المعروضة هي الموجودة على الموقع.");
+        }
       } catch (error) {
         console.error("Failed to restore taxonomy draft:", error);
       }
@@ -684,13 +695,15 @@
         elements.publishTaxonomyButton.textContent = "جاري نشر الأقسام...";
       }
 
+      const nextTaxonomyVersion = String(Math.max(Date.now(), Number(state.taxonomyBaseVersion || 0) + 1));
       const response = await fetch("/admin/api/update-taxonomy", {
         method: "POST",
         credentials: "same-origin",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           categories: categoriesList,
-          taxonomySource: buildTaxonomyFile(),
+          taxonomySource: buildTaxonomyFile(nextTaxonomyVersion),
+          baseVersion: state.taxonomyBaseVersion,
           message: `Update category taxonomy from admin ${new Date().toISOString()}`
         })
       });
@@ -700,6 +713,7 @@
         throw new Error(result.error || result.message || `HTTP ${response.status}`);
       }
 
+      state.taxonomyBaseVersion = nextTaxonomyVersion;
       const previousTaxonomy = state.originalTaxonomy;
       state.originalTaxonomy = deepClone(categoriesList);
       localStorage.removeItem(TAXONOMY_DRAFT_KEY);
@@ -1781,7 +1795,7 @@
       return;
     }
     try {
-      localStorage.setItem(TAXONOMY_DRAFT_KEY, JSON.stringify({ savedAt: new Date().toISOString(), categories: state.taxonomy }));
+      localStorage.setItem(TAXONOMY_DRAFT_KEY, JSON.stringify({ savedAt: new Date().toISOString(), baseVersion: state.taxonomyBaseVersion, categories: state.taxonomy }));
       showToast("تم حفظ مسودة الأقسام بأمان على هذا الجهاز.");
     } catch (error) {
       console.error("Failed to save taxonomy draft:", error);
@@ -2704,8 +2718,7 @@ function updateProductField(product, element) {
     URL.revokeObjectURL(url);
   }
 
-  function buildTaxonomyFile() {
-    const taxonomyVersion = Date.now();
+  function buildTaxonomyFile(taxonomyVersion = Date.now()) {
     const categoriesSource = JSON.stringify(taxonomyCategoriesForAdmin(), null, 4)
       .replace(/^/gm, "  ");
     return `(function () {

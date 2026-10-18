@@ -6,7 +6,7 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import vm from "node:vm";
 import { execSync } from "node:child_process";
-import { SITE, adminJsonPost, createAdminEnv, installFakeGitHub } from "./helpers/fake-github.mjs";
+import { SITE, adminJsonPost, createAdminEnv, installFakeGitHub, liveTaxonomyVersion } from "./helpers/fake-github.mjs";
 import { extractFunction, scriptSource } from "./helpers/storefront-sandbox.mjs";
 
 globalThis.caches = { default: { async match() { return null; }, async put() {} } };
@@ -52,7 +52,7 @@ async function uploadTaxonomyImage(subcategoryId) {
 }
 
 async function publishTaxonomy(categories) {
-  const response = await worker.fetch(adminJsonPost(env, "/admin/api/update-taxonomy", { categories, taxonomySource: adminTaxonomyFile(categories) }), env, ctx);
+  const response = await worker.fetch(adminJsonPost(env, "/admin/api/update-taxonomy", { categories, taxonomySource: adminTaxonomyFile(categories), baseVersion: liveTaxonomyVersion() }), env, ctx);
   return { response, result: await response.json() };
 }
 
