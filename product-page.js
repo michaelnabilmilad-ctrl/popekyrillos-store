@@ -3,7 +3,16 @@ const product = window.enrichYotaColorProduct ? window.enrichYotaColorProduct(ra
 const root = document.querySelector("#product-detail");
 const relatedRoot = document.querySelector("[data-related-products]");
 const cartCount = document.querySelector("[data-cart-count]");
-const cartKey = "pope-kyrillos-cart:guest";
+const guestCartKey = "pope-kyrillos-cart:guest";
+// Same key the storefront (script.js) uses: the signed-in customer's cart when a
+// session is cached in this browser, otherwise the guest cart.
+function activeCartKey() {
+  try {
+    const user = JSON.parse(localStorage.getItem("pope-kyrillos-auth:user") || "null");
+    if (user?.uid) return `pope-kyrillos-cart:user:${user.uid}`;
+  } catch {}
+  return guestCartKey;
+}
 const legacyColoringStorageKey = `pope-kyrillos-coloring:${product.id || "product"}`;
 let coloringStorageKey = `yota-coloring-design-${product.coloringModelId || "unconfigured"}:${product.coloringModelVersion || "unversioned"}:${product.id || "product"}`;
 let coloringStorageVersion = String(product.coloringModelVersion || "unversioned");
@@ -1553,7 +1562,16 @@ function chooseVariant() {
 }
 
 function readCart() {
-  try { const data=JSON.parse(localStorage.getItem(cartKey)||"{}"); return Array.isArray(data.items)?data.items:[]; } catch { return []; }
+  try { const data=JSON.parse(localStorage.getItem(activeCartKey())||"{}"); return Array.isArray(data.items)?data.items:[]; } catch { return []; }
+}
+function saveCartItems(items) {
+  const key = activeCartKey();
+  let storedAt = 0;
+  try { storedAt = Date.parse(JSON.parse(localStorage.getItem(key) || "{}").updatedAt || "") || 0; } catch {}
+  const updatedAt = new Date(Math.max(Date.now(), storedAt + 1)).toISOString();
+  localStorage.setItem(key, JSON.stringify({ items, updatedAt }));
+  localStorage.setItem("pope-kyrillos-cart:active", key);
+  localStorage.setItem("pope-kyrillos-cart:sync", JSON.stringify({ key, updatedAt }));
 }
 function updateCount() { cartCount.textContent=readCart().reduce((sum,item)=>sum+(Number(item.qty)||0),0); }
 function selectionKey(variantId, coloringDesign) {
@@ -1595,7 +1613,7 @@ function addToCart() {
   } else {
     items.push({productId:product.id,variantId,lineId,qty,image:currentMedalPreviewImage||assetUrl(activeImage),price:Number(selected?.price??product.price)||0,options:{...(selected?.options||{})},...(coloringDesign ? { coloringDesign } : {}),...(medalDetails || {})});
   }
-  localStorage.setItem(cartKey,JSON.stringify({items,updatedAt:new Date().toISOString()})); localStorage.setItem("pope-kyrillos-cart:active",cartKey); updateCount(); root.querySelector("[data-message]").textContent="تمت إضافة المنتج إلى السلة";
+  saveCartItems(items); updateCount(); root.querySelector("[data-message]").textContent="تمت إضافة المنتج إلى السلة";
 }
 async function loadRelated() {
   try { const category=product.mainCategory||product.category||"all"; const response=await fetch(`/api/catalog?category=${encodeURIComponent(category)}&limit=5`); const data=await response.json(); const items=(data.items||[]).filter((item)=>item.id!==product.id).slice(0,4); relatedRoot.innerHTML=items.map((item)=>`<article class="product-card"><a href="/products/${encodeURIComponent(item.slug)}"><img src="${escapeHtml(item.thumbnail)}" alt="${escapeHtml(text(item.name))}" width="320" height="320" loading="lazy" decoding="async"></a><div class="product-info"><h3><a href="/products/${encodeURIComponent(item.slug)}">${escapeHtml(text(item.name))}</a></h3><span class="price">${money(item.price)}</span></div></article>`).join(""); } catch { document.querySelector(".product-route-related")?.remove(); }

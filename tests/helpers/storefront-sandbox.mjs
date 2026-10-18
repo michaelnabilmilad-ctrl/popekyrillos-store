@@ -126,15 +126,19 @@ export function storefrontTab({ storage = new FakeStorage(), firestore = fakeFir
   return tab;
 }
 
-// What product-page.js does when "add to cart" is pressed on a product page.
+const productPageSource = fs.readFileSync(new URL("../../product-page.js", import.meta.url), "utf8");
+
+// What product-page.js does when "add to cart" is pressed, using its own
+// readCart/activeCartKey/saveCartItems functions against the given storage.
 export function productPageAdd(storage, item) {
-  const cartKey = "pope-kyrillos-cart:guest";
-  const data = JSON.parse(storage.getItem(cartKey) || "{}");
-  const items = Array.isArray(data.items) ? data.items : [];
+  const context = { JSON, Date, Math, Number, Array, localStorage: storage, guestCartKey: "pope-kyrillos-cart:guest" };
+  vm.createContext(context);
+  vm.runInContext(["activeCartKey", "readCart", "saveCartItems"].map((name) => extractFunction(productPageSource, name)).join("\n\n"), context);
+  const items = context.readCart();
   const existing = items.find((line) => line.productId === item.productId && line.variantId === item.variantId);
   if (existing) existing.qty += item.qty; else items.push(item);
-  storage.setItem(cartKey, JSON.stringify({ items, updatedAt: new Date(Date.now() + 5000).toISOString() }));
-  storage.setItem("pope-kyrillos-cart:active", cartKey);
+  context.saveCartItems(items);
+  return context.activeCartKey();
 }
 
 export { scriptSource };

@@ -97,13 +97,23 @@ test("signing out keeps the items in this browser", () => {
   assert.deepEqual(tab.cart, { [KEY("cross-1")]: 1 });
 });
 
-test("adding from a product page while signed in does not hide the account cart", { todo: "product-page.js always writes the guest key and marks it active" }, () => {
+test("adding from a product page while signed in does not hide the account cart", () => {
   const storage = new FakeStorage();
   const user = { uid: "user-a" };
+  storage.setItem("pope-kyrillos-auth:user", JSON.stringify(user)); // saved by script.js on sign-in
   storefrontTab({ storage, catalog: fullCatalog, user }).load().add("cross-1").add("censer-1");
-  productPageAdd(storage, { productId: "book-1", variantId: "default", qty: 1 });
+  assert.equal(productPageAdd(storage, { productId: "book-1", variantId: "default", qty: 1 }), "pope-kyrillos-cart:user:user-a");
   const nextPage = storefrontTab({ storage, catalog: fullCatalog, user }).load();
   assert.deepEqual(nextPage.cart, { [KEY("cross-1")]: 1, [KEY("censer-1")]: 1, [KEY("book-1")]: 1 });
+  assert.equal(storage.getItem("pope-kyrillos-cart:guest"), null, "nothing leaks into the guest cart");
+});
+
+test("a guest adding from a product page sees the item in the storefront cart", () => {
+  const storage = new FakeStorage();
+  storefrontTab({ storage, catalog: fullCatalog }).load().add("cross-1");
+  assert.equal(productPageAdd(storage, { productId: "book-1", variantId: "default", qty: 2 }), "pope-kyrillos-cart:guest");
+  const nextPage = storefrontTab({ storage, catalog: fullCatalog }).load();
+  assert.deepEqual(nextPage.cart, { [KEY("cross-1")]: 1, [KEY("book-1")]: 2 });
 });
 
 test("no payment or personal data is written to the cart storage", () => {
