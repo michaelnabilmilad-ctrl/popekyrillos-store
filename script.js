@@ -3146,11 +3146,6 @@ function clearCachedAuthUser() {
   }
 }
 
-function moveCurrentCartToGuest() {
-  const guestCart = readCartRecord(guestCartStorageKey).cart;
-  saveCartToLocal(guestCartStorageKey, mergeCartMaps(guestCart, state.cart));
-}
-
 function currentUserCartStorageKey(user = effectiveAuthUser()) {
   return user?.uid ? `${userCartStoragePrefix}${user.uid}` : guestCartStorageKey;
 }
@@ -4943,48 +4938,27 @@ async function loadRemoteCartRecord(user) {
   }
 }
 
+// Account cart on sign-in: start from the account (the server copy, or this
+// browser's copy of it when that has newer unsynced changes) and add every guest
+// line. Merging keeps the larger quantity, so repeating it never doubles items.
+// The guest cart is cleared only once the merged cart is safely on the server.
 async function applySignedInCart(user) {
   const userCartKey = currentUserCartStorageKey(user);
   const before = cartFingerprint(state.cart);
   const guestRecord = readCartRecord(guestCartStorageKey);
   const userLocalRecord = readCartRecord(userCartKey);
-  const currentFingerprint = cartFingerprint(state.cart);
-  const currentUpdatedAt = Math.max(
-    cartFingerprint(guestRecord.cart) === currentFingerprint ? guestRecord.updatedAt : 0,
-    cartFingerprint(userLocalRecord.cart) === currentFingerprint ? userLocalRecord.updatedAt : 0
-  );
-  const currentRecord = { key: userCartKey, cart: state.cart, updatedAt: currentUpdatedAt, exists: true };
-  const localRecord = [guestRecord, userLocalRecord, currentRecord]
-    .filter(Boolean)
-    .filter((record) => record.exists || record.updatedAt > 0)
-    .sort((a, b) => b.updatedAt - a.updatedAt)[0] || { key: userCartKey, cart: new Map(), updatedAt: 0, exists: false };
-  const localCart = localRecord.cart;
   const remoteResult = await loadRemoteCartRecord(user);
-  const remoteCart = remoteResult.cart;
-  const hasRemoteCart = cartHasItems(remoteCart);
-  const hasGuestCart = cartHasItems(guestRecord.cart);
-  const hasLocalCart = cartHasItems(localCart);
-  const localIsNewer = localRecord.updatedAt > (remoteResult.updatedAt || 0);
+  const accountCart = remoteResult.ok && !(userLocalRecord.updatedAt > (remoteResult.updatedAt || 0))
+    ? remoteResult.cart
+    : userLocalRecord.cart;
 
-  if (remoteResult.ok && hasRemoteCart) {
-    state.cart = localIsNewer ? localCart : remoteCart;
-  } else {
-    state.cart = localCart;
-  }
-
+  state.cart = mergeCartMaps(accountCart, guestRecord.cart);
   saveCartToLocal(userCartKey, state.cart);
   if (cartFingerprint(state.cart) !== before) renderCart();
   if (!remoteResult.ok) return;
-  if (localIsNewer || (!hasRemoteCart && hasLocalCart)) {
-    const saved = await saveRemoteCart();
-    if (saved) {
-      try {
-        localStorage.removeItem(guestCartStorageKey);
-      } catch {
-        // Local storage cleanup is best-effort.
-      }
-    }
-  } else if (hasRemoteCart && hasGuestCart && !localIsNewer) {
+
+  const saved = cartFingerprint(state.cart) === cartFingerprint(remoteResult.cart) || await saveRemoteCart();
+  if (saved && guestRecord.exists) {
     try {
       localStorage.removeItem(guestCartStorageKey);
     } catch {
@@ -5036,7 +5010,9 @@ async function initCustomerAuth() {
       if (user) {
         saveCachedAuthUser(user);
       } else {
-        moveCurrentCartToGuest();
+        // Never copy an account cart into the guest cart: the next person on this
+        // device would inherit it. The account cart stays under its own key and
+        // on the server, and comes back on the next sign-in.
         clearCachedAuthUser();
       }
       renderAuthState();
@@ -5211,7 +5187,6 @@ async function resetEmailPassword() {
 async function signOutCustomer() {
   const services = state.auth.services;
   await saveCartNow({ immediateRemote: true });
-  moveCurrentCartToGuest();
   clearCachedAuthUser();
   state.auth.user = null;
   if (services?.auth) await services.signOut(services.auth);

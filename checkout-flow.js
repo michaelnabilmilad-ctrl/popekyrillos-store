@@ -502,44 +502,28 @@ async function restoreSignedInCheckoutCart() {
   } catch {
     services = null;
   }
+  // Same rule as the storefront (script.js applySignedInCart): account cart plus
+  // every guest line, larger quantity wins, guest cleared only after a server save.
   const userCartKey = `${userCartStoragePrefix}${user.uid}`;
   const guestRecord = readCartRecord(guestCartStorageKey);
   const userLocalRecord = readCartRecord(userCartKey);
-  const currentFingerprint = cartFingerprint(cart);
-  const currentUpdatedAt = Math.max(
-    cartFingerprint(guestRecord.cart) === currentFingerprint ? guestRecord.updatedAt : 0,
-    cartFingerprint(userLocalRecord.cart) === currentFingerprint ? userLocalRecord.updatedAt : 0
-  );
-  const currentRecord = { key: userCartKey, cart, updatedAt: currentUpdatedAt, exists: true };
-  const localRecord = [guestRecord, userLocalRecord, currentRecord]
-    .filter(Boolean)
-    .filter((record) => record.exists || record.updatedAt > 0)
-    .sort((a, b) => b.updatedAt - a.updatedAt)[0] || { key: userCartKey, cart: new Map(), updatedAt: 0, exists: false };
-  const localCart = localRecord.cart;
   const remoteResult =
     services && realUser?.getIdToken ? await loadRemoteCartRecordForCheckout(services, realUser) : { ok: false, cart: new Map() };
-  const remoteCart = remoteResult.cart;
-  const hasRemoteCart = cartHasItems(remoteCart);
-  const hasGuestCart = cartHasItems(guestRecord.cart);
-  const hasLocalCart = cartHasItems(localCart);
-  const localIsNewer = localRecord.updatedAt > (remoteResult.updatedAt || 0);
-  let signedInCart = remoteResult.ok && hasRemoteCart ? (localIsNewer ? localCart : remoteCart) : localCart;
+  const accountCart = remoteResult.ok && !(userLocalRecord.updatedAt > (remoteResult.updatedAt || 0))
+    ? remoteResult.cart
+    : userLocalRecord.cart;
+  const signedInCart = mergeCartMaps(accountCart, guestRecord.cart);
 
   saveCartRecord(userCartKey, signedInCart);
-  if (remoteResult.ok && services && realUser?.getIdToken && (localIsNewer || (!hasRemoteCart && hasLocalCart))) {
-    const saved = await saveRemoteCartForCheckout(services, realUser, signedInCart);
-    if (saved) {
+  if (remoteResult.ok) {
+    const saved = cartFingerprint(signedInCart) === cartFingerprint(remoteResult.cart)
+      || await saveRemoteCartForCheckout(services, realUser, signedInCart);
+    if (saved && guestRecord.exists) {
       try {
         localStorage.removeItem(guestCartStorageKey);
       } catch {
         // Local storage cleanup is best-effort.
       }
-    }
-  } else if (remoteResult.ok && hasRemoteCart && hasGuestCart && !localIsNewer) {
-    try {
-      localStorage.removeItem(guestCartStorageKey);
-    } catch {
-      // Local storage cleanup is best-effort.
     }
   }
   return cartFingerprint(signedInCart) !== before;

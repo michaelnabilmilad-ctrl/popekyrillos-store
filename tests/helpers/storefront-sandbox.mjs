@@ -27,8 +27,9 @@ const CART_FUNCTIONS = [
   "cartKey", "parseCartKey", "cartPayloadFromMap", "cartMapFromPayload", "readCartRecord", "mergeCartMaps",
   "cartHasItems", "cartFingerprint", "timestampMillis", "clampCartMap", "nextCartTimestamp", "saveCartToLocal",
   "setActiveCartStorageKey", "currentUserCartStorageKey", "currentCartStorageKey", "isAllowedCartStorageKey",
-  "effectiveAuthUser", "localCartCandidateKeys", "preferredLocalCartRecord", "loadGuestCart", "moveCurrentCartToGuest",
-  "applySignedInCart", "getProduct", "isVariantAvailable", "variantQuantity", "isProductUnavailable"
+  "effectiveAuthUser", "localCartCandidateKeys", "preferredLocalCartRecord", "loadGuestCart",
+  "applySignedInCart", "getProduct", "isVariantAvailable", "variantQuantity", "isProductUnavailable",
+  "signOutCustomer", "saveCartNow", "clearCachedAuthUser"
 ];
 
 export class FakeStorage {
@@ -72,17 +73,25 @@ export function storefrontTab({ storage = new FakeStorage(), firestore = fakeFir
     state: { cart: new Map(), auth: { user, ready: true, cachedUser: null, services: null } },
     updateCartCount() {},
     renderCart() {},
+    renderAuthState() {},
+    closeAccountModal() {},
+    showToast() {},
+    t: (key) => key,
+    warnCartAccountSaveFailed() {},
+    queueRemoteCartSave() { return context.saveRemoteCart(); },
+    cachedAuthStorageKey: "pope-kyrillos-auth:user",
     findVariant(product, variantId) {
       const variants = Array.isArray(product?.variants) && product.variants.length ? product.variants : [{ id: "default", available: true }];
       return variants.find((variant) => variant.id === variantId) || variants[0];
     },
     async loadRemoteCartRecord(signedInUser) {
+      if (firestore.offline) return { ok: false, cart: new Map(), updatedAt: 0 };
       const doc = firestore.read(signedInUser.uid);
       return { ok: true, cart: context.cartMapFromPayload(doc?.items || []), updatedAt: doc?.updatedAt || 0 };
     },
     async saveRemoteCart() {
       const signedInUser = context.state.auth.user;
-      if (!signedInUser) return false;
+      if (!signedInUser || firestore.offline) return false;
       firestore.write(signedInUser.uid, context.cartPayloadFromMap());
       return true;
     }
@@ -116,10 +125,14 @@ export function storefrontTab({ storage = new FakeStorage(), firestore = fakeFir
       await context.applySignedInCart(signedInUser);
       return tab;
     },
-    signOut() {
-      context.moveCurrentCartToGuest();
-      context.state.auth.user = null;
-      context.loadGuestCart();
+    // Runs the shipped signOutCustomer() (Firebase signOut is not configured here).
+    async signOut() {
+      await context.signOutCustomer();
+      return tab;
+    },
+    remove(productId, variantId = "default") {
+      context.state.cart.delete(context.cartKey(productId, variantId));
+      context.saveCartToLocal(context.currentCartStorageKey(), context.state.cart);
       return tab;
     }
   };

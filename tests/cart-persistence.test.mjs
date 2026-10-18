@@ -75,7 +75,9 @@ test("the account cart opens on another device", async () => {
   assert.deepEqual(phone.cart, { [KEY("censer-1")]: 1 });
 });
 
-test("signing in merges guest items with an existing account cart", { todo: "applySignedInCart keeps only the newest cart instead of merging" }, async () => {
+const remoteItems = (firestore, uid) => Object.fromEntries((firestore.read(uid)?.items || []).map((item) => [KEY(item.productId), item.qty]));
+
+test("signing in merges guest items with an existing account cart and saves the result", async () => {
   const firestore = fakeFirestore();
   const otherDevice = storefrontTab({ storage: new FakeStorage(), firestore, catalog: fullCatalog }).load();
   await otherDevice.signIn({ uid: "user-a" });
@@ -88,13 +90,80 @@ test("signing in merges guest items with an existing account cart", { todo: "app
   firestore.write("user-a", firestore.read("user-a").items);
   await guest.signIn({ uid: "user-a" });
   assert.deepEqual(guest.cart, { [KEY("censer-1")]: 1, [KEY("book-1")]: 1 });
+  assert.deepEqual(remoteItems(firestore, "user-a"), { [KEY("censer-1")]: 1, [KEY("book-1")]: 1 });
+  assert.equal(storage.getItem("pope-kyrillos-cart:guest"), null, "guest lines now live in the account");
 });
 
-test("signing out keeps the items in this browser", () => {
+test("signing in twice with the same guest lines never doubles quantities", async () => {
+  const firestore = fakeFirestore();
+  firestore.write("user-a", [{ productId: "cross-1", variantId: "default", qty: 2 }]);
   const storage = new FakeStorage();
-  const tab = storefrontTab({ storage, catalog: fullCatalog, user: { uid: "user-a" } }).load().add("cross-1");
-  tab.signOut();
-  assert.deepEqual(tab.cart, { [KEY("cross-1")]: 1 });
+  const tab = storefrontTab({ storage, firestore, catalog: fullCatalog }).load().add("cross-1", 2);
+  await tab.signIn({ uid: "user-a" });
+  await tab.signOut();
+  storefrontTab({ storage, catalog: fullCatalog }).load().add("cross-1", 2);
+  const again = await storefrontTab({ storage, firestore, catalog: fullCatalog }).load().signIn({ uid: "user-a" });
+  assert.deepEqual(again.cart, { [KEY("cross-1")]: 2 });
+});
+
+test("if the account cannot be reached, guest lines are kept and merged on the next sign-in", async () => {
+  const firestore = fakeFirestore();
+  firestore.write("user-a", [{ productId: "censer-1", variantId: "default", qty: 1 }]);
+  const storage = new FakeStorage();
+  const tab = storefrontTab({ storage, firestore, catalog: fullCatalog }).load().add("book-1");
+  firestore.offline = true;
+  await tab.signIn({ uid: "user-a" });
+  assert.ok(KEY("book-1") in tab.cart);
+  assert.notEqual(storage.getItem("pope-kyrillos-cart:guest"), null, "guest cart kept until the account is saved");
+  firestore.offline = false;
+  const later = await storefrontTab({ storage, firestore, catalog: fullCatalog }).load().signIn({ uid: "user-a" });
+  assert.deepEqual(later.cart, { [KEY("censer-1")]: 1, [KEY("book-1")]: 1 });
+});
+
+test("a line removed on another device stays removed when signing in here", async () => {
+  const firestore = fakeFirestore();
+  const storage = new FakeStorage();
+  const here = await storefrontTab({ storage, firestore, catalog: fullCatalog }).load().signIn({ uid: "user-a" });
+  here.add("cross-1").add("censer-1");
+  await here.context.saveRemoteCart();
+  firestore.tick(60_000);
+  const phone = await storefrontTab({ storage: new FakeStorage(), firestore, catalog: fullCatalog }).load().signIn({ uid: "user-a" });
+  phone.remove("censer-1");
+  firestore.tick(60_000);
+  await phone.context.saveRemoteCart();
+  const back = await storefrontTab({ storage, firestore, catalog: fullCatalog }).load().signIn({ uid: "user-a" });
+  assert.deepEqual(back.cart, { [KEY("cross-1")]: 1 });
+});
+
+test("signing out hides the account cart and signing back in restores it", async () => {
+  const firestore = fakeFirestore();
+  const storage = new FakeStorage();
+  const tab = await storefrontTab({ storage, firestore, catalog: fullCatalog }).load().signIn({ uid: "user-a" });
+  tab.add("cross-1");
+  await tab.signOut();
+  assert.deepEqual(tab.cart, {}, "the guest view must not show the account's lines");
+  const back = await storefrontTab({ storage, firestore, catalog: fullCatalog }).load().signIn({ uid: "user-a" });
+  assert.deepEqual(back.cart, { [KEY("cross-1")]: 1 });
+});
+
+test("two accounts on the same device never see or absorb each other's cart", async () => {
+  const firestore = fakeFirestore();
+  const storage = new FakeStorage();
+  const first = await storefrontTab({ storage, firestore, catalog: fullCatalog }).load().signIn({ uid: "user-a" });
+  first.add("cross-1", 3);
+  await first.signOut();
+  const second = await storefrontTab({ storage, firestore, catalog: fullCatalog }).load().signIn({ uid: "user-b" });
+  assert.deepEqual(second.cart, {});
+  second.add("book-1");
+  await second.context.saveRemoteCart();
+  assert.deepEqual(remoteItems(firestore, "user-a"), { [KEY("cross-1")]: 3 });
+  assert.deepEqual(remoteItems(firestore, "user-b"), { [KEY("book-1")]: 1 });
+});
+
+test("quantity updates and removals persist across reloads", () => {
+  const storage = new FakeStorage();
+  storefrontTab({ storage, catalog: fullCatalog }).load().add("cross-1").add("cross-1", 2).add("censer-1").remove("censer-1");
+  assert.deepEqual(storefrontTab({ storage, catalog: fullCatalog }).load().cart, { [KEY("cross-1")]: 3 });
 });
 
 test("adding from a product page while signed in does not hide the account cart", () => {
