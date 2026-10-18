@@ -5,6 +5,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import vm from "node:vm";
+import { execSync } from "node:child_process";
 import { SITE, adminJsonPost, createAdminEnv, installFakeGitHub } from "./helpers/fake-github.mjs";
 import { extractFunction, scriptSource } from "./helpers/storefront-sandbox.mjs";
 
@@ -25,7 +26,7 @@ function evaluateTaxonomy(source) {
 
 function storefrontImages() {
   const context = {
-    console, JSON, String, Number, Array, Object, Map, Set, RegExp,
+    console, JSON, String, Number, Array, Object, Map, Set, RegExp, URL, URLSearchParams,
     products: [], catalogSubcategoryImages: {}, productsAssetVersion: "v1",
     productMainCategoryId: (product) => product.mainCategoryId, productSubCategoryId: (product) => product.subcategory,
     getProductImages: (product) => product.images || [], hasAvailableVariant: () => true
@@ -74,14 +75,53 @@ test("a new subcategory image is uploaded, published, served and rendered on the
   assert.equal(image.headers.get("Content-Type"), "image/webp");
 });
 
-test("a main category image set in the admin appears on the storefront tile", { todo: "admin edits `subcategoryImage`; the storefront tile only reads customImage and falls back to built-in drawings" }, async (t) => {
+// The field the admin's «صورة القسم على الموقع» input writes for a main category.
+const adminMainImageField = /<input[^>]*data-taxonomy-main-field="([^"]+)"[^>]*placeholder="اتركه فارغًا لاستخدام الرسمة الافتراضية"/
+  .exec(fs.readFileSync("admin.html", "utf8"))?.[1];
+
+test("a main category image set in the admin appears on the storefront tile", async (t) => {
+  assert.equal(adminMainImageField, "customImage");
   const github = installFakeGitHub(t, env, seedFiles());
   const edited = baseTaxonomy();
-  edited[0].subcategoryImage = "assets/optimized/products/gallery/new-crosses-tile.webp";
+  edited[0][adminMainImageField] = "assets/optimized/products/gallery/new-crosses-tile.webp";
   await publishTaxonomy(edited);
   const live = evaluateTaxonomy(github.text("category-taxonomy.js"));
   const tile = storefrontImages().mainCategoryTileArt(live[0]);
   assert.match(tile, /new-crosses-tile\.webp/);
+});
+
+test("changing a category image on the live catalog copy keeps every product and category", async (t) => {
+  let products;
+  let liveTaxonomySource;
+  try {
+    products = execSync("git show github/products-data:products.json", { maxBuffer: 1e8 }).toString();
+    liveTaxonomySource = execSync("git show github/products-data:category-taxonomy.js", { maxBuffer: 1e8 }).toString();
+  } catch {
+    t.skip("github/products-data is not fetched in this clone");
+    return;
+  }
+  const github = installFakeGitHub(t, env, { "products.json": products, "category-taxonomy.js": liveTaxonomySource });
+  const before = evaluateTaxonomy(liveTaxonomySource);
+  const ids = (categories) => categories.flatMap((category) => [category.id, ...category.subcategories.map((sub) => `${category.id}/${sub.id}`)]).sort();
+
+  const edited = JSON.parse(JSON.stringify(before));
+  edited.find((category) => category.id === "crosses")[adminMainImageField] = "assets/optimized/products/gallery/new-crosses-tile.webp";
+  const { response } = await publishTaxonomy(edited);
+  assert.equal(response.status, 200);
+
+  const after = evaluateTaxonomy(github.text("category-taxonomy.js"));
+  assert.deepEqual(ids(after), ids(before), "no category or subcategory is added or removed");
+  assert.equal(github.text("products.json"), products, "products.json is untouched by a category publish");
+  assert.equal(JSON.parse(github.text("products.json")).length, JSON.parse(products).length);
+  assert.equal(after.find((category) => category.id === "crosses").customImage, "assets/optimized/products/gallery/new-crosses-tile.webp");
+  const unchanged = (list) => list.map(({ customImage, ...rest }) => rest);
+  assert.deepEqual(unchanged(after), unchanged(before), "only the edited image field changed");
+});
+
+test("existing legacy subcategoryImage values do not change today's main category tiles", () => {
+  const tile = storefrontImages().mainCategoryTileArt(baseTaxonomy()[0]);
+  assert.match(tile, /<svg/, "without a configured image the built-in drawing stays");
+  assert.doesNotMatch(tile, /processional-cross\.webp/);
 });
 
 test("a failed image upload returns an error status and commits nothing", async (t) => {

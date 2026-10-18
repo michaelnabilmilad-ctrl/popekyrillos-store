@@ -1460,7 +1460,8 @@
     const category = selectedTaxonomyCategory();
     if (!field || !category) return;
     const key = field.dataset.taxonomyMainField;
-    category[key] = field.type === "checkbox" ? field.checked : field.value.trim();
+    // The storefront main-category tile reads customImage (subcategoryImage is legacy).
+    category[key] = field.type === "checkbox" ? field.checked : key === "customImage" ? normalizeImagePath(field.value) : field.value.trim();
     if (key === "name") renderTaxonomyManager();
     refreshTaxonomyDependentUi();
   });
