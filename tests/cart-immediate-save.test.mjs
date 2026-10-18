@@ -32,3 +32,10 @@ test("adding and changing quantities save the cart before rendering it", () => {
     assert.ok(save < render, `${name} must persist before rendering`);
   }
 });
+
+test("a returning signed-in customer's session is restored on page load so cart edits reach the account", () => {
+  const boot = scriptSource.slice(scriptSource.lastIndexOf("loadProducts();"));
+  assert.match(boot, /if \(state\.auth\.cachedUser\) \{\s*loadAuthConfig\(\)/, "restores the session only when a customer signed in before");
+  assert.match(boot, /ensureAuthServices\(\)/);
+  assert.doesNotMatch(scriptSource.slice(0, scriptSource.lastIndexOf("loadProducts();")).split("\n").slice(-12).join("\n"), /loadAuthConfig\(\)\s*;?\s*$/m, "guests do not load Firebase on page load");
+});

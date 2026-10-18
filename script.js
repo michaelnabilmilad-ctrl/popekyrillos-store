@@ -6549,3 +6549,13 @@ updateFloatingShopButton();
 state.auth.configured = false;
 renderAuthState();
 loadProducts();
+// A customer who signed in before gets their session restored in the background so
+// cart changes on this page reach their account; guests load nothing extra.
+if (state.auth.cachedUser) {
+  loadAuthConfig()
+    .then(() => {
+      state.auth.configured = hasFirebaseConfig();
+      return ensureAuthServices();
+    })
+    .catch((error) => console.warn("Could not restore the customer session.", error));
+}
