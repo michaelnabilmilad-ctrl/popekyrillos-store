@@ -73,6 +73,16 @@ test("every write is refused in the preview and reaches no service", async (t) =
   assert.deepEqual(calls, [], "no outbound request at all");
 });
 
+test("the preview blocks crawlers and the admin panel entirely", async (t) => {
+  recordNetwork(t);
+  const robots = await worker.fetch(new Request(`${PREVIEW}/robots.txt`), previewEnv(), ctx);
+  assert.equal(await robots.text(), "User-agent: *\nDisallow: /\n");
+  for (const pathname of ["/admin", "/admin/", "/admin/orders/", "/admin/api/orders", "/admin.js"]) {
+    const response = await worker.fetch(new Request(`${PREVIEW}${pathname}`), previewEnv(), ctx);
+    assert.equal(response.status, 403, pathname);
+  }
+});
+
 test("production behaviour is unchanged without PREVIEW_MODE: other hosts redirect to the real domain", async (t) => {
   recordNetwork(t);
   const { PREVIEW_MODE, ...productionEnv } = previewEnv();

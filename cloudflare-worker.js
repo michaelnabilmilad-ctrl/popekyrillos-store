@@ -2715,6 +2715,12 @@ export {
 async function previewModeResponse(request, env, ctx) {
   const { pathname } = new URL(request.url);
   const headers = { "Cache-Control": "no-store", "X-Robots-Tag": "noindex, nofollow" };
+  if (pathname === "/robots.txt") {
+    return new Response("User-agent: *\nDisallow: /\n", { headers: { ...headers, "Content-Type": "text/plain; charset=utf-8" } });
+  }
+  if (pathname.startsWith("/admin")) {
+    return new Response("لوحة الإدارة غير متاحة في نسخة المعاينة.", { status: 403, headers: { ...headers, "Content-Type": "text/plain; charset=utf-8" } });
+  }
   if (/^\/firebase-config(\.min)?\.js$/.test(pathname)) {
     return new Response("window.POPE_KYRILLOS_FIREBASE_CONFIG = {};\nwindow.POPE_KYRILLOS_API_CONFIG = { bostaDeliveryEndpoint: \"\", orderEndpoint: \"\" };\n", {
       headers: { ...headers, "Content-Type": "text/javascript; charset=utf-8" }
