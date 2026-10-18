@@ -150,9 +150,9 @@ const productPageSource = fs.readFileSync(new URL("../../product-page.js", impor
 // What product-page.js does when "add to cart" is pressed, using its own
 // readCart/activeCartKey/saveCartItems functions against the given storage.
 export function productPageAdd(storage, item) {
-  const context = { JSON, Date, Math, Number, Array, localStorage: storage, guestCartKey: "pope-kyrillos-cart:guest" };
+  const context = { JSON, Date, Math, Number, Array, String, localStorage: storage, guestCartKey: "pope-kyrillos-cart:guest" };
   vm.createContext(context);
-  vm.runInContext(["activeCartKey", "readCart", "saveCartItems"].map((name) => extractFunction(productPageSource, name)).join("\n\n"), context);
+  vm.runInContext(["persistedFirebaseProfile", "activeCartKey", "readCart", "saveCartItems"].map((name) => extractFunction(productPageSource, name)).join("\n\n"), context);
   const items = context.readCart();
   const existing = items.find((line) => line.productId === item.productId && line.variantId === item.variantId);
   if (existing) existing.qty += item.qty; else items.push(item);

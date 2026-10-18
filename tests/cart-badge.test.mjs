@@ -51,7 +51,7 @@ function productPage(storage, { badges = 1, lang = "ar" } = {}) {
   const window = fakeWindow();
   const context = { localStorage: storage, document, window, Intl, JSON, Date, Math, Number, Array, String, guestCartKey: GUEST };
   vm.createContext(context);
-  vm.runInContext(["activeCartKey", "readCart", "cartBadgeCount", "updateCount"].map((name) => extractFunction(productPageSource, name)).join("\n\n"), context);
+  vm.runInContext(["persistedFirebaseProfile", "activeCartKey", "readCart", "cartBadgeCount", "updateCount"].map((name) => extractFunction(productPageSource, name)).join("\n\n"), context);
   context.updateCount();
   return { nodes, context };
 }
@@ -175,4 +175,66 @@ test("when the sign-in expires the account cart is kept, never copied to the gue
   const source = scriptSource.replace(/\r\n/g, "\n");
   assert.match(source, /const expiredAccountCartCount = !user && state\.auth\.cachedUser/);
   assert.match(source, /if \(expiredAccountCartCount > 0\) \{\n\s*showToast\(/);
+});
+
+// Reported on the live site: after a refresh the home badge stayed 0 for good while
+// /cart showed the products. Cause: the profile cache was missing while Firebase still
+// held a valid session, so the home page never started Firebase and showed the guest
+// cart. Every page must now fall back to the session Firebase persists itself.
+const FIREBASE_SESSION = "firebase:authUser:demo-key:[DEFAULT]";
+
+function sessionOnlyStorage(uid) {
+  return new FakeStorage([
+    [FIREBASE_SESSION, JSON.stringify({ uid, email: "alice@test.local", stsTokenManager: { accessToken: "never-copied" } })],
+    [userKey(uid), saved([
+      { productId: "cross-1", variantId: "default", qty: 1 },
+      { productId: "censer-1", variantId: "default", qty: 1 },
+      { productId: "book-1", variantId: "default", qty: 1 }
+    ])],
+    [ACTIVE, GUEST]
+  ]);
+}
+
+function cachedUserLoader(source, storage) {
+  const context = { localStorage: storage, JSON, cachedAuthStorageKey: AUTH };
+  vm.createContext(context);
+  vm.runInContext(["persistedFirebaseProfile", "loadCachedAuthUser"].map((name) => extractFunction(source, name)).join("\n\n"), context);
+  return context.loadCachedAuthUser;
+}
+
+test("with only Firebase's own session left, the home badge shows the account cart after a refresh", () => {
+  const uid = "uid-alice";
+  const storage = sessionOnlyStorage(uid);
+  const cachedUser = cachedUserLoader(scriptSource, storage)();
+  assert.equal(cachedUser?.uid, uid, "the signed-in customer is recognised");
+  const rebuilt = JSON.parse(storage.getItem(AUTH));
+  assert.deepEqual(Object.keys(rebuilt).sort(), ["displayName", "email", "photoURL", "uid"], "only profile fields, no tokens");
+  const home = storefrontTab({ storage, catalog });
+  home.context.state.auth = { user: null, ready: false, cachedUser, services: null };
+  home.load();
+  assert.equal(storefrontCount(home), 3, "not the empty guest cart");
+});
+
+test("the cart page, product page and policies page recognise the same session the same way", () => {
+  const uid = "uid-alice";
+  assert.equal(cachedUserLoader(checkoutSource, sessionOnlyStorage(uid))()?.uid, uid);
+  assert.equal(productPage(sessionOnlyStorage(uid)).nodes[0].textContent, ar(3));
+  assert.equal(badgePage(sessionOnlyStorage(uid)).nodes[0].textContent, ar(3));
+});
+
+test("a real guest (no cache, no Firebase session) still gets the guest cart", () => {
+  const storage = new FakeStorage([[GUEST, saved([{ productId: "icon-1", variantId: "default", qty: 2 }])]]);
+  assert.equal(cachedUserLoader(scriptSource, storage)(), null);
+  assert.equal(storage.getItem(AUTH), null);
+  assert.equal(storefrontCount(storefrontTab({ storage, catalog }).load()), 2);
+  assert.equal(badgePage(storage).nodes[0].textContent, ar(2));
+});
+
+test("the cart page never copies the account cart into the guest cart on a signed-out event", () => {
+  assert.doesNotMatch(checkoutSource, /moveCheckoutCartToGuest/);
+  assert.doesNotMatch(scriptSource, /moveCurrentCartToGuest/);
+});
+
+test("the home badge is refreshed once the account cart sync finishes, even when nothing changed", () => {
+  assert.match(scriptSource.replace(/\r\n/g, "\n"), /applySignedInCart\(user\)\n\s*\.catch\([^\n]*\)\n\s*\.finally\(\(\) => updateCartCount\(\)\);/);
 });

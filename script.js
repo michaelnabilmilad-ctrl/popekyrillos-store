@@ -3107,15 +3107,43 @@ function cartSelectionLineId(variant) {
   return (hash >>> 0).toString(36);
 }
 
+// Firebase keeps the signed-in session under firebase:authUser:<apiKey>:[DEFAULT]
+// (browserLocalPersistence). Only the public profile fields are read, never tokens.
+function persistedFirebaseProfile() {
+  try {
+    for (let index = 0; index < localStorage.length; index += 1) {
+      const key = localStorage.key(index) || "";
+      if (!key.startsWith("firebase:authUser:")) continue;
+      const user = JSON.parse(localStorage.getItem(key) || "null");
+      if (user?.uid) return { uid: user.uid, displayName: user.displayName || "", email: user.email || "", photoURL: user.photoURL || "" };
+    }
+  } catch {
+    // Storage can be unavailable in private browsing.
+  }
+  return null;
+}
+
+// The profile cache can be missing while Firebase still holds a valid session (it is
+// cleared on any signed-out auth event); fall back to that session and rebuild the
+// cache, so the page restores the account cart instead of treating the customer as
+// a guest until they open the cart or account screens.
 function loadCachedAuthUser() {
   try {
     const raw = localStorage.getItem(cachedAuthStorageKey);
-    if (!raw) return null;
-    const user = JSON.parse(raw);
-    return user?.uid ? user : null;
+    const user = raw ? JSON.parse(raw) : null;
+    if (user?.uid) return user;
   } catch {
-    return null;
+    // Fall through to the Firebase session.
   }
+  const persisted = persistedFirebaseProfile();
+  if (persisted) {
+    try {
+      localStorage.setItem(cachedAuthStorageKey, JSON.stringify(persisted));
+    } catch {
+      // Ignore storage write failures.
+    }
+  }
+  return persisted;
 }
 
 function authProfile(user) {
@@ -5046,7 +5074,9 @@ async function initCustomerAuth() {
       }
       renderAuthState();
       if (user) {
-        applySignedInCart(user).catch((error) => console.warn("Could not sync signed-in cart.", error));
+        applySignedInCart(user)
+          .catch((error) => console.warn("Could not sync signed-in cart.", error))
+          .finally(() => updateCartCount());
       } else {
         loadGuestCart();
         renderCart();

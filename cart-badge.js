@@ -24,6 +24,11 @@
     let active = "";
     try {
       uid = JSON.parse(localStorage.getItem("pope-kyrillos-auth:user") || "null")?.uid || "";
+      for (let index = 0; !uid && index < localStorage.length; index += 1) {
+        const key = localStorage.key(index) || "";
+        // Firebase's own persisted session, when the profile cache is missing.
+        if (key.startsWith("firebase:authUser:")) uid = JSON.parse(localStorage.getItem(key) || "null")?.uid || "";
+      }
       active = localStorage.getItem(activeKey) || "";
     } catch {
       // Storage can be unavailable in private browsing.

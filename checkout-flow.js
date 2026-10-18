@@ -195,15 +195,32 @@ function nextCartTimestamp(key) {
   return new Date(cartWriteClock).toISOString();
 }
 
+// Firebase keeps the signed-in session under firebase:authUser:<apiKey>:[DEFAULT]
+// (browserLocalPersistence). Only the public profile fields are read, never tokens.
+function persistedFirebaseProfile() {
+  try {
+    for (let index = 0; index < localStorage.length; index += 1) {
+      const key = localStorage.key(index) || "";
+      if (!key.startsWith("firebase:authUser:")) continue;
+      const user = JSON.parse(localStorage.getItem(key) || "null");
+      if (user?.uid) return { uid: user.uid, displayName: user.displayName || "", email: user.email || "", photoURL: user.photoURL || "" };
+    }
+  } catch {
+    // Storage can be unavailable in private browsing.
+  }
+  return null;
+}
+
+// Same fallback as script.js: a missing profile cache never hides a valid session.
 function loadCachedAuthUser() {
   try {
     const raw = localStorage.getItem(cachedAuthStorageKey);
-    if (!raw) return null;
-    const user = JSON.parse(raw);
-    return user?.uid ? user : null;
+    const user = raw ? JSON.parse(raw) : null;
+    if (user?.uid) return user;
   } catch {
-    return null;
+    // Fall through to the Firebase session.
   }
+  return persistedFirebaseProfile();
 }
 
 function authProfile(user) {
@@ -232,11 +249,6 @@ function clearCachedAuthUser() {
   } catch {
     // Local storage cleanup is best-effort.
   }
-}
-
-function moveCheckoutCartToGuest() {
-  const guestCart = readCartRecord(guestCartStorageKey).cart;
-  saveCartRecord(guestCartStorageKey, mergeCartMaps(guestCart, cart));
 }
 
 function currentUserCartStorageKey(user = loadCachedAuthUser()) {
@@ -436,7 +448,6 @@ async function currentCheckoutUser() {
         if (user) {
           saveCachedAuthUser(user);
         } else {
-          moveCheckoutCartToGuest();
           clearCachedAuthUser();
         }
         resolve(user);

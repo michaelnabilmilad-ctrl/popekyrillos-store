@@ -5,9 +5,24 @@ const relatedRoot = document.querySelector("[data-related-products]");
 const guestCartKey = "pope-kyrillos-cart:guest";
 // Same key the storefront (script.js) uses: the signed-in customer's cart when a
 // session is cached in this browser, otherwise the guest cart.
+// Firebase keeps the signed-in session under firebase:authUser:<apiKey>:[DEFAULT]
+// (browserLocalPersistence). Only the public profile fields are read, never tokens.
+function persistedFirebaseProfile() {
+  try {
+    for (let index = 0; index < localStorage.length; index += 1) {
+      const key = localStorage.key(index) || "";
+      if (!key.startsWith("firebase:authUser:")) continue;
+      const user = JSON.parse(localStorage.getItem(key) || "null");
+      if (user?.uid) return { uid: user.uid, displayName: user.displayName || "", email: user.email || "", photoURL: user.photoURL || "" };
+    }
+  } catch {
+    // Storage can be unavailable in private browsing.
+  }
+  return null;
+}
 function activeCartKey() {
   try {
-    const user = JSON.parse(localStorage.getItem("pope-kyrillos-auth:user") || "null");
+    const user = JSON.parse(localStorage.getItem("pope-kyrillos-auth:user") || "null") || persistedFirebaseProfile();
     if (user?.uid) return `pope-kyrillos-cart:user:${user.uid}`;
   } catch {}
   return guestCartKey;
