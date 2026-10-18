@@ -4644,7 +4644,7 @@ function renderMiniCart(entries, total, rawCount, hasUnpriced) {
       const image = item.variant?.image || getVariantImages(item.variant)[0] || getProductImages(item.product)[0] || "";
       const imageUrl = image ? productImageUrl(image, item.product) : "";
       const thumb = imageUrl
-        ? `<img class="mini-cart-thumb" src="${escapeHtml(imageUrl)}" alt="${escapeHtml(displayText(localized(product.name)))}" width="108" height="108" loading="lazy" decoding="async" />`
+        ? `<img class="mini-cart-thumb" src="${escapeHtml(imageUrl)}" alt="${escapeHtml(productName)}" width="108" height="108" loading="lazy" decoding="async" />`
         : `<span class="mini-cart-thumb mini-cart-thumb-empty" aria-hidden="true"></span>`;
       const qtyText = displayText(formatter.format(item.qty));
       const priceText = item.price === null ? t("askPrice") : money(item.price);
@@ -5234,8 +5234,9 @@ function addToCart(productId, variantId = "", amount = 1, options = {}) {
   if (legacyKey !== key) state.cart.delete(legacyKey);
   state.cart.set(key, nextQty);
   state.bosta.shipment = null;
-  renderCart();
+  // Persist before rendering so a rendering error can never drop the new line.
   saveCartNow({ immediateRemote: true });
+  renderCart();
   trackStoreEvent("add_to_cart", analyticsProduct(product, variant, requestedAmount));
   const selected = variantOptionText(variant);
   showToast(options.message || t("addedToast", {
@@ -5271,8 +5272,8 @@ function changeQty(key, delta) {
     if (delta < 0 && changedProduct) trackStoreEvent("remove_from_cart", analyticsProduct(changedProduct, changedVariant, Math.abs(delta)));
   }
   state.bosta.shipment = null;
-  renderCart();
   saveCartNow({ immediateRemote: true });
+  renderCart();
 }
 
 function openCart() {
