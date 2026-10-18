@@ -576,6 +576,11 @@ body[data-lang="en"] .hero h1 {
   color: var(--ink);
 }
 
+/* Empty until the saved cart has been read, so no misleading "0" shows meanwhile. */
+.cart-count:empty {
+  visibility: hidden;
+}
+
 .cart-count {
   position: absolute;
   top: -5px;

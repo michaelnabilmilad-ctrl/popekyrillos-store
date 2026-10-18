@@ -2,7 +2,6 @@ const rawProduct = JSON.parse(document.querySelector("#product-data")?.textConte
 const product = window.enrichYotaColorProduct ? window.enrichYotaColorProduct(rawProduct) : rawProduct;
 const root = document.querySelector("#product-detail");
 const relatedRoot = document.querySelector("[data-related-products]");
-const cartCount = document.querySelector("[data-cart-count]");
 const guestCartKey = "pope-kyrillos-cart:guest";
 // Same key the storefront (script.js) uses: the signed-in customer's cart when a
 // session is cached in this browser, otherwise the guest cart.
@@ -1573,7 +1572,18 @@ function saveCartItems(items) {
   localStorage.setItem("pope-kyrillos-cart:active", key);
   localStorage.setItem("pope-kyrillos-cart:sync", JSON.stringify({ key, updatedAt }));
 }
-function updateCount() { cartCount.textContent=readCart().reduce((sum,item)=>sum+(Number(item.qty)||0),0); }
+// Same badge rule and digits as script.js / checkout-flow.js, on every badge.
+function cartBadgeCount(items = readCart()) {
+  return items.reduce((sum, item) => sum + Math.max(0, Math.floor(Number(item?.qty) || 0)), 0);
+}
+function updateCount() {
+  const text = new Intl.NumberFormat(document.documentElement.lang === "en" ? "en-US" : "ar-EG").format(cartBadgeCount());
+  document.querySelectorAll("[data-cart-count]").forEach((node) => { node.textContent = text; });
+}
+window.addEventListener("storage", (event) => {
+  if (String(event.key || "").startsWith("pope-kyrillos-cart") || event.key === "pope-kyrillos-auth:user") updateCount();
+});
+window.addEventListener("pageshow", (event) => { if (event.persisted) updateCount(); });
 function selectionKey(variantId, coloringDesign) {
   const options = Object.entries(selected?.options || {}).sort(([a], [b]) => a.localeCompare(b, "ar"));
   const coloring = coloringDesign ? JSON.stringify(coloringDesign) : "";

@@ -641,7 +641,8 @@ function cartTotal() {
 }
 
 function setCartCount() {
-  const count = [...cart.values()].reduce((sum, qty) => sum + qty, 0);
+  // Same badge rule as script.js and product-page.js.
+  const count = [...cart.values()].reduce((sum, qty) => sum + Math.max(0, Math.floor(Number(qty) || 0)), 0);
   document.querySelectorAll("[data-cart-count]").forEach((node) => {
     node.textContent = formatter.format(count);
   });
@@ -1259,6 +1260,20 @@ async function initCheckoutFlow() {
   bindPaymentPage();
   if (!syncedBeforeRender) scheduleCheckoutCartSync();
 }
+
+function refreshCheckoutCartFromStorage() {
+  const before = cartFingerprint(cart);
+  cart = loadCart();
+  setCartCount();
+  if (cartFingerprint(cart) === before) return;
+  renderCartPage();
+  renderOrderSummary();
+}
+
+// Back/forward cache restores the page without re-reading the saved cart.
+window.addEventListener("pageshow", (event) => {
+  if (event.persisted) refreshCheckoutCartFromStorage();
+});
 
 window.addEventListener("storage", (event) => {
   const userKey = currentUserCartStorageKey();

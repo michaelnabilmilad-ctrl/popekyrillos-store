@@ -8,6 +8,7 @@ const files = [
   "index.html",
   "assistant.js",
   "assistant.css",
+  "cart-badge.js",
   "cart.html",
   "checkout.html",
   "payment.html",

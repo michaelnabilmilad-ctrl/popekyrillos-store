@@ -4197,6 +4197,8 @@ function cartEntries() {
     .filter(Boolean);
 }
 
+// Badge rule shared with checkout-flow.js and product-page.js: the sum of every
+// line's whole, positive quantity.
 function cartQuantityCount(map = state.cart) {
   return [...map.values()].reduce((sum, qty) => sum + Math.max(0, Math.floor(Number(qty) || 0)), 0);
 }
@@ -5031,6 +5033,9 @@ async function initCustomerAuth() {
       state.auth.user = user;
       state.auth.ready = true;
       state.auth.loading = false;
+      const expiredAccountCartCount = !user && state.auth.cachedUser
+        ? cartQuantityCount(readCartRecord(currentUserCartStorageKey(state.auth.cachedUser)).cart)
+        : 0;
       if (user) {
         saveCachedAuthUser(user);
       } else {
@@ -5045,6 +5050,14 @@ async function initCustomerAuth() {
       } else {
         loadGuestCart();
         renderCart();
+        // The session ended (expired or cleared by the browser) while this device
+        // still showed the account cart; say why the badge changed instead of
+        // silently showing the guest count.
+        if (expiredAccountCartCount > 0) {
+          showToast(isEnglish()
+            ? `Your sign-in expired. Sign in again to get back your account cart (${expiredAccountCartCount} items).`
+            : `انتهت جلسة تسجيل الدخول. سجّل الدخول تاني لاسترجاع سلة حسابك (${displayText(formatter.format(expiredAccountCartCount))} منتج).`);
+        }
       }
     });
   } catch (error) {
@@ -6535,6 +6548,12 @@ window.addEventListener("popstate", (event) => {
     return;
   }
   applyCatalogFilterFromUrl({ render: true, scroll: true });
+});
+
+// A page restored from the back/forward cache missed every change made on other
+// pages meanwhile, so read the saved cart again.
+window.addEventListener("pageshow", (event) => {
+  if (event.persisted) refreshCartFromLocalStorage();
 });
 
 window.addEventListener("storage", (event) => {
