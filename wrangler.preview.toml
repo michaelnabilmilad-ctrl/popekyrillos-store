@@ -1,0 +1,20 @@
+# Separate, read-only preview Worker. It is NOT connected to the production Worker,
+# its custom domains, Workers Builds, D1, or any secret. Deploy only after approval:
+#   npx wrangler deploy --config wrangler.preview.toml
+# It reads products and categories from the public products-data branch and
+# refuses every write (orders, admin publish, analytics) via PREVIEW_MODE.
+name = "popekyrillos-store-preview"
+main = "cloudflare-worker.js"
+compatibility_date = "2026-06-19"
+compatibility_flags = ["nodejs_compat"]
+workers_dev = true
+preview_urls = false
+
+[vars]
+PREVIEW_MODE = "1"
+SITE_URL = "https://popekyrillos.store"
+
+[assets]
+directory = "./dist"
+binding = "ASSETS"
+run_worker_first = true

@@ -2709,9 +2709,33 @@ export {
   resolveAirtableProducts
 };
 
+// Read-only preview (separate Worker with PREVIEW_MODE="1" and no secrets): serves
+// the storefront from its workers.dev host, keeps Firebase off, refuses every
+// write, and asks search engines not to index it.
+async function previewModeResponse(request, env, ctx) {
+  const { pathname } = new URL(request.url);
+  const headers = { "Cache-Control": "no-store", "X-Robots-Tag": "noindex, nofollow" };
+  if (/^\/firebase-config(\.min)?\.js$/.test(pathname)) {
+    return new Response("window.POPE_KYRILLOS_FIREBASE_CONFIG = {};\nwindow.POPE_KYRILLOS_API_CONFIG = { bostaDeliveryEndpoint: \"\", orderEndpoint: \"\" };\n", {
+      headers: { ...headers, "Content-Type": "text/javascript; charset=utf-8" }
+    });
+  }
+  if (!["GET", "HEAD", "OPTIONS"].includes(request.method)) {
+    return new Response(JSON.stringify({ error: "preview_read_only", message: "هذه نسخة معاينة للقراءة فقط؛ لا يتم حفظ أو إرسال أي طلب." }), {
+      status: 403,
+      headers: { ...headers, "Content-Type": "application/json; charset=utf-8" }
+    });
+  }
+  const response = await handleRequest(request, { ...env, LOCAL_DEV: "1" }, ctx);
+  const marked = new Response(response.body, response);
+  marked.headers.set("X-Robots-Tag", "noindex, nofollow");
+  return marked;
+}
+
 export default {
   async fetch(request, env, ctx) {
     try {
+      if (env.PREVIEW_MODE === "1") return await previewModeResponse(request, env, ctx);
       return await handleRequest(request, env, ctx);
     } catch (error) {
       ctx.waitUntil(recordWorkerError(env, request, error));
