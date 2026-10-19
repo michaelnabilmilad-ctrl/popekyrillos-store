@@ -16,3 +16,30 @@ npm-debug.log*
 # Local Codex publish artifacts (never repository submodules)
 .codex-publish-bible-cover/
 .codex-publish-bible-cover-data/
+
+# Browser profiles and test-browser data: never commit. They can hold saved
+# passwords, cookies, login sessions and browsing history. Keep audit browser
+# profiles and raw network logs outside the repository.
+**/warm-cache-profile/
+**/chrome-profile*/
+**/user-data-dir*/
+**/*-profile/Default/
+**/Login Data
+**/Login Data-journal
+**/Login Data For Account
+**/Login Data For Account-journal
+**/Cookies
+**/Cookies-journal
+**/Web Data
+**/Web Data-journal
+**/Account Web Data
+**/Account Web Data-journal
+**/Local State
+**/Default/History
+**/Default/History-journal
+**/Default/Local Storage/
+**/Default/Session Storage/
+**/Default/IndexedDB/
+*.har
+*.devtoolslog.json
+*.trace.json
