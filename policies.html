@@ -41,6 +41,8 @@
             <path d="M4 21a8 8 0 0 1 16 0" />
           </svg>
           <span data-account-label>دخول</span>
+          <!-- A customer with a saved session sees the waiting label at once, not «دخول», until script.min.js checks the session. -->
+          <script>(function(){try{var s=document.currentScript.previousElementSibling,l=localStorage,h=false,u,i,k;try{h=sessionStorage.getItem("pope-kyrillos-auth:redirect")==="1"}catch(e){}u=JSON.parse(l.getItem("pope-kyrillos-auth:user")||"null");if(u&&u.uid)h=true;for(i=0;!h&&i<l.length;i++){k=l.key(i)||"";if(k.indexOf("firebase:authUser:")===0){u=JSON.parse(l.getItem(k)||"null");if(u&&u.uid)h=true}}if(h)s.textContent="جارٍ التحقق…"}catch(e){}})();</script>
         </button>
         <div class="header-search" data-header-search>
           <button class="icon-button search-toggle" type="button" data-search-toggle aria-label="بحث عن منتج" aria-expanded="false" aria-controls="product-search">

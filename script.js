@@ -4844,6 +4844,22 @@ function connectLocalFirebaseEmulators(authModule, firestoreModule, auth, db) {
   if (firestoreModule && db) firestoreModule.connectFirestoreEmulator(db, emulator.firestoreHost, Number(emulator.firestorePort));
 }
 
+// The session is read from localStorage first. With the SDK's default order an older session
+// left in IndexedDB won, the fresh one in localStorage was deleted and the customer looked signed
+// out after a refresh (regular Chrome, not Incognito). With this order the fresh session is kept
+// and the SDK removes the stale IndexedDB copy itself, so existing customers heal on their own.
+function initFirebaseAuth(authModule, app) {
+  try {
+    return authModule.initializeAuth(app, {
+      persistence: [authModule.browserLocalPersistence, authModule.indexedDBLocalPersistence],
+      popupRedirectResolver: authModule.browserPopupRedirectResolver
+    });
+  } catch (error) {
+    if (error?.code !== "auth/already-initialized") throw error;
+    return authModule.getAuth(app);
+  }
+}
+
 function hasFirebaseConfig() {
   const config = firebaseConfig();
   return Boolean(config.apiKey && config.authDomain && config.projectId && config.appId);
@@ -5102,9 +5118,8 @@ async function initCustomerAuth() {
     ]);
 
     const app = appModule.getApps().length ? appModule.getApp() : appModule.initializeApp(firebaseConfig());
-    const auth = authModule.getAuth(app);
+    const auth = initFirebaseAuth(authModule, app);
     connectLocalFirebaseEmulators(authModule, null, auth, null);
-    await authModule.setPersistence(auth, authModule.browserLocalPersistence);
 
     state.auth.firestorePromise = firestoreModulePromise.then((firestoreModule) => {
       const db = firestoreModule.getFirestore(app);

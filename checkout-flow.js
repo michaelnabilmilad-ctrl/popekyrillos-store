@@ -422,6 +422,20 @@ function connectLocalFirebaseEmulators(authModule, firestoreModule, auth, db) {
   firestoreModule.connectFirestoreEmulator(db, emulator.firestoreHost, Number(emulator.firestorePort));
 }
 
+// Same session order as script.js initFirebaseAuth: localStorage first, so an older session left
+// in IndexedDB can no longer replace the fresh one (which signed customers out in regular Chrome).
+function initFirebaseAuth(authModule, app) {
+  try {
+    return authModule.initializeAuth(app, {
+      persistence: [authModule.browserLocalPersistence, authModule.indexedDBLocalPersistence],
+      popupRedirectResolver: authModule.browserPopupRedirectResolver
+    });
+  } catch (error) {
+    if (error?.code !== "auth/already-initialized") throw error;
+    return authModule.getAuth(app);
+  }
+}
+
 function hasFirebaseConfig() {
   const config = firebaseConfig();
   return Boolean(config.apiKey && config.authDomain && config.projectId && config.appId);
@@ -438,10 +452,9 @@ async function checkoutAuthServices() {
       import(`https://www.gstatic.com/firebasejs/${firebaseSdkVersion}/firebase-firestore.js`)
     ]);
     const app = appModule.initializeApp(firebaseConfig());
-    const auth = authModule.getAuth(app);
+    const auth = initFirebaseAuth(authModule, app);
     const db = firestoreModule.getFirestore(app);
     connectLocalFirebaseEmulators(authModule, firestoreModule, auth, db);
-    await authModule.setPersistence(auth, authModule.browserLocalPersistence);
     return {
       auth,
       db,
