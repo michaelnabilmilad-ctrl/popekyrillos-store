@@ -3214,6 +3214,7 @@ function isAllowedCartStorageKey(key, user = effectiveAuthUser()) {
 
 function setActiveCartStorageKey(key = currentCartStorageKey()) {
   try {
+    if (localStorage.getItem(activeCartStorageKey) === key) return;
     localStorage.setItem(activeCartStorageKey, key);
   } catch {
     // Local storage availability varies in private browsing.
@@ -3333,6 +3334,13 @@ function nextCartTimestamp(key) {
 
 function saveCartToLocal(key = currentCartStorageKey(), map = state.cart) {
   try {
+    // Every write reaches the other open tabs as a storage event. A save that changes
+    // nothing is skipped, so two tabs reacting to each other cannot write in a loop.
+    const stored = readCartRecord(key);
+    if (stored.exists && cartFingerprint(stored.cart) === cartFingerprint(map)) {
+      setActiveCartStorageKey(key);
+      return;
+    }
     const updatedAt = nextCartTimestamp(key);
     localStorage.setItem(
       key,
@@ -3385,6 +3393,12 @@ function refreshCartFromLocalStorage() {
   // Another tab or page changed the saved carts. For a confirmed customer, merge any
   // guest additions into the account (merge, then save) instead of switching carts.
   if (state.auth.user?.uid) {
+    // Nothing to merge (no guest additions, and the account copy is what this page shows):
+    // skip the merge, which reads the server cart. Before, two tabs answering each other's
+    // storage events ran it hundreds of times per second.
+    const accountRecord = readCartRecord(currentUserCartStorageKey(state.auth.user));
+    const guestAdditions = cartHasItems(readCartRecord(guestCartStorageKey).cart);
+    if (!guestAdditions && cartFingerprint(accountRecord.cart) === cartFingerprint(state.cart)) return;
     applySignedInCart(state.auth.user).catch((error) => console.warn("Could not sync signed-in cart.", error));
     return;
   }

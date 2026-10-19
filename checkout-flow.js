@@ -284,6 +284,13 @@ function isAllowedCartStorageKey(key, user = loadCachedAuthUser()) {
 
 function saveCartRecord(key, map) {
   try {
+    // Every write reaches the other open tabs as a storage event. A save that changes
+    // nothing is skipped, so two tabs reacting to each other cannot write in a loop.
+    const stored = readCartRecord(key);
+    if (stored.exists && cartFingerprint(stored.cart) === cartFingerprint(map)) {
+      setActiveCartKey(key);
+      return;
+    }
     const updatedAt = nextCartTimestamp(key);
     localStorage.setItem(
       key,
@@ -298,6 +305,7 @@ function saveCartRecord(key, map) {
 
 function setActiveCartKey(key) {
   try {
+    if (localStorage.getItem(activeCartStorageKey) === key) return;
     localStorage.setItem(activeCartStorageKey, key);
   } catch {
     // Ignore localStorage write failures.
@@ -455,6 +463,9 @@ async function checkoutAuthServices() {
     const auth = initFirebaseAuth(authModule, app);
     const db = firestoreModule.getFirestore(app);
     connectLocalFirebaseEmulators(authModule, firestoreModule, auth, db);
+    authModule.onAuthStateChanged(auth, (user) => {
+      followCheckoutAccount(user).catch((error) => console.warn("Could not follow the account change.", error));
+    });
     return {
       auth,
       db,
@@ -1294,6 +1305,18 @@ function bindPaymentPage() {
       if (status) status.textContent = t("copied");
     });
   });
+}
+
+// Another tab signed out or switched accounts after this page settled: show the account
+// Firebase now confirms (or the guest cart) instead of keeping the previous account's cart,
+// which also kept rewriting that account's key against the other tab.
+async function followCheckoutAccount(user) {
+  if (!checkoutAuthSettled) return;
+  if ((user?.uid || "") === (checkoutConfirmedUser?.uid || "")) return;
+  checkoutConfirmedUser = user ? authProfile(user) : null;
+  checkoutSyncedUid = "";
+  if (user) await restoreSignedInCheckoutCart();
+  applyCheckoutCartSync(true);
 }
 
 function applyCheckoutCartSync(changed) {
