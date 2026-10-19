@@ -105,7 +105,7 @@ test("home, cart page, product page and policies page count the same saved cart 
 test("a signed-in customer's badge shows the account cart after a reload, not an older guest cart", () => {
   const uid = "uid-alice";
   const storage = new FakeStorage([
-    [AUTH, JSON.stringify({ uid })],
+    [AUTH, JSON.stringify({ uid, confirmedAt: Date.now() })],
     [userKey(uid), saved([
       { productId: "cross-1", variantId: "default", qty: 1 },
       { productId: "censer-1", variantId: "default", qty: 1 },
@@ -194,14 +194,14 @@ test("reported bug: Firebase session present but profile cache missing still sta
 
 test("a stale or edited profile cache alone never opens an account cart", () => {
   const uid = "uid-alice";
-  const storage = accountStorage(uid, [[AUTH, JSON.stringify({ uid })]]);
+  const storage = accountStorage(uid, [[AUTH, JSON.stringify({ uid, confirmedAt: Date.now() })]]);
   const home = storefrontTab({ storage, catalog }).load();
   assert.equal(storefrontCount(home), 0, "home: guest cart until Firebase confirms");
   assert.deepEqual(nonSdkPages(storage), [ar(0), ar(0)], "product and policies pages: no matching Firebase session, guest");
 });
 
 test("a profile cache and a Firebase session for different users (account switch, shared device) mean guest", () => {
-  const storage = accountStorage("uid-alice", [[AUTH, JSON.stringify({ uid: "uid-alice" })], [FIREBASE_SESSION, JSON.stringify({ uid: "uid-bob" })]]);
+  const storage = accountStorage("uid-alice", [[AUTH, JSON.stringify({ uid: "uid-alice", confirmedAt: Date.now() })], [FIREBASE_SESSION, JSON.stringify({ uid: "uid-bob" })]]);
   assert.deepEqual(nonSdkPages(storage), [ar(0), ar(0)]);
   const bob = storefrontTab({ storage, catalog, user: { uid: "uid-bob" } }).load();
   assert.equal(storefrontCount(bob), 0, "Bob never sees Alice's cart");
@@ -210,7 +210,7 @@ test("a profile cache and a Firebase session for different users (account switch
 
 test("matching confirmed profile and Firebase session show the account cart on pages without Firebase", () => {
   const uid = "uid-alice";
-  const storage = accountStorage(uid, [[AUTH, JSON.stringify({ uid })], [FIREBASE_SESSION, JSON.stringify({ uid })]]);
+  const storage = accountStorage(uid, [[AUTH, JSON.stringify({ uid, confirmedAt: Date.now() })], [FIREBASE_SESSION, JSON.stringify({ uid })]]);
   assert.deepEqual(nonSdkPages(storage), [ar(3), ar(3)]);
 });
 
@@ -239,7 +239,7 @@ test("while Firebase decides, the home badge is empty, not a misleading guest co
 test("identity: the SDK verdict is final; before it, only both Firebase-written records together count", () => {
   const script = scriptSource.replace(/\r\n/g, "\n");
   assert.match(script, /function effectiveAuthUser\(\) \{\n  return state\.auth\.user \|\| \(!state\.auth\.ready \? state\.auth\.provisionalUser : null\);\n\}/);
-  assert.match(script, /function consistentLocalProfile\(\) \{\n  const profile = loadCachedAuthUser\(\);\n  return profile\?\.uid && persistedFirebaseSessionUid\(\) === String\(profile\.uid\) \? profile : null;\n\}/);
+  assert.match(script, /function consistentLocalProfile\(\) \{\n  const profile = loadCachedAuthUser\(\);\n  const recentlyConfirmed = Number\(profile\?\.confirmedAt\) > Date\.now\(\) - 14 \* 24 \* 60 \* 60 \* 1000;\n  return profile\?\.uid && recentlyConfirmed && persistedFirebaseSessionUid\(\) === String\(profile\.uid\) \? profile : null;\n\}/);
   assert.match(script, /state\.auth\.provisionalUser = null;/, "the SDK verdict replaces the provisional identity");
   assert.doesNotMatch(script, /persistedFirebaseProfile|setItem\(cachedAuthStorageKey, JSON\.stringify\(persisted\)\)/, "no cache rebuilt from local data");
   assert.match(script, /state\.auth\.sessionPending = !state\.auth\.provisionalUser;/);
@@ -251,7 +251,7 @@ test("identity: the SDK verdict is final; before it, only both Firebase-written 
 
 test("when the sign-in expires the account cart is kept, never copied to the guest cart, and the notice shows no item count", () => {
   const uid = "uid-alice";
-  const storage = accountStorage(uid, [[AUTH, JSON.stringify({ uid })], [FIREBASE_SESSION, JSON.stringify({ uid })]]);
+  const storage = accountStorage(uid, [[AUTH, JSON.stringify({ uid, confirmedAt: Date.now() })], [FIREBASE_SESSION, JSON.stringify({ uid })]]);
   // Firebase answered "no user": its record is gone, our cache is cleared.
   storage.removeItem(FIREBASE_SESSION);
   const home = storefrontTab({ storage, catalog });

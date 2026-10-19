@@ -169,7 +169,7 @@ test("quantity updates and removals persist across reloads", () => {
 test("adding from a product page while signed in does not hide the account cart", () => {
   const storage = new FakeStorage();
   const user = { uid: "user-a" };
-  storage.setItem("pope-kyrillos-auth:user", JSON.stringify(user)); // saved by script.js on sign-in
+  storage.setItem("pope-kyrillos-auth:user", JSON.stringify({ ...user, confirmedAt: Date.now() })); // saved by script.js on sign-in
   storage.setItem("firebase:authUser:demo-key:[DEFAULT]", JSON.stringify(user)); // persisted by Firebase on sign-in
   storefrontTab({ storage, catalog: fullCatalog, user }).load().add("cross-1").add("censer-1");
   assert.equal(productPageAdd(storage, { productId: "book-1", variantId: "default", qty: 1 }), "pope-kyrillos-cart:user:user-a");

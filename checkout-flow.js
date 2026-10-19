@@ -231,7 +231,8 @@ function hasLocalSessionHint() {
 // Same rule as script.js: both records Firebase wrote must agree on the uid.
 function consistentLocalProfile() {
   const profile = storedConfirmedProfile();
-  return profile?.uid && persistedFirebaseSessionUid() === String(profile.uid) ? profile : null;
+  const recentlyConfirmed = Number(profile?.confirmedAt) > Date.now() - 14 * 24 * 60 * 60 * 1000;
+  return profile?.uid && recentlyConfirmed && persistedFirebaseSessionUid() === String(profile.uid) ? profile : null;
 }
 
 function cartOwnerOfKey(key = "") {
@@ -246,6 +247,8 @@ let checkoutProvisionalUser = consistentLocalProfile();
 // Owner of the cart in memory ("" = guest); a cart is only ever written to the
 // server document of the account that owns it.
 let cartOwner = "";
+// uid whose server cart this page has merged with; direct saves wait for it.
+let checkoutSyncedUid = "";
 
 function loadCachedAuthUser() {
   return checkoutAuthSettled ? checkoutConfirmedUser : (checkoutConfirmedUser || checkoutProvisionalUser);
@@ -265,7 +268,7 @@ function saveCachedAuthUser(user) {
   const profile = authProfile(user);
   if (!profile) return;
   try {
-    localStorage.setItem(cachedAuthStorageKey, JSON.stringify(profile));
+    localStorage.setItem(cachedAuthStorageKey, JSON.stringify({ ...profile, confirmedAt: Date.now() }));
   } catch {
     // Ignore localStorage write failures.
   }
@@ -543,7 +546,7 @@ async function saveCurrentCheckoutCartRemote() {
   if (!user?.getIdToken) return false;
   // Never write a guest or other account's cart over this account's server cart:
   // merge it into the account cart instead (the merge saves the result).
-  if (cartOwner !== user.uid) {
+  if (cartOwner !== user.uid || checkoutSyncedUid !== user.uid) {
     const changed = await restoreSignedInCheckoutCart();
     applyCheckoutCartSync(changed);
     return true;
@@ -588,6 +591,7 @@ async function restoreSignedInCheckoutCart() {
   saveCartRecord(userCartKey, signedInCart);
   cartOwner = user.uid;
   if (remoteResult.ok) {
+    checkoutSyncedUid = user.uid;
     const saved = cartFingerprint(signedInCart) === cartFingerprint(remoteResult.cart)
       || await saveRemoteCartForCheckout(services, realUser, signedInCart);
     if (saved && guestRecord.exists) {

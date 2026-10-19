@@ -157,6 +157,8 @@ const state = {
     sessionPending: false,
     firestorePromise: null,
     retryTimer: null,
+    // uid whose server cart this page has merged with; direct saves wait for it.
+    syncedUid: "",
     services: null,
     saveTimer: null,
     cartSaveWarningShown: false
@@ -3163,7 +3165,8 @@ function hasLocalSessionHint() {
 // A stale, edited or mismatched record gives no identity.
 function consistentLocalProfile() {
   const profile = loadCachedAuthUser();
-  return profile?.uid && persistedFirebaseSessionUid() === String(profile.uid) ? profile : null;
+  const recentlyConfirmed = Number(profile?.confirmedAt) > Date.now() - 14 * 24 * 60 * 60 * 1000;
+  return profile?.uid && recentlyConfirmed && persistedFirebaseSessionUid() === String(profile.uid) ? profile : null;
 }
 
 function cartOwnerOfKey(key = "") {
@@ -3191,7 +3194,8 @@ function saveCachedAuthUser(user) {
   if (!profile) return;
   state.auth.cachedUser = profile;
   try {
-    localStorage.setItem(cachedAuthStorageKey, JSON.stringify(profile));
+    // confirmedAt: when the SDK last confirmed this user here (provisional identity limit).
+    localStorage.setItem(cachedAuthStorageKey, JSON.stringify({ ...profile, confirmedAt: Date.now() }));
   } catch {
     // Local storage can be unavailable in strict privacy modes.
   }
@@ -4993,12 +4997,13 @@ async function firestoreReady() {
 async function saveRemoteCart() {
   const user = await authenticatedCartUser();
   if (!user?.getIdToken) return false;
-  // The cart in memory may be the guest cart (shown while Firebase was loading) or
-  // another account's. Writing it would replace this account's server cart, so
-  // merge it into the account cart instead (that merge saves the result).
-  if (state.cartOwner !== user.uid) {
+  // Write directly only a cart that belongs to this account AND has already been
+  // merged with its server copy on this page. Otherwise (guest cart shown while
+  // Firebase was loading, another account's cart, or an unmerged local copy that
+  // may miss lines added on another device) run the merge, which saves the result.
+  if (state.cartOwner !== user.uid || state.auth.syncedUid !== user.uid) {
     await applySignedInCart(user);
-    return true;
+    return state.auth.syncedUid === user.uid;
   }
   if (!(await firestoreReady())) return false;
   const services = state.auth.services;
@@ -5068,6 +5073,7 @@ async function applySignedInCart(user) {
   if (cartFingerprint(state.cart) !== before) renderCart();
   if (!remoteResult.ok) return;
 
+  state.auth.syncedUid = user.uid;
   const saved = cartFingerprint(state.cart) === cartFingerprint(remoteResult.cart) || await saveRemoteCart();
   if (saved && guestRecord.exists) {
     try {
@@ -5135,6 +5141,7 @@ async function initCustomerAuth() {
       const sessionEnded = !user && state.auth.sessionHint;
       state.auth.sessionHint = Boolean(user);
       state.auth.provisionalUser = null;
+      if (!user || state.auth.syncedUid !== user.uid) state.auth.syncedUid = "";
       state.auth.sessionPending = false;
       window.clearTimeout(state.auth.sessionPendingTimer);
       window.clearTimeout(state.auth.retryTimer);

@@ -26,7 +26,8 @@ function persistedFirebaseSessionUid() {
 function activeCartKey() {
   try {
     const user = JSON.parse(localStorage.getItem("pope-kyrillos-auth:user") || "null");
-    if (user?.uid && persistedFirebaseSessionUid() === String(user.uid)) return `pope-kyrillos-cart:user:${user.uid}`;
+    const recentlyConfirmed = Number(user?.confirmedAt) > Date.now() - 14 * 24 * 60 * 60 * 1000;
+    if (user?.uid && recentlyConfirmed && persistedFirebaseSessionUid() === String(user.uid)) return `pope-kyrillos-cart:user:${user.uid}`;
   } catch {}
   return guestCartKey;
 }

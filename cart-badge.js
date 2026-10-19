@@ -25,7 +25,9 @@
     try {
       // Account cart only when the last Firebase-confirmed profile and Firebase's own
       // session record name the same uid (same rule as product-page.js).
-      const confirmedUid = String(JSON.parse(localStorage.getItem("pope-kyrillos-auth:user") || "null")?.uid || "");
+      const confirmed = JSON.parse(localStorage.getItem("pope-kyrillos-auth:user") || "null");
+      const recentlyConfirmed = Number(confirmed?.confirmedAt) > Date.now() - 14 * 24 * 60 * 60 * 1000;
+      const confirmedUid = recentlyConfirmed ? String(confirmed?.uid || "") : "";
       let sessionUid = "";
       for (let index = 0; !sessionUid && index < localStorage.length; index += 1) {
         const key = localStorage.key(index) || "";

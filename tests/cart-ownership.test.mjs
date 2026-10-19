@@ -26,7 +26,7 @@ const saved = (list, updatedAt = "2026-10-19T08:00:00.000Z") => JSON.stringify({
 // A signed-in account: 3 lines locally and on the (fake) server.
 function signedInDevice(uid) {
   const storage = new FakeStorage([
-    [AUTH, JSON.stringify({ uid })],
+    [AUTH, JSON.stringify({ uid, confirmedAt: Date.now() })],
     [FIREBASE_SESSION, JSON.stringify({ uid })],
     [userKey(uid), saved(items("cross-1", "censer-1", "book-1"))],
     [ACTIVE, userKey(uid)]
@@ -107,9 +107,9 @@ test("adds during the provisional phase go to the account cart and survive the S
 });
 
 test("no provisional identity from a stale, edited or mismatched record", () => {
-  const onlyCache = new FakeStorage([[AUTH, JSON.stringify({ uid: "a" })]]);
+  const onlyCache = new FakeStorage([[AUTH, JSON.stringify({ uid: "a", confirmedAt: Date.now() })]]);
   const onlySession = new FakeStorage([[FIREBASE_SESSION, JSON.stringify({ uid: "a" })]]);
-  const mismatch = new FakeStorage([[AUTH, JSON.stringify({ uid: "a" })], [FIREBASE_SESSION, JSON.stringify({ uid: "b" })]]);
+  const mismatch = new FakeStorage([[AUTH, JSON.stringify({ uid: "a", confirmedAt: Date.now() })], [FIREBASE_SESSION, JSON.stringify({ uid: "b" })]]);
   for (const storage of [onlyCache, onlySession, mismatch, new FakeStorage()]) assert.equal(provisionalProfile(storage), null);
 });
 
@@ -142,7 +142,62 @@ test("a redirect Google sign-in is finished when the customer comes back", () =>
 });
 
 test("the cart page applies the same owner guard and provisional identity", () => {
-  assert.match(checkoutSource, /if \(cartOwner !== user\.uid\) \{\n\s*const changed = await restoreSignedInCheckoutCart\(\);/);
+  assert.match(checkoutSource, /if \(cartOwner !== user\.uid \|\| checkoutSyncedUid !== user\.uid\) \{\n\s*const changed = await restoreSignedInCheckoutCart\(\);/);
+  assert.match(checkoutSource, /if \(remoteResult\.ok\) \{\n\s*checkoutSyncedUid = user\.uid;/, "direct saves only after a merge with the server copy");
   assert.match(checkoutSource, /checkoutSessionPending = sessionHint && !checkoutProvisionalUser;/);
   assert.match(checkoutSource, /checkoutAuthServicesPromise\.catch\(\(\) => \{ checkoutAuthServicesPromise = null; \}\);/);
+});
+
+// Security review of bea1845 (2026-10-19).
+test("a provisional identity alone can never read or write the server cart", async () => {
+  const uid = "uid-google";
+  const storage = signedInDevice(uid);
+  const tab = storefrontTab({ storage, catalog });
+  tab.firestore.write(uid, items("cross-1", "censer-1", "book-1"));
+  Object.assign(tab.context.state.auth, { user: null, ready: false, provisionalUser: provisionalProfile(storage) });
+  tab.load().add("icon-1");
+  // The SDK is unreachable: no confirmed user, no token.
+  tab.context.ensureAuthServices = async () => false;
+  tab.context.state.auth.services = null;
+  vm.runInContext(["authenticatedCartUser", "saveRemoteCart", "firestoreReady"].map((name) => extractFunction(scriptSource, name)).join("\n\n"), tab.context);
+  assert.equal(await tab.context.saveRemoteCart(), false, "nothing is sent");
+  assert.equal(tab.firestore.read(uid).items.length, 3, "server cart untouched");
+  assert.equal(JSON.parse(storage.getItem(userKey(uid))).items.length, 4, "the add is kept on this device for the next confirmed sync");
+});
+
+test("the first save after confirmation merges with the server copy, so lines added on another device survive", async () => {
+  const uid = "uid-google";
+  const storage = signedInDevice(uid);
+  const tab = storefrontTab({ storage, catalog });
+  // Another device added icon-1 to the account after this device's last visit.
+  tab.firestore.write(uid, items("cross-1", "censer-1", "book-1", "icon-1"));
+  Object.assign(tab.context.state.auth, { user: null, ready: false, provisionalUser: provisionalProfile(storage) });
+  tab.load(); // provisional: this device's older copy (3 lines)
+  tab.context.state.cart.delete(KEY("book-1")); // a removal on this device, before the SDK answers
+  const user = { uid, getIdToken() {} };
+  Object.assign(tab.context.state.auth, { user, ready: true, provisionalUser: null, syncedUid: "" });
+  withRealRemoteSave(tab, user);
+  await tab.context.saveRemoteCart(); // a direct save would drop icon-1
+  const server = tab.firestore.read(uid).items.map((item) => item.productId);
+  assert.ok(server.includes("icon-1"), `the other device's line is kept: ${server.join(", ")}`);
+  assert.equal(tab.context.state.auth.syncedUid, uid, "later saves may write directly");
+});
+
+test("an old confirmation (over 14 days) gives no provisional identity on any page", () => {
+  const uid = "uid-google";
+  const old = Date.now() - 15 * 24 * 60 * 60 * 1000;
+  const storage = signedInDevice(uid);
+  storage.setItem(AUTH, JSON.stringify({ uid, confirmedAt: old }));
+  assert.equal(provisionalProfile(storage), null);
+  const legacy = signedInDevice(uid);
+  legacy.setItem(AUTH, JSON.stringify({ uid })); // written by an older version, no confirmedAt
+  assert.equal(provisionalProfile(legacy), null);
+  const productPage = fs.readFileSync(new URL("../product-page.js", import.meta.url), "utf8");
+  const badge = fs.readFileSync(new URL("../cart-badge.js", import.meta.url), "utf8");
+  for (const source of [productPage, badge, checkoutSource]) assert.match(source, /Number\((user|confirmed|profile)\?\.confirmedAt\) > Date\.now\(\) - 14 \* 24 \* 60 \* 60 \* 1000/);
+});
+
+test("signing in stores when the SDK confirmed the user", () => {
+  assert.match(script, /JSON\.stringify\(\{ \.\.\.profile, confirmedAt: Date\.now\(\) \}\)/);
+  assert.match(checkoutSource, /JSON\.stringify\(\{ \.\.\.profile, confirmedAt: Date\.now\(\) \}\)/);
 });

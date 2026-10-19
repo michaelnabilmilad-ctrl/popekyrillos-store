@@ -77,7 +77,7 @@ export function storefrontTab({ storage = new FakeStorage(), firestore = fakeFir
     userCartStoragePrefix: "pope-kyrillos-cart:user:",
     activeCartStorageKey: "pope-kyrillos-cart:active",
     cartSyncStorageKey: "pope-kyrillos-cart:sync",
-    state: { cart: new Map(), auth: { user, ready: true, cachedUser: null, sessionPending: false, services: null } },
+    state: { cart: new Map(), auth: { user, ready: true, cachedUser: null, sessionPending: false, syncedUid: "", services: null } },
     updateCartCount() {},
     renderCart() {},
     renderAuthState() {},
