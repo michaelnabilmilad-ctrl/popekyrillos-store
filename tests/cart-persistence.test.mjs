@@ -166,16 +166,22 @@ test("quantity updates and removals persist across reloads", () => {
   assert.deepEqual(storefrontTab({ storage, catalog: fullCatalog }).load().cart, { [KEY("cross-1")]: 3 });
 });
 
-test("adding from a product page while signed in does not hide the account cart", () => {
+test("adding from a product page while signed in does not hide the account cart", async () => {
   const storage = new FakeStorage();
-  const user = { uid: "user-a" };
-  storage.setItem("pope-kyrillos-auth:user", JSON.stringify({ ...user, confirmedAt: Date.now() })); // saved by script.js on sign-in
-  storage.setItem("firebase:authUser:demo-key:[DEFAULT]", JSON.stringify(user)); // persisted by Firebase on sign-in
-  storefrontTab({ storage, catalog: fullCatalog, user }).load().add("cross-1").add("censer-1");
-  assert.equal(productPageAdd(storage, { productId: "book-1", variantId: "default", qty: 1 }), "pope-kyrillos-cart:user:user-a");
-  const nextPage = storefrontTab({ storage, catalog: fullCatalog, user }).load();
+  const user = { uid: "user-a", getIdToken() {} };
+  storage.setItem("pope-kyrillos-auth:user", JSON.stringify({ uid: user.uid, confirmedAt: Date.now() })); // saved by script.js on sign-in
+  storage.setItem("firebase:authUser:demo-key:[DEFAULT]", JSON.stringify({ uid: user.uid })); // persisted by Firebase on sign-in
+  const firstPage = storefrontTab({ storage, catalog: fullCatalog, user });
+  await firstPage.signIn(user);
+  firstPage.add("cross-1").add("censer-1");
+  // The product page cannot confirm the session, so its addition is kept apart.
+  assert.equal(productPageAdd(storage, { productId: "book-1", variantId: "default", qty: 1 }), "pope-kyrillos-cart:guest");
+  assert.equal(JSON.parse(storage.getItem("pope-kyrillos-cart:user:user-a")).items.length, 2, "the account copy is not written by that page");
+  // The next page confirms the session and merges the addition into the account.
+  const nextPage = storefrontTab({ storage, catalog: fullCatalog, user, firestore: firstPage.firestore });
+  await nextPage.signIn(user);
   assert.deepEqual(nextPage.cart, { [KEY("cross-1")]: 1, [KEY("censer-1")]: 1, [KEY("book-1")]: 1 });
-  assert.equal(storage.getItem("pope-kyrillos-cart:guest"), null, "nothing leaks into the guest cart");
+  assert.equal(storage.getItem("pope-kyrillos-cart:guest"), null, "the addition was merged, not left behind");
 });
 
 test("a guest adding from a product page sees the item in the storefront cart", () => {

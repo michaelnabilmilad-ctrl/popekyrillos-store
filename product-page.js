@@ -24,12 +24,16 @@ function persistedFirebaseSessionUid() {
 // profile Firebase confirmed here and Firebase's own session record name the same
 // uid (both are removed on sign-out); any mismatch or missing record means guest.
 function activeCartKey() {
-  try {
-    const user = JSON.parse(localStorage.getItem("pope-kyrillos-auth:user") || "null");
-    const recentlyConfirmed = Number(user?.confirmedAt) > Date.now() - 14 * 24 * 60 * 60 * 1000;
-    if (user?.uid && recentlyConfirmed && persistedFirebaseSessionUid() === String(user.uid)) return `pope-kyrillos-cart:user:${user.uid}`;
-  } catch {}
   return guestCartKey;
+}
+
+// A customer may be signed in on this device (this page cannot confirm it).
+function hasLocalSessionHint() {
+  try {
+    return Boolean(JSON.parse(localStorage.getItem("pope-kyrillos-auth:user") || "null")?.uid || persistedFirebaseSessionUid());
+  } catch {
+    return false;
+  }
 }
 const legacyColoringStorageKey = `pope-kyrillos-coloring:${product.id || "product"}`;
 let coloringStorageKey = `yota-coloring-design-${product.coloringModelId || "unconfigured"}:${product.coloringModelVersion || "unversioned"}:${product.id || "product"}`;
@@ -1596,7 +1600,10 @@ function cartBadgeCount(items = readCart()) {
   return items.reduce((sum, item) => sum + Math.max(0, Math.floor(Number(item?.qty) || 0)), 0);
 }
 function updateCount() {
-  const text = new Intl.NumberFormat(document.documentElement.lang === "en" ? "en-US" : "ar-EG").format(cartBadgeCount());
+  const count = cartBadgeCount();
+  // Signed-in customers: this page shows only what was added here, never the
+  // account cart, and nothing at all when nothing was added.
+  const text = hasLocalSessionHint() && !count ? "" : new Intl.NumberFormat(document.documentElement.lang === "en" ? "en-US" : "ar-EG").format(count);
   document.querySelectorAll("[data-cart-count]").forEach((node) => { node.textContent = text; });
 }
 window.addEventListener("storage", (event) => {

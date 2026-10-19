@@ -151,10 +151,9 @@ const state = {
     cachedUser: loadCachedAuthUser(),
     // A local hint that a session may exist: start Firebase and wait for its verdict.
     sessionHint: hasLocalSessionHint(),
-    // Used only until the SDK answers, and only when both records Firebase wrote
-    // agree on the uid; the SDK verdict always replaces it.
-    provisionalUser: consistentLocalProfile(),
+    // True while a session may exist and the SDK has not answered yet.
     sessionPending: false,
+    verifyFailed: false,
     firestorePromise: null,
     retryTimer: null,
     // uid whose server cart this page has merged with; direct saves wait for it.
@@ -3160,15 +3159,6 @@ function hasLocalSessionHint() {
   return Boolean(loadCachedAuthUser() || persistedFirebaseSessionUid() || redirectPending);
 }
 
-// The profile the SDK confirmed last on this device, but only while Firebase's own
-// session record (removed by signOut and by an invalid session) names the same uid.
-// A stale, edited or mismatched record gives no identity.
-function consistentLocalProfile() {
-  const profile = loadCachedAuthUser();
-  const recentlyConfirmed = Number(profile?.confirmedAt) > Date.now() - 14 * 24 * 60 * 60 * 1000;
-  return profile?.uid && recentlyConfirmed && persistedFirebaseSessionUid() === String(profile.uid) ? profile : null;
-}
-
 function cartOwnerOfKey(key = "") {
   return String(key).startsWith(userCartStoragePrefix) ? String(key).slice(userCartStoragePrefix.length) : "";
 }
@@ -3183,10 +3173,10 @@ function authProfile(user) {
   };
 }
 
-// The SDK-confirmed user; before the SDK answers, the provisional identity (both
-// Firebase-written records agree). Never a single local record on its own.
+// Only the user the Firebase SDK confirmed on this page selects the account cart;
+// local records never do (they only tell the page to start Firebase and wait).
 function effectiveAuthUser() {
-  return state.auth.user || (!state.auth.ready ? state.auth.provisionalUser : null);
+  return state.auth.user || null;
 }
 
 function saveCachedAuthUser(user) {
@@ -3359,9 +3349,10 @@ function saveCartToLocal(key = currentCartStorageKey(), map = state.cart) {
 }
 
 function localCartCandidateKeys(user = effectiveAuthUser()) {
+  // A confirmed customer sees the account copy only; anything in the guest cart is
+  // added to it by the sign-in merge, never shown instead of it.
+  if (user?.uid) return [currentUserCartStorageKey(user)];
   const keys = [];
-  const userCartKey = user?.uid ? currentUserCartStorageKey(user) : "";
-  if (userCartKey) keys.push(userCartKey);
   try {
     const activeKey = localStorage.getItem(activeCartStorageKey);
     if (isAllowedCartStorageKey(activeKey, user)) keys.push(activeKey);
@@ -3391,6 +3382,12 @@ function loadGuestCart() {
 }
 
 function refreshCartFromLocalStorage() {
+  // Another tab or page changed the saved carts. For a confirmed customer, merge any
+  // guest additions into the account (merge, then save) instead of switching carts.
+  if (state.auth.user?.uid) {
+    applySignedInCart(state.auth.user).catch((error) => console.warn("Could not sync signed-in cart.", error));
+    return;
+  }
   const before = cartFingerprint(state.cart);
   const record = preferredLocalCartRecord();
   state.cart = record.cart;
@@ -4264,9 +4261,9 @@ function cartQuantityCount(map = state.cart) {
 }
 
 function updateCartCount(count = cartQuantityCount()) {
-  // While Firebase is still deciding who is signed in, the badge stays empty
-  // (hidden) rather than showing the guest count of a signed-in customer.
-  const text = state.auth.sessionPending ? "" : displayText(formatter.format(count));
+  // While Firebase is still deciding who is signed in, the badge shows only what was
+  // added on this device meanwhile (kept apart from the account), or stays empty.
+  const text = state.auth.sessionPending && !count ? "" : displayText(formatter.format(count));
   document.querySelectorAll("[data-cart-count]").forEach((node) => {
     node.textContent = text;
   });
@@ -4873,7 +4870,10 @@ function renderAuthState() {
   const configured = state.auth.configured;
   const displayName = user?.displayName || user?.email || (isEnglish() ? "Customer" : "عميل");
 
-  if (accountLabel) accountLabel.textContent = user ? displayName.split(/\s+/)[0] : t("login");
+  const waitingLabel = state.auth.verifyFailed
+    ? (isEnglish() ? "Refresh the page" : "حدّث الصفحة")
+    : (isEnglish() ? "Checking…" : "جارٍ التحقق…");
+  if (accountLabel) accountLabel.textContent = user ? displayName.split(/\s+/)[0] : state.auth.sessionPending ? waitingLabel : t("login");
   if (accountToggle) {
     accountToggle.setAttribute("aria-label", user ? (isEnglish() ? `Account ${displayName}` : `حساب ${displayName}`) : t("accountAria"));
   }
@@ -4959,9 +4959,8 @@ async function authenticatedCartUser() {
 }
 
 function saveCartNow({ remote = true, immediateRemote = false } = {}) {
-  // A cart change before Firebase answers goes to the guest cart, which is merged
-  // into the account cart once the session is confirmed; show its count now.
-  endSessionPending();
+  // A cart change before Firebase answers goes to the guest cart (kept apart), which
+  // is merged into the account cart once the session is confirmed.
   state.cart = clampCartMap(state.cart);
   saveCartToLocal(currentCartStorageKey(), state.cart);
   if (!remote) return Promise.resolve(true);
@@ -5140,7 +5139,7 @@ async function initCustomerAuth() {
       state.auth.loading = false;
       const sessionEnded = !user && state.auth.sessionHint;
       state.auth.sessionHint = Boolean(user);
-      state.auth.provisionalUser = null;
+      state.auth.verifyFailed = false;
       if (!user || state.auth.syncedUid !== user.uid) state.auth.syncedUid = "";
       state.auth.sessionPending = false;
       window.clearTimeout(state.auth.sessionPendingTimer);
@@ -5181,15 +5180,23 @@ async function initCustomerAuth() {
     console.warn("Could not initialize Firebase auth.", error);
     state.auth.loading = false;
     authInitPromise = null;
-    endSessionPending();
     // A failed download (slow or dropped connection) says nothing about the session:
-    // keep the provisional identity and try again instead of signing the customer out.
+    // stay in the waiting state and try again instead of signing the customer out.
     if (state.auth.sessionHint) {
+      // The browser keeps a failed module download for the life of the page, so only
+      // a reload can retry it: say so instead of pretending to retry.
+      if (!state.auth.verifyFailed) {
+        showToast(isEnglish()
+          ? "Your account could not be confirmed (connection problem). Refresh the page to get your cart back."
+          : "تعذر تأكيد حسابك بسبب الاتصال. حدّث الصفحة لاسترجاع سلتك.");
+      }
+      state.auth.verifyFailed = true;
       window.clearTimeout(state.auth.retryTimer);
       state.auth.retryTimer = window.setTimeout(() => void ensureAuthServices(), 15000);
     } else {
       state.auth.ready = true;
       state.auth.configured = false;
+      endSessionPending();
     }
     renderAuthState();
   }
@@ -6707,20 +6714,22 @@ loadProducts();
 // When a session may exist, Firebase is started and decides; until it answers the
 // page shows the guest cart with an empty badge. Guests load nothing extra.
 if (state.auth.sessionHint) {
-  // With a provisional identity the account cart is already shown; otherwise keep
-  // the badge empty until Firebase decides.
-  state.auth.sessionPending = !state.auth.provisionalUser;
+  // No account cart is shown before Firebase confirms the session: the page shows a
+  // waiting state (header and badge) until the SDK answers.
+  state.auth.sessionPending = true;
   updateCartCount();
-  // Never leave the badge empty if Firebase cannot be reached.
-  state.auth.sessionPendingTimer = window.setTimeout(endSessionPending, 8000);
+  renderAuthState();
   loadAuthConfig()
     .then(() => {
       state.auth.configured = hasFirebaseConfig();
       return ensureAuthServices();
     })
-    .then((started) => { if (!started) endSessionPending(); })
-    .catch((error) => {
-      console.warn("Could not restore the customer session.", error);
-      endSessionPending();
-    });
+    .then((started) => {
+      // No Firebase configuration on this site (e.g. the preview): nothing to wait for.
+      if (!started && !hasFirebaseConfig()) {
+        endSessionPending();
+        renderAuthState();
+      }
+    })
+    .catch((error) => console.warn("Could not restore the customer session.", error));
 }

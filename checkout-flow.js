@@ -228,22 +228,14 @@ function hasLocalSessionHint() {
   return Boolean(storedConfirmedProfile() || persistedFirebaseSessionUid());
 }
 
-// Same rule as script.js: both records Firebase wrote must agree on the uid.
-function consistentLocalProfile() {
-  const profile = storedConfirmedProfile();
-  const recentlyConfirmed = Number(profile?.confirmedAt) > Date.now() - 14 * 24 * 60 * 60 * 1000;
-  return profile?.uid && recentlyConfirmed && persistedFirebaseSessionUid() === String(profile.uid) ? profile : null;
-}
-
 function cartOwnerOfKey(key = "") {
   return String(key).startsWith(userCartStoragePrefix) ? String(key).slice(userCartStoragePrefix.length) : "";
 }
 
-// Identity used to pick the account cart: the user the Firebase SDK confirmed on
-// this page; until the SDK answers, the provisional identity above.
+// Identity used to pick the account cart: only the user the Firebase SDK confirmed
+// on this page. Local records only tell the page to wait for that answer.
 let checkoutConfirmedUser = null;
 let checkoutAuthSettled = false;
-let checkoutProvisionalUser = consistentLocalProfile();
 // Owner of the cart in memory ("" = guest); a cart is only ever written to the
 // server document of the account that owns it.
 let cartOwner = "";
@@ -251,7 +243,7 @@ let cartOwner = "";
 let checkoutSyncedUid = "";
 
 function loadCachedAuthUser() {
-  return checkoutAuthSettled ? checkoutConfirmedUser : (checkoutConfirmedUser || checkoutProvisionalUser);
+  return checkoutConfirmedUser;
 }
 
 function authProfile(user) {
@@ -340,9 +332,9 @@ function withTimeout(promise, timeoutMs = 3500) {
 }
 
 function savedCartKeys(user = loadCachedAuthUser()) {
+  // Same rule as script.js: a confirmed customer reads the account copy only.
+  if (user?.uid) return [currentUserCartStorageKey(user)];
   const keys = [];
-  const userKey = user?.uid ? currentUserCartStorageKey(user) : "";
-  if (userKey) keys.push(userKey);
   try {
     const activeKey = localStorage.getItem(activeCartStorageKey);
     if (isAllowedCartStorageKey(activeKey, user)) keys.push(activeKey);
@@ -369,9 +361,10 @@ function loadCart(user = loadCachedAuthUser()) {
 }
 
 function saveCart() {
-  const activeKey = localStorage.getItem(activeCartStorageKey);
-  const cachedUser = loadCachedAuthUser();
-  const targetKey = isAllowedCartStorageKey(activeKey, cachedUser) ? activeKey : currentUserCartStorageKey(cachedUser);
+  // The cart in memory belongs to the confirmed account or to the guest; save it
+  // under that owner's key (the guest key while the session is not confirmed).
+  const confirmedUser = loadCachedAuthUser();
+  const targetKey = confirmedUser?.uid && cartOwner === confirmedUser.uid ? currentUserCartStorageKey(confirmedUser) : guestCartStorageKey;
   saveCartRecord(targetKey, cart);
   saveCurrentCheckoutCartRemote();
 }
@@ -472,7 +465,6 @@ async function currentCheckoutUser() {
     if (services.auth.currentUser) {
       checkoutConfirmedUser = authProfile(services.auth.currentUser);
       checkoutAuthSettled = true;
-      checkoutProvisionalUser = null;
       saveCachedAuthUser(services.auth.currentUser);
       return services.auth.currentUser;
     }
@@ -487,7 +479,6 @@ async function currentCheckoutUser() {
         unsubscribe();
         checkoutConfirmedUser = user ? authProfile(user) : null;
         checkoutAuthSettled = true;
-        checkoutProvisionalUser = null;
         if (user) {
           saveCachedAuthUser(user);
         } else {
@@ -704,6 +695,7 @@ function cartTotal() {
 }
 
 let checkoutSessionPending = false;
+let checkoutVerifyFailed = false;
 
 function setCartCount() {
   if (checkoutSessionPending) {
@@ -767,12 +759,23 @@ function renderCartPage() {
   if (!list) return;
   const entries = cartEntries();
   if (!entries.length) {
-    list.innerHTML = `<p class="checkout-empty">${t("emptyCart")}</p>`;
+    const english = document.documentElement.lang === "en";
+    const waiting = checkoutSessionPending
+      ? (english ? "Confirming your account and loading your cart…" : "جاري تأكيد حسابك وتحميل سلتك…")
+      : checkoutVerifyFailed
+      ? (english ? "Your account could not be confirmed (connection problem). Refresh the page to see your cart." : "تعذر تأكيد حسابك بسبب الاتصال. حدّث الصفحة لعرض سلة حسابك.")
+      : t("emptyCart");
+    list.innerHTML = `<p class="checkout-empty">${waiting}</p>`;
     document.querySelector("[data-cart-page-total]").textContent = money(0);
     document.querySelector("[data-cart-next]")?.setAttribute("aria-disabled", "true");
     return;
   }
-  list.innerHTML = entries
+  // Additions made while the account could not be confirmed: say the account cart
+  // is still missing instead of letting these lines look like the whole cart.
+  const accountNotice = checkoutVerifyFailed
+    ? `<p class="checkout-empty">${document.documentElement.lang === "en" ? "Your account could not be confirmed (connection problem). Refresh the page to see your account cart; these are the items added meanwhile." : "تعذر تأكيد حسابك بسبب الاتصال. حدّث الصفحة لعرض سلة حسابك؛ دي المنتجات اللي اتضافت في الوقت ده."}</p>`
+    : "";
+  list.innerHTML = accountNotice + entries
     .map((item) => {
       const image = item.previewImage || productImage(item.product);
       const unitPrice = item.price === null ? t("askPrice") : money(item.price);
@@ -1299,25 +1302,42 @@ function scheduleCheckoutCartSync() {
   }
 }
 
+// Wait for Firebase's answer (retrying a slow or failed download), then merge.
+async function waitForCheckoutVerdict(maxMs) {
+  const deadline = Date.now() + maxMs;
+  while (Date.now() < deadline) {
+    await restoreSignedInCheckoutCart().catch(() => false);
+    if (checkoutAuthSettled) return true;
+    await new Promise((resolve) => window.setTimeout(resolve, 1500));
+  }
+  return false;
+}
+
 async function initCheckoutFlow() {
-  // With a possible session, wait (briefly) for Firebase to confirm who is signed in
-  // before showing any cart, so a stale local record never shows an account cart.
+  // With a possible session, no cart is shown until Firebase confirms who is signed
+  // in: a waiting message instead of an account cart taken from local data.
   const sessionHint = hasLocalSessionHint();
-  // With a provisional identity the account cart shows right away and is synced in
-  // the background; without one, wait (briefly) for Firebase to decide.
-  checkoutSessionPending = sessionHint && !checkoutProvisionalUser;
+  checkoutSessionPending = sessionHint;
   cart = loadCart();
   setCartCount();
   let syncedBeforeRender = false;
   if (checkoutSessionPending) {
-    await Promise.race([
-      restoreSignedInCheckoutCart().catch(() => false),
-      new Promise((resolve) => window.setTimeout(resolve, 4000))
-    ]);
-    syncedBeforeRender = Boolean(checkoutConfirmedUser);
+    if (isCartPage()) renderCartPage();
+    const settled = await waitForCheckoutVerdict(20000);
+    syncedBeforeRender = settled;
     checkoutSessionPending = false;
     cart = loadCart();
     setCartCount();
+    if (!settled) {
+      // No answer (usually a failed download, which only a reload retries): never
+      // show "empty cart" to a customer whose account cart could not be loaded.
+      checkoutVerifyFailed = true;
+      void waitForCheckoutVerdict(120000).then((ok) => {
+        if (!ok) return;
+        checkoutVerifyFailed = false;
+        applyCheckoutCartSync(true);
+      });
+    }
   }
   try {
     const response = await fetch(`/products.json?v=${Date.now()}`, { cache: "no-store" });

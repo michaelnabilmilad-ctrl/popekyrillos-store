@@ -19,35 +19,28 @@
     }
   }
 
-  function savedCartItems() {
-    let uid = "";
-    let active = "";
+  // A customer may be signed in on this device (this page cannot confirm it).
+  function hasSessionHint() {
     try {
-      // Account cart only when the last Firebase-confirmed profile and Firebase's own
-      // session record name the same uid (same rule as product-page.js).
-      const confirmed = JSON.parse(localStorage.getItem("pope-kyrillos-auth:user") || "null");
-      const recentlyConfirmed = Number(confirmed?.confirmedAt) > Date.now() - 14 * 24 * 60 * 60 * 1000;
-      const confirmedUid = recentlyConfirmed ? String(confirmed?.uid || "") : "";
-      let sessionUid = "";
-      for (let index = 0; !sessionUid && index < localStorage.length; index += 1) {
-        const key = localStorage.key(index) || "";
-        if (key.startsWith("firebase:authUser:")) sessionUid = String(JSON.parse(localStorage.getItem(key) || "null")?.uid || "");
+      if (JSON.parse(localStorage.getItem("pope-kyrillos-auth:user") || "null")?.uid) return true;
+      for (let index = 0; index < localStorage.length; index += 1) {
+        if ((localStorage.key(index) || "").startsWith("firebase:authUser:")) return true;
       }
-      uid = confirmedUid && confirmedUid === sessionUid ? confirmedUid : "";
-      active = localStorage.getItem(activeKey) || "";
     } catch {
       // Storage can be unavailable in private browsing.
     }
-    const userKey = uid ? `${userPrefix}${uid}` : "";
-    const keys = [userKey, active === guestKey || (userKey && active === userKey) ? active : "", guestKey];
-    const records = [...new Set(keys.filter(Boolean))].map(read).filter(Boolean);
-    records.sort((a, b) => b.updatedAt - a.updatedAt);
-    return records[0]?.items || [];
+    return false;
+  }
+
+  // Never an account cart on this page: only the guest cart (what was added on this
+  // device without a confirmed session).
+  function savedCartItems() {
+    return read(guestKey)?.items || [];
   }
 
   function update() {
     const count = savedCartItems().reduce((sum, item) => sum + Math.max(0, Math.floor(Number(item?.qty) || 0)), 0);
-    const text = new Intl.NumberFormat(document.documentElement.lang === "en" ? "en-US" : "ar-EG").format(count);
+    const text = hasSessionHint() && !count ? "" : new Intl.NumberFormat(document.documentElement.lang === "en" ? "en-US" : "ar-EG").format(count);
     document.querySelectorAll("[data-cart-count]").forEach((node) => { node.textContent = text; });
   }
 
