@@ -145,7 +145,11 @@ const state = {
     ready: false,
     loading: false,
     user: null,
+    // Last profile the Firebase SDK confirmed on this device; never used as identity.
     cachedUser: loadCachedAuthUser(),
+    // A local hint that a session may exist: start Firebase and wait for its verdict.
+    sessionHint: hasLocalSessionHint(),
+    sessionPending: false,
     services: null,
     saveTimer: null,
     cartSaveWarningShown: false
@@ -3107,43 +3111,38 @@ function cartSelectionLineId(variant) {
   return (hash >>> 0).toString(36);
 }
 
-// Firebase keeps the signed-in session under firebase:authUser:<apiKey>:[DEFAULT]
-// (browserLocalPersistence). Only the public profile fields are read, never tokens.
-function persistedFirebaseProfile() {
+function loadCachedAuthUser() {
+  try {
+    const raw = localStorage.getItem(cachedAuthStorageKey);
+    if (!raw) return null;
+    const user = JSON.parse(raw);
+    return user?.uid ? user : null;
+  } catch {
+    return null;
+  }
+}
+
+// uid in the session record Firebase persists itself (firebase:authUser:<apiKey>:[DEFAULT]).
+// It is a hint only: it never selects an account cart on its own.
+function persistedFirebaseSessionUid() {
   try {
     for (let index = 0; index < localStorage.length; index += 1) {
       const key = localStorage.key(index) || "";
       if (!key.startsWith("firebase:authUser:")) continue;
-      const user = JSON.parse(localStorage.getItem(key) || "null");
-      if (user?.uid) return { uid: user.uid, displayName: user.displayName || "", email: user.email || "", photoURL: user.photoURL || "" };
+      const uid = JSON.parse(localStorage.getItem(key) || "null")?.uid;
+      if (uid) return String(uid);
     }
   } catch {
     // Storage can be unavailable in private browsing.
   }
-  return null;
+  return "";
 }
 
-// The profile cache can be missing while Firebase still holds a valid session (it is
-// cleared on any signed-out auth event); fall back to that session and rebuild the
-// cache, so the page restores the account cart instead of treating the customer as
-// a guest until they open the cart or account screens.
-function loadCachedAuthUser() {
-  try {
-    const raw = localStorage.getItem(cachedAuthStorageKey);
-    const user = raw ? JSON.parse(raw) : null;
-    if (user?.uid) return user;
-  } catch {
-    // Fall through to the Firebase session.
-  }
-  const persisted = persistedFirebaseProfile();
-  if (persisted) {
-    try {
-      localStorage.setItem(cachedAuthStorageKey, JSON.stringify(persisted));
-    } catch {
-      // Ignore storage write failures.
-    }
-  }
-  return persisted;
+// Either local record (our profile cache or Firebase's session record) means a
+// customer may be signed in. The profile cache alone used to decide this, so a
+// missing cache with a valid session left the home page on the guest cart for good.
+function hasLocalSessionHint() {
+  return Boolean(loadCachedAuthUser() || persistedFirebaseSessionUid());
 }
 
 function authProfile(user) {
@@ -3156,8 +3155,10 @@ function authProfile(user) {
   };
 }
 
+// Only the user the Firebase SDK confirmed on this page selects the account cart;
+// local records never do, so a stale or edited record cannot open someone's cart.
 function effectiveAuthUser() {
-  return state.auth.user || (!state.auth.ready ? state.auth.cachedUser : null);
+  return state.auth.user || null;
 }
 
 function saveCachedAuthUser(user) {
@@ -4232,9 +4233,19 @@ function cartQuantityCount(map = state.cart) {
 }
 
 function updateCartCount(count = cartQuantityCount()) {
+  // While Firebase is still deciding who is signed in, the badge stays empty
+  // (hidden) rather than showing the guest count of a signed-in customer.
+  const text = state.auth.sessionPending ? "" : displayText(formatter.format(count));
   document.querySelectorAll("[data-cart-count]").forEach((node) => {
-    node.textContent = displayText(formatter.format(count));
+    node.textContent = text;
   });
+}
+
+function endSessionPending() {
+  if (!state.auth.sessionPending) return;
+  state.auth.sessionPending = false;
+  window.clearTimeout(state.auth.sessionPendingTimer);
+  updateCartCount();
 }
 
 function syncMobileCatalogHeading() {
@@ -4917,6 +4928,9 @@ async function authenticatedCartUser() {
 }
 
 function saveCartNow({ remote = true, immediateRemote = false } = {}) {
+  // A cart change before Firebase answers goes to the guest cart, which is merged
+  // into the account cart once the session is confirmed; show its count now.
+  endSessionPending();
   state.cart = clampCartMap(state.cart);
   saveCartToLocal(currentCartStorageKey(), state.cart);
   if (!remote) return Promise.resolve(true);
@@ -5061,9 +5075,10 @@ async function initCustomerAuth() {
       state.auth.user = user;
       state.auth.ready = true;
       state.auth.loading = false;
-      const expiredAccountCartCount = !user && state.auth.cachedUser
-        ? cartQuantityCount(readCartRecord(currentUserCartStorageKey(state.auth.cachedUser)).cart)
-        : 0;
+      const sessionEnded = !user && state.auth.sessionHint;
+      state.auth.sessionHint = Boolean(user);
+      state.auth.sessionPending = false;
+      window.clearTimeout(state.auth.sessionPendingTimer);
       if (user) {
         saveCachedAuthUser(user);
       } else {
@@ -5083,10 +5098,11 @@ async function initCustomerAuth() {
         // The session ended (expired or cleared by the browser) while this device
         // still showed the account cart; say why the badge changed instead of
         // silently showing the guest count.
-        if (expiredAccountCartCount > 0) {
+        // No item count: the device may now be used by someone else.
+        if (sessionEnded) {
           showToast(isEnglish()
-            ? `Your sign-in expired. Sign in again to get back your account cart (${expiredAccountCartCount} items).`
-            : `انتهت جلسة تسجيل الدخول. سجّل الدخول تاني لاسترجاع سلة حسابك (${displayText(formatter.format(expiredAccountCartCount))} منتج).`);
+            ? "Your sign-in expired. Sign in again to get back your account cart."
+            : "انتهت جلسة تسجيل الدخول. سجّل الدخول تاني لاسترجاع سلة حسابك.");
         }
       }
     });
@@ -5096,6 +5112,7 @@ async function initCustomerAuth() {
     state.auth.configured = false;
     console.warn("Could not initialize Firebase auth.", error);
     renderAuthState();
+    endSessionPending();
   }
 }
 
@@ -6601,13 +6618,21 @@ updateFloatingShopButton();
 state.auth.configured = false;
 renderAuthState();
 loadProducts();
-// A customer who signed in before gets their session restored in the background so
-// cart changes on this page reach their account; guests load nothing extra.
-if (state.auth.cachedUser) {
+// When a session may exist, Firebase is started and decides; until it answers the
+// page shows the guest cart with an empty badge. Guests load nothing extra.
+if (state.auth.sessionHint) {
+  state.auth.sessionPending = true;
+  updateCartCount();
+  // Never leave the badge empty if Firebase cannot be reached.
+  state.auth.sessionPendingTimer = window.setTimeout(endSessionPending, 8000);
   loadAuthConfig()
     .then(() => {
       state.auth.configured = hasFirebaseConfig();
       return ensureAuthServices();
     })
-    .catch((error) => console.warn("Could not restore the customer session.", error));
+    .then((started) => { if (!started) endSessionPending(); })
+    .catch((error) => {
+      console.warn("Could not restore the customer session.", error);
+      endSessionPending();
+    });
 }

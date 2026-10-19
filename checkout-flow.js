@@ -195,32 +195,45 @@ function nextCartTimestamp(key) {
   return new Date(cartWriteClock).toISOString();
 }
 
-// Firebase keeps the signed-in session under firebase:authUser:<apiKey>:[DEFAULT]
-// (browserLocalPersistence). Only the public profile fields are read, never tokens.
-function persistedFirebaseProfile() {
+// uid in the session record Firebase persists itself (firebase:authUser:<apiKey>:[DEFAULT]).
+// It is a hint only: it never selects an account cart on its own.
+function persistedFirebaseSessionUid() {
   try {
     for (let index = 0; index < localStorage.length; index += 1) {
       const key = localStorage.key(index) || "";
       if (!key.startsWith("firebase:authUser:")) continue;
-      const user = JSON.parse(localStorage.getItem(key) || "null");
-      if (user?.uid) return { uid: user.uid, displayName: user.displayName || "", email: user.email || "", photoURL: user.photoURL || "" };
+      const uid = JSON.parse(localStorage.getItem(key) || "null")?.uid;
+      if (uid) return String(uid);
     }
   } catch {
     // Storage can be unavailable in private browsing.
   }
-  return null;
+  return "";
 }
 
-// Same fallback as script.js: a missing profile cache never hides a valid session.
-function loadCachedAuthUser() {
+// Last profile the Firebase SDK confirmed on this device (written by
+// saveCachedAuthUser after a confirmed sign-in, removed on sign-out).
+function storedConfirmedProfile() {
   try {
     const raw = localStorage.getItem(cachedAuthStorageKey);
-    const user = raw ? JSON.parse(raw) : null;
-    if (user?.uid) return user;
+    if (!raw) return null;
+    const user = JSON.parse(raw);
+    return user?.uid ? user : null;
   } catch {
-    // Fall through to the Firebase session.
+    return null;
   }
-  return persistedFirebaseProfile();
+}
+
+function hasLocalSessionHint() {
+  return Boolean(storedConfirmedProfile() || persistedFirebaseSessionUid());
+}
+
+// Identity used to pick the account cart: only the user the Firebase SDK confirmed
+// on this page (set by currentCheckoutUser). Local records are never enough.
+let checkoutConfirmedUser = null;
+
+function loadCachedAuthUser() {
+  return checkoutConfirmedUser;
 }
 
 function authProfile(user) {
@@ -433,6 +446,7 @@ async function currentCheckoutUser() {
     const services = await checkoutAuthServices();
     if (!services?.auth) return null;
     if (services.auth.currentUser) {
+      checkoutConfirmedUser = authProfile(services.auth.currentUser);
       saveCachedAuthUser(services.auth.currentUser);
       return services.auth.currentUser;
     }
@@ -445,6 +459,7 @@ async function currentCheckoutUser() {
       unsubscribe = services.onAuthStateChanged(services.auth, (user) => {
         window.clearTimeout(timeout);
         unsubscribe();
+        checkoutConfirmedUser = user ? authProfile(user) : null;
         if (user) {
           saveCachedAuthUser(user);
         } else {
@@ -651,7 +666,13 @@ function cartTotal() {
   return cartEntries().reduce((sum, item) => sum + (item.unavailable ? 0 : (item.price || 0) * item.qty), 0);
 }
 
+let checkoutSessionPending = false;
+
 function setCartCount() {
+  if (checkoutSessionPending) {
+    document.querySelectorAll("[data-cart-count]").forEach((node) => { node.textContent = ""; });
+    return;
+  }
   // Same badge rule as script.js and product-page.js.
   const count = [...cart.values()].reduce((sum, qty) => sum + Math.max(0, Math.floor(Number(qty) || 0)), 0);
   document.querySelectorAll("[data-cart-count]").forEach((node) => {
@@ -1242,9 +1263,23 @@ function scheduleCheckoutCartSync() {
 }
 
 async function initCheckoutFlow() {
+  // With a possible session, wait (briefly) for Firebase to confirm who is signed in
+  // before showing any cart, so a stale local record never shows an account cart.
+  const sessionHint = hasLocalSessionHint();
+  checkoutSessionPending = sessionHint;
   cart = loadCart();
   setCartCount();
   let syncedBeforeRender = false;
+  if (sessionHint) {
+    await Promise.race([
+      restoreSignedInCheckoutCart().catch(() => false),
+      new Promise((resolve) => window.setTimeout(resolve, 4000))
+    ]);
+    syncedBeforeRender = Boolean(checkoutConfirmedUser);
+    checkoutSessionPending = false;
+    cart = loadCart();
+    setCartCount();
+  }
   try {
     const response = await fetch(`/products.json?v=${Date.now()}`, { cache: "no-store" });
     products = await response.json();

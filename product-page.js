@@ -5,25 +5,28 @@ const relatedRoot = document.querySelector("[data-related-products]");
 const guestCartKey = "pope-kyrillos-cart:guest";
 // Same key the storefront (script.js) uses: the signed-in customer's cart when a
 // session is cached in this browser, otherwise the guest cart.
-// Firebase keeps the signed-in session under firebase:authUser:<apiKey>:[DEFAULT]
-// (browserLocalPersistence). Only the public profile fields are read, never tokens.
-function persistedFirebaseProfile() {
+// uid in the session record Firebase persists itself (firebase:authUser:<apiKey>:[DEFAULT]).
+// It is a hint only: it never selects an account cart on its own.
+function persistedFirebaseSessionUid() {
   try {
     for (let index = 0; index < localStorage.length; index += 1) {
       const key = localStorage.key(index) || "";
       if (!key.startsWith("firebase:authUser:")) continue;
-      const user = JSON.parse(localStorage.getItem(key) || "null");
-      if (user?.uid) return { uid: user.uid, displayName: user.displayName || "", email: user.email || "", photoURL: user.photoURL || "" };
+      const uid = JSON.parse(localStorage.getItem(key) || "null")?.uid;
+      if (uid) return String(uid);
     }
   } catch {
     // Storage can be unavailable in private browsing.
   }
-  return null;
+  return "";
 }
+// This page has no Firebase SDK, so it uses the account cart only when the last
+// profile Firebase confirmed here and Firebase's own session record name the same
+// uid (both are removed on sign-out); any mismatch or missing record means guest.
 function activeCartKey() {
   try {
-    const user = JSON.parse(localStorage.getItem("pope-kyrillos-auth:user") || "null") || persistedFirebaseProfile();
-    if (user?.uid) return `pope-kyrillos-cart:user:${user.uid}`;
+    const user = JSON.parse(localStorage.getItem("pope-kyrillos-auth:user") || "null");
+    if (user?.uid && persistedFirebaseSessionUid() === String(user.uid)) return `pope-kyrillos-cart:user:${user.uid}`;
   } catch {}
   return guestCartKey;
 }

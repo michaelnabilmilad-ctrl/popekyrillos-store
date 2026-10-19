@@ -51,7 +51,7 @@ function productPage(storage, { badges = 1, lang = "ar" } = {}) {
   const window = fakeWindow();
   const context = { localStorage: storage, document, window, Intl, JSON, Date, Math, Number, Array, String, guestCartKey: GUEST };
   vm.createContext(context);
-  vm.runInContext(["persistedFirebaseProfile", "activeCartKey", "readCart", "cartBadgeCount", "updateCount"].map((name) => extractFunction(productPageSource, name)).join("\n\n"), context);
+  vm.runInContext(["persistedFirebaseSessionUid", "activeCartKey", "readCart", "cartBadgeCount", "updateCount"].map((name) => extractFunction(productPageSource, name)).join("\n\n"), context);
   context.updateCount();
   return { nodes, context };
 }
@@ -59,7 +59,7 @@ function productPage(storage, { badges = 1, lang = "ar" } = {}) {
 // checkout-flow.js setCartCount on the cart it loaded.
 function checkoutCount(cart) {
   const { nodes, document } = fakeDocument(1);
-  const context = { cart, document, formatter: new Intl.NumberFormat("ar-EG"), Math, Number };
+  const context = { cart, document, formatter: new Intl.NumberFormat("ar-EG"), Math, Number, checkoutSessionPending: false };
   vm.createContext(context);
   vm.runInContext(extractFunction(checkoutSource, "setCartCount"), context);
   context.setCartCount();
@@ -71,6 +71,7 @@ function storefrontCount(tab) {
   return tab.context.cartQuantityCount();
 }
 
+const FIREBASE_SESSION = "firebase:authUser:demo-key:[DEFAULT]";
 const ar = (n) => new Intl.NumberFormat("ar-EG").format(n);
 
 test("every page starts the badge empty and hides it until the saved cart is read", () => {
@@ -113,9 +114,9 @@ test("a signed-in customer's badge shows the account cart after a reload, not an
     [GUEST, saved([{ productId: "icon-1", variantId: "default", qty: 1 }], "2026-10-18T09:00:00.000Z")],
     [ACTIVE, userKey(uid)]
   ]);
-  const home = storefrontTab({ storage, catalog });
-  home.context.state.auth = { user: null, ready: false, cachedUser: { uid }, services: null };
-  home.load();
+  storage.setItem(FIREBASE_SESSION, JSON.stringify({ uid }));
+  // Firebase confirmed the session on this page load.
+  const home = storefrontTab({ storage, catalog, user: { uid } }).load();
   assert.equal(storefrontCount(home), 3);
   assert.equal(productPage(storage).nodes[0].textContent, ar(3));
   assert.equal(badgePage(storage).nodes[0].textContent, ar(3));
@@ -154,80 +155,112 @@ test("a page restored from the back/forward cache re-reads the saved cart", () =
   }
 });
 
-test("when the sign-in expires the account cart is kept, never copied to the guest cart, and the customer is told", () => {
-  const uid = "uid-alice";
-  const storage = new FakeStorage([
-    [AUTH, JSON.stringify({ uid })],
-    [userKey(uid), saved([{ productId: "cross-1", variantId: "default", qty: 3 }])],
-    [ACTIVE, userKey(uid)]
-  ]);
-  const home = storefrontTab({ storage, catalog });
-  home.context.state.auth = { user: null, ready: false, cachedUser: { uid }, services: null };
-  home.load();
-  assert.equal(storefrontCount(home), 3, "cached account cart shows while Firebase starts");
-  // What onAuthStateChanged(null) does in script.js.
-  home.context.state.auth.ready = true;
-  home.context.clearCachedAuthUser();
-  home.context.loadGuestCart();
-  assert.equal(storefrontCount(home), 0, "the next person on this device does not see the account cart");
-  assert.equal(JSON.parse(storage.getItem(userKey(uid))).items[0].qty, 3, "account cart is still saved");
-  assert.equal(storage.getItem(GUEST), null, "nothing was copied into the guest cart");
-  const source = scriptSource.replace(/\r\n/g, "\n");
-  assert.match(source, /const expiredAccountCartCount = !user && state\.auth\.cachedUser/);
-  assert.match(source, /if \(expiredAccountCartCount > 0\) \{\n\s*showToast\(/);
-});
+// Identity rule (security review): local records only hint that a session may exist
+// and start Firebase; the account cart is chosen only after the Firebase SDK confirms
+// the user. Pages without the SDK use the account cart only when the last
+// SDK-confirmed profile and Firebase's own session record name the same uid.
+function sessionHint(source, storage, names = ["loadCachedAuthUser", "persistedFirebaseSessionUid", "hasLocalSessionHint"]) {
+  const context = { localStorage: storage, JSON, String, Boolean, cachedAuthStorageKey: AUTH };
+  vm.createContext(context);
+  vm.runInContext(names.map((name) => extractFunction(source, name)).join("\n\n"), context);
+  return context.hasLocalSessionHint();
+}
 
-// Reported on the live site: after a refresh the home badge stayed 0 for good while
-// /cart showed the products. Cause: the profile cache was missing while Firebase still
-// held a valid session, so the home page never started Firebase and showed the guest
-// cart. Every page must now fall back to the session Firebase persists itself.
-const FIREBASE_SESSION = "firebase:authUser:demo-key:[DEFAULT]";
-
-function sessionOnlyStorage(uid) {
+function accountStorage(uid, extra = []) {
   return new FakeStorage([
-    [FIREBASE_SESSION, JSON.stringify({ uid, email: "alice@test.local", stsTokenManager: { accessToken: "never-copied" } })],
     [userKey(uid), saved([
       { productId: "cross-1", variantId: "default", qty: 1 },
       { productId: "censer-1", variantId: "default", qty: 1 },
       { productId: "book-1", variantId: "default", qty: 1 }
     ])],
-    [ACTIVE, GUEST]
+    [ACTIVE, userKey(uid)],
+    ...extra
   ]);
 }
 
-function cachedUserLoader(source, storage) {
-  const context = { localStorage: storage, JSON, cachedAuthStorageKey: AUTH };
-  vm.createContext(context);
-  vm.runInContext(["persistedFirebaseProfile", "loadCachedAuthUser"].map((name) => extractFunction(source, name)).join("\n\n"), context);
-  return context.loadCachedAuthUser;
-}
+const nonSdkPages = (storage) => [productPage(storage).nodes[0].textContent, badgePage(storage).nodes[0].textContent];
 
-test("with only Firebase's own session left, the home badge shows the account cart after a refresh", () => {
+test("reported bug: Firebase session present but profile cache missing still starts Firebase and then shows the account cart", () => {
   const uid = "uid-alice";
-  const storage = sessionOnlyStorage(uid);
-  const cachedUser = cachedUserLoader(scriptSource, storage)();
-  assert.equal(cachedUser?.uid, uid, "the signed-in customer is recognised");
-  const rebuilt = JSON.parse(storage.getItem(AUTH));
-  assert.deepEqual(Object.keys(rebuilt).sort(), ["displayName", "email", "photoURL", "uid"], "only profile fields, no tokens");
-  const home = storefrontTab({ storage, catalog });
-  home.context.state.auth = { user: null, ready: false, cachedUser, services: null };
-  home.load();
-  assert.equal(storefrontCount(home), 3, "not the empty guest cart");
+  const storage = accountStorage(uid, [[FIREBASE_SESSION, JSON.stringify({ uid })]]);
+  assert.equal(sessionHint(scriptSource, storage), true, "home page starts Firebase");
+  assert.equal(sessionHint(checkoutSource, storage, ["storedConfirmedProfile", "persistedFirebaseSessionUid", "hasLocalSessionHint"]), true, "cart page waits for Firebase");
+  const beforeConfirm = storefrontTab({ storage, catalog }).load();
+  assert.equal(storefrontCount(beforeConfirm), 0, "nothing from the account before Firebase answers");
+  const confirmed = storefrontTab({ storage, catalog, user: { uid } }).load();
+  assert.equal(storefrontCount(confirmed), 3, "account cart once Firebase confirms");
+  assert.equal(storage.getItem(AUTH), null, "the profile cache is not rebuilt from local data");
 });
 
-test("the cart page, product page and policies page recognise the same session the same way", () => {
+test("a stale or edited profile cache alone never opens an account cart", () => {
   const uid = "uid-alice";
-  assert.equal(cachedUserLoader(checkoutSource, sessionOnlyStorage(uid))()?.uid, uid);
-  assert.equal(productPage(sessionOnlyStorage(uid)).nodes[0].textContent, ar(3));
-  assert.equal(badgePage(sessionOnlyStorage(uid)).nodes[0].textContent, ar(3));
+  const storage = accountStorage(uid, [[AUTH, JSON.stringify({ uid })]]);
+  const home = storefrontTab({ storage, catalog }).load();
+  assert.equal(storefrontCount(home), 0, "home: guest cart until Firebase confirms");
+  assert.deepEqual(nonSdkPages(storage), [ar(0), ar(0)], "product and policies pages: no matching Firebase session, guest");
 });
 
-test("a real guest (no cache, no Firebase session) still gets the guest cart", () => {
-  const storage = new FakeStorage([[GUEST, saved([{ productId: "icon-1", variantId: "default", qty: 2 }])]]);
-  assert.equal(cachedUserLoader(scriptSource, storage)(), null);
-  assert.equal(storage.getItem(AUTH), null);
+test("a profile cache and a Firebase session for different users (account switch, shared device) mean guest", () => {
+  const storage = accountStorage("uid-alice", [[AUTH, JSON.stringify({ uid: "uid-alice" })], [FIREBASE_SESSION, JSON.stringify({ uid: "uid-bob" })]]);
+  assert.deepEqual(nonSdkPages(storage), [ar(0), ar(0)]);
+  const bob = storefrontTab({ storage, catalog, user: { uid: "uid-bob" } }).load();
+  assert.equal(storefrontCount(bob), 0, "Bob never sees Alice's cart");
+  assert.equal(JSON.parse(storage.getItem(userKey("uid-alice"))).items.length, 3, "Alice's cart is untouched");
+});
+
+test("matching confirmed profile and Firebase session show the account cart on pages without Firebase", () => {
+  const uid = "uid-alice";
+  const storage = accountStorage(uid, [[AUTH, JSON.stringify({ uid })], [FIREBASE_SESSION, JSON.stringify({ uid })]]);
+  assert.deepEqual(nonSdkPages(storage), [ar(3), ar(3)]);
+});
+
+test("after signing out (both records removed) every page shows the guest cart", () => {
+  const storage = accountStorage("uid-alice", [[GUEST, saved([{ productId: "icon-1", variantId: "default", qty: 2 }])]]);
+  storage.setItem(ACTIVE, GUEST);
+  assert.equal(sessionHint(scriptSource, storage), false, "no Firebase load for a guest");
   assert.equal(storefrontCount(storefrontTab({ storage, catalog }).load()), 2);
-  assert.equal(badgePage(storage).nodes[0].textContent, ar(2));
+  assert.deepEqual(nonSdkPages(storage), [ar(2), ar(2)]);
+});
+
+test("while Firebase decides, the home badge is empty, not a misleading guest count", () => {
+  const { nodes, document } = fakeDocument(2);
+  const context = {
+    document, window: { clearTimeout() {} }, state: { cart: new Map([["cross-1::default", 2]]), auth: { sessionPending: true } },
+    formatter: new Intl.NumberFormat("ar-EG"), displayText: (value) => value, Math, Number
+  };
+  vm.createContext(context);
+  vm.runInContext(["cartQuantityCount", "updateCartCount", "endSessionPending"].map((name) => extractFunction(scriptSource, name)).join("\n\n"), context);
+  context.updateCartCount();
+  assert.deepEqual(nodes.map((node) => node.textContent), ["", ""]);
+  context.endSessionPending();
+  assert.deepEqual(nodes.map((node) => node.textContent), [ar(2), ar(2)]);
+});
+
+test("identity comes only from the Firebase SDK on the home and cart pages", () => {
+  const script = scriptSource.replace(/\r\n/g, "\n");
+  assert.match(script, /function effectiveAuthUser\(\) \{\n  return state\.auth\.user \|\| null;\n\}/);
+  assert.doesNotMatch(script, /persistedFirebaseProfile|setItem\(cachedAuthStorageKey, JSON\.stringify\(persisted\)\)/, "no cache rebuilt from local data");
+  assert.match(script, /if \(state\.auth\.sessionHint\) \{\n  state\.auth\.sessionPending = true;/);
+  assert.match(script, /window\.setTimeout\(endSessionPending, 8000\)/, "badge never stays empty if Firebase is unreachable");
+  const checkout = checkoutSource;
+  assert.match(checkout, /function loadCachedAuthUser\(\) \{\n  return checkoutConfirmedUser;\n\}/);
+  assert.match(checkout, /checkoutConfirmedUser = user \? authProfile\(user\) : null;/);
+});
+
+test("when the sign-in expires the account cart is kept, never copied to the guest cart, and the notice shows no item count", () => {
+  const uid = "uid-alice";
+  const storage = accountStorage(uid, [[AUTH, JSON.stringify({ uid })], [FIREBASE_SESSION, JSON.stringify({ uid })]]);
+  // Firebase answered "no user": its record is gone, our cache is cleared.
+  storage.removeItem(FIREBASE_SESSION);
+  const home = storefrontTab({ storage, catalog });
+  home.context.clearCachedAuthUser();
+  home.load();
+  assert.equal(storefrontCount(home), 0);
+  assert.equal(JSON.parse(storage.getItem(userKey(uid))).items.length, 3, "account cart is still saved");
+  assert.equal(storage.getItem(GUEST), null, "nothing was copied into the guest cart");
+  const script = scriptSource.replace(/\r\n/g, "\n");
+  assert.match(script, /const sessionEnded = !user && state\.auth\.sessionHint;/);
+  assert.match(script, /"انتهت جلسة تسجيل الدخول\. سجّل الدخول تاني لاسترجاع سلة حسابك\."/);
 });
 
 test("the cart page never copies the account cart into the guest cart on a signed-out event", () => {

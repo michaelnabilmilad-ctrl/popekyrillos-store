@@ -29,7 +29,7 @@ const CART_FUNCTIONS = [
   "setActiveCartStorageKey", "currentUserCartStorageKey", "currentCartStorageKey", "isAllowedCartStorageKey",
   "effectiveAuthUser", "localCartCandidateKeys", "preferredLocalCartRecord", "loadGuestCart",
   "applySignedInCart", "getProduct", "isVariantAvailable", "variantQuantity", "isProductUnavailable",
-  "signOutCustomer", "saveCartNow", "clearCachedAuthUser"
+  "signOutCustomer", "saveCartNow", "clearCachedAuthUser", "endSessionPending"
 ];
 
 export class FakeStorage {
@@ -66,6 +66,7 @@ export function storefrontTab({ storage = new FakeStorage(), firestore = fakeFir
   const context = {
     console, Date, Math, JSON, Map, Set, Number, String, Array, Object, Promise, Error,
     localStorage: storage,
+    window: { clearTimeout() {}, setTimeout() {} },
     products: catalog,
     productDetailsCache: new Map(),
     bestSellerProducts: [],
@@ -76,7 +77,7 @@ export function storefrontTab({ storage = new FakeStorage(), firestore = fakeFir
     userCartStoragePrefix: "pope-kyrillos-cart:user:",
     activeCartStorageKey: "pope-kyrillos-cart:active",
     cartSyncStorageKey: "pope-kyrillos-cart:sync",
-    state: { cart: new Map(), auth: { user, ready: true, cachedUser: null, services: null } },
+    state: { cart: new Map(), auth: { user, ready: true, cachedUser: null, sessionPending: false, services: null } },
     updateCartCount() {},
     renderCart() {},
     renderAuthState() {},
@@ -152,7 +153,7 @@ const productPageSource = fs.readFileSync(new URL("../../product-page.js", impor
 export function productPageAdd(storage, item) {
   const context = { JSON, Date, Math, Number, Array, String, localStorage: storage, guestCartKey: "pope-kyrillos-cart:guest" };
   vm.createContext(context);
-  vm.runInContext(["persistedFirebaseProfile", "activeCartKey", "readCart", "saveCartItems"].map((name) => extractFunction(productPageSource, name)).join("\n\n"), context);
+  vm.runInContext(["persistedFirebaseSessionUid", "activeCartKey", "readCart", "saveCartItems"].map((name) => extractFunction(productPageSource, name)).join("\n\n"), context);
   const items = context.readCart();
   const existing = items.find((line) => line.productId === item.productId && line.variantId === item.variantId);
   if (existing) existing.qty += item.qty; else items.push(item);

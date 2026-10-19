@@ -23,12 +23,15 @@
     let uid = "";
     let active = "";
     try {
-      uid = JSON.parse(localStorage.getItem("pope-kyrillos-auth:user") || "null")?.uid || "";
-      for (let index = 0; !uid && index < localStorage.length; index += 1) {
+      // Account cart only when the last Firebase-confirmed profile and Firebase's own
+      // session record name the same uid (same rule as product-page.js).
+      const confirmedUid = String(JSON.parse(localStorage.getItem("pope-kyrillos-auth:user") || "null")?.uid || "");
+      let sessionUid = "";
+      for (let index = 0; !sessionUid && index < localStorage.length; index += 1) {
         const key = localStorage.key(index) || "";
-        // Firebase's own persisted session, when the profile cache is missing.
-        if (key.startsWith("firebase:authUser:")) uid = JSON.parse(localStorage.getItem(key) || "null")?.uid || "";
+        if (key.startsWith("firebase:authUser:")) sessionUid = String(JSON.parse(localStorage.getItem(key) || "null")?.uid || "");
       }
+      uid = confirmedUid && confirmedUid === sessionUid ? confirmedUid : "";
       active = localStorage.getItem(activeKey) || "";
     } catch {
       // Storage can be unavailable in private browsing.
