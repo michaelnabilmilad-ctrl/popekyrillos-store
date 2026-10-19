@@ -236,15 +236,17 @@ test("while Firebase decides, the home badge is empty, not a misleading guest co
   assert.deepEqual(nodes.map((node) => node.textContent), [ar(2), ar(2)]);
 });
 
-test("identity comes only from the Firebase SDK on the home and cart pages", () => {
+test("identity: the SDK verdict is final; before it, only both Firebase-written records together count", () => {
   const script = scriptSource.replace(/\r\n/g, "\n");
-  assert.match(script, /function effectiveAuthUser\(\) \{\n  return state\.auth\.user \|\| null;\n\}/);
+  assert.match(script, /function effectiveAuthUser\(\) \{\n  return state\.auth\.user \|\| \(!state\.auth\.ready \? state\.auth\.provisionalUser : null\);\n\}/);
+  assert.match(script, /function consistentLocalProfile\(\) \{\n  const profile = loadCachedAuthUser\(\);\n  return profile\?\.uid && persistedFirebaseSessionUid\(\) === String\(profile\.uid\) \? profile : null;\n\}/);
+  assert.match(script, /state\.auth\.provisionalUser = null;/, "the SDK verdict replaces the provisional identity");
   assert.doesNotMatch(script, /persistedFirebaseProfile|setItem\(cachedAuthStorageKey, JSON\.stringify\(persisted\)\)/, "no cache rebuilt from local data");
-  assert.match(script, /if \(state\.auth\.sessionHint\) \{\n  state\.auth\.sessionPending = true;/);
+  assert.match(script, /state\.auth\.sessionPending = !state\.auth\.provisionalUser;/);
   assert.match(script, /window\.setTimeout\(endSessionPending, 8000\)/, "badge never stays empty if Firebase is unreachable");
   const checkout = checkoutSource;
-  assert.match(checkout, /function loadCachedAuthUser\(\) \{\n  return checkoutConfirmedUser;\n\}/);
-  assert.match(checkout, /checkoutConfirmedUser = user \? authProfile\(user\) : null;/);
+  assert.match(checkout, /function loadCachedAuthUser\(\) \{\n  return checkoutAuthSettled \? checkoutConfirmedUser : \(checkoutConfirmedUser \|\| checkoutProvisionalUser\);\n\}/);
+  assert.match(checkout, /checkoutConfirmedUser = user \? authProfile\(user\) : null;\n\s*checkoutAuthSettled = true;/);
 });
 
 test("when the sign-in expires the account cart is kept, never copied to the guest cart, and the notice shows no item count", () => {

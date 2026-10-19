@@ -228,12 +228,27 @@ function hasLocalSessionHint() {
   return Boolean(storedConfirmedProfile() || persistedFirebaseSessionUid());
 }
 
-// Identity used to pick the account cart: only the user the Firebase SDK confirmed
-// on this page (set by currentCheckoutUser). Local records are never enough.
+// Same rule as script.js: both records Firebase wrote must agree on the uid.
+function consistentLocalProfile() {
+  const profile = storedConfirmedProfile();
+  return profile?.uid && persistedFirebaseSessionUid() === String(profile.uid) ? profile : null;
+}
+
+function cartOwnerOfKey(key = "") {
+  return String(key).startsWith(userCartStoragePrefix) ? String(key).slice(userCartStoragePrefix.length) : "";
+}
+
+// Identity used to pick the account cart: the user the Firebase SDK confirmed on
+// this page; until the SDK answers, the provisional identity above.
 let checkoutConfirmedUser = null;
+let checkoutAuthSettled = false;
+let checkoutProvisionalUser = consistentLocalProfile();
+// Owner of the cart in memory ("" = guest); a cart is only ever written to the
+// server document of the account that owns it.
+let cartOwner = "";
 
 function loadCachedAuthUser() {
-  return checkoutConfirmedUser;
+  return checkoutAuthSettled ? checkoutConfirmedUser : (checkoutConfirmedUser || checkoutProvisionalUser);
 }
 
 function authProfile(user) {
@@ -341,8 +356,12 @@ function loadCart(user = loadCachedAuthUser()) {
     .filter((record) => record.exists || record.updatedAt > 0)
     .sort((a, b) => b.updatedAt - a.updatedAt);
   const selected = records[0];
-  if (!selected) return new Map();
+  if (!selected) {
+    cartOwner = user?.uid ? String(user.uid) : "";
+    return new Map();
+  }
   setActiveCartKey(selected.key);
+  cartOwner = cartOwnerOfKey(selected.key);
   return selected.cart;
 }
 
@@ -437,6 +456,8 @@ async function checkoutAuthServices() {
       serverTimestamp: firestoreModule.serverTimestamp
     };
   })();
+  // A failed download is retried on the next call instead of failing for good.
+  checkoutAuthServicesPromise.catch(() => { checkoutAuthServicesPromise = null; });
 
   return checkoutAuthServicesPromise;
 }
@@ -447,6 +468,8 @@ async function currentCheckoutUser() {
     if (!services?.auth) return null;
     if (services.auth.currentUser) {
       checkoutConfirmedUser = authProfile(services.auth.currentUser);
+      checkoutAuthSettled = true;
+      checkoutProvisionalUser = null;
       saveCachedAuthUser(services.auth.currentUser);
       return services.auth.currentUser;
     }
@@ -460,6 +483,8 @@ async function currentCheckoutUser() {
         window.clearTimeout(timeout);
         unsubscribe();
         checkoutConfirmedUser = user ? authProfile(user) : null;
+        checkoutAuthSettled = true;
+        checkoutProvisionalUser = null;
         if (user) {
           saveCachedAuthUser(user);
         } else {
@@ -516,6 +541,13 @@ async function saveRemoteCartForCheckout(services, user, map) {
 async function saveCurrentCheckoutCartRemote() {
   const user = await currentCheckoutUser();
   if (!user?.getIdToken) return false;
+  // Never write a guest or other account's cart over this account's server cart:
+  // merge it into the account cart instead (the merge saves the result).
+  if (cartOwner !== user.uid) {
+    const changed = await restoreSignedInCheckoutCart();
+    applyCheckoutCartSync(changed);
+    return true;
+  }
 
   let services = null;
   try {
@@ -554,6 +586,7 @@ async function restoreSignedInCheckoutCart() {
   const signedInCart = mergeCartMaps(accountCart, guestRecord.cart);
 
   saveCartRecord(userCartKey, signedInCart);
+  cartOwner = user.uid;
   if (remoteResult.ok) {
     const saved = cartFingerprint(signedInCart) === cartFingerprint(remoteResult.cart)
       || await saveRemoteCartForCheckout(services, realUser, signedInCart);
@@ -1266,11 +1299,13 @@ async function initCheckoutFlow() {
   // With a possible session, wait (briefly) for Firebase to confirm who is signed in
   // before showing any cart, so a stale local record never shows an account cart.
   const sessionHint = hasLocalSessionHint();
-  checkoutSessionPending = sessionHint;
+  // With a provisional identity the account cart shows right away and is synced in
+  // the background; without one, wait (briefly) for Firebase to decide.
+  checkoutSessionPending = sessionHint && !checkoutProvisionalUser;
   cart = loadCart();
   setCartCount();
   let syncedBeforeRender = false;
-  if (sessionHint) {
+  if (checkoutSessionPending) {
     await Promise.race([
       restoreSignedInCheckoutCart().catch(() => false),
       new Promise((resolve) => window.setTimeout(resolve, 4000))

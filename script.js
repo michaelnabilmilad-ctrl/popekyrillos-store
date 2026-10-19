@@ -131,6 +131,8 @@ const state = {
   subcategoryCardsCategory: "",
   language: localStorage.getItem(languageStorageKey) === "en" ? "en" : "ar",
   cart: new Map(),
+  // Owner of the cart in memory: "" for the guest cart, otherwise the account uid.
+  cartOwner: "",
   paymentMethod: "instapay",
   deliveryMethod: "bosta",
   shippingConfirmed: false,
@@ -149,7 +151,12 @@ const state = {
     cachedUser: loadCachedAuthUser(),
     // A local hint that a session may exist: start Firebase and wait for its verdict.
     sessionHint: hasLocalSessionHint(),
+    // Used only until the SDK answers, and only when both records Firebase wrote
+    // agree on the uid; the SDK verdict always replaces it.
+    provisionalUser: consistentLocalProfile(),
     sessionPending: false,
+    firestorePromise: null,
+    retryTimer: null,
     services: null,
     saveTimer: null,
     cartSaveWarningShown: false
@@ -3142,7 +3149,25 @@ function persistedFirebaseSessionUid() {
 // customer may be signed in. The profile cache alone used to decide this, so a
 // missing cache with a valid session left the home page on the guest cart for good.
 function hasLocalSessionHint() {
-  return Boolean(loadCachedAuthUser() || persistedFirebaseSessionUid());
+  let redirectPending = false;
+  try {
+    redirectPending = sessionStorage.getItem("pope-kyrillos-auth:redirect") === "1";
+  } catch {
+    // Session storage can be unavailable in private browsing.
+  }
+  return Boolean(loadCachedAuthUser() || persistedFirebaseSessionUid() || redirectPending);
+}
+
+// The profile the SDK confirmed last on this device, but only while Firebase's own
+// session record (removed by signOut and by an invalid session) names the same uid.
+// A stale, edited or mismatched record gives no identity.
+function consistentLocalProfile() {
+  const profile = loadCachedAuthUser();
+  return profile?.uid && persistedFirebaseSessionUid() === String(profile.uid) ? profile : null;
+}
+
+function cartOwnerOfKey(key = "") {
+  return String(key).startsWith(userCartStoragePrefix) ? String(key).slice(userCartStoragePrefix.length) : "";
 }
 
 function authProfile(user) {
@@ -3155,10 +3180,10 @@ function authProfile(user) {
   };
 }
 
-// Only the user the Firebase SDK confirmed on this page selects the account cart;
-// local records never do, so a stale or edited record cannot open someone's cart.
+// The SDK-confirmed user; before the SDK answers, the provisional identity (both
+// Firebase-written records agree). Never a single local record on its own.
 function effectiveAuthUser() {
-  return state.auth.user || null;
+  return state.auth.user || (!state.auth.ready ? state.auth.provisionalUser : null);
 }
 
 function saveCachedAuthUser(user) {
@@ -3356,6 +3381,7 @@ function preferredLocalCartRecord(user = effectiveAuthUser()) {
 function loadGuestCart() {
   const record = preferredLocalCartRecord();
   state.cart = record.cart;
+  state.cartOwner = cartOwnerOfKey(record.key);
   setActiveCartStorageKey(record.key);
   updateCartCount();
 }
@@ -3364,6 +3390,7 @@ function refreshCartFromLocalStorage() {
   const before = cartFingerprint(state.cart);
   const record = preferredLocalCartRecord();
   state.cart = record.cart;
+  state.cartOwner = cartOwnerOfKey(record.key);
   setActiveCartStorageKey(record.key);
   updateCartCount();
   if (cartFingerprint(state.cart) !== before) renderCart();
@@ -4812,8 +4839,8 @@ function firebaseConfig() {
 function connectLocalFirebaseEmulators(authModule, firestoreModule, auth, db) {
   const emulator = firebaseConfig().emulator;
   if (!emulator || !["127.0.0.1", "localhost"].includes(window.location.hostname)) return;
-  authModule.connectAuthEmulator(auth, emulator.authUrl, { disableWarnings: true });
-  firestoreModule.connectFirestoreEmulator(db, emulator.firestoreHost, Number(emulator.firestorePort));
+  if (authModule && auth) authModule.connectAuthEmulator(auth, emulator.authUrl, { disableWarnings: true });
+  if (firestoreModule && db) firestoreModule.connectFirestoreEmulator(db, emulator.firestoreHost, Number(emulator.firestorePort));
 }
 
 function hasFirebaseConfig() {
@@ -4954,10 +4981,27 @@ function queueRemoteCartSave() {
   return Promise.resolve(true);
 }
 
+async function firestoreReady() {
+  try {
+    await state.auth.firestorePromise;
+  } catch {
+    // Reported by the caller as an unavailable server cart.
+  }
+  return Boolean(state.auth.services?.db);
+}
+
 async function saveRemoteCart() {
   const user = await authenticatedCartUser();
+  if (!user?.getIdToken) return false;
+  // The cart in memory may be the guest cart (shown while Firebase was loading) or
+  // another account's. Writing it would replace this account's server cart, so
+  // merge it into the account cart instead (that merge saves the result).
+  if (state.cartOwner !== user.uid) {
+    await applySignedInCart(user);
+    return true;
+  }
+  if (!(await firestoreReady())) return false;
   const services = state.auth.services;
-  if (!services?.db || !user?.getIdToken) return false;
 
   try {
     await withTimeout(
@@ -4984,8 +5028,8 @@ async function loadRemoteCart(user) {
 }
 
 async function loadRemoteCartRecord(user) {
+  if (!user?.getIdToken || !(await firestoreReady())) return { ok: false, cart: new Map() };
   const services = state.auth.services;
-  if (!services?.db || !user?.getIdToken) return { ok: false, cart: new Map() };
 
   try {
     const snapshot = await withTimeout(services.getDoc(services.doc(services.db, "customerCarts", user.uid)));
@@ -5019,6 +5063,7 @@ async function applySignedInCart(user) {
     : localHasNewerChanges ? mergeCartMaps(remoteResult.cart, userLocalRecord.cart) : remoteResult.cart;
 
   state.cart = mergeCartMaps(accountCart, guestRecord.cart);
+  state.cartOwner = user.uid;
   saveCartToLocal(userCartKey, state.cart);
   if (cartFingerprint(state.cart) !== before) renderCart();
   if (!remoteResult.ok) return;
@@ -5042,21 +5087,37 @@ async function initCustomerAuth() {
   renderAuthState();
 
   try {
-    const [appModule, authModule, firestoreModule] = await Promise.all([
+    // Identity needs only app + auth; Firestore (the largest module) loads in
+    // parallel and is awaited only where the server cart is read or written.
+    const firestoreModulePromise = import(`https://www.gstatic.com/firebasejs/${firebaseSdkVersion}/firebase-firestore.js`);
+    firestoreModulePromise.catch(() => {});
+    const [appModule, authModule] = await Promise.all([
       import(`https://www.gstatic.com/firebasejs/${firebaseSdkVersion}/firebase-app.js`),
-      import(`https://www.gstatic.com/firebasejs/${firebaseSdkVersion}/firebase-auth.js`),
-      import(`https://www.gstatic.com/firebasejs/${firebaseSdkVersion}/firebase-firestore.js`)
+      import(`https://www.gstatic.com/firebasejs/${firebaseSdkVersion}/firebase-auth.js`)
     ]);
 
-    const app = appModule.initializeApp(firebaseConfig());
+    const app = appModule.getApps().length ? appModule.getApp() : appModule.initializeApp(firebaseConfig());
     const auth = authModule.getAuth(app);
-    const db = firestoreModule.getFirestore(app);
-    connectLocalFirebaseEmulators(authModule, firestoreModule, auth, db);
+    connectLocalFirebaseEmulators(authModule, null, auth, null);
     await authModule.setPersistence(auth, authModule.browserLocalPersistence);
+
+    state.auth.firestorePromise = firestoreModulePromise.then((firestoreModule) => {
+      const db = firestoreModule.getFirestore(app);
+      connectLocalFirebaseEmulators(null, firestoreModule, null, db);
+      Object.assign(state.auth.services, {
+        db,
+        doc: firestoreModule.doc,
+        getDoc: firestoreModule.getDoc,
+        setDoc: firestoreModule.setDoc,
+        serverTimestamp: firestoreModule.serverTimestamp
+      });
+      return db;
+    });
+    state.auth.firestorePromise.catch((error) => console.warn("Could not load the server cart module.", error));
 
     state.auth.services = {
       auth,
-      db,
+      db: null,
       GoogleAuthProvider: authModule.GoogleAuthProvider,
       createUserWithEmailAndPassword: authModule.createUserWithEmailAndPassword,
       signInWithEmailAndPassword: authModule.signInWithEmailAndPassword,
@@ -5064,11 +5125,7 @@ async function initCustomerAuth() {
       signInWithPopup: authModule.signInWithPopup,
       signInWithRedirect: authModule.signInWithRedirect,
       signOut: authModule.signOut,
-      onAuthStateChanged: authModule.onAuthStateChanged,
-      doc: firestoreModule.doc,
-      getDoc: firestoreModule.getDoc,
-      setDoc: firestoreModule.setDoc,
-      serverTimestamp: firestoreModule.serverTimestamp
+      onAuthStateChanged: authModule.onAuthStateChanged
     };
 
     state.auth.services.onAuthStateChanged(auth, async (user) => {
@@ -5077,8 +5134,15 @@ async function initCustomerAuth() {
       state.auth.loading = false;
       const sessionEnded = !user && state.auth.sessionHint;
       state.auth.sessionHint = Boolean(user);
+      state.auth.provisionalUser = null;
       state.auth.sessionPending = false;
       window.clearTimeout(state.auth.sessionPendingTimer);
+      window.clearTimeout(state.auth.retryTimer);
+      try {
+        sessionStorage.removeItem("pope-kyrillos-auth:redirect");
+      } catch {
+        // Session storage cleanup is best-effort.
+      }
       if (user) {
         saveCachedAuthUser(user);
       } else {
@@ -5107,12 +5171,20 @@ async function initCustomerAuth() {
       }
     });
   } catch (error) {
-    state.auth.ready = true;
-    state.auth.loading = false;
-    state.auth.configured = false;
     console.warn("Could not initialize Firebase auth.", error);
-    renderAuthState();
+    state.auth.loading = false;
+    authInitPromise = null;
     endSessionPending();
+    // A failed download (slow or dropped connection) says nothing about the session:
+    // keep the provisional identity and try again instead of signing the customer out.
+    if (state.auth.sessionHint) {
+      window.clearTimeout(state.auth.retryTimer);
+      state.auth.retryTimer = window.setTimeout(() => void ensureAuthServices(), 15000);
+    } else {
+      state.auth.ready = true;
+      state.auth.configured = false;
+    }
+    renderAuthState();
   }
 }
 
@@ -5145,6 +5217,13 @@ async function signInWithProvider(providerName) {
     closeAccountModal();
   } catch (error) {
     if (error?.code === "auth/popup-blocked" || error?.code === "auth/cancelled-popup-request") {
+      // On return the page must start Firebase to finish the sign-in, even though
+      // no session record exists yet.
+      try {
+        sessionStorage.setItem("pope-kyrillos-auth:redirect", "1");
+      } catch {
+        // Without session storage the customer signs in again from the account menu.
+      }
       await services.signInWithRedirect(services.auth, provider);
       return;
     }
@@ -6621,7 +6700,9 @@ loadProducts();
 // When a session may exist, Firebase is started and decides; until it answers the
 // page shows the guest cart with an empty badge. Guests load nothing extra.
 if (state.auth.sessionHint) {
-  state.auth.sessionPending = true;
+  // With a provisional identity the account cart is already shown; otherwise keep
+  // the badge empty until Firebase decides.
+  state.auth.sessionPending = !state.auth.provisionalUser;
   updateCartCount();
   // Never leave the badge empty if Firebase cannot be reached.
   state.auth.sessionPendingTimer = window.setTimeout(endSessionPending, 8000);

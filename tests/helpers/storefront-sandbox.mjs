@@ -29,7 +29,7 @@ const CART_FUNCTIONS = [
   "setActiveCartStorageKey", "currentUserCartStorageKey", "currentCartStorageKey", "isAllowedCartStorageKey",
   "effectiveAuthUser", "localCartCandidateKeys", "preferredLocalCartRecord", "loadGuestCart",
   "applySignedInCart", "getProduct", "isVariantAvailable", "variantQuantity", "isProductUnavailable",
-  "signOutCustomer", "saveCartNow", "clearCachedAuthUser", "endSessionPending"
+  "signOutCustomer", "saveCartNow", "clearCachedAuthUser", "endSessionPending", "cartOwnerOfKey"
 ];
 
 export class FakeStorage {
