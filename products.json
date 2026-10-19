@@ -11568,5 +11568,52 @@
     "subcategory": "relic-boxes",
     "sku": "PK-71CB97A9EBBF42D8A0B7D45512945927",
     "hasVariants": false
+  },
+  {
+    "id": "custom-1792428691115",
+    "name": "قلم يوتا ",
+    "category": "brass",
+    "label": "نحاسيات",
+    "description": "أقلام اليوتا الدقيقة مثالية للتلوين والرسم والتحكم في أدق التفاصيل، وتساعدك على توزيع الألوان بسهولة ودقة، خصوصاً في المساحات الصغيرة والتصميمات الدقيقة.\n\nمواصفات المنتج:\n\nالطول: 11 سم.\nالسعة: 20 مل.\nالنوع: قلم فارغ قابل لإعادة التعبئة.\nالسن: دقيق لتلوين التفاصيل الصغيرة.\nالاستخدام: تلوين اليوتا والأعمال الفنية واليدوية.\n\n✅ سهلة الاستخدام والتعبئة.\n✅ مناسبة للتلوين الدقيق والتحكم في كمية اللون.\n✅ قابلة لإعادة الاستخدام.\n✅ حجم عملي وسهل الحمل والتخزين.\n\n📌 ملحوظة: الأقلام تُباع فارغة بدون ألوان.\n\nمتوفرة الآن بسعر مميز في مكتبة البابا كيرلس.",
+    "price": 35,
+    "priceNote": "",
+    "stock": "متاح",
+    "badge": "أقلام اليوتا، قلم يوتا فارغ، أقلام تلوين اليوتا، أقلام دقيقة للتلوين، قلم تعبئة ألوان، أدوات تلوين اليوتا، أقلام رسم دقيقة، مستلزمات اليوتا.",
+    "isBestSeller": true,
+    "image": "assets/optimized/products/gallery/product-1-1-20261019165246-80b9be.webp",
+    "url": "https://popekyrillos.store/?product=custom-1792428691115",
+    "tags": [
+      "يوتا",
+      "اقلام",
+      "تلوين",
+      "عمل فني"
+    ],
+    "collections": [],
+    "images": [
+      "assets/optimized/products/gallery/product-1-1-20261019165246-80b9be.webp",
+      "assets/optimized/products/gallery/product-1-2-20261019165253-e77d8b.webp",
+      "assets/optimized/products/gallery/product-1-4-20261019165258-ec7c09.webp",
+      "assets/optimized/products/gallery/product-1-22-20261019165303-181730.webp"
+    ],
+    "options": [],
+    "variants": [
+      {
+        "id": "custom-1792428691115-variant-1792428691115-1",
+        "title": "الاختيار الافتراضي",
+        "options": {},
+        "price": 35,
+        "compareAtPrice": null,
+        "available": true,
+        "image": null,
+        "images": [],
+        "sku": "PK-7F172F35B6FC4714A48EFD3384934FAF",
+        "quantity": null
+      }
+    ],
+    "mainCategory": "المناسبات والخدمة",
+    "subCategory": "تلوين وأشغال يدوية",
+    "subcategory": "crafts-coloring",
+    "sku": "PK-1C451D7AF1694A56A357E4CED327CBB4",
+    "hasVariants": false
   }
 ]
