@@ -149,6 +149,29 @@ test("new orders are rate limited per phone, retries of the same order are never
   assert.ok(subjects.length > 0 && subjects.every((subject) => !subject.includes("0101234")));
 });
 
+test("many customers on one shared mobile IP are not blocked", async (t) => {
+  const f = await setup(t);
+  for (let i = 0; i < 25; i++) {
+    assert.equal((await f.order({ phone: `0101234${String(5000 + i)}` })).status, 200, `customer ${i + 1}`);
+  }
+  assert.equal(f.creates, 25);
+});
+
+test("an order that failed on our side does not count against the customer's limit", async (t) => {
+  const f = await setup(t);
+  let failures = 6;
+  t.mock.method(globalThis, "fetch", async (input, init = {}) => {
+    if (failures > 0 && init.method === "POST" && decodeURIComponent(String(input)).endsWith("/Orders")) {
+      failures -= 1;
+      return new Response(JSON.stringify({ error: { type: "SERVER_ERROR" } }), { status: 500 });
+    }
+    return f.fetch(input, init);
+  });
+  for (let i = 0; i < 6; i++) assert.equal((await f.order({ requestId: "retry-after-failure" })).status, 502, `failed try ${i + 1}`);
+  assert.equal((await f.order({ requestId: "retry-after-failure" })).status, 200, "the customer's retry still goes through");
+  assert.equal(f.env.ANALYTICS_DB.sqlite.prepare("SELECT COUNT(*) AS n FROM website_order_attempts WHERE subject LIKE 'phone:%'").get().n, 1);
+});
+
 test("retrying the same request id returns the same order without counting or creating again", async (t) => {
   const f = await setup(t);
   const payload = { requestId: "same-order" };

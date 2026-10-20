@@ -1758,8 +1758,10 @@ async function initializeOrderIdempotency(env) {
 
 // Generous limits a real customer does not reach, to stop scripted order floods during paid
 // campaigns. Only NEW orders count (a retry with the same request id is answered from
-// website_order_requests and never counted). Phone numbers and IPs are stored only as salted hashes.
-const ORDER_LIMITS = [{ kind: "phone", max: 5 }, { kind: "ip", max: 20 }];
+// website_order_requests and never counted), and an attempt that failed on our side is removed
+// again. The IP limit is high because many mobile customers share one carrier IP (CGNAT).
+// Phone numbers and IPs are stored only as salted hashes.
+const ORDER_LIMITS = [{ kind: "phone", max: 5 }, { kind: "ip", max: 60 }];
 const ORDER_LIMIT_WINDOW_SECONDS = 3600;
 
 async function orderLimitSubject(env, kind, value) {
@@ -1768,9 +1770,9 @@ async function orderLimitSubject(env, kind, value) {
   return `${kind}:${[...bytes.slice(0, 16)].map((byte) => byte.toString(16).padStart(2, "0")).join("")}`;
 }
 
-async function orderRateLimited(env, request, order) {
+async function orderRateLimited(env, request, order, requestId) {
   await env.ANALYTICS_DB.prepare(
-    "CREATE TABLE IF NOT EXISTS website_order_attempts (subject TEXT NOT NULL, created_at INTEGER NOT NULL)"
+    "CREATE TABLE IF NOT EXISTS website_order_attempts (subject TEXT NOT NULL, created_at INTEGER NOT NULL, request_id TEXT NOT NULL DEFAULT '')"
   ).run();
   await env.ANALYTICS_DB.prepare(
     "CREATE INDEX IF NOT EXISTS website_order_attempts_subject ON website_order_attempts (subject, created_at)"
@@ -1791,7 +1793,7 @@ async function orderRateLimited(env, request, order) {
     subjects.push(subject);
   }
   for (const subject of subjects) {
-    await env.ANALYTICS_DB.prepare("INSERT INTO website_order_attempts (subject, created_at) VALUES (?, ?)").bind(subject, now).run();
+    await env.ANALYTICS_DB.prepare("INSERT INTO website_order_attempts (subject, created_at, request_id) VALUES (?, ?, ?)").bind(subject, now, requestId).run();
   }
   await env.ANALYTICS_DB.prepare("DELETE FROM website_order_attempts WHERE created_at < ?").bind(now - 86400).run();
   return false;
@@ -2346,7 +2348,7 @@ async function createOrderResponse(context) {
     const reservation = await env.ANALYTICS_DB.prepare(
       "INSERT OR IGNORE INTO website_order_requests (request_id, status) VALUES (?, 'processing')"
     ).bind(requestId).run();
-    if (reservation.meta?.changes && await orderRateLimited(env, request, order)) {
+    if (reservation.meta?.changes && await orderRateLimited(env, request, order, requestId)) {
       await env.ANALYTICS_DB.prepare("DELETE FROM website_order_requests WHERE request_id = ?").bind(requestId).run();
       console.warn("Website order rate limit reached", { requestId });
       return orderJsonResponse(request, {
@@ -2462,6 +2464,8 @@ async function createOrderResponse(context) {
         ).bind(requestId).run();
       } else {
         await env.ANALYTICS_DB.prepare("DELETE FROM website_order_requests WHERE request_id = ?").bind(requestId).run();
+        // Nothing was created: a retry of this order must not count against the customer's limit.
+        await env.ANALYTICS_DB.prepare("DELETE FROM website_order_attempts WHERE request_id = ?").bind(requestId).run().catch(() => {});
       }
     } catch (stateError) {
       console.error("Could not restore website order retry state", { requestId, recordId, message: stateError.message });
