@@ -40,8 +40,8 @@ class SharedStorage extends FakeStorage {
   }
 }
 
-function storefront(storage, user) {
-  const tab = storefrontTab({ storage, catalog, user });
+function storefront(storage, user, firestore) {
+  const tab = storefrontTab({ storage, catalog, user, ...(firestore ? { firestore } : {}) });
   vm.runInContext(extractFunction(scriptSource, "refreshCartFromLocalStorage"), tab.context);
   let reads = 0;
   const load = tab.context.loadRemoteCartRecord;
@@ -73,6 +73,32 @@ test("two tabs on different accounts settle instead of saving against each other
   assert.ok(home.reads() + other.reads() < 10, "the server cart is not read in a loop");
   assert.deepEqual(Object.keys(home.cart), ["cross-1::default"], "Carol's tab keeps Carol's cart");
   assert.deepEqual(Object.keys(other.cart), ["book-1::default"], "Erin's lines never enter Carol's cart");
+});
+
+test("two tabs of the same account: additions and removals reach the other tab and stay", async () => {
+  const storage = new SharedStorage();
+  const carol = { uid: "uid-carol", getIdToken() {} };
+  const a = storefront(storage, carol);
+  const b = storefront(storage, carol, a.firestore); // same browser, same server
+  storage.current = a; await a.signIn(carol); a.add("cross-1"); a.add("censer-1");
+  await a.context.saveRemoteCart();
+  storage.current = b; await b.signIn(carol);
+  await storage.deliver();
+  assert.deepEqual(Object.keys(b.cart).sort(), ["censer-1::default", "cross-1::default"], "tab B sees tab A's additions");
+
+  // Tab A removes a line; its server save is still on the way (the server still has it).
+  storage.current = a; a.remove("censer-1");
+  const delivered = await storage.deliver();
+  assert.ok(delivered < 20, `settles (delivered ${delivered})`);
+  assert.deepEqual(Object.keys(b.cart), ["cross-1::default"], "the removal reaches tab B");
+  assert.deepEqual(Object.keys(a.cart), ["cross-1::default"], "the removed line does not come back in tab A");
+  storage.current = a; await a.context.saveRemoteCart(); // tab A's save arrives
+  await storage.deliver();
+  assert.deepEqual(a.firestore.read("uid-carol").items.map((item) => item.productId), ["cross-1"]);
+
+  storage.current = b; b.add("book-1");
+  await storage.deliver();
+  assert.deepEqual(Object.keys(a.cart).sort(), ["book-1::default", "cross-1::default"], "tab A sees tab B's addition");
 });
 
 test("a storage event with nothing new does not re-run the server merge", async () => {

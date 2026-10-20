@@ -3399,6 +3399,15 @@ function refreshCartFromLocalStorage() {
     const accountRecord = readCartRecord(currentUserCartStorageKey(state.auth.user));
     const guestAdditions = cartHasItems(readCartRecord(guestCartStorageKey).cart);
     if (!guestAdditions && cartFingerprint(accountRecord.cart) === cartFingerprint(state.cart)) return;
+    // Another tab of this account saved its cart and sends it to the server itself: show that
+    // copy as it is. Merging it with the server copy here brought a removed line back while
+    // the other tab's save was still on its way (and froze tabs on the old code).
+    if (!guestAdditions && accountRecord.exists && state.cartOwner === state.auth.user.uid) {
+      state.cart = accountRecord.cart;
+      updateCartCount();
+      renderCart();
+      return;
+    }
     applySignedInCart(state.auth.user).catch((error) => console.warn("Could not sync signed-in cart.", error));
     return;
   }
