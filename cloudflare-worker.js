@@ -11,6 +11,7 @@ import { bestSellersResponse } from "./functions/api/best-sellers.js";
 import { coloringDesignForProduct } from "./coloringDesigns.js";
 import { backfillAirtableOrderProducts } from "./functions/_airtable-order-backfill.js";
 import { checkoutReceipt, customerOrdersResponse, ensureOrderAccess, purchaseSnapshot } from "./functions/_customer-orders.js";
+import { ALLOWED_PAYMENT_METHODS, NEW_ORDER_STATUS, TOTAL_TOLERANCE, paymentStatusForMethod, priceOrderItems } from "./functions/_order-pricing.js";
 import {
   AIRTABLE_PRODUCT_SKU_FIELD,
   AIRTABLE_PRODUCT_NAME_FIELD,
@@ -1755,6 +1756,47 @@ async function initializeOrderIdempotency(env) {
   `).run();
 }
 
+// Generous limits a real customer does not reach, to stop scripted order floods during paid
+// campaigns. Only NEW orders count (a retry with the same request id is answered from
+// website_order_requests and never counted). Phone numbers and IPs are stored only as salted hashes.
+const ORDER_LIMITS = [{ kind: "phone", max: 5 }, { kind: "ip", max: 20 }];
+const ORDER_LIMIT_WINDOW_SECONDS = 3600;
+
+async function orderLimitSubject(env, kind, value) {
+  const raw = `${kind}:${value}:${String(env.ANALYTICS_HASH_SALT || "pope-kyrillos-orders")}`;
+  const bytes = new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(raw)));
+  return `${kind}:${[...bytes.slice(0, 16)].map((byte) => byte.toString(16).padStart(2, "0")).join("")}`;
+}
+
+async function orderRateLimited(env, request, order) {
+  await env.ANALYTICS_DB.prepare(
+    "CREATE TABLE IF NOT EXISTS website_order_attempts (subject TEXT NOT NULL, created_at INTEGER NOT NULL)"
+  ).run();
+  await env.ANALYTICS_DB.prepare(
+    "CREATE INDEX IF NOT EXISTS website_order_attempts_subject ON website_order_attempts (subject, created_at)"
+  ).run();
+  const now = Math.floor(Date.now() / 1000);
+  const values = {
+    phone: String(order.phone || "").replace(/\D/g, "").slice(-10),
+    ip: cleanOrderString(request.headers.get("CF-Connecting-IP"))
+  };
+  const subjects = [];
+  for (const limit of ORDER_LIMITS) {
+    if (!values[limit.kind]) continue;
+    const subject = await orderLimitSubject(env, limit.kind, values[limit.kind]);
+    const row = await env.ANALYTICS_DB.prepare(
+      "SELECT COUNT(*) AS count FROM website_order_attempts WHERE subject = ? AND created_at > ?"
+    ).bind(subject, now - ORDER_LIMIT_WINDOW_SECONDS).first();
+    if (Number(row?.count) >= limit.max) return true;
+    subjects.push(subject);
+  }
+  for (const subject of subjects) {
+    await env.ANALYTICS_DB.prepare("INSERT INTO website_order_attempts (subject, created_at) VALUES (?, ?)").bind(subject, now).run();
+  }
+  await env.ANALYTICS_DB.prepare("DELETE FROM website_order_attempts WHERE created_at < ?").bind(now - 86400).run();
+  return false;
+}
+
 function medalVariantPricing(variantId) {
   if (variantId === "medal-wood-plywood") {
     return { woodType: "كونتر", basePrice: 20, discountRate: 0.1, discountValue: 2, finalPrice: 18 };
@@ -1847,6 +1889,7 @@ function normalizeDeliveryType(value) {
 }
 
 function normalizeOrderPayload(payload = {}) {
+  const paymentMethod = normalizePaymentMethod(payload.paymentMethod);
   return {
     customerName: cleanOrderString(payload.customerName),
     phone: cleanOrderString(payload.phone),
@@ -1854,12 +1897,15 @@ function normalizeOrderPayload(payload = {}) {
     source: cleanOrderString(payload.source) || "Website",
     products: formatOrderProductsForAirtable(payload.products),
     total: Number(payload.total),
-    paymentStatus: cleanOrderString(payload.paymentStatus) || "\u063a\u064a\u0631 \u0645\u062f\u0641\u0648\u0639",
-    paymentMethod: normalizePaymentMethod(payload.paymentMethod),
-    paymentProof: cleanOrderString(payload.paymentProof),
+    // A new website order's payment and order status are set here from the payment
+    // method, never taken from the request (a request could arrive marked as paid).
+    paymentStatus: paymentStatusForMethod(paymentMethod),
+    paymentMethod,
+    // The site never sends a proof with the order (customers send it on WhatsApp).
+    paymentProof: "",
     pickupDate: cleanOrderString(payload.pickupDate),
     deliveryType: normalizeDeliveryType(payload.deliveryType),
-    orderStatus: cleanOrderString(payload.orderStatus) || "\u062c\u062f\u064a\u062f",
+    orderStatus: NEW_ORDER_STATUS,
     missingInfo: cleanOrderString(payload.missingInfo) || "\u0644\u0627 \u064a\u0648\u062c\u062f",
     notes: cleanOrderString(payload.notes)
   };
@@ -1872,8 +1918,9 @@ function validateOrderPayload(order) {
   if (!order.address) missing.push("address");
   if (!order.products || order.products === "[]") missing.push("products");
   if (!Number.isFinite(order.total)) missing.push("total");
-  if (!order.paymentMethod) missing.push("paymentMethod");
-  if (!order.deliveryType) missing.push("deliveryType");
+  // Cash is paid at the shop on pickup; shipped orders are paid by transfer (as on the payment page).
+  if (!ALLOWED_PAYMENT_METHODS.has(order.paymentMethod) || (order.paymentMethod === "Cash" && order.deliveryType === "شحن")) missing.push("paymentMethod");
+  if (!["استلام من المكتبة", "شحن"].includes(order.deliveryType)) missing.push("deliveryType");
   if (!order.orderStatus) missing.push("orderStatus");
   return missing;
 }
@@ -2234,6 +2281,36 @@ async function createOrderResponse(context) {
       message: "\u0628\u064a\u0627\u0646\u0627\u062a \u0645\u0646\u062a\u062c\u0627\u062a \u0627\u0644\u0633\u0644\u0629 \u063a\u064a\u0631 \u0645\u0643\u062a\u0645\u0644\u0629."
     }, { status: 400 });
   }
+  // Every line is priced from the live catalog (the same data the cart page priced it from),
+  // never from the request. A total that differs means the cart is outdated or was edited:
+  // nothing is saved and the customer is asked to review the cart.
+  const catalog = await loadProducts(env, request, { maxAgeMs: 0 });
+  const pricing = priceOrderItems(normalizedItems.items, catalog);
+  if (pricing.errors.length) {
+    console.warn("Order lines do not match the catalog", { requestId, lines: pricing.errors });
+    return orderJsonResponse(request, {
+      error: "cart_changed",
+      fields: pricing.errors,
+      message: "\u0628\u0639\u0636 \u0645\u0646\u062a\u062c\u0627\u062a \u0627\u0644\u0633\u0644\u0629 \u062a\u063a\u064a\u0651\u0631\u062a \u0623\u0648 \u0644\u0645 \u062a\u0639\u062f \u0645\u062a\u0627\u062d\u0629. \u0631\u0627\u062c\u0639 \u0627\u0644\u0633\u0644\u0629 \u062b\u0645 \u0623\u0643\u062f \u0627\u0644\u0637\u0644\u0628 \u0645\u0631\u0629 \u0623\u062e\u0631\u0649."
+    }, { status: 409 });
+  }
+  const requestedTotal = Number(payload.total);
+  if (!Number.isFinite(requestedTotal) || Math.abs(requestedTotal - pricing.total) > TOTAL_TOLERANCE) {
+    console.warn("Order total differs from the catalog total", {
+      requestId,
+      requestedTotal,
+      catalogTotal: pricing.total,
+      productIds: pricing.lines.map((line) => line.productId)
+    });
+    return orderJsonResponse(request, {
+      error: "price_changed",
+      catalogTotal: pricing.total,
+      message: "\u062a\u063a\u064a\u0651\u0631\u062a \u0623\u0633\u0639\u0627\u0631 \u0628\u0639\u0636 \u0627\u0644\u0645\u0646\u062a\u062c\u0627\u062a. \u062d\u062f\u0651\u062b \u0627\u0644\u0633\u0644\u0629 \u0648\u0631\u0627\u062c\u0639 \u0627\u0644\u0625\u062c\u0645\u0627\u0644\u064a \u0642\u0628\u0644 \u062a\u0623\u0643\u064a\u062f \u0627\u0644\u0637\u0644\u0628."
+    }, { status: 409 });
+  }
+  normalizedItems.items.forEach((item, index) => {
+    item.unitPrice = pricing.lines[index].unitPrice;
+  });
   order.total = normalizedItems.items.reduce((sum, item) => sum + item.unitPrice * item.quantity, 0);
   order.products = normalizedItems.items.map((item) => [
     item.productName,
@@ -2269,6 +2346,14 @@ async function createOrderResponse(context) {
     const reservation = await env.ANALYTICS_DB.prepare(
       "INSERT OR IGNORE INTO website_order_requests (request_id, status) VALUES (?, 'processing')"
     ).bind(requestId).run();
+    if (reservation.meta?.changes && await orderRateLimited(env, request, order)) {
+      await env.ANALYTICS_DB.prepare("DELETE FROM website_order_requests WHERE request_id = ?").bind(requestId).run();
+      console.warn("Website order rate limit reached", { requestId });
+      return orderJsonResponse(request, {
+        error: "too_many_orders",
+        message: "تم استلام عدد كبير من الطلبات في وقت قصير. حاول بعد قليل أو تواصل معنا على واتساب."
+      }, { status: 429 });
+    }
     let savedRequest = await env.ANALYTICS_DB.prepare(
       "SELECT status, airtable_order_id, detail_count FROM website_order_requests WHERE request_id = ?"
     ).bind(requestId).first();

@@ -11,6 +11,16 @@ import {
 
 const env = { AIRTABLE_BASE_ID: "appTest", AIRTABLE_TOKEN: "secret" };
 
+// The live catalog /api/orders prices lines from (read from products-data on GitHub).
+const testCatalog = [
+  { id: "site-1", sku: "SKU-1", name: "Linked Item", price: 10, stock: "متاح", variants: [] },
+  { id: "SITE-2", name: "Permanent ID Item", price: 20, stock: "متاح", variants: [] }
+];
+function catalogResponse(url) {
+  const { hostname, pathname } = new URL(url);
+  return ["raw.githubusercontent.com", "api.github.com"].includes(hostname) && pathname.includes("products.json") ? Response.json(testCatalog) : null;
+}
+
 test("normalizes one item and keeps quantity as one detail row", () => {
   const result = normalizeOrderItems(JSON.stringify([
     { sku: "SKU-1", quantity: 3, price: 25, lineTotal: 75 }
@@ -198,6 +208,8 @@ test("mixed SKU and permanent-id checkout links every row and retries safely", a
   let orderRequest;
   let detailRequest;
   globalThis.fetch = async (url, init = {}) => {
+    const catalog = catalogResponse(url);
+    if (catalog) return catalog;
     const path = new URL(url).pathname;
     if (!init.method && path.endsWith("/Orders/recOrder1")) return Response.json({ id: "recOrder1", fields: { "Order ID": 1, Phone: "01000000000" } });
     if (!init.method && path.includes(encodeURIComponent("المنتجات"))) {
@@ -288,6 +300,8 @@ test("detail creation failure never returns checkout success", async () => {
   };
   const originalFetch = globalThis.fetch;
   globalThis.fetch = async (url, init = {}) => {
+    const catalog = catalogResponse(url);
+    if (catalog) return catalog;
     const pathname = new URL(url).pathname;
     if (!init.method && pathname.includes(encodeURIComponent("المنتجات"))) {
       return new Response(JSON.stringify({ records: [{ id: "recProduct1" }] }));

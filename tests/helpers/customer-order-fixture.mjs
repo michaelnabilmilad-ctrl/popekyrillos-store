@@ -51,8 +51,11 @@ export function airtableFixture() {
       f["تم إرجاع المخزون؟"] = true;
       return movement ? "completed" : "repaired-returned-flag";
     },
+    // The live catalog the order endpoint prices lines from (read from products-data on GitHub).
+    catalog: [{ id: "book-1", sku: "BOOK-1", name: "كتاب", price: 120, stock: "متاح", variants: [] }],
     async fetch(input, init = {}) {
       const url = new URL(input);
+      if (["raw.githubusercontent.com", "api.github.com"].includes(url.hostname) && /products\.json/.test(url.pathname)) return Response.json(fixture.catalog);
       if (url.hostname !== "api.airtable.com") throw new Error("Unexpected external request");
       const [, , , table, id] = decodeURIComponent(url.pathname).split("/");
       const method = init.method || "GET";
