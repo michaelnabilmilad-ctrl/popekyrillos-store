@@ -2302,8 +2302,9 @@ async function createOrderResponse(context) {
   if (pricing.errors.length) {
     console.warn("Order lines do not match the catalog", { requestId, lines: pricing.errors });
     return orderJsonResponse(request, {
+      // No field list here: the payment page prints `fields` after the message, and the
+      // customer only needs to review the cart (the details are in the log above).
       error: "cart_changed",
-      fields: pricing.errors,
       message: "\u0628\u0639\u0636 \u0645\u0646\u062a\u062c\u0627\u062a \u0627\u0644\u0633\u0644\u0629 \u062a\u063a\u064a\u0651\u0631\u062a \u0623\u0648 \u0644\u0645 \u062a\u0639\u062f \u0645\u062a\u0627\u062d\u0629. \u0631\u0627\u062c\u0639 \u0627\u0644\u0633\u0644\u0629 \u062b\u0645 \u0623\u0643\u062f \u0627\u0644\u0637\u0644\u0628 \u0645\u0631\u0629 \u0623\u062e\u0631\u0649."
     }, { status: 409 });
   }

@@ -131,7 +131,10 @@ test("an unavailable or unknown product is refused with a review-your-cart messa
   const f = await setup(t);
   const response = await f.order({ products: [{ productId: "gone", name: "منتج غير متاح", quantity: 1, price: 50 }], total: 50 });
   assert.equal(response.status, 409);
-  assert.equal((await response.json()).error, "cart_changed");
+  const body = await response.json();
+  assert.equal(body.error, "cart_changed");
+  assert.equal(body.fields, undefined, "no technical field list printed under the message");
+  assert.match(body.message, /راجع السلة/);
   assert.equal(f.creates, 0);
 });
 
