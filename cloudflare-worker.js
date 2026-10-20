@@ -1770,7 +1770,18 @@ async function orderLimitSubject(env, kind, value) {
   return `${kind}:${[...bytes.slice(0, 16)].map((byte) => byte.toString(16).padStart(2, "0")).join("")}`;
 }
 
+// The limit must never block valid orders: if the attempts table cannot be created, read or
+// written, the order goes through as before and the problem is only logged.
 async function orderRateLimited(env, request, order, requestId) {
+  try {
+    return await checkAndRecordOrderAttempt(env, request, order, requestId);
+  } catch (error) {
+    console.error("Order rate limit check failed; order allowed", { requestId, message: error?.message || String(error) });
+    return false;
+  }
+}
+
+async function checkAndRecordOrderAttempt(env, request, order, requestId) {
   await env.ANALYTICS_DB.prepare(
     "CREATE TABLE IF NOT EXISTS website_order_attempts (subject TEXT NOT NULL, created_at INTEGER NOT NULL, request_id TEXT NOT NULL DEFAULT '')"
   ).run();

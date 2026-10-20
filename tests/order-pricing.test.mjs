@@ -149,6 +149,21 @@ test("new orders are rate limited per phone, retries of the same order are never
   assert.ok(subjects.length > 0 && subjects.every((subject) => !subject.includes("0101234")));
 });
 
+test("if the attempts table cannot be created or used, valid orders still go through", async (t) => {
+  const f = await setup(t);
+  const database = f.env.ANALYTICS_DB;
+  f.env.ANALYTICS_DB = {
+    ...database,
+    prepare(sql) {
+      if (sql.includes("website_order_attempts")) return { bind() { return this; }, async run() { throw new Error("D1 failure"); }, async first() { throw new Error("D1 failure"); } };
+      return database.prepare(sql);
+    }
+  };
+  t.mock.method(console, "error", () => {});
+  for (let i = 0; i < 7; i++) assert.equal((await f.order()).status, 200, `order ${i + 1}`);
+  assert.equal(f.creates, 7, "orders saved; only the limit is skipped");
+});
+
 test("many customers on one shared mobile IP are not blocked", async (t) => {
   const f = await setup(t);
   for (let i = 0; i < 25; i++) {
