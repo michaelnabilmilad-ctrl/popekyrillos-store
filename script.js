@@ -3159,6 +3159,46 @@ function hasLocalSessionHint() {
   return Boolean(loadCachedAuthUser() || persistedFirebaseSessionUid() || redirectPending);
 }
 
+// Older versions of the site moved the session to IndexedDB on every page load and back.
+// A tab closed at that moment left it there only, and the other open tab then removed the
+// profile cache, so the customer looked signed out on every page. Look for such a session
+// on this device without creating the database; only a found session loads Firebase.
+async function hasIndexedDbSession() {
+  try {
+    if (!window.indexedDB?.databases) return false;
+    const databases = await indexedDB.databases();
+    if (!databases.some((database) => database.name === "firebaseLocalStorageDb")) return false;
+    return await new Promise((resolve) => {
+      const request = indexedDB.open("firebaseLocalStorageDb");
+      request.onerror = () => resolve(false);
+      request.onsuccess = () => {
+        const database = request.result;
+        try {
+          if (!database.objectStoreNames.contains("firebaseLocalStorage")) {
+            database.close();
+            resolve(false);
+            return;
+          }
+          const keys = database.transaction("firebaseLocalStorage", "readonly").objectStore("firebaseLocalStorage").getAllKeys();
+          keys.onsuccess = () => {
+            database.close();
+            resolve(keys.result.some((key) => String(key).startsWith("firebase:authUser:")));
+          };
+          keys.onerror = () => {
+            database.close();
+            resolve(false);
+          };
+        } catch {
+          database.close();
+          resolve(false);
+        }
+      };
+    });
+  } catch {
+    return false;
+  }
+}
+
 function cartOwnerOfKey(key = "") {
   return String(key).startsWith(userCartStoragePrefix) ? String(key).slice(userCartStoragePrefix.length) : "";
 }
@@ -6751,7 +6791,7 @@ renderAuthState();
 loadProducts();
 // When a session may exist, Firebase is started and decides; until it answers the
 // page shows the guest cart with an empty badge. Guests load nothing extra.
-if (state.auth.sessionHint) {
+function restoreSavedSession() {
   // No account cart is shown before Firebase confirms the session: the page shows a
   // waiting state (header and badge) until the SDK answers.
   state.auth.sessionPending = true;
@@ -6770,4 +6810,14 @@ if (state.auth.sessionHint) {
       }
     })
     .catch((error) => console.warn("Could not restore the customer session.", error));
+}
+
+if (state.auth.sessionHint) {
+  restoreSavedSession();
+} else {
+  void hasIndexedDbSession().then((found) => {
+    if (!found || state.auth.sessionHint || state.auth.services?.auth) return;
+    state.auth.sessionHint = true;
+    restoreSavedSession();
+  });
 }

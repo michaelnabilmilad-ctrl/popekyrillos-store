@@ -35,7 +35,8 @@ test("adding and changing quantities save the cart before rendering it", () => {
 
 test("a returning signed-in customer's session is restored on page load so cart edits reach the account", () => {
   const boot = scriptSource.slice(scriptSource.lastIndexOf("loadProducts();"));
-  assert.match(boot, /if \(state\.auth\.sessionHint\) \{[\s\S]*?loadAuthConfig\(\)/, "restores the session only when a session may exist on this device");
+  assert.match(boot, /function restoreSavedSession\(\) \{[\s\S]*?loadAuthConfig\(\)/);
+  assert.match(boot, /if \(state\.auth\.sessionHint\) \{\r?\n\s*restoreSavedSession\(\);\r?\n\} else \{\r?\n\s*void hasIndexedDbSession\(\)/, "restores the session only when a session may exist on this device");
   assert.match(boot, /ensureAuthServices\(\)/);
   assert.doesNotMatch(scriptSource.slice(0, scriptSource.lastIndexOf("loadProducts();")).split("\n").slice(-12).join("\n"), /loadAuthConfig\(\)\s*;?\s*$/m, "guests do not load Firebase on page load");
 });

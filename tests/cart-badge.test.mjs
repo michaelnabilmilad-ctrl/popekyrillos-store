@@ -207,7 +207,8 @@ test("identity comes only from the Firebase SDK; local records only start it", (
   const script = scriptSource.replace(/\r\n/g, "\n");
   assert.match(script, /function effectiveAuthUser\(\) \{\n  return state\.auth\.user \|\| null;\n\}/);
   assert.doesNotMatch(script, /provisionalUser|consistentLocalProfile|persistedFirebaseProfile/);
-  assert.match(script, /if \(state\.auth\.sessionHint\) \{[\s\S]{0,200}state\.auth\.sessionPending = true;/);
+  assert.match(script, /function restoreSavedSession\(\) \{[\s\S]{0,200}state\.auth\.sessionPending = true;/);
+  assert.match(script, /if \(state\.auth\.sessionHint\) \{\n\s*restoreSavedSession\(\);/);
   assert.doesNotMatch(script, /setTimeout\(endSessionPending, 8000\)/, "no timer that falls back to the guest view");
   assert.ok(script.includes("\"جارٍ التحقق…\""), "header shows a waiting state, not 'sign in'");
   assert.match(checkoutSource, /function loadCachedAuthUser\(\) \{\n  return checkoutConfirmedUser;\n\}/);

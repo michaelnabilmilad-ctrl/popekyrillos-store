@@ -95,3 +95,54 @@ test("the inline header check uses the same session records as the storefront", 
   assert.match(script, /if \(!key\.startsWith\("firebase:authUser:"\)\) continue;/);
   assert.match(script, /sessionStorage\.getItem\("pope-kyrillos-auth:redirect"\) === "1"/);
 });
+
+// Older site versions left some sessions in IndexedDB only (a tab closed while the session was
+// moved there; the other tab then removed the profile cache). Reproduced on 70cb1cf: the open tab
+// showed «انتهت جلسة» and every later page looked signed out until «دخول» was tapped.
+function fakeIndexedDb({ databases = [], keys = [], withStore = true, failOpen = false, noDatabasesApi = false } = {}) {
+  const calls = { open: 0 };
+  const api = {
+    calls,
+    async databases() { return databases.map((name) => ({ name })); },
+    open(name) {
+      calls.open += 1;
+      const request = {};
+      setTimeout(() => {
+        if (failOpen) { request.onerror?.(); return; }
+        request.result = {
+          objectStoreNames: { contains: (store) => withStore && store === "firebaseLocalStorage" },
+          transaction: () => ({ objectStore: () => ({ getAllKeys() { const r = {}; setTimeout(() => { r.result = keys; r.onsuccess?.(); }); return r; } }) }),
+          close() {}
+        };
+        request.onsuccess?.();
+      });
+      return request;
+    }
+  };
+  if (noDatabasesApi) delete api.databases;
+  return api;
+}
+
+async function detect(options) {
+  const indexedDB = fakeIndexedDb(options);
+  const context = { window: { indexedDB }, indexedDB, String, Promise, setTimeout };
+  vm.createContext(context);
+  vm.runInContext(extractFunction(script, "hasIndexedDbSession"), context);
+  return { found: await context.hasIndexedDbSession(), opened: indexedDB.calls.open };
+}
+
+test("a session kept only in IndexedDB is found, so the page restores it without «دخول»", async () => {
+  assert.deepEqual(await detect({ databases: ["firebaseLocalStorageDb"], keys: ["firebase:authUser:key:[DEFAULT]"] }), { found: true, opened: 1 });
+});
+
+test("guests and other data never count as a session, and the database is never created", async () => {
+  assert.deepEqual(await detect({ databases: [] }), { found: false, opened: 0 }, "no database: not even opened (opening would create it)");
+  assert.deepEqual(await detect({ databases: ["firebaseLocalStorageDb"], keys: ["firebase:redirectUser:key:[DEFAULT]"] }), { found: false, opened: 1 });
+  assert.deepEqual(await detect({ databases: ["firebaseLocalStorageDb"], withStore: false }), { found: false, opened: 1 });
+  assert.deepEqual(await detect({ databases: ["firebaseLocalStorageDb"], failOpen: true }), { found: false, opened: 1 });
+  assert.deepEqual(await detect({ noDatabasesApi: true }), { found: false, opened: 0 }, "browsers without databases(): unchanged behaviour");
+});
+
+test("without a local hint the storefront checks IndexedDB and then restores like a hinted session", () => {
+  assert.match(script, /if \(state\.auth\.sessionHint\) \{\n\s*restoreSavedSession\(\);\n\} else \{\n\s*void hasIndexedDbSession\(\)\.then\(\(found\) => \{\n\s*if \(!found \|\| state\.auth\.sessionHint \|\| state\.auth\.services\?\.auth\) return;\n\s*state\.auth\.sessionHint = true;\n\s*restoreSavedSession\(\);/);
+});
