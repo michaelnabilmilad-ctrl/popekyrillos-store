@@ -1622,6 +1622,16 @@ body[data-lang="en"] .category-art {
     var(--shadow);
 }
 
+/* Quick view is fetching the product's full gallery. */
+.product-card[aria-busy="true"] {
+  cursor: progress;
+}
+
+.product-card[aria-busy="true"] .product-visual {
+  opacity: 0.72;
+  transition: opacity 120ms ease;
+}
+
 .product-visual {
   position: relative;
   display: grid;

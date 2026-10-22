@@ -102,6 +102,10 @@ let bestSellerProducts = [];
 let bestSellerProductsLoaded = false;
 const productDetailsCache = new Map();
 const productDetailsRequests = new Map();
+const productDetailsFetchedAt = new Map();
+// Quick view refetches details older than this so price and stock stay current.
+const productDetailsMaxAgeMs = 5 * 60 * 1000;
+let productModalOpenSequence = 0;
 let authInitPromise = null;
 let authConfigPromise = null;
 let productsAssetVersion = "";
@@ -2663,8 +2667,14 @@ function renderPopularProducts() {
   `;
 }
 
+// Same rule as productPrice() in cloudflare-worker.js: the cheapest variant
+// wins, because a full record's top-level price can lag behind its variants.
 function productPrice(product) {
-  const value = Number(product.price);
+  const variantPrices = productHasVariants(product) && Array.isArray(product?.variants)
+    ? product.variants.map((variant) => Number(variant.price)).filter((price) => Number.isFinite(price) && price > 0)
+    : [];
+  if (variantPrices.length) return Math.min(...variantPrices);
+  const value = Number(product?.price);
   return Number.isFinite(value) && value > 0 ? value : null;
 }
 
@@ -2812,13 +2822,24 @@ function getProduct(id) {
     || bestSellerProducts.find((item) => item.id === id);
 }
 
-function hasProductDetails(product) {
-  return Boolean(product && (Array.isArray(product.variants) || Array.isArray(product.options) || product.description));
+function hasFreshProductDetails(productId) {
+  const fetchedAt = productDetailsFetchedAt.get(productId);
+  return fetchedAt !== undefined && Date.now() - fetchedAt < productDetailsMaxAgeMs;
 }
 
-async function loadProductDetails(productId) {
+// /api/catalog and /api/best-sellers send card records (variants and one
+// thumbnail, no gallery), so their fields cannot tell a full record apart.
+// Only the static products.json fallback or a fresh /api/products/:id
+// response carries the whole gallery.
+function hasProductDetails(product) {
+  if (!product) return false;
+  if (staticCatalogProducts?.includes(product)) return true;
+  return hasFreshProductDetails(product.id);
+}
+
+async function loadProductDetails(productId, { refresh = false } = {}) {
   const cached = productDetailsCache.get(productId);
-  if (cached) return cached;
+  if (cached && (!refresh || hasFreshProductDetails(productId))) return cached;
   if (productDetailsRequests.has(productId)) return productDetailsRequests.get(productId);
   const request = fetch(`/api/products/${encodeURIComponent(productId)}`, { cache: "default" })
     .then((response) => {
@@ -2826,8 +2847,11 @@ async function loadProductDetails(productId) {
       return response.json();
     })
     .then((product) => {
-      productDetailsCache.set(product.id || productId, product);
-      if (product.id && product.id !== productId) productDetailsCache.set(productId, product);
+      const fetchedAt = Date.now();
+      [product.id || productId, productId].forEach((key) => {
+        productDetailsCache.set(key, product);
+        productDetailsFetchedAt.set(key, fetchedAt);
+      });
       return product;
     })
     .finally(() => productDetailsRequests.delete(productId));
@@ -4085,14 +4109,22 @@ function renderProductModal() {
 async function openProductModal(productId, { updateUrl = true, variantId = "" } = {}) {
   let product = getProduct(productId);
   if (!product) return;
+  const openSequence = ++productModalOpenSequence;
   if (!hasProductDetails(product)) {
+    const loadingCards = document.querySelectorAll(`[data-card-product="${CSS.escape(product.id)}"]`);
+    loadingCards.forEach((card) => card.setAttribute("aria-busy", "true"));
     try {
-      product = await loadProductDetails(productId);
+      product = await loadProductDetails(productId, { refresh: true });
     } catch (error) {
+      if (openSequence !== productModalOpenSequence) return;
       console.warn("Could not load product details for the quick view.", error);
       window.location.assign(canonicalProductPath(product));
       return;
+    } finally {
+      loadingCards.forEach((card) => card.removeAttribute("aria-busy"));
     }
+    // A later click opened another product while this one was loading.
+    if (openSequence !== productModalOpenSequence) return;
   }
 
   state.modal.returnScrollY = window.scrollY;
@@ -4269,6 +4301,7 @@ function openProductImageLightbox(productId, image, alt = "", { updateUrl = true
 }
 
 function closeProductModal({ updateUrl = true } = {}) {
+  productModalOpenSequence += 1;
   closeImageLightbox({ updateUrl: false });
   document.body.classList.remove("product-open");
   productModal.setAttribute("aria-hidden", "true");
