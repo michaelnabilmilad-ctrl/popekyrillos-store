@@ -43,11 +43,11 @@
                   "name": "قوارير الماء والخمر",
                   "subcategoryImage": "assets/optimized/products/communion-set.webp"
               },
-      {
-        "id": "relic-boxes",
-        "name": "حافظات رفات القديسين",
-        "subcategoryImage": "assets/optimized/products/communion-set.webp"
-      },
+              {
+                  "id": "relic-boxes",
+                  "name": "حافظات رفات القديسين",
+                  "subcategoryImage": "assets/optimized/products/communion-set.webp"
+              },
               {
                   "id": "communion-bread-boxes",
                   "name": "بيوت القربان",
@@ -87,6 +87,15 @@
                   "id": "vessel-cases",
                   "name": "شنط وصناديق حفظ الأواني",
                   "subcategoryImage": "assets/optimized/products/communion-set.webp"
+              },
+              {
+                  "id": "custom-subcategory-1792784523638",
+                  "name": "كرسي الكأس",
+                  "description": "",
+                  "customImage": "assets/optimized/products/gallery/taxonomy-custom-subcategory-17927845-image-20261023200218-d56d59.webp",
+                  "representativeProductId": "",
+                  "visible": true,
+                  "homeVisible": true
               }
           ]
       },
@@ -856,7 +865,7 @@
   ];
   const TAXONOMY_STORAGE_KEY = "pope-kyrillos-taxonomy";
   const TAXONOMY_VERSION_STORAGE_KEY = "pope-kyrillos-taxonomy-version";
-  const CURRENT_TAXONOMY_VERSION = 1790541000000;
+  const CURRENT_TAXONOMY_VERSION = 1792785795522;
   const categories = (() => {
     try {
       const storedVersion = Number(localStorage.getItem(TAXONOMY_VERSION_STORAGE_KEY) || 0);
@@ -944,7 +953,7 @@
   }
 
   function categoryImage(category) {
-    const value = category?.subcategoryImage || category?.imageUrl || category?.imageURL || category?.image_url || category?.image || category?.thumbnail || category?.thumbnailUrl || category?.cover || category?.categoryImage || "";
+    const value = category?.customImage || category?.manualImage || category?.taxonomyImage || category?.subcategoryImage || category?.imageUrl || category?.imageURL || category?.image_url || category?.image || category?.thumbnail || category?.thumbnailUrl || category?.cover || category?.categoryImage || "";
     if (typeof value !== "string" || !value.trim() || /^(?:javascript|data:text|blob):/i.test(value.trim())) return "";
     return value.trim().replace(/^\/public\//, "/");
   }
