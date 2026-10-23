@@ -11836,5 +11836,48 @@
     "subcategory": "icon-gospel-stands",
     "sku": "PK-8CB892B52A254D6E8E90F34871FF192D",
     "hasVariants": false
+  },
+  {
+    "id": "custom-1792780601571",
+    "name": "كرسي كاس صدف ثماني ",
+    "category": "brass",
+    "label": "نحاسيات",
+    "description": "**كرسي كأس خشب ثماني**\n\nكرسي كأس كنسي مصنوع من الخشب، يتميز بتصميم ثماني الأوجه يجمع بين الشكل الكنسي التقليدي والجمال والبساطة، ومخصص لحمل الكأس المقدسة أثناء القداس الإلهي.\n\nيتميز الكرسي بتصميمه الثماني الذي يمنحه شكلًا مميزًا يتناسب مع المذبح، ويُستخدم لتثبيت الكأس المقدسة في موضعها أثناء الصلوات والطقوس الكنسية.\n\n**مميزات المنتج:**\n\n* مصنوع من الخشب.\n* تصميم ثماني الأوجه بطابع كنسي تقليدي.\n* مخصص لحمل الكأس المقدسة على المذبح.\n* يساعد على تثبيت الكأس أثناء القداس الإلهي.\n* مناسب للاستخدام في الكنائس والأديرة.\n\n**الاستخدام:** يوضع على المذبح لحمل الكأس المقدسة أثناء القداس الإلهي.\n\n✝️ متوفر لدى مكتبة البابا كيرلس لجميع مستلزمات الكنيسة.\n",
+    "price": 0,
+    "priceNote": "",
+    "stock": "متاح",
+    "badge": "كرسي كأس خشب ثماني | أدوات المذبح | مكتبة البابا كيرلس",
+    "isBestSeller": false,
+    "image": "assets/optimized/products/gallery/product-1-2-20261023183735-c509c6.webp",
+    "url": "https://popekyrillos.store/?product=custom-1792780601571",
+    "tags": [
+      "كرسي",
+      "كاس",
+      "خشب"
+    ],
+    "collections": [],
+    "images": [
+      "assets/optimized/products/gallery/product-1-2-20261023183735-c509c6.webp"
+    ],
+    "options": [],
+    "variants": [
+      {
+        "id": "custom-1792780601571-variant-1792780601571-1",
+        "title": "الاختيار الافتراضي",
+        "options": {},
+        "price": 0,
+        "compareAtPrice": null,
+        "available": true,
+        "image": null,
+        "images": [],
+        "sku": "PK-694D0BB6B6B74AF2BE5D599FCE6A5508",
+        "quantity": null
+      }
+    ],
+    "mainCategory": "المذبح والأواني المقدسة",
+    "subCategory": "آلات وأدوات الخدمة الكنسية",
+    "subcategory": "church-service-tools",
+    "sku": "PK-85B4E51F54434041A3AEB0DD5D260384",
+    "hasVariants": false
   }
 ]
