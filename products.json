@@ -11712,5 +11712,50 @@
     "subcategory": "church-service-tools",
     "sku": "PK-830F48E2C2DC45038A0351EBDEB5FDE9",
     "hasVariants": true
+  },
+  {
+    "id": "custom-1792780031876",
+    "name": "كرسي كاس صدف مفكك رباعي",
+    "category": "brass",
+    "label": "نحاسيات",
+    "description": "### كرسي كأس رباعي مفكك – خشب\n\nكرسي كأس كنسي مصنوع من الخشب، بتصميم رباعي تقليدي يتناسب مع الاستخدام على المذبح أثناء القداس الإلهي، ويُستخدم لوضع الكأس المقدسة وحفظها في موضعها أثناء الصلاة.\n\nيتميز بتصميم عملي قابل للفك والتركيب، مما يسهل نقله وتخزينه عند الحاجة، مع الحفاظ على الشكل الكنسي التقليدي.\n\n**مميزات المنتج:**\n\n* مصنوع من الخشب.\n* تصميم رباعي الأوجه.\n* قابل للفك والتركيب بسهولة.\n* سهل النقل والتخزين.\n* مناسب للاستخدام الكنسي على المذبح أثناء القداس الإلهي.\n\n✝️ **متوفر لدى مكتبة البابا كيرلس لجميع مستلزمات الكنيسة.**\n",
+    "price": 1885,
+    "priceNote": "",
+    "stock": "متاح",
+    "badge": "كرسي كأس رباعي مفكك خشب | مستلزمات الكنيسة | مكتبة البابا كيرلس",
+    "isBestSeller": false,
+    "image": "assets/optimized/products/gallery/product-1-1-20261023182857-674986.webp",
+    "url": "https://popekyrillos.store/?product=custom-1792780031876",
+    "tags": [
+      "كرسي",
+      "كاس",
+      "أواني"
+    ],
+    "collections": [],
+    "images": [
+      "assets/optimized/products/gallery/product-1-1-20261023182857-674986.webp",
+      "assets/optimized/products/gallery/product-1-3-20261023182903-140cba.webp",
+      "assets/optimized/products/gallery/product-1-2-20261023182849-5a2e66.webp"
+    ],
+    "options": [],
+    "variants": [
+      {
+        "id": "custom-1792780031876-variant-1792780031876-1",
+        "title": "الاختيار الافتراضي",
+        "options": {},
+        "price": 1885,
+        "compareAtPrice": null,
+        "available": true,
+        "image": null,
+        "images": [],
+        "sku": "PK-2AC8026905D9438FAD7C61D8A989304D",
+        "quantity": null
+      }
+    ],
+    "mainCategory": "المذبح والأواني المقدسة",
+    "subCategory": "آلات وأدوات الخدمة الكنسية",
+    "subcategory": "church-service-tools",
+    "sku": "PK-06708EEBD8374F85B2D367701692B418",
+    "hasVariants": false
   }
 ]
