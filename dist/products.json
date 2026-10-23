@@ -11757,5 +11757,84 @@
     "subcategory": "church-service-tools",
     "sku": "PK-06708EEBD8374F85B2D367701692B418",
     "hasVariants": false
+  },
+  {
+    "id": "custom-1792780379346",
+    "name": "منتج جديد",
+    "category": "brass",
+    "label": "نحاسيات",
+    "description": "",
+    "price": 0,
+    "priceNote": "",
+    "stock": "متاح",
+    "badge": "نحاسيات",
+    "isBestSeller": false,
+    "image": "",
+    "url": "https://popekyrillos.store/?product=custom-1792780379346",
+    "tags": [],
+    "collections": [],
+    "images": [],
+    "options": [],
+    "variants": [
+      {
+        "id": "custom-1792780379346-variant-1792780379346-1",
+        "title": "الاختيار الافتراضي",
+        "options": {},
+        "price": 0,
+        "compareAtPrice": null,
+        "available": true,
+        "image": null,
+        "images": [],
+        "sku": "PK-30CA7B50B2B140FC8A9BA84194F661DC",
+        "quantity": null
+      }
+    ],
+    "mainCategory": "غير مصنف",
+    "subCategory": "يحتاج مراجعة",
+    "subcategory": "needs-review",
+    "hasVariants": false
+  },
+  {
+    "id": "custom-1792780350462",
+    "name": "قراية خشب صدف",
+    "category": "brass",
+    "label": "نحاسيات",
+    "description": "**قراية خشب لحمل الكتب – للمذبح والمكتب**\n\nقراية خشبية بتصميم عملي وأنيق، مخصصة لحمل الكتب وتثبيتها أثناء القراءة، ومناسبة للاستخدام داخل الكنيسة على المذبح أو على المكاتب.\n\nتساعد القراية على وضع الكتب في وضع مائل ومريح للقراءة، مما يسهل متابعة النصوص والصلوات دون الحاجة إلى حمل الكتاب باليد.\n\n**مميزات المنتج:**\n\n* مصنوعة من الخشب.\n* تصميم عملي وأنيق يناسب الاستخدام الكنسي والمكتبي.\n* تساعد على تثبيت الكتب أثناء القراءة.\n* توفر زاوية مريحة لقراءة الكتب والصلوات.\n* مناسبة لحمل الكتب الطقسية والروحية.\n* يمكن وضعها على المذبح أو المكتب.\n\n**الاستخدامات:**\n\n* حمل الكتب الطقسية أثناء الصلوات والخدمات الكنسية.\n* وضع الكتب الروحية والكتاب المقدس أثناء القراءة.\n* استخدامها على المكاتب وحوامل القراءة.\n\n✝️ **متوفرة لدى مكتبة البابا كيرلس لجميع مستلزمات الكنيسة.**\n",
+    "price": 650,
+    "priceNote": "",
+    "stock": "متاح",
+    "badge": "قراية خشب، قراية خشبية، قراية مذبح، قراية كتب، قراية كنيسة، حامل كتب خشب، حامل كتاب مقدس، حامل كتب للمذبح، حامل كتب للمكتب، حامل كتب كنسي، قراية خشب للكنيسة، مستلزمات الكنيسة، أدوات المذبح، مكتبة البابا كيرلس",
+    "isBestSeller": false,
+    "image": "assets/optimized/products/gallery/product-2-image-20261023183311-f62fff.webp",
+    "url": "https://popekyrillos.store/?product=custom-1792780350462",
+    "tags": [
+      "قراية",
+      "حامل",
+      "منجلية"
+    ],
+    "collections": [],
+    "images": [
+      "assets/optimized/products/gallery/product-2-image-20261023183311-f62fff.webp"
+    ],
+    "options": [],
+    "variants": [
+      {
+        "id": "custom-1792780350462-variant-1792780350462-1",
+        "title": "الاختيار الافتراضي",
+        "options": {},
+        "price": 650,
+        "compareAtPrice": null,
+        "available": true,
+        "image": null,
+        "images": [],
+        "sku": "PK-4CA22C38F1DB4057969130A4372BCA46",
+        "quantity": null
+      }
+    ],
+    "mainCategory": "تجهيز الكنائس والطلبات الخاصة",
+    "subCategory": "حوامل الأيقونات والإنجيل",
+    "subcategory": "icon-gospel-stands",
+    "sku": "PK-8CB892B52A254D6E8E90F34871FF192D",
+    "hasVariants": false
   }
 ]
