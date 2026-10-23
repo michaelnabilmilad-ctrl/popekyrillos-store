@@ -7393,7 +7393,7 @@
         "quantity": null
       }
     ],
-    "mainCategory": "تجهيز الكنائس والطلبات الخاصة",
+    "mainCategory": "المذبح والأواني المقدسة",
     "subCategory": "حافظات رفات القديسين",
     "slug": "حق-ذخيره-كبير-نحاس-مطلي-نيكل",
     "subcategory": "relic-boxes",
@@ -7453,7 +7453,7 @@
         "quantity": null
       }
     ],
-    "mainCategory": "تجهيز الكنائس والطلبات الخاصة",
+    "mainCategory": "المذبح والأواني المقدسة",
     "subCategory": "حافظات رفات القديسين",
     "slug": "حق-ذخيره-صغير-نحاس-مطلي-نيكل",
     "subcategory": "relic-boxes",
@@ -7513,7 +7513,7 @@
         "quantity": null
       }
     ],
-    "mainCategory": "تجهيز الكنائس والطلبات الخاصة",
+    "mainCategory": "المذبح والأواني المقدسة",
     "subCategory": "حافظات رفات القديسين",
     "slug": "حق-ذخيره-استانلس-صغير",
     "subcategory": "relic-boxes",
@@ -7574,7 +7574,7 @@
         "quantity": null
       }
     ],
-    "mainCategory": "تجهيز الكنائس والطلبات الخاصة",
+    "mainCategory": "المذبح والأواني المقدسة",
     "subCategory": "حافظات رفات القديسين",
     "slug": "حق-ذخيره-استانلس-وسط",
     "subcategory": "relic-boxes",
@@ -7634,7 +7634,7 @@
         "quantity": null
       }
     ],
-    "mainCategory": "تجهيز الكنائس والطلبات الخاصة",
+    "mainCategory": "المذبح والأواني المقدسة",
     "subCategory": "حافظات رفات القديسين",
     "slug": "حق-ذخيره-استانلس-صغير-old-10068212646195",
     "subcategory": "relic-boxes",
@@ -8297,7 +8297,7 @@
         "quantity": null
       }
     ],
-    "mainCategory": "تجهيز الكنائس والطلبات الخاصة",
+    "mainCategory": "المذبح والأواني المقدسة",
     "subCategory": "حافظات رفات القديسين",
     "slug": "انابيب-رفات-قديسين-زان",
     "subcategory": "relic-boxes",
@@ -11407,7 +11407,7 @@
         "quantity": null
       }
     ],
-    "mainCategory": "تجهيز الكنائس والطلبات الخاصة",
+    "mainCategory": "المذبح والأواني المقدسة",
     "subCategory": "حافظات رفات القديسين",
     "subcategory": "relic-boxes",
     "sku": "PK-6A657AA263C14D13A511CA2D9C47D5FA",
@@ -11446,7 +11446,7 @@
         "quantity": null
       }
     ],
-    "mainCategory": "تجهيز الكنائس والطلبات الخاصة",
+    "mainCategory": "المذبح والأواني المقدسة",
     "subCategory": "حافظات رفات القديسين",
     "subcategory": "relic-boxes",
     "sku": "PK-6A657AA263C14D13A511CA2D9C47D5FA",
@@ -11485,7 +11485,7 @@
         "quantity": null
       }
     ],
-    "mainCategory": "تجهيز الكنائس والطلبات الخاصة",
+    "mainCategory": "المذبح والأواني المقدسة",
     "subCategory": "حافظات رفات القديسين",
     "subcategory": "relic-boxes",
     "sku": "PK-6A657AA263C14D13A511CA2D9C47D5FA",
@@ -11524,7 +11524,7 @@
         "quantity": null
       }
     ],
-    "mainCategory": "تجهيز الكنائس والطلبات الخاصة",
+    "mainCategory": "المذبح والأواني المقدسة",
     "subCategory": "حافظات رفات القديسين",
     "subcategory": "relic-boxes",
     "sku": "PK-997EC3B3C75E4A94850F65A3BBA27E83",
@@ -11563,7 +11563,7 @@
         "quantity": null
       }
     ],
-    "mainCategory": "تجهيز الكنائس والطلبات الخاصة",
+    "mainCategory": "المذبح والأواني المقدسة",
     "subCategory": "حافظات رفات القديسين",
     "subcategory": "relic-boxes",
     "sku": "PK-71CB97A9EBBF42D8A0B7D45512945927",
@@ -12132,7 +12132,7 @@
         "quantity": null
       }
     ],
-    "mainCategory": "تجهيز الكنائس والطلبات الخاصة",
+    "mainCategory": "المذبح والأواني المقدسة",
     "subCategory": "حافظات رفات القديسين",
     "subcategory": "relic-boxes",
     "sku": "PK-22EDB173BA124FDEBE5B29A3CE652927",
@@ -12445,7 +12445,7 @@
       }
     ],
     "mainCategory": "تجهيز الكنائس والطلبات الخاصة",
-    "subCategory": "طقم أكاليل",
+    "subCategory": "مستلزمات الإكليل",
     "subcategory": "custom-subcategory-1792789093403",
     "sku": "PK-CC50ACC1E87849869A27BFAE4D19CC7C",
     "hasVariants": false
@@ -12507,7 +12507,7 @@
       }
     ],
     "mainCategory": "تجهيز الكنائس والطلبات الخاصة",
-    "subCategory": "بيض نعام",
+    "subCategory": "يحتاج مراجعة",
     "subcategory": "custom-subcategory-1792789306752",
     "sku": "PK-DF72AAE0516149359FC8E654C36326DF",
     "hasVariants": false
@@ -12892,9 +12892,77 @@
       }
     ],
     "mainCategory": "الملابس والأقمشة الكنسية",
-    "subCategory": "شنط شمامسة",
+    "subCategory": "يحتاج مراجعة",
     "subcategory": "custom-subcategory-1792791598240",
     "sku": "PK-CD2D11A2D76F490FB185A6B954B09506",
+    "hasVariants": false
+  },
+  {
+    "id": "custom-1792795811580",
+    "name": "كرسي كاس خشب فن اليوتا",
+    "category": "brass",
+    "label": "نحاسيات",
+    "description": "### كرسي كأس خشب مزخرف بفن اليوتا ✝️🎨\n\nكرسي كأس خشبي بتصميم قبطي مميز، يجمع بين جمال الخشب الطبيعي وروعة الزخارف القبطية الملونة بفن اليوتا، ليضيف لمسة من الجمال والأصالة إلى المذبح.\n\nيتميز كرسي الكأس بزخارف هندسية قبطية دقيقة وصلبان ملونة بألوان متناسقة، مع تصميم عملي وغطاء علوي قابل للرفع.\n\n### ✨ مميزات المنتج\n\n* مصنوع من الخشب بتصميم أنيق ومميز.\n* مزين بصلبان وزخارف قبطية بفن اليوتا.\n* تصميم مناسب للاستخدام داخل الهيكل.\n* غطاء علوي قابل للرفع.\n* متاح ملون وجاهز للاستخدام أو سادة بدون تلوين.\n* مناسب للتقديم كهدية للكنائس.\n\n### 🎨 لونوه بإيديكم وقدموه هدية لكنيستكم!\n\nبنقدم لكم فكرة مميزة لشباب الكنيسة وخدام مدارس الأحد! ❤️\n\nيمكنكم طلب كرسي الكأس سادة بدون تلوين، ويقوم الشباب بتلوينه وتزيينه بأنفسهم باستخدام ألوان اليوتا، ثم تقديمه هدية للكنيسة من عمل أيديهم.\n\nنشاط فني وروحي جميل يجمع الشباب على عمل مشترك، ويشجعهم على تنمية مواهبهم الفنية والمشاركة في تجميل بيت ربنا.\n\n### ✅ خيارات الطلب\n\n🟢 **ملون:** كرسي كأس جاهز بزخارف اليوتا القبطية.\n\n🟡 **سادة:** كرسي كأس بدون تلوين، مناسب للأنشطة الفنية والتلوين الجماعي.\n\nمتوفر للطلب من مكتبة البابا كيرلس، ويمكن اختيار الشكل المناسب حسب احتياجات الكنيسة.\n",
+    "price": 5500,
+    "priceNote": "",
+    "stock": "متاح",
+    "badge": "نحاسيات",
+    "isBestSeller": false,
+    "image": "assets/optimized/products/gallery/product-1-gemini-generated-image-3a3hwq3a3hwq3-20261023225232-74193e.webp",
+    "url": "https://popekyrillos.store/?product=custom-1792795811580",
+    "tags": [
+      "كرسي كأس خشب",
+      "كرسي كأس",
+      "كرسي الكأس",
+      "كرسي كأس قبطي",
+      "كرسي كأس خشب قبطي",
+      "كرسي كأس مزخرف",
+      "كرسي كأس فن اليوتا",
+      "كرسي كأس للتلوين",
+      "كرسي كأس سادة",
+      "كرسي كأس للكنيسة",
+      "كرسي كأس للمذبح",
+      "كرسي كأس ملون",
+      "مستلزمات الكنيسة",
+      "مستلزمات الهيكل",
+      "أدوات المذبح",
+      "فن اليوتا",
+      "تلوين اليوتا",
+      "الفن القبطي",
+      "الزخارف القبطية",
+      "هدايا للكنيسة",
+      "أنشطة شباب الكنيسة",
+      "أنشطة مدارس الأحد",
+      "مكتبة البابا كيرلس",
+      "Coptic Chalice Stand",
+      "Wooden Chalice Stand",
+      "Coptic Church Supplies",
+      "Coptic Yuta Art"
+    ],
+    "collections": [],
+    "images": [
+      "assets/optimized/products/gallery/product-1-gemini-generated-image-3a3hwq3a3hwq3-20261023225232-74193e.webp",
+      "assets/optimized/products/gallery/product-1-gemini-generated-image-qumti4qumti4q-20261023225238-8a88bc.webp"
+    ],
+    "options": [],
+    "variants": [
+      {
+        "id": "custom-1792795811580-variant-1792795811580-1",
+        "title": "الاختيار الافتراضي",
+        "options": {},
+        "price": 5500,
+        "compareAtPrice": null,
+        "available": true,
+        "image": null,
+        "images": [],
+        "sku": "PK-7409DFC1D007458C82FF2ABE9315474E",
+        "quantity": null
+      }
+    ],
+    "mainCategory": "المذبح والأواني المقدسة",
+    "subCategory": "كرسي الكأس",
+    "subcategory": "custom-subcategory-1792784523638",
+    "sku": "PK-C79B822AB0084280B66BF42A57D63C0B",
     "hasVariants": false
   }
 ]
