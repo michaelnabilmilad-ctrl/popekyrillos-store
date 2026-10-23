@@ -11615,5 +11615,102 @@
     "subcategory": "crafts-coloring",
     "sku": "PK-1C451D7AF1694A56A357E4CED327CBB4",
     "hasVariants": false
+  },
+  {
+    "id": "custom-1792779615820",
+    "name": "طبق حمل ",
+    "category": "brass",
+    "label": "نحاسيات",
+    "description": "طبق حمل كنسي بتصميم أنيق ومميز، يُستخدم لتقديم القربان أثناء طقس اختيار الحمل في القداس الإلهي.\n\nيتميز الطبق باللون النبيتي الفاخر، ويتوسطه صورة العشاء الأخير محاطة بإطار ذهبي مزخرف، مع صلبان ورسومات كنسية على الجوانب، وحواف مزينة بشراشيب ذهبية تضفي عليه لمسة من الجمال والوقار.\n\nمميزات المنتج:\n\nحجم ميني مناسب للاستخدام الكنسي.\nتصميم دائري باللون النبيتي.\nمزين بصورة العشاء الأخير.\nزخارف وصلبان كنسية على الجوانب.\nحواف مزينة بشراشيب ذهبية أنيقة.\nمناسب لتقديم القربان أثناء اختيار الحمل في القداس الإلهي.\n\n✝️ متوفر لدى مكتبة البابا كيرلس لجميع مستلزمات الكنيسة.",
+    "price": 280,
+    "priceNote": "",
+    "stock": "متاح",
+    "badge": "طبق حمل ميني نبيتي | مستلزمات الكنيسة | مكتبة البابا كيرلس",
+    "isBestSeller": false,
+    "image": "assets/optimized/products/gallery/product-1-image-20261023182346-b2a637.webp",
+    "url": "https://popekyrillos.store/?product=custom-1792779615820",
+    "tags": [
+      "طبق",
+      "حمل",
+      "قربان"
+    ],
+    "collections": [],
+    "images": [
+      "assets/optimized/products/gallery/product-1-image-20261023182346-b2a637.webp"
+    ],
+    "options": [
+      {
+        "name": "الاختيار",
+        "values": [
+          "ميني",
+          "صغير",
+          "وسط",
+          "كبير"
+        ]
+      }
+    ],
+    "variants": [
+      {
+        "id": "custom-1792779615820-variant-1792779615820-1",
+        "title": "ميني",
+        "options": {
+          "الاختيار": "ميني"
+        },
+        "price": 280,
+        "compareAtPrice": null,
+        "available": true,
+        "image": null,
+        "images": [],
+        "sku": "PK-923CAAFCA4A643E596D555CFEDAE3154",
+        "quantity": null
+      },
+      {
+        "id": "custom-1792779615820-variant-1792779709421-2",
+        "title": "صغير",
+        "options": {
+          "الاختيار": "صغير"
+        },
+        "price": 478,
+        "compareAtPrice": null,
+        "available": true,
+        "image": null,
+        "images": [],
+        "sku": "PK-05E2B0EE83E44421ADB9FDA99A8FF72E",
+        "quantity": null
+      },
+      {
+        "id": "custom-1792779615820-variant-1792779710139-3",
+        "title": "وسط",
+        "options": {
+          "الاختيار": "وسط"
+        },
+        "price": 595,
+        "compareAtPrice": null,
+        "available": true,
+        "image": null,
+        "images": [],
+        "sku": "PK-0E2B92FF27EB45EEA5E107CA45CC6825",
+        "quantity": null
+      },
+      {
+        "id": "custom-1792779615820-variant-1792779720266-4",
+        "title": "كبير",
+        "options": {
+          "الاختيار": "كبير"
+        },
+        "price": 665,
+        "compareAtPrice": null,
+        "available": true,
+        "image": null,
+        "images": [],
+        "sku": "PK-1F21924CF7DC4589B4BC98A454506287",
+        "quantity": null
+      }
+    ],
+    "mainCategory": "المذبح والأواني المقدسة",
+    "subCategory": "آلات وأدوات الخدمة الكنسية",
+    "subcategory": "church-service-tools",
+    "sku": "PK-830F48E2C2DC45038A0351EBDEB5FDE9",
+    "hasVariants": true
   }
 ]
