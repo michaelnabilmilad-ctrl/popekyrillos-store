@@ -22,7 +22,8 @@
               {
                   "id": "altar-sets",
                   "name": "أطقم أواني المذبح",
-                  "subcategoryImage": "assets/optimized/products/communion-set.webp"
+                  "subcategoryImage": "assets/optimized/products/communion-set.webp",
+                  "customImage": "assets/optimized/products/gallery/taxonomy-altar-sets-2-20261023201407-30fb7a.webp"
               },
               {
                   "id": "chalices",
@@ -893,7 +894,7 @@
   ];
   const TAXONOMY_STORAGE_KEY = "pope-kyrillos-taxonomy";
   const TAXONOMY_VERSION_STORAGE_KEY = "pope-kyrillos-taxonomy-version";
-  const CURRENT_TAXONOMY_VERSION = 1792805057349;
+  const CURRENT_TAXONOMY_VERSION = 1792805509678;
   const categories = (() => {
     try {
       const storedVersion = Number(localStorage.getItem(TAXONOMY_VERSION_STORAGE_KEY) || 0);
