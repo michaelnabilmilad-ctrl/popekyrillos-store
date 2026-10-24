@@ -344,7 +344,10 @@ function openRouteLightbox(source = activeImage) {
 }
 
 function available(variant) {
-  const qty = Number(variant?.quantity);
+  // An empty quantity means "not tracked", as in the catalog, cart and order
+  // pricing; Number(null) would otherwise read it as 0 and block the option.
+  const raw = variant?.quantity;
+  const qty = raw === null || raw === undefined || raw === "" ? NaN : Number(raw);
   return Number.isInteger(qty) && qty >= 0 ? qty > 0 : variant?.available !== false;
 }
 
