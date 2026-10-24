@@ -11,7 +11,8 @@
               {
                   "id": "censers",
                   "name": "الشوريات",
-                  "subcategoryImage": "assets/optimized/products/incense-chat.webp"
+                  "subcategoryImage": "assets/optimized/products/incense-chat.webp",
+                  "customImage": "assets/optimized/products/gallery/taxonomy-censers-image-20261023201310-1c9021.webp"
               },
               {
                   "id": "lamps",
@@ -296,6 +297,15 @@
                   "id": "custom-embroidery",
                   "name": "تطريز وتنفيذ بالطلب",
                   "subcategoryImage": "assets/optimized/products/gallery/stole-01.webp"
+              },
+              {
+                  "id": "custom-subcategory-1792791598240",
+                  "name": "شنط شمامسة",
+                  "description": "",
+                  "customImage": "assets/optimized/products/gallery/taxonomy-custom-subcategory-17927915-image-20261023214010-76340a.webp",
+                  "representativeProductId": "",
+                  "visible": true,
+                  "homeVisible": true
               }
           ]
       },
@@ -818,6 +828,24 @@
                   "id": "quote-request",
                   "name": "طلب عرض سعر",
                   "subcategoryImage": "assets/optimized/hero-products-collage.webp"
+              },
+              {
+                  "id": "custom-subcategory-1792789093403",
+                  "name": "طقم أكاليل",
+                  "description": "",
+                  "customImage": "",
+                  "representativeProductId": "",
+                  "visible": true,
+                  "homeVisible": true
+              },
+              {
+                  "id": "custom-subcategory-1792789306752",
+                  "name": "بيض نعام",
+                  "description": "",
+                  "customImage": "assets/optimized/products/gallery/taxonomy-custom-subcategory-17927893-image-20261023211639-4a93ef.webp",
+                  "representativeProductId": "",
+                  "visible": true,
+                  "homeVisible": true
               }
           ]
       },
@@ -865,7 +893,7 @@
   ];
   const TAXONOMY_STORAGE_KEY = "pope-kyrillos-taxonomy";
   const TAXONOMY_VERSION_STORAGE_KEY = "pope-kyrillos-taxonomy-version";
-  const CURRENT_TAXONOMY_VERSION = 1792785795522;
+  const CURRENT_TAXONOMY_VERSION = 1792805057349;
   const categories = (() => {
     try {
       const storedVersion = Number(localStorage.getItem(TAXONOMY_VERSION_STORAGE_KEY) || 0);
