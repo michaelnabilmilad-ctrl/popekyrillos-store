@@ -676,12 +676,11 @@ function productImage(product) {
   return product?.image || "";
 }
 
-// The shared availability rule (script.js isVariantAvailable, product-page.js available,
-// functions/_order-pricing.js); the server re-checks at order time.
+// Mirrors the storefront rule (script.js isVariantAvailable); the server re-checks at order time.
 function isCartLineUnavailable(product, variant) {
   if (product?.stock === "غير متاح حاليا" || product?.stock === "Currently unavailable" || product?.available === false) return true;
   if (variant?.quantity !== null && variant?.quantity !== undefined && variant?.quantity !== "" && Number(variant.quantity) <= 0) return true;
-  return variant?.available === false || variantPrice(variant, product) === null;
+  return variant?.available === false;
 }
 
 function cartEntries() {
