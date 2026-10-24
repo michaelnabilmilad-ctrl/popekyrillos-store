@@ -200,7 +200,7 @@ test("a site still serving the old taxonomy is reported as not live yet", async 
 test("the admin says the categories are live only after verification succeeds", () => {
   const source = extractFunction(adminSource, "publishTaxonomyToSite");
   const verify = source.indexOf("await verifyPublishedTaxonomy(");
-  const liveToast = source.indexOf("وظهرت على الموقع.\")");
+  const liveToast = source.indexOf("تم نشر الأقسام وصورها وظهرت على الموقع.");
   assert.ok(verify > 0 && liveToast > verify, "success toast comes after the live check");
   assert.match(source, /if \(verification\.ok\)[\s\S]*else[\s\S]*لسه ما ظهرتش على الموقع/);
 });
