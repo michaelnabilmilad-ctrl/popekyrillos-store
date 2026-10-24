@@ -312,16 +312,10 @@ function productPriceText(product) {
   return price === null ? "" : `${price} ج.م`;
 }
 
-function isVariantAvailable(variant) {
-  const rawQuantity = variant?.quantity;
-  const quantity = rawQuantity === null || rawQuantity === undefined || rawQuantity === "" ? null : Number(rawQuantity);
-  if (quantity !== null && Number.isInteger(quantity) && quantity >= 0) return quantity > 0;
-  return variant?.available !== false;
-}
-
+// In stock means an order for it would be accepted: the order system's own rule
+// (stock flag, option flag, tracked quantity, chargeable price, medal wood types).
 function hasAvailableVariant(product) {
-  if (productHasVariants(product) && Array.isArray(product?.variants) && product.variants.length) return product.variants.some(isVariantAvailable);
-  return product?.stock !== "غير متاح حاليا" && product?.available !== false;
+  return purchasableOffers(product).some((offer) => offer.available && offer.price !== null);
 }
 
 function isCatalogProductVisible(product) {

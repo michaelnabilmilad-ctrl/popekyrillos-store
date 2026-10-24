@@ -98,7 +98,20 @@ const variants = isMedalProduct
   ? medalWoodVariants
   : productHasVariants && Array.isArray(product.variants) && product.variants.length
     ? product.variants
-    : [{ id:"default", price:product.price, available:product.stock !== "غير متاح حاليا", options:{} }];
+    : [pageDefaultVariant(product)];
+
+// A product without options is ordered as its stored variant (the order system
+// falls back to variants[0]), so its availability and quantity count here too.
+function pageDefaultVariant(item) {
+  const stored = Array.isArray(item?.variants) ? item.variants[0] : null;
+  return {
+    id: "default",
+    price: item?.price,
+    available: item?.stock !== "غير متاح حاليا" && item?.available !== false && stored?.available !== false,
+    quantity: stored?.quantity ?? null,
+    options: {}
+  };
+}
 const options = isMedalProduct
   ? [{ name: medalWoodOptionName, values: ["كونتر", "زان"], required: true }]
   : Array.isArray(product.options) ? product.options : [];
@@ -114,7 +127,7 @@ const hasColoringGame = Boolean(
 // ?variant=<id> (the URL each option's Offer uses in the structured data) opens that option.
 const requestedVariantId = new URLSearchParams(location.search).get("variant");
 const requestedVariant = requestedVariantId ? variants.find((variant) => String(variant.id) === requestedVariantId) : null;
-let selected = isMedalProduct ? null : requestedVariant || variants.find((variant) => variant.available !== false) || variants[0];
+let selected = isMedalProduct ? null : requestedVariant || variants.find((variant) => available(variant)) || variants[0];
 let activeImage = images[0] || "";
 let routeLightbox = null;
 let routeZoom = { scale: 1, x: 0, y: 0, pointers: new Map(), gesture: null };
@@ -343,12 +356,16 @@ function openRouteLightbox(source = activeImage) {
   lightbox.querySelector("[data-image-lightbox-close]").focus();
 }
 
+// Same rule as the cart page and the order system (functions/_order-pricing.js):
+// the product is not marked unavailable, the option is not marked unavailable,
+// a tracked quantity is above zero (an empty quantity means "not tracked"), and
+// the option has a price an order can be charged.
 function available(variant) {
-  // An empty quantity means "not tracked", as in the catalog, cart and order
-  // pricing; Number(null) would otherwise read it as 0 and block the option.
-  const raw = variant?.quantity;
-  const qty = raw === null || raw === undefined || raw === "" ? NaN : Number(raw);
-  return Number.isInteger(qty) && qty >= 0 ? qty > 0 : variant?.available !== false;
+  if (!variant || product?.stock === "غير متاح حاليا" || product?.available === false) return false;
+  if (variant.available === false) return false;
+  const raw = variant.quantity;
+  if (raw !== null && raw !== undefined && raw !== "" && Number(raw) <= 0) return false;
+  return Number(variant.price ?? product?.price) > 0;
 }
 
 function coloringMarkup() {
@@ -1632,6 +1649,10 @@ function addToCart() {
   if (isMedalProduct && !selected) {
     root.querySelector("[data-wood-error]")?.classList.add("is-visible");
     root.querySelector("[data-medal-wood-options]")?.focus();
+    return;
+  }
+  if (!selected || !available(selected)) {
+    root.querySelector("[data-message]").textContent = "هذا الاختيار غير متاح حاليا";
     return;
   }
   const qty=Math.max(1,Math.floor(Number(root.querySelector("[data-quantity]")?.value)||1));

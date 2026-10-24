@@ -2889,7 +2889,7 @@ function getVariantImages(variant) {
 }
 
 function isProductUnavailable(product) {
-  return product?.stock === "غير متاح حاليا" || product?.stock === "Currently unavailable";
+  return product?.stock === "غير متاح حاليا" || product?.stock === "Currently unavailable" || product?.available === false;
 }
 
 function comparableImagePath(value = "") {
@@ -2997,17 +2997,24 @@ function getProductVariants(product) {
       title: "الاختيار الأساسي",
       options: {},
       price: productPrice(product),
-      available: !isProductUnavailable(product),
+      // Orders for a product without options are checked against its stored
+      // variant (the order system falls back to variants[0]).
+      available: !isProductUnavailable(product) && product?.variants?.[0]?.available !== false,
+      quantity: product?.variants?.[0]?.quantity ?? null,
       image: product?.image || null
     }
   ];
 }
 
+// Same rule as the cart page and the order system (functions/_order-pricing.js):
+// an option marked unavailable stays unavailable even with stock left, a
+// tracked quantity must be above zero, and the option needs a chargeable price.
 function isVariantAvailable(variant, product = null) {
   if (product && isProductUnavailable(product)) return false;
+  if (variant?.available === false) return false;
   const quantity = variantQuantity(variant);
-  if (quantity !== null) return quantity > 0;
-  return variant?.available !== false;
+  if (quantity !== null && quantity <= 0) return false;
+  return Number(variant?.price ?? product?.price) > 0;
 }
 
 function hasProductChoices(product) {
