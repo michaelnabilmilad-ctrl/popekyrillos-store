@@ -68,12 +68,21 @@ function absoluteUrl(origin, value = "") {
   const raw = String(value || "").trim();
   if (!raw) return "";
   if (/^https?:\/\//i.test(raw)) return raw;
+  if (raw.startsWith("//")) return `https:${raw}`;
   return `${origin}/${raw.replace(/^\/+/, "")}`;
+}
+
+// Store images become root paths (served by whichever host renders the page);
+// images on other hosts (old Shopify CDN imports) keep their full URL.
+function sameSitePath(value = "") {
+  const raw = String(value || "").trim();
+  return /^https:\/\/popekyrillos\.store\//i.test(raw) ? raw.replace(/^https:\/\/popekyrillos\.store/i, "") : rootPath(raw);
 }
 
 function rootPath(value = "") {
   const raw = String(value || "").trim();
   if (!raw || /^https?:\/\//i.test(raw)) return raw;
+  if (raw.startsWith("//")) return `https:${raw}`;
   return `/${raw.replace(/^\/+/, "")}`;
 }
 
@@ -286,7 +295,7 @@ export function breadcrumbNavHtml(crumbs, className = "seo-breadcrumb") {
 export function productDetailSsrHtml(seo) {
   const image = seo.images[0] || "";
   const imageMarkup = image
-    ? `<div class="product-route-main-image"><img src="${escapeHtml(rootPath(image.replace(/^https?:\/\/[^/]+/i, "")))}" alt="${escapeHtml(seo.alt)}" width="800" height="800" decoding="async" fetchpriority="high"></div>`
+    ? `<div class="product-route-main-image"><img src="${escapeHtml(sameSitePath(image))}" alt="${escapeHtml(seo.alt)}" width="800" height="800" decoding="async" fetchpriority="high"></div>`
     : "";
   return `<div class="product-route-grid"><div class="product-route-gallery">${imageMarkup}</div><article class="product-route-copy">${seo.kind ? `<p class="product-route-category">${escapeHtml(seo.kind)}</p>` : ""}<h1>${escapeHtml(seo.name)}</h1><p class="product-route-description">${escapeHtml(seo.description)}</p>${seo.price !== null ? `<div class="product-route-price">${escapeHtml(seo.priceText || priceLabel(seo.price))}</div>` : ""}<p class="product-route-message">${seo.inStock ? "متاح" : "غير متاح حاليا"}</p></article></div>`;
 }

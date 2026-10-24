@@ -872,6 +872,9 @@ function escapeHtml(value = "") {
 
 function absoluteAssetUrl(value = "") {
   if (!value) return "";
+  // Some imported products keep their full image URL on another host (Shopify CDN).
+  if (/^https?:\/\//i.test(value)) return value;
+  if (value.startsWith("//")) return `https:${value}`;
   return new URL(value.startsWith("/") ? value : `/${value}`, canonicalOrigin).toString();
 }
 

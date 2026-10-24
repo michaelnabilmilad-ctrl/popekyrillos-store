@@ -4,6 +4,7 @@ import {
   catalogIndexHtml,
   insertBeforeServices,
   plainText,
+  productDetailSsrHtml,
   productIndexState,
   productLastmod,
   productSeo,
@@ -180,4 +181,12 @@ test("catalog page helpers insert a crawlable directory and the page heading", (
   assert.match(out, /<a href="\/products\/a">شورية &lt;1&gt;<\/a><span>900 ج\.م<\/span>/);
   assert.ok(out.indexOf("data-seo-catalog-index") < out.indexOf('class="services"'));
   assert.equal(catalogIndexHtml({ heading: "x" }), "");
+});
+
+test("images on another host (old Shopify imports) keep their full URL", () => {
+  const shopify = "https://cdn.shopify.com/s/files/1/0761/files/IMG-1.png?v=1";
+  const seo = productSeo({ ...censer, images: [shopify] }, helpers, taxonomy, origin);
+  assert.deepEqual(seo.productLd.image, [shopify]);
+  assert.match(productDetailSsrHtml(seo), /<img src="https:\/\/cdn\.shopify\.com\/s\/files\/1\/0761\/files\/IMG-1\.png\?v=1"/);
+  assert.match(productDetailSsrHtml(productSeo(censer, helpers, taxonomy, origin)), /<img src="\/assets\/products\/censer\.webp"/);
 });
