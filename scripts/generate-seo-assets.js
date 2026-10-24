@@ -9,19 +9,17 @@ const products = JSON.parse(fs.readFileSync(productsPath, "utf8"));
 const canonicalOrigin = "https://popekyrillos.store";
 const today = new Date().toISOString().slice(0, 10);
 
-function hasAvailableVariant(product) {
-  const variants = Array.isArray(product?.variants) ? product.variants : [];
-  if (!variants.length) return product?.stock !== "غير متاح حاليا" && product?.available !== false;
-  return variants.some((variant) => {
-    const raw = variant?.quantity;
-    const quantity = raw === null || raw === undefined || raw === "" ? null : Number(raw);
-    return quantity !== null && Number.isInteger(quantity) && quantity >= 0 ? quantity > 0 : variant?.available !== false;
-  });
+function hasPositivePrice(product) {
+  const prices = [product?.price, ...(Array.isArray(product?.variants) ? product.variants.map((variant) => variant?.price) : [])];
+  return prices.some((price) => Number(price) > 0);
 }
 
+// Fallback copy of the Worker's live sitemap rule (functions/_seo.js): every
+// published product with a price and a photo, sold-out products included.
 function isActiveProduct(product) {
   return product?.active !== false && product?.hidden !== true && product?.deleted !== true
-    && product?.published !== false && hasAvailableVariant(product);
+    && product?.published !== false && hasPositivePrice(product)
+    && Boolean(product?.image || (Array.isArray(product?.images) && product.images.length));
 }
 
 const taxonomySandbox = { window: {}, localStorage: { getItem: () => null, setItem: () => {} } };
