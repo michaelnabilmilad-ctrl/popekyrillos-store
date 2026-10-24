@@ -579,6 +579,12 @@
       return;
     }
 
+    const pendingTaxonomy = productsWaitingForTaxonomyPublish();
+    if (pendingTaxonomy.length) {
+      showToast(summarizeIssues("انشر الأقسام الأول من تبويب «الأقسام» (حفظ ونشر)، لأن المنتجات دي مربوطة بأقسام لسه ما اتنشرتش:", pendingTaxonomy), { error: true });
+      return;
+    }
+
     const confirmed = window.confirm("سيتم حفظ products.json على فرع المنتجات وتحديث الموقع مباشرة بدون تشغيل Cloudflare build. هل تريد المتابعة؟");
     if (!confirmed) return;
 
@@ -680,7 +686,7 @@
     }
     const validation = validateTaxonomy(categoriesList);
     if (!validation.ok) {
-      showToast(`تعذر النشر:\n${validation.errors.join("\n")}`);
+      showToast(summarizeIssues("تعذر نشر الأقسام:", validation.errors), { error: true });
       return;
     }
 
@@ -723,7 +729,9 @@
       const verification = await verifyPublishedTaxonomy(changedTaxonomyImages(previousTaxonomy, categoriesList));
       if (verification.ok) {
         renderStatus(`تم نشر الأقسام وظهرت على الموقع. Commit: ${commit}`);
-        showToast("تم نشر الأقسام وصورها وظهرت على الموقع.");
+        showToast(validation.warnings.length
+          ? summarizeIssues(`تم نشر الأقسام وصورها وظهرت على الموقع.\nملاحظة: ${validation.warnings.length} منتج علاقته بالأقسام محتاجة مراجعة (موجودة من قبل التعديل ده):`, validation.warnings, 3)
+          : "تم نشر الأقسام وصورها وظهرت على الموقع.", { error: validation.warnings.length > 0 });
       } else {
         renderStatus(`اتحفظت الأقسام (Commit: ${commit}) لكن لسه ما ظهرتش على الموقع.`);
         showToast(`اتحفظت الأقسام على GitHub، لكن لسه ما ظهرتش على الموقع: ${verification.message} جرّب تحديث الموقع بعد دقيقة.`);
@@ -1768,20 +1776,80 @@
     if (duplicateIds.length) {
       errors.unshift(`تم العثور على ${duplicateIds.length} IDs مكررة:\n${duplicateIds.map((item) => `• ${item}`).join("\n")}`);
     }
-    if (state.products.length) {
-      const parentBySubcategory = new Map();
-      for (const category of categoriesList || []) {
-        for (const subcategory of category.subcategories || []) parentBySubcategory.set(subcategory.id, category.id);
-      }
-      for (const product of state.products) {
-        const mainId = normalizeMainCategoryValue(product.mainCategory, product.category);
-        const subId = normalizeSubCategoryValue(product.subcategory || product.subCategory);
-        if (!categoryIds.has(mainId)) errors.push(`المنتج ${product.id} مرتبط بقسم رئيسي غير موجود: ${mainId}`);
-        if (!parentBySubcategory.has(subId)) errors.push(`المنتج ${product.id} مرتبط بقسم فرعي غير موجود: ${subId}`);
-        else if (parentBySubcategory.get(subId) !== mainId) errors.push(`القسم الفرعي للمنتج ${product.id} لا يتبع قسمه الرئيسي.`);
+    // Product links only block a save when this edit breaks them. Links that are
+    // already broken in the published taxonomy are reported as warnings, so one
+    // old inconsistency can't lock every later category or image change.
+    const warnings = [];
+    if (state.products.length && errors.length === 0) {
+      const before = productTaxonomyLinkIssues(state.originalTaxonomy || []);
+      for (const [productId, issue] of productTaxonomyLinkIssues(categoriesList)) {
+        if (state.originalTaxonomy && before.has(productId)) warnings.push(issue);
+        else errors.push(issue);
       }
     }
-    return { ok: errors.length === 0, errors };
+    return { ok: errors.length === 0, errors, warnings };
+  }
+
+  // Products whose subcategory is new or was moved in this page but not yet
+  // published. Saving them first would write category links the live taxonomy
+  // doesn't have, which is how products and categories drift apart.
+  function productsWaitingForTaxonomyPublish() {
+    if (state.taxonomyStatus !== "loaded" || !state.originalTaxonomy) return [];
+    const parentIn = (categoriesList) => {
+      const parents = new Map();
+      for (const category of categoriesList) {
+        for (const subcategory of category.subcategories || []) parents.set(subcategory.id, category.id);
+      }
+      return parents;
+    };
+    const published = parentIn(state.originalTaxonomy);
+    const current = parentIn(taxonomyCategoriesForAdmin());
+    const pending = [];
+    for (const product of state.products) {
+      const subId = normalizeSubCategoryValue(product.subcategory || product.subCategory);
+      if (!current.has(subId)) continue;
+      if (!published.has(subId)) pending.push(`«${product.name || product.id}»: القسم الفرعي «${taxonomySubcategoryNameFromId(subId)}» جديد`);
+      else if (published.get(subId) !== current.get(subId)) pending.push(`«${product.name || product.id}»: القسم الفرعي «${taxonomySubcategoryNameFromId(subId)}» اتنقل لقسم رئيسي تاني`);
+    }
+    return pending;
+  }
+
+  // A product resolves to its subcategory by stable ID (or name), and its main
+  // category follows that subcategory's parent — the same rule as the Worker and
+  // storefront — so a stale mainCategory label is not a broken link.
+  function productTaxonomyLinkIssues(categoriesList) {
+    const issues = new Map();
+    const mainIds = new Set();
+    const mainNames = new Set();
+    const subcategoryKeys = new Set();
+    for (const category of categoriesList || []) {
+      mainIds.add(category.id);
+      mainNames.add(category.name);
+      for (const subcategory of category.subcategories || []) {
+        subcategoryKeys.add(subcategory.id);
+        subcategoryKeys.add(subcategory.name);
+      }
+    }
+    for (const product of state.products) {
+      const label = product.name || product.id;
+      const subValue = String(product.subcategory || product.subCategory || "").trim();
+      if (subValue && subcategoryKeys.has(subValue)) continue;
+      if (subValue) {
+        issues.set(String(product.id), `«${label}» مرتبط بقسم فرعي غير موجود في الأقسام: ${product.subCategory || subValue}`);
+        continue;
+      }
+      const mainValue = String(product.mainCategory || "").trim();
+      const mainKnown = mainValue ? mainIds.has(mainValue) || mainNames.has(mainValue) : mainIds.has(legacyCategoryToMainCategory[product.category]);
+      if (!mainKnown) issues.set(String(product.id), `«${label}» مرتبط بقسم رئيسي غير موجود: ${mainValue || product.category || "بدون قسم"}`);
+    }
+    return issues;
+  }
+
+  // Long validation lists are summarised so the message never covers the page.
+  function summarizeIssues(title, issues, limit = 5) {
+    const shown = issues.slice(0, limit).map((issue) => `• ${issue}`);
+    if (issues.length > limit) shown.push(`• و${issues.length - limit} غيرهم.`);
+    return `${title}\n${shown.join("\n")}`;
   }
 
   function saveTaxonomyDraft() {
@@ -1791,12 +1859,12 @@
     }
     const validation = validateTaxonomy(state.taxonomy);
     if (!validation.ok) {
-      showToast(`تعذر الحفظ:\n${validation.errors.join("\n")}`);
+      showToast(summarizeIssues("تعذر حفظ المسودة:", validation.errors), { error: true });
       return;
     }
     try {
       localStorage.setItem(TAXONOMY_DRAFT_KEY, JSON.stringify({ savedAt: new Date().toISOString(), baseVersion: state.taxonomyBaseVersion, categories: state.taxonomy }));
-      showToast("تم حفظ مسودة الأقسام بأمان على هذا الجهاز.");
+      showToast("تم حفظ مسودة الأقسام على هذا الجهاز فقط. اضغط «حفظ ونشر» لتظهر التعديلات والصور على الموقع.");
     } catch (error) {
       console.error("Failed to save taxonomy draft:", error);
       showToast("تعذر حفظ مسودة الأقسام. لم يتم تغيير بيانات الموقع.");
@@ -2585,8 +2653,11 @@ function updateProductField(product, element) {
     product.name = product.name || "منتج بدون اسم";
     product.category = product.category || "brass";
     product.label = product.label || categories.find((category) => category.id === product.category)?.label || "";
+    // A subcategory ID missing from the taxonomy keeps its saved name, so a
+    // products save never erases the only record of which subcategory it was.
+    const unknownSubcategoryId = Boolean(product.subcategory) && !findTaxonomySubcategory(product.subcategory);
     product.mainCategory = mainCategoryName(product);
-    product.subCategory = subCategoryName(product);
+    product.subCategory = unknownSubcategoryId && product.subCategory ? product.subCategory : subCategoryName(product);
     if (!product.mainCategory || !product.subCategory) throw new Error("لا يمكن حفظ منتج بدون قسم رئيسي وفرعي.");
     product.price = numberOrNull(product.price) ?? 0;
     product.hasVariants = productHasVariants(product);
@@ -2945,12 +3016,13 @@ function updateProductField(product, element) {
     return escapeHtml(value).replaceAll("\n", " ");
   }
 
-  function showToast(message) {
+  function showToast(message, { error = false } = {}) {
     elements.toast.textContent = message;
+    elements.toast.classList.toggle("is-error", error);
     elements.toast.hidden = false;
     window.clearTimeout(showToast.timer);
     showToast.timer = window.setTimeout(() => {
       elements.toast.hidden = true;
-    }, 3200);
+    }, error ? 9000 : 3200);
   }
 })();

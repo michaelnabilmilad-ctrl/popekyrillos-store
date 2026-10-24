@@ -52,7 +52,9 @@ test("admin and server validators report all duplicate IDs together", () => {
   assert.match(adminSource, /duplicateCategoryIds/);
   assert.match(adminSource, /duplicateSubcategoryIds/);
   assert.match(adminSource, /تم العثور على.*IDs مكررة/);
-  assert.match(adminSource, /validation\.errors\.join\("\\n"\)/);
+  // The duplicate-ID error is listed first, so the summarised toast always shows it in full.
+  assert.match(adminSource, /errors\.unshift\(`تم العثور على/);
+  assert.match(adminSource, /summarizeIssues\("تعذر نشر الأقسام:", validation\.errors\)/);
   assert.match(apiSource, /Duplicate taxonomy IDs/);
   assert.match(apiSource, /duplicateIds\.join/);
 });

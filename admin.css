@@ -849,7 +849,14 @@ textarea:focus {
   background: var(--ink);
   color: #fff;
   white-space: pre-line;
+  overflow-wrap: anywhere;
+  max-height: min(40vh, 320px);
+  overflow-y: auto;
   box-shadow: var(--shadow);
+}
+
+.toast.is-error {
+  background: var(--burgundy);
 }
 
 [hidden] {
