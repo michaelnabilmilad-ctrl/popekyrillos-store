@@ -1,14 +1,16 @@
 User-agent: *
 Allow: /
+# Public, read-only catalog data the storefront pages render from.
+Allow: /api/catalog
+Allow: /api/products/
+Disallow: /api/
 Disallow: /admin
 Disallow: /admin/
 Disallow: /cart
 Disallow: /checkout
 Disallow: /payment
-Disallow: /payment-success
-Disallow: /payment-failed
-Disallow: /payment-pending
-Disallow: /api/
-Disallow: /admin/api/
+Disallow: /order-success
+Disallow: /order/
+Disallow: /track-order
 
 Sitemap: https://popekyrillos.store/sitemap.xml

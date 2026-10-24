@@ -35,8 +35,10 @@ test("catalog renders every visible product record without group-based or identi
 });
 
 test("category SEO noindexes empty routes and sitemap excludes inactive products", () => {
-  assert.match(worker, /matched\.length \? "index, follow" : "noindex, follow"/);
+  assert.match(worker, /route\.listed\.length && route\.isPublic \? "index, follow" : "noindex, follow"/);
   assert.match(worker, /categoryPageResponse/);
+  // The live sitemap (Worker) lists only products that pass the index rules.
+  assert.match(worker, /const listed = sitemapProducts\(products\);/);
   assert.match(seo, /const activeProducts = enrichedProducts\.filter\(isActiveProduct\)/);
   assert.match(seo, /categories\.filter\(\(category\) => \(categoryCounts\[category\.id\] \|\| 0\) > 0\)/);
 });

@@ -11,7 +11,25 @@ import { bestSellersResponse } from "./functions/api/best-sellers.js";
 import { coloringDesignForProduct } from "./coloringDesigns.js";
 import { backfillAirtableOrderProducts } from "./functions/_airtable-order-backfill.js";
 import { checkoutReceipt, customerOrdersResponse, ensureOrderAccess, purchaseSnapshot } from "./functions/_customer-orders.js";
-import { ALLOWED_PAYMENT_METHODS, NEW_ORDER_STATUS, TOTAL_TOLERANCE, paymentStatusForMethod, priceOrderItems } from "./functions/_order-pricing.js";
+import { ALLOWED_PAYMENT_METHODS, NEW_ORDER_STATUS, TOTAL_TOLERANCE, paymentStatusForMethod, priceOrderItems, purchasableOffers } from "./functions/_order-pricing.js";
+import {
+  STORE_NAME,
+  breadcrumbLd,
+  breadcrumbNavHtml,
+  catalogIndexHtml,
+  insertBeforeServices,
+  isPublicCategory,
+  jsonLdScript,
+  productCardHtml,
+  productDetailSsrHtml,
+  productIndexState,
+  productLastmod,
+  productSeo,
+  setCatalogHeading,
+  sitemapXml,
+  taxonomyView,
+  truncateText
+} from "./functions/_seo.js";
 import {
   AIRTABLE_PRODUCT_SKU_FIELD,
   AIRTABLE_PRODUCT_NAME_FIELD,
@@ -1171,53 +1189,14 @@ function ensureUtf8ContentType(headers, pathname = "") {
   if (needsUtf8) headers.set("Content-Type", `${normalized}; charset=utf-8`);
 }
 
-function productMetaTags(product) {
-  const titleText = `${localized(product.name)} | مكتبة البابا كيرلس`;
-  const descriptionText = productDescription(product);
-  const canonical = canonicalProductUrl(product);
-  const image = absoluteAssetUrl(productImages(product)[0] || "assets/optimized/hero-papa-kyrillos-products.webp");
-  const price = productPrice(product);
-  const availability = hasAvailableVariant(product) ? "https://schema.org/InStock" : "https://schema.org/OutOfStock";
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Product",
-    name: localized(product.name),
-    description: descriptionText,
-    image: image ? [image] : undefined,
-    sku: product.sku || product.id,
-    brand: {
-      "@type": "Brand",
-      name: "مكتبة البابا كيرلس"
-    },
-    url: canonical,
-    offers: {
-      "@type": "Offer",
-      priceCurrency: "EGP",
-      price: price === null ? undefined : price,
-      availability,
-      url: canonical
-    }
-  };
-
-  return {
-    title: `<title>${escapeHtml(titleText)}</title>`,
-    description: `<meta name="description" content="${escapeHtml(descriptionText.slice(0, 170))}" />`,
-    extra: [
-      `<link rel="canonical" href="${escapeHtml(canonical)}" />`,
-      '<meta name="robots" content="index, follow" />',
-      '<meta property="og:type" content="product" />',
-      `<meta property="og:title" content="${escapeHtml(titleText)}" />`,
-      `<meta property="og:description" content="${escapeHtml(descriptionText.slice(0, 170))}" />`,
-      `<meta property="og:url" content="${escapeHtml(canonical)}" />`,
-      `<meta property="og:image" content="${escapeHtml(image)}" />`,
-      '<meta name="twitter:card" content="summary_large_image" />',
-      `<meta name="twitter:title" content="${escapeHtml(titleText)}" />`,
-      `<meta name="twitter:description" content="${escapeHtml(descriptionText.slice(0, 170))}" />`,
-      `<meta name="twitter:image" content="${escapeHtml(image)}" />`,
-      `<script type="application/ld+json" id="product-json-ld">${JSON.stringify(jsonLd).replace(/</g, "\\u003c")}</script>`
-    ].join("\n    ")
-  };
-}
+const seoHelpers = {
+  productPrice,
+  purchasableOffers,
+  productImages,
+  hasAvailableVariant,
+  canonicalProductUrl,
+  mainCategoryId: (product) => catalogMainCategoryId(product)
+};
 
 const categorySeoNames = {
   "altar-vessels": "المذبح والأواني المقدسة",
@@ -1231,54 +1210,267 @@ const categorySeoNames = {
   "greek-collection": "المجموعة اليونانية"
 };
 
-function categoryPageMetaTags(url, products) {
-  const segments = url.pathname.split("/").filter(Boolean).map(decodeURIComponent);
-  const categoryId = segments[1] || "all";
-  const subcategoryId = segments[2] || "";
-  const params = new URLSearchParams({ category: categoryId });
-  if (subcategoryId) params.set("subcategory", subcategoryId);
-  const matched = products.filter((product) => catalogProductMatches(product, params));
-  const first = matched[0];
-  const categoryName = categorySeoNames[categoryId] || categoryId;
-  const subcategoryName = subcategoryId
-    ? localized(first?.subCategory || first?.label) || subcategoryId
-    : "";
-  const pageName = subcategoryName || categoryName;
-  const titleText = `${pageName} | مكتبة البابا كيرلس`;
-  const descriptionText = matched.length
-    ? `تصفح ${pageName} من مكتبة البابا كيرلس. ${matched.length} منتج متاح للخدمة والكنائس مع صور وأسعار محدثة.`
-    : `قسم ${pageName} في مكتبة البابا كيرلس. ستظهر المنتجات هنا عند توفرها.`;
-  const canonical = `${canonicalOrigin}${url.pathname.replace(/\/+$/, "") || "/"}`;
-  const image = absoluteAssetUrl(productImages(first)[0] || "assets/optimized/hero-papa-kyrillos-products.webp");
+// Live taxonomy (published from the admin) as a lookup for names and
+// breadcrumbs. Also refreshes the index catalogMainCategoryId() relies on.
+async function loadSeoTaxonomy(env, request) {
+  await refreshCatalogTaxonomyIndex(env, request);
+  let source = "";
+  try {
+    source = await loadTaxonomySource(env, request, { maxAgeMs: 60000 });
+  } catch (error) {
+    console.warn("SEO taxonomy unavailable; using built-in category names.", error?.message || error);
+  }
+  if (seoTaxonomyCache && seoTaxonomyCache.source === source) return seoTaxonomyCache.view;
+  const categories = source ? parseTaxonomyCategories(source) : null;
+  const view = taxonomyView(categories?.length ? categories : Object.entries(categorySeoNames).map(([id, name]) => ({ id, name, subcategories: [] })));
+  view.live = Boolean(categories?.length);
+  seoTaxonomyCache = { source, view };
+  return view;
+}
+
+let seoTaxonomyCache = null;
+
+function seoListItem(product, thumbnailManifest = {}) {
+  const name = localized(product.name);
   return {
-    title: `<title>${escapeHtml(titleText)}</title>`,
-    description: `<meta name="description" content="${escapeHtml(descriptionText)}" />`,
+    path: canonicalProductPath(product),
+    name,
+    price: productPrice(product),
+    inStock: hasAvailableVariant(product),
+    thumbnail: catalogThumbnail(product, thumbnailManifest),
+    alt: localized(product.imageAlt).trim() || name
+  };
+}
+
+// Category facts per product, computed once per catalog/taxonomy version.
+// Counting every subcategory with catalogProductMatches() repeated the same
+// work ~30k times per request, far over the Worker CPU budget.
+const seoProductFacts = new WeakMap();
+
+function productFacts(product) {
+  const version = catalogTaxonomyIndex?.version || "";
+  const cached = seoProductFacts.get(product);
+  if (cached && cached.version === version) return cached;
+  const facts = {
+    version,
+    visible: isCatalogProductVisible(product),
+    published: product?.active !== false && product?.hidden !== true && product?.deleted !== true && product?.published !== false,
+    inStock: hasAvailableVariant(product),
+    inSitemap: productIndexState(product, seoHelpers).inSitemap,
+    category: catalogMainCategoryId(product),
+    subcategory: String(product?.subcategory || product?.subCategory || ""),
+    label: String(product?.label || ""),
+    collections: catalogCollectionIds(product)
+  };
+  seoProductFacts.set(product, facts);
+  return facts;
+}
+
+function sitemapProducts(products) {
+  return products.filter((product) => productFacts(product).inSitemap);
+}
+
+// Same category/subcategory rule as catalogProductMatches() without search or
+// price filters. The catalog shows in-stock products only; SEO lists
+// (sitemap, crawlable directories) pass withOutOfStock to keep sold-out pages.
+function categoryProducts(products, categoryId, subcategoryId = "", { withOutOfStock = false } = {}) {
+  const migrated = globalThis.POPE_KYRILLOS_CATEGORY_MIGRATION.route(categoryId || "all", subcategoryId || "");
+  const category = migrated.category;
+  const subcategory = migrated.label;
+  return products.filter((product) => {
+    const facts = productFacts(product);
+    if (!(withOutOfStock ? facts.published : facts.visible)) return false;
+    if (category !== "all" && facts.category !== category && !(category === "greek-collection" && facts.collections.length)) return false;
+    return !subcategory || facts.subcategory === subcategory || facts.label === subcategory || facts.collections.includes(subcategory);
+  });
+}
+
+function seoHeadTags({ title, description, canonical, robots = "index, follow", image, type = "website", jsonLd = [] }) {
+  const ogImage = image || `${canonicalOrigin}/assets/optimized/hero-papa-kyrillos-products.webp`;
+  return {
+    title: `<title>${escapeHtml(title)}</title>`,
+    description: `<meta name="description" content="${escapeHtml(description)}" />`,
     extra: [
       `<link rel="canonical" href="${escapeHtml(canonical)}" />`,
-      `<meta name="robots" content="${matched.length ? "index, follow" : "noindex, follow"}" />`,
-      '<meta property="og:type" content="website" />',
-      `<meta property="og:title" content="${escapeHtml(titleText)}" />`,
-      `<meta property="og:description" content="${escapeHtml(descriptionText)}" />`,
+      `<meta name="robots" content="${robots}" />`,
+      `<meta property="og:type" content="${type}" />`,
+      `<meta property="og:site_name" content="${escapeHtml(STORE_NAME)}" />`,
+      '<meta property="og:locale" content="ar_EG" />',
+      `<meta property="og:title" content="${escapeHtml(title)}" />`,
+      `<meta property="og:description" content="${escapeHtml(description)}" />`,
       `<meta property="og:url" content="${escapeHtml(canonical)}" />`,
-      `<meta property="og:image" content="${escapeHtml(image)}" />`,
+      `<meta property="og:image" content="${escapeHtml(ogImage)}" />`,
       '<meta name="twitter:card" content="summary_large_image" />',
-      `<meta name="twitter:title" content="${escapeHtml(titleText)}" />`,
-      `<meta name="twitter:description" content="${escapeHtml(descriptionText)}" />`,
-      `<meta name="twitter:image" content="${escapeHtml(image)}" />`
+      `<meta name="twitter:title" content="${escapeHtml(title)}" />`,
+      `<meta name="twitter:description" content="${escapeHtml(description)}" />`,
+      `<meta name="twitter:image" content="${escapeHtml(ogImage)}" />`,
+      ...jsonLd
     ].join("\n    ")
   };
 }
 
+function productMetaTags(seo) {
+  return seoHeadTags({
+    title: seo.title,
+    description: seo.metaDescription,
+    canonical: seo.canonical,
+    robots: seo.robots,
+    image: seo.images[0],
+    type: "product",
+    jsonLd: [jsonLdScript(seo.productLd, "product-json-ld"), jsonLdScript(seo.breadcrumbLd, "breadcrumb-json-ld")]
+  });
+}
+
+// Resolves /category/<id>[/<subcategory>] against the live taxonomy. Returns
+// null for a category the store does not have, so the route can answer 404.
+function resolveCategoryRoute(url, taxonomy, products) {
+  let segments;
+  try {
+    segments = url.pathname.split("/").filter(Boolean).map(decodeURIComponent);
+  } catch {
+    return null;
+  }
+  if (segments.length > 3) return null;
+  const rawCategory = segments[1] || "all";
+  const rawSubcategory = segments[2] || "";
+  const migrated = globalThis.POPE_KYRILLOS_CATEGORY_MIGRATION.route(rawCategory, rawSubcategory);
+  const categoryId = migrated.category || rawCategory;
+  const subcategoryId = migrated.label || "";
+  const category = taxonomy.byId.get(categoryId);
+  const matched = categoryProducts(products, categoryId, subcategoryId);
+  // Indexable products of the route, sold-out ones included.
+  const listed = sitemapProducts(categoryProducts(products, categoryId, subcategoryId, { withOutOfStock: true }));
+  if (categoryId !== "all" && taxonomy.live && !category && !listed.length) return null;
+  const subcategory = subcategoryId ? taxonomy.subcategoryById.get(subcategoryId) : null;
+  if (subcategoryId && taxonomy.live && !subcategory && !listed.length) return null;
+  const categoryName = categoryId === "all" ? "كل المنتجات" : category?.name || categorySeoNames[categoryId] || categoryId;
+  const subcategoryName = subcategoryId ? subcategory?.name || subcategoryId : "";
+  const canonicalPath = categoryId === "all" && !subcategoryId
+    ? "/products"
+    : `/category/${encodeURIComponent(categoryId)}${subcategoryId ? `/${encodeURIComponent(subcategoryId)}` : ""}`;
+  return {
+    categoryId,
+    subcategoryId,
+    category,
+    categoryName,
+    subcategoryName,
+    pageName: subcategoryName || categoryName,
+    canonical: `${canonicalOrigin}${canonicalPath}`,
+    matched,
+    listed,
+    isPublic: categoryId === "all" || isPublicCategory(category)
+  };
+}
+
+function categoryPageMetaTags(route) {
+  const listed = route.listed;
+  const examples = listed.slice(0, 3).map((product) => localized(product.name)).join("، ");
+  const title = `${route.pageName} | ${STORE_NAME}`;
+  const description = truncateText(route.matched.length
+    ? `تسوق ${route.pageName} من ${STORE_NAME} لمستلزمات الكنائس: ${route.matched.length} منتج بصور وأسعار محدثة${examples ? `، منها ${examples}` : ""}.`
+    : `قسم ${route.pageName} في ${STORE_NAME}. ستظهر المنتجات هنا عند توفرها.`);
+  const crumbs = [{ name: "الرئيسية", url: `${canonicalOrigin}/` }];
+  if (route.categoryId !== "all") crumbs.push({ name: route.categoryName, url: `${canonicalOrigin}/category/${encodeURIComponent(route.categoryId)}` });
+  if (route.subcategoryId) crumbs.push({ name: route.subcategoryName, url: route.canonical });
+  if (route.categoryId === "all") crumbs.push({ name: route.categoryName, url: route.canonical });
+  return seoHeadTags({
+    title,
+    description,
+    canonical: route.canonical,
+    robots: route.listed.length && route.isPublic ? "index, follow" : "noindex, follow",
+    image: absoluteAssetUrl(productImages(listed[0] || route.matched[0])[0] || ""),
+    jsonLd: [jsonLdScript(breadcrumbLd(crumbs), "breadcrumb-json-ld")]
+  });
+}
+
+// Category tiles for the home page index: every public category and
+// subcategory that has at least one listed product.
+function categoryDirectory(taxonomy, products) {
+  const listed = sitemapProducts(products);
+  const items = [];
+  for (const category of taxonomy.categories) {
+    if (!isPublicCategory(category)) continue;
+    const count = categoryProducts(listed, category.id, "", { withOutOfStock: true }).length;
+    if (!count) continue;
+    items.push({ path: `/category/${encodeURIComponent(category.id)}`, name: category.name, count });
+    for (const subcategory of category.subcategories) {
+      const subCount = categoryProducts(listed, category.id, subcategory.id, { withOutOfStock: true }).length;
+      if (subCount) items.push({ path: `/category/${encodeURIComponent(category.id)}/${encodeURIComponent(subcategory.id)}`, name: `${category.name} / ${localized(subcategory.name)}`, count: subCount });
+    }
+  }
+  return items;
+}
+
 async function categoryPageResponse(request, env, products) {
+  const taxonomy = await loadSeoTaxonomy(env, request);
+  const route = resolveCategoryRoute(new URL(request.url), taxonomy, products);
+  if (!route) return notFoundResponse("page");
   const response = await env.ASSETS.fetch(rewriteGetRequest(request, "/"));
   const headers = new Headers(response.headers);
   headers.set("Content-Type", "text/html; charset=utf-8");
   headers.set("Cache-Control", "no-cache, must-revalidate");
   headers.set("X-Content-Type-Options", "nosniff");
   if (request.method === "HEAD") return new Response(null, { status: response.status, headers });
-  const tags = categoryPageMetaTags(new URL(request.url), products);
-  return new Response(injectHead(await response.text(), tags), { status: response.status, headers });
+  const thumbnailManifest = await loadThumbnailManifest(env, request);
+  const listed = route.listed.map((product) => seoListItem(product, thumbnailManifest));
+  const subcategories = !route.subcategoryId && route.category
+    ? route.category.subcategories
+      .map((subcategory) => ({ subcategory, count: categoryProducts(route.listed, route.categoryId, subcategory.id, { withOutOfStock: true }).length }))
+      .filter((item) => item.count)
+      .map(({ subcategory, count }) => ({ path: `/category/${encodeURIComponent(route.categoryId)}/${encodeURIComponent(subcategory.id)}`, name: localized(subcategory.name), count }))
+    : [];
+  let html = injectHead(await response.text(), categoryPageMetaTags(route));
+  html = setCatalogHeading(html, route.pageName, route.subcategoryId ? `${route.categoryName} / ${route.subcategoryName}` : route.categoryName);
+  html = insertBeforeServices(html, catalogIndexHtml({ heading: `كل منتجات ${route.pageName}`, categories: subcategories, products: listed }));
+  return new Response(html, { status: response.status, headers });
 }
+
+// Home, /products and /contact share index.html; each gets its own title,
+// description and a crawlable directory.
+async function storefrontPageResponse(request, env, pathname) {
+  const response = await env.ASSETS.fetch(rewriteGetRequest(request, "/"));
+  const headers = new Headers(response.headers);
+  ensureUtf8ContentType(headers, "/index.html");
+  headers.set("Cache-Control", "no-cache, must-revalidate");
+  headers.set("X-Content-Type-Options", "nosniff");
+  if (request.method === "HEAD" || !headers.get("Content-Type")?.includes("text/html")) {
+    return new Response(request.method === "HEAD" ? null : response.body, { status: response.status, headers });
+  }
+  let html = await response.text();
+  try {
+    const products = await loadProducts(env, request, { maxAgeMs: 60000 });
+    const taxonomy = await loadSeoTaxonomy(env, request);
+    if (pathname === "/products") {
+      const thumbnailManifest = await loadThumbnailManifest(env, request);
+      const listed = sitemapProducts(products);
+      html = injectHead(html, seoHeadTags({
+        title: `كل المنتجات | ${STORE_NAME}`,
+        description: truncateText(`تسوق كل منتجات ${STORE_NAME}: ${listed.length} منتج من مستلزمات الكنائس، الصلبان، الشوريات، القناديل، الكتب الطقسية والأيقونات بأسعار محدثة.`),
+        canonical: `${canonicalOrigin}/products`,
+        jsonLd: [jsonLdScript(breadcrumbLd([{ name: "الرئيسية", url: `${canonicalOrigin}/` }, { name: "كل المنتجات", url: `${canonicalOrigin}/products` }]), "breadcrumb-json-ld")]
+      }));
+      html = setCatalogHeading(html, "كل المنتجات", "كل المنتجات");
+      html = insertBeforeServices(html, catalogIndexHtml({ heading: "كل منتجات المكتبة", products: listed.map((product) => seoListItem(product, thumbnailManifest)) }));
+    } else if (pathname === "/contact") {
+      html = injectCanonical(html, `${canonicalOrigin}/contact`)
+        .replace(/<title>[\s\S]*?<\/title>/i, `<title>تواصل معنا | ${STORE_NAME}</title>`)
+        .replace(/<meta\s+name="description"[\s\S]*?>/i, `<meta name="description" content="تواصل مع ${STORE_NAME} لطلب منتج غير موجود أو عرض سعر لتجهيزات الكنائس عبر واتساب ${escapeHtml("01016125589")}." />`);
+    } else {
+      html = insertBeforeServices(injectCanonical(html, `${canonicalOrigin}/`), catalogIndexHtml({ heading: "كل أقسام المكتبة", categories: categoryDirectory(taxonomy, products) }));
+    }
+  } catch (error) {
+    console.warn("Storefront SEO enrichment skipped.", error?.message || error);
+    html = injectCanonical(html, `${canonicalOrigin}${pathname === "/" ? "/" : pathname}`);
+  }
+  return new Response(html, { status: response.status, headers });
+}
+
+const policyPageMeta = {
+  "/policies": ["سياسات الاسترجاع والشحن والخصوصية", "تعرف على سياسات الاسترجاع والاستبدال والشحن والخصوصية وطرق الدفع في مكتبة البابا كيرلس لمستلزمات الكنائس."],
+  "/privacy-policy": ["سياسة الخصوصية", "سياسة الخصوصية في مكتبة البابا كيرلس: البيانات التي نجمعها عند الطلب وكيف نستخدمها ونحميها."],
+  "/refund-policy": ["سياسة الاسترجاع والاستبدال", "شروط الاسترجاع والاستبدال في مكتبة البابا كيرلس لمستلزمات الكنائس والمدة المتاحة وطريقة الطلب."],
+  "/shipping-policy": ["سياسة الشحن والتوصيل", "مدة وتكلفة الشحن والتوصيل داخل مصر لطلبات مكتبة البابا كيرلس لمستلزمات الكنائس."]
+};
 
 async function htmlResponse(request, env, pathname = "/index.html", init = {}) {
   const assetPath = init.assetPath || (pathname === "/index.html" ? "/" : pathname.replace(/\.html$/, ""));
@@ -1289,12 +1481,19 @@ async function htmlResponse(request, env, pathname = "/index.html", init = {}) {
   headers.set("X-Content-Type-Options", "nosniff");
   if (request.method === "HEAD") return new Response(null, { status: init.status || response.status, headers });
   if (headers.get("Content-Type")?.includes("text/html") && init.canonicalUrl) {
-    return new Response(injectCanonical(await response.text(), init.canonicalUrl), { status: init.status || response.status, headers });
+    let html = injectCanonical(await response.text(), init.canonicalUrl);
+    if (init.meta) {
+      const [title, description] = init.meta;
+      html = html
+        .replace(/<title>[\s\S]*?<\/title>/i, `<title>${escapeHtml(`${title} | ${STORE_NAME}`)}</title>`)
+        .replace(/<meta\s+name="description"[\s\S]*?>/i, `<meta name="description" content="${escapeHtml(description)}" />`);
+    }
+    return new Response(html, { status: init.status || response.status, headers });
   }
   return new Response(response.body, { status: init.status || response.status, headers });
 }
 
-async function productPageResponse(request, env, product) {
+async function productPageResponse(request, env, product, products = []) {
   if (request.method === "HEAD") {
     return new Response(null, {
       status: 200,
@@ -1305,18 +1504,31 @@ async function productPageResponse(request, env, product) {
       }
     });
   }
-  const tags = productMetaTags(product);
-  const safeProduct = JSON.stringify(product).replace(/</g, "\\u003c");
-  const name = escapeHtml(localized(product?.name));
+  const taxonomy = await loadSeoTaxonomy(env, request);
+  const seo = productSeo(product, seoHelpers, taxonomy, canonicalOrigin);
+  const tags = productMetaTags(seo);
+  const safeProduct = JSON.stringify({ ...product, seoImageAlt: seo.alt }).replace(/</g, "\\u003c");
+  const name = escapeHtml(seo.name);
+  const thumbnailManifest = await loadThumbnailManifest(env, request);
+  const mainId = catalogMainCategoryId(product);
+  const subcategoryId = String(product.subcategory || "");
+  const related = sitemapProducts(products)
+    .filter((item) => item.id !== product.id && productFacts(item).category === mainId)
+    .sort((a, b) => Number(productFacts(b).inStock) - Number(productFacts(a).inStock)
+      || Number(String(b.subcategory || "") === subcategoryId) - Number(String(a.subcategory || "") === subcategoryId))
+    .slice(0, 4)
+    .map((item) => productCardHtml(seoListItem(item, thumbnailManifest)))
+    .join("");
   const html = `<!doctype html>
 <html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 ${tags.title}${tags.description}${tags.extra}
 <link rel="preload" href="/assets/fonts/ge-ss-two-bold.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/styles.min.css"><link rel="stylesheet" href="/product-page.css?v=13">
+<style>.product-route-breadcrumb{margin:-12px 0 18px;color:#65747a;font-size:13px;font-weight:700}.product-route-breadcrumb a{color:#073d42;text-decoration:none}</style>
 <script src="/assistant.js?v=1" defer></script>
 </head><body class="standalone-product-page">
 <header class="site-header" data-elevated="false"><div class="brand-cluster"><a class="brand" href="/" aria-label="مكتبة البابا كيرلس"><span class="brand-logo-wrap"><img src="/assets/optimized/logo-papa-kyrillos-64.webp" srcset="/assets/optimized/logo-papa-kyrillos-64.webp 64w, /assets/optimized/logo-papa-kyrillos-128.webp 128w" sizes="50px" alt="" width="160" height="160" decoding="async"></span><span><strong>مكتبة البابا كيرلس</strong><small>مستلزمات الكنائس والخدمة</small></span></a></div><nav class="main-nav" aria-label="التنقل الرئيسي"><a href="/#categories">الأقسام</a><a href="/#catalog">المنتجات</a></nav><div class="header-actions"><a class="cart-toggle" href="/cart" aria-label="فتح السلة"><span>السلة</span><span class="cart-count" data-cart-count></span></a></div></header>
-<main class="product-route-main"><a class="product-route-back" href="/#catalog">العودة إلى المنتجات</a><div id="product-detail" aria-label="${name}"></div><section class="product-route-related" aria-labelledby="related-title"><h2 id="related-title">منتجات مشابهة</h2><div class="product-grid" data-related-products></div></section></main>
+<main class="product-route-main"><a class="product-route-back" href="/#catalog">العودة إلى المنتجات</a>${seo.crumbs.length > 2 ? breadcrumbNavHtml(seo.crumbs, "product-route-breadcrumb") : ""}<div id="product-detail" aria-label="${name}">${productDetailSsrHtml(seo)}</div><section class="product-route-related" aria-labelledby="related-title"><h2 id="related-title">منتجات مشابهة</h2><div class="product-grid" data-related-products>${related}</div></section></main>
 <footer class="product-route-footer"><strong>مكتبة البابا كيرلس</strong><span>مستلزمات الكنائس والخدمة</span><a href="/policies">السياسات</a><a href="https://wa.me/201016125589">تواصل معنا</a></footer>
 <div class="toast" data-toast role="status" aria-live="polite"></div><script id="product-data" type="application/json">${safeProduct}</script><script src="/yota-colors.js?v=3" defer></script><script src="/product-page.js?v=22" defer></script></body></html>`;
   return new Response(html, {
@@ -1329,27 +1541,61 @@ ${tags.title}${tags.description}${tags.extra}
   });
 }
 
-function notFoundResponse() {
+// Built from the live catalog and taxonomy on every request, so products and
+// categories published from /admin (straight to products-data, no deploy)
+// appear here within the Worker's one-minute catalog cache.
+async function sitemapResponse(request, env) {
+  const products = await loadProducts(env, request, { maxAgeMs: 60000 });
+  const taxonomy = await loadSeoTaxonomy(env, request);
+  const listed = sitemapProducts(products);
+  const entries = ["/", "/products", "/contact", "/policies"].map((path) => ({ loc: `${canonicalOrigin}${path}` }));
+  for (const category of taxonomy.categories) {
+    if (!isPublicCategory(category)) continue;
+    const inCategory = categoryProducts(listed, category.id, "", { withOutOfStock: true });
+    if (!inCategory.length) continue;
+    entries.push({ loc: `${canonicalOrigin}/category/${encodeURIComponent(category.id)}`, lastmod: inCategory.map(productLastmod).sort().pop() || "" });
+    for (const subcategory of category.subcategories) {
+      const inSubcategory = categoryProducts(inCategory, category.id, subcategory.id, { withOutOfStock: true });
+      if (inSubcategory.length) entries.push({ loc: `${canonicalOrigin}/category/${encodeURIComponent(category.id)}/${encodeURIComponent(subcategory.id)}`, lastmod: inSubcategory.map(productLastmod).sort().pop() || "" });
+    }
+  }
+  for (const product of listed) entries.push({ loc: canonicalProductUrl(product), lastmod: productLastmod(product) });
+  return new Response(request.method === "HEAD" ? null : sitemapXml(entries), {
+    status: 200,
+    headers: {
+      "Content-Type": "application/xml; charset=utf-8",
+      "Cache-Control": "public, max-age=300",
+      "X-Content-Type-Options": "nosniff"
+    }
+  });
+}
+
+function notFoundResponse(kind = "product") {
+  const isProduct = kind === "product";
+  const title = isProduct ? "المنتج غير موجود" : "الصفحة غير موجودة";
+  const message = isProduct
+    ? "الرابط الذي فتحته لا يطابق منتجا متاحا حاليا. يمكنك الرجوع إلى كل المنتجات أو التواصل معنا للمساعدة."
+    : "الرابط الذي فتحته غير موجود في المكتبة. يمكنك تصفح الأقسام وكل المنتجات من الروابط التالية.";
   const html = `<!doctype html>
 <html lang="ar" dir="rtl">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>المنتج غير موجود | مكتبة البابا كيرلس</title>
+    <title>${title} | مكتبة البابا كيرلس</title>
     <meta name="robots" content="noindex, follow" />
     <style>
       body{margin:0;font-family:Tahoma,Arial,sans-serif;background:#f8f3ea;color:#1f2933;display:grid;min-height:100vh;place-items:center;padding:24px}
       main{max-width:620px;background:#fff;border:1px solid #e7dccb;border-radius:8px;padding:32px;box-shadow:0 18px 50px rgba(31,41,51,.08)}
       h1{margin:0 0 12px;font-size:clamp(1.6rem,4vw,2.3rem)}
       p{line-height:1.8;color:#52606d}
-      a{display:inline-flex;margin-top:16px;background:#0c6b68;color:#fff;text-decoration:none;border-radius:6px;padding:12px 18px;font-weight:700}
+      a{display:inline-flex;margin-top:16px;margin-inline-end:8px;background:#0c6b68;color:#fff;text-decoration:none;border-radius:6px;padding:12px 18px;font-weight:700}
     </style>
   </head>
   <body>
     <main>
-      <h1>المنتج غير موجود</h1>
-      <p>الرابط الذي فتحته لا يطابق منتجا متاحا حاليا. يمكنك الرجوع إلى كل المنتجات أو التواصل معنا للمساعدة.</p>
-      <a href="/#catalog">الرجوع إلى المنتجات</a>
+      <h1>${title}</h1>
+      <p>${message}</p>
+      <a href="/products">كل المنتجات</a><a href="/#categories">الأقسام</a>
     </main>
   </body>
 </html>`;
@@ -2765,13 +3011,25 @@ async function handleRequest(request, env, ctx) {
       if (legacyProductUrl(url) && product) return redirectToProduct(product, url);
       if (url.pathname.startsWith("/products/")) {
         if (!product) return notFoundResponse();
-        return productPageResponse(request, env, product);
+        return productPageResponse(request, env, product, products);
+      }
+    }
+
+    if (url.pathname === "/sitemap.xml") {
+      try {
+        return await sitemapResponse(request, env);
+      } catch (error) {
+        console.warn("Dynamic sitemap failed; serving the deployed copy.", error?.message || error);
       }
     }
 
     if (staticRewrites[url.pathname]) {
       const isPrivate = ["/cart", "/checkout", "/payment", "/order-success", "/payment-success", "/payment-failed", "/payment-pending"].includes(url.pathname);
-      const responseOptions = isPrivate ? { private: true } : { canonicalUrl: `${canonicalOrigin}${url.pathname}` };
+      // The three policy aliases render the same policies page, so they point
+      // search engines at /policies instead of competing with it.
+      const responseOptions = isPrivate
+        ? { private: true }
+        : { canonicalUrl: `${canonicalOrigin}${policyPageMeta[url.pathname] ? "/policies" : url.pathname}`, meta: policyPageMeta[url.pathname] };
       if (url.pathname === "/coloring-game") responseOptions.assetPath = "/coloring-game/index.html";
       return htmlResponse(request, env, staticRewrites[url.pathname], responseOptions);
     }
@@ -2785,13 +3043,18 @@ async function handleRequest(request, env, ctx) {
     if (/^\/order\/[a-f0-9]{64}$/.test(url.pathname)) return htmlResponse(request, env, "/order.html", { private: true });
 
     if (htmlRoutePaths.has(url.pathname)) {
-      return htmlResponse(request, env, "/index.html", { canonicalUrl: `${canonicalOrigin}${url.pathname === "/" ? "/" : url.pathname}` });
+      return storefrontPageResponse(request, env, url.pathname);
     }
 
     const assetResponse = await env.ASSETS.fetch(request);
     if (assetResponse.status === 404 && isProductUploadAsset(url.pathname)) {
       const githubAsset = await githubAssetFallbackResponse(url.pathname, env);
       if (githubAsset) return githubAsset;
+    }
+    // Page-like URLs (no file extension) that match nothing get a real page
+    // with links back into the store; missing files keep the bare 404.
+    if (assetResponse.status === 404 && ["GET", "HEAD"].includes(request.method) && !/\.[a-z0-9]{1,8}$/i.test(url.pathname) && !url.pathname.startsWith("/api/") && !url.pathname.startsWith("/cdn-cgi/")) {
+      return notFoundResponse("page");
     }
     return withAssetCacheHeaders(assetResponse, url.pathname);
 }

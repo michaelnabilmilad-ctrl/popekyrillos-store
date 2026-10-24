@@ -106,7 +106,7 @@ const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://w
   .join("\n")}\n</urlset>\n`;
 fs.writeFileSync(path.join(root, "sitemap.xml"), sitemap, "utf8");
 
-const robots = `User-agent: *\nAllow: /\nDisallow: /admin\nDisallow: /admin/\nDisallow: /cart\nDisallow: /checkout\nDisallow: /payment\nDisallow: /payment-success\nDisallow: /payment-failed\nDisallow: /payment-pending\nDisallow: /api/\nDisallow: /admin/api/\n\nSitemap: ${canonicalOrigin}/sitemap.xml\n`;
+const robots = `User-agent: *\nAllow: /\n# Public, read-only catalog data the storefront pages render from.\nAllow: /api/catalog\nAllow: /api/products/\nDisallow: /api/\nDisallow: /admin\nDisallow: /admin/\nDisallow: /cart\nDisallow: /checkout\nDisallow: /payment\nDisallow: /order-success\nDisallow: /order/\nDisallow: /track-order\n\nSitemap: ${canonicalOrigin}/sitemap.xml\n`;
 fs.writeFileSync(path.join(root, "robots.txt"), robots, "utf8");
 
 console.log(`SEO assets generated for ${activeProducts.length} active products.`);

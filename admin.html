@@ -162,6 +162,11 @@
               <div class="accordion-body"><label><span>الوصف</span><textarea data-field="description" rows="6" placeholder="وصف واضح للمنتج"></textarea></label><label><span>الكلمات المفتاحية - كل كلمة في سطر</span><textarea data-field="tags" rows="3" placeholder="نحاسيات&#10;صلبان زفة"></textarea></label></div>
             </details>
 
+            <details class="form-section editor-accordion" data-editor-section="seo">
+              <summary><span>محركات البحث (SEO)</span><small>اختياري: يُكتب تلقائيًا لو تركته فارغًا</small></summary>
+              <div class="accordion-body"><p class="hint">اترك الحقول فارغة ليكتب الموقع العنوان والوصف ووصف الصورة تلقائيًا من اسم المنتج ووصفه وقسمه وسعره. اكتب هنا فقط لو أردت نصًا مخصصًا.</p><label><span>عنوان نتيجة البحث (حتى 65 حرفًا)</span><input type="text" data-field="seoTitle" maxlength="70" placeholder="تلقائي: اسم المنتج | مكتبة البابا كيرلس"></label><label><span>وصف نتيجة البحث (حتى 155 حرفًا)</span><textarea data-field="seoDescription" rows="3" maxlength="170" placeholder="تلقائي: من وصف المنتج، أو من الاسم والقسم والسعر"></textarea></label><label><span>وصف الصورة الرئيسية (Alt)</span><input type="text" data-field="imageAlt" maxlength="125" placeholder="تلقائي: اسم المنتج – القسم الفرعي"></label></div>
+            </details>
+
             <details class="form-section editor-accordion" data-editor-section="images">
               <summary><span>الصور</span><small>الصورة الأساسية والصور الإضافية</small></summary>
               <div class="accordion-body"><div class="image-drop-zone" data-image-drop-zone tabindex="0"><strong>اسحب الصور هنا أو اضغط للرفع</strong><span>يتم التحويل والرفع بنفس آلية الصور الحالية</span></div><div class="section-title-row"><span class="hint">أول صورة هي التي تظهر في الكارت وعليها علامة ⭐.</span><div class="image-upload-actions"><button class="button small secondary" type="button" data-action="upload-image">إضافة صور</button><button class="button small danger" type="button" data-action="replace-product-images">استبدال كل الصور</button></div></div><label class="advanced-image-paths"><span>مسارات الصور</span><textarea data-field="images" rows="5" dir="ltr" placeholder="assets/optimized/products/example.webp"></textarea></label><div class="image-preview" data-image-preview></div></div>

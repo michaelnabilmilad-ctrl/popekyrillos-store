@@ -2407,17 +2407,30 @@ function updatePageMeta(product = null) {
   const categoryCount = isCategory
     ? (routeFilter.label ? fullSubcategoryProductCount(routeFilter.category, routeFilter.label) : mainCategoryProductCount(routeFilter.category))
     : null;
-  const canonicalUrl = isProduct
+  const routeCanonicalUrl = isProduct
     ? `${canonicalOrigin}${canonicalProductPath(product)}`
     : isCategory
       ? categoryShareUrl(routeFilter.category, routeFilter.label).split("#")[0]
       : `${canonicalOrigin}/`;
-  const title = isProduct
-    ? `${displayText(localized(product.name))} | ${t("brandName")}`
-    : isCategory
-      ? `${categoryName} | ${t("brandName")}`
-      : t("documentTitle");
-  const description = isCategory
+  // The Worker already sends the right title, description and canonical for
+  // the other storefront pages (/, /products, /contact); keep them rather than
+  // pointing /products and /contact at the home page.
+  const serverMeta = updatePageMeta.serverMeta || (updatePageMeta.serverMeta = {
+    path: location.pathname,
+    title: document.title,
+    description: document.querySelector('meta[name="description"]')?.content || "",
+    canonical: document.querySelector('link[rel="canonical"]')?.href || ""
+  });
+  const keepServerMeta = !isProduct && !isCategory && !isEnglish() && Boolean(serverMeta.canonical) && location.pathname === serverMeta.path;
+  const canonicalUrl = keepServerMeta ? serverMeta.canonical : routeCanonicalUrl;
+  const title = keepServerMeta
+    ? serverMeta.title
+    : isProduct
+      ? `${displayText(localized(product.name))} | ${t("brandName")}`
+      : isCategory
+        ? `${categoryName} | ${t("brandName")}`
+        : t("documentTitle");
+  const description = keepServerMeta && serverMeta.description ? serverMeta.description : isCategory
     ? (categoryCount > 0
         ? `تصفح ${categoryName} من مكتبة البابا كيرلس. ${displayText(formatter.format(categoryCount))} منتج متاح للخدمة والكنائس مع صور وأسعار محدثة.`
         : `قسم ${categoryName} في مكتبة البابا كيرلس. ستظهر المنتجات هنا عند توفرها.`)

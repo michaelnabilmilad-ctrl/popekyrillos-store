@@ -35,6 +35,19 @@ function lineUnavailable(product, variant) {
   return variant?.available === false;
 }
 
+// What a customer can buy for each option, by the same rules priceOrderItems() charges
+// with. Structured data uses this so search results never show a price we would refuse.
+export function purchasableOffers(product) {
+  return productVariants(product).map((variant) => ({
+    id: String(variant?.id || "default"),
+    price: positivePrice(variant?.price ?? product?.price),
+    available: !lineUnavailable(product, variant),
+    options: variant?.options && typeof variant.options === "object" ? variant.options : {},
+    sku: String(variant?.sku || "").trim(),
+    image: String(variant?.image || (Array.isArray(variant?.images) ? variant.images[0] || "" : "")).trim()
+  }));
+}
+
 // items: normalizeOrderItems(...).items (websiteProductId, sku, variantId, quantity).
 // Returns { lines, total, errors }; lines[i] has the server price for items[i].
 export function priceOrderItems(items, catalog) {

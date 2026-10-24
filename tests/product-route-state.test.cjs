@@ -14,7 +14,7 @@ test("quick view state never impersonates the durable product details route", ()
 
 test("durable product URLs render a complete page shell at the edge", () => {
   assert.match(worker, /url\.pathname\.startsWith\("\/products\/"\)/);
-  assert.match(worker, /return productPageResponse\(request, env, product\)/);
+  assert.match(worker, /return productPageResponse\(request, env, product, products\)/);
   const page = worker.slice(worker.indexOf("async function productPageResponse"), worker.indexOf("function notFoundResponse"));
   for (const required of ["<header", "<main", "id=\"product-detail\"", "<footer"]) assert.match(page, new RegExp(required));
 });

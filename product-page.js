@@ -111,7 +111,10 @@ const hasColoringGame = Boolean(
   product.coloringOutlineUrl &&
   (product.coloringRegionsUrl || coloringRegions.length)
 );
-let selected = isMedalProduct ? null : variants.find((variant) => variant.available !== false) || variants[0];
+// ?variant=<id> (the URL each option's Offer uses in the structured data) opens that option.
+const requestedVariantId = new URLSearchParams(location.search).get("variant");
+const requestedVariant = requestedVariantId ? variants.find((variant) => String(variant.id) === requestedVariantId) : null;
+let selected = isMedalProduct ? null : requestedVariant || variants.find((variant) => variant.available !== false) || variants[0];
 let activeImage = images[0] || "";
 let routeLightbox = null;
 let routeZoom = { scale: 1, x: 0, y: 0, pointers: new Map(), gesture: null };
@@ -206,7 +209,8 @@ function imageMarkup(source, index, className = "", purpose = "thumbnail") {
   const displaySource = responsive ? productThumbnailUrl(purpose === "main" ? 640 : 320) : assetUrl(source);
   const loading = purpose === "main" ? 'fetchpriority="high"' : 'loading="lazy"';
   const sizes = responsive ? ` srcset="${responsive}" sizes="${purpose === "main" ? "(max-width: 760px) calc(100vw - 32px), 540px" : "72px"}"` : "";
-  const imageAlt = index === 0 ? text(product.name) : `صورة ${index + 1} من ${text(product.name)}`;
+  // seoImageAlt is the Worker's alt for the main photo (admin text or name + subcategory).
+  const imageAlt = index === 0 ? text(product.seoImageAlt || product.imageAlt) || text(product.name) : `صورة ${index + 1} من ${text(product.name)}`;
   return `<img class="${className}" src="${escapeHtml(displaySource)}"${sizes} alt="${escapeHtml(imageAlt)}" width="800" height="800" ${loading} decoding="async">`;
 }
 
@@ -1652,7 +1656,7 @@ function addToCart() {
   saveCartItems(items); updateCount(); root.querySelector("[data-message]").textContent="تمت إضافة المنتج إلى السلة";
 }
 async function loadRelated() {
-  try { const category=product.mainCategory||product.category||"all"; const response=await fetch(`/api/catalog?category=${encodeURIComponent(category)}&limit=5`); const data=await response.json(); const items=(data.items||[]).filter((item)=>item.id!==product.id).slice(0,4); relatedRoot.innerHTML=items.map((item)=>`<article class="product-card"><a href="/products/${encodeURIComponent(item.slug)}"><img src="${escapeHtml(item.thumbnail)}" alt="${escapeHtml(text(item.name))}" width="320" height="320" loading="lazy" decoding="async"></a><div class="product-info"><h3><a href="/products/${encodeURIComponent(item.slug)}">${escapeHtml(text(item.name))}</a></h3><span class="price">${money(item.price)}</span></div></article>`).join(""); } catch { document.querySelector(".product-route-related")?.remove(); }
+  try { const category=product.mainCategory||product.category||"all"; const response=await fetch(`/api/catalog?category=${encodeURIComponent(category)}&limit=5`); const data=await response.json(); const items=(data.items||[]).filter((item)=>item.id!==product.id).slice(0,4); relatedRoot.innerHTML=items.map((item)=>`<article class="product-card"><a href="/products/${encodeURIComponent(item.slug)}"><img src="${escapeHtml(assetUrl(item.thumbnail))}" alt="${escapeHtml(text(item.name))}" width="320" height="320" loading="lazy" decoding="async"></a><div class="product-info"><h3><a href="/products/${encodeURIComponent(item.slug)}">${escapeHtml(text(item.name))}</a></h3><span class="price">${money(item.price)}</span></div></article>`).join(""); } catch { document.querySelector(".product-route-related")?.remove(); }
 }
 
 root.addEventListener("click", (event) => {

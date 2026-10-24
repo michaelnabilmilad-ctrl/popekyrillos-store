@@ -2027,6 +2027,9 @@
     setValue("priceNote", product.priceNote);
     setValue("isBestSeller", Boolean(product.isBestSeller));
     setValue("description", product.description);
+    setValue("seoTitle", product.seoTitle);
+    setValue("seoDescription", product.seoDescription);
+    setValue("imageAlt", product.imageAlt);
     setValue("tags", arrayToLines(product.tags));
     setValue("images", arrayToLines(product.images?.length ? product.images : [product.image].filter(Boolean)));
     setValue("options", JSON.stringify(product.options || [], null, 2));
