@@ -256,10 +256,9 @@ test("live catalog copy: every product is served under the main category its tax
   const misfiled = products
     .filter((product) => served.has(String(product.id)))
     .filter((product) => !served.get(String(product.id)).includes(nameToId.get(product.mainCategory)));
-  // The order system's rule: an option is sold only with a chargeable price.
   const purchasable = (product) => (Array.isArray(product.variants) && product.variants.length
-    ? product.variants.some((variant) => variant.available !== false && Number(variant.price ?? product.price) > 0)
-    : product.stock !== "غير متاح حاليا" && product.available !== false && Number(product.price) > 0);
+    ? product.variants.some((variant) => variant.available !== false)
+    : product.stock !== "غير متاح حاليا" && product.available !== false);
   const hidden = products.filter((product) => nameToId.has(product.mainCategory) && !served.has(String(product.id))
     && product.published !== false && product.deleted !== true && product.hidden !== true && purchasable(product));
   assert.deepEqual({ misfiled: misfiled.map((product) => product.id), hidden: hidden.map((product) => product.id) }, { misfiled: [], hidden: [] });
