@@ -1154,8 +1154,10 @@ function ensureMainCategoryTiles() {
       ${mainCategoryTileArt(category)}
       <strong>${escapeHtml(localized(category.name))}</strong>${countText}</a>`;
   }).join("");
+  const replacesSkeleton = categoryGrid.getAttribute("aria-busy") === "true";
   categoryGrid.innerHTML = allTile + tiles;
   categoryGrid.setAttribute("aria-busy", "false");
+  if (replacesSkeleton) categoryGrid.scrollLeft = 0;
 }
 
 function mainCategoryProductCount(categoryId) {
@@ -1578,7 +1580,8 @@ function renderSubcategoryCards() {
     }))
   ];
 
-  if (state.subcategoryCardsCategory !== categoryId) {
+  const categoryChanged = state.subcategoryCardsCategory !== categoryId;
+  if (categoryChanged) {
     state.subcategoryCardsCategory = categoryId;
     state.subcategoryCardsExpanded = false;
   }
@@ -1632,6 +1635,10 @@ function renderSubcategoryCards() {
   subcategoryCards.dataset.collapsible = needsMoreCard ? "true" : "false";
   subcategoryCards.dataset.expanded = state.subcategoryCardsExpanded ? "true" : "false";
   subcategoryCards.innerHTML = `${visibleCards.map(cardHtml).join("")}${moreCardHtml}`;
+  // The carousel element is reused for every category, so a new category opened
+  // at the place the previous one was swiped to. scrollLeft 0 is the start in
+  // RTL as well as LTR.
+  if (categoryChanged) subcategoryCards.scrollLeft = 0;
 }
 
 function updateFilterButtons() {
@@ -3642,18 +3649,43 @@ function renderProducts() {
   }
 }
 
-function scrollToFirstCatalogProduct() {
-  const scroll = () => {
-    const target = productGrid?.querySelector(".product-card") || productGrid;
-    if (!target) return;
-    const headerOffset = (header?.offsetHeight || 0) + 16;
-    const top = target.getBoundingClientRect().top + window.scrollY - headerOffset;
-    window.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
+let catalogScrollRequest = 0;
+let catalogScrollUserInput = 0;
+["touchstart", "wheel", "keydown"].forEach((type) => {
+  window.addEventListener(type, () => { catalogScrollUserInput += 1; }, { passive: true });
+});
+
+// A category's products arrive after the click. A smooth scroll started before
+// they render was cut short or pushed down by scroll anchoring when the grid
+// changed height, leaving the customer at the end of the new list. Jump at
+// once, then align again after the products render unless the customer has
+// touched or scrolled the page meanwhile.
+function scrollToCatalogStart(target = "catalog", rendered = null) {
+  const request = ++catalogScrollRequest;
+  const userInput = catalogScrollUserInput;
+  const align = () => {
+    if (request !== catalogScrollRequest || userInput !== catalogScrollUserInput) return;
+    const element = target === "products"
+      ? productGrid?.querySelector(".product-card") || productGrid
+      : document.querySelector("#catalog");
+    if (!element) return;
+    const offset = target === "products"
+      ? (header?.offsetHeight || 0) + 16
+      : parseFloat(window.getComputedStyle(document.documentElement).scrollPaddingTop) || 0;
+    const top = Math.max(0, element.getBoundingClientRect().top + window.scrollY - offset);
+    // html has scroll-behavior: smooth, so "auto" would animate again.
+    window.scrollTo({ top, left: 0, behavior: "instant" });
   };
 
-  const scheduleFrame = window.requestAnimationFrame || ((callback) => window.setTimeout(callback, 0));
-  scheduleFrame(scroll);
-  window.setTimeout(scroll, 120);
+  align();
+  if (rendered) {
+    const scheduleFrame = window.requestAnimationFrame || ((callback) => window.setTimeout(callback, 0));
+    void Promise.resolve(rendered).finally(() => scheduleFrame(align));
+  }
+}
+
+function scrollToFirstCatalogProduct(rendered = null) {
+  scrollToCatalogStart("products", rendered);
 }
 
 function normalizeModalSelection(product, preferredOption = "") {
@@ -5590,6 +5622,9 @@ function openShopMenu() {
   closeProductModal();
   closeAccountModal();
   renderShopMenu();
+  // The drawer kept the scroll position of its last use, so it reopened on the
+  // last categories.
+  if (shopMenu) shopMenu.scrollTop = 0;
   document.body.classList.add("shop-menu-open");
   if (shopMenu) shopMenu.inert = false;
   shopMenu?.setAttribute("aria-hidden", "false");
@@ -5624,19 +5659,18 @@ function applyCatalogFilter(category = "all", label = "", { updateUrl = true, sc
   state.visibleProductCount = productBatchSize;
   trackStoreEvent("view_category", { category: label || state.filter || "all" });
   updateFilterButtons();
-  void loadCatalogPage({ reset: true });
+  const rendered = loadCatalogPage({ reset: true });
   renderShopMenu();
   closeShopMenu();
   if (updateUrl) setCatalogUrl(state.filter, label, { replace: replaceUrl });
-  if (scroll && scrollTarget === "products") {
-    scrollToFirstCatalogProduct();
-  } else if (scroll) {
-    document.querySelector("#catalog")?.scrollIntoView({ behavior: "smooth", block: "start" });
-  }
+  if (scroll) scrollToCatalogStart(scrollTarget === "products" ? "products" : "catalog", rendered);
 }
 
 function applyCatalogFilterFromUrl({ render = true, scroll = false } = {}) {
   const { category, label } = catalogFilterFromUrl();
+  const previousFilter = state.filter;
+  const previousLabel = state.labelFilter;
+  const previousSearch = state.search;
   resetPriceRangeForCategory();
   state.filter = normalizeCategoryFilter(category);
   state.labelFilter = label;
@@ -5644,12 +5678,17 @@ function applyCatalogFilterFromUrl({ render = true, scroll = false } = {}) {
   state.visibleProductCount = productBatchSize;
   syncSearchInput();
   updateFilterButtons();
+  let rendered = null;
   if (render) {
-    renderProducts();
+    // The loaded page holds the products of the category being left; filtering
+    // them for another category left the grid empty after the back button.
+    const filterChanged = state.filter !== previousFilter || state.labelFilter !== previousLabel || state.search !== previousSearch;
+    if (filterChanged) rendered = loadCatalogPage({ reset: true });
+    else renderProducts();
     renderShopMenu();
   }
   if (scroll && window.location.hash === "#catalog") {
-    document.querySelector("#catalog")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    scrollToCatalogStart("catalog", rendered);
   }
 }
 
@@ -5954,10 +5993,10 @@ labelFilterSelect?.addEventListener("change", (event) => {
   resetPriceRangeForCategory();
   state.labelFilter = event.target.value || "";
   state.visibleProductCount = productBatchSize;
-  void loadCatalogPage({ reset: true });
+  const rendered = loadCatalogPage({ reset: true });
   renderShopMenu();
   setCatalogUrl(state.filter || "all", state.labelFilter, { replace: true });
-  scrollToFirstCatalogProduct();
+  scrollToFirstCatalogProduct(rendered);
 });
 
 subcategoryCards?.addEventListener("click", (event) => {
