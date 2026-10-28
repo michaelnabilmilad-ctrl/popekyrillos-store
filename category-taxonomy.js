@@ -98,6 +98,15 @@
                   "representativeProductId": "",
                   "visible": true,
                   "homeVisible": true
+              },
+              {
+                  "id": "custom-subcategory-1793199421562",
+                  "name": "علب بخور",
+                  "description": "",
+                  "customImage": "assets/optimized/products/gallery/taxonomy-custom-subcategory-17931994-image-20261028145828-661865.webp",
+                  "representativeProductId": "",
+                  "visible": true,
+                  "homeVisible": true
               }
           ]
       },
@@ -894,7 +903,7 @@
   ];
   const TAXONOMY_STORAGE_KEY = "pope-kyrillos-taxonomy";
   const TAXONOMY_VERSION_STORAGE_KEY = "pope-kyrillos-taxonomy-version";
-  const CURRENT_TAXONOMY_VERSION = 1792805509678;
+  const CURRENT_TAXONOMY_VERSION = 1793199523121;
   const categories = (() => {
     try {
       const storedVersion = Number(localStorage.getItem(TAXONOMY_VERSION_STORAGE_KEY) || 0);
