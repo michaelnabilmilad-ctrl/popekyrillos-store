@@ -2259,11 +2259,13 @@ function airtableOrdersUrl(env, recordId = "") {
   return `https://api.airtable.com/v0/${baseId}/${tableName}${suffix}`;
 }
 
+// Admin responses carry customer names, phones and addresses: never stored by a
+// browser or any shared cache.
 function adminOrdersJson(payload, init = {}) {
   return Response.json(payload, {
     ...init,
     headers: {
-      "Cache-Control": "public, max-age=60, stale-while-revalidate=300",
+      "Cache-Control": "private, no-store",
       "X-Content-Type-Options": "nosniff",
       ...(init.headers || {})
     }
@@ -2785,7 +2787,8 @@ const analyticsEventNames = new Set([
 function analyticsJson(payload, init = {}) {
   const headers = new Headers(init.headers || {});
   headers.set("Content-Type", "application/json; charset=UTF-8");
-  headers.set("Cache-Control", init.private ? "private, no-store" : "public, max-age=60, stale-while-revalidate=300");
+  // The admin dashboard data (search terms, error messages) and ingest replies are never cached.
+  headers.set("Cache-Control", "private, no-store");
   headers.set("X-Content-Type-Options", "nosniff");
   return new Response(JSON.stringify(payload), { ...init, headers });
 }
