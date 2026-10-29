@@ -75,6 +75,17 @@ export async function parseRequestBody(request) {
 }
 
 async function loadProducts(context) {
+  // The Worker passes the live catalog GitHub just confirmed; if it cannot, the
+  // payment is refused rather than priced from the deployed (older) products.json.
+  if (typeof context.loadFreshCatalog === "function") {
+    try {
+      return await context.loadFreshCatalog();
+    } catch (error) {
+      console.error("Live catalog check failed; payment refused", { message: error?.message || String(error) });
+      throw publicError(503, "تعذر التحقق من الأسعار الآن. حاول مرة أخرى بعد لحظات.");
+    }
+  }
+
   const requestUrl = new URL(context.request.url);
   const productsUrl = new URL("/products.json", requestUrl);
   const response = context.env?.ASSETS?.fetch

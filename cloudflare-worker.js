@@ -12,6 +12,7 @@ import { coloringDesignForProduct } from "./coloringDesigns.js";
 import { backfillAirtableOrderProducts } from "./functions/_airtable-order-backfill.js";
 import { checkoutReceipt, customerOrdersResponse, ensureOrderAccess, purchaseSnapshot } from "./functions/_customer-orders.js";
 import { ALLOWED_PAYMENT_METHODS, NEW_ORDER_STATUS, TOTAL_TOLERANCE, paymentStatusForMethod, priceOrderItems, purchasableOffers } from "./functions/_order-pricing.js";
+import { readLiveFile, recordPublishedFile } from "./functions/_live-data.js";
 import {
   STORE_NAME,
   breadcrumbLd,
@@ -87,12 +88,12 @@ function withProductColoringConfig(product) {
   };
 }
 
-let productsCache = null;
-let productsCacheTime = 0;
-let productsCacheSha = "";
-let taxonomyCache = "";
-let taxonomyCacheTime = 0;
-let taxonomyCacheSha = "";
+// Parsed catalog of the live products.json version last read in this isolate.
+let parsedProducts = { version: "", products: null };
+// Version (git blob SHA, or "deployed:…") of each catalog array handed out.
+const productVersions = new WeakMap();
+// ctx.waitUntil of each incoming request, so catalog loads can finish background checks.
+const requestWaitUntil = new WeakMap();
 let thumbnailManifestCache = null;
 
 function githubConfig(env = {}) {
@@ -119,32 +120,6 @@ function githubContentsUrl(config, path) {
 
 function githubRawUrl(config, path) {
   return `https://raw.githubusercontent.com/${config.owner}/${config.repo}/${encodeURIComponent(config.branch)}/${path.replace(/^\/+/, "")}`;
-}
-
-async function githubFetchText(env, path, { cacheBust = false, signal } = {}) {
-  const config = githubConfig(env);
-  const cacheSuffix = cacheBust ? `&v=${Date.now()}` : "";
-
-  if (config.token) {
-    const response = await fetch(`${githubContentsUrl(config, path)}${cacheSuffix}`, {
-      headers: githubHeaders(config, "application/vnd.github.raw"), signal
-    });
-    if (response.ok) {
-      return {
-        text: await response.text(),
-        sha: response.headers.get("ETag") || ""
-      };
-    }
-  }
-
-  const response = await fetch(githubRawUrl(config, path), {
-    headers: { "User-Agent": "popekyrillos-store" }, signal
-  });
-  if (!response.ok) throw new Error(`GitHub raw fetch failed with ${response.status}`);
-  return {
-    text: await response.text(),
-    sha: response.headers.get("ETag") || ""
-  };
 }
 
 async function githubFetchAsset(env, path) {
@@ -223,6 +198,8 @@ function requestContext(request, env, ctx) {
     request,
     env,
     waitUntil: ctx.waitUntil.bind(ctx),
+    // Card payments price the cart from the catalog GitHub just confirmed.
+    loadFreshCatalog: () => loadProducts(env, request, { strict: true }),
     passThroughOnException() {}
   };
 }
@@ -381,40 +358,55 @@ function productSsrStyles() {
   <script>document.documentElement.classList.add("js-product-route");</script>`;
 }
 
-async function loadProducts(env, request, { maxAgeMs = 5000, requireFresh = false, signal } = {}) {
-  if (productsCache && Date.now() - productsCacheTime < maxAgeMs) return productsCache;
-
+// Pages get the cached live catalog (see functions/_live-data.js). `strict` (order
+// pricing, checkout) confirms the version with GitHub first and throws when GitHub
+// cannot be reached; it never falls back to an older copy or the deployed file.
+async function loadProducts(env, request, { strict = false, signal } = {}) {
   try {
-    const latest = await githubFetchText(env, "products.json", { signal });
-    const products = JSON.parse(latest.text);
-    if (Array.isArray(products)) {
-      productsCache = products.map(globalThis.POPE_KYRILLOS_CATEGORY_MIGRATION.product);
-      productsCacheTime = Date.now();
-      productsCacheSha = latest.sha;
-      return productsCache;
+    const live = await readLiveFile({ env, origin: new URL(request.url).origin, file: "products.json", strict, waitUntil: requestWaitUntil.get(request), signal });
+    if (parsedProducts.version !== live.version) {
+      const products = JSON.parse(live.text);
+      if (!Array.isArray(products)) throw new Error("Invalid live catalog");
+      parsedProducts = { version: live.version, products: products.map(globalThis.POPE_KYRILLOS_CATEGORY_MIGRATION.product) };
+      productVersions.set(parsedProducts.products, live.version);
     }
-    if (requireFresh) throw new Error("Invalid current catalog");
+    return parsedProducts.products;
   } catch (error) {
-    if (requireFresh) throw error;
-    console.warn("Could not load products.json from GitHub, falling back to deployed assets.", error);
+    if (strict) throw error;
+    console.warn("Could not load the live products.json, falling back to deployed assets.", error?.message || error);
   }
 
   const response = await env.ASSETS.fetch(rewriteRequest(request, "/products.json"));
   if (!response.ok) return [];
-  productsCache = (await response.json()).map(globalThis.POPE_KYRILLOS_CATEGORY_MIGRATION.product);
-  productsCacheTime = Date.now();
-  productsCacheSha = response.headers.get("ETag") || "";
-  return productsCache;
+  const products = (await response.json()).map(globalThis.POPE_KYRILLOS_CATEGORY_MIGRATION.product);
+  productVersions.set(products, `deployed-${String(response.headers.get("ETag") || "").replace(/[^0-9A-Za-z]/g, "")}`);
+  return products;
+}
+
+function productsVersion(products) {
+  return productVersions.get(products) || "";
+}
+
+// The admin editor (`?admin=`) asks GitHub first so it always edits the latest catalog.
+async function loadProductsForAdminEditor(env, request) {
+  if (!new URL(request.url).searchParams.has("admin")) return loadProducts(env, request);
+  try {
+    return await loadProducts(env, request, { strict: true });
+  } catch (error) {
+    console.warn("Admin catalog check failed; serving the cached catalog.", error?.message || error);
+    return loadProducts(env, request);
+  }
 }
 
 async function productsJsonResponse(request, env) {
-  const products = await loadProducts(env, request, { maxAgeMs: 0 });
+  const products = await loadProductsForAdminEditor(env, request);
+  const version = productsVersion(products);
   return new Response(JSON.stringify(products), {
     status: 200,
     headers: {
       "Content-Type": "application/json; charset=utf-8",
       "Cache-Control": "no-cache, must-revalidate",
-      ...(productsCacheSha ? { ETag: productsCacheSha } : {})
+      ...(version ? { ETag: `"${version}"` } : {})
     }
   });
 }
@@ -611,7 +603,7 @@ function buildCatalogTaxonomyIndex(categories = []) {
 
 async function refreshCatalogTaxonomyIndex(env, request) {
   try {
-    const source = await loadTaxonomySource(env, request, { maxAgeMs: 5000 });
+    const source = await loadTaxonomySource(env, request);
     if (source && source !== catalogTaxonomyIndexSource) {
       const categories = parseTaxonomyCategories(source);
       if (categories?.length) {
@@ -692,7 +684,7 @@ async function catalogApiResponse(request, env, ctx) {
   cacheUrl.searchParams.set("schema", "price-range-19");
   cacheUrl.searchParams.set("thumbnails", "plain-iota-v2");
   [...url.searchParams.entries()].sort(([a], [b]) => a.localeCompare(b)).forEach(([key, value]) => cacheUrl.searchParams.append(key, value));
-  const allProducts = await loadProducts(env, request, { maxAgeMs: 0 });
+  const allProducts = await loadProducts(env, request);
   const taxonomyIndex = await refreshCatalogTaxonomyIndex(env, request);
   const thumbnailManifest = await loadThumbnailManifest(env, request);
   const navigationProducts = allProducts.filter(isCatalogProductVisible);
@@ -729,7 +721,8 @@ async function catalogApiResponse(request, env, ctx) {
     });
     return images;
   }, {});
-  if (productsCacheSha) cacheUrl.searchParams.set("v", productsCacheSha);
+  const catalogVersion = productsVersion(allProducts);
+  if (catalogVersion) cacheUrl.searchParams.set("v", catalogVersion);
   // A taxonomy-only publish must not be hidden behind a cached catalog response.
   if (taxonomyIndex) cacheUrl.searchParams.set("taxonomy", taxonomyIndex.version);
   const cacheKey = new Request(cacheUrl.toString(), { method: "GET" });
@@ -758,37 +751,65 @@ async function productApiResponse(request, env, product) {
   });
 }
 
-async function loadTaxonomySource(env, request, { maxAgeMs = 5000 } = {}) {
-  if (taxonomyCache && Date.now() - taxonomyCacheTime < maxAgeMs) return taxonomyCache;
-
+// Same live-data cache as the catalog. `strict` is used by the admin's post-publish
+// check (`?verify=`) and falls back to the cached copy if GitHub cannot answer.
+async function loadTaxonomy(env, request, { strict = false } = {}) {
+  const options = { env, origin: new URL(request.url).origin, file: "category-taxonomy.js", waitUntil: requestWaitUntil.get(request) };
   try {
-    const live = await githubFetchText(env, "category-taxonomy.js", { cacheBust: true });
-    if (live?.text) {
-      taxonomyCache = live.text;
-      taxonomyCacheTime = Date.now();
-      taxonomyCacheSha = live.sha || "";
-      return taxonomyCache;
+    if (strict) {
+      try {
+        return await readLiveFile({ ...options, strict: true });
+      } catch (error) {
+        console.warn("Strict taxonomy check failed; using the cached taxonomy.", error?.message || error);
+      }
     }
+    const live = await readLiveFile(options);
+    if (live?.text) return live;
   } catch (error) {
     console.warn("Live taxonomy fetch failed; using deployed asset.", error?.message || error);
   }
 
   const fallback = await env.ASSETS.fetch(rewriteRequest(request, "/category-taxonomy.js"));
-  if (!fallback.ok) return "";
-  taxonomyCache = await fallback.text();
-  taxonomyCacheTime = Date.now();
-  taxonomyCacheSha = fallback.headers.get("ETag") || "";
-  return taxonomyCache;
+  if (!fallback.ok) return { text: "", version: "" };
+  return { text: await fallback.text(), version: `deployed-${String(fallback.headers.get("ETag") || "").replace(/[^0-9A-Za-z]/g, "")}` };
+}
+
+// After a successful admin publish this data center serves the committed file at
+// once; a failure here only means pages wait for the next GitHub check.
+async function recordPublishedCatalog(request, response) {
+  try {
+    const result = await response.json();
+    if (!Array.isArray(result?.products)) return;
+    // Byte-for-byte the content update-products.js committed.
+    await recordPublishedFile({ origin: new URL(request.url).origin, file: "products.json", text: `${JSON.stringify(result.products, null, 2)}\n` });
+  } catch (error) {
+    console.warn("Could not cache the published catalog", error?.message || error);
+  }
+}
+
+async function recordPublishedTaxonomy(request, published) {
+  try {
+    const body = await published.json();
+    if (typeof body?.taxonomySource !== "string") return;
+    // Byte-for-byte the content update-taxonomy.js committed.
+    await recordPublishedFile({ origin: new URL(request.url).origin, file: "category-taxonomy.js", text: `${body.taxonomySource.trim()}\n` });
+  } catch (error) {
+    console.warn("Could not cache the published taxonomy", error?.message || error);
+  }
+}
+
+async function loadTaxonomySource(env, request) {
+  return (await loadTaxonomy(env, request)).text;
 }
 
 async function taxonomyJsResponse(request, env) {
-  const source = await loadTaxonomySource(env, request, { maxAgeMs: 5000 });
+  const { text: source, version } = await loadTaxonomy(env, request, { strict: new URL(request.url).searchParams.has("verify") });
   return new Response(source, {
     status: source ? 200 : 503,
     headers: {
       "Content-Type": "application/javascript; charset=utf-8",
       "Cache-Control": "no-cache, must-revalidate",
-      ...(taxonomyCacheSha ? { ETag: taxonomyCacheSha } : {})
+      ...(version ? { ETag: `"${version}"` } : {})
     }
   });
 }
@@ -1027,7 +1048,7 @@ function metaProductFeedCsv(products) {
 }
 
 async function metaProductFeedResponse(request, env) {
-  const products = await loadProducts(env, request, { maxAgeMs: 60000 });
+  const products = await loadProducts(env, request);
   const result = metaProductFeedCsv(products);
   return new Response(result.csv, { status: 200, headers: {
     "Content-Type": "text/csv; charset=utf-8",
@@ -1122,7 +1143,7 @@ function catalogFeedXml(products, { includePrice = true, requestPath = "/api/met
 }
 
 async function catalogFeedResponse(request, env, { includePrice = true } = {}) {
-  const products = await loadProducts(env, request, { maxAgeMs: 60000 });
+  const products = await loadProducts(env, request);
   const url = new URL(request.url);
   const result = catalogFeedXml(products, { includePrice, requestPath: url.pathname });
   return new Response(result.xml, {
@@ -1219,7 +1240,7 @@ async function loadSeoTaxonomy(env, request) {
   await refreshCatalogTaxonomyIndex(env, request);
   let source = "";
   try {
-    source = await loadTaxonomySource(env, request, { maxAgeMs: 60000 });
+    source = await loadTaxonomySource(env, request);
   } catch (error) {
     console.warn("SEO taxonomy unavailable; using built-in category names.", error?.message || error);
   }
@@ -1441,7 +1462,7 @@ async function storefrontPageResponse(request, env, pathname) {
   }
   let html = await response.text();
   try {
-    const products = await loadProducts(env, request, { maxAgeMs: 60000 });
+    const products = await loadProducts(env, request);
     const taxonomy = await loadSeoTaxonomy(env, request);
     if (pathname === "/products") {
       const thumbnailManifest = await loadThumbnailManifest(env, request);
@@ -1548,7 +1569,7 @@ ${tags.title}${tags.description}${tags.extra}
 // categories published from /admin (straight to products-data, no deploy)
 // appear here within the Worker's one-minute catalog cache.
 async function sitemapResponse(request, env) {
-  const products = await loadProducts(env, request, { maxAgeMs: 60000 });
+  const products = await loadProducts(env, request);
   const taxonomy = await loadSeoTaxonomy(env, request);
   const listed = sitemapProducts(products);
   const entries = ["/", "/products", "/contact", "/policies"].map((path) => ({ loc: `${canonicalOrigin}${path}` }));
@@ -2363,7 +2384,7 @@ async function adminOrdersResponse(context, pathname) {
 
 function queueResolvedProductMediaSync(context, resolvedItems, requestId) {
   if (typeof context.waitUntil !== "function") return;
-  const task = loadProducts(context.env, context.request, { maxAgeMs: 60000 })
+  const task = loadProducts(context.env, context.request)
     .then((products) => syncResolvedOrderProductMedia(context.env, resolvedItems, products, { requestId }))
     .catch((error) => {
       console.warn("Airtable product media sync skipped after order", {
@@ -2391,7 +2412,7 @@ async function adminAirtableProductMediaSyncResponse(context) {
   if (!dryRun && body.confirm !== "SYNC_AIRTABLE_PRODUCT_MEDIA") {
     return adminOrdersJson({ error: "confirmation_required" }, { status: 400 });
   }
-  const products = await loadProducts(context.env, context.request, { maxAgeMs: 0 });
+  const products = await loadProducts(context.env, context.request, { strict: true });
   const summary = await syncAirtableCatalogProductMedia(context.env, products, {
     dryRun,
     createMissing: true,
@@ -2426,7 +2447,7 @@ async function adminAirtableOrderBackfillResponse(context) {
   const orderNumbers = Array.isArray(body.orderNumbers)
     ? body.orderNumbers.map(cleanOrderString).filter((value) => /^\d+$/.test(value)).slice(0, 100)
     : [];
-  const products = await loadProducts(context.env, context.request, { maxAgeMs: 0 });
+  const products = await loadProducts(context.env, context.request, { strict: true });
   try {
     const report = await backfillAirtableOrderProducts(context.env, products, {
       dryRun,
@@ -2546,7 +2567,17 @@ async function createOrderResponse(context) {
   // Every line is priced from the live catalog (the same data the cart page priced it from),
   // never from the request. A total that differs means the cart is outdated or was edited:
   // nothing is saved and the customer is asked to review the cart.
-  const catalog = await loadProducts(env, request, { maxAgeMs: 0 });
+  let catalog;
+  try {
+    catalog = await loadProducts(env, request, { strict: true });
+  } catch (error) {
+    // Never price an order from a copy GitHub did not just confirm.
+    console.error("Order catalog check failed; order refused", { requestId, message: error?.message || String(error), status: error?.status || null });
+    return orderJsonResponse(request, {
+      error: "catalog_unavailable",
+      message: "\u062a\u0639\u0630\u0631 \u0627\u0644\u062a\u062d\u0642\u0642 \u0645\u0646 \u0627\u0644\u0623\u0633\u0639\u0627\u0631 \u0627\u0644\u0622\u0646. \u062d\u0627\u0648\u0644 \u0645\u0631\u0629 \u0623\u062e\u0631\u0649 \u0628\u0639\u062f \u0644\u062d\u0638\u0627\u062a."
+    }, { status: 503 });
+  }
   const pricing = priceOrderItems(normalizedItems.items, catalog);
   if (pricing.errors.length) {
     console.warn("Order lines do not match the catalog", { requestId, lines: pricing.errors });
@@ -2904,6 +2935,7 @@ async function recordWorkerError(env, request, error) {
 
 async function handleRequest(request, env, ctx) {
     const url = new URL(request.url);
+    requestWaitUntil.set(request, ctx.waitUntil.bind(ctx));
     const context = requestContext(request, env, ctx);
 
     if (url.pathname === "/category/altar-vessels/service-plates") {
@@ -2951,12 +2983,13 @@ async function handleRequest(request, env, ctx) {
 
       if (url.pathname === "/admin/api/update-products") {
         const response = await updateProducts(context);
-        if (response.ok) { productsCache = null; productsCacheTime = 0; productsCacheSha = ""; }
+        if (response.ok) await recordPublishedCatalog(request, response.clone());
         return response;
       }
       if (url.pathname === "/admin/api/update-taxonomy") {
+        const published = request.clone();
         const response = await updateTaxonomy(context);
-        if (response.ok) { taxonomyCache = null; taxonomyCacheTime = 0; taxonomyCacheSha = ""; }
+        if (response.ok) await recordPublishedTaxonomy(request, published);
         return response;
       }
       if (url.pathname === "/admin/api/upload-product-image") return uploadProductImage(context);
@@ -2969,7 +3002,7 @@ async function handleRequest(request, env, ctx) {
     if (url.pathname === "/api/assistant/config") return assistantConfigResponse(request, env);
     if (url.pathname === "/api/assistant/chat") {
       const tools = createAssistantTools({
-        getProducts: signal => loadProducts(env, request, { maxAgeMs: 0, requireFresh: true, signal }),
+        getProducts: signal => loadProducts(env, request, { strict: true, signal }),
         getPolicies: async signal => {
           const response = await env.ASSETS.fetch(new Request(new URL("/policies", request.url), { signal }));
           if (!response.ok) throw new Error("Policy unavailable");
@@ -2982,7 +3015,7 @@ async function handleRequest(request, env, ctx) {
     }
     if (url.pathname === "/api/catalog") return catalogApiResponse(request, env, ctx);
     if (url.pathname.startsWith("/api/products/")) {
-      const products = await loadProducts(env, request, { maxAgeMs: 0 });
+      const products = await loadProducts(env, request);
       const product = withProductColoringConfig(productByIdOrSlug(products, url.pathname.slice("/api/products/".length)));
       return product ? productApiResponse(request, env, product) : new Response(JSON.stringify({ error: "not_found" }), { status: 404, headers: { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" } });
     }
@@ -2997,7 +3030,7 @@ async function handleRequest(request, env, ctx) {
       return customerOrdersResponse(context, url.pathname);
     }
     if (url.pathname === "/api/best-sellers") {
-      const products = await loadProducts(env, request, { maxAgeMs: 60000 });
+      const products = await loadProducts(env, request);
       return bestSellersResponse(context, products);
     }
     if (url.pathname === "/api/analytics/events") return analyticsIngestResponse(request, env);
@@ -3005,7 +3038,7 @@ async function handleRequest(request, env, ctx) {
     if (url.pathname === "/category-taxonomy.js") return taxonomyJsResponse(request, env);
 
     if (legacyProductUrl(url) || url.pathname.startsWith("/products/")) {
-      const products = await loadProducts(env, request, { maxAgeMs: 0 });
+      const products = await loadProducts(env, request);
       const matchedProduct = productFromUrl(products, url);
       const thumbnailManifest = matchedProduct ? await loadThumbnailManifest(env, request) : {};
       const product = matchedProduct
@@ -3038,7 +3071,7 @@ async function handleRequest(request, env, ctx) {
     }
 
     if (url.pathname.startsWith("/category/")) {
-      const products = await loadProducts(env, request, { maxAgeMs: 60000 });
+      const products = await loadProducts(env, request);
       return categoryPageResponse(request, env, products);
     }
 

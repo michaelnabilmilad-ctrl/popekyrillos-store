@@ -9,12 +9,15 @@ import fs from "node:fs";
 import vm from "node:vm";
 import { execSync } from "node:child_process";
 import { SITE, adminJsonPost, createAdminEnv, installFakeGitHub, liveTaxonomyVersion } from "./helpers/fake-github.mjs";
+import { resetLiveDataMemory } from "../functions/_live-data.js";
 
 globalThis.caches = { default: { async match() { return null; }, async put() {} } };
 
 const worker = (await import(`../cloudflare-worker.js?category-publish=${Date.now()}`)).default;
 const env = createAdminEnv();
 const ctx = { waitUntil() {} };
+// Each test seeds its own fake GitHub: start every test like a new Worker isolate.
+test.beforeEach(() => resetLiveDataMemory());
 const adminSource = fs.readFileSync("admin.js", "utf8");
 
 function extractFunction(source, name) {

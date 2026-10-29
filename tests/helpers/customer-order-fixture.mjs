@@ -19,7 +19,8 @@ export function d1Database() {
 // Models the live Airtable script automation. Cancellation movements carry a
 // deterministic marker so a retry can repair the flag without restoring twice.
 export function airtableFixture() {
-  const env = { AIRTABLE_TOKEN: "test-secret", AIRTABLE_BASE_ID: "appTest", AIRTABLE_TABLE_NAME: "Orders", ANALYTICS_DB: d1Database() };
+  // GITHUB_TOKEN: orders price lines from the catalog the contents API confirms, as in production.
+  const env = { AIRTABLE_TOKEN: "test-secret", AIRTABLE_BASE_ID: "appTest", AIRTABLE_TABLE_NAME: "Orders", ANALYTICS_DB: d1Database(), GITHUB_TOKEN: "fake-token-for-local-tests" };
   const orders = new Map();
   const details = [];
   const movements = [];

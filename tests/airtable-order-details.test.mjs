@@ -9,7 +9,8 @@ import {
   resolveAirtableProducts
 } from "../cloudflare-worker.js";
 
-const env = { AIRTABLE_BASE_ID: "appTest", AIRTABLE_TOKEN: "secret" };
+// GITHUB_TOKEN: orders price lines from the catalog the contents API confirms, as in production.
+const env = { AIRTABLE_BASE_ID: "appTest", AIRTABLE_TOKEN: "secret", GITHUB_TOKEN: "fake-token-for-local-tests" };
 
 // The live catalog /api/orders prices lines from (read from products-data on GitHub).
 const testCatalog = [

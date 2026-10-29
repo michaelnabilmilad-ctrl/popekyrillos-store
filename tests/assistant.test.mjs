@@ -18,7 +18,9 @@ function database() {
 }
 function environment(extra = {}) {
   return { ASSISTANT_ENABLED: "1", ANTHROPIC_API_KEY: "test-only-api-key", ANTHROPIC_MODEL: "configured-test-model", ASSISTANT_SESSION_SECRET: secret,
-    TURNSTILE_SITE_KEY: "test-site", TURNSTILE_SECRET_KEY: "test-only-turnstile-secret", ANALYTICS_DB: database(), ...extra };
+    TURNSTILE_SITE_KEY: "test-site", TURNSTILE_SECRET_KEY: "test-only-turnstile-secret", ANALYTICS_DB: database(),
+    // Production reads the catalog with a GitHub token; checks without one are refused.
+    GITHUB_TOKEN: "fake-token-for-local-tests", ...extra };
 }
 function request(body = {}, options = {}) {
   return new Request(origin + "/api/assistant/chat", { method: "POST", headers: { Origin: origin, "Content-Type": "application/json", "CF-Connecting-IP": "198.51.100.1", ...options.headers }, body: JSON.stringify({ message: "صليب صدر", turnstileToken: "test-only-token", ...body }) });
