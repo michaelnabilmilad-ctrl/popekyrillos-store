@@ -520,6 +520,45 @@ function catalogSearchText(product) {
   return entry;
 }
 
+// The search texts a fresh isolate would build are shared through the data center's
+// edge cache, keyed by catalog version, taxonomy version and this text format. A copy
+// whose product ids do not match the catalog exactly is ignored and rebuilt.
+const CATALOG_SEARCH_TEXT_FORMAT = "search-text-1";
+
+async function ensureCatalogSearchText(origin, allProducts, waitUntil) {
+  const taxonomyIndex = catalogTaxonomyIndex;
+  if (!allProducts.length || allProducts.every((product) => catalogSearchTextCache.get(product)?.taxonomyIndex === taxonomyIndex)) return;
+  const version = productsVersion(allProducts);
+  const cache = globalThis.caches?.default;
+  if (!version || !cache) return;
+  const taxonomyVersion = taxonomyIndex?.version || "built-in";
+  const key = new Request(`${origin}/__live-data/v1/${CATALOG_SEARCH_TEXT_FORMAT}/${encodeURIComponent(version)}/${encodeURIComponent(taxonomyVersion)}`, { method: "GET" });
+  const ids = allProducts.map((product) => String(product?.id ?? ""));
+  try {
+    const hit = await cache.match(key);
+    const shared = hit ? await hit.json() : null;
+    // Another request may have refreshed the taxonomy while this one waited.
+    if (catalogTaxonomyIndex !== taxonomyIndex) return;
+    if (Array.isArray(shared?.ids) && Array.isArray(shared?.texts) && shared.ids.length === ids.length && shared.ids.every((id, index) => id === ids[index])) {
+      allProducts.forEach((product, index) => {
+        const [haystack, candidates] = shared.texts[index];
+        if (product && typeof product === "object") catalogSearchTextCache.set(product, { taxonomyIndex, haystack, candidates });
+      });
+      return;
+    }
+  } catch (error) {
+    console.warn("Shared search text unavailable; building it here.", error?.message || error);
+  }
+  const texts = allProducts.map((product) => {
+    const { haystack, candidates } = catalogSearchText(product);
+    return [haystack, candidates];
+  });
+  const body = JSON.stringify({ ids, texts });
+  const put = cache.put(key, new Response(body, { headers: { "Content-Type": "application/json", "Cache-Control": "public, max-age=2592000" } }))
+    .catch((error) => console.warn("Could not share the search text", error?.message || error));
+  if (waitUntil) waitUntil(put);
+}
+
 function catalogSearchScore(product, search) {
   if (!search) return 0;
   const { haystack, candidates } = catalogSearchText(product);
@@ -818,6 +857,7 @@ async function catalogApiResponse(request, env, ctx) {
   }
   const { categoryCounts, subcategoryCounts, subcategoryImages } = catalogNavigation(allProducts, thumbnailManifest);
   const search = normalizedSearch(url.searchParams.get("search") || "");
+  if (search) await ensureCatalogSearchText(url.origin, allProducts, ctx.waitUntil.bind(ctx));
   // Each product is scored once per request; the filter and the sort reuse it.
   const searchScores = new Map();
   const searchScore = (product, term) => {

@@ -388,3 +388,28 @@ test("category counts, price bounds and search follow every publish (no stale me
   assert.ok((await search("مراجعة البحث")).items.some((item) => item.id === probe.id));
   assert.ok(!(await search("فحص الكاش")).items.some((item) => item.id === probe.id));
 });
+
+test("a fresh isolate reuses the shared search text with identical results, and ignores a mismatched copy", async (t) => {
+  const l = lab(t);
+  const query = (n) => `/api/catalog?page=1&limit=48&v=14&search=${encodeURIComponent("صليب صدر")}&n=${n}`;
+  const built = await (await l.call(query("a"))).json();
+  await l.settle();
+  const sharedKey = [...edge.keys()].find((key) => key.includes("/search-text-1/"));
+  assert.ok(sharedKey, "the first isolate shared its search text");
+
+  // A second isolate: new Worker module instance, empty memory, same edge cache.
+  const other = (await import(`../cloudflare-worker.js?live-catalog-second=${Date.now()}`)).default;
+  resetLiveDataMemory();
+  const call = (path) => other.fetch(new Request(`${SITE}${path}`), l.env, l.ctx);
+  assert.deepEqual(await (await call(query("b"))).json(), built);
+
+  // A copy that does not match the catalog (here: ids in another order) is ignored.
+  const third = (await import(`../cloudflare-worker.js?live-catalog-third=${Date.now()}`)).default;
+  resetLiveDataMemory();
+  const stored = JSON.parse(edge.get(sharedKey).body);
+  stored.ids.reverse();
+  stored.texts = stored.texts.map(() => ["", []]);
+  edge.set(sharedKey, { ...edge.get(sharedKey), body: JSON.stringify(stored) });
+  const response = await third.fetch(new Request(`${SITE}${query("c")}`), l.env, l.ctx);
+  assert.deepEqual(await response.json(), built);
+});
