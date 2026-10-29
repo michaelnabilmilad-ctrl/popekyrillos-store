@@ -630,12 +630,36 @@ const namedCatalogCategoryIds = {
 // below stay only as a fallback when the taxonomy cannot be read.
 let catalogTaxonomyIndex = null;
 let catalogTaxonomyIndexSource = "";
+// The categories parsed from the last taxonomy source this isolate read; the catalog
+// index and the SEO view only read them.
+let parsedTaxonomy = { source: null, categories: null };
+
+function taxonomyCategoriesOf(source) {
+  if (parsedTaxonomy.source !== source) parsedTaxonomy = { source, categories: parseTaxonomyCategories(source) };
+  return parsedTaxonomy.categories;
+}
 
 // Reads the `defaultCategories = [...]` JSON literal without evaluating the file.
 function parseTaxonomyCategories(source = "") {
   const marker = source.indexOf("defaultCategories =");
   const start = marker >= 0 ? source.indexOf("[", marker) : -1;
   if (start < 0) return null;
+  // The admin writes the array with JSON.stringify, so it ends on a line holding only
+  // "];". A slice that parses as a JSON array is exactly the array the character scan
+  // below finds (valid JSON has no earlier top-level "]"), found with native code,
+  // which matters on a fresh isolate. Anything else falls through to the scan.
+  const endOfArray = /\n[ \t]*\];/g;
+  endOfArray.lastIndex = start;
+  for (let attempt = 0; attempt < 2; attempt += 1) {
+    const found = endOfArray.exec(source);
+    if (!found) break;
+    try {
+      const parsed = JSON.parse(source.slice(start, found.index + found[0].length - 1));
+      if (Array.isArray(parsed)) return parsed;
+    } catch {
+      // Not the end of the array: try the next candidate, then the scan.
+    }
+  }
   let depth = 0;
   let quote = "";
   let escaped = false;
@@ -661,7 +685,9 @@ function parseTaxonomyCategories(source = "") {
   return null;
 }
 
-function buildCatalogTaxonomyIndex(categories = []) {
+// `sourceVersion` is the live taxonomy file's git blob SHA: it changes with any change
+// to the file, so it replaces hashing the categories character by character.
+function buildCatalogTaxonomyIndex(categories = [], sourceVersion = "") {
   const mainIds = new Set();
   const mainByName = new Map();
   const mainBySubcategory = new Map();
@@ -676,17 +702,18 @@ function buildCatalogTaxonomyIndex(categories = []) {
       if (subcategory?.id && !mainBySubcategory.has(subcategory.id)) mainBySubcategory.set(subcategory.id, category.id);
     }
   }
+  if (/^[0-9a-f]{40}$/.test(sourceVersion)) return { mainIds, mainByName, mainBySubcategory, version: sourceVersion };
   for (const char of JSON.stringify(categories)) version = Math.imul(version ^ char.charCodeAt(0), 16777619);
   return { mainIds, mainByName, mainBySubcategory, version: (version >>> 0).toString(36) };
 }
 
 async function refreshCatalogTaxonomyIndex(env, request) {
   try {
-    const source = await loadTaxonomySource(env, request);
+    const { text: source, version } = await loadTaxonomy(env, request);
     if (source && source !== catalogTaxonomyIndexSource) {
-      const categories = parseTaxonomyCategories(source);
+      const categories = taxonomyCategoriesOf(source);
       if (categories?.length) {
-        catalogTaxonomyIndex = buildCatalogTaxonomyIndex(categories);
+        catalogTaxonomyIndex = buildCatalogTaxonomyIndex(categories, version);
         catalogTaxonomyIndexSource = source;
       }
     }
@@ -1379,7 +1406,7 @@ async function loadSeoTaxonomy(env, request) {
     console.warn("SEO taxonomy unavailable; using built-in category names.", error?.message || error);
   }
   if (seoTaxonomyCache && seoTaxonomyCache.source === source) return seoTaxonomyCache.view;
-  const categories = source ? parseTaxonomyCategories(source) : null;
+  const categories = source ? taxonomyCategoriesOf(source) : null;
   const view = taxonomyView(categories?.length ? categories : Object.entries(categorySeoNames).map(([id, name]) => ({ id, name, subcategories: [] })));
   view.live = Boolean(categories?.length);
   seoTaxonomyCache = { source, view };
