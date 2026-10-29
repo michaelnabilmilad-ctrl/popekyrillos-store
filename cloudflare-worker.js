@@ -449,29 +449,52 @@ function normalizedSearch(value = "") {
 
 const catalogSearchAliases = [["yota", "iota", "يوتا", "يوطا"], ["icon", "icons", "ايقونه", "ايقونات"], ["cross", "crosses", "salib", "saleeb", "صليب", "صلبان"]];
 
+// normalizedSearch() is idempotent, so the alias groups are normalized once.
+const normalizedSearchAliases = catalogSearchAliases.map((group) => group.map(normalizedSearch));
+
+// The same search text gives the same terms; a search is split once, not once per product.
+const catalogSearchTermsCache = new Map();
+
 function catalogSearchTerms(value = "") {
+  const key = String(value);
+  if (catalogSearchTermsCache.has(key)) return catalogSearchTermsCache.get(key);
   const tokens = normalizedSearch(value).split(" ").filter(Boolean);
-  return tokens.map((token) => {
-    const aliases = catalogSearchAliases.find((group) => group.map(normalizedSearch).some((alias) => {
+  const terms = tokens.map((token) => {
+    const aliases = normalizedSearchAliases.find((group) => group.some((alias) => {
       if (alias === token) return true;
       const shortest = Math.min(alias.length, token.length);
       if (shortest < 3) return false;
       return catalogEditDistance(alias, token, shortest >= 7 ? 2 : 1) <= (shortest >= 7 ? 2 : 1);
     })) || [];
-    return [...new Set([token, ...aliases.map(normalizedSearch)])];
+    return [...new Set([token, ...aliases])];
   });
+  if (catalogSearchTermsCache.size >= 500) catalogSearchTermsCache.clear();
+  catalogSearchTermsCache.set(key, terms);
+  return terms;
 }
+
+// Exact for any distance up to maxDistance; anything farther returns maxDistance + 1
+// (every caller only accepts distances <= maxDistance).
+// Two rows reused across calls (the Worker runs one search at a time per isolate).
+let editDistanceRows = [new Int32Array(64), new Int32Array(64)];
 
 function catalogEditDistance(first, second, maxDistance) {
   if (first === second) return 0;
   if (Math.abs(first.length - second.length) > maxDistance) return maxDistance + 1;
-  let previous = Array.from({ length: second.length + 1 }, (_, index) => index);
+  if (editDistanceRows[0].length <= second.length) editDistanceRows = [new Int32Array(second.length + 1), new Int32Array(second.length + 1)];
+  let [previous, current] = editDistanceRows;
+  for (let column = 0; column <= second.length; column += 1) previous[column] = column;
   for (let row = 1; row <= first.length; row += 1) {
-    const current = [row];
+    current[0] = row;
+    let rowMinimum = row;
     for (let column = 1; column <= second.length; column += 1) {
       current[column] = Math.min(previous[column] + 1, current[column - 1] + 1, previous[column - 1] + (first[row - 1] === second[column - 1] ? 0 : 1));
+      if (current[column] < rowMinimum) rowMinimum = current[column];
     }
+    if (rowMinimum > maxDistance) return maxDistance + 1;
+    const done = previous;
     previous = current;
+    current = done;
   }
   return previous[second.length];
 }
@@ -489,8 +512,8 @@ function catalogSearchText(product) {
     ...(Array.isArray(product?.tags) ? product.tags : []), ...(Array.isArray(product?.searchKeywords) ? product.searchKeywords : [])
   ].join(" "));
   const candidates = [...new Set(haystack.split(" ").filter(Boolean).flatMap((candidate) => {
-    const aliasGroup = catalogSearchAliases.find((group) => group.map(normalizedSearch).includes(candidate)) || [];
-    return [candidate, ...aliasGroup.map(normalizedSearch)];
+    const aliasGroup = normalizedSearchAliases.find((group) => group.includes(candidate)) || [];
+    return [candidate, ...aliasGroup];
   }))];
   const entry = { taxonomyIndex: catalogTaxonomyIndex, haystack, candidates };
   if (product && typeof product === "object") catalogSearchTextCache.set(product, entry);
@@ -503,12 +526,15 @@ function catalogSearchScore(product, search) {
   let score = 0;
   for (const group of catalogSearchTerms(search)) {
     let best = Infinity;
-    for (const term of group) {
+    // 0 (an exact word) cannot be beaten, so the group stops looking once it is found.
+    terms: for (const term of group) {
       if (haystack.includes(term)) best = Math.min(best, 1);
       for (const candidate of candidates) {
-        if (candidate === term) best = 0;
+        if (candidate === term) { best = 0; break terms; }
         else if (term.length >= 3 && candidate.startsWith(term)) best = Math.min(best, 1);
-        else if (Math.min(term.length, candidate.length) >= 3) {
+        // A fuzzy match scores 2 + distance >= 3 (the words differ), so it can only
+        // help while nothing better than 3 has been found.
+        else if (best > 3 && Math.min(term.length, candidate.length) >= 3) {
           const allowed = Math.min(term.length, candidate.length) >= 7 ? 2 : 1;
           const distance = catalogEditDistance(term, candidate, allowed);
           if (distance <= allowed) best = Math.min(best, 2 + distance);
@@ -656,19 +682,29 @@ function catalogMainCategoryId(product) {
 }
 
 function catalogProductMatches(product, params, searchScore = catalogSearchScore) {
-  if (!isCatalogProductVisible(product)) return false;
+  return catalogProductMatcher(params, searchScore)(product);
+}
+
+// The request's filters are read once; the returned test runs per product.
+function catalogProductMatcher(params, searchScore = catalogSearchScore) {
   const migrated = globalThis.POPE_KYRILLOS_CATEGORY_MIGRATION.route(params.get("category") || "all", params.get("subcategory") || "");
   const category = migrated.category;
   const subcategory = migrated.label;
   const search = normalizedSearch(params.get("search") || "");
   const price = params.get("price") || "all";
+  const hasPriceRange = params.has("minPrice") || params.has("maxPrice");
+  const minPrice = params.has("minPrice") ? Math.max(0, Number(params.get("minPrice"))) : 0;
+  const maxPrice = params.has("maxPrice") ? Number(params.get("maxPrice")) : Infinity;
+  return (product) => catalogProductMatchesFilters(product, { category, subcategory, search, price, hasPriceRange, minPrice, maxPrice }, searchScore);
+}
+
+function catalogProductMatchesFilters(product, { category, subcategory, search, price, hasPriceRange, minPrice, maxPrice }, searchScore) {
+  if (!isCatalogProductVisible(product)) return false;
   const productCategory = catalogMainCategoryId(product);
   const productSubcategory = String(product?.subcategory || product?.subCategory || "");
   const collectionIds = catalogCollectionIds(product);
   const amount = productPrice(product);
-  const minPrice = params.has("minPrice") ? Math.max(0, Number(params.get("minPrice"))) : 0;
-  const maxPrice = params.has("maxPrice") ? Number(params.get("maxPrice")) : Infinity;
-  if (params.has("minPrice") || params.has("maxPrice")) {
+  if (hasPriceRange) {
     const prices = Array.isArray(product.variants) && product.variants.length ? product.variants.map(variant => Number(variant.price ?? product.price)).filter(value => Number.isFinite(value) && value > 0) : amount === null ? [] : [amount];
     if (!prices.some(value => value >= minPrice && value <= maxPrice)) return false;
   }
@@ -690,17 +726,21 @@ function sortCatalogProducts(products, sort = "default") {
   return products.sort((a, b) => direction * ((productPrice(a) ?? Number.MAX_SAFE_INTEGER) - (productPrice(b) ?? Number.MAX_SAFE_INTEGER)));
 }
 
-async function catalogApiResponse(request, env, ctx) {
-  const url = new URL(request.url);
-  const page = Math.max(1, Math.trunc(Number(url.searchParams.get("page"))) || 1);
-  const limit = Math.min(48, Math.max(1, Math.trunc(Number(url.searchParams.get("limit"))) || 12));
-  const cacheUrl = new URL(url.origin + url.pathname);
-  cacheUrl.searchParams.set("schema", "price-range-19");
-  cacheUrl.searchParams.set("thumbnails", "plain-iota-v2");
-  [...url.searchParams.entries()].sort(([a], [b]) => a.localeCompare(b)).forEach(([key, value]) => cacheUrl.searchParams.append(key, value));
-  const allProducts = await loadProducts(env, request);
-  const taxonomyIndex = await refreshCatalogTaxonomyIndex(env, request);
-  const thumbnailManifest = await loadThumbnailManifest(env, request);
+// Category counts and images for the menu depend only on the catalog version, the
+// taxonomy index and the thumbnail manifest, so they are computed once per version.
+const catalogNavigationCache = new WeakMap();
+
+function catalogNavigationEntry(allProducts, thumbnailManifest) {
+  const cached = catalogNavigationCache.get(allProducts);
+  if (cached && cached.taxonomyIndex === catalogTaxonomyIndex && cached.thumbnailManifest === thumbnailManifest) return cached;
+  const entry = { taxonomyIndex: catalogTaxonomyIndex, thumbnailManifest, navigation: null, priceBounds: new Map() };
+  catalogNavigationCache.set(allProducts, entry);
+  return entry;
+}
+
+function catalogNavigation(allProducts, thumbnailManifest) {
+  const entry = catalogNavigationEntry(allProducts, thumbnailManifest);
+  if (entry.navigation) return entry.navigation;
   const navigationProducts = allProducts.filter(isCatalogProductVisible);
   const categoryCounts = navigationProducts.reduce((counts, product) => {
     const categoryId = catalogMainCategoryId(product);
@@ -735,6 +775,33 @@ async function catalogApiResponse(request, env, ctx) {
     });
     return images;
   }, {});
+  entry.navigation = { categoryCounts, subcategoryCounts, subcategoryImages };
+  return entry.navigation;
+}
+
+// Price slider bounds ignore price and search filters, so they depend only on the
+// category and subcategory of the request.
+function catalogPriceBounds(allProducts, thumbnailManifest, boundsParams) {
+  const entry = catalogNavigationEntry(allProducts, thumbnailManifest);
+  const key = `${boundsParams.get("category") || ""}\n${boundsParams.get("subcategory") || ""}`;
+  if (entry.priceBounds.has(key)) return entry.priceBounds.get(key);
+  const priced = allProducts.filter(catalogProductMatcher(boundsParams)).flatMap(product => Array.isArray(product.variants) && product.variants.length ? product.variants.map(variant => Number(variant.price ?? product.price)).filter(value => Number.isFinite(value) && value > 0) : [productPrice(product)].filter(value => value !== null));
+  const priceBounds = { min: priced.length ? Math.min(...priced) : 0, max: priced.length ? Math.max(...priced) : 1 };
+  entry.priceBounds.set(key, priceBounds);
+  return priceBounds;
+}
+
+async function catalogApiResponse(request, env, ctx) {
+  const url = new URL(request.url);
+  const page = Math.max(1, Math.trunc(Number(url.searchParams.get("page"))) || 1);
+  const limit = Math.min(48, Math.max(1, Math.trunc(Number(url.searchParams.get("limit"))) || 12));
+  const cacheUrl = new URL(url.origin + url.pathname);
+  cacheUrl.searchParams.set("schema", "price-range-19");
+  cacheUrl.searchParams.set("thumbnails", "plain-iota-v2");
+  [...url.searchParams.entries()].sort(([a], [b]) => a.localeCompare(b)).forEach(([key, value]) => cacheUrl.searchParams.append(key, value));
+  const allProducts = await loadProducts(env, request);
+  const taxonomyIndex = await refreshCatalogTaxonomyIndex(env, request);
+  const thumbnailManifest = await loadThumbnailManifest(env, request);
   const catalogVersion = productsVersion(allProducts);
   if (catalogVersion) cacheUrl.searchParams.set("v", catalogVersion);
   // A taxonomy-only publish must not be hidden behind a cached catalog response.
@@ -749,6 +816,7 @@ async function catalogApiResponse(request, env, ctx) {
     response.headers.set("Cache-Control", "public, max-age=0, must-revalidate");
     return response;
   }
+  const { categoryCounts, subcategoryCounts, subcategoryImages } = catalogNavigation(allProducts, thumbnailManifest);
   const search = normalizedSearch(url.searchParams.get("search") || "");
   // Each product is scored once per request; the filter and the sort reuse it.
   const searchScores = new Map();
@@ -756,14 +824,14 @@ async function catalogApiResponse(request, env, ctx) {
     if (!searchScores.has(product)) searchScores.set(product, catalogSearchScore(product, term));
     return searchScores.get(product);
   };
-  const matched = sortCatalogProducts(allProducts.filter((product) => catalogProductMatches(product, url.searchParams, searchScore)), url.searchParams.get("sort") || "default");
+  const matches = catalogProductMatcher(url.searchParams, searchScore);
+  const matched = sortCatalogProducts(allProducts.filter(matches), url.searchParams.get("sort") || "default");
   if (search && !["price-asc", "price-desc"].includes(url.searchParams.get("sort") || "default")) {
     matched.sort((first, second) => searchScore(first, search) - searchScore(second, search));
   }
   const boundsParams = new URLSearchParams(url.searchParams);
   for (const key of ["price", "minPrice", "maxPrice", "search"]) boundsParams.delete(key);
-  const priced = allProducts.filter(product => catalogProductMatches(product, boundsParams)).flatMap(product => Array.isArray(product.variants) && product.variants.length ? product.variants.map(variant => Number(variant.price ?? product.price)).filter(value => Number.isFinite(value) && value > 0) : [productPrice(product)].filter(value => value !== null));
-  const priceBounds = { min: priced.length ? Math.min(...priced) : 0, max: priced.length ? Math.max(...priced) : 1 };
+  const priceBounds = catalogPriceBounds(allProducts, thumbnailManifest, boundsParams);
   const start = (page - 1) * limit;
   const body = JSON.stringify({ items: matched.slice(start, start + limit).map((product) => catalogDto(product, thumbnailManifest)), page, limit, total: matched.length, hasMore: start + limit < matched.length, categoryCounts, subcategoryCounts, subcategoryImages, priceBounds });
   const response = new Response(body, { headers: { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "public, max-age=0, must-revalidate", "CDN-Cache-Control": "public, max-age=600, stale-while-revalidate=300" } });

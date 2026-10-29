@@ -361,3 +361,30 @@ test("best sellers follow the catalog version and are not kept by browsers for h
   await l.settle();
   assert.equal(keys().length, 2, "one entry per catalog version");
 });
+
+test("category counts, price bounds and search follow every publish (no stale memoized data)", async (t) => {
+  const l = lab(t);
+  const probe = simpleProduct(l.github.products());
+  const listing = async () => (await l.call(`/api/catalog?page=1&limit=48&v=14&category=crosses&x=${crypto.randomUUID()}`)).json();
+  const search = async (term) => (await l.call(`/api/catalog?page=1&limit=48&v=14&search=${encodeURIComponent(term)}&x=${crypto.randomUUID()}`)).json();
+  const before = await listing();
+  assert.ok((await search("فحص الكاش")).items.some((item) => item.id === probe.id));
+
+  // Price outside every current bound: the slider bounds and the item follow at once.
+  const top = before.priceBounds.max + 100000;
+  await l.publishProducts((products) => products.map((item) => item.id === probe.id ? { ...item, price: top } : item));
+  const priced = await listing();
+  assert.equal(priced.priceBounds.max, top);
+  assert.equal((await search("فحص الكاش")).items.find((item) => item.id === probe.id)?.price, top);
+
+  // Sold out: it leaves the counts and the search results at once.
+  await l.publishProducts((products) => products.map((item) => item.id === probe.id ? { ...item, stock: "غير متاح حاليا" } : item));
+  const soldOut = await listing();
+  assert.equal(soldOut.categoryCounts.crosses, before.categoryCounts.crosses - 1);
+  assert.ok(!(await search("فحص الكاش")).items.some((item) => item.id === probe.id));
+
+  // Renamed: search finds the new name, not the old one.
+  await l.publishProducts((products) => products.map((item) => item.id === probe.id ? { ...item, stock: "متاح", name: "منتج مراجعة البحث" } : item));
+  assert.ok((await search("مراجعة البحث")).items.some((item) => item.id === probe.id));
+  assert.ok(!(await search("فحص الكاش")).items.some((item) => item.id === probe.id));
+});

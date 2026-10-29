@@ -28,7 +28,8 @@ test("catalog renders every visible product record without group-based or identi
   assert.doesNotMatch(worker, /function uniqueCatalogProducts|function catalogDuplicateKey/);
   assert.doesNotMatch(storefront, /function dedupeCatalogProducts|function duplicateCatalogKey/);
   assert.match(worker, /const navigationProducts = allProducts\.filter\(isCatalogProductVisible\)/);
-  assert.match(worker, /sortCatalogProducts\(allProducts\.filter\(\(product\) => catalogProductMatches/);
+  assert.match(catalogEndpoint, /const matches = catalogProductMatcher\(url\.searchParams, searchScore\);/);
+  assert.match(catalogEndpoint, /sortCatalogProducts\(allProducts\.filter\(matches\)/);
   assert.match(storefront, /return products\.filter\(\(product\) => product\?\.active !== false/);
   assert.match(storefront, /staticCatalogProducts = Array\.isArray\(payload\)/);
   assert.doesNotMatch(catalogEndpoint, /groupId|groupSlug|product\?\.group|product\.group/);
