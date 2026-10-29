@@ -476,8 +476,14 @@ function catalogEditDistance(first, second, maxDistance) {
   return previous[second.length];
 }
 
-function catalogSearchScore(product, search) {
-  if (!search) return 0;
+// A product's normalized search text and candidate words depend only on the product
+// and the taxonomy index (for its main category), so they are built once per catalog
+// version instead of on every search.
+const catalogSearchTextCache = new WeakMap();
+
+function catalogSearchText(product) {
+  const cached = product && typeof product === "object" ? catalogSearchTextCache.get(product) : null;
+  if (cached && cached.taxonomyIndex === catalogTaxonomyIndex) return cached;
   const haystack = normalizedSearch([
     localized(product?.name), product?.label, product?.description, catalogMainCategoryId(product), product?.subcategory, product?.subCategory,
     ...(Array.isArray(product?.tags) ? product.tags : []), ...(Array.isArray(product?.searchKeywords) ? product.searchKeywords : [])
@@ -486,6 +492,14 @@ function catalogSearchScore(product, search) {
     const aliasGroup = catalogSearchAliases.find((group) => group.map(normalizedSearch).includes(candidate)) || [];
     return [candidate, ...aliasGroup.map(normalizedSearch)];
   }))];
+  const entry = { taxonomyIndex: catalogTaxonomyIndex, haystack, candidates };
+  if (product && typeof product === "object") catalogSearchTextCache.set(product, entry);
+  return entry;
+}
+
+function catalogSearchScore(product, search) {
+  if (!search) return 0;
+  const { haystack, candidates } = catalogSearchText(product);
   let score = 0;
   for (const group of catalogSearchTerms(search)) {
     let best = Infinity;
@@ -641,7 +655,7 @@ function catalogMainCategoryId(product) {
   return legacyCatalogCategoryIds[String(product?.category || "")] || mainCategory || "uncategorized";
 }
 
-function catalogProductMatches(product, params) {
+function catalogProductMatches(product, params, searchScore = catalogSearchScore) {
   if (!isCatalogProductVisible(product)) return false;
   const migrated = globalThis.POPE_KYRILLOS_CATEGORY_MIGRATION.route(params.get("category") || "all", params.get("subcategory") || "");
   const category = migrated.category;
@@ -665,7 +679,7 @@ function catalogProductMatches(product, params) {
   if (price === "1000-5000" && !(amount !== null && amount >= 1000 && amount <= 5000)) return false;
   if (price === "over-5000" && !(amount !== null && amount > 5000)) return false;
   if (search) {
-    if (!Number.isFinite(catalogSearchScore(product, search))) return false;
+    if (!Number.isFinite(searchScore(product, search))) return false;
   }
   return true;
 }
@@ -728,11 +742,23 @@ async function catalogApiResponse(request, env, ctx) {
   const cacheKey = new Request(cacheUrl.toString(), { method: "GET" });
   const edgeCache = caches.default;
   const cached = await edgeCache.match(cacheKey);
-  if (cached) return cached;
+  if (cached) {
+    // A copy served from the edge cache comes back with the zone's Browser Cache TTL
+    // (max-age=14400), which let browsers show an old listing for 4 hours.
+    const response = new Response(cached.body, cached);
+    response.headers.set("Cache-Control", "public, max-age=0, must-revalidate");
+    return response;
+  }
   const search = normalizedSearch(url.searchParams.get("search") || "");
-  const matched = sortCatalogProducts(allProducts.filter((product) => catalogProductMatches(product, url.searchParams)), url.searchParams.get("sort") || "default");
+  // Each product is scored once per request; the filter and the sort reuse it.
+  const searchScores = new Map();
+  const searchScore = (product, term) => {
+    if (!searchScores.has(product)) searchScores.set(product, catalogSearchScore(product, term));
+    return searchScores.get(product);
+  };
+  const matched = sortCatalogProducts(allProducts.filter((product) => catalogProductMatches(product, url.searchParams, searchScore)), url.searchParams.get("sort") || "default");
   if (search && !["price-asc", "price-desc"].includes(url.searchParams.get("sort") || "default")) {
-    matched.sort((first, second) => catalogSearchScore(first, search) - catalogSearchScore(second, search));
+    matched.sort((first, second) => searchScore(first, search) - searchScore(second, search));
   }
   const boundsParams = new URLSearchParams(url.searchParams);
   for (const key of ["price", "minPrice", "maxPrice", "search"]) boundsParams.delete(key);
@@ -3034,7 +3060,7 @@ async function handleRequest(request, env, ctx) {
     }
     if (url.pathname === "/api/best-sellers") {
       const products = await loadProducts(env, request);
-      return bestSellersResponse(context, products);
+      return bestSellersResponse(context, products, { catalogVersion: productsVersion(products) });
     }
     if (url.pathname === "/api/analytics/events") return analyticsIngestResponse(request, env);
     if (url.pathname === "/products.json") return productsJsonResponse(request, env);

@@ -17,9 +17,15 @@ import { validateCartItems } from "../functions/_paymob-utils.js";
 const edge = new Map();
 globalThis.caches = {
   default: {
+    // Like Cloudflare on popekyrillos.store: a cached copy comes back with the zone's
+    // Browser Cache TTL (4 h) in Cache-Control and CF-Cache-Status: HIT.
     async match(request) {
       const hit = edge.get(request.url);
-      return hit ? new Response(hit.body, { headers: hit.headers }) : undefined;
+      if (!hit) return undefined;
+      const headers = new Headers(hit.headers);
+      headers.set("Cache-Control", "public, max-age=14400, must-revalidate");
+      headers.set("CF-Cache-Status", "HIT");
+      return new Response(hit.body, { headers });
     },
     async put(request, response) {
       edge.set(request.url, { body: await response.text(), headers: [...response.headers] });
@@ -323,4 +329,35 @@ test("no cached copy and no API: raw GitHub, then the deployed file, keep pages 
   m.control.rawDown = true;
   const deployed = await m.json("/products.json");
   assert.equal(deployed.length, JSON.parse(deployedProducts).length);
+});
+
+test("a catalog listing served from the edge cache is never kept by browsers for hours", async (t) => {
+  const l = lab(t);
+  const first = await l.call("/api/catalog?page=1&limit=8&v=14");
+  await first.text();
+  await l.settle();
+  const second = await l.call("/api/catalog?page=1&limit=8&v=14");
+  assert.equal(second.headers.get("CF-Cache-Status"), "HIT", "served from the edge cache");
+  assert.equal(second.headers.get("Cache-Control"), "public, max-age=0, must-revalidate");
+  assert.equal(first.headers.get("Cache-Control"), "public, max-age=0, must-revalidate");
+  assert.deepEqual(await second.json(), await (await l.call("/api/catalog?page=1&limit=8&v=14")).json());
+});
+
+test("best sellers follow the catalog version and are not kept by browsers for hours", async (t) => {
+  const l = lab(t);
+  const product = simpleProduct(l.github.products());
+  const keys = () => [...edge.keys()].filter((key) => key.includes("/api/best-sellers"));
+  const first = await l.call("/api/best-sellers");
+  assert.equal(first.status, 200);
+  await l.settle();
+  const hit = await l.call("/api/best-sellers");
+  assert.equal(hit.headers.get("CF-Cache-Status"), "HIT");
+  assert.equal(hit.headers.get("Cache-Control"), "public, max-age=60, s-maxage=720, stale-while-revalidate=60");
+  assert.equal(keys().length, 1);
+  assert.match(keys()[0], /[?&]catalog=[0-9a-f]{40}/);
+  await l.publishProducts((products) => products.map((item) => item.id === product.id ? { ...item, price: item.price + 1 } : item));
+  const after = await l.call("/api/best-sellers");
+  assert.notEqual(after.headers.get("CF-Cache-Status"), "HIT", "a publish starts a new best-sellers entry");
+  await l.settle();
+  assert.equal(keys().length, 2, "one entry per catalog version");
 });

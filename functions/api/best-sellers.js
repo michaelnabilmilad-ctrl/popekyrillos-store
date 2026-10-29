@@ -343,13 +343,22 @@ function responseJson(payload, init = {}) {
   return new Response(JSON.stringify(payload), { ...init, headers });
 }
 
-export async function bestSellersResponse(context, catalogProducts = []) {
+// catalogVersion (the live products.json version) is part of the cache key, so a
+// publish that changes a best seller's price or stock is not hidden for 12 minutes.
+export async function bestSellersResponse(context, catalogProducts = [], { catalogVersion = "" } = {}) {
   const { request, env, waitUntil } = context;
   if (request.method !== "GET") return responseJson({ error: "method_not_allowed" }, { status: 405, headers: { Allow: "GET" } });
   const cache = globalThis.caches?.default;
-  const cacheKey = new Request(new URL("/api/best-sellers?v=11", request.url), { method: "GET" });
+  const cacheUrl = new URL("/api/best-sellers?v=11", request.url);
+  if (catalogVersion) cacheUrl.searchParams.set("catalog", catalogVersion);
+  const cacheKey = new Request(cacheUrl, { method: "GET" });
   const cached = cache ? await cache.match(cacheKey) : null;
-  if (cached) return cached;
+  if (cached) {
+    // The edge cache hands its copy back with the zone's 4-hour Browser Cache TTL.
+    const response = new Response(cached.body, cached);
+    response.headers.set("Cache-Control", `public, max-age=60, s-maxage=${CACHE_SECONDS}, stale-while-revalidate=60`);
+    return response;
+  }
 
   const names = tableNames(env);
   let payload;
