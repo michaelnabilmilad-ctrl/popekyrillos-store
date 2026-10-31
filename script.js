@@ -333,7 +333,9 @@ const translations = {
     popularBadge: "الأكثر مبيعًا",
     temporarilyOut: "نفد مؤقتًا",
     popularViewProduct: "عرض المنتج",
-    popularExploreAll: "شوف كل المنتجات",
+    popularBrowseMore: "تصفح المزيد",
+    popularPrevious: "المنتجات السابقة",
+    popularNext: "المنتجات التالية",
     searchPlaceholder: "ابحث عن منتج",
     filterMainLabel: "القسم الرئيسي",
     mainAll: "كل الأقسام الرئيسية",
@@ -599,7 +601,9 @@ const translations = {
     popularBadge: "Best seller",
     temporarilyOut: "Temporarily sold out",
     popularViewProduct: "View product",
-    popularExploreAll: "Explore all products",
+    popularBrowseMore: "Browse more",
+    popularPrevious: "Previous products",
+    popularNext: "Next products",
     searchPlaceholder: "Search products",
     filterMainLabel: "Main category",
     mainAll: "All main categories",
@@ -2597,8 +2601,8 @@ function renderPopularProductsSkeleton() {
   popularProductsSection.setAttribute("aria-busy", "true");
   popularProductsSection.innerHTML = `
     <div class="popular-products-head">
-      <p class="eyebrow">${escapeHtml(t("popularEyebrow"))}</p>
       <div>
+        <p class="eyebrow">${escapeHtml(t("popularEyebrow"))}</p>
         <h2 id="popular-products-title">${escapeHtml(t("popularTitle"))}</h2>
         <p>${escapeHtml(t("popularLead"))}</p>
       </div>
@@ -2614,6 +2618,7 @@ function renderPopularProductsSkeleton() {
         </article>
       `).join("")}
     </div>
+    <div class="popular-products-footer" aria-hidden="true"><span class="popular-skeleton-more"></span></div>
   `;
 }
 
@@ -2643,13 +2648,17 @@ function renderPopularProducts() {
   popularProductsSection.removeAttribute("aria-busy");
   popularProductsSection.innerHTML = `
     <div class="popular-products-head">
-      <p class="eyebrow">${escapeHtml(t("popularEyebrow"))}</p>
       <div>
+        <p class="eyebrow">${escapeHtml(t("popularEyebrow"))}</p>
         <h2 id="popular-products-title">${escapeHtml(t("popularTitle"))}</h2>
         <p>${escapeHtml(t("popularLead"))}</p>
       </div>
+      <div class="popular-products-nav">
+        <button class="popular-products-arrow" type="button" data-popular-scroll="-1" aria-label="${escapeHtml(t("popularPrevious"))}" aria-controls="popular-products-track"><span aria-hidden="true">‹</span></button>
+        <button class="popular-products-arrow" type="button" data-popular-scroll="1" aria-label="${escapeHtml(t("popularNext"))}" aria-controls="popular-products-track"><span aria-hidden="true">›</span></button>
+      </div>
     </div>
-    <div class="popular-products-grid">
+    <div class="popular-products-grid" id="popular-products-track" tabindex="0" aria-label="${escapeHtml(t("popularTitle"))}">
       ${popularProducts.map((product, index) => {
         const image = getProductImages(product)[0] || "";
         const name = displayText(localized(product.name));
@@ -2664,7 +2673,7 @@ function renderPopularProducts() {
               <span class="popular-product-badge">${escapeHtml(isAvailable ? t("popularBadge") : t("temporarilyOut"))}</span>
               <img
                 src="${escapeHtml(cardImage)}"
-                ${cardSrcset ? `srcset="${cardSrcset}" sizes="(max-width: 720px) 46vw, (max-width: 1100px) 30vw, 320px"` : ""}
+                ${cardSrcset ? `srcset="${cardSrcset}" sizes="(max-width: 767px) 72vw, (max-width: 999px) 31vw, 240px"` : ""}
                 alt="${escapeHtml(name)}"
                 width="320"
                 height="320"
@@ -2674,7 +2683,7 @@ function renderPopularProducts() {
               >
             </div>
             <div class="popular-product-info">
-              <h3>${escapeHtml(name)}</h3>
+              <h3><a class="popular-product-name" href="${escapeHtml(canonicalProductPath(product))}">${escapeHtml(name)}</a></h3>
               ${productCardPurchaseHtml(product, { popular: true })}
             </div>
           </article>
@@ -2682,9 +2691,41 @@ function renderPopularProducts() {
       }).join("")}
     </div>
     <div class="popular-products-footer">
-      <a class="popular-products-link" href="#catalog">${escapeHtml(t("popularExploreAll"))}</a>
+      <button class="popular-products-link" type="button" data-popular-scroll="1" aria-controls="popular-products-track">${escapeHtml(t("popularBrowseMore"))}</button>
     </div>
   `;
+  updatePopularCarouselControls();
+}
+
+// Pages the best-seller carousel by its visible width. Forward wraps to the start
+// so "Browse more" never dead-ends; RTL scrolls toward negative scrollLeft.
+function popularCarouselState(track) {
+  const offset = Math.abs(track.scrollLeft);
+  const max = track.scrollWidth - track.clientWidth;
+  return { atStart: offset <= 2, atEnd: offset >= max - 2, scrollable: max > 2 };
+}
+
+function updatePopularCarouselControls() {
+  const track = popularProductsSection?.querySelector(".popular-products-grid");
+  if (!track) return;
+  const { atStart, atEnd, scrollable } = popularCarouselState(track);
+  popularProductsSection.querySelectorAll(".popular-products-arrow").forEach((button) => {
+    button.disabled = !scrollable || (button.dataset.popularScroll === "-1" ? atStart : atEnd);
+  });
+  popularProductsSection.querySelector(".popular-products-nav")?.toggleAttribute("hidden", !scrollable);
+  popularProductsSection.querySelector(".popular-products-footer")?.toggleAttribute("hidden", !scrollable);
+}
+
+function scrollPopularCarousel(step) {
+  const track = popularProductsSection?.querySelector(".popular-products-grid");
+  if (!track) return;
+  const direction = getComputedStyle(track).direction === "rtl" ? -1 : 1;
+  const behavior = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
+  if (step > 0 && popularCarouselState(track).atEnd) {
+    track.scrollTo({ left: 0, behavior });
+    return;
+  }
+  track.scrollBy({ left: step * direction * track.clientWidth, behavior });
 }
 
 // Same rule as productPrice() in cloudflare-worker.js: the cheapest variant
@@ -3128,10 +3169,10 @@ function productCardPurchaseHtml(product, { popular = false } = {}) {
     <div class="product-card-purchase ${popular ? "is-popular" : ""}">
       ${select}
       <div class="product-card-live-price" data-card-price>${selectedVariant ? variantPriceHtml(selectedVariant, product) : productPriceHtml(product)}</div>
-      <label class="product-card-quantity-label">
+      ${popular ? "" : `<label class="product-card-quantity-label">
         <span>${escapeHtml(isEnglish() ? "Quantity" : "الكمية")}</span>
         <input type="number" min="1" step="1" value="1" inputmode="numeric" data-card-quantity>
-      </label>
+      </label>`}
       <div class="product-card-purchase-actions">
         <button class="button primary add-button" type="button" data-card-add="${productId}" ${variants.length ? "" : "disabled"}>
           ${escapeHtml(variants.length ? (isEnglish() ? "Add to cart" : "أضف للسلة") : t("unavailable"))}
@@ -6215,6 +6256,12 @@ productGrid.addEventListener("click", (event) => {
 });
 
 popularProductsSection?.addEventListener("click", (event) => {
+  const scrollButton = event.target.closest("[data-popular-scroll]");
+  if (scrollButton) {
+    event.preventDefault();
+    scrollPopularCarousel(Number(scrollButton.dataset.popularScroll) || 1);
+    return;
+  }
   const coloringButton = event.target.closest("[data-card-coloring]");
   if (coloringButton) {
     event.preventDefault();
@@ -6241,6 +6288,8 @@ popularProductsSection?.addEventListener("click", (event) => {
     if (added && validation) validation.textContent = "";
     return;
   }
+  // Product names are real links: the browser navigates to the product page; the rest of the card opens Quick View.
+  if (event.target.closest(".popular-product-name")) return;
   openProductFromCardClick(event);
 });
 
@@ -6258,6 +6307,9 @@ function updateProductCardChoice(event) {
 
 productGrid.addEventListener("change", updateProductCardChoice);
 popularProductsSection?.addEventListener("change", updateProductCardChoice);
+// Scroll does not bubble; capture it so the arrows track swipes as well as clicks.
+popularProductsSection?.addEventListener("scroll", updatePopularCarouselControls, { capture: true, passive: true });
+window.addEventListener("resize", updatePopularCarouselControls, { passive: true });
 
 productGrid.addEventListener("pointerover", (event) => {
   if (event.pointerType === "touch") return;

@@ -1087,12 +1087,8 @@ body[data-lang="en"] .category-art {
   background: var(--paper);
 }
 
-.is-home-route .popular-products {
-  min-height: 760px;
-}
-
 .is-home-route .popular-products[hidden] {
-  display: block;
+  display: none;
 }
 
 .popular-products-head {
@@ -4831,9 +4827,6 @@ body.account-open .scrim {
     gap: 12px;
   }
 
-  .is-home-route .popular-products {
-    min-height: 1370px;
-  }
 
   .popular-products-head p:not(.eyebrow) {
     font-size: 15px;
@@ -5390,3 +5383,120 @@ body.account-open .scrim {
 /* Cart lines whose product is no longer available stay visible with a notice. */
 .cart-unavailable{display:block;margin-top:4px;color:var(--burgundy);font-weight:700}
 .cart-unavailable-summary{margin:0 0 12px;padding:10px 12px;border:1px solid var(--burgundy);border-radius:10px;color:var(--burgundy);background:#fff5f5;font-weight:700}
+
+/* Compact best sellers: one-row carousel, scoped to avoid changing catalog purchase controls. */
+.section.popular-products {
+  --popular-gap: 12px;
+  --popular-visible: 4;
+  --popular-media: 150px;
+  min-width: 0;
+  padding-block: 28px;
+}
+.popular-products .popular-products-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+  max-width: none;
+  margin-bottom: 14px;
+}
+.popular-products-head .eyebrow { margin-bottom: 4px; font-size: 12px; }
+.popular-products .popular-products-head h2 { font-size: clamp(22px, 2.2vw, 30px); line-height: 1.35; }
+.popular-products .popular-products-head p:not(.eyebrow) { margin-top: 4px; font-size: 13px; line-height: 1.6; }
+.popular-products-nav { display: flex; flex: none; gap: 8px; }
+.popular-products-nav[hidden] { display: none; }
+.popular-products-arrow {
+  display: grid;
+  width: 40px;
+  height: 40px;
+  place-items: center;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: #fff;
+  color: var(--navy);
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+}
+.popular-products-arrow:hover:not(:disabled) { border-color: var(--burgundy); color: var(--burgundy); }
+.popular-products-arrow:focus-visible { outline: 3px solid rgba(12, 107, 104, 0.34); outline-offset: 2px; }
+.popular-products-arrow:disabled { opacity: .35; cursor: default; }
+.popular-products .popular-products-grid {
+  grid-template-columns: none;
+  grid-auto-flow: column;
+  grid-auto-columns: calc((100% - (var(--popular-visible) - 1) * var(--popular-gap)) / var(--popular-visible));
+  gap: var(--popular-gap);
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: 2px;
+  padding: 2px 2px 8px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--line) transparent;
+  -webkit-overflow-scrolling: touch;
+}
+.popular-products .popular-products-grid:focus-visible { outline: 3px solid rgba(12, 107, 104, 0.34); outline-offset: 2px; }
+.popular-products .popular-product-card {
+  scroll-snap-align: start;
+  border-radius: 12px;
+  box-shadow: 0 3px 12px rgba(14, 32, 39, .05);
+}
+.popular-products .popular-product-card:hover,
+.popular-products .popular-product-card:focus-within { transform: none; box-shadow: 0 0 0 1px var(--burgundy); }
+.popular-products .popular-product-media { height: var(--popular-media); aspect-ratio: auto; padding: 26px 10px 8px; }
+.popular-products .popular-product-media img { min-height: 0; max-height: 100%; object-fit: contain; }
+.popular-products .popular-product-badge { inset: 7px auto auto; inset-inline-start: 7px; padding: 4px 7px; font-size: 10px; }
+.popular-products .popular-product-info { gap: 6px; padding: 10px; }
+/* Full names wrap instead of being clipped; two-line minimum keeps prices aligned. */
+.popular-products .popular-product-info h3 { min-height: 43px; min-height: 2lh; font-size: 14px; line-height: 1.55; overflow-wrap: anywhere; }
+/* The name is a real link to the product page; undo the base two-line clamp on h3 links. */
+.popular-products .popular-product-info h3 a { display: inline; overflow: visible; -webkit-line-clamp: unset; color: inherit; text-decoration: none; }
+.popular-products .popular-product-info h3 a:hover { color: var(--burgundy); text-decoration: underline; text-underline-offset: 3px; }
+.popular-products .popular-product-card .product-card-purchase { gap: 7px; margin-top: auto; }
+.popular-products .product-card-choice-label { gap: 3px; }
+.popular-products .product-card-choice-label select { min-width: 0; min-height: 40px; padding: 6px 8px; font-size: 13px; }
+.popular-products .product-card-live-price { min-height: 0; font-size: 17px; line-height: 1.4; }
+.popular-products .product-card-live-price .price-stack { gap: 2px; }
+.popular-products .product-card-purchase-actions { grid-template-columns: 1fr; gap: 6px; }
+.popular-products .product-card-purchase-actions .button { min-height: 44px; padding: 7px 8px; font-size: 13px; }
+.popular-products .product-card-coloring { display: block; }
+.popular-products .product-card-validation:empty { display: none; }
+.popular-products .popular-products-footer { margin-top: 12px; }
+.popular-products .popular-products-footer[hidden] { display: none; }
+.popular-products .popular-products-link { min-height: 44px; padding: 8px 18px; font: inherit; font-size: 13px; font-weight: 900; cursor: pointer; }
+.popular-skeleton-more { display: block; width: 120px; height: 44px; border-radius: var(--radius); background: #ece6d9; }
+/* Skeleton cards hold the hydrated card height so the catalog below does not jump. */
+.popular-products .popular-product-skeleton { min-height: calc(var(--popular-media) + 217px); }
+/* The global .price flex-basis would otherwise stretch the skeleton's price bar. */
+.popular-products .popular-skeleton-line.price { flex: none; }
+@media (min-width: 768px) and (max-width: 999px) {
+  .section.popular-products { --popular-visible: 3; --popular-media: 140px; }
+}
+@media (max-width: 767px) {
+  .section.popular-products {
+    --popular-gap: 10px;
+    --popular-media: 140px;
+    padding-block: 20px;
+    padding-inline: 16px;
+  }
+  /* One full card at ~72% of the width, with the next card peeking in to invite a swipe. */
+  .popular-products .popular-products-grid { grid-auto-columns: 72%; }
+  .popular-products .popular-products-head { margin-bottom: 10px; }
+  .popular-products .popular-products-head h2 { font-size: 21px; }
+  .popular-products .popular-products-head p:not(.eyebrow) { font-size: 12px; }
+  .popular-products-nav { display: none; }
+  .popular-products .popular-products-grid { scroll-snap-type: x mandatory; scrollbar-width: none; }
+  .popular-products .popular-products-grid::-webkit-scrollbar { display: none; }
+  .popular-products .popular-product-media { padding: 22px 6px 4px; }
+  .popular-products .popular-product-badge { padding: 3px 6px; font-size: 9px; }
+  .popular-products .popular-product-info { gap: 5px; padding: 8px; }
+  .popular-products .popular-product-info h3 { font-size: 14px; line-height: 1.5; }
+  .popular-products .product-card-choice-label > span { font-size: 11px; }
+  .popular-products .product-card-choice-label select { min-height: 38px; padding: 4px 6px; font-size: 16px; }
+  .popular-products .product-card-live-price { font-size: 16px; }
+  .popular-products .product-card-live-price .price-stack small,
+  .popular-products .product-card-live-price .price-stack s { font-size: 11px; }
+  .popular-products .product-card-purchase-actions .button { min-height: 42px; padding: 6px; font-size: 13px; }
+  .popular-products .popular-product-skeleton { min-height: calc(var(--popular-media) + 203px); }
+}
