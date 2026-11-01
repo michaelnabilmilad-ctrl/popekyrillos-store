@@ -108,15 +108,18 @@ body[data-lang="en"] .about-services { text-align: center; }
 .contact-list a { display: flex; align-items: center; gap: 12px; color: var(--ink); font-weight: 800; }
 .contact-list a span { direction: ltr; unicode-bidi: isolate; }
 .contact-list svg { margin-top: 0; stroke: var(--teal); }
-.social-row { display: flex; flex-wrap: wrap; gap: 10px; margin: 0; padding: 0; list-style: none; }
-.social-row a { display: inline-flex; align-items: center; gap: 8px; min-height: 46px; padding: 8px 16px; border: 1px solid var(--line); border-radius: 999px; background: #fff; color: var(--ink); font-weight: 800; }
-.social-row a:hover, .social-row a:focus-visible { border-color: var(--teal); outline: 0; }
-.social-row svg { width: 22px; height: 22px; }
-.social-row .wa svg { fill: #1f9d55; }
-.social-row .fb svg { fill: #1877f2; }
-.social-row .ig svg { fill: none; stroke: #c13584; stroke-width: 1.8; }
-.social-row .ig svg .dot { fill: #c13584; stroke: none; }
-.social-row .tt svg { fill: #111; }
+.social-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin: 0; padding: 0; list-style: none; }
+.social-row a { display: flex; align-items: center; gap: 12px; min-height: 56px; padding: 8px 14px 8px 10px; border: 1px solid var(--line); border-radius: 12px; background: #fff; color: var(--ink); font-weight: 800; transition: transform 160ms ease, border-color 160ms ease, box-shadow 160ms ease; }
+.social-row a:hover, .social-row a:focus-visible { transform: translateY(-2px); border-color: currentColor; box-shadow: var(--soft-shadow); outline: 0; }
+.social-row .ico { flex: none; display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; color: #fff; }
+.social-row .ico svg { width: 22px; height: 22px; fill: currentColor; }
+.social-row .fb .ico { background: #1877f2; }
+.social-row .ig .ico { background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fd5949 45%, #d6249f 60%, #285aeb 90%); }
+.social-row .ig .ico svg { fill: none; stroke: #fff; stroke-width: 1.9; }
+.social-row .ig .ico svg .dot { fill: #fff; stroke: none; }
+.social-row .tt .ico { background: #111; }
+.social-row .wa .ico { background: #25d366; }
+.social-row small { display: block; color: var(--muted); font-size: 12px; font-weight: 700; direction: ltr; text-align: start; }
 .about-visit .about-card h2 { font-size: clamp(24px, 3vw, 32px); }
 .about-visit .about-actions .button { flex: 1 1 160px; }
 .about-contact-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
@@ -175,3 +178,51 @@ body[data-lang="en"] .about-cta-box, body[data-lang="en"] .about-services .about
   .first-story p { font-size: 16px; }
   .first-ribbon { font-size: 14px; padding: 10px 12px; }
 }
+
+/* hero photo slot + timeline */
+.about-photo { position: relative; margin: 0; }
+.about-photo img:not(figcaption img) { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 14px; box-shadow: var(--shadow); }
+.about-photo-slot { display: grid; place-content: center; justify-items: center; gap: 6px; aspect-ratio: 4 / 3; border: 2px dashed rgba(198, 146, 69, 0.7); border-radius: 14px; background: repeating-linear-gradient(135deg, #fbf5e8 0 14px, #f6eedb 14px 28px); color: #81561d; text-align: center; font-weight: 800; }
+.about-photo-slot svg { width: 44px; height: 44px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.about-photo-slot small { color: var(--muted); font-size: 13px; font-weight: 700; }
+.about-photo:not(.is-empty) .about-photo-slot { display: none; }
+.about-photo figcaption { position: absolute; inset-inline-start: -18px; bottom: -22px; display: flex; align-items: center; gap: 10px; padding: 8px 16px 8px 8px; border: 1px solid rgba(198, 146, 69, 0.5); border-radius: 999px; background: #fff; box-shadow: var(--soft-shadow); }
+.about-photo figcaption img { width: 52px; height: 52px; border-radius: 50%; background: var(--navy); }
+.about-photo figcaption > span { display: grid; line-height: 1.2; color: var(--muted); font-size: 13px; }
+.about-photo figcaption strong { color: var(--navy); font-size: 24px; }
+.about-timeline { position: relative; display: grid; gap: 12px; margin: 24px 0 0; padding: 0; list-style: none; }
+.about-timeline::before { content: ""; position: absolute; inset-inline-start: 31px; top: 20px; bottom: 20px; width: 2px; background: linear-gradient(var(--gold), var(--navy)); }
+.about-timeline li { position: relative; display: flex; align-items: center; gap: 14px; font-weight: 800; color: var(--ink); line-height: 1.6; }
+.about-timeline li > strong { flex: none; display: grid; place-items: center; width: 64px; height: 40px; border-radius: 999px; background: var(--gold-soft); color: #6e4614; font-size: 15px; z-index: 1; }
+.about-timeline li.now > strong { background: var(--navy); color: #fff; }
+.about-timeline li.now > span { color: var(--navy); }
+.about-hero-grid { align-items: center; }
+
+@media (max-width: 720px) {
+  .about-hero h1 { font-size: 34px; }
+  .about-hero .about-sub { font-size: 17px; margin: 8px 0 16px; }
+  .about-photo { margin: 6px 0 22px; }
+  .about-photo figcaption { inset-inline-start: 10px; bottom: -18px; padding: 6px 12px 6px 6px; }
+  .about-photo figcaption img { width: 40px; height: 40px; }
+  .about-photo figcaption strong { font-size: 19px; }
+  .about-timeline li { font-size: 14.5px; }
+  .about-timeline li > strong { width: 58px; height: 36px; font-size: 14px; }
+  .about-timeline::before { inset-inline-start: 28px; }
+  /* navy highlight: strong but compact */
+  .about-first { padding-block: 64px 44px; }
+  .first-feature { padding: 22px 16px 22px; }
+  .first-medal { width: 88px; height: 88px; margin: -66px auto 10px; }
+  .first-medal strong { margin-top: 20px; font-size: 18px; }
+  .first-medal small { font-size: 11px; }
+  .first-eyebrow { margin-bottom: 4px; }
+  .about-first .first-feature h2 { font-size: 25px; margin-bottom: 12px; }
+  .first-statement { font-size: 17px !important; padding: 10px 2px; margin-bottom: 14px !important; }
+  .first-story p { font-size: 15.5px; line-height: 1.85; }
+  .first-store { padding-top: 26px; gap: 20px; }
+  .first-store h3 { font-size: 19px; }
+  .about-steps li { padding: 10px 12px; font-size: 14.5px; }
+  .about-steps svg { width: 34px; height: 34px; padding: 7px; }
+  .social-row a { min-height: 52px; padding: 6px 10px 6px 8px; gap: 9px; font-size: 14px; }
+  .social-row .ico { width: 36px; height: 36px; }
+}
+@media (max-width: 720px) { .about-photo-slot { aspect-ratio: 16 / 10; } }
