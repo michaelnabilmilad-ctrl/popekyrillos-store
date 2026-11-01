@@ -301,6 +301,7 @@ const translations = {
     navProducts: "المنتجات",
     navServices: "خدمات الكنائس",
     navContact: "تواصل",
+    navAbout: "من نحن",
     login: "دخول",
     languageToggleAria: "Switch language to English",
     accountAria: "تسجيل الدخول",
@@ -569,6 +570,7 @@ const translations = {
     navProducts: "Products",
     navServices: "Church services",
     navContact: "Contact",
+    navAbout: "About us",
     login: "Login",
     languageToggleAria: "تغيير اللغة إلى العربية",
     accountAria: "Login",
@@ -1759,7 +1761,8 @@ function applyLanguage({ render = true } = {}) {
     "#categories": "navCategories",
     "#catalog": "navProducts",
     "#services": "navServices",
-    "#contact": "navContact"
+    "#contact": "navContact",
+    "/about": "navAbout"
   };
   Object.entries(navLabels).forEach(([href, key]) => {
     setText(`.main-nav a[href="${href}"]`, t(key));
@@ -1868,6 +1871,7 @@ function applyLanguage({ render = true } = {}) {
   setText("[data-policy-footer-privacy]", t("policyPrivacy"));
   setText("[data-policy-footer-contact]", t("policyContact"));
   setText("[data-policy-footer-shipping]", t("policyShipping"));
+  setText("[data-policy-footer-about]", t("navAbout"));
 
   setText(".cart-panel-head .eyebrow", t("cartEyebrow"));
   setText(".cart-panel-head h2", t("cartTitle"));

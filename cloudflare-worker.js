@@ -50,6 +50,7 @@ const staticRewrites = {
   "/checkout": "/checkout.html",
   "/payment": "/payment.html",
   "/order-success": "/order-success.html",
+  "/about": "/about.html",
   "/policies": "/policies.html",
   "/privacy-policy": "/policies.html",
   "/refund-policy": "/policies.html",
@@ -1718,7 +1719,7 @@ ${tags.title}${tags.description}${tags.extra}
 </head><body class="standalone-product-page">
 <header class="site-header" data-elevated="false"><div class="brand-cluster"><a class="brand" href="/" aria-label="مكتبة البابا كيرلس"><span class="brand-logo-wrap"><img src="/assets/optimized/logo-papa-kyrillos-64.webp" srcset="/assets/optimized/logo-papa-kyrillos-64.webp 64w, /assets/optimized/logo-papa-kyrillos-128.webp 128w" sizes="50px" alt="" width="160" height="160" decoding="async"></span><span><strong>مكتبة البابا كيرلس</strong><small>مستلزمات الكنائس والخدمة</small></span></a></div><nav class="main-nav" aria-label="التنقل الرئيسي"><a href="/#categories">الأقسام</a><a href="/#catalog">المنتجات</a></nav><div class="header-actions"><a class="cart-toggle" href="/cart" aria-label="فتح السلة"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6h15l-2 8H8L6 3H3"/><circle cx="9" cy="20" r="1.6"/><circle cx="18" cy="20" r="1.6"/></svg><span>السلة</span><span class="cart-count" data-cart-count></span></a></div></header>
 <main class="product-route-main"><a class="product-route-back" href="/#catalog">العودة إلى المنتجات</a>${seo.crumbs.length > 2 ? breadcrumbNavHtml(seo.crumbs, "product-route-breadcrumb") : ""}<div id="product-detail" aria-label="${name}">${productDetailSsrHtml(seo)}</div><section class="product-route-related" aria-labelledby="related-title"><h2 id="related-title">منتجات مشابهة</h2><div class="product-grid" data-related-products>${related}</div></section></main>
-<footer class="product-route-footer"><strong>مكتبة البابا كيرلس</strong><span>مستلزمات الكنائس والخدمة</span><a href="/policies">السياسات</a><a href="https://wa.me/201016125589">تواصل معنا</a></footer>
+<footer class="product-route-footer"><strong>مكتبة البابا كيرلس</strong><span>مستلزمات الكنائس والخدمة</span><a href="/about">من نحن</a><a href="/policies">السياسات</a><a href="https://wa.me/201016125589">تواصل معنا</a></footer>
 <div class="toast" data-toast role="status" aria-live="polite"></div><script id="product-data" type="application/json">${safeProduct}</script><script src="/yota-colors.js?v=3" defer></script><script src="/product-page.js?v=24" defer></script></body></html>`;
   return new Response(html, {
     status: 200,
@@ -1737,7 +1738,7 @@ async function sitemapResponse(request, env) {
   const products = await loadProducts(env, request);
   const taxonomy = await loadSeoTaxonomy(env, request);
   const listed = sitemapProducts(products);
-  const entries = ["/", "/products", "/contact", "/policies"].map((path) => ({ loc: `${canonicalOrigin}${path}` }));
+  const entries = ["/", "/products", "/about", "/contact", "/policies"].map((path) => ({ loc: `${canonicalOrigin}${path}` }));
   for (const category of taxonomy.categories) {
     if (!isPublicCategory(category)) continue;
     const inCategory = categoryProducts(listed, category.id, "", { withOutOfStock: true });
