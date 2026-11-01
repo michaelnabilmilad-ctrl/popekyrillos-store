@@ -80,3 +80,50 @@ html.coloring-group-editor-open,body.coloring-group-editor-open{overflow:hidden}
 .medal-price-row{display:flex;align-items:center;gap:12px}
 .product-route-price small{display:block;margin-top:4px;font-size:.76em;color:#a52a2a}
 @media(max-width:520px){.medal-wood-grid{grid-template-columns:1fr}}
+
+/* Product page header: dark text on the light page (it was white on cream). */
+.standalone-product-page .site-header{background:rgba(255,253,247,.96);border-bottom:1px solid #ece4d3;box-shadow:0 6px 20px rgba(16,33,42,.06);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.standalone-product-page .brand strong{color:#10212a}
+.standalone-product-page .brand small{color:#65747a}
+.standalone-product-page .main-nav{background:#f4eddf;border:1px solid #e6dcc7;box-shadow:none}
+.standalone-product-page .main-nav a{color:#1a2751}
+.standalone-product-page .cart-toggle{position:relative;display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 16px;border:1px solid #e0d6c2;border-radius:999px;background:#fff;color:#1a2751;font-weight:800}
+.standalone-product-page .cart-toggle svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.standalone-product-page .cart-toggle .cart-count{position:absolute;top:-6px;left:-6px;display:grid;min-width:22px;height:22px;padding:0 6px;place-items:center;border-radius:999px;background:#85243c;color:#fff;font-size:12px;font-weight:900;line-height:1}
+.standalone-product-page .cart-toggle .cart-count[hidden]{display:none}
+
+/* Buy box before the description. */
+.product-route-copy h1{font-size:clamp(24px,2.6vw,34px);line-height:1.35}
+.product-route-price{margin:10px 0 4px;font-size:30px}
+.product-route-actions{display:grid;grid-template-columns:96px 1fr;gap:10px;margin-top:18px}
+.product-route-actions .button.primary{min-height:52px;font-size:17px}
+.product-route-quantity{width:100%;min-height:52px;text-align:center;font-size:18px}
+.product-route-actions .button.secondary{grid-column:1/-1;justify-self:center;min-height:0;padding:4px 8px;border:0;background:none;box-shadow:none;color:#073d42;text-decoration:underline;text-underline-offset:4px}
+.product-route-message:empty{min-height:0;margin:0}
+.product-route-trust{display:grid;gap:8px;margin:16px 0 4px;padding:14px 16px;list-style:none;border-radius:10px;background:#f6f1e6;color:#10212a;font-size:14px;font-weight:800}
+.product-route-trust li{display:flex;align-items:center;gap:10px}
+.product-route-trust svg{width:20px;height:20px;flex:0 0 auto;fill:none;stroke:#0c6b68;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.product-route-details-title{margin:22px 0 6px;padding-top:18px;border-top:1px solid #ece4d3;font-size:16px;color:#10212a}
+.product-route-description{margin-top:0;line-height:1.9}
+
+/* Phone buy bar (product-page.js mountBuyBar). */
+.product-buy-bar{display:none}
+@media (max-width:760px){
+  .product-route-main{padding-top:84px}
+  .product-route-back{margin-bottom:10px}
+  .product-route-breadcrumb{margin:0 0 12px}
+  .product-route-copy h1{font-size:23px}
+  .product-route-price{font-size:26px}
+  .product-buy-bar{position:fixed;inset:auto 0 0;z-index:30;display:flex;align-items:center;gap:12px;padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px));background:#fffdf7;border-top:1px solid #e6dcc7;box-shadow:0 -8px 24px rgba(16,33,42,.1);transform:translateY(110%);visibility:hidden;transition:transform .2s ease,visibility .2s}
+  .product-buy-bar.is-visible{transform:none;visibility:visible}
+  .product-buy-bar img{width:44px;height:44px;border:1px solid #ece4d3;border-radius:8px;background:#fff;object-fit:contain}
+  .product-buy-bar div{display:grid;flex:1;min-width:0}
+  .product-buy-bar small{overflow:hidden;color:#65747a;font-size:12px;font-weight:800;white-space:nowrap;text-overflow:ellipsis}
+  .product-buy-bar strong{color:#85243c;font-size:18px}
+  .product-buy-bar button{min-height:46px;max-width:55%;padding:0 18px;border:0;border-radius:10px;background:#1a2751;color:#fff;font:inherit;font-weight:900}
+  .product-buy-bar button:disabled{background:#8a91a6}
+  .product-buy-bar button.is-added{background:#0c6b68}
+  body.has-product-buy-bar{padding-bottom:72px}
+  body.has-product-buy-bar .toast{bottom:88px}
+}
+@media (prefers-reduced-motion:reduce){.product-buy-bar{transition:none}}
