@@ -49,7 +49,8 @@
             "addressRegion": "القاهرة",
             "addressCountry": "EG"
           },
-          "areaServed": "EG"
+          "areaServed": "EG",
+          "sameAs": ["https://www.facebook.com/106671568146726", "https://www.instagram.com/pope.kyrillos.bookshop/", "https://www.tiktok.com/@popekyrillosshop"]
         },
         {
           "@context": "https://schema.org",
@@ -63,7 +64,7 @@
     </script>
     <link rel="preload" href="/assets/fonts/ge-ss-two-bold.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="stylesheet" href="/styles.min.css?v=asset-2ddfb172599e" />
-    <link rel="stylesheet" href="/about.css?v=2" />
+    <link rel="stylesheet" href="/about.css?v=3" />
   </head>
   <body dir="rtl" data-lang="ar" class="about-page">
     <header class="site-header" data-elevated="true">
@@ -247,70 +248,38 @@
               </a>
             </div>
           </div>
-          <ul class="about-services-list">
-            <li><span class="t" lang="ar">مستلزمات المذبح والأواني</span><span class="t" lang="en">Altar supplies and vessels</span></li>
-            <li><span class="t" lang="ar">تجهيزات الكنيسة</span><span class="t" lang="en">Church furnishings</span></li>
-            <li><span class="t" lang="ar">هدايا اجتماعات الخدمة</span><span class="t" lang="en">Gifts for ministry meetings</span></li>
-            <li><span class="t" lang="ar">كميات كبيرة ومنتجات مخصصة</span><span class="t" lang="en">Bulk and custom orders</span></li>
-          </ul>
         </div>
       </section>
 
       <!-- 5 + 6. زورونا + تواصل معنا -->
-      <section class="about-section" aria-labelledby="visit-title">
-        <div class="about-wrap">
-          <div class="about-head">
+      <section class="about-section about-visit" aria-label="زورونا وتواصل معنا">
+        <div class="about-wrap about-contact-grid" id="contact-us">
+          <div class="about-card">
             <p class="eyebrow"><span class="t" lang="ar">زورونا في المكتبة</span><span class="t" lang="en">Visit the bookshop</span></p>
             <h2 id="visit-title"><span class="t" lang="ar">يسعدنا زيارتكم</span><span class="t" lang="en">We'd love to welcome you</span></h2>
-          </div>
-          <div class="about-visit-grid">
-            <div class="about-card">
-              <h3 class="eyebrow"><span class="t" lang="ar">العنوان</span><span class="t" lang="en">Address</span></h3>
-              <address class="about-address">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21Z" /><circle cx="12" cy="9.5" r="2.5" /></svg>
-                <span><span class="t" lang="ar">5 شارع البعثة، روض الفرج، القاهرة، مصر</span><span class="t" lang="en">5 El Baatha Street, Rod El Farag, Cairo, Egypt</span></span>
-              </address>
-              <div class="about-actions">
-                <a class="button primary" href="https://www.google.com/maps/search/?api=1&amp;query=5%20%D8%B4%D8%A7%D8%B1%D8%B9%20%D8%A7%D9%84%D8%A8%D8%B9%D8%AB%D8%A9%D8%8C%20%D8%B1%D9%88%D8%B6%20%D8%A7%D9%84%D9%81%D8%B1%D8%AC%D8%8C%20%D8%A7%D9%84%D9%82%D8%A7%D9%87%D8%B1%D8%A9%D8%8C%20%D9%85%D8%B5%D8%B1" target="_blank" rel="noopener" data-about-maps>
-                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21Z" /><circle cx="12" cy="9.5" r="2.5" /></svg>
-                  <span class="t" lang="ar">افتح الموقع على Google Maps</span><span class="t" lang="en">Open in Google Maps</span>
-                </a>
-                <a class="button outline" href="tel:+201016125589">
-                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3h4l2 5-2.5 1.5a11 11 0 0 0 6 6L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 5a2 2 0 0 1 2-2Z" /></svg>
-                  <span class="t" lang="ar">اتصل بالمكتبة</span><span class="t" lang="en">Call the bookshop</span>
-                </a>
-                <a class="button outline" href="https://wa.me/201016125589" target="_blank" rel="noopener">
-                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l1.3-3.8A8 8 0 1 1 8 19Z" /><path d="M9 9.5c.3 2.2 2.3 4.3 4.5 4.8l1.2-1.2 1.8.8v1.4c-3.8.4-8-3.6-8-7.6H10l.8 1.8Z" /></svg>
-                  <span class="t" lang="ar">واتساب</span><span class="t" lang="en">WhatsApp</span>
-                </a>
-              </div>
-            </div>
-            <div class="about-map">
-              <div class="about-map-fallback" aria-hidden="true">
-                <strong><span class="t" lang="ar">خريطة Google</span><span class="t" lang="en">Google map</span></strong>
-                <span class="t" lang="ar">5 شارع البعثة، روض الفرج، القاهرة</span><span class="t" lang="en">5 El Baatha St, Rod El Farag, Cairo</span>
-              </div>
-              <iframe title="خريطة موقع مكتبة البابا كيرلس – 5 شارع البعثة، روض الفرج، القاهرة" src="https://maps.google.com/maps?q=5%20%D8%B4%D8%A7%D8%B1%D8%B9%20%D8%A7%D9%84%D8%A8%D8%B9%D8%AB%D8%A9%D8%8C%20%D8%B1%D9%88%D8%B6%20%D8%A7%D9%84%D9%81%D8%B1%D8%AC%D8%8C%20%D8%A7%D9%84%D9%82%D8%A7%D9%87%D8%B1%D8%A9%D8%8C%20%D9%85%D8%B5%D8%B1&amp;hl=ar&amp;z=16&amp;output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+            <address class="about-address">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21Z" /><circle cx="12" cy="9.5" r="2.5" /></svg>
+              <span><span class="t" lang="ar">5 شارع البعثة، روض الفرج، القاهرة، مصر</span><span class="t" lang="en">5 El Baatha Street, Rod El Farag, Cairo, Egypt</span></span>
+            </address>
+            <!-- Map + «افتح الموقع على Google Maps»: on hold until Michael confirms the exact Google Maps location. -->
+            <div class="about-actions">
+              <a class="button primary" href="tel:+201016125589"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3h4l2 5-2.5 1.5a11 11 0 0 0 6 6L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 5a2 2 0 0 1 2-2Z" /></svg><span class="t" lang="ar">اتصل بالمكتبة</span><span class="t" lang="en">Call the bookshop</span></a>
+              <a class="button outline" href="https://wa.me/201016125589" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l1.3-3.8A8 8 0 1 1 8 19Z" /><path d="M9 9.5c.3 2.2 2.3 4.3 4.5 4.8l1.2-1.2 1.8.8v1.4c-3.8.4-8-3.6-8-7.6H10l.8 1.8Z" /></svg><span class="t" lang="ar">واتساب</span><span class="t" lang="en">WhatsApp</span></a>
             </div>
           </div>
-
-          <div class="about-contact-grid" id="contact-us">
-            <div class="about-card">
-              <h2 id="contact-title"><span class="t" lang="ar">تواصل معنا</span><span class="t" lang="en">Contact us</span></h2>
-              <ul class="contact-list">
-                <li><a href="tel:+201016125589"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3h4l2 5-2.5 1.5a11 11 0 0 0 6 6L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 5a2 2 0 0 1 2-2Z" /></svg><span>01016125589</span></a></li>
-                <li><a href="mailto:pope.kyrillos.bookshop@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2" /><path d="m3 7 9 6 9-6" /></svg><span>pope.kyrillos.bookshop@gmail.com</span></a></li>
-              </ul>
-            </div>
-            <div class="about-card">
-              <h3 class="eyebrow"><span class="t" lang="ar">تابعنا وتواصل معنا</span><span class="t" lang="en">Follow &amp; message us</span></h3>
-              <!-- Facebook / Instagram / TikTok: add here once the official page links are confirmed. -->
-              <ul class="social-row">
-                <li><a class="wa" href="https://wa.me/201016125589" target="_blank" rel="noopener" aria-label="WhatsApp 01016125589">
-                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.4.1-.2 0-.3 0-.5l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.4.8 3.2.6.5-.1 1.5-.6 1.8-1.2.2-.6.2-1.1.1-1.2l-.5-.4Z" /></svg>
-                  WhatsApp</a></li>
-              </ul>
-            </div>
+          <div class="about-card">
+            <p class="eyebrow"><span class="t" lang="ar">تواصل</span><span class="t" lang="en">Get in touch</span></p>
+            <h2 id="contact-title"><span class="t" lang="ar">تواصل معنا</span><span class="t" lang="en">Contact us</span></h2>
+            <ul class="contact-list">
+              <li><a href="tel:+201016125589"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3h4l2 5-2.5 1.5a11 11 0 0 0 6 6L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 5a2 2 0 0 1 2-2Z" /></svg><span>01016125589</span></a></li>
+              <li><a href="mailto:pope.kyrillos.bookshop@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2" /><path d="m3 7 9 6 9-6" /></svg><span>pope.kyrillos.bookshop@gmail.com</span></a></li>
+            </ul>
+            <ul class="social-row" aria-label="حساباتنا الرسمية">
+              <li><a class="fb" href="https://www.facebook.com/106671568146726" target="_blank" rel="noopener" aria-label="Facebook – مكتبة البابا كيرلس"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13.5 21v-7.5H16l.4-3h-2.9V8.6c0-.9.3-1.5 1.5-1.5h1.5V4.4c-.3 0-1.2-.1-2.2-.1-2.2 0-3.7 1.3-3.7 3.8v2.4H8.1v3h2.5V21Z" /></svg>Facebook</a></li>
+              <li><a class="ig" href="https://www.instagram.com/pope.kyrillos.bookshop/" target="_blank" rel="noopener" aria-label="Instagram @pope.kyrillos.bookshop"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="5" /><circle cx="12" cy="12" r="4" /><circle cx="17.2" cy="6.8" r="1.1" class="dot" /></svg>Instagram</a></li>
+              <li><a class="tt" href="https://www.tiktok.com/@popekyrillosshop" target="_blank" rel="noopener" aria-label="TikTok @popekyrillosshop"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16.6 3h-3.1v12.2a2.7 2.7 0 1 1-2.7-2.7c.3 0 .5 0 .8.1V9.4a5.8 5.8 0 1 0 5 5.8V9a7.3 7.3 0 0 0 4.2 1.3V7.2A4.2 4.2 0 0 1 16.6 3Z" /></svg>TikTok</a></li>
+              <li><a class="wa" href="https://wa.me/201016125589" target="_blank" rel="noopener" aria-label="WhatsApp 01016125589"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.4.1-.2 0-.3 0-.5l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.4.8 3.2.6.5-.1 1.5-.6 1.8-1.2.2-.6.2-1.1.1-1.2l-.5-.4Z" /></svg>WhatsApp</a></li>
+            </ul>
           </div>
         </div>
       </section>

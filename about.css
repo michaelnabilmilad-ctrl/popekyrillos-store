@@ -86,7 +86,9 @@ body[data-lang="ar"] [lang="en"].t, body[data-lang="en"] [lang="ar"].t { display
 
 /* 4. church services */
 .about-services { background: var(--surface); border-block: 1px solid var(--line); }
-.about-services .about-wrap { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: clamp(24px, 5vw, 64px); align-items: center; }
+.about-services .about-wrap { max-width: 860px; text-align: center; }
+.about-services .about-actions { justify-content: center; }
+body[data-lang="en"] .about-services { text-align: center; }
 .about-services-list { display: grid; gap: 10px; margin: 0; padding: 20px; border: 1px dashed rgba(198, 146, 69, 0.6); border-radius: var(--radius); list-style: none; background: #fffaf0; }
 .about-services-list li { display: flex; align-items: center; gap: 10px; font-weight: 700; }
 .about-services-list li::before { content: ""; flex: none; width: 8px; height: 8px; border-radius: 50%; background: var(--gold); }
@@ -111,7 +113,13 @@ body[data-lang="ar"] [lang="en"].t, body[data-lang="en"] [lang="ar"].t { display
 .social-row a:hover, .social-row a:focus-visible { border-color: var(--teal); outline: 0; }
 .social-row svg { width: 22px; height: 22px; }
 .social-row .wa svg { fill: #1f9d55; }
-.about-contact-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; margin-top: 18px; }
+.social-row .fb svg { fill: #1877f2; }
+.social-row .ig svg { fill: none; stroke: #c13584; stroke-width: 1.8; }
+.social-row .ig svg .dot { fill: #c13584; stroke: none; }
+.social-row .tt svg { fill: #111; }
+.about-visit .about-card h2 { font-size: clamp(24px, 3vw, 32px); }
+.about-visit .about-actions .button { flex: 1 1 160px; }
+.about-contact-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
 
 /* 7. CTA */
 .about-cta { padding: 64px clamp(16px, 5vw, 64px) 96px; }
@@ -126,7 +134,7 @@ body[data-lang="ar"] [lang="en"].t, body[data-lang="en"] [lang="ar"].t { display
 /* GE SS TWO draws Arabic-Indic digits; English text uses a Latin face so 2001 reads as 2001 */
 body[data-lang="en"].about-page, body[data-lang="en"].about-page .about-seal-year strong { font-family: "Segoe UI", Tahoma, Arial, sans-serif; }
 body[data-lang="en"] .about-section, body[data-lang="en"] .about-hero, body[data-lang="en"] .about-cta { direction: ltr; text-align: left; }
-body[data-lang="en"] .about-cta-box { text-align: center; }
+body[data-lang="en"] .about-cta-box, body[data-lang="en"] .about-services .about-wrap { text-align: center; }
 
 @media (max-width: 1000px) {
   .offer-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -154,7 +162,9 @@ body[data-lang="en"] .about-cta-box { text-align: center; }
   .about-map { min-height: 260px; }
   .about-card { padding: 20px 18px; }
   .about-address { font-size: 17px; }
-  .about-cta { padding: 40px 16px 110px; }
+  .about-cta { padding: 32px 16px 48px; }
+  body.about-page { padding-bottom: 0; }
+  .about-page .language-toggle { display: inline-grid; min-width: 42px; height: 42px; }
   .about-first { padding-block: 76px 52px; }
   .first-feature { padding: 26px 18px 24px; }
   .first-feature::before, .first-feature::after { width: 34px; height: 34px; top: 12px; }
