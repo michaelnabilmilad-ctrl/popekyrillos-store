@@ -41,7 +41,30 @@ body[data-lang="ar"] [lang="en"].t, body[data-lang="en"] [lang="ar"].t { display
 /* 2. first online store (highlight) */
 .about-first { position: relative; overflow: hidden; background: linear-gradient(140deg, var(--navy) 0%, #13204a 55%, var(--teal-dark) 100%); color: #fff; }
 .about-first::after { content: ""; position: absolute; inset: auto -120px -160px auto; width: 420px; height: 420px; border: 1px solid rgba(246, 204, 131, 0.18); border-radius: 50%; box-shadow: 0 0 0 60px rgba(246, 204, 131, 0.04), 0 0 0 120px rgba(246, 204, 131, 0.03); pointer-events: none; }
-.about-first .about-wrap { position: relative; z-index: 1; display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); gap: clamp(28px, 5vw, 64px); align-items: center; }
+.about-first { padding-block: 84px; }
+.about-first .about-wrap { position: relative; z-index: 1; display: grid; gap: 40px; }
+.first-feature { position: relative; max-width: 860px; margin: 0 auto; padding: clamp(28px, 4vw, 48px) clamp(20px, 4vw, 52px); border: 1px solid rgba(246, 204, 131, 0.45); border-radius: 14px; background: linear-gradient(160deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.03)); box-shadow: 0 30px 70px rgba(4, 10, 30, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.12); text-align: center; }
+.first-feature::before, .first-feature::after { content: ""; position: absolute; top: 18px; width: 60px; height: 60px; border-top: 2px solid #c69245; opacity: 0.7; }
+.first-feature::before { right: 18px; border-right: 2px solid #c69245; border-top-right-radius: 10px; }
+.first-feature::after { left: 18px; border-left: 2px solid #c69245; border-top-left-radius: 10px; }
+.first-medal { position: relative; width: 132px; height: 132px; margin: -98px auto 18px; display: grid; place-content: center; text-align: center; color: #1d1406; }
+.first-medal svg { position: absolute; inset: 0; width: 100%; height: 100%; filter: drop-shadow(0 14px 26px rgba(0, 0, 0, 0.35)); }
+.first-medal .m-ring { fill: #c69245; stroke: #f6cc83; stroke-width: 2; }
+.first-medal .m-inner { fill: #f5e2bc; stroke: #b07b2f; stroke-width: 1.5; stroke-dasharray: 3 4; }
+.first-medal .m-star { fill: #85243c; }
+.first-medal strong { position: relative; margin-top: 30px; font-size: 26px; line-height: 1.1; color: var(--navy); }
+.first-medal small { position: relative; font-size: 13px; font-weight: 800; color: #6e4614; }
+.first-eyebrow { color: #f6cc83; }
+.about-first .first-feature h2 { margin-bottom: 18px; color: #fff; font-size: clamp(30px, 4.2vw, 50px); }
+.first-statement { margin: 0 auto 22px !important; max-width: 760px; padding: 16px 20px; border-block: 1px solid rgba(246, 204, 131, 0.4); color: #f6cc83 !important; font-size: clamp(19px, 2.3vw, 25px) !important; font-weight: 800; line-height: 1.7 !important; }
+.first-statement .first-name { color: #fff; }
+.first-story { max-width: 720px; margin: 0 auto; }
+.first-story p { color: rgba(255, 255, 255, 0.9); font-size: 18px; }
+.first-store { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); gap: clamp(24px, 5vw, 64px); align-items: center; padding-top: 36px; border-top: 1px solid rgba(255, 255, 255, 0.14); }
+.first-store h3 { margin: 0 0 12px; color: #fff; font-size: clamp(20px, 2.4vw, 26px); }
+.first-ribbon { display: inline-flex; align-items: center; gap: 10px; margin: -6px 0 22px; padding: 10px 16px; border: 1px solid rgba(198, 146, 69, 0.6); border-radius: var(--radius); background: linear-gradient(90deg, #fff4dc, #fffaf0); color: var(--navy); font-weight: 800; line-height: 1.6; box-shadow: 0 8px 20px rgba(198, 146, 69, 0.16); }
+.first-ribbon svg { flex: none; width: 22px; height: 22px; fill: var(--gold); }
+.first-ribbon:hover, .first-ribbon:focus-visible { border-color: var(--gold); outline: 0; }
 .about-badge { display: inline-flex; align-items: center; gap: 8px; margin-bottom: 16px; padding: 6px 14px; border: 1px solid rgba(246, 204, 131, 0.5); border-radius: 999px; color: #f6cc83; font-size: 14px; font-weight: 800; }
 .about-badge svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; }
 .about-first h2 { color: #fff; font-size: clamp(26px, 3.6vw, 42px); }
@@ -107,7 +130,7 @@ body[data-lang="en"] .about-cta-box { text-align: center; }
 
 @media (max-width: 1000px) {
   .offer-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .about-first .about-wrap, .about-services .about-wrap, .about-visit-grid { grid-template-columns: 1fr; }
+  .first-store, .about-services .about-wrap, .about-visit-grid { grid-template-columns: 1fr; }
 }
 @media (max-width: 720px) {
   .about-main { padding-top: 0; }
@@ -132,4 +155,13 @@ body[data-lang="en"] .about-cta-box { text-align: center; }
   .about-card { padding: 20px 18px; }
   .about-address { font-size: 17px; }
   .about-cta { padding: 40px 16px 110px; }
+  .about-first { padding-block: 76px 52px; }
+  .first-feature { padding: 26px 18px 24px; }
+  .first-feature::before, .first-feature::after { width: 34px; height: 34px; top: 12px; }
+  .first-feature::before { right: 12px; } .first-feature::after { left: 12px; }
+  .first-medal { width: 104px; height: 104px; margin-top: -80px; }
+  .first-medal strong { margin-top: 24px; font-size: 21px; }
+  .first-statement { padding: 12px 4px; }
+  .first-story p { font-size: 16px; }
+  .first-ribbon { font-size: 14px; padding: 10px 12px; }
 }
