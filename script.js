@@ -1336,6 +1336,13 @@ function productSubCategoryName(product) {
   return taxonomy?.subcategoryNameFromId?.(id) || product?.subcategory || product?.subCategory || product?.label || "";
 }
 
+// Catalog API items carry the subcategory id (e.g. "hand-crosses") in label;
+// customers see the Arabic subcategory name from the taxonomy instead.
+function productCardLabel(product) {
+  const id = productSubCategoryId(product);
+  return (id !== "needs-review" && taxonomy?.subcategoryNameFromId?.(id)) || (/^[a-z0-9-]+$/.test(String(product?.label || "")) ? "" : product?.label) || "منتج";
+}
+
 function productCollectionIds(product) {
   const explicitCollections = Array.isArray(product?.collections) ? product.collections : [];
   const groupValues = [product?.group, product?.groupId, product?.groupSlug]
@@ -3673,7 +3680,7 @@ function renderProducts() {
           </div>
           <div class="product-info">
             <div class="product-meta">
-              <span>${escapeHtml(localized(product.label || "منتج"))}</span>
+              <span>${escapeHtml(localized(productCardLabel(product)))}</span>
               <span class="stock">${escapeHtml(stockText)}</span>
             </div>
             <h3>${productName}</h3>
@@ -4101,7 +4108,7 @@ function renderProductModal() {
       ${hasColoringGame ? coloringGameHtml(product, productDisplayName) : ""}
     </div>
     <div class="product-modal-copy">
-      <p class="eyebrow">${escapeHtml(localized(product.label || "منتج"))}</p>
+      <p class="eyebrow">${escapeHtml(localized(productCardLabel(product)))}</p>
       <h2 id="product-modal-title">${productName}</h2>
       <div class="product-share-actions" aria-label="${t("shareProduct")}">
         <button class="product-share-button" type="button" data-copy-product-link="${escapeHtml(product.id)}">
