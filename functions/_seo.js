@@ -297,7 +297,7 @@ export function productDetailSsrHtml(seo) {
   const imageMarkup = image
     ? `<div class="product-route-main-image"><img src="${escapeHtml(sameSitePath(image))}" alt="${escapeHtml(seo.alt)}" width="800" height="800" decoding="async" fetchpriority="high"></div>`
     : "";
-  return `<div class="product-route-grid"><div class="product-route-gallery">${imageMarkup}</div><article class="product-route-copy">${seo.kind ? `<p class="product-route-category">${escapeHtml(seo.kind)}</p>` : ""}<h1>${escapeHtml(seo.name)}</h1><p class="product-route-description">${escapeHtml(seo.description)}</p>${seo.price !== null ? `<div class="product-route-price">${escapeHtml(seo.priceText || priceLabel(seo.price))}</div>` : ""}<p class="product-route-message">${seo.inStock ? "متاح" : "غير متاح حاليا"}</p></article></div>`;
+  return `<div class="product-route-grid"><div class="product-route-gallery">${imageMarkup}</div><article class="product-route-copy">${seo.kind ? `<p class="product-route-category">${escapeHtml(seo.kind)}</p>` : ""}<h1>${escapeHtml(seo.name)}</h1>${seo.price !== null ? `<div class="product-route-price">${escapeHtml(seo.priceText || priceLabel(seo.price))}</div>` : ""}<p class="product-route-message">${seo.inStock ? "متاح" : "غير متاح حاليا"}</p>${String(seo.description || "").trim() ? `<h2 class="product-route-details-title">تفاصيل المنتج</h2><p class="product-route-description">${escapeHtml(seo.description)}</p>` : ""}</article></div>`;
 }
 
 export function productCardHtml(item) {

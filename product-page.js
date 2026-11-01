@@ -1549,6 +1549,66 @@ function initializeColoringGame(panel) {
   });
 }
 
+// Store facts shown under the buy button (same wording as the home page and
+// the returns policy), so the answer is there before the customer asks.
+const productTrustHtml = `<ul class="product-route-trust">
+  <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h18v10H3z"/><circle cx="12" cy="12" r="3"/></svg>الدفع أونلاين أو كاش عند الاستلام من الفرع</li>
+  <li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>تجهيز الطلب خلال 48 ساعة</li>
+  <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 1 0 3-6.2"/><path d="M4 4v5h5"/></svg>استرجاع واستبدال خلال 14 يوم</li>
+</ul>`;
+
+// Phone-only bar that keeps the price and the add button in reach while the
+// page's own buy box is off screen. Its button presses the page's [data-add],
+// so variant, stock and medal-wood rules stay in one place.
+let buyBar = null;
+function mountBuyBar() {
+  const actions = root.querySelector(".product-route-actions");
+  const add = actions?.querySelector("[data-add]");
+  if (!add || buyBar) return;
+  const hasChoices = Boolean(root.querySelector("[data-option]"));
+  // Same file the main photo already loaded, so the bar costs no extra download.
+  const mainImage = root.querySelector("[data-main] img");
+  const firstImage = mainImage ? mainImage.getAttribute("src") : "";
+  buyBar = document.createElement("div");
+  buyBar.className = "product-buy-bar";
+  buyBar.setAttribute("aria-hidden", "true");
+  buyBar.innerHTML = `${firstImage ? `<img src="${escapeHtml(firstImage)}" alt="" width="44" height="44" decoding="async">` : ""}<div><small>${escapeHtml(text(product.name))}</small><strong data-buy-bar-price></strong></div><button type="button" tabindex="-1" data-buy-bar-add></button>`;
+  document.body.append(buyBar);
+  document.body.classList.add("has-product-buy-bar");
+  const button = buyBar.querySelector("[data-buy-bar-add]");
+  const priceNode = buyBar.querySelector("[data-buy-bar-price]");
+  let confirmUntil = 0;
+  const sync = () => {
+    if (Date.now() >= confirmUntil) {
+      button.textContent = add.textContent.trim();
+      button.classList.remove("is-added");
+    }
+    button.disabled = add.disabled && !hasChoices;
+    priceNode.textContent = isMedalProduct && !selected ? "" : money(selected?.price ?? product.price);
+    const box = actions.getBoundingClientRect();
+    buyBar.classList.toggle("is-visible", box.bottom < 0 || box.top > window.innerHeight);
+  };
+  button.addEventListener("click", () => {
+    if (add.disabled) {
+      (root.querySelector(".product-route-options") || actions).scrollIntoView({ behavior: "smooth", block: "center" });
+      return;
+    }
+    const message = root.querySelector("[data-message]");
+    const before = message?.textContent;
+    add.click();
+    if (message && message.textContent && message.textContent !== before) {
+      confirmUntil = Date.now() + 2200;
+      button.textContent = "✓ تمت الإضافة";
+      button.classList.add("is-added");
+      setTimeout(sync, 2300);
+    }
+  });
+  window.addEventListener("scroll", sync, { passive: true });
+  window.addEventListener("resize", sync, { passive: true });
+  new MutationObserver(sync).observe(root.querySelector(".product-route-copy"), { subtree: true, childList: true, characterData: true, attributes: true });
+  sync();
+}
+
 function render() {
   const optionControls = isMedalProduct ? `
     <fieldset class="medal-wood-options" data-medal-wood-options>
@@ -1570,7 +1630,8 @@ function render() {
     const values = option.values || [];
     return `<label>${escapeHtml(name)}<select data-option="${escapeHtml(name)}">${values.map((value)=>`<option value="${escapeHtml(text(value))}" ${selected?.options?.[name]===text(value)?"selected":""}>${escapeHtml(text(value))}</option>`).join("")}</select></label>`;
   }).join("");
-  root.innerHTML = `<div class="product-route-grid"><div class="product-route-gallery"><button class="product-route-main-image" type="button" data-main data-route-zoom aria-label="تكبير صورة ${escapeHtml(text(product.name))}">${images[0]?imageMarkup(images[0],0,"","main"):""}</button>${images.length>1?`<div class="product-route-thumbs">${images.map((image,index)=>`<button class="product-route-thumb" type="button" data-image="${escapeHtml(image)}" aria-pressed="${index===0}">${imageMarkup(image,index,"","thumbnail")}</button>`).join("")}</div>`:""}</div><article class="product-route-copy"><p class="product-route-category">${escapeHtml(text(product.label||product.badge||product.subcategory||"منتج"))}</p><h1>${escapeHtml(text(product.name))}</h1><p class="product-route-description">${escapeHtml(text(product.description))}</p>${coloringMarkup()}<div class="product-route-price" data-price>${isMedalProduct ? "اختر نوع الخشب لعرض السعر" : money(selected?.price ?? product.price)}</div><div class="product-route-options">${optionControls}</div><div class="product-route-actions"><input class="product-route-quantity" type="number" min="1" value="1" data-quantity aria-label="الكمية"><button class="button primary" type="button" data-add ${isMedalProduct || !available(selected)?"disabled":""}>${isMedalProduct ? "اختر نوع الخشب أولًا" : available(selected)?"أضف إلى السلة":"غير متاح حاليا"}</button><a class="button secondary" href="/cart">عرض السلة</a></div><p class="product-route-message" data-message></p></article></div>`;
+  root.innerHTML = `<div class="product-route-grid"><div class="product-route-gallery"><button class="product-route-main-image" type="button" data-main data-route-zoom aria-label="تكبير صورة ${escapeHtml(text(product.name))}">${images[0]?imageMarkup(images[0],0,"","main"):""}</button>${images.length>1?`<div class="product-route-thumbs">${images.map((image,index)=>`<button class="product-route-thumb" type="button" data-image="${escapeHtml(image)}" aria-pressed="${index===0}">${imageMarkup(image,index,"","thumbnail")}</button>`).join("")}</div>`:""}</div><article class="product-route-copy"><p class="product-route-category">${escapeHtml(text(product.label||product.badge||product.subcategory||"منتج"))}</p><h1>${escapeHtml(text(product.name))}</h1><div class="product-route-price" data-price>${isMedalProduct ? "اختر نوع الخشب لعرض السعر" : money(selected?.price ?? product.price)}</div>${coloringMarkup()}<div class="product-route-options">${optionControls}</div><div class="product-route-actions"><input class="product-route-quantity" type="number" min="1" value="1" data-quantity aria-label="الكمية"><button class="button primary" type="button" data-add ${isMedalProduct || !available(selected)?"disabled":""}>${isMedalProduct ? "اختر نوع الخشب أولًا" : available(selected)?"أضف إلى السلة":"غير متاح حاليا"}</button><a class="button secondary" href="/cart">عرض السلة</a></div><p class="product-route-message" data-message></p>${productTrustHtml}${text(product.description).trim() ? `<h2 class="product-route-details-title">تفاصيل المنتج</h2><p class="product-route-description">${escapeHtml(text(product.description))}</p>` : ""}</article></div>`;
+  mountBuyBar();
 }
 
 function chooseVariant() {
@@ -1608,7 +1669,8 @@ function updateCount() {
   // Signed-in customers: this page shows only what was added here, never the
   // account cart, and nothing at all when nothing was added.
   const text = hasLocalSessionHint() && !count ? "" : new Intl.NumberFormat(document.documentElement.lang === "en" ? "en-US" : "ar-EG").format(count);
-  document.querySelectorAll("[data-cart-count]").forEach((node) => { node.textContent = text; });
+  // An empty cart shows no bubble in this page's header.
+  document.querySelectorAll("[data-cart-count]").forEach((node) => { node.textContent = text; node.hidden = !count; });
 }
 window.addEventListener("storage", (event) => {
   if (String(event.key || "").startsWith("pope-kyrillos-cart") || event.key === "pope-kyrillos-auth:user") updateCount();
