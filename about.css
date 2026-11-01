@@ -226,3 +226,6 @@ body[data-lang="en"] .about-cta-box, body[data-lang="en"] .about-services .about
   .social-row .ico { width: 36px; height: 36px; }
 }
 @media (max-width: 720px) { .about-photo-slot { aspect-ratio: 16 / 10; } }
+.social-row a > span:last-child { min-width: 0; }
+.social-row small { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+@media (max-width: 480px) { .social-row { grid-template-columns: 1fr; } }
