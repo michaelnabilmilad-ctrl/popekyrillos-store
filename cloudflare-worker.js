@@ -412,8 +412,12 @@ async function productsJsonResponse(request, env) {
 }
 
 function catalogThumbnail(product, manifest = {}) {
-  const generated = manifest[String(product?.id || "")] || "";
-  const source = generated || productImages(product)[0] || product?.image || "";
+  const entry = manifest[String(product?.id || "")];
+  const photo = productImages(product)[0] || product?.image || "";
+  // Object entries remember which photo they were made from; once the product
+  // photo changes in /admin the card shows the new photo instead of a stale one.
+  const generated = typeof entry === "string" ? entry : entry?.source === photo ? entry.thumbnail || "" : "";
+  const source = generated || photo;
   return String(source || "");
 }
 
@@ -863,7 +867,7 @@ async function catalogApiResponse(request, env, ctx) {
   const limit = Math.min(48, Math.max(1, Math.trunc(Number(url.searchParams.get("limit"))) || 12));
   const cacheUrl = new URL(url.origin + url.pathname);
   cacheUrl.searchParams.set("schema", "price-range-19");
-  cacheUrl.searchParams.set("thumbnails", "plain-iota-v2");
+  cacheUrl.searchParams.set("thumbnails", "card-images-v3");
   [...url.searchParams.entries()].sort(([a], [b]) => a.localeCompare(b)).forEach(([key, value]) => cacheUrl.searchParams.append(key, value));
   const allProducts = await loadProducts(env, request);
   const taxonomyIndex = await refreshCatalogTaxonomyIndex(env, request);
