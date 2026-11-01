@@ -1,0 +1,135 @@
+/* About Us / من نحن page. Builds on styles.min.css tokens (--navy, --gold, --teal, --paper ...). */
+.about-page { background: var(--paper); }
+.about-page .site-header { color: var(--ink); background: rgba(255, 253, 247, 0.94); border-bottom: 1px solid rgba(222, 216, 203, 0.76); box-shadow: 0 10px 28px rgba(14, 32, 39, 0.07); backdrop-filter: blur(16px); }
+.about-page .site-header .main-nav { border-color: var(--line); background: #fff; }
+.about-page .site-header .main-nav a:hover, .about-page .site-header .main-nav a:focus-visible { background: #eef3ef; }
+.about-page .site-header .main-nav a[aria-current="page"] { background: var(--navy); color: #fff; }
+.about-page .language-toggle { border-color: var(--line); background: #fff; }
+.about-page .brand-logo-wrap { border-color: var(--line); }
+
+/* language switching: both languages ship in the HTML, the inactive one is hidden */
+body[data-lang="ar"] [lang="en"].t, body[data-lang="en"] [lang="ar"].t { display: none !important; }
+
+.about-page .site-header { position: sticky; top: 0; }
+.about-main { padding-top: 0; }
+.about-wrap { width: min(1120px, 100%); margin: 0 auto; }
+.about-section { padding: 72px clamp(16px, 5vw, 64px); }
+.about-section h2 { margin: 0 0 14px; color: var(--ink); font-size: clamp(26px, 3.4vw, 40px); line-height: 1.25; }
+.about-section p { margin: 0 0 14px; color: #34444b; font-size: 17px; line-height: 1.95; }
+.about-section p:last-child { margin-bottom: 0; }
+.about-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 26px; }
+.about-actions .button svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.button.outline { border-color: var(--navy); background: transparent; color: var(--navy); }
+.button.outline:hover { background: rgba(26, 39, 81, 0.06); }
+.button.gold { background: var(--gold); color: #1d1406; box-shadow: 0 14px 30px rgba(198, 146, 69, 0.3); }
+.button.gold:hover { background: #b98535; }
+
+/* 1. intro */
+.about-hero { position: relative; overflow: hidden; padding: 64px clamp(16px, 5vw, 64px) 72px; background: radial-gradient(120% 90% at 85% 0%, rgba(198, 146, 69, 0.16), transparent 60%), var(--surface); border-bottom: 1px solid var(--line); }
+.about-hero-grid { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(220px, 0.8fr); gap: clamp(28px, 5vw, 72px); align-items: center; }
+.about-hero h1 { margin: 0; color: var(--navy); font-size: clamp(36px, 5.2vw, 64px); line-height: 1.15; }
+.about-hero .about-sub { display: inline-flex; align-items: center; gap: 10px; margin: 14px 0 22px; color: #81561d; font-size: clamp(18px, 2.2vw, 22px); font-weight: 800; }
+.about-hero .about-sub::before { content: ""; width: 34px; height: 2px; background: var(--gold); }
+.about-hero p { max-width: 640px; }
+.about-seal { position: relative; display: grid; justify-items: center; gap: 16px; text-align: center; }
+.about-seal-logo { width: min(240px, 60vw); aspect-ratio: 1; padding: 10px; border: 1px solid var(--line); border-radius: 50%; background: #fff; box-shadow: var(--soft-shadow); }
+.about-seal-logo img { display: block; width: 100%; height: 100%; border-radius: 50%; background: var(--navy); object-fit: cover; }
+.about-seal-year { display: grid; gap: 2px; padding: 12px 26px; border: 1px solid rgba(198, 146, 69, 0.45); border-radius: var(--radius); background: #fff; }
+.about-seal-year strong { color: var(--navy); font-size: 34px; line-height: 1.1; }
+.about-seal-year span { color: var(--muted); font-size: 14px; }
+
+/* 2. first online store (highlight) */
+.about-first { position: relative; overflow: hidden; background: linear-gradient(140deg, var(--navy) 0%, #13204a 55%, var(--teal-dark) 100%); color: #fff; }
+.about-first::after { content: ""; position: absolute; inset: auto -120px -160px auto; width: 420px; height: 420px; border: 1px solid rgba(246, 204, 131, 0.18); border-radius: 50%; box-shadow: 0 0 0 60px rgba(246, 204, 131, 0.04), 0 0 0 120px rgba(246, 204, 131, 0.03); pointer-events: none; }
+.about-first .about-wrap { position: relative; z-index: 1; display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); gap: clamp(28px, 5vw, 64px); align-items: center; }
+.about-badge { display: inline-flex; align-items: center; gap: 8px; margin-bottom: 16px; padding: 6px 14px; border: 1px solid rgba(246, 204, 131, 0.5); border-radius: 999px; color: #f6cc83; font-size: 14px; font-weight: 800; }
+.about-badge svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; }
+.about-first h2 { color: #fff; font-size: clamp(26px, 3.6vw, 42px); }
+.about-first p { color: rgba(255, 255, 255, 0.86); }
+.about-steps { display: grid; gap: 12px; margin: 0; padding: 0; list-style: none; }
+.about-steps li { display: flex; align-items: center; gap: 14px; padding: 14px 16px; border: 1px solid rgba(255, 255, 255, 0.14); border-radius: var(--radius); background: rgba(255, 255, 255, 0.06); font-weight: 700; }
+.about-steps svg { flex: none; width: 38px; height: 38px; padding: 8px; border-radius: 50%; background: rgba(246, 204, 131, 0.16); fill: none; stroke: #f6cc83; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+
+/* 3. what we offer */
+.about-head { max-width: 720px; margin-bottom: 30px; }
+.about-head .eyebrow { margin-bottom: 6px; }
+.offer-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; margin: 0; padding: 0; list-style: none; }
+.offer-card { display: flex; flex-direction: column; gap: 12px; height: 100%; padding: 22px 18px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); color: var(--ink); transition: transform 160ms ease, border-color 160ms ease, box-shadow 160ms ease; }
+.offer-card:hover, .offer-card:focus-visible { transform: translateY(-3px); border-color: rgba(198, 146, 69, 0.7); box-shadow: var(--soft-shadow); outline: 0; }
+.offer-card svg { width: 46px; height: 46px; padding: 10px; border-radius: 12px; background: var(--gold-soft); fill: none; stroke: #6e4614; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.offer-card h3 { margin: 0; font-size: 17px; line-height: 1.5; }
+.offer-card span.more { margin-top: auto; color: var(--teal); font-size: 14px; font-weight: 800; }
+.offer-grid li:last-child .offer-card { background: linear-gradient(160deg, #fff8ea, var(--surface)); border-color: rgba(198, 146, 69, 0.55); }
+
+/* 4. church services */
+.about-services { background: var(--surface); border-block: 1px solid var(--line); }
+.about-services .about-wrap { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: clamp(24px, 5vw, 64px); align-items: center; }
+.about-services-list { display: grid; gap: 10px; margin: 0; padding: 20px; border: 1px dashed rgba(198, 146, 69, 0.6); border-radius: var(--radius); list-style: none; background: #fffaf0; }
+.about-services-list li { display: flex; align-items: center; gap: 10px; font-weight: 700; }
+.about-services-list li::before { content: ""; flex: none; width: 8px; height: 8px; border-radius: 50%; background: var(--gold); }
+
+/* 5 + 6. visit + contact */
+.about-visit-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); gap: 18px; align-items: stretch; }
+.about-card { padding: 26px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
+.about-address { display: flex; gap: 12px; margin: 6px 0 20px; color: var(--ink); font-size: 19px; font-style: normal; font-weight: 800; line-height: 1.7; }
+.about-address svg, .contact-list svg { flex: none; width: 24px; height: 24px; margin-top: 4px; fill: none; stroke: var(--burgundy); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.about-card .about-actions { margin-top: 0; }
+.about-card .about-actions .button { flex: 1 1 180px; }
+.about-map { position: relative; min-height: 340px; overflow: hidden; border: 1px solid var(--line); border-radius: var(--radius); background: repeating-linear-gradient(45deg, #efe9dc 0 12px, #f5f0e5 12px 24px); }
+.about-map iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.about-map-fallback { position: absolute; inset: 0; display: grid; place-content: center; gap: 6px; padding: 20px; color: var(--muted); text-align: center; font-size: 14px; }
+.about-map-fallback strong { color: var(--ink); font-size: 16px; }
+.contact-list { display: grid; gap: 12px; margin: 0 0 22px; padding: 0; list-style: none; }
+.contact-list a { display: flex; align-items: center; gap: 12px; color: var(--ink); font-weight: 800; }
+.contact-list a span { direction: ltr; unicode-bidi: isolate; }
+.contact-list svg { margin-top: 0; stroke: var(--teal); }
+.social-row { display: flex; flex-wrap: wrap; gap: 10px; margin: 0; padding: 0; list-style: none; }
+.social-row a { display: inline-flex; align-items: center; gap: 8px; min-height: 46px; padding: 8px 16px; border: 1px solid var(--line); border-radius: 999px; background: #fff; color: var(--ink); font-weight: 800; }
+.social-row a:hover, .social-row a:focus-visible { border-color: var(--teal); outline: 0; }
+.social-row svg { width: 22px; height: 22px; }
+.social-row .wa svg { fill: #1f9d55; }
+.about-contact-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; margin-top: 18px; }
+
+/* 7. CTA */
+.about-cta { padding: 64px clamp(16px, 5vw, 64px) 96px; }
+.about-cta-box { padding: clamp(28px, 5vw, 52px); border-radius: 14px; background: linear-gradient(135deg, #fff6e3, #f5e2bc); border: 1px solid rgba(198, 146, 69, 0.5); text-align: center; }
+.about-cta-box h2 { margin-inline: auto; max-width: 720px; }
+.about-cta-box p { max-width: 640px; margin-inline: auto; }
+.about-cta-box .about-actions { justify-content: center; }
+
+.about-footer { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 20px; padding: 26px 16px 36px; border-top: 1px solid var(--line); color: var(--muted); font-size: 14px; }
+.about-footer a { color: var(--ink); font-weight: 700; }
+
+/* GE SS TWO draws Arabic-Indic digits; English text uses a Latin face so 2001 reads as 2001 */
+body[data-lang="en"].about-page, body[data-lang="en"].about-page .about-seal-year strong { font-family: "Segoe UI", Tahoma, Arial, sans-serif; }
+body[data-lang="en"] .about-section, body[data-lang="en"] .about-hero, body[data-lang="en"] .about-cta { direction: ltr; text-align: left; }
+body[data-lang="en"] .about-cta-box { text-align: center; }
+
+@media (max-width: 1000px) {
+  .offer-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .about-first .about-wrap, .about-services .about-wrap, .about-visit-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 720px) {
+  .about-main { padding-top: 0; }
+  .about-page .site-header { height: 70px; }
+  .about-section { padding: 48px 16px; }
+  .about-hero { padding: 36px 16px 44px; }
+  .about-hero-grid { grid-template-columns: 1fr; gap: 26px; }
+  .about-seal { order: -1; grid-template-columns: auto auto; align-items: center; justify-content: start; gap: 14px; }
+  body[data-lang="ar"] .about-seal { justify-content: start; }
+  .about-seal-logo { width: 92px; padding: 5px; }
+  .about-seal-year { padding: 8px 16px; }
+  .about-seal-year strong { font-size: 24px; }
+  .about-section p { font-size: 16px; line-height: 1.9; }
+  .about-actions .button { flex: 1 1 100%; }
+  .offer-grid { gap: 10px; }
+  .offer-card { padding: 16px 14px; gap: 10px; }
+  .offer-card svg { width: 40px; height: 40px; padding: 8px; }
+  .offer-card h3 { font-size: 15px; }
+  .offer-card span.more { font-size: 13px; }
+  .about-contact-grid { grid-template-columns: 1fr; }
+  .about-map { min-height: 260px; }
+  .about-card { padding: 20px 18px; }
+  .about-address { font-size: 17px; }
+  .about-cta { padding: 40px 16px 110px; }
+}
