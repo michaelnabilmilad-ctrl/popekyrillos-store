@@ -1718,7 +1718,10 @@ function addToCart() {
   saveCartItems(items); updateCount(); root.querySelector("[data-message]").textContent="تمت إضافة المنتج إلى السلة";
 }
 async function loadRelated() {
-  try { const category=product.mainCategory||product.category||"all"; const response=await fetch(`/api/catalog?category=${encodeURIComponent(category)}&limit=5`); const data=await response.json(); const items=(data.items||[]).filter((item)=>item.id!==product.id).slice(0,4); relatedRoot.innerHTML=items.map((item)=>`<article class="product-card"><a href="/products/${encodeURIComponent(item.slug)}"><img src="${escapeHtml(assetUrl(item.thumbnail))}" alt="${escapeHtml(text(item.name))}" width="320" height="320" loading="lazy" decoding="async"></a><div class="product-info"><h3><a href="/products/${encodeURIComponent(item.slug)}">${escapeHtml(text(item.name))}</a></h3><span class="price">${money(item.price)}</span></div></article>`).join(""); } catch { document.querySelector(".product-route-related")?.remove(); }
+  // The Worker already renders up to 4 related cards for this product's main
+  // category; only fill the section from the catalog API when it came empty.
+  if (relatedRoot.children.length) return;
+  try { const category=product.mainCategory||product.category||"all"; const response=await fetch(`/api/catalog?category=${encodeURIComponent(category)}&limit=5`); const data=await response.json(); const items=(data.items||[]).filter((item)=>item.id!==product.id).slice(0,4); if(!items.length) throw new Error("no related products"); relatedRoot.innerHTML=items.map((item)=>`<article class="product-card"><a href="/products/${encodeURIComponent(item.slug)}"><img src="${escapeHtml(assetUrl(item.thumbnail))}" alt="${escapeHtml(text(item.name))}" width="320" height="320" loading="lazy" decoding="async"></a><div class="product-info"><h3><a href="/products/${encodeURIComponent(item.slug)}">${escapeHtml(text(item.name))}</a></h3><span class="price">${money(item.price)}</span></div></article>`).join(""); } catch { document.querySelector(".product-route-related")?.remove(); }
 }
 
 root.addEventListener("click", (event) => {

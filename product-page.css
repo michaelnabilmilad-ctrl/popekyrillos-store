@@ -127,3 +127,12 @@ html.coloring-group-editor-open,body.coloring-group-editor-open{overflow:hidden}
   body.has-product-buy-bar .toast{bottom:88px}
 }
 @media (prefers-reduced-motion:reduce){.product-buy-bar{transition:none}}
+
+/* Related products: cards size to their content (no empty band under the price). */
+.product-route-related .product-grid{align-items:start}
+.product-route-related .product-card>a{display:block;background:#fff}
+.product-route-related .product-card img{display:block;height:auto}
+.product-route-related .product-info{display:grid;gap:6px;min-height:0;flex:0 0 auto}
+.product-route-related .product-info h3{margin:0;font-size:16px;line-height:1.6}
+.product-route-related .product-info h3 a{color:#10212a;text-decoration:none}
+.product-route-related .price{color:#85243c;font-weight:900}
