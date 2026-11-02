@@ -70,6 +70,7 @@ const categoryCounts = activeProducts.reduce((counts, product) => {
 const staticUrls = [
   { loc: `${canonicalOrigin}/`, lastmod: today, priority: "1.0" },
   { loc: `${canonicalOrigin}/products`, lastmod: today, priority: "0.8" },
+  { loc: `${canonicalOrigin}/about`, lastmod: today, priority: "0.6" },
   { loc: `${canonicalOrigin}/contact`, lastmod: today, priority: "0.6" },
   { loc: `${canonicalOrigin}/policies`, lastmod: today, priority: "0.6" },
   { loc: `${canonicalOrigin}/shipping-policy`, lastmod: today, priority: "0.5" },
