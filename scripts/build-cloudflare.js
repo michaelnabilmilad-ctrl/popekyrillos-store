@@ -39,6 +39,8 @@ const files = [
   "sitemap.xml",
   "robots.txt",
   "policies.html",
+  "about.html",
+  "about.css",
   "admin.html",
   "admin-orders.html",
   "admin-analytics.html",
