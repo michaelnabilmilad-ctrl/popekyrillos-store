@@ -17,15 +17,15 @@
   const isEnglish = (document.documentElement.lang || "").toLowerCase().startsWith("en");
 
   const TEXT = isEnglish ? {
-    body: "We use marketing cookies (Meta) only to measure the results of our Facebook and Instagram ads. We never share your name, phone, email or what you search for.",
+    body: "Only if you accept, our server sends Meta (Facebook and Instagram) limited events to measure our ads: page visits, product views, searches (without the search words), add to cart, checkout start and order placed, with the amount in EGP, the number of items, your browser type and the ad click identifier if you came from an ad. We never send your name, phone, email, address, product names or search words, and no Meta software is loaded on your device.",
     accept: "Accept",
     reject: "Reject",
-    more: "Privacy policy"
+    more: "Details in our privacy policy"
   } : {
-    body: "نستخدم كوكيز تسويقية (Meta) فقط لقياس نتائج إعلاناتنا على فيسبوك وإنستجرام، ولا نشارك اسمك أو رقم تليفونك أو بريدك أو ما تبحث عنه.",
+    body: "بعد موافقتك فقط، يرسل خادم موقعنا إلى Meta (فيسبوك وإنستجرام) أحداثًا محدودة لقياس نتائج إعلاناتنا: زيارة الصفحات، عرض منتج، البحث (بدون كلمة البحث)، الإضافة للسلة، بدء إتمام الطلب، وتسجيل الطلب، مع قيمة المبلغ بالجنيه وعدد القطع ونوع المتصفح ومعرّف النقر على الإعلان إن وصلت من إعلان. لا نرسل اسمك أو رقم هاتفك أو بريدك أو عنوانك أو أسماء المنتجات أو كلمات البحث، ولا يتم تحميل أي برنامج من Meta على جهازك.",
     accept: "موافق",
     reject: "رفض",
-    more: "سياسة الخصوصية"
+    more: "التفاصيل في سياسة الخصوصية"
   };
 
   function readCookie(name) {

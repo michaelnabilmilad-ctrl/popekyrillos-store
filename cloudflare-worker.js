@@ -3288,7 +3288,10 @@ async function previewModeResponse(request, env, ctx) {
   if (pathname === "/robots.txt") {
     return new Response("User-agent: *\nDisallow: /\n", { headers: { ...headers, "Content-Type": "text/plain; charset=utf-8" } });
   }
-  if (!["GET", "HEAD", "OPTIONS"].includes(request.method)) {
+  // The separate Meta test Worker (wrangler.meta-test.toml) may post only to /api/meta-events,
+  // which in preview sends nothing unless a Meta Test Events code is set.
+  const metaTestPost = env.META_CAPI_PREVIEW === "1" && pathname === "/api/meta-events" && request.method === "POST";
+  if (!["GET", "HEAD", "OPTIONS"].includes(request.method) && !metaTestPost) {
     return new Response(JSON.stringify({ error: "preview_read_only", message: "هذه نسخة معاينة للقراءة فقط؛ لا يتم حفظ أو إرسال أي طلب." }), {
       status: 403,
       headers: { ...headers, "Content-Type": "application/json; charset=utf-8" }

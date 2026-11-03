@@ -28,13 +28,18 @@ const ALL_EVENTS = new Set([...BROWSER_EVENTS, "Purchase"]);
 const FBC_PATTERN = /^fb\.1\.\d{10,16}\.[A-Za-z0-9_-]{10,500}$/;
 const TOKEN_PATTERN = /^[a-f0-9]{64}$/;
 
-// In-isolate limiter: cheap first line against floods. Purchase has a second, D1-backed
-// limit because it touches the order table.
+// In-isolate limits (per Worker instance, so best effort, not global): per IP, a stricter
+// per-IP limit for Purchase, and a per-instance ceiling that caps outbound calls to Meta.
+// They never write to D1, so a flood cannot use up the D1 quota the order system shares.
+// The global first line is a Cloudflare WAF rate-limiting rule on /api/meta-events,
+// to be added in the dashboard only with Michael's approval (see the report).
 const RATE_WINDOW_MS = 10 * 60 * 1000;
 const RATE_MAX_EVENTS = 120;
 const PURCHASE_RATE_MAX = 10;
-const PURCHASE_RATE_WINDOW_SECONDS = 3600;
+const GLOBAL_WINDOW_MS = 60 * 1000;
+const GLOBAL_MAX_EVENTS = 600;
 const rateBuckets = new Map();
+let globalBucket = { start: 0, count: 0 };
 
 function noContent(status = 204) {
   return new Response(null, { status, headers: { "Cache-Control": "no-store" } });
@@ -74,7 +79,7 @@ function allowedOrigin(request) {
   return Boolean(origin) || site === "same-origin";
 }
 
-export function underRateLimit(key, now = Date.now()) {
+export function underRateLimit(key, max = RATE_MAX_EVENTS, now = Date.now()) {
   const bucket = rateBuckets.get(key);
   if (!bucket || now - bucket.start > RATE_WINDOW_MS) {
     if (rateBuckets.size > 5000) rateBuckets.clear();
@@ -82,10 +87,16 @@ export function underRateLimit(key, now = Date.now()) {
     return true;
   }
   bucket.count += 1;
-  return bucket.count <= RATE_MAX_EVENTS;
+  return bucket.count <= max;
 }
 
-export function resetMetaRateLimits() { rateBuckets.clear(); }
+function underGlobalLimit(now = Date.now()) {
+  if (now - globalBucket.start > GLOBAL_WINDOW_MS) globalBucket = { start: now, count: 0 };
+  globalBucket.count += 1;
+  return globalBucket.count <= GLOBAL_MAX_EVENTS;
+}
+
+export function resetMetaRateLimits() { rateBuckets.clear(); globalBucket = { start: 0, count: 0 }; }
 
 function boundedNumber(value, min, max) {
   const number = Number(value);
@@ -129,15 +140,6 @@ export function validateBrowserEvent(body) {
 
 async function initializeMetaTables(env) {
   await env.ANALYTICS_DB.prepare("CREATE TABLE IF NOT EXISTS meta_capi_events (event_key TEXT PRIMARY KEY, status TEXT NOT NULL, created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP)").run();
-  await env.ANALYTICS_DB.prepare("CREATE TABLE IF NOT EXISTS meta_capi_rate (key TEXT PRIMARY KEY, bucket INTEGER NOT NULL, count INTEGER NOT NULL)").run();
-}
-
-async function underPurchaseLimit(env, ipHash) {
-  const bucket = Math.floor(Date.now() / 1000 / PURCHASE_RATE_WINDOW_SECONDS);
-  const key = `purchase:${ipHash}`;
-  await env.ANALYTICS_DB.prepare("INSERT INTO meta_capi_rate (key, bucket, count) VALUES (?, ?, 1) ON CONFLICT(key) DO UPDATE SET count = CASE WHEN bucket = excluded.bucket THEN count + 1 ELSE 1 END, bucket = excluded.bucket").bind(key, bucket).run();
-  const row = await env.ANALYTICS_DB.prepare("SELECT count FROM meta_capi_rate WHERE key = ?").bind(key).first();
-  return Number(row?.count || 0) <= PURCHASE_RATE_MAX;
 }
 
 function parseSqlTime(value) {
@@ -215,16 +217,20 @@ export async function metaEventsResponse(request, env, ctx) {
   if (!underRateLimit(ipHash)) return json({ error: "rate_limited" }, 429);
   // Disabled (the default): accept and drop, so the browser behaves the same either way.
   if (!metaCapiEnabled(env)) return noContent(202);
+  // A preview/test Worker may only send to Meta's Test Events, never as live data.
+  if (env.PREVIEW_MODE === "1" && !/^[A-Za-z0-9]{3,40}$/.test(String(env.META_TEST_EVENT_CODE || "").trim())) return noContent(202);
+  if (!underGlobalLimit()) return json({ error: "rate_limited" }, 429);
 
   let event = valid;
   let eventId = crypto.randomUUID();
   let purchaseKey = "";
   if (valid.event === "Purchase") {
     if (!env.ANALYTICS_DB) return noContent(202);
-    await initializeMetaTables(env);
-    if (!(await underPurchaseLimit(env, ipHash))) return json({ error: "rate_limited" }, 429);
+    if (!underRateLimit(`purchase:${ipHash}`, PURCHASE_RATE_MAX)) return json({ error: "rate_limited" }, 429);
+    // Read only; the only write below happens for a real, recent order.
     const purchase = await verifiedPurchase(env, valid.token).catch(() => null);
     if (!purchase) return noContent(202);
+    await initializeMetaTables(env);
     purchaseKey = purchase.eventKey;
     const claim = await env.ANALYTICS_DB.prepare("INSERT OR IGNORE INTO meta_capi_events (event_key, status) VALUES (?, 'sending')").bind(purchaseKey).run();
     if (!claim?.meta?.changes) return noContent(202);

@@ -167,3 +167,45 @@ test("the endpoint never writes to the order tables", async (t) => {
   await call(e, { event: "Purchase", consent: true, token });
   assert.equal(JSON.stringify(await e.ANALYTICS_DB.prepare("SELECT * FROM customer_order_access").all()), before);
 });
+
+test("fake-token floods never write to D1 and hit the per-IP Purchase limit", async (t) => {
+  const calls = captureMeta(t);
+  const e = env();
+  let last = 0;
+  for (let i = 0; i < 11; i++) last = await call(e, { event: "Purchase", consent: true, token: i.toString(16).padStart(64, "0") });
+  assert.equal(last, 429);
+  const tables = (await e.ANALYTICS_DB.prepare("SELECT name FROM sqlite_master WHERE type = 'table'").all()).results.map((r) => r.name);
+  assert.ok(!tables.includes("meta_capi_events"), tables.join());
+  assert.equal(calls.length, 0);
+});
+
+test("per-instance ceiling caps outbound calls to Meta", async (t) => {
+  const calls = captureMeta(t);
+  const e = env();
+  let limited = 0;
+  for (let i = 0; i < 610; i++) if ((await call(e, { event: "PageView", consent: true }, { ip: `198.51.${i >> 8}.${i & 255}` })) === 429) limited++;
+  assert.equal(calls.length, 600);
+  assert.equal(limited, 10);
+});
+
+test("preview/test Worker sends only with a Meta Test Events code", async (t) => {
+  const calls = captureMeta(t);
+  assert.equal(await call(env({ PREVIEW_MODE: "1" }), { event: "PageView", consent: true }), 202);
+  assert.equal(calls.length, 0);
+  await call(env({ PREVIEW_MODE: "1", META_TEST_EVENT_CODE: "TEST777" }), { event: "PageView", consent: true });
+  assert.equal(calls.length, 1);
+  assert.equal(calls[0].body.test_event_code, "TEST777");
+});
+
+test("Meta test Worker config is isolated from production data and secrets", async () => {
+  const fs = await import("node:fs");
+  const toml = fs.readFileSync(new URL("../wrangler.meta-test.toml", import.meta.url), "utf8");
+  const prod = fs.readFileSync(new URL("../wrangler.toml", import.meta.url), "utf8");
+  const prodDbId = prod.match(/database_id = "([^"]+)"/)[1];
+  assert.ok(!toml.includes(prodDbId));
+  assert.ok(!toml.includes('database_name = "popekyrillos-analytics"'));
+  assert.ok(!/\[\[routes\]\]|custom_domain|zone_name/.test(toml));
+  assert.match(toml, /PREVIEW_MODE = "1"/);
+  assert.match(toml, /META_CAPI_SEND_IP = "false"/);
+  assert.ok(!/AIRTABLE|BOSTA|PAYMOB|FIREBASE|GITHUB_TOKEN|ANTHROPIC/.test(toml.replace(/^#.*$/gm, "")));
+});

@@ -1,0 +1,35 @@
+# Meta Conversions API TEST Worker. NOT deployed. Deploy only after Michael's separate approval:
+#   npx wrangler d1 create popekyrillos-meta-test          (new, EMPTY database; put its id below)
+#   npx wrangler secret put META_CAPI_TOKEN      --config wrangler.meta-test.toml
+#   npx wrangler secret put META_TEST_EVENT_CODE --config wrangler.meta-test.toml
+#   npx wrangler deploy --config wrangler.meta-test.toml
+# Isolation:
+#  - its own Worker name, workers.dev only: no custom domain, no production routes, no Workers Builds;
+#  - its own empty D1 database (never the production popekyrillos-analytics database);
+#  - no Airtable, Bosta, Paymob, Firebase, GitHub or assistant secrets, so no order, shipping,
+#    payment, message or notification can happen; PREVIEW_MODE refuses every other write;
+#  - events reach Meta only as Test Events (META_TEST_EVENT_CODE is required in preview).
+name = "popekyrillos-store-meta-test"
+main = "cloudflare-worker.js"
+compatibility_date = "2026-06-19"
+compatibility_flags = ["nodejs_compat"]
+workers_dev = true
+preview_urls = false
+
+[vars]
+PREVIEW_MODE = "1"
+META_CAPI_PREVIEW = "1"
+META_CAPI_ENABLED = "true"
+META_CAPI_SEND_IP = "false"
+META_DATASET_ID = "1182812737752728"
+SITE_URL = "https://popekyrillos.store"
+
+[assets]
+directory = "./dist"
+binding = "ASSETS"
+run_worker_first = true
+
+[[d1_databases]]
+binding = "ANALYTICS_DB"
+database_name = "popekyrillos-meta-test"
+database_id = "PENDING-APPROVAL-create-a-new-empty-database"
