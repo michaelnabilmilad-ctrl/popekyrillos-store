@@ -9,6 +9,7 @@ const files = [
   "assistant.js",
   "assistant.css",
   "cart-badge.js",
+  "meta-consent.js",
   "cart.html",
   "checkout.html",
   "payment.html",

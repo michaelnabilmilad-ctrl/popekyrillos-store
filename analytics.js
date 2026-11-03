@@ -148,6 +148,8 @@
   }
 
   function track(name, input = {}) {
+    // Marketing consent + Meta Conversions API (meta-consent.js) decides itself whether to use the event.
+    try { window.PKMetaConsent?.onStoreEvent?.(name, input); } catch {}
     const payload = sanitizePayload(name, input);
     if (!payload.event) return;
     sendFirstParty(payload);

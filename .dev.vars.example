@@ -6,3 +6,11 @@ ASSISTANT_SESSION_SECRET=
 TURNSTILE_SITE_KEY=
 TURNSTILE_SECRET_KEY=
 ASSISTANT_DAILY_REQUEST_LIMIT=50
+# Meta Conversions API (server side only). Off unless META_CAPI_ENABLED=true AND a token is set.
+# The real token lives only in a Cloudflare secret (wrangler secret put META_CAPI_TOKEN), never in git.
+META_CAPI_ENABLED=false
+META_CAPI_TOKEN=
+META_DATASET_ID=1182812737752728
+META_GRAPH_VERSION=v23.0
+META_TEST_EVENT_CODE=
+META_CAPI_SEND_IP=false

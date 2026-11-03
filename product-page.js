@@ -1716,6 +1716,8 @@ function addToCart() {
     items.push({productId:product.id,variantId,lineId,qty,image:currentMedalPreviewImage||assetUrl(activeImage),price:Number(selected?.price??product.price)||0,options:{...(selected?.options||{})},...(coloringDesign ? { coloringDesign } : {}),...(medalDetails || {})});
   }
   saveCartItems(items); updateCount(); root.querySelector("[data-message]").textContent="تمت إضافة المنتج إلى السلة";
+  // Notification only (Meta Conversions API, after marketing consent); the cart is already saved.
+  try { window.PKMetaConsent?.onStoreEvent?.("add_to_cart", { price: Number(selected?.price ?? product.price) || 0, quantity: qty }); } catch {}
 }
 async function loadRelated() {
   // The Worker already renders up to 4 related cards for this product's main
