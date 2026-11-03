@@ -2,8 +2,10 @@
 #   npx wrangler d1 create popekyrillos-meta-test          (new, EMPTY database; put its id below)
 #   npx wrangler secret put META_CAPI_TOKEN      --config wrangler.meta-test.toml
 #   npx wrangler secret put META_TEST_EVENT_CODE --config wrangler.meta-test.toml
+#   npx wrangler secret put META_TEST_ACCESS_KEY --config wrangler.meta-test.toml   (random, 32+ chars; without it the Worker refuses everything)
 #   npx wrangler deploy --config wrangler.meta-test.toml
 # Isolation:
+#  - locked: every request needs a signed HttpOnly cookie issued only after typing META_TEST_ACCESS_KEY on /__test-access;
 #  - its own Worker name, workers.dev only: no custom domain, no production routes, no Workers Builds;
 #  - its own empty D1 database (never the production popekyrillos-analytics database);
 #  - no Airtable, Bosta, Paymob, Firebase, GitHub or assistant secrets, so no order, shipping,

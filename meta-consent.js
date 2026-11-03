@@ -2,7 +2,7 @@
 // No Meta script is loaded and no request goes to Meta from the browser: events go to
 // the site's own /api/meta-events, only after the visitor accepted marketing cookies.
 // The browser never sends product names or ids, search terms, page URLs or customer data.
-// DRAFT TEXTS: the banner wording below is pending Michael's review (not final).
+// Short banner (mobile); full details live in the privacy policy. Wording pending Michael's final OK.
 (function () {
   "use strict";
   if (window.PKMetaConsent) return;
@@ -17,12 +17,12 @@
   const isEnglish = (document.documentElement.lang || "").toLowerCase().startsWith("en");
 
   const TEXT = isEnglish ? {
-    body: "Only if you accept, our server sends Meta (Facebook and Instagram) limited events to measure our ads: page visits, product views, searches (without the search words), add to cart, checkout start and order placed, with the amount in EGP, the number of items, your browser type and the ad click identifier if you came from an ad. We never send your name, phone, email, address, product names or search words, and no Meta software is loaded on your device.",
+    body: "Only with your consent, we use marketing cookies to measure our Facebook and Instagram ads. We never send your name, phone, email, product names or search words.",
     accept: "Accept",
     reject: "Reject",
     more: "Details in our privacy policy"
   } : {
-    body: "بعد موافقتك فقط، يرسل خادم موقعنا إلى Meta (فيسبوك وإنستجرام) أحداثًا محدودة لقياس نتائج إعلاناتنا: زيارة الصفحات، عرض منتج، البحث (بدون كلمة البحث)، الإضافة للسلة، بدء إتمام الطلب، وتسجيل الطلب، مع قيمة المبلغ بالجنيه وعدد القطع ونوع المتصفح ومعرّف النقر على الإعلان إن وصلت من إعلان. لا نرسل اسمك أو رقم هاتفك أو بريدك أو عنوانك أو أسماء المنتجات أو كلمات البحث، ولا يتم تحميل أي برنامج من Meta على جهازك.",
+    body: "بعد موافقتك فقط، نستخدم كوكيز التسويق لقياس نتائج إعلاناتنا على فيسبوك وإنستجرام. لا نرسل اسمك أو هاتفك أو بريدك أو أسماء المنتجات أو كلمات البحث.",
     accept: "موافق",
     reject: "رفض",
     more: "التفاصيل في سياسة الخصوصية"

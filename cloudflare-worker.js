@@ -9,6 +9,7 @@ import { onRequest as updateProducts } from "./functions/api/update-products.js"
 import { onRequest as updateTaxonomy } from "./functions/api/update-taxonomy.js";
 import { bestSellersResponse } from "./functions/api/best-sellers.js";
 import { metaEventsResponse } from "./functions/_meta-capi.js";
+import { testAccessGate } from "./functions/_test-access.js";
 import { coloringDesignForProduct } from "./coloringDesigns.js";
 import { backfillAirtableOrderProducts } from "./functions/_airtable-order-backfill.js";
 import { checkoutReceipt, customerOrdersResponse, ensureOrderAccess, purchaseSnapshot } from "./functions/_customer-orders.js";
@@ -3285,6 +3286,9 @@ export {
 async function previewModeResponse(request, env, ctx) {
   const { pathname } = new URL(request.url);
   const headers = { "Cache-Control": "no-store", "X-Robots-Tag": "noindex, nofollow" };
+  // The Meta test Worker is locked behind a typed access key (not just a secret link).
+  const locked = await testAccessGate(request, env);
+  if (locked) return locked;
   if (pathname === "/robots.txt") {
     return new Response("User-agent: *\nDisallow: /\n", { headers: { ...headers, "Content-Type": "text/plain; charset=utf-8" } });
   }
