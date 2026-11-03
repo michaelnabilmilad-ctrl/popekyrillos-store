@@ -209,3 +209,12 @@ test("Meta test Worker config is isolated from production data and secrets", asy
   assert.match(toml, /META_CAPI_SEND_IP = "false"/);
   assert.ok(!/AIRTABLE|BOSTA|PAYMOB|FIREBASE|GITHUB_TOKEN|ANTHROPIC/.test(toml.replace(/^#.*$/gm, "")));
 });
+
+test("only the isolated test Worker accepts its own workers.dev origin", async (t) => {
+  const calls = captureMeta(t);
+  const testUrl = "https://popekyrillos-store-meta-test.example.workers.dev/api/meta-events";
+  const mk = () => new Request(testUrl, { method: "POST", headers: { Origin: new URL(testUrl).origin, "Content-Type": "application/json", Cookie: "pk_mkt_consent=granted", "User-Agent": "UA" }, body: JSON.stringify({ event: "PageView", consent: true }) });
+  assert.equal((await metaEventsResponse(mk(), env(), null)).status, 403);
+  assert.equal((await metaEventsResponse(mk(), env({ PREVIEW_MODE: "1", META_CAPI_PREVIEW: "1", META_TEST_EVENT_CODE: "TEST1" }), null)).status, 202);
+  assert.equal(calls.length, 1);
+});

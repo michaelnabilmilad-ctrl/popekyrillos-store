@@ -71,9 +71,12 @@ function clientIp(request) {
   return String(request.headers.get("CF-Connecting-IP") || "").trim().slice(0, 64);
 }
 
-function allowedOrigin(request) {
+function allowedOrigin(request, env) {
   const origin = request.headers.get("Origin");
-  if (origin && origin !== SITE_ORIGIN && origin !== "https://www.popekyrillos.store") return false;
+  // The isolated Meta test Worker runs on its own workers.dev address; only there is its
+  // own origin accepted as well.
+  const ownTestOrigin = env?.META_CAPI_PREVIEW === "1" && env?.PREVIEW_MODE === "1" ? new URL(request.url).origin : "";
+  if (origin && origin !== SITE_ORIGIN && origin !== "https://www.popekyrillos.store" && origin !== ownTestOrigin) return false;
   const site = request.headers.get("Sec-Fetch-Site");
   if (site && site !== "same-origin") return false;
   return Boolean(origin) || site === "same-origin";
@@ -200,7 +203,7 @@ async function sendToMeta(env, metaEvent) {
 
 export async function metaEventsResponse(request, env, ctx) {
   if (request.method !== "POST") return json({ error: "method_not_allowed" }, 405);
-  if (!allowedOrigin(request)) return json({ error: "origin_not_allowed" }, 403);
+  if (!allowedOrigin(request, env)) return json({ error: "origin_not_allowed" }, 403);
   if (!String(request.headers.get("Content-Type") || "").toLowerCase().startsWith("application/json")) return json({ error: "invalid_content_type" }, 415);
   const declared = Number(request.headers.get("Content-Length") || 0);
   if (declared > MAX_BODY_BYTES) return json({ error: "payload_too_large" }, 413);
