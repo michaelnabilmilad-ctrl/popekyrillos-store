@@ -81,12 +81,14 @@
     document.head.append(st);
   }
 
-  function images(product) { return [...new Set([...(product.images || []), product.image].filter(Boolean))]; }
+  // Photos to choose from: the product's own photos plus any engraving-only preview photo
+  // uploaded here (kept apart from the product photos, which are never changed).
+  function images(product, extra = []) { return [...new Set([...(product.images || []), product.image, product.engraving?.previewImage, ...extra].filter(Boolean))]; }
 
   function defaultsFor(product) {
     const s = E.normalizeSettings({ ...(product.engraving || {}) });
     s.enabled = s.requested; delete s.requested; delete s.missing;
-    if (!s.previewImage || !images(product).includes(s.previewImage)) s.previewImage = images(product).find((i) => /unboxed/i.test(i)) || images(product)[0] || "";
+    // No photo is picked for the admin: the shop chooses (or uploads) the one that suits.
     return s;
   }
 
@@ -104,12 +106,15 @@
     const { draft, product } = ctx;
     const z = draft.zone;
     const body = ctx.section.querySelector("[data-ae-body]");
-    const imgs = images(product);
+    const imgs = images(product, ctx.uploaded || []);
     body.innerHTML = `
       <label class="ae-toggle"><input type="checkbox" data-ae="enabled" ${draft.enabled ? "checked" : ""}> السماح بالكتابة على هذا المنتج</label>
       <p class="hint">لما يتفعّل، صفحة المنتج تعرض للعميل اختيار «أضف اسم الكاهن» مع معاينة على الصورة اللي تختارها هنا. التعديلات هنا مسودة لحد ما تضغط «اعتماد».</p>
       <div class="ae-row"><strong>قالب جاهز:</strong>${Object.entries(TEMPLATES).map(([k, t]) => `<button class="button ghost" type="button" data-ae-template="${k}">${esc(t.label)}</button>`).join("")}<small class="hint">بيملأ اللون واللغات والخط بس؛ كل حاجة تفضل قابلة للتعديل.</small></div>
-      <div class="ae-row"><strong>صورة المعاينة:</strong><div class="ae-thumbs">${imgs.map((src) => `<button type="button" data-ae-image="${esc(src)}" aria-pressed="${src === draft.previewImage}" title="${esc(src)}"><img src="${esc(ctx.assetUrl(src))}" alt=""></button>`).join("") || "<span>أضف صور للمنتج الأول.</span>"}</div></div>
+      <div class="ae-row"><strong>صورة المعاينة:</strong><div class="ae-thumbs">${imgs.map((src) => `<button type="button" data-ae-image="${esc(src)}" aria-pressed="${src === draft.previewImage}" title="${esc(src)}"><img src="${esc(ctx.assetUrl(src))}" alt=""></button>`).join("")}</div>
+        <label class="button ghost ae-upload">رفع صورة معاينة خاصة<input type="file" accept="image/*" data-ae-upload hidden></label><small class="hint" data-ae-upload-status></small></div>
+      <p class="hint">ممكن تكون مختلفة عن صور المنتج، ومش بتتضاف لصور المنتج ولا بتغيّرها. الأفضل صورة للصليب من فوق، على خلفية فاتحة، ومن غير علامة مائية على اليد.</p>
+      <label class="ae-row"><input type="checkbox" data-ae="photoConfirmed" ${draft.photoConfirmed ? "checked" : ""}> <b>الصورة حقيقية لنفس المنتج، ومكان الكتابة واضح، ومفيش علامة مائية فوق مكان الاسم</b></label>
       <div class="ae-grid">
         <div>
           <div class="ae-canvas"><canvas data-ae-full width="900" height="900" aria-label="اسحب لتحريك منطقة الكتابة"></canvas></div>
@@ -122,7 +127,8 @@
           <label class="ae-ctl"><span>طريقة التنفيذ</span><select data-ae-s="finish">${Object.entries(E.FINISHES).map(([k, f]) => `<option value="${k}">${esc(f.label)}</option>`).join("")}</select><span></span></label>
           <div class="ae-ctl"><span>لون الكتابة <b class="ae-bad">*</b></span><select data-ae-color aria-label="لون الكتابة"><option value="">— اختار اللون —</option>${E.COLOR_PRESETS.map((c) => `<option value="${c.value}">${esc(c.label)}</option>`).join("")}<option value="custom">لون آخر…</option></select><input type="color" data-ae-color-custom value="${z.color || "#18130e"}" aria-label="لون مخصص" ${E.COLOR_PRESETS.some((c) => c.value === z.color) || !z.color ? "hidden" : ""}></div>
           <p class="hint">مفيش لون افتراضي: لازم تختار لون الكتابة لكل منتج. لحد ما يتحدد، المعاينة هنا بالرمادي ومش هتظهر للعملاء.</p>
-          <div class="ae-row"><span>أقصى عدد حروف:</span>${["ar", "en", "cop"].map((l) => `<label>${LANG_LABEL[l]} <input type="number" min="1" max="60" value="${z.maxChars[l]}" data-ae-max="${l}" style="width:60px"></label>`).join("")}</div>
+          <div class="ae-row"><span>أقصى عدد حروف:</span>${["ar", "en", "cop"].map((l) => `<label>${LANG_LABEL[l]} <input type="number" min="1" max="60" value="${z.maxChars[l]}" data-ae-max="${l}" style="width:60px"></label>`).join("")}<button class="button ghost" type="button" data-ae-act="measure">قياس من مساحة الكتابة</button></div>
+          <p class="hint" data-ae-measure>القياس بيجرّب أسماء عريضة بالخط المختار على الصورة دي، ويحط أطول عدد حروف بيفضل واضح بأصغر حجم مسموح. وكل اسم بيتقاس تاني وقت ما العميل يكتبه.</p>
           <div class="ae-row"><span>اللغات المتاحة:</span>${["ar", "en", "cop"].map((l) => `<label><input type="checkbox" data-ae-lang="${l}" ${draft.languages.includes(l) ? "checked" : ""}> ${LANG_LABEL[l]}</label>`).join("")}</div>
           <label class="ae-ctl"><span>الخط القبطي</span><select data-ae-coptic><option value="noto">Noto Sans Coptic (مرخص مجانًا)</option><option value="athanasius">CS New Athanasius</option></select><span></span></label>
           <p class="hint" data-ae-coptic-note></p>
@@ -162,6 +168,8 @@
     const t = e.target, z = ctx.draft.zone;
     if (t.dataset.ae === "enabled") ctx.draft.enabled = t.checked;
     else if (t.dataset.ae === "freeNote") ctx.draft.freeNote = t.checked;
+    else if (t.dataset.ae === "photoConfirmed") ctx.draft.photoConfirmed = t.checked;
+    else if (t.matches("[data-ae-upload]")) { uploadPreview(t.files?.[0]); t.value = ""; return; }
     else if (t.matches("[data-ae-coptic]")) ctx.draft.copticFont = t.value;
     else if (t.dataset.ae === "confirmed") z.confirmed = t.checked;
     else if (t.matches("[data-ae-color]")) {
@@ -187,6 +195,8 @@
     if (img) {
       ctx.draft.previewImage = img.dataset.aeImage;
       ctx.draft.zone.confirmed = false; syncConfirm();
+      ctx.draft.photoConfirmed = false;
+      const pc = ctx.section.querySelector('[data-ae="photoConfirmed"]'); if (pc) pc.checked = false;
       ctx.section.querySelectorAll("[data-ae-image]").forEach((b) => b.setAttribute("aria-pressed", String(b === img)));
       changed();
       return;
@@ -205,13 +215,15 @@
     if (!act) return;
     if (act.dataset.aeAct === "reset") { ctx.draft = defaultsFor(ctx.product); build(); return; }
     if (act.dataset.aeAct === "apply") apply();
+    if (act.dataset.aeAct === "measure") measure();
   }
 
   function syncConfirm() { const c = ctx.section.querySelector('[data-ae="confirmed"]'); if (c) c.checked = ctx.draft.zone.confirmed === true; }
-  const MISSING_LABEL = { previewImage: "صورة المعاينة", color: "لون الكتابة", zone: "مراجعة مكان الكتابة" };
+  const MISSING_LABEL = { previewImage: "صورة المعاينة", photo: "تأكيد إن صورة المعاينة مناسبة", color: "لون الكتابة", zone: "مراجعة مكان الكتابة" };
   function missingOf(s) {
     const m = [];
     if (!s.previewImage) m.push("previewImage");
+    if (!s.photoConfirmed) m.push("photo");
     if (!s.zone.color) m.push("color");
     if (!s.zone.confirmed) m.push("zone");
     return m;
@@ -247,6 +259,58 @@
     ctx.markDirty?.();
     status();
   }
+  async function measure() {
+    const note = ctx.section.querySelector("[data-ae-measure]");
+    if (!ctx.draft.previewImage) { note.textContent = "اختار صورة المعاينة الأول."; return; }
+    note.textContent = "جاري القياس…";
+    const zone = cleanDraft().zone;
+    const legacy = ctx.draft.copticFont === "athanasius";
+    const found = {};
+    for (const lang of ctx.draft.languages) {
+      await E.loadFont(lang, { legacy }).catch(() => {});
+      try { found[lang] = await E.measureMaxChars({ imageSrc: ctx.assetUrl(ctx.draft.previewImage), zone, lang, legacy }); }
+      catch (error) { note.textContent = `تعذر القياس: ${error?.message || error}`; return; }
+      if (found[lang] > 0) {
+        ctx.draft.zone.maxChars[lang] = found[lang];
+        const input = ctx.section.querySelector(`[data-ae-max="${lang}"]`); if (input) input.value = found[lang];
+      }
+    }
+    note.textContent = `نتيجة القياس: ${Object.entries(found).map(([l, n]) => `${LANG_LABEL[l]} ${n || "المساحة صغيرة جدًا"}`).join(" · ")}. تقدر تعدّلها يدويًا.`;
+    note.dataset.measured = JSON.stringify(found);
+    changed();
+  }
+
+  // Engraving-only preview photo: converted to WebP in the browser and stored through the same
+  // upload the product photos use, as a new file. It is not added to the product's photos.
+  async function uploadPreview(file) {
+    const note = ctx.section.querySelector("[data-ae-upload-status]");
+    if (!file || !file.type.startsWith("image/")) { note.textContent = "اختار ملف صورة."; return; }
+    try {
+      note.textContent = "جاري تجهيز الصورة…";
+      const bitmap = await createImageBitmap(file);
+      let base64 = "";
+      for (const [side, quality] of [[1600, 0.9], [1400, 0.85], [1200, 0.8]]) {
+        const k = Math.min(1, side / Math.max(bitmap.width, bitmap.height));
+        const c = document.createElement("canvas"); c.width = Math.round(bitmap.width * k); c.height = Math.round(bitmap.height * k);
+        c.getContext("2d").drawImage(bitmap, 0, 0, c.width, c.height);
+        base64 = c.toDataURL("image/webp", quality).split(",")[1] || "";
+        if (base64.length * 0.75 < 1.9 * 1024 * 1024) break;
+      }
+      note.textContent = "جاري الرفع…";
+      const res = await fetch("/admin/api/upload-product-image", { method: "POST", credentials: "same-origin", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ filename: `engraving-preview-${file.name}`, productId: `engraving-${ctx.product.id}`, imageBase64: base64 }) });
+      const out = await res.json().catch(() => ({}));
+      if (!res.ok || !out.path) throw new Error(out.error || `HTTP ${res.status}`);
+      ctx.uploaded = [...(ctx.uploaded || []), out.path];
+      ctx.draft.previewImage = out.path;
+      ctx.draft.photoConfirmed = false;
+      ctx.draft.zone.confirmed = false;
+      build();
+      ctx.section.querySelector("[data-ae-upload-status]").textContent = "اترفعت. حدد مكان الكتابة عليها، وأكّد إنها مناسبة.";
+    } catch (error) {
+      note.textContent = `تعذر رفع الصورة: ${error.message}`;
+    }
+  }
+
   function alertStatus(msg) { const node = ctx.section.querySelector("[data-ae-status]"); node.className = "ae-status is-dirty"; node.textContent = msg; }
 
   async function draw() {

@@ -9,7 +9,7 @@
   const esc = (v) => String(v ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   const LANG_LABEL = { ar: "العربية", en: "English", cop: "القبطية" };
   const PLACEHOLDER = { ar: "مثال: القمص يوحنا مرقس", en: "e.g. Fr. John Mark", cop: "ⲒⲰⲀⲚⲚⲎⲤ" };
-  const COPTIC_KEYS = ["Ⲁ","Ⲃ","Ⲅ","Ⲇ","Ⲉ","Ⲋ","Ⲍ","Ⲏ","Ⲑ","Ⲓ","Ⲕ","Ⲗ","Ⲙ","Ⲛ","Ⲝ","Ⲟ","Ⲡ","Ⲣ","Ⲥ","Ⲧ","Ⲩ","Ⲫ","Ⲭ","Ⲯ","Ⲱ","Ϣ","Ϥ","Ϧ","Ϩ","Ϫ","Ϭ","Ϯ"];
+  const COPTIC_KEYS = ["Ⲁ","Ⲃ","Ⲅ","Ⲇ","Ⲉ","Ⲍ","Ⲏ","Ⲑ","Ⲓ","Ⲕ","Ⲗ","Ⲙ","Ⲛ","Ⲝ","Ⲟ","Ⲡ","Ⲣ","Ⲥ","Ⲧ","Ⲩ","Ⲫ","Ⲭ","Ⲯ","Ⲱ","Ϣ","Ϥ","Ϧ","Ϩ","Ϫ","Ϭ","Ϯ"];
 
   let host = null, settings = null, imageSrc = "", state = null, last = null, ticket = 0, idSeq = 0;
 
@@ -54,7 +54,6 @@
     host.addEventListener("input", (e) => { if (e.target.matches("[data-pe-input]")) onName(); });
     host.addEventListener("click", onClick);
     syncLang();
-    E.loadFont(state.lang, fontOpts()).catch(() => {});
     return true;
   }
 
@@ -90,7 +89,8 @@
     input.placeholder = PLACEHOLDER[state.lang];
     input.classList.toggle("is-coptic", state.lang === "cop");
     $("[data-pe-keys]").hidden = state.lang !== "cop";
-    E.loadFont(state.lang, fontOpts()).then(draw, draw);
+    // Fonts load only once the customer chooses to add a name (no cost for everyone else).
+    if (state.mode === "name") E.loadFont(state.lang, fontOpts()).then(draw, draw);
   }
   function unconfirm() { const c = $("[data-pe-confirm]"); if (c) c.checked = false; }
   function clearError() { const n = $("[data-pe-err]"); if (n && n.dataset.kind === "submit") { n.textContent = ""; n.dataset.kind = ""; } }

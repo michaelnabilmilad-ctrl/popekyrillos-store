@@ -4,6 +4,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import vm from "node:vm";
+import { createHash } from "node:crypto";
 import { createRequire } from "node:module";
 import { createOrderResponse, normalizeOrderItems } from "../cloudflare-worker.js";
 import { airtableFixture } from "./helpers/customer-order-fixture.mjs";
@@ -14,7 +15,7 @@ const { CrossEngraving: E, CopticLegacy } = require("../cross-engraving.js");
 const checkoutSource = fs.readFileSync(new URL("../checkout-flow.js", import.meta.url), "utf8");
 const origin = "https://popekyrillos.store";
 
-const engraving = { enabled: true, previewImage: "assets/products/gallery/cross-unboxed.webp", languages: ["ar", "en", "cop"], fee: 0, version: 3,
+const engraving = { enabled: true, previewImage: "assets/products/gallery/cross-unboxed.webp", photoConfirmed: true, languages: ["ar", "en", "cop"], fee: 0, version: 3,
   zone: { x: 0.64, y: 0.6, len: 0.33, thick: 0.05, angle: 90, surface: "flat", finish: "ink", color: "#18130e", confirmed: true, maxChars: { ar: 24, en: 24, cop: 20 } } };
 const catalog = [
   { id: "cross-2", name: "طقم صلبان يد وصدر كوريان - موديل 2", price: 770, stock: "متاح", variants: [], engraving },
@@ -73,6 +74,9 @@ test("engraving stays off for customers until the photo, the colour and the writ
   assert.deepEqual(unchecked.missing, ["zone"]);
   const noPhoto = E.normalizeSettings({ ...engraving, previewImage: "" });
   assert.deepEqual(noPhoto.missing, ["previewImage"]);
+  const photoNotChecked = E.normalizeSettings({ ...engraving, photoConfirmed: false });
+  assert.equal(photoNotChecked.enabled, false);
+  assert.deepEqual(photoNotChecked.missing, ["photo"], "the admin must confirm the preview photo suits");
 });
 
 test("CS New Athanasius display encoding round-trips and never shows a wrong letter", () => {
@@ -164,6 +168,8 @@ test("a name on a product without engraving, a closed language or a too-long nam
   assert.equal((await f.order([line("أبونا مينا")])).status, 409, "no writing colour set yet");
   f.catalog = [{ ...catalog[0], engraving: { ...engraving, zone: { ...engraving.zone, confirmed: false } } }];
   assert.equal((await f.order([line("أبونا مينا")])).status, 409, "writing area not checked yet");
+  f.catalog = [{ ...catalog[0], engraving: { ...engraving, photoConfirmed: false } }];
+  assert.equal((await f.order([line("أبونا مينا")])).status, 409, "preview photo not confirmed yet");
   assert.equal(f.creates, 0);
   assert.equal(f.writes.length, 0);
 });
@@ -174,5 +180,9 @@ test("product pages load the engraving files only when the admin enabled it", ()
   assert.match(worker, /\$\{engravingScripts\}<script src="\/product-page\.js\?v=26" defer><\/script>/);
   const build = fs.readFileSync(new URL("../scripts/build-cloudflare.js", import.meta.url), "utf8");
   for (const file of ["cross-engraving.js", "product-engraving.js", "product-engraving.css", "admin-engraving.js"]) assert.match(build, new RegExp(`"${file.replace(".", "\\.")}"`));
-  for (const f of ["CS-New-Athanasius.ttf", "cs-new-athanasius.ttf"]) assert.ok(!fs.existsSync(new URL(`../assets/fonts/engraving/${f}`, import.meta.url)), "CS New Athanasius is not shipped until its licence is confirmed");
+  // CS New Athanasius ships only with its licence note (owner's confirmation) and as the exact file checked.
+  const font = fs.readFileSync(new URL("../assets/fonts/engraving/cs-new-athanasius.ttf", import.meta.url));
+  const note = fs.readFileSync(new URL("../assets/fonts/engraving/LICENSE-cs-new-athanasius.txt", import.meta.url), "utf8");
+  const sha = createHash("sha256").update(font).digest("hex");
+  assert.ok(note.includes(sha), "the licence note names this exact file");
 });

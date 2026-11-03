@@ -1595,6 +1595,7 @@ function mountBuyBar() {
   // preview and the form, so it stays hidden; the real add button is just below the form.
   const engravingBox = root.querySelector("[data-engraving-slot]");
   const coversCustomization = () => {
+    if (!engravingBox) return false; // products without engraving keep the bar exactly as before
     const active = document.activeElement;
     if (active && active !== document.body && active.matches("input:not([type=radio]):not([type=checkbox]),textarea,select")) return true;
     const vv = window.visualViewport;

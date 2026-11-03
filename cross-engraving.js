@@ -73,9 +73,9 @@
   "use strict";
 
   const FONT_BASE = (global.CROSS_ENGRAVING_FONT_BASE || "/assets/fonts/engraving/");
-  // CS New Athanasius is chosen per product in admin (copticFont: "athanasius"). Its file is NOT
-  // part of the code: the shop adds the licensed copy at this path once the licence is confirmed
-  // (a local test may point elsewhere). Until the file is there, Coptic falls back to
+  // CS New Athanasius is chosen per product in admin (copticFont: "athanasius"). The shop's own
+  // copy ships at this path (licence confirmed by the owner, 2026-11-03; see
+  // LICENSE-cs-new-athanasius.txt). If it ever fails to load, Coptic falls back to
   // Noto Sans Coptic (OFL), so a product never shows a broken preview.
   const COPTIC_LEGACY_URL = global.CROSS_ENGRAVING_COPTIC_LEGACY_FONT_URL || `${FONT_BASE}cs-new-athanasius.ttf`;
   const LANGS = {
@@ -151,7 +151,8 @@
         img.decoding = "async";
         img.crossOrigin = "anonymous";
         img.onload = () => resolve(img);
-        img.onerror = reject;
+        // A failed load is not kept, so a retry (e.g. right after an upload) can succeed.
+        img.onerror = () => { imageCache.delete(src); reject(new Error(`image failed to load: ${src}`)); };
         img.src = src;
       }));
     }
@@ -412,6 +413,7 @@
     zone.finish = FINISHES[z.finish] ? z.finish : (LEGACY_FINISH[z.finish] || "ink");
     zone.color = isHexColor(z.color) ? z.color.toLowerCase() : "";
     zone.confirmed = z.confirmed === true;
+    const photoConfirmed = src.photoConfirmed === true;
     zone.maxChars = {};
     for (const l of ["ar", "en", "cop"]) zone.maxChars[l] = Math.round(clampNum(z.maxChars?.[l], [1, 60], ZONE_DEFAULTS.maxChars[l]));
     const languages = (Array.isArray(src.languages) ? src.languages : ["ar", "en", "cop"]).filter((l) => LANGS[l]);
@@ -421,6 +423,7 @@
     const missing = [];
     if (!previewImage) missing.push("previewImage");
     if (!zone.color) missing.push("color");
+    if (!photoConfirmed) missing.push("photo");
     if (!zone.confirmed) missing.push("zone");
     return {
       enabled: src.enabled === true && missing.length === 0,
@@ -430,11 +433,31 @@
       zone,
       languages: languages.length ? [...new Set(languages)] : ["ar"],
       fee: 0, // engraving is free (owner's decision 2026-11-03); no fee field is used
+      photoConfirmed,
       copticFont: src.copticFont === "athanasius" ? "athanasius" : "noto",
       freeNote: src.freeNote === true,
       version: Math.max(1, Math.floor(Number(src.version) || 1))
     };
   }
+  // Admin helper: the longest name (in letters) that still fits the writing area at the smallest
+  // allowed size, measured with the real font on this product's photo. Wide sample text per
+  // language, so ordinary names of that length fit too; each name is still measured live on the
+  // product page and refused there if it does not fit.
+  const WIDE_SAMPLES = {
+    ar: "القمص أنطونيوس عبد المسيح بشاي مرقس يوحنا القمص أنطونيوس عبد المسيح بشاي",
+    en: "FR. MICHAEL WILLIAM GEORGE MARK ANTHONY FR. MICHAEL WILLIAM GEORGE MARK",
+    cop: "ⲠⲒⲀⲄⲒⲞⲤ ⲘⲀⲢⲔⲞⲤ ⲠⲒⲀⲠⲞⲤⲦⲞⲖⲞⲤ ⲀⲚⲦⲰⲚⲒⲞⲤ ⲠⲒⲀⲄⲒⲞⲤ ⲘⲀⲢⲔⲞⲤ ⲠⲒⲀⲠⲞⲤⲦⲞⲖⲞⲤ"
+  };
+  async function measureMaxChars({ imageSrc, zone, lang, legacy = false }) {
+    const letters = [...WIDE_SAMPLES[lang]];
+    const sample = (n) => letters.slice(0, n).join("").trim();
+    const fits = async (n) => (await render({ imageSrc, zone: { ...zone, maxChars: { ar: 60, en: 60, cop: 60 } }, text: sample(n), lang, legacy })).fit?.fits === true;
+    if (!(await fits(3))) return 0;
+    let lo = 3, hi = Math.min(60, letters.length);
+    while (lo < hi) { const mid = Math.ceil((lo + hi) / 2); if (await fits(mid)) lo = mid; else hi = mid - 1; }
+    return lo;
+  }
+
   // Stable short key per (language, name): two names on the same cross = two cart lines.
   function lineKey(lang, name) {
     const value = `${lang}\u0000${cleanName(name)}`;
@@ -447,6 +470,6 @@
     return `eng-${h1.toString(36)}${h2.toString(36)}`;
   }
 
-  global.CrossEngraving = { LANGS, FINISHES, cleanName, validateName, loadFont, drawSpec, legacyReady, render, drawZoom, drawFull, thumbnail, normalizeSettings, lineKey, ZONE_DEFAULTS, COLOR_PRESETS, isHexColor };
+  global.CrossEngraving = { LANGS, FINISHES, cleanName, validateName, loadFont, drawSpec, legacyReady, render, drawZoom, drawFull, thumbnail, normalizeSettings, lineKey, ZONE_DEFAULTS, COLOR_PRESETS, isHexColor, measureMaxChars };
   if (typeof module !== "undefined" && module.exports) module.exports.CrossEngraving = global.CrossEngraving;
 })(typeof window !== "undefined" ? window : globalThis);

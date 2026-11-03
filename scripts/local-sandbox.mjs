@@ -64,6 +64,9 @@ airtable.orders.clear();
 Object.defineProperty(airtable, "catalog", { get: () => github.products() });
 
 const blocked = [];
+// The in-memory GitHub keeps text only, so photos uploaded in admin are also kept here as bytes
+// and served from this map (the real upload commits the WebP file to products-data).
+const uploads = new Map();
 globalThis.fetch = async (input, init) => {
   const url = new URL(input instanceof Request ? input.url : input);
   if (url.hostname === "api.airtable.com") {
@@ -87,7 +90,7 @@ function sandboxState() {
   return {
     orders: [...airtable.orders.values()].map((order) => ({ id: order.id, ...order.fields })),
     orderLines: airtable.details.map((row) => ({ order: row.fields["رقم الأوردر"]?.[0], quantity: row.fields["الكمية"], unitPrice: row.fields["سعر القطعة"], notes: row.fields["ملاحظات"] || "" })),
-    engravingProducts: products.filter((p) => p.engraving).map((p) => ({ id: p.id, engraving: p.engraving })),
+    engravingProducts: products.filter((p) => p.engraving).map((p) => ({ id: p.id, images: p.images, image: p.image, engraving: p.engraving })),
     dataCommits: github.commitCount(),
     blockedRequests: blocked
   };
@@ -112,6 +115,12 @@ http.createServer(async (req, res) => {
     for (const [key, value] of Object.entries(req.headers)) if (typeof value === "string") headers.set(key, value);
     // The order endpoint only accepts the shop's own origin; the sandbox page is that shop.
     if (url.pathname.startsWith("/api/") && headers.get("origin") === url.origin) headers.set("origin", "https://popekyrillos.store");
+    const uploaded = uploads.get(url.pathname.replace(/^\//, "").replace(/^assets\/detail\//, "assets/optimized/"));
+    if (uploaded && req.method === "GET") {
+      res.writeHead(200, { "Content-Type": "image/webp", "Cache-Control": "no-store" });
+      res.end(uploaded);
+      return;
+    }
     const request = new Request(url, { method: req.method, headers, body: ["GET", "HEAD"].includes(req.method) ? undefined : Buffer.concat(chunks) });
     const pending = [];
     let response = await worker.fetch(request, env, { waitUntil: (p) => pending.push(Promise.resolve(p).catch(() => {})), passThroughOnException() {} });
@@ -122,6 +131,11 @@ http.createServer(async (req, res) => {
       headersOut.delete("Content-Length");
       headersOut.delete("Content-Security-Policy");
       response = new Response(html, { status: response.status, headers: headersOut });
+    }
+    if (url.pathname === "/admin/api/upload-product-image" && response.ok) {
+      const result = await response.clone().json().catch(() => ({}));
+      const sent = JSON.parse(Buffer.concat(chunks).toString("utf8") || "{}");
+      if (result.path && sent.imageBase64) uploads.set(result.path, Buffer.from(String(sent.imageBase64).replace(/^data:image\/webp;base64,/, ""), "base64"));
     }
     const out = {};
     response.headers.forEach((value, key) => { out[key] = value; });

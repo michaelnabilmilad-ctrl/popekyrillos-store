@@ -1951,10 +1951,11 @@ function orderItemEngraving(value) {
   };
 }
 
-// Customers see engraving only after the admin enabled it AND set the preview photo, the
-// writing colour and checked the writing area (same rule as CrossEngraving.normalizeSettings).
+// Customers see engraving only after the admin enabled it AND set the preview photo (and confirmed
+// it suits), the writing colour and checked the writing area (same rule as CrossEngraving.normalizeSettings).
 function engravingReady(settings) {
   return Boolean(settings && settings.enabled === true && typeof settings.previewImage === "string" && settings.previewImage
+    && settings.photoConfirmed === true
     && /^#[0-9a-f]{6}$/i.test(String(settings.zone?.color || "")) && settings.zone?.confirmed === true);
 }
 
