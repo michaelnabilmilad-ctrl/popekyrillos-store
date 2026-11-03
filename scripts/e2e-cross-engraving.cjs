@@ -22,7 +22,11 @@ const PRODUCT = "popek-corian-cross-set-2";
 const PLAIN = "atb3ho-10555319877797"; // a normal product (book), price 25
 const ZONE = { x: 0.6385, y: 0.6, len: 0.33, thick: 0.05, angle: 90, fontMax: 0.52, fontMin: 0.38, weight: 0.03, padding: 0.08, curve: 0 };
 const MULTI = "popek-corian-cross-set-9"; // stands in for an ivory cross (3 languages)
-const MULTI_ZONE = { x: 0.631, y: 0.61, len: 0.32, thick: 0.048, angle: 90, fontMax: 0.52, fontMin: 0.38, weight: 0.03, padding: 0.08, curve: 0 };
+// Ivory test: no ivory product photo exists yet, so model 9 stands in for an ivory cross and the
+// admin picks, from the device, a frame of the shop's own video of a real ivory hand cross (old
+// writing removed digitally). It only ever lives in this sandbox; the site never gets it.
+const IVORY_TEST_PHOTO = process.env.IVORY_TEST_PHOTO || "/mnt/project-files/cross-engraving/prototype/images/sample-ivory-TEST-cleaned-crop.png";
+const MULTI_ZONE = { x: 0.5693, y: 0.6353, len: 0.444, thick: 0.0785, angle: 93.4, fontMax: 0.6, fontMin: 0.42, weight: 0.06, padding: 0.11, curve: 0 };
 const NAMES = { arLong: "القمص بيشوي يوحنا مرقس", arSecond: "أبونا مينا", cop: "Ⲁ̀ⲃⲃⲁ Ⲙⲏⲛⲁ", regAr: "أبونا داود", regEn: "Fr. Mark" };
 let MAX_AR = 24; // replaced by the limit measured in admin
 const LEGIBILITY = ["أبونا مينا", "القمص يوحنا مرقس", "الأنبا أنطونيوس", "القمص بيشوي يوحنا مرقس", "القس أنطونيوس عبد المسيح", "القمص بيشوي يوحنا مرقس عبد المسيح"];
@@ -125,6 +129,8 @@ async function addName(p, name, lang = "ar", qty = 1) {
     return state();
   };
 
+  const start = await state();
+  check("start: no product has engraving switched on (nothing is enabled automatically)", start.engravingProducts.length === 0 && start.uploadedFiles.length === 0, JSON.stringify(start.engravingProducts.map((x) => x.id)));
   // Model 2: black cross
   await openProduct(PRODUCT);
   await a.check("[data-ae-body] [data-ae='enabled']");
@@ -176,7 +182,7 @@ async function addName(p, name, lang = "ar", qty = 1) {
   // this cross), «بديل عاج» template, then the colour edited (no ivory photo exists yet)
   await openProduct(MULTI);
   await a.check("[data-ae-body] [data-ae='enabled']");
-  await a.setInputFiles("[data-ae-upload]", path.join(__dirname, "..", "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-9-unboxed.webp"));
+  await a.setInputFiles("[data-ae-upload]", IVORY_TEST_PHOTO);
   await a.waitForFunction(() => /جهازك|تعذر/.test(document.querySelector("[data-ae-upload-status]")?.textContent || ""), null, { timeout: 30000 });
   const uploadMsg = await a.textContent("[data-ae-upload-status]");
   const uploadedPick = await a.$eval('[data-ae-image][aria-pressed="true"]', (b) => b.dataset.aeImage).catch(() => "");
@@ -187,6 +193,8 @@ async function addName(p, name, lang = "ar", qty = 1) {
   const ivoryOk = (await a.inputValue("[data-ae-color]")) === "#18130e" && JSON.stringify(await langsChecked()) === '["ar","en","cop"]' && (await a.inputValue("[data-ae-coptic]")) === "athanasius";
   check("admin: «بديل عاج» template = black, 3 languages, CS New Athanasius", ivoryOk);
   await a.selectOption("[data-ae-color]", "#ffffff");
+  const colourEditable = (await a.inputValue("[data-ae-color]")) === "#ffffff";
+  await a.selectOption("[data-ae-color]", "#18130e");
   check("admin: watermarked copy made from the device photo", /اتجهزت/.test(await protect()));
   await a.check('[data-ae="photoConfirmed"]');
   await a.check('[data-ae="confirmed"]');
@@ -201,13 +209,13 @@ async function addName(p, name, lang = "ar", qty = 1) {
   await a.waitForTimeout(300);
   st = await publish(2);
   const multi = st.engravingProducts.find((x) => x.id === MULTI)?.engraving;
-  check("admin: colour and languages are per product (edited after the template)", multi?.zone?.color === "#ffffff" && multi?.languages?.length === 3 && multi?.copticFont === "athanasius", JSON.stringify({ color: multi?.zone?.color, languages: multi?.languages, copticFont: multi?.copticFont }));
+  check("admin: ivory cross saved with black writing, Arabic/English/Coptic, CS New Athanasius (colour stays editable)", colourEditable && multi?.zone?.color === "#18130e" && JSON.stringify(multi?.languages) === '["ar","en","cop"]' && multi?.copticFont === "athanasius" && multi?.freeNote === true, JSON.stringify({ color: multi?.zone?.color, languages: multi?.languages, copticFont: multi?.copticFont }));
   const multiEntry = st.engravingProducts.find((x) => x.id === MULTI);
   check("admin: the uploaded preview photo is not added to the product's photos", /engraving-/.test(multi?.previewImage || "") && !(multiEntry?.images || []).some((i) => /engraving-/.test(i)) && (multiEntry?.images || []).length === 2, JSON.stringify({ preview: multi?.previewImage, images: multiEntry?.images }));
   check("admin: only those two products have engraving (not all crosses)", st.engravingProducts.length === 2);
   check("storage: only the two watermarked copies were uploaded (no clean original)", st.uploadedFiles.length === 2 && st.uploadedFiles.every((f) => /\/engraving-[^/]*protected-preview[^/]*\.webp$/.test(f)) && multi?.previewSource === "local", JSON.stringify({ files: st.uploadedFiles, source: multi?.previewSource }));
   {
-    const audit = await auditWatermark("/assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-9-unboxed.webp", "/" + multi.previewImage, multi.zone);
+    const audit = await auditWatermark(`data:image/png;base64,${fs.readFileSync(IVORY_TEST_PHOTO).toString("base64")}`, "/" + multi.previewImage, multi.zone);
     check("watermark (device photo): writing area untouched, line beside it, marks over the photo", audit.zoneDiff < 3 && audit.bandA > 25 && audit.bandB > 25 && audit.markedShare > 3 && audit.bandInsideThumb, JSON.stringify(audit));
   }
 
@@ -348,6 +356,32 @@ async function addName(p, name, lang = "ar", qty = 1) {
     await ctx.close();
   }
 
+  // ---------- 1c. Ivory stand-in: black writing in Arabic, English and Coptic on a phone
+  {
+    const ctx = await browser.newContext({ ...devices["iPhone 13"] });
+    await guard(ctx);
+    const p = await ctx.newPage();
+    p.on("pageerror", (e) => errors.push(`ivory: ${e.message}`));
+    await openEngraving(p, MULTI);
+    const rows = [];
+    for (const [lang, name] of [["ar", "القمص يوحنا مرقس"], ["en", "Fr. John Mark"], ["cop", "ⲠⲒⲀ̀ⲄⲒⲞⲤ ⲘⲀⲢⲔⲞⲤ"]]) {
+      await p.click(`.pe-pills input[value="${lang}"]`, { force: true });
+      await p.fill("[data-pe-input]", name);
+      await p.waitForTimeout(1500);
+      const r = await p.evaluate(() => ({ err: document.querySelector("[data-pe-err]").textContent, summary: document.querySelector("[data-pe-summary]").textContent, dir: document.querySelector("[data-pe-input]").dir }));
+      rows.push({ lang, ...r });
+      await p.click('[data-pe-view="zoom"]');
+      await p.waitForTimeout(500);
+      await p.locator('[data-pe-figure="zoom"]').screenshot({ path: shot(`iv-${lang}-zoom.png`) });
+      await p.click('[data-pe-view="full"]');
+      await p.waitForTimeout(900);
+      await p.locator('[data-pe-figure="full"]').screenshot({ path: shot(`iv-${lang}-full.png`) });
+      await p.click('[data-pe-view="zoom"]');
+    }
+    check("ivory (black writing): Arabic, English and Coptic each preview without errors, right direction", rows.every((r) => !r.err && r.summary) && rows[0].dir === "rtl" && rows[1].dir === "ltr", JSON.stringify(rows));
+    await ctx.close();
+  }
+
   // ---------- 2b. Coptic in CS New Athanasius, served by the site itself, on a computer and a phone
   for (const [label, opts] of [["desktop", { viewport: { width: 1366, height: 900 } }], ["phone", { ...devices["iPhone 13"] }]]) {
     const ctx = await browser.newContext(opts);
@@ -358,7 +392,7 @@ async function addName(p, name, lang = "ar", qty = 1) {
     p.on("pageerror", (e) => errors.push(`coptic ${label}: ${e.message}`));
     await openEngraving(p, MULTI);
     await p.click('.pe-pills input[value="cop"]', { force: true });
-    await p.fill("[data-pe-input]", "ⲠⲒⲀ̀ⲄⲒⲞⲤ ϮϨⲨⲄⲞⲨⲘⲈⲚⲞⲤ");
+    await p.fill("[data-pe-input]", "ⲠⲒⲀ̀ⲄⲒⲞⲤ ⲘⲀⲢⲔⲞⲤ");
     await p.waitForTimeout(1500);
     const c = await p.evaluate(() => {
       const E = window.CrossEngraving, L = window.CopticLegacy;
@@ -516,6 +550,29 @@ async function addName(p, name, lang = "ar", qty = 1) {
   await plainCross.goto(`${base}/products/popek-corian-cross-set-3`);
   await plainCross.waitForSelector("[data-add]");
   check("other crosses: no engraving section or scripts", !(await plainCross.$(".pe")) && !(await plainCross.$('script[src*="cross-engraving"]')));
+
+  // ---------- 6. Turning it off from admin works at once
+  {
+    await a.bringToFront();
+    await openProduct(PRODUCT);
+    await a.uncheck("[data-ae-body] [data-ae='enabled']");
+    await a.click('[data-ae-act="apply"]');
+    await a.waitForTimeout(300);
+    await a.click('[data-action="publish-products"]');
+    let off = null;
+    for (let i = 0; i < 40; i++) { await a.waitForTimeout(500); off = (await state()).engravingProducts.find((x) => x.id === PRODUCT); if (off?.engraving?.enabled === false) break; }
+    const page = await phone.newPage();
+    await page.goto(`${base}/products/${PRODUCT}`);
+    await page.waitForSelector("[data-add]");
+    const gone = !(await page.$(".pe")) && !(await page.$('script[src*="cross-engraving"]'));
+    const refused = await page.evaluate(async (product) => {
+      const requestId = `off-${Math.random().toString(36).slice(2)}`;
+      const res = await fetch("/api/orders", { method: "POST", headers: { "Content-Type": "application/json", "X-Request-Id": requestId }, body: JSON.stringify({ requestId, customerName: "تجربة", phone: "01012345678", address: "القاهرة", paymentMethod: "InstaPay", deliveryType: "Shipping", products: [{ productId: product, quantity: 1, price: 770, lineTotal: 770, engraving: { enabled: true, name: "أبونا مينا", lang: "ar", zoneVersion: 1, customizationId: "x" } }], total: 770 }) });
+      return res.status;
+    }, PRODUCT);
+    check("admin: unticking «السماح بالكتابة» + «حفظ ونشر» hides the section at once and the server refuses names", off?.engraving?.enabled === false && gone && refused === 409, JSON.stringify({ enabled: off?.engraving?.enabled, gone, refused }));
+    await page.screenshot({ path: shot("17-after-turning-off.png") });
+  }
 
   check("no page errors", errors.length === 0, errors.join(" | "));
   check("no request left the sandbox", after.blockedRequests.length === 0, after.blockedRequests.join(", "));

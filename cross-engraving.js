@@ -461,7 +461,9 @@
     }
     g.restore();
     // 2) a line on both sides of the writing area, readable in every close-up
-    const flip = Math.cos(z.rot) < -1e-6 ? Math.PI : 0; // never upside down
+    // Same direction as the name, so the line reads the right way up in the close-up
+    // (the close-up turns the writing area level).
+    const flip = 0;
     const bfs = band * 0.78;
     g.save();
     g.lineWidth = Math.max(1.2, bfs * 0.1);
