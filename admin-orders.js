@@ -81,6 +81,15 @@
 
   function countBy(field, value) { return state.orders.filter((order) => order[field] === value).length; }
 
+  // Priest-name engraving lines written by /api/orders: "… | الاسم على الصليب: «…» | لغة الكتابة: … | الكمية: n | …"
+  function engravingLines(order) {
+    return String(order.products || "").split("\n").map((line) => {
+      const name = line.match(/الاسم على الصليب: «([^»]+)»/)?.[1];
+      if (!name) return null;
+      return { product: line.split(" | ")[0], name, lang: line.match(/لغة الكتابة: ([^|]+)/)?.[1]?.trim() || "", qty: line.match(/الكمية: (\d+)/)?.[1] || "1" };
+    }).filter(Boolean);
+  }
+
   function renderList() {
     const orders = filteredOrders();
     els.count.textContent = `${formatNumber(orders.length)} أوردر`;
@@ -92,7 +101,7 @@
       <button type="button" class="order-card ${order.id === state.selectedId ? "is-selected" : ""}" data-order-id="${escapeAttr(order.id)}">
         <span class="order-card-head"><strong>#${escapeHtml(order.orderId || "—")} · ${escapeHtml(order.customerName || "بدون اسم")}</strong><span>${formatMoney(order.total)}</span></span>
         <span class="order-card-meta"><span>${escapeHtml(order.phone || "بدون موبايل")}</span><span>${escapeHtml(order.deliveryType || "غير محدد")}</span></span>
-        <span class="order-card-statuses"><span class="status-pill">${escapeHtml(order.paymentStatus || "غير محدد")}</span><span class="status-pill">${escapeHtml(order.orderStatus || "غير محدد")}</span></span>
+        <span class="order-card-statuses"><span class="status-pill">${escapeHtml(order.paymentStatus || "غير محدد")}</span><span class="status-pill">${escapeHtml(order.orderStatus || "غير محدد")}</span>${engravingLines(order).length ? '<span class="status-pill" style="background:#fbf0d9;color:#7a4d10">✍️ كتابة اسم</span>' : ""}</span>
         <span class="order-card-date">${order.pickupDate ? `الاستلام: ${formatDate(order.pickupDate)}` : "ميعاد الاستلام غير محدد"}</span>
       </button>`).join("");
   }
@@ -109,6 +118,7 @@
           <div><dt>طريقة الدفع</dt><dd>${escapeHtml(order.paymentMethod || "—")}</dd></div>
           <div><dt>طريقة الاستلام</dt><dd>${escapeHtml(order.deliveryType || "—")}</dd></div>
         </dl>
+        ${engravingLines(order).length ? `<section class="order-products" style="border:1px solid #e6d3ad;background:#fffaf0;border-radius:8px;padding:10px 12px"><h4>✍️ الأسماء المطلوب كتابتها على الصلبان</h4><ol style="margin:0;padding-inline-start:20px">${engravingLines(order).map((item) => `<li><strong><bdi>«${escapeHtml(item.name)}»</bdi></strong> · ${escapeHtml(item.lang)} · الكمية ${escapeHtml(item.qty)}<br><small>${escapeHtml(item.product)}</small></li>`).join("")}</ol></section>` : ""}
         <section class="order-products"><h4>المنتجات</h4><p>${escapeHtml(order.products || "لا توجد تفاصيل").replaceAll("\n", "<br>")}</p></section>
         <div class="order-edit-grid">
           <label><span>حالة الدفع</span><select name="paymentStatus">${options(paymentStatuses, order.paymentStatus)}</select></label>

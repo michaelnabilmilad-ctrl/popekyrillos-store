@@ -2038,6 +2038,8 @@
 
     renderImagePreview(product.images || []);
     renderVariants(product);
+    // Priest-name engraving settings (admin-engraving.js) render their own section for this product.
+    document.dispatchEvent(new CustomEvent("admin:product-editor-render", { detail: { product, markDirty, assetUrl: previewAssetUrl } }));
   }
 
   function renderImagePreview(images) {

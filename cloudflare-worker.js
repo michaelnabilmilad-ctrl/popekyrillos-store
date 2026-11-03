@@ -1698,6 +1698,10 @@ async function productPageResponse(request, env, product, products = []) {
   const tags = productMetaTags(seo);
   const safeProduct = JSON.stringify({ ...product, seoImageAlt: seo.alt }).replace(/</g, "\\u003c");
   const name = escapeHtml(seo.name);
+  // Priest-name engraving assets load only on products the admin enabled it for.
+  const engravingOn = product?.engraving?.enabled === true;
+  const engravingHead = engravingOn ? `<link rel="stylesheet" href="/product-engraving.css?v=1">` : "";
+  const engravingScripts = engravingOn ? `<script src="/cross-engraving.js?v=1" defer></script><script src="/product-engraving.js?v=1" defer></script>` : "";
   const thumbnailManifest = await loadThumbnailManifest(env, request);
   const mainId = catalogMainCategoryId(product);
   const subcategoryId = String(product.subcategory || "");
@@ -1712,14 +1716,14 @@ async function productPageResponse(request, env, product, products = []) {
 <html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 ${tags.title}${tags.description}${tags.extra}
 <link rel="preload" href="/assets/fonts/ge-ss-two-bold.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/styles.min.css"><link rel="stylesheet" href="/product-page.css?v=15">
+<link rel="stylesheet" href="/styles.min.css"><link rel="stylesheet" href="/product-page.css?v=15">${engravingHead}
 <style>.product-route-breadcrumb{margin:-12px 0 18px;color:#65747a;font-size:13px;font-weight:700}.product-route-breadcrumb a{color:#073d42;text-decoration:none}</style>
 <script src="/assistant.js?v=1" defer></script>
 </head><body class="standalone-product-page">
 <header class="site-header" data-elevated="false"><div class="brand-cluster"><a class="brand" href="/" aria-label="مكتبة البابا كيرلس"><span class="brand-logo-wrap"><img src="/assets/optimized/logo-papa-kyrillos-64.webp" srcset="/assets/optimized/logo-papa-kyrillos-64.webp 64w, /assets/optimized/logo-papa-kyrillos-128.webp 128w" sizes="50px" alt="" width="160" height="160" decoding="async"></span><span><strong>مكتبة البابا كيرلس</strong><small>مستلزمات الكنائس والخدمة</small></span></a></div><nav class="main-nav" aria-label="التنقل الرئيسي"><a href="/#categories">الأقسام</a><a href="/#catalog">المنتجات</a></nav><div class="header-actions"><a class="cart-toggle" href="/cart" aria-label="فتح السلة"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6h15l-2 8H8L6 3H3"/><circle cx="9" cy="20" r="1.6"/><circle cx="18" cy="20" r="1.6"/></svg><span>السلة</span><span class="cart-count" data-cart-count></span></a></div></header>
 <main class="product-route-main"><a class="product-route-back" href="/#catalog">العودة إلى المنتجات</a>${seo.crumbs.length > 2 ? breadcrumbNavHtml(seo.crumbs, "product-route-breadcrumb") : ""}<div id="product-detail" aria-label="${name}">${productDetailSsrHtml(seo)}</div><section class="product-route-related" aria-labelledby="related-title"><h2 id="related-title">منتجات مشابهة</h2><div class="product-grid" data-related-products>${related}</div></section></main>
 <footer class="product-route-footer"><strong>مكتبة البابا كيرلس</strong><span>مستلزمات الكنائس والخدمة</span><a href="/policies">السياسات</a><a href="https://wa.me/201016125589">تواصل معنا</a></footer>
-<div class="toast" data-toast role="status" aria-live="polite"></div><script id="product-data" type="application/json">${safeProduct}</script><script src="/yota-colors.js?v=3" defer></script><script src="/product-page.js?v=24" defer></script></body></html>`;
+<div class="toast" data-toast role="status" aria-live="polite"></div><script id="product-data" type="application/json">${safeProduct}</script><script src="/yota-colors.js?v=3" defer></script>${engravingScripts}<script src="/product-page.js?v=25" defer></script></body></html>`;
   return new Response(html, {
     status: 200,
     headers: {
@@ -1913,6 +1917,61 @@ function absoluteOrderImageUrl(value) {
   }
 }
 
+// Priest-name engraving on a hand cross (product.engraving set in /admin). The name and
+// language travel with the cart line; the server re-checks them and writes them into the
+// order text and the line's «ملاحظات» so the team sees exactly what to write.
+const ENGRAVING_LANG_LABELS = { ar: "العربية", en: "English", cop: "القبطية" };
+const ENGRAVING_ALLOWED = {
+  ar: /^[\u0621-\u063A\u0641-\u064A\u064B-\u0652\u0670\u0640\u0660-\u0669 .\-()]+$/u,
+  en: /^[A-Za-z .'\-()]+$/u,
+  cop: /^[\u2C80-\u2CB1\u03E2-\u03EF\u0300\u0301\u0304\u0305\u0307\u0308\u033F\u2CEF-\u2CF1 .\-]+$/u
+};
+const ENGRAVING_INVISIBLE = /[\u0000-\u001F\u007F-\u009F\u200B-\u200F\u202A-\u202E\u2060-\u2069\uFEFF]/gu;
+
+function engravingGraphemes(value) {
+  if (typeof Intl !== "undefined" && Intl.Segmenter) return [...new Intl.Segmenter(undefined, { granularity: "grapheme" }).segment(value)].length;
+  return [...value].length;
+}
+
+function orderItemEngraving(value) {
+  if (!value || typeof value !== "object" || value.enabled !== true) return { engraving: null, error: false };
+  const name = String(value.name || "").normalize("NFC").replace(ENGRAVING_INVISIBLE, "").replace(/\s+/g, " ").trim();
+  const lang = Object.prototype.hasOwnProperty.call(ENGRAVING_LANG_LABELS, value.lang) ? value.lang : "";
+  if (!name || !lang || engravingGraphemes(name) > 60 || !ENGRAVING_ALLOWED[lang].test(name)) return { engraving: null, error: true };
+  return {
+    engraving: {
+      name,
+      lang,
+      langLabel: ENGRAVING_LANG_LABELS[lang],
+      finish: cleanOrderString(value.finish).slice(0, 20),
+      zoneVersion: Math.max(1, Math.floor(Number(value.zoneVersion) || 1)),
+      customizationId: cleanOrderString(value.customizationId).slice(0, 40)
+    },
+    error: false
+  };
+}
+
+function engravingNote(engraving) {
+  return engraving ? `الاسم على الصليب: «${engraving.name}» | لغة الكتابة: ${engraving.langLabel}` : "";
+}
+
+// A line may carry a name only for a product the admin enabled it for, in an allowed
+// language and within that product's letter limit.
+function engravingCatalogErrors(items, catalog) {
+  const byId = new Map((Array.isArray(catalog) ? catalog : []).map((product) => [String(product?.id ?? ""), product]));
+  const errors = [];
+  items.forEach((item, index) => {
+    if (!item.engraving) return;
+    const settings = byId.get(String(item.websiteProductId || ""))?.engraving;
+    const languages = Array.isArray(settings?.languages) && settings.languages.length ? settings.languages : ["ar", "en", "cop"];
+    const max = Number(settings?.zone?.maxChars?.[item.engraving.lang]) || 24;
+    if (settings?.enabled !== true) errors.push({ index, code: "engraving_not_available" });
+    else if (!languages.includes(item.engraving.lang)) errors.push({ index, code: "engraving_language" });
+    else if (engravingGraphemes(item.engraving.name) > max) errors.push({ index, code: "engraving_too_long" });
+  });
+  return errors;
+}
+
 function normalizeOrderItems(value) {
   const products = parseOrderProducts(value);
   if (!products || !products.length) return { items: [], errors: ["products"] };
@@ -1929,6 +1988,9 @@ function normalizeOrderItems(value) {
     const designName = cleanOrderString(product?.designName);
     const customizationId = cleanOrderString(product?.customizationId || product?.coloringDesign?.customizationId);
     const selectedColors = orderItemSelectedColors(product);
+    const engravingResult = orderItemEngraving(product?.engraving);
+    if (engravingResult.error) errors.push(`products[${index}].engraving`);
+    const engraving = engravingResult.engraving;
     const option = cleanOrderString(product?.option);
     const variantName = cleanOrderString(product?.variantName) || option;
     const notes = cleanOrderString(product?.notes ?? product?.note);
@@ -1957,9 +2019,10 @@ function normalizeOrderItems(value) {
       unitPrice,
       designId,
       designName,
-      customizationId,
+      customizationId: customizationId || engraving?.customizationId || "",
       customization: { selectedColors },
       selectedColors,
+      ...(engraving ? { engraving } : {}),
       ...(medalPricing ? { basePrice, discountValue, discountRate, woodType } : {})
     };
   });
@@ -2086,7 +2149,7 @@ async function resolveAirtableProducts(env, items, context) {
       ...item,
       productId,
       unresolved,
-      detailNote: [variantNote, pricingNote, designNote, colorsNote, imageNote, fallbackNote, item.notes].filter(Boolean).join(" | ")
+      detailNote: [engravingNote(item.engraving), variantNote, pricingNote, designNote, colorsNote, imageNote, fallbackNote, item.notes].filter(Boolean).join(" | ")
     };
   });
 }
@@ -2755,6 +2818,14 @@ async function createOrderResponse(context) {
       message: "\u0628\u0639\u0636 \u0645\u0646\u062a\u062c\u0627\u062a \u0627\u0644\u0633\u0644\u0629 \u062a\u063a\u064a\u0651\u0631\u062a \u0623\u0648 \u0644\u0645 \u062a\u0639\u062f \u0645\u062a\u0627\u062d\u0629. \u0631\u0627\u062c\u0639 \u0627\u0644\u0633\u0644\u0629 \u062b\u0645 \u0623\u0643\u062f \u0627\u0644\u0637\u0644\u0628 \u0645\u0631\u0629 \u0623\u062e\u0631\u0649."
     }, { status: 409 });
   }
+  const engravingErrors = engravingCatalogErrors(normalizedItems.items, catalog);
+  if (engravingErrors.length) {
+    console.warn("Order engraving does not match the product settings", { requestId, lines: engravingErrors });
+    return orderJsonResponse(request, {
+      error: "engraving_invalid",
+      message: "الاسم المطلوب كتابته على الصليب محتاج مراجعة (اللغة أو الطول أو المنتج). ارجع للسلة وعدّله ثم أكد الطلب."
+    }, { status: 409 });
+  }
   const requestedTotal = Number(payload.total);
   if (!Number.isFinite(requestedTotal) || Math.abs(requestedTotal - pricing.total) > TOTAL_TOLERANCE) {
     console.warn("Order total differs from the catalog total", {
@@ -2778,6 +2849,7 @@ async function createOrderResponse(context) {
     item.sku ? `SKU: ${item.sku}` : "",
     item.websiteProductId ? `Product ID: ${item.websiteProductId}` : "",
     item.option,
+    engravingNote(item.engraving),
     Object.entries(parseSelectedColors(item.selectedColors)).length
       ? `\u0627\u0644\u0623\u0644\u0648\u0627\u0646: ${Object.entries(parseSelectedColors(item.selectedColors)).map(([region, hex]) => `${region}: ${hex}`).join("\u060c ")}`
       : "",
