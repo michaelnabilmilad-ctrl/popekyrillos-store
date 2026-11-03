@@ -79,6 +79,8 @@ const assetUrl = (value) => {
 };
 const images = [...new Set([...(product.images || []), product.image].filter(Boolean))];
 const isMedalProduct = /(?:مادلي|ميدالي|medal)/i.test(text(product.name));
+// Set per product from /admin (product.engraving); the module is loaded only for those products.
+const engravingEnabled = product.engraving?.enabled === true && Boolean(window.ProductEngraving);
 const medalWoodOptionName = "نوع الخشب";
 const medalWoodVariants = [
   { id: "medal-wood-plywood", title: "خشب كونتر", price: 18, compareAtPrice: 20, discountRate: 0.1, available: true, options: { [medalWoodOptionName]: "كونتر" } },
@@ -1586,7 +1588,23 @@ function mountBuyBar() {
     button.disabled = add.disabled && !hasChoices;
     priceNode.textContent = isMedalProduct && !selected ? "" : money(selected?.price ?? product.price);
     const box = actions.getBoundingClientRect();
-    buyBar.classList.toggle("is-visible", box.bottom < 0 || box.top > window.innerHeight);
+    buyBar.classList.toggle("is-visible", (box.bottom < 0 || box.top > window.innerHeight) && !coversCustomization());
+  };
+  // The engraving form (name field, preview, confirm box) sits above the page's own add button.
+  // While the customer is working in it, or the phone keyboard is open, the bar would cover the
+  // preview and the form, so it stays hidden; the real add button is just below the form.
+  const engravingBox = root.querySelector("[data-engraving-slot]");
+  const coversCustomization = () => {
+    if (!engravingBox) return false; // products without engraving keep the bar exactly as before
+    const active = document.activeElement;
+    if (active && active !== document.body && active.matches("input:not([type=radio]):not([type=checkbox]),textarea,select")) return true;
+    const vv = window.visualViewport;
+    if (vv && vv.height < window.innerHeight * 0.75) return true;
+    if (!engravingBox || !engravingBox.isConnected) return false;
+    const body = engravingBox.querySelector("[data-pe-body]");
+    if (!body || body.hidden) return false;
+    const r = engravingBox.getBoundingClientRect();
+    return r.bottom > 0 && r.top < window.innerHeight;
   };
   button.addEventListener("click", () => {
     if (add.disabled) {
@@ -1596,6 +1614,11 @@ function mountBuyBar() {
     const message = root.querySelector("[data-message]");
     const before = message?.textContent;
     add.click();
+    const engravingError = engravingBox?.querySelector("[data-pe-err]");
+    if (engravingError && engravingError.dataset.kind === "submit" && engravingError.textContent) {
+      engravingBox.scrollIntoView({ behavior: "smooth", block: "start" });
+      return;
+    }
     if (message && message.textContent && message.textContent !== before) {
       confirmUntil = Date.now() + 2200;
       button.textContent = "✓ تمت الإضافة";
@@ -1605,6 +1628,9 @@ function mountBuyBar() {
   });
   window.addEventListener("scroll", sync, { passive: true });
   window.addEventListener("resize", sync, { passive: true });
+  window.visualViewport?.addEventListener("resize", sync, { passive: true });
+  document.addEventListener("focusin", sync);
+  document.addEventListener("focusout", () => setTimeout(sync, 50));
   new MutationObserver(sync).observe(root.querySelector(".product-route-copy"), { subtree: true, childList: true, characterData: true, attributes: true });
   sync();
 }
@@ -1630,7 +1656,8 @@ function render() {
     const values = option.values || [];
     return `<label>${escapeHtml(name)}<select data-option="${escapeHtml(name)}">${values.map((value)=>`<option value="${escapeHtml(text(value))}" ${selected?.options?.[name]===text(value)?"selected":""}>${escapeHtml(text(value))}</option>`).join("")}</select></label>`;
   }).join("");
-  root.innerHTML = `<div class="product-route-grid"><div class="product-route-gallery"><button class="product-route-main-image" type="button" data-main data-route-zoom aria-label="تكبير صورة ${escapeHtml(text(product.name))}">${images[0]?imageMarkup(images[0],0,"","main"):""}</button>${images.length>1?`<div class="product-route-thumbs">${images.map((image,index)=>`<button class="product-route-thumb" type="button" data-image="${escapeHtml(image)}" aria-pressed="${index===0}">${imageMarkup(image,index,"","thumbnail")}</button>`).join("")}</div>`:""}</div><article class="product-route-copy"><p class="product-route-category">${escapeHtml(text(product.label||product.badge||product.subcategory||"منتج"))}</p><h1>${escapeHtml(text(product.name))}</h1><div class="product-route-price" data-price>${isMedalProduct ? "اختر نوع الخشب لعرض السعر" : money(selected?.price ?? product.price)}</div>${coloringMarkup()}<div class="product-route-options">${optionControls}</div><div class="product-route-actions"><input class="product-route-quantity" type="number" min="1" value="1" data-quantity aria-label="الكمية"><button class="button primary" type="button" data-add ${isMedalProduct || !available(selected)?"disabled":""}>${isMedalProduct ? "اختر نوع الخشب أولًا" : available(selected)?"أضف إلى السلة":"غير متاح حاليا"}</button><a class="button secondary" href="/cart">عرض السلة</a></div><p class="product-route-message" data-message></p>${productTrustHtml}${text(product.description).trim() ? `<h2 class="product-route-details-title">تفاصيل المنتج</h2><p class="product-route-description">${escapeHtml(text(product.description))}</p>` : ""}</article></div>`;
+  root.innerHTML = `<div class="product-route-grid"><div class="product-route-gallery"><button class="product-route-main-image" type="button" data-main data-route-zoom aria-label="تكبير صورة ${escapeHtml(text(product.name))}">${images[0]?imageMarkup(images[0],0,"","main"):""}</button>${images.length>1?`<div class="product-route-thumbs">${images.map((image,index)=>`<button class="product-route-thumb" type="button" data-image="${escapeHtml(image)}" aria-pressed="${index===0}">${imageMarkup(image,index,"","thumbnail")}</button>`).join("")}</div>`:""}</div><article class="product-route-copy"><p class="product-route-category">${escapeHtml(text(product.label||product.badge||product.subcategory||"منتج"))}</p><h1>${escapeHtml(text(product.name))}</h1><div class="product-route-price" data-price>${isMedalProduct ? "اختر نوع الخشب لعرض السعر" : money(selected?.price ?? product.price)}</div>${coloringMarkup()}${engravingEnabled ? `<section data-engraving-slot aria-label="الكتابة على الصليب"></section>` : ""}<div class="product-route-options">${optionControls}</div><div class="product-route-actions"><input class="product-route-quantity" type="number" min="1" value="1" data-quantity aria-label="الكمية"><button class="button primary" type="button" data-add ${isMedalProduct || !available(selected)?"disabled":""}>${isMedalProduct ? "اختر نوع الخشب أولًا" : available(selected)?"أضف إلى السلة":"غير متاح حاليا"}</button><a class="button secondary" href="/cart">عرض السلة</a></div><p class="product-route-message" data-message></p>${productTrustHtml}${text(product.description).trim() ? `<h2 class="product-route-details-title">تفاصيل المنتج</h2><p class="product-route-description">${escapeHtml(text(product.description))}</p>` : ""}</article></div>`;
+  if (engravingEnabled) window.ProductEngraving.mount(root.querySelector("[data-engraving-slot]"), product, { assetUrl });
   mountBuyBar();
 }
 
@@ -1696,7 +1723,14 @@ function addToCart() {
   const qty=Math.max(1,Math.floor(Number(root.querySelector("[data-quantity]")?.value)||1));
   const items=readCart(); const variantId=selected?.id||"default";
   const coloringDesign = currentColoringDesign ? JSON.parse(JSON.stringify(currentColoringDesign)) : null;
-  const lineId = selectionKey(variantId, coloringDesign);
+  // Priest-name engraving: each (language, name) is its own cart line, never merged with another name.
+  const engravingLine = engravingEnabled ? window.ProductEngraving.cartDetails() : null;
+  if (engravingLine?.error) {
+    root.querySelector("[data-message]").textContent = "";
+    root.querySelector("[data-engraving-slot]")?.scrollIntoView({ behavior: "smooth", block: "center" });
+    return;
+  }
+  const lineId = selectionKey(variantId, coloringDesign) + (engravingLine ? `~${engravingLine.lineKey}` : "");
   const found=items.find((item)=>item.productId===product.id&&item.variantId===variantId&&(item.lineId||selectionKey(item.variantId, item.coloringDesign||null))===lineId);
   const medalDetails = isMedalProduct ? {
     woodType: text(selected?.options?.[medalWoodOptionName]),
@@ -1713,9 +1747,9 @@ function addToCart() {
     if (coloringDesign) found.coloringDesign = coloringDesign;
     if (medalDetails) Object.assign(found, medalDetails);
   } else {
-    items.push({productId:product.id,variantId,lineId,qty,image:currentMedalPreviewImage||assetUrl(activeImage),price:Number(selected?.price??product.price)||0,options:{...(selected?.options||{})},...(coloringDesign ? { coloringDesign } : {}),...(medalDetails || {})});
+    items.push({productId:product.id,variantId,lineId,qty,image:currentMedalPreviewImage||assetUrl(activeImage),price:Number(selected?.price??product.price)||0,options:{...(selected?.options||{})},...(coloringDesign ? { coloringDesign } : {}),...(medalDetails || {}),...(engravingLine ? { engraving: engravingLine.engraving, previewImage: engravingLine.thumbnail || "" } : {})});
   }
-  saveCartItems(items); updateCount(); root.querySelector("[data-message]").textContent="تمت إضافة المنتج إلى السلة";
+  saveCartItems(items); updateCount(); root.querySelector("[data-message]").textContent=engravingLine ? `تمت إضافة الصليب باسم «${engravingLine.engraving.name}» إلى السلة` : "تمت إضافة المنتج إلى السلة";
 }
 async function loadRelated() {
   // The Worker already renders up to 4 related cards for this product's main

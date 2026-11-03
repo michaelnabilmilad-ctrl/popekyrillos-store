@@ -5500,3 +5500,16 @@ body.account-open .scrim {
   .popular-products .product-card-purchase-actions .button { min-height: 42px; padding: 6px; font-size: 13px; }
   .popular-products .popular-product-skeleton { min-height: calc(var(--popular-media) + 203px); }
 }
+
+/* Priest-name engraving on cart and checkout lines */
+.cart-engraving {
+  margin: 4px 0;
+  padding: 4px 10px;
+  border-inline-start: 3px solid var(--gold);
+  background: #fbf5e8;
+  border-radius: 6px;
+  font-size: 14px;
+  color: var(--ink);
+}
+.cart-engraving bdi { font-weight: 800; }
+.cart-engraving small { color: var(--muted); }
