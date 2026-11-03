@@ -26,7 +26,7 @@
     const langs = settings.languages;
     host.className = "pe";
     host.innerHTML = `
-      <div class="pe-head"><h2 id="${uid}-t">✍️ اكتب اسم أبونا على الصليب</h2><span class="pe-free">بدون رسوم إضافية</span></div>
+      <div class="pe-head"><h2 id="${uid}-t">✍️ اكتب اسم أبونا على الصليب</h2></div>
       <p class="pe-lead">نكتب الاسم على يد صليب اليد، وتشوف شكله على صورة نفس الصليب قبل ما تطلب.</p>
       <div class="pe-choice" role="radiogroup" aria-labelledby="${uid}-t">
         <label><input type="radio" name="${uid}-mode" value="none" checked><b>بدون كتابة</b><small>الصليب كما في الصور</small></label>
@@ -136,7 +136,7 @@
     if (!$("[data-pe-confirm]").checked) { $("[data-pe-confirm]").focus(); const n = $("[data-pe-err]"); n.textContent = "أكّد إنك راجعت الاسم قبل الإضافة للسلة."; n.dataset.kind = "submit"; return { error: n.textContent }; }
     const key = E.lineKey(state.lang, v.name);
     let thumbnail = "";
-    try { thumbnail = E.thumbnail(last.result, 360); } catch {}
+    try { thumbnail = E.thumbnail(last.result, 240); } catch {} // small: it travels with the cart (also the account cart)
     return {
       lineKey: key,
       thumbnail,

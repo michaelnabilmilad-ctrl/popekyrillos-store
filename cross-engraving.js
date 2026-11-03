@@ -158,12 +158,38 @@
   }
 
   // How the shop actually executes the name on each product (set per product in admin).
+  // The colour is never assumed: each product carries its own zone.color, chosen in admin.
   const FINISHES = {
-    ink: { label: "كتابة بالأسود (للصلبان العاجية)", kind: "ink", color: "#18130e" },
-    ivory: { label: "حفر مملوء بالأبيض", kind: "filled", top: "#f4efe3", bottom: "#e2d9c6" },
-    gold: { label: "حفر مملوء بالذهبي", kind: "filled", top: "#e9cc84", bottom: "#b48a3b" },
-    laser: { label: "حفر ليزر بدون تعبئة", kind: "filled", top: "#8d8a85", bottom: "#76736e" }
+    ink: { label: "كتابة على سطح الصليب (حبر/طباعة)", kind: "ink" },
+    filled: { label: "حفر مملوء باللون المختار", kind: "filled" },
+    laser: { label: "حفر ليزر بدون تعبئة", kind: "filled" }
   };
+  // Older drafts used the colour name as the finish.
+  const LEGACY_FINISH = { ivory: "filled", gold: "filled" };
+  const COLOR_PRESETS = [
+    { value: "#18130e", label: "أسود (المعتمد للصلبان العاجية)" },
+    { value: "#c9a14f", label: "ذهبي" },
+    { value: "#f2ede2", label: "أبيض عاجي" },
+    { value: "#b9bcc0", label: "فضي" }
+  ];
+  const isHexColor = (v) => typeof v === "string" && /^#[0-9a-f]{6}$/i.test(v);
+  function shade(hex, f) {
+    const n = parseInt(hex.slice(1), 16);
+    const ch = [n >> 16, (n >> 8) & 255, n & 255].map((c) => Math.round(f >= 0 ? c + (255 - c) * f : c * (1 + f)));
+    return `rgb(${ch.join(",")})`;
+  }
+  function luminance(hex) {
+    const n = parseInt(hex.slice(1), 16);
+    return (0.2126 * (n >> 16) + 0.7152 * ((n >> 8) & 255) + 0.0722 * (n & 255)) / 255;
+  }
+  function finishFor(zone) {
+    const base = FINISHES[zone.finish] || FINISHES.ink;
+    // No colour chosen yet (admin draft only): neutral grey, so no colour is implied.
+    const color = isHexColor(zone.color) ? zone.color : "#8a8a8a";
+    if (base.kind === "ink") return { kind: "ink", color, dark: luminance(color) < 0.5 };
+    const laser = zone.finish === "laser";
+    return { kind: "filled", top: shade(color, laser ? -0.05 : 0.12), bottom: shade(color, laser ? -0.2 : -0.14), color };
+  }
 
   function makeCanvas(w, h) {
     const c = document.createElement("canvas");
@@ -301,7 +327,7 @@
       fit = f;
       const curve = zone.surface === "round" ? Math.min(1.35, Math.max(0.05, zone.curve || 0.9)) : 0;
       const shaped = curve ? wrapCylinder(mask, w, h, curve) : mask;
-      const finish = FINISHES[zone.finish] || FINISHES.ivory;
+      const finish = finishFor(zone);
       const lightDir = { x: Math.sin(z.rot), y: Math.cos(z.rot) };
       const layer = finishLayer(shaped, w, h, fit, finish, lightDir, curve);
       ctx.save();
@@ -310,8 +336,9 @@
       ctx.beginPath(); ctx.rect(-z.L / 2, -z.S / 2, z.L, z.S); ctx.clip();
       ctx.imageSmoothingQuality = "high";
       if (finish.kind === "ink") {
-        // ink sits on the surface: multiply keeps the photo's own light and texture
-        ctx.globalCompositeOperation = "multiply";
+        // ink sits on the surface: a dark ink multiplies (keeps the photo's own light and texture);
+        // a light ink on a dark cross is painted normally, since multiply would hide it.
+        ctx.globalCompositeOperation = finish.dark ? "multiply" : "source-over";
         ctx.globalAlpha = 0.97;
         ctx.filter = `blur(${Math.max(0.3, fit.px / scale * 0.012).toFixed(2)}px)`;
       }
@@ -363,12 +390,12 @@
   function thumbnail(result, size = 360) {
     const t = makeCanvas(size, size / 3);
     drawZoom(t, result, { margin: 0.12 });
-    return t.toDataURL("image/jpeg", 0.8);
+    return t.toDataURL("image/jpeg", 0.72);
   }
 
 
   // ---- shared settings helpers (product page, admin editor, admin order view) ----
-  const ZONE_DEFAULTS = { x: 0.5, y: 0.65, len: 0.3, thick: 0.06, angle: 90, surface: "flat", curve: 0, fontMax: 0.52, fontMin: 0.38, weight: 0.03, padding: 0.08, tracking: undefined, offset: 0, finish: "ivory", maxChars: { ar: 24, en: 24, cop: 20 } };
+  const ZONE_DEFAULTS = { x: 0.5, y: 0.65, len: 0.3, thick: 0.06, angle: 90, surface: "flat", curve: 0, fontMax: 0.52, fontMin: 0.38, weight: 0.03, padding: 0.08, tracking: undefined, offset: 0, finish: "ink", color: "", confirmed: false, maxChars: { ar: 24, en: 24, cop: 20 } };
   const LIMITS = { x: [0, 1], y: [0, 1], len: [0.02, 0.95], thick: [0.005, 0.4], angle: [-180, 180], curve: [0, 1.3], fontMax: [0.2, 0.95], fontMin: [0.15, 0.9], weight: [0, 0.12], padding: [0, 0.3], tracking: [0, 0.2], offset: [-0.4, 0.4] };
   const clampNum = (v, [lo, hi], d) => { const n = Number(v); return Number.isFinite(n) ? Math.min(hi, Math.max(lo, n)) : d; };
   function normalizeSettings(raw) {
@@ -381,13 +408,24 @@
     }
     if (zone.fontMin > zone.fontMax) zone.fontMin = zone.fontMax;
     zone.surface = z.surface === "round" ? "round" : "flat";
-    zone.finish = FINISHES[z.finish] ? z.finish : "ivory";
+    zone.finish = FINISHES[z.finish] ? z.finish : (LEGACY_FINISH[z.finish] || "ink");
+    zone.color = isHexColor(z.color) ? z.color.toLowerCase() : "";
+    zone.confirmed = z.confirmed === true;
     zone.maxChars = {};
     for (const l of ["ar", "en", "cop"]) zone.maxChars[l] = Math.round(clampNum(z.maxChars?.[l], [1, 60], ZONE_DEFAULTS.maxChars[l]));
     const languages = (Array.isArray(src.languages) ? src.languages : ["ar", "en", "cop"]).filter((l) => LANGS[l]);
+    const previewImage = typeof src.previewImage === "string" ? src.previewImage : "";
+    // Customers only see engraving once the shop set the photo, the writing colour and
+    // checked the writing area (missing = what is still needed, shown in admin).
+    const missing = [];
+    if (!previewImage) missing.push("previewImage");
+    if (!zone.color) missing.push("color");
+    if (!zone.confirmed) missing.push("zone");
     return {
-      enabled: src.enabled === true,
-      previewImage: typeof src.previewImage === "string" ? src.previewImage : "",
+      enabled: src.enabled === true && missing.length === 0,
+      requested: src.enabled === true,
+      missing,
+      previewImage,
       zone,
       languages: languages.length ? [...new Set(languages)] : ["ar"],
       fee: 0, // optional fee stays off until the shop approves it
@@ -406,6 +444,6 @@
     return `eng-${h1.toString(36)}${h2.toString(36)}`;
   }
 
-  global.CrossEngraving = { LANGS, FINISHES, cleanName, validateName, loadFont, drawSpec, legacyReady, render, drawZoom, drawFull, thumbnail, normalizeSettings, lineKey, ZONE_DEFAULTS };
+  global.CrossEngraving = { LANGS, FINISHES, cleanName, validateName, loadFont, drawSpec, legacyReady, render, drawZoom, drawFull, thumbnail, normalizeSettings, lineKey, ZONE_DEFAULTS, COLOR_PRESETS, isHexColor };
   if (typeof module !== "undefined" && module.exports) module.exports.CrossEngraving = global.CrossEngraving;
 })(typeof window !== "undefined" ? window : globalThis);

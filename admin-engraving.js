@@ -78,6 +78,7 @@
 
   function defaultsFor(product) {
     const s = E.normalizeSettings({ ...(product.engraving || {}) });
+    s.enabled = s.requested; delete s.requested; delete s.missing;
     if (!s.previewImage || !images(product).includes(s.previewImage)) s.previewImage = images(product).find((i) => /unboxed/i.test(i)) || images(product)[0] || "";
     return s;
   }
@@ -110,16 +111,21 @@
         <div>
           ${SLIDERS.map(([k, label, min, max, step]) => `<label class="ae-ctl"><span>${label}</span><input type="range" min="${min}" max="${max}" step="${step}" value="${z[k]}" data-ae-z="${k}"><output data-ae-o="${k}">${fmt(z[k])}</output></label>`).join("")}
           <label class="ae-ctl"><span>شكل يد الصليب</span><select data-ae-s="surface"><option value="flat">مسطحة</option><option value="round">مستديرة</option></select><span></span></label>
-          <label class="ae-ctl"><span>لون الكتابة</span><select data-ae-s="finish">${Object.entries(E.FINISHES).map(([k, f]) => `<option value="${k}">${esc(f.label)}</option>`).join("")}</select><span></span></label>
+          <label class="ae-ctl"><span>طريقة التنفيذ</span><select data-ae-s="finish">${Object.entries(E.FINISHES).map(([k, f]) => `<option value="${k}">${esc(f.label)}</option>`).join("")}</select><span></span></label>
+          <div class="ae-ctl"><span>لون الكتابة <b class="ae-bad">*</b></span><select data-ae-color aria-label="لون الكتابة"><option value="">— اختار اللون —</option>${E.COLOR_PRESETS.map((c) => `<option value="${c.value}">${esc(c.label)}</option>`).join("")}<option value="custom">لون آخر…</option></select><input type="color" data-ae-color-custom value="${z.color || "#18130e"}" aria-label="لون مخصص" ${E.COLOR_PRESETS.some((c) => c.value === z.color) || !z.color ? "hidden" : ""}></div>
+          <p class="hint">مفيش لون افتراضي: لازم تختار لون الكتابة لكل منتج. لحد ما يتحدد، المعاينة هنا بالرمادي ومش هتظهر للعملاء.</p>
           <div class="ae-row"><span>أقصى عدد حروف:</span>${["ar", "en", "cop"].map((l) => `<label>${LANG_LABEL[l]} <input type="number" min="1" max="60" value="${z.maxChars[l]}" data-ae-max="${l}" style="width:60px"></label>`).join("")}</div>
           <div class="ae-row"><span>اللغات المتاحة:</span>${["ar", "en", "cop"].map((l) => `<label><input type="checkbox" data-ae-lang="${l}" ${draft.languages.includes(l) ? "checked" : ""}> ${LANG_LABEL[l]}</label>`).join("")}</div>
           <div class="ae-row"><label>رسوم الكتابة <input type="number" value="0" disabled style="width:70px"> ج.م</label><small class="hint">معطلة لحد موافقة الإدارة.</small></div>
+          <label class="ae-row"><input type="checkbox" data-ae="confirmed" ${z.confirmed ? "checked" : ""}> <b>راجعت مكان الكتابة ومقاسها على صورة المعاينة</b></label>
+          <p class="hint">أي تحريك للمنطقة أو تغيير للصورة بيلغي المراجعة، عشان تتأكد منها تاني.</p>
           <div class="ae-row"><button class="button" type="button" data-ae-act="apply">اعتماد الإعدادات للمنتج</button><button class="button ghost" type="button" data-ae-act="reset">تراجع عن التعديلات</button></div>
           <p class="ae-status" data-ae-status></p>
         </div>
       </div>`;
     body.querySelector('[data-ae-s="surface"]').value = z.surface;
     body.querySelector('[data-ae-s="finish"]').value = z.finish;
+    body.querySelector("[data-ae-color]").value = !z.color ? "" : (E.COLOR_PRESETS.some((c) => c.value === z.color) ? z.color : "custom");
     const canvas = body.querySelector("[data-ae-full]");
     canvas.addEventListener("pointerdown", (e) => { drag = { x: e.clientX, y: e.clientY, zx: ctx.draft.zone.x, zy: ctx.draft.zone.y }; canvas.setPointerCapture(e.pointerId); });
     canvas.addEventListener("pointermove", (e) => {
@@ -127,6 +133,7 @@
       const r = canvas.getBoundingClientRect();
       ctx.draft.zone.x = clamp(drag.zx + (e.clientX - drag.x) / r.width, 0, 1);
       ctx.draft.zone.y = clamp(drag.zy + (e.clientY - drag.y) / r.height, 0, 1);
+      ctx.draft.zone.confirmed = false; syncConfirm();
       syncSliders(); changed();
     });
     canvas.addEventListener("pointerup", () => { drag = null; });
@@ -143,7 +150,17 @@
     if (!ctx) return;
     const t = e.target, z = ctx.draft.zone;
     if (t.dataset.ae === "enabled") ctx.draft.enabled = t.checked;
-    else if (t.dataset.aeZ) { z[t.dataset.aeZ] = Number(t.value); ctx.section.querySelector(`[data-ae-o="${t.dataset.aeZ}"]`).textContent = fmt(t.value); }
+    else if (t.dataset.ae === "confirmed") z.confirmed = t.checked;
+    else if (t.matches("[data-ae-color]")) {
+      const custom = ctx.section.querySelector("[data-ae-color-custom]");
+      custom.hidden = t.value !== "custom";
+      z.color = t.value === "custom" ? custom.value : t.value;
+    }
+    else if (t.matches("[data-ae-color-custom]")) z.color = t.value;
+    else if (t.dataset.aeZ) {
+      z[t.dataset.aeZ] = Number(t.value); ctx.section.querySelector(`[data-ae-o="${t.dataset.aeZ}"]`).textContent = fmt(t.value);
+      if (!["fontMax", "fontMin", "weight"].includes(t.dataset.aeZ)) { z.confirmed = false; syncConfirm(); }
+    }
     else if (t.dataset.aeS) z[t.dataset.aeS] = t.value;
     else if (t.dataset.aeMax) z.maxChars[t.dataset.aeMax] = Number(t.value);
     else if (t.dataset.aeLang) ctx.draft.languages = ["ar", "en", "cop"].filter((l) => ctx.section.querySelector(`[data-ae-lang="${l}"]`).checked);
@@ -156,6 +173,7 @@
     const img = e.target.closest("[data-ae-image]");
     if (img) {
       ctx.draft.previewImage = img.dataset.aeImage;
+      ctx.draft.zone.confirmed = false; syncConfirm();
       ctx.section.querySelectorAll("[data-ae-image]").forEach((b) => b.setAttribute("aria-pressed", String(b === img)));
       changed();
       return;
@@ -166,8 +184,18 @@
     if (act.dataset.aeAct === "apply") apply();
   }
 
+  function syncConfirm() { const c = ctx.section.querySelector('[data-ae="confirmed"]'); if (c) c.checked = ctx.draft.zone.confirmed === true; }
+  const MISSING_LABEL = { previewImage: "صورة المعاينة", color: "لون الكتابة", zone: "مراجعة مكان الكتابة" };
+  function missingOf(s) {
+    const m = [];
+    if (!s.previewImage) m.push("previewImage");
+    if (!s.zone.color) m.push("color");
+    if (!s.zone.confirmed) m.push("zone");
+    return m;
+  }
   function cleanDraft() {
     const s = E.normalizeSettings(ctx.draft);
+    s.enabled = ctx.draft.enabled === true; delete s.requested; delete s.missing;
     s.previewImage = ctx.draft.previewImage;
     if (!s.languages.length) s.languages = ["ar"];
     return s;
@@ -180,11 +208,14 @@
     if (!node) return;
     const dirty = isDirty();
     node.className = `ae-status ${dirty ? "is-dirty" : "is-clean"}`;
-    node.textContent = dirty ? "فيه تعديلات لسه ما اتعتمدتش." : (ctx.product.engraving ? `الإعدادات المعتمدة (إصدار ${ctx.product.engraving.version || 1}). بعد الاعتماد اضغط «حفظ ونشر» عشان تظهر على الموقع.` : "الكتابة غير مفعلة لهذا المنتج.");
+    const missing = missingOf(cleanDraft()).map((k) => MISSING_LABEL[k]);
+    const need = ctx.draft.enabled && missing.length ? ` لسه ناقص: ${missing.join("، ")}.` : "";
+    node.textContent = (dirty ? "فيه تعديلات لسه ما اتعتمدتش." : (ctx.product.engraving ? `الإعدادات المعتمدة (إصدار ${ctx.product.engraving.version || 1}). بعد الاعتماد اضغط «حفظ ونشر» عشان تظهر على الموقع.` : "الكتابة غير مفعلة لهذا المنتج.")) + need;
   }
   function apply() {
     const next = cleanDraft();
-    if (next.enabled && !next.previewImage) { alertStatus("اختار صورة المعاينة الأول."); return; }
+    const missing = missingOf(next);
+    if (next.enabled && missing.length) { alertStatus(`مينفعش تفعيل الكتابة قبل تحديد: ${missing.map((k) => MISSING_LABEL[k]).join("، ")}.`); return; }
     if (next.zone.fontMin > next.zone.fontMax) { alertStatus("أصغر حجم للخط لازم يكون أقل من أكبر حجم."); return; }
     const prev = ctx.product.engraving ? E.normalizeSettings(ctx.product.engraving) : null;
     next.version = prev ? (same(next, prev) ? prev.version : prev.version + 1) : 1;

@@ -2,7 +2,6 @@
 .pe{display:grid;gap:12px;margin:18px 0 6px;padding:16px;border:1px solid rgba(198,146,69,.45);border-radius:10px;background:linear-gradient(180deg,#fffaf0,#fffdf7)}
 .pe-head{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
 .pe-head h2{margin:0;font-size:19px;color:#073d42}
-.pe-free{font-size:12px;font-weight:800;color:#0c6b68;background:#e4f1ef;border-radius:999px;padding:3px 10px;white-space:nowrap}
 .pe-lead{margin:0;color:#65747a;font-size:14px}
 .pe-choice{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .pe-choice label,.pe-pills label{position:relative;cursor:pointer}

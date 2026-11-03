@@ -1699,7 +1699,7 @@ async function productPageResponse(request, env, product, products = []) {
   const safeProduct = JSON.stringify({ ...product, seoImageAlt: seo.alt }).replace(/</g, "\\u003c");
   const name = escapeHtml(seo.name);
   // Priest-name engraving assets load only on products the admin enabled it for.
-  const engravingOn = product?.engraving?.enabled === true;
+  const engravingOn = engravingReady(product?.engraving);
   const engravingHead = engravingOn ? `<link rel="stylesheet" href="/product-engraving.css?v=1">` : "";
   const engravingScripts = engravingOn ? `<script src="/cross-engraving.js?v=1" defer></script><script src="/product-engraving.js?v=1" defer></script>` : "";
   const thumbnailManifest = await loadThumbnailManifest(env, request);
@@ -1723,7 +1723,7 @@ ${tags.title}${tags.description}${tags.extra}
 <header class="site-header" data-elevated="false"><div class="brand-cluster"><a class="brand" href="/" aria-label="مكتبة البابا كيرلس"><span class="brand-logo-wrap"><img src="/assets/optimized/logo-papa-kyrillos-64.webp" srcset="/assets/optimized/logo-papa-kyrillos-64.webp 64w, /assets/optimized/logo-papa-kyrillos-128.webp 128w" sizes="50px" alt="" width="160" height="160" decoding="async"></span><span><strong>مكتبة البابا كيرلس</strong><small>مستلزمات الكنائس والخدمة</small></span></a></div><nav class="main-nav" aria-label="التنقل الرئيسي"><a href="/#categories">الأقسام</a><a href="/#catalog">المنتجات</a></nav><div class="header-actions"><a class="cart-toggle" href="/cart" aria-label="فتح السلة"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6h15l-2 8H8L6 3H3"/><circle cx="9" cy="20" r="1.6"/><circle cx="18" cy="20" r="1.6"/></svg><span>السلة</span><span class="cart-count" data-cart-count></span></a></div></header>
 <main class="product-route-main"><a class="product-route-back" href="/#catalog">العودة إلى المنتجات</a>${seo.crumbs.length > 2 ? breadcrumbNavHtml(seo.crumbs, "product-route-breadcrumb") : ""}<div id="product-detail" aria-label="${name}">${productDetailSsrHtml(seo)}</div><section class="product-route-related" aria-labelledby="related-title"><h2 id="related-title">منتجات مشابهة</h2><div class="product-grid" data-related-products>${related}</div></section></main>
 <footer class="product-route-footer"><strong>مكتبة البابا كيرلس</strong><span>مستلزمات الكنائس والخدمة</span><a href="/policies">السياسات</a><a href="https://wa.me/201016125589">تواصل معنا</a></footer>
-<div class="toast" data-toast role="status" aria-live="polite"></div><script id="product-data" type="application/json">${safeProduct}</script><script src="/yota-colors.js?v=3" defer></script>${engravingScripts}<script src="/product-page.js?v=25" defer></script></body></html>`;
+<div class="toast" data-toast role="status" aria-live="polite"></div><script id="product-data" type="application/json">${safeProduct}</script><script src="/yota-colors.js?v=3" defer></script>${engravingScripts}<script src="/product-page.js?v=26" defer></script></body></html>`;
   return new Response(html, {
     status: 200,
     headers: {
@@ -1951,6 +1951,13 @@ function orderItemEngraving(value) {
   };
 }
 
+// Customers see engraving only after the admin enabled it AND set the preview photo, the
+// writing colour and checked the writing area (same rule as CrossEngraving.normalizeSettings).
+function engravingReady(settings) {
+  return Boolean(settings && settings.enabled === true && typeof settings.previewImage === "string" && settings.previewImage
+    && /^#[0-9a-f]{6}$/i.test(String(settings.zone?.color || "")) && settings.zone?.confirmed === true);
+}
+
 function engravingNote(engraving) {
   return engraving ? `الاسم على الصليب: «${engraving.name}» | لغة الكتابة: ${engraving.langLabel}` : "";
 }
@@ -1965,7 +1972,7 @@ function engravingCatalogErrors(items, catalog) {
     const settings = byId.get(String(item.websiteProductId || ""))?.engraving;
     const languages = Array.isArray(settings?.languages) && settings.languages.length ? settings.languages : ["ar", "en", "cop"];
     const max = Number(settings?.zone?.maxChars?.[item.engraving.lang]) || 24;
-    if (settings?.enabled !== true) errors.push({ index, code: "engraving_not_available" });
+    if (!engravingReady(settings)) errors.push({ index, code: "engraving_not_available" });
     else if (!languages.includes(item.engraving.lang)) errors.push({ index, code: "engraving_language" });
     else if (engravingGraphemes(item.engraving.name) > max) errors.push({ index, code: "engraving_too_long" });
   });

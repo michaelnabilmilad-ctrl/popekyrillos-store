@@ -1588,7 +1588,22 @@ function mountBuyBar() {
     button.disabled = add.disabled && !hasChoices;
     priceNode.textContent = isMedalProduct && !selected ? "" : money(selected?.price ?? product.price);
     const box = actions.getBoundingClientRect();
-    buyBar.classList.toggle("is-visible", box.bottom < 0 || box.top > window.innerHeight);
+    buyBar.classList.toggle("is-visible", (box.bottom < 0 || box.top > window.innerHeight) && !coversCustomization());
+  };
+  // The engraving form (name field, preview, confirm box) sits above the page's own add button.
+  // While the customer is working in it, or the phone keyboard is open, the bar would cover the
+  // preview and the form, so it stays hidden; the real add button is just below the form.
+  const engravingBox = root.querySelector("[data-engraving-slot]");
+  const coversCustomization = () => {
+    const active = document.activeElement;
+    if (active && active !== document.body && active.matches("input:not([type=radio]):not([type=checkbox]),textarea,select")) return true;
+    const vv = window.visualViewport;
+    if (vv && vv.height < window.innerHeight * 0.75) return true;
+    if (!engravingBox || !engravingBox.isConnected) return false;
+    const body = engravingBox.querySelector("[data-pe-body]");
+    if (!body || body.hidden) return false;
+    const r = engravingBox.getBoundingClientRect();
+    return r.bottom > 0 && r.top < window.innerHeight;
   };
   button.addEventListener("click", () => {
     if (add.disabled) {
@@ -1598,6 +1613,11 @@ function mountBuyBar() {
     const message = root.querySelector("[data-message]");
     const before = message?.textContent;
     add.click();
+    const engravingError = engravingBox?.querySelector("[data-pe-err]");
+    if (engravingError && engravingError.dataset.kind === "submit" && engravingError.textContent) {
+      engravingBox.scrollIntoView({ behavior: "smooth", block: "start" });
+      return;
+    }
     if (message && message.textContent && message.textContent !== before) {
       confirmUntil = Date.now() + 2200;
       button.textContent = "✓ تمت الإضافة";
@@ -1607,6 +1627,9 @@ function mountBuyBar() {
   });
   window.addEventListener("scroll", sync, { passive: true });
   window.addEventListener("resize", sync, { passive: true });
+  window.visualViewport?.addEventListener("resize", sync, { passive: true });
+  document.addEventListener("focusin", sync);
+  document.addEventListener("focusout", () => setTimeout(sync, 50));
   new MutationObserver(sync).observe(root.querySelector(".product-route-copy"), { subtree: true, childList: true, characterData: true, attributes: true });
   sync();
 }

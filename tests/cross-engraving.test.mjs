@@ -15,14 +15,14 @@ const checkoutSource = fs.readFileSync(new URL("../checkout-flow.js", import.met
 const origin = "https://popekyrillos.store";
 
 const engraving = { enabled: true, previewImage: "assets/products/gallery/cross-unboxed.webp", languages: ["ar", "en", "cop"], fee: 0, version: 3,
-  zone: { x: 0.64, y: 0.6, len: 0.33, thick: 0.05, angle: 90, surface: "flat", finish: "ivory", maxChars: { ar: 24, en: 24, cop: 20 } } };
+  zone: { x: 0.64, y: 0.6, len: 0.33, thick: 0.05, angle: 90, surface: "flat", finish: "ink", color: "#18130e", confirmed: true, maxChars: { ar: 24, en: 24, cop: 20 } } };
 const catalog = [
   { id: "cross-2", name: "طقم صلبان يد وصدر كوريان - موديل 2", price: 770, stock: "متاح", variants: [], engraving },
   { id: "book-1", sku: "BOOK-1", name: "كتاب", price: 120, stock: "متاح", variants: [] }
 ];
 const line = (name, lang = "ar", extra = {}) => ({
   productId: "cross-2", name: "طقم صلبان يد وصدر كوريان - موديل 2", quantity: 1, price: 770, lineTotal: 770,
-  engraving: { enabled: true, name, lang, finish: "ivory", zoneVersion: 3, customizationId: E.lineKey(lang, name) }, ...extra
+  engraving: { enabled: true, name, lang, finish: "ink", zoneVersion: 3, customizationId: E.lineKey(lang, name) }, ...extra
 });
 
 test("names are cleaned and checked per language, with a per-product letter limit", () => {
@@ -46,11 +46,28 @@ test("admin settings are clamped to safe values and the fee stays off", () => {
   const s = E.normalizeSettings({ enabled: true, fee: 50, zone: { x: 7, fontMin: 0.9, fontMax: 0.5, finish: "neon", maxChars: { ar: 500 } }, languages: ["ar", "xx"] });
   assert.equal(s.zone.x, 1);
   assert.equal(s.zone.fontMin, 0.5);
-  assert.equal(s.zone.finish, "ivory");
+  assert.equal(s.zone.finish, "ink");
+  assert.equal(s.zone.color, "");
   assert.equal(s.zone.maxChars.ar, 60);
   assert.deepEqual(s.languages, ["ar"]);
   assert.equal(s.fee, 0);
   assert.equal(E.normalizeSettings(null).enabled, false);
+  assert.equal(E.normalizeSettings({ enabled: true, zone: { finish: "gold" } }).zone.finish, "filled", "older drafts keep working");
+});
+
+test("engraving stays off for customers until the photo, the colour and the writing area are set", () => {
+  const ready = E.normalizeSettings(engraving);
+  assert.equal(ready.enabled, true);
+  assert.deepEqual(ready.missing, []);
+  const noColor = E.normalizeSettings({ ...engraving, zone: { ...engraving.zone, color: "" } });
+  assert.equal(noColor.enabled, false);
+  assert.deepEqual(noColor.missing, ["color"]);
+  const badColor = E.normalizeSettings({ ...engraving, zone: { ...engraving.zone, color: "black" } });
+  assert.equal(badColor.enabled, false);
+  const unchecked = E.normalizeSettings({ ...engraving, zone: { ...engraving.zone, confirmed: false } });
+  assert.deepEqual(unchecked.missing, ["zone"]);
+  const noPhoto = E.normalizeSettings({ ...engraving, previewImage: "" });
+  assert.deepEqual(noPhoto.missing, ["previewImage"]);
 });
 
 test("CS New Athanasius display encoding round-trips and never shows a wrong letter", () => {
@@ -86,6 +103,11 @@ test("the server re-checks the name and refuses invisible tricks or other script
   assert.deepEqual(normalizeOrderItems([line("ابونا مينا", "cop")]).errors, ["products[0].engraving"]);
   assert.equal(normalizeOrderItems([line("أبونا‮ مينا")]).items[0].engraving.name, "أبونا مينا");
   assert.equal(normalizeOrderItems([{ productId: "book-1", quantity: 1, price: 120 }]).items[0].engraving, undefined);
+  for (const name of ["ⲡ̀ⲓⲱⲧ ⲙⲏⲛⲁ", "Ⲁⲃⲃⲁ Ⲡⲓϣⲟⲓ", "ϯϩⲩⲅⲟⲩⲙⲉⲛⲟⲥ ⲙ̅"]) {
+    const r = normalizeOrderItems([line(name, "cop")]);
+    assert.deepEqual(r.errors, [], name);
+    assert.equal(r.items[0].engraving.name, name.normalize("NFC"), "Coptic letters and marks are kept as Unicode");
+  }
 });
 
 async function setup(t) {
@@ -133,14 +155,18 @@ test("a name on a product without engraving, a closed language or a too-long nam
   assert.equal((await f.order([line("القمص يوحنا مرقس")])).status, 409);
   f.catalog = [{ ...catalog[0], engraving: { ...engraving, enabled: false } }];
   assert.equal((await f.order([line("أبونا مينا")])).status, 409);
+  f.catalog = [{ ...catalog[0], engraving: { ...engraving, zone: { ...engraving.zone, color: "" } } }];
+  assert.equal((await f.order([line("أبونا مينا")])).status, 409, "no writing colour set yet");
+  f.catalog = [{ ...catalog[0], engraving: { ...engraving, zone: { ...engraving.zone, confirmed: false } } }];
+  assert.equal((await f.order([line("أبونا مينا")])).status, 409, "writing area not checked yet");
   assert.equal(f.creates, 0);
   assert.equal(f.writes.length, 0);
 });
 
 test("product pages load the engraving files only when the admin enabled it", () => {
   const worker = fs.readFileSync(new URL("../cloudflare-worker.js", import.meta.url), "utf8");
-  assert.match(worker, /const engravingOn = product\?\.engraving\?\.enabled === true;/);
-  assert.match(worker, /\$\{engravingScripts\}<script src="\/product-page\.js\?v=25" defer><\/script>/);
+  assert.match(worker, /const engravingOn = engravingReady\(product\?\.engraving\);/);
+  assert.match(worker, /\$\{engravingScripts\}<script src="\/product-page\.js\?v=26" defer><\/script>/);
   const build = fs.readFileSync(new URL("../scripts/build-cloudflare.js", import.meta.url), "utf8");
   for (const file of ["cross-engraving.js", "product-engraving.js", "product-engraving.css", "admin-engraving.js"]) assert.match(build, new RegExp(`"${file.replace(".", "\\.")}"`));
   assert.ok(!fs.existsSync(new URL("../assets/fonts/engraving/CS-New-Athanasius.ttf", import.meta.url)), "CS New Athanasius is not shipped until its licence is confirmed");
