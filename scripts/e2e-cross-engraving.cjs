@@ -1,7 +1,10 @@
 // End-to-end run of the priest-name engraving feature against scripts/local-sandbox.mjs.
 //   node scripts/e2e-cross-engraving.cjs http://localhost:8790 <screenshots folder>
-// 1. Admin: engraving cannot be switched on before a colour and a checked writing area; then
-//    it is set on ONE real product and published to the sandbox's in-memory data branch.
+// 1. Admin: engraving cannot be switched on before a colour and a checked writing area. Model 2
+//    (black cross) gets the «صليب أسود» template: white writing, Arabic only. Model 9 gets the
+//    «بديل عاج» template (Arabic, English, Coptic in CS New Athanasius); since no ivory photo
+//    exists yet, its colour is then changed to white in admin so the test can see it.
+// 1b. White on black: letter height on a phone screen and contrast for short and long names.
 // 2. Phone layout at 320/360/375/390/430 px: nothing covers the preview or the form, zoom and
 //    full-cross views, no sideways scrolling, the keyboard and the sticky add-to-cart bar.
 // 3. Purchases: guest (no name, long Arabic name, Coptic with marks, same cross twice, a normal
@@ -18,8 +21,10 @@ const out = process.argv[3] || "e2e-shots";
 const PRODUCT = "popek-corian-cross-set-2";
 const PLAIN = "atb3ho-10555319877797"; // a normal product (book), price 25
 const ZONE = { x: 0.6385, y: 0.6, len: 0.33, thick: 0.05, angle: 90, fontMax: 0.52, fontMin: 0.38, weight: 0.03, padding: 0.08, curve: 0 };
-const TEST_COLOR = "#f2ede2"; // test-only choice for this black cross; the real colour is Michael's call
-const NAMES = { arLong: "القمص بيشوي يوحنا مرقس", cop: "Ⲁ̀ⲃⲃⲁ Ⲙⲏⲛⲁ", regAr: "أبونا داود", regEn: "Fr. Mark" };
+const MULTI = "popek-corian-cross-set-9"; // stands in for an ivory cross (3 languages)
+const MULTI_ZONE = { x: 0.631, y: 0.61, len: 0.32, thick: 0.048, angle: 90, fontMax: 0.52, fontMin: 0.38, weight: 0.03, padding: 0.08, curve: 0 };
+const NAMES = { arLong: "القمص بيشوي يوحنا مرقس", arSecond: "أبونا مينا", cop: "Ⲁ̀ⲃⲃⲁ Ⲙⲏⲛⲁ", regAr: "أبونا داود", regEn: "Fr. Mark" };
+const LEGIBILITY = ["أبونا مينا", "القمص يوحنا مرقس", "الأنبا أنطونيوس", "القمص بيشوي يوحنا مرقس", "القس أنطونيوس عبد المسيح"];
 fs.mkdirSync(out, { recursive: true });
 const results = [];
 const check = (name, ok, detail = "") => { results.push({ name, ok: Boolean(ok), detail }); console.log(`${ok ? "PASS" : "FAIL"} ${name}${detail ? ` — ${detail}` : ""}`); };
@@ -45,7 +50,7 @@ async function openEngraving(p, id = PRODUCT) {
   await p.waitForSelector("[data-pe-body]:not([hidden])");
 }
 async function addName(p, name, lang = "ar", qty = 1) {
-  await p.click(`.pe-pills input[value="${lang}"]`, { force: true });
+  if (await p.$(`.pe-pills input[value="${lang}"]`)) await p.click(`.pe-pills input[value="${lang}"]`, { force: true });
   await p.fill("[data-pe-input]", name);
   await p.waitForFunction(() => document.querySelector("[data-pe-summary]")?.textContent || document.querySelector("[data-pe-err]")?.textContent, null, { timeout: 8000 });
   await p.waitForTimeout(400);
@@ -68,49 +73,123 @@ async function addName(p, name, lang = "ar", qty = 1) {
   a.on("dialog", (d) => d.accept());
   await a.goto(`${base}/admin`);
   await a.waitForFunction(() => document.querySelectorAll("[data-product-row]").length > 5, null, { timeout: 30000 });
-  await a.fill("[data-search]", PRODUCT);
-  await a.click(`.row-actions [data-select-product="${PRODUCT}"]`);
-  await a.waitForFunction(() => !document.querySelector("[data-editor]")?.hidden, null, { timeout: 15000 });
-  await a.click('[data-editor-tab="engraving"]');
-  await a.waitForSelector("[data-ae-body] [data-ae='enabled']");
-  await a.check("[data-ae-body] [data-ae='enabled']");
-  await a.click('[data-ae-image$="model-2-unboxed.webp"]');
-  await a.evaluate((zone) => {
-    for (const [k, v] of Object.entries(zone)) {
+  const setZone = (zone) => a.evaluate((z) => {
+    for (const [k, v] of Object.entries(z)) {
       const input = document.querySelector(`[data-ae-z="${k}"]`);
       if (!input) continue;
       input.value = v;
       input.dispatchEvent(new Event("input", { bubbles: true }));
     }
-    const finish = document.querySelector('[data-ae-s="finish"]');
-    finish.value = "filled"; finish.dispatchEvent(new Event("change", { bubbles: true }));
-  }, ZONE);
+  }, zone);
+  const openProduct = async (id) => {
+    await a.fill("[data-search]", id);
+    await a.click(`.row-actions [data-select-product="${id}"]`);
+    await a.waitForFunction(() => !document.querySelector("[data-editor]")?.hidden, null, { timeout: 15000 });
+    await a.click('[data-editor-tab="engraving"]');
+    await a.waitForSelector("[data-ae-body] [data-ae='enabled']");
+  };
+  const langsChecked = () => a.evaluate(() => ["ar", "en", "cop"].filter((l) => document.querySelector(`[data-ae-lang="${l}"]`).checked));
+  const publish = async (count) => {
+    await a.click('[data-action="publish-products"]');
+    for (let i = 0; i < 40; i++) { await a.waitForTimeout(500); if ((await state()).engravingProducts.length >= count) break; }
+    return state();
+  };
+
+  // Model 2: black cross
+  await openProduct(PRODUCT);
+  await a.check("[data-ae-body] [data-ae='enabled']");
+  await a.click('[data-ae-image$="model-2-unboxed.webp"]');
+  await setZone(ZONE);
   check("admin: no writing colour is pre-selected", (await a.inputValue("[data-ae-color]")) === "");
   await a.click('[data-ae-act="apply"]');
   const noColor = await a.textContent("[data-ae-status]");
   check("admin: cannot enable before choosing the writing colour", /لون الكتابة/.test(noColor), noColor);
-  await a.selectOption("[data-ae-color]", TEST_COLOR);
+  await a.click('[data-ae-template="black"]');
+  check("admin: «صليب أسود» template = white, Arabic only, free note", (await a.inputValue("[data-ae-color]")) === "#ffffff" && JSON.stringify(await langsChecked()) === '["ar"]' && await a.isChecked('[data-ae="freeNote"]'));
   await a.click('[data-ae-act="apply"]');
   const noZone = await a.textContent("[data-ae-status]");
   check("admin: cannot enable before checking the writing area", /مراجعة مكان الكتابة/.test(noZone) && !/لون الكتابة/.test(noZone), noZone);
   await a.check('[data-ae="confirmed"]');
-  // Moving the area again clears the check
   await a.evaluate(() => { const s = document.querySelector('[data-ae-z="x"]'); s.value = "0.6386"; s.dispatchEvent(new Event("input", { bubbles: true })); });
   check("admin: moving the writing area asks to check it again", !(await a.isChecked('[data-ae="confirmed"]')));
   await a.evaluate(() => { const s = document.querySelector('[data-ae-z="x"]'); s.value = "0.6385"; s.dispatchEvent(new Event("input", { bubbles: true })); });
   await a.check('[data-ae="confirmed"]');
-  await a.waitForTimeout(1500);
-  await a.locator('[data-editor-section="engraving"]').screenshot({ path: shot("01-admin-engraving-settings.png") });
+  await a.waitForTimeout(1800);
+  await a.locator('[data-editor-section="engraving"]').screenshot({ path: shot("01-admin-black-cross-template.png") });
   await a.click('[data-ae-act="apply"]');
   await a.waitForTimeout(300);
   check("admin: settings applied to the product draft", /حفظ ونشر/.test(await a.textContent("[data-ae-status]")));
-  await a.click('[data-action="publish-products"]');
-  let published = false;
-  for (let i = 0; i < 40 && !published; i++) { await a.waitForTimeout(500); published = (await state()).engravingProducts.length > 0; }
-  const afterPublish = await state();
-  const saved = afterPublish.engravingProducts[0]?.engraving;
-  check("admin: «حفظ ونشر» saved the settings with colour and checked area", published && saved?.zone?.color === TEST_COLOR && saved?.zone?.confirmed === true && saved?.enabled === true, JSON.stringify(saved?.zone || {}));
-  check("admin: only that product has engraving (not all crosses)", afterPublish.engravingProducts.length === 1 && afterPublish.engravingProducts[0].id === PRODUCT);
+  let st = await publish(1);
+  const black = st.engravingProducts.find((x) => x.id === PRODUCT)?.engraving;
+  check("admin: black cross saved as white, Arabic only, free", black?.zone?.color === "#ffffff" && JSON.stringify(black?.languages) === '["ar"]' && black?.freeNote === true && black?.zone?.confirmed === true && black?.enabled === true, JSON.stringify({ color: black?.zone?.color, languages: black?.languages, freeNote: black?.freeNote }));
+
+  // Model 9: «بديل عاج» template, then the colour edited in admin (no ivory photo yet)
+  await openProduct(MULTI);
+  await a.check("[data-ae-body] [data-ae='enabled']");
+  await a.click('[data-ae-image$="model-9-unboxed.webp"]');
+  await setZone(MULTI_ZONE);
+  await a.click('[data-ae-template="ivory"]');
+  const ivoryOk = (await a.inputValue("[data-ae-color]")) === "#18130e" && JSON.stringify(await langsChecked()) === '["ar","en","cop"]' && (await a.inputValue("[data-ae-coptic]")) === "athanasius";
+  check("admin: «بديل عاج» template = black, 3 languages, CS New Athanasius", ivoryOk);
+  await a.selectOption("[data-ae-color]", "#ffffff");
+  await a.check('[data-ae="confirmed"]');
+  await a.waitForTimeout(2200);
+  await a.locator('[data-editor-section="engraving"]').screenshot({ path: shot("02-admin-three-languages.png") });
+  await a.click('[data-ae-act="apply"]');
+  await a.waitForTimeout(300);
+  st = await publish(2);
+  const multi = st.engravingProducts.find((x) => x.id === MULTI)?.engraving;
+  check("admin: colour and languages are per product (edited after the template)", multi?.zone?.color === "#ffffff" && multi?.languages?.length === 3 && multi?.copticFont === "athanasius", JSON.stringify({ color: multi?.zone?.color, languages: multi?.languages, copticFont: multi?.copticFont }));
+  check("admin: only those two products have engraving (not all crosses)", st.engravingProducts.length === 2);
+
+  // ---------- 1b. White on black: legibility on a phone
+  {
+    const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true, userAgent: devices["iPhone 13"].userAgent });
+    await guard(ctx);
+    const p = await ctx.newPage();
+    p.on("pageerror", (e) => errors.push(`legibility: ${e.message}`));
+    await openEngraving(p);
+    const head = await p.textContent(".pe-head");
+    check("black cross page: «الكتابة مجانية» shown, Arabic only (no language choice)", /الكتابة مجانية/.test(head) && !(await p.$(".pe-pills")));
+    const rows = [];
+    for (const [i, name] of LEGIBILITY.entries()) {
+      await p.fill("[data-pe-input]", name);
+      await p.waitForTimeout(1300);
+      const m = await p.evaluate(async (text) => {
+        const E = window.CrossEngraving;
+        const product = JSON.parse(document.getElementById("product-data").textContent);
+        const settings = E.normalizeSettings(product.engraving);
+        const imageSrc = "/" + settings.previewImage.replace(/^\//, "");
+        const [r1, r0] = [await E.render({ imageSrc, zone: settings.zone, text, lang: "ar" }), await E.render({ imageSrc, zone: settings.zone, text: "", lang: "ar" })];
+        const draw = (r) => { const c = document.createElement("canvas"); c.width = 900; c.height = 300; E.drawZoom(c, r, {}); return c.getContext("2d").getImageData(0, 0, 900, 300).data; };
+        const a1 = draw(r1), a0 = draw(r0);
+        let minY = 300, maxY = -1, minX = 900, maxX = -1, ink = 0, inkLum = 0, bgLum = 0, bg = 0;
+        for (let y = 0; y < 300; y++) for (let x = 0; x < 900; x++) {
+          const k = (y * 900 + x) * 4;
+          const l1 = 0.2126 * a1[k] + 0.7152 * a1[k + 1] + 0.0722 * a1[k + 2];
+          const l0 = 0.2126 * a0[k] + 0.7152 * a0[k + 1] + 0.0722 * a0[k + 2];
+          if (Math.abs(l1 - l0) > 40) { ink++; inkLum += l1; bgLum += l0; minY = Math.min(minY, y); maxY = Math.max(maxY, y); minX = Math.min(minX, x); maxX = Math.max(maxX, x); }
+        }
+        const shown = document.querySelector("[data-pe-zoom]").getBoundingClientRect().width / 900;
+        const rel = (v) => { v /= 255; return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4; };
+        const L1 = rel(inkLum / Math.max(1, ink)), L0 = rel(bgLum / Math.max(1, ink));
+        return { fits: r1.fit?.fits, sizeOfMax: Math.round((r1.fit?.ratio || 0) * 100), textHeightPx: Math.round((maxY - minY + 1) * shown), textWidthPx: Math.round((maxX - minX + 1) * shown), contrast: Math.round(((Math.max(L1, L0) + 0.05) / (Math.min(L1, L0) + 0.05)) * 10) / 10, err: document.querySelector("[data-pe-err]").textContent };
+      }, name);
+      rows.push({ name, chars: [...name].length, ...m });
+      await p.locator(".pe-figure[data-pe-figure=zoom]").screenshot({ path: shot(`w-${i + 1}-zoom-${[...name].length}chars.png`) });
+    }
+    await p.click('[data-pe-view="full"]');
+    await p.waitForTimeout(900);
+    await p.locator('[data-pe-figure="full"]').screenshot({ path: shot("w-6-full-cross-longest.png") });
+    await p.fill("[data-pe-input]", "القمص بيشوي يوحنا مرقس عبد المسيح");
+    await p.waitForTimeout(1000);
+    const tooLong = await p.textContent("[data-pe-err]");
+    fs.writeFileSync(path.join(out, "legibility.json"), JSON.stringify(rows, null, 2));
+    console.log(rows.map((r) => `   ${r.name} (${r.chars}): height ${r.textHeightPx}px, width ${r.textWidthPx}px, size ${r.sizeOfMax}% of max, contrast ${r.contrast}:1, fits ${r.fits}`).join("\n"));
+    check("white on black: every name up to 24 letters fits, contrast ≥ 7:1, letters ≥ 9px tall on a 390px phone", rows.every((r) => r.fits && r.contrast >= 7 && r.textHeightPx >= 9 && !r.err), JSON.stringify(rows.map((r) => [r.chars, r.textHeightPx, r.contrast])));
+    check("white on black: a longer name gets a clear warning instead of a tiny font", /أطول/.test(tooLong), tooLong);
+    await ctx.close();
+  }
 
   // ---------- 2. Phone layout at five widths
   const layout = [];
@@ -188,21 +267,18 @@ async function addName(p, name, lang = "ar", qty = 1) {
   await p.goto(`${base}/products/${PRODUCT}`);
   await p.waitForSelector(".pe .pe-choice");
   const priceText = await p.textContent("[data-price]");
-  check("price unchanged and no fee wording shown", /770|٧٧٠/.test(priceText) && !/رسوم/.test(await p.textContent(".pe")), priceText);
+  check("price unchanged (770) and no fee added", /770|٧٧٠/.test(priceText) && !/رسوم/.test(await p.textContent(".pe")), priceText);
   await p.click("[data-add]"); // no engraving
   await p.waitForTimeout(300);
   check("guest: cross added without any name", /أضيف|تمت|السلة/.test(await p.textContent("[data-message]")));
   await p.click('.pe-choice input[value="name"]', { force: true });
   check("guest: long Arabic name added", (await addName(p, NAMES.arLong)).includes(NAMES.arLong));
   await p.locator(".pe").screenshot({ path: shot("10-guest-long-arabic.png") });
-  await p.fill("[data-quantity]", "1");
+  check("guest: same cross again with a second Arabic name", (await addName(p, NAMES.arSecond)).includes(NAMES.arSecond));
+  await openEngraving(p, MULTI);
+  check("3-language cross: Arabic, English and Coptic offered", (await p.$$eval(".pe-pills input", (n) => n.map((i) => i.value).join(","))) === "ar,en,cop");
   check("guest: Coptic name with marks added", (await addName(p, NAMES.cop, "cop")).includes(NAMES.cop.normalize("NFC")));
-  await p.locator(".pe").screenshot({ path: shot("11-guest-coptic-marks.png") });
-  // too long still refused
-  await p.click('.pe-pills input[value="ar"]', { force: true });
-  await p.fill("[data-pe-input]", "القمص بيشوي يوحنا مرقس عبد المسيح");
-  await p.waitForTimeout(900);
-  check("guest: a too-long name is refused with a clear warning", /أطول/.test(await p.textContent("[data-pe-err]")));
+  await p.locator(".pe").screenshot({ path: shot("11-guest-coptic-athanasius.png") });
   await p.goto(`${base}/products/${PLAIN}`);
   await p.waitForSelector("[data-add]");
   check("normal product: no engraving section or scripts", !(await p.$(".pe")) && !(await p.$('script[src*="cross-engraving"]')));
@@ -210,7 +286,7 @@ async function addName(p, name, lang = "ar", qty = 1) {
   await p.waitForTimeout(300);
   let cart = await cartItems(p);
   const crossLines = cart.items.filter((i) => i.productId === PRODUCT);
-  check("cart: same cross 3 times = 3 separate lines (no name, Arabic, Coptic)", crossLines.length === 3 && new Set(crossLines.map((i) => i.lineId || "")).size === 3, crossLines.map((i) => i.engraving?.name || "—").join(" | "));
+  check("cart: same cross 3 times = 3 separate lines (no name, 2 different names)", crossLines.length === 3 && new Set(crossLines.map((i) => i.lineId || "")).size === 3, crossLines.map((i) => i.engraving?.name || "—").join(" | "));
   await p.goto(`${base}/cart`);
   await p.waitForSelector(".cart-engraving");
   const arLine = (await cartItems(p)).items.find((i) => i.engraving?.name === NAMES.arLong);
@@ -219,11 +295,11 @@ async function addName(p, name, lang = "ar", qty = 1) {
   await p.waitForTimeout(400);
   cart = await cartItems(p);
   const qty = (fn) => cart.items.find(fn)?.qty;
-  check("cart: changing the Arabic line's quantity changes only that line", qty((i) => i.engraving?.name === NAMES.arLong) === 2 && qty((i) => i.engraving?.lang === "cop") === 1 && qty((i) => i.productId === PRODUCT && !i.engraving) === 1);
+  check("cart: changing the Arabic line's quantity changes only that line", qty((i) => i.engraving?.name === NAMES.arLong) === 2 && qty((i) => i.engraving?.name === NAMES.arSecond) === 1 && qty((i) => i.engraving?.lang === "cop") === 1 && qty((i) => i.productId === PRODUCT && !i.engraving) === 1);
   await p.reload();
   await p.waitForSelector(".cart-engraving");
   const cartText = await p.textContent("[data-cart-page-items]");
-  check("cart: after reload the names, languages and quantities are still there", cartText.includes(NAMES.arLong) && cartText.includes(NAMES.cop.normalize("NFC")) && /القبطية/.test(cartText) && (await cartItems(p)).items.length === 4);
+  check("cart: after reload the names, languages and quantities are still there", cartText.includes(NAMES.arLong) && cartText.includes(NAMES.cop.normalize("NFC")) && cartText.includes(NAMES.arSecond) && /القبطية/.test(cartText) && (await cartItems(p)).items.length === 5);
   await p.screenshot({ path: shot("12-guest-cart.png"), fullPage: true });
   await p.goto(`${base}/checkout`);
   await p.check('input[name="deliveryMethod"][value="pickup"]', { force: true });
@@ -240,12 +316,14 @@ async function addName(p, name, lang = "ar", qty = 1) {
   const guestOrder = s.orders[0];
   const gl = (guestOrder?.Products || "").split("\n");
   const lineWith = (re) => gl.filter((l) => re.test(l));
-  check("guest order: created, total 770 + 2×770 + 770 + 25", s.orders.length === 1 && guestOrder.Total === 3105, String(guestOrder?.Total));
+  check("guest order: created, total 770 + 2×770 + 770 + 770 + 25", s.orders.length === 1 && guestOrder.Total === 3875, String(guestOrder?.Total));
   check("guest order: Arabic name on its own line with quantity 2", lineWith(/«القمص بيشوي يوحنا مرقس» \| لغة الكتابة: العربية/).length === 1 && /الكمية: 2/.test(lineWith(/بيشوي/)[0] || ""), gl.join(" || "));
   check("guest order: Coptic name kept exactly (Unicode with marks)", lineWith(new RegExp(`«${NAMES.cop.normalize("NFC")}» \\| لغة الكتابة: القبطية`)).length === 1);
+  check("guest order: second Arabic name on its own line", lineWith(/«أبونا مينا» \| لغة الكتابة: العربية/).length === 1);
   check("guest order: plain cross and normal product have no name", gl.filter((l) => !/الاسم على الصليب/.test(l)).length === 2);
-  const gNotes = s.orderLines.filter((l) => l.order === guestOrder?.id || true).slice(0, 4).map((l) => l.notes);
-  check("guest order lines (ملاحظات): one name per line, never mixed", gNotes.filter((n) => /بيشوي/.test(n)).length === 1 && gNotes.filter((n) => n.includes(NAMES.cop.normalize("NFC"))).length === 1 && !gNotes.some((n) => /بيشوي/.test(n) && n.includes("Ⲙⲏⲛⲁ")), gNotes.join(" || "));
+  const gNotes = s.orderLines.slice(0, 5).map((l) => l.notes);
+  const one = (re) => gNotes.filter((n) => re.test(n)).length === 1;
+  check("guest order lines (ملاحظات): one name per line, never mixed", one(/بيشوي/) && one(/«أبونا مينا»/) && gNotes.filter((n) => n.includes(NAMES.cop.normalize("NFC"))).length === 1 && !gNotes.some((n) => (n.match(/الاسم على الصليب/g) || []).length > 1), gNotes.join(" || "));
 
   // ---------- 3b. Signed-in customer (local stand-in for Firebase)
   const reg = await browser.newContext({ ...devices["iPhone 13"] });
@@ -257,6 +335,7 @@ async function addName(p, name, lang = "ar", qty = 1) {
   await r.waitForTimeout(1500);
   await openEngraving(r);
   await addName(r, NAMES.regAr);
+  await openEngraving(r, MULTI);
   await addName(r, NAMES.regEn, "en");
   await r.goto(`${base}/cart`);
   await r.waitForSelector(".cart-engraving", { timeout: 15000 });
@@ -293,11 +372,12 @@ async function addName(p, name, lang = "ar", qty = 1) {
     return {
       onNormal: await send([{ productId: plain, quantity: 1, price: 25, lineTotal: 25, engraving: eng("أبونا مينا", "ar") }]),
       badChars: await send([{ productId: product, quantity: 1, price: 770, lineTotal: 770, engraving: eng("Mina<script>", "en") }]),
-      tooLong: await send([{ productId: product, quantity: 1, price: 770, lineTotal: 770, engraving: eng("القمص بيشوي يوحنا مرقس عبد المسيح", "ar") }])
+      tooLong: await send([{ productId: product, quantity: 1, price: 770, lineTotal: 770, engraving: eng("القمص بيشوي يوحنا مرقس عبد المسيح", "ar") }]),
+      englishOnArabicOnly: await send([{ productId: product, quantity: 1, price: 770, lineTotal: 770, engraving: eng("Fr. Mina", "en") }])
     };
   }, { product: PRODUCT, plain: PLAIN });
   const after = await state();
-  check("server: refuses a name on a normal product, bad characters and a too-long name", tamper.onNormal.status === 409 && /engraving_invalid/.test(tamper.onNormal.body) && tamper.tooLong.status === 409 && /engraving_invalid/.test(tamper.tooLong.body) && tamper.badChars.status >= 400 && /engraving/.test(tamper.badChars.body) && after.orders.length === 2, JSON.stringify(Object.fromEntries(Object.entries(tamper).map(([k, v]) => [k, `${v.status} ${v.body.slice(0, 60)}`]))));
+  check("server: refuses a name on a normal product, bad characters, a too-long name and English on the Arabic-only black cross", tamper.englishOnArabicOnly.status === 409 && /engraving_invalid/.test(tamper.englishOnArabicOnly.body) && tamper.onNormal.status === 409 && /engraving_invalid/.test(tamper.onNormal.body) && tamper.tooLong.status === 409 && /engraving_invalid/.test(tamper.tooLong.body) && tamper.badChars.status >= 400 && /engraving/.test(tamper.badChars.body) && after.orders.length === 2, JSON.stringify(Object.fromEntries(Object.entries(tamper).map(([k, v]) => [k, `${v.status} ${v.body.slice(0, 60)}`]))));
 
   // ---------- 5. Admin orders page
   const o = await admin.newPage();

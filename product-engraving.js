@@ -26,7 +26,7 @@
     const langs = settings.languages;
     host.className = "pe";
     host.innerHTML = `
-      <div class="pe-head"><h2 id="${uid}-t">✍️ اكتب اسم أبونا على الصليب</h2></div>
+      <div class="pe-head"><h2 id="${uid}-t">✍️ اكتب اسم أبونا على الصليب</h2>${settings.freeNote ? `<span class="pe-free">الكتابة مجانية</span>` : ""}</div>
       <p class="pe-lead">نكتب الاسم على يد صليب اليد، وتشوف شكله على صورة نفس الصليب قبل ما تطلب.</p>
       <div class="pe-choice" role="radiogroup" aria-labelledby="${uid}-t">
         <label><input type="radio" name="${uid}-mode" value="none" checked><b>بدون كتابة</b><small>الصليب كما في الصور</small></label>
@@ -54,14 +54,15 @@
     host.addEventListener("input", (e) => { if (e.target.matches("[data-pe-input]")) onName(); });
     host.addEventListener("click", onClick);
     syncLang();
-    E.loadFont(state.lang).catch(() => {});
+    E.loadFont(state.lang, fontOpts()).catch(() => {});
     return true;
   }
 
   const $ = (s) => host.querySelector(s);
+  const fontOpts = () => ({ legacy: settings.copticFont === "athanasius" });
   function onChange(e) {
     const t = e.target;
-    if (t.name?.endsWith("-mode")) { state.mode = t.value; $("[data-pe-body]").hidden = state.mode !== "name"; if (state.mode === "name") { E.loadFont(state.lang).then(draw, draw); setTimeout(() => $("[data-pe-input]").focus({ preventScroll: true }), 30); } }
+    if (t.name?.endsWith("-mode")) { state.mode = t.value; $("[data-pe-body]").hidden = state.mode !== "name"; if (state.mode === "name") { E.loadFont(state.lang, fontOpts()).then(draw, draw); setTimeout(() => $("[data-pe-input]").focus({ preventScroll: true }), 30); } }
     if (t.name?.endsWith("-lang")) { state.lang = t.value; syncLang(); unconfirm(); onName(); }
     if (t.matches("[data-pe-confirm]")) clearError();
   }
@@ -89,7 +90,7 @@
     input.placeholder = PLACEHOLDER[state.lang];
     input.classList.toggle("is-coptic", state.lang === "cop");
     $("[data-pe-keys]").hidden = state.lang !== "cop";
-    E.loadFont(state.lang).then(draw, draw);
+    E.loadFont(state.lang, fontOpts()).then(draw, draw);
   }
   function unconfirm() { const c = $("[data-pe-confirm]"); if (c) c.checked = false; }
   function clearError() { const n = $("[data-pe-err]"); if (n && n.dataset.kind === "submit") { n.textContent = ""; n.dataset.kind = ""; } }
@@ -108,7 +109,7 @@
     const v = validation();
     const text = v.ok || v.code === "length" ? v.name : "";
     let result;
-    try { result = await E.render({ imageSrc, zone: settings.zone, text, lang: state.lang }); } catch { if (my === ticket) $("[data-pe-err]").textContent = "تعذر تحميل صورة المعاينة. حدّث الصفحة وحاول تاني."; return; }
+    try { result = await E.render({ imageSrc, zone: settings.zone, text, lang: state.lang, legacy: settings.copticFont === "athanasius" }); } catch { if (my === ticket) $("[data-pe-err]").textContent = "تعذر تحميل صورة المعاينة. حدّث الصفحة وحاول تاني."; return; }
     if (my !== ticket) return;
     last = { result, v, text };
     const full = $("[data-pe-full]");

@@ -19,6 +19,13 @@
     ["curve", "استدارة اليد (للأيدي المستديرة)", 0, 1.3, 0.05]
   ];
 
+  // One-click starting points from the owner's decisions (2026-11-03). They only fill the
+  // draft: every value stays editable below and nothing applies until «اعتماد».
+  const TEMPLATES = {
+    black: { label: "صليب أسود: كتابة بيضاء، عربي فقط", languages: ["ar"], zone: { color: "#ffffff", finish: "ink" }, copticFont: "noto", freeNote: true },
+    ivory: { label: "بديل عاج: كتابة سوداء، عربي وإنجليزي وقبطي", languages: ["ar", "en", "cop"], zone: { color: "#18130e", finish: "ink" }, copticFont: "athanasius", freeNote: true }
+  };
+
   let ctx = null; // { product, markDirty, assetUrl, draft, section }
   let ticket = 0, drag = null;
 
@@ -101,6 +108,7 @@
     body.innerHTML = `
       <label class="ae-toggle"><input type="checkbox" data-ae="enabled" ${draft.enabled ? "checked" : ""}> السماح بالكتابة على هذا المنتج</label>
       <p class="hint">لما يتفعّل، صفحة المنتج تعرض للعميل اختيار «أضف اسم الكاهن» مع معاينة على الصورة اللي تختارها هنا. التعديلات هنا مسودة لحد ما تضغط «اعتماد».</p>
+      <div class="ae-row"><strong>قالب جاهز:</strong>${Object.entries(TEMPLATES).map(([k, t]) => `<button class="button ghost" type="button" data-ae-template="${k}">${esc(t.label)}</button>`).join("")}<small class="hint">بيملأ اللون واللغات والخط بس؛ كل حاجة تفضل قابلة للتعديل.</small></div>
       <div class="ae-row"><strong>صورة المعاينة:</strong><div class="ae-thumbs">${imgs.map((src) => `<button type="button" data-ae-image="${esc(src)}" aria-pressed="${src === draft.previewImage}" title="${esc(src)}"><img src="${esc(ctx.assetUrl(src))}" alt=""></button>`).join("") || "<span>أضف صور للمنتج الأول.</span>"}</div></div>
       <div class="ae-grid">
         <div>
@@ -116,7 +124,9 @@
           <p class="hint">مفيش لون افتراضي: لازم تختار لون الكتابة لكل منتج. لحد ما يتحدد، المعاينة هنا بالرمادي ومش هتظهر للعملاء.</p>
           <div class="ae-row"><span>أقصى عدد حروف:</span>${["ar", "en", "cop"].map((l) => `<label>${LANG_LABEL[l]} <input type="number" min="1" max="60" value="${z.maxChars[l]}" data-ae-max="${l}" style="width:60px"></label>`).join("")}</div>
           <div class="ae-row"><span>اللغات المتاحة:</span>${["ar", "en", "cop"].map((l) => `<label><input type="checkbox" data-ae-lang="${l}" ${draft.languages.includes(l) ? "checked" : ""}> ${LANG_LABEL[l]}</label>`).join("")}</div>
-          <div class="ae-row"><label>رسوم الكتابة <input type="number" value="0" disabled style="width:70px"> ج.م</label><small class="hint">معطلة لحد موافقة الإدارة.</small></div>
+          <label class="ae-ctl"><span>الخط القبطي</span><select data-ae-coptic><option value="noto">Noto Sans Coptic (مرخص مجانًا)</option><option value="athanasius">CS New Athanasius</option></select><span></span></label>
+          <p class="hint" data-ae-coptic-note></p>
+          <label class="ae-row"><input type="checkbox" data-ae="freeNote" ${draft.freeNote ? "checked" : ""}> إظهار «الكتابة مجانية» للعميل</label>
           <label class="ae-row"><input type="checkbox" data-ae="confirmed" ${z.confirmed ? "checked" : ""}> <b>راجعت مكان الكتابة ومقاسها على صورة المعاينة</b></label>
           <p class="hint">أي تحريك للمنطقة أو تغيير للصورة بيلغي المراجعة، عشان تتأكد منها تاني.</p>
           <div class="ae-row"><button class="button" type="button" data-ae-act="apply">اعتماد الإعدادات للمنتج</button><button class="button ghost" type="button" data-ae-act="reset">تراجع عن التعديلات</button></div>
@@ -124,6 +134,7 @@
         </div>
       </div>`;
     body.querySelector('[data-ae-s="surface"]').value = z.surface;
+    body.querySelector("[data-ae-coptic]").value = draft.copticFont;
     body.querySelector('[data-ae-s="finish"]').value = z.finish;
     body.querySelector("[data-ae-color]").value = !z.color ? "" : (E.COLOR_PRESETS.some((c) => c.value === z.color) ? z.color : "custom");
     const canvas = body.querySelector("[data-ae-full]");
@@ -150,6 +161,8 @@
     if (!ctx) return;
     const t = e.target, z = ctx.draft.zone;
     if (t.dataset.ae === "enabled") ctx.draft.enabled = t.checked;
+    else if (t.dataset.ae === "freeNote") ctx.draft.freeNote = t.checked;
+    else if (t.matches("[data-ae-coptic]")) ctx.draft.copticFont = t.value;
     else if (t.dataset.ae === "confirmed") z.confirmed = t.checked;
     else if (t.matches("[data-ae-color]")) {
       const custom = ctx.section.querySelector("[data-ae-color-custom]");
@@ -176,6 +189,16 @@
       ctx.draft.zone.confirmed = false; syncConfirm();
       ctx.section.querySelectorAll("[data-ae-image]").forEach((b) => b.setAttribute("aria-pressed", String(b === img)));
       changed();
+      return;
+    }
+    const tpl = e.target.closest("[data-ae-template]");
+    if (tpl) {
+      const t = TEMPLATES[tpl.dataset.aeTemplate];
+      Object.assign(ctx.draft.zone, t.zone);
+      ctx.draft.languages = [...t.languages];
+      ctx.draft.copticFont = t.copticFont;
+      ctx.draft.freeNote = t.freeNote;
+      build();
       return;
     }
     const act = e.target.closest("[data-ae-act]");
@@ -232,16 +255,21 @@
     const src = ctx.assetUrl(ctx.draft.previewImage);
     const zone = cleanDraft().zone;
     try {
+      const legacy = ctx.draft.copticFont === "athanasius";
       const base = await E.render({ imageSrc: src, zone, text: ctx.tests.ar && ctx.draft.languages.includes("ar") ? ctx.tests.ar : "", lang: "ar" });
       if (my !== ticket) return;
       const full = ctx.section.querySelector("[data-ae-full]");
       full.getContext("2d").clearRect(0, 0, full.width, full.height);
       E.drawFull(full, base, { outline: true });
       for (const l of ["ar", "en", "cop"]) {
-        await E.loadFont(l).catch(() => {});
+        await E.loadFont(l, { legacy }).catch(() => {});
         const text = ctx.tests[l] || "";
         const v = E.validateName(text, l, zone);
-        const r = await E.render({ imageSrc: src, zone, text: v.ok || v.code === "length" ? v.name : "", lang: l });
+        const r = await E.render({ imageSrc: src, zone, text: v.ok || v.code === "length" ? v.name : "", lang: l, legacy });
+        if (l === "cop") {
+          const note = ctx.section.querySelector("[data-ae-coptic-note]");
+          if (note) note.textContent = !legacy ? "" : (E.legacyReady.cop ? "المعاينة بخط CS New Athanasius." : "ملف CS New Athanasius المرخّص لسه مش مضاف للموقع، فالمعاينة والعملاء بيشوفوا Noto Sans Coptic لحد ما يتضاف.");
+        }
         if (my !== ticket) return;
         E.drawZoom(ctx.section.querySelector(`[data-ae-strip="${l}"]`), r, { outline: true });
         const cap = ctx.section.querySelector(`[data-ae-fit="${l}"]`);

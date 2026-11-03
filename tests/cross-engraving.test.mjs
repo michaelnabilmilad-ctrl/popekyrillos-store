@@ -53,6 +53,11 @@ test("admin settings are clamped to safe values and the fee stays off", () => {
   assert.equal(s.fee, 0);
   assert.equal(E.normalizeSettings(null).enabled, false);
   assert.equal(E.normalizeSettings({ enabled: true, zone: { finish: "gold" } }).zone.finish, "filled", "older drafts keep working");
+  assert.equal(s.copticFont, "noto", "Noto Sans Coptic unless the admin picks CS New Athanasius");
+  assert.equal(E.normalizeSettings({ copticFont: "athanasius" }).copticFont, "athanasius");
+  assert.equal(E.normalizeSettings({ copticFont: "comic" }).copticFont, "noto");
+  assert.equal(s.freeNote, false, "«الكتابة مجانية» shows only when the admin ticks it");
+  assert.equal(E.normalizeSettings({ freeNote: true }).freeNote, true);
 });
 
 test("engraving stays off for customers until the photo, the colour and the writing area are set", () => {
@@ -169,5 +174,5 @@ test("product pages load the engraving files only when the admin enabled it", ()
   assert.match(worker, /\$\{engravingScripts\}<script src="\/product-page\.js\?v=26" defer><\/script>/);
   const build = fs.readFileSync(new URL("../scripts/build-cloudflare.js", import.meta.url), "utf8");
   for (const file of ["cross-engraving.js", "product-engraving.js", "product-engraving.css", "admin-engraving.js"]) assert.match(build, new RegExp(`"${file.replace(".", "\\.")}"`));
-  assert.ok(!fs.existsSync(new URL("../assets/fonts/engraving/CS-New-Athanasius.ttf", import.meta.url)), "CS New Athanasius is not shipped until its licence is confirmed");
+  for (const f of ["CS-New-Athanasius.ttf", "cs-new-athanasius.ttf"]) assert.ok(!fs.existsSync(new URL(`../assets/fonts/engraving/${f}`, import.meta.url)), "CS New Athanasius is not shipped until its licence is confirmed");
 });

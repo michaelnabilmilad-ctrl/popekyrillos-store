@@ -73,9 +73,11 @@
   "use strict";
 
   const FONT_BASE = (global.CROSS_ENGRAVING_FONT_BASE || "/assets/fonts/engraving/");
-  // CS New Athanasius is NOT shipped with the site (licence unconfirmed). A local test page may
-  // point this at a local copy; without it the Coptic preview uses Noto Sans Coptic (OFL).
-  const COPTIC_LEGACY_URL = global.CROSS_ENGRAVING_COPTIC_LEGACY_FONT_URL || "";
+  // CS New Athanasius is chosen per product in admin (copticFont: "athanasius"). Its file is NOT
+  // part of the code: the shop adds the licensed copy at this path once the licence is confirmed
+  // (a local test may point elsewhere). Until the file is there, Coptic falls back to
+  // Noto Sans Coptic (OFL), so a product never shows a broken preview.
+  const COPTIC_LEGACY_URL = global.CROSS_ENGRAVING_COPTIC_LEGACY_FONT_URL || `${FONT_BASE}cs-new-athanasius.ttf`;
   const LANGS = {
     ar: { label: "العربية", dir: "rtl", family: "EngraveArabic", weight: "800", faceWeight: "100 900", file: "noto-sans-arabic-arabic-wdth-normal.woff2", sample: "القمص يوحنا مرقس", tracking: 0, condense: 0.74 },
     en: { label: "English", dir: "ltr", family: "EngraveLatin", weight: "700", file: "cinzel-latin-700-normal.woff2", sample: "Fr. John Mark", tracking: 0.05, condense: 1 },
@@ -120,22 +122,21 @@
     const face = new FontFace(family, `url(${src}) format("${format}")`, { weight, display: "block" });
     return face.load().then((loaded) => { document.fonts.add(loaded); return loaded; });
   }
-  function loadFont(lang) {
+  const legacyPromises = {};
+  // legacy: true also loads the product's chosen CS New Athanasius (only when the admin picked it).
+  function loadFont(lang, { legacy = false } = {}) {
     const def = LANGS[lang];
     if (!def) return Promise.resolve();
-    if (!fontPromises[lang]) {
-      const main = loadFace(def.family, def.file, def.faceWeight || def.weight);
-      const legacy = def.legacy
-        ? loadFace(def.legacy.family, def.legacy.file, "400", def.legacy.format).then(() => { legacyReady[lang] = true; }, () => { legacyReady[lang] = false; })
-        : Promise.resolve();
-      fontPromises[lang] = Promise.all([main, legacy]);
+    if (!fontPromises[lang]) fontPromises[lang] = loadFace(def.family, def.file, def.faceWeight || def.weight);
+    if (legacy && def.legacy && !legacyPromises[lang]) {
+      legacyPromises[lang] = loadFace(def.legacy.family, def.legacy.file, "400", def.legacy.format).then(() => { legacyReady[lang] = true; }, () => { legacyReady[lang] = false; });
     }
-    return fontPromises[lang];
+    return Promise.all([fontPromises[lang], legacy ? legacyPromises[lang] : null]);
   }
   // What actually gets drawn: family + the string in that family's encoding.
   function drawSpec(text, lang, opts = {}) {
     const def = LANGS[lang];
-    if (def.legacy && legacyReady[lang] && opts.legacy !== false) {
+    if (def.legacy && legacyReady[lang] && opts.legacy === true) {
       const enc = def.legacy.encode(text);
       if (enc.ok) return { family: def.legacy.family, weight: "400", text: enc.text, legacy: true, condense: 1 };
     }
@@ -167,9 +168,9 @@
   // Older drafts used the colour name as the finish.
   const LEGACY_FINISH = { ivory: "filled", gold: "filled" };
   const COLOR_PRESETS = [
-    { value: "#18130e", label: "أسود (المعتمد للصلبان العاجية)" },
+    { value: "#ffffff", label: "أبيض (المعتمد للصلبان السوداء)" },
+    { value: "#18130e", label: "أسود (المعتمد لصلبان بديل العاج)" },
     { value: "#c9a14f", label: "ذهبي" },
-    { value: "#f2ede2", label: "أبيض عاجي" },
     { value: "#b9bcc0", label: "فضي" }
   ];
   const isHexColor = (v) => typeof v === "string" && /^#[0-9a-f]{6}$/i.test(v);
@@ -312,7 +313,7 @@
 
   async function render({ imageSrc, zone, text, lang, legacy }) {
     const img = await loadImage(imageSrc);
-    if (text) await loadFont(lang);
+    if (text) await loadFont(lang, { legacy: legacy === true });
     const W = img.naturalWidth, H = img.naturalHeight;
     const canvas = makeCanvas(W, H);
     const ctx = canvas.getContext("2d");
@@ -428,7 +429,9 @@
       previewImage,
       zone,
       languages: languages.length ? [...new Set(languages)] : ["ar"],
-      fee: 0, // optional fee stays off until the shop approves it
+      fee: 0, // engraving is free (owner's decision 2026-11-03); no fee field is used
+      copticFont: src.copticFont === "athanasius" ? "athanasius" : "noto",
+      freeNote: src.freeNote === true,
       version: Math.max(1, Math.floor(Number(src.version) || 1))
     };
   }
