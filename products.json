@@ -133,7 +133,45 @@
     "slug": "طقم-صلبان-يد-وصدر-كوريان-موديل-2",
     "thumbnail": "/assets/thumbnails/320/popek-corian-cross-set-2-146b75b26a.webp",
     "url": "https://popekyrillos.store/?product=popek-corian-cross-set-2",
-    "hasVariants": false
+    "hasVariants": false,
+    "engraving": {
+      "enabled": true,
+      "previewImage": "assets/optimized/products/gallery/engraving-popek-corian-cross-set-2-protected-preview-20261103220813-8f4a65.webp",
+      "previewSource": "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-2-unboxed.webp",
+      "previewWatermark": {
+        "zone": "0.6385,0.6,0.33,0.05,90"
+      },
+      "zone": {
+        "x": 0.6385,
+        "y": 0.6,
+        "len": 0.33,
+        "thick": 0.05,
+        "angle": 90,
+        "surface": "flat",
+        "curve": 0,
+        "fontMax": 0.52,
+        "fontMin": 0.38,
+        "weight": 0.03,
+        "padding": 0.08,
+        "offset": 0,
+        "finish": "ink",
+        "color": "#ffffff",
+        "confirmed": true,
+        "maxChars": {
+          "ar": 34,
+          "en": 24,
+          "cop": 20
+        }
+      },
+      "languages": [
+        "ar"
+      ],
+      "fee": 0,
+      "photoConfirmed": true,
+      "copticFont": "noto",
+      "freeNote": true,
+      "version": 1
+    }
   },
   {
     "id": "popek-corian-cross-set-3",
