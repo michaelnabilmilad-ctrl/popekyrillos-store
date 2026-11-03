@@ -22,11 +22,11 @@ const PRODUCT = "popek-corian-cross-set-2";
 const PLAIN = "atb3ho-10555319877797"; // a normal product (book), price 25
 const ZONE = { x: 0.6385, y: 0.6, len: 0.33, thick: 0.05, angle: 90, fontMax: 0.52, fontMin: 0.38, weight: 0.03, padding: 0.08, curve: 0 };
 const MULTI = "popek-corian-cross-set-9"; // stands in for an ivory cross (3 languages)
-// Ivory test: no ivory product photo exists yet, so model 9 stands in for an ivory cross and the
-// admin picks, from the device, a frame of the shop's own video of a real ivory hand cross (old
-// writing removed digitally). It only ever lives in this sandbox; the site never gets it.
-const IVORY_TEST_PHOTO = process.env.IVORY_TEST_PHOTO || "/mnt/project-files/cross-engraving/prototype/images/sample-ivory-TEST-cleaned-crop.png";
-const MULTI_ZONE = { x: 0.5693, y: 0.6353, len: 0.444, thick: 0.0785, angle: 93.4, fontMax: 0.6, fontMin: 0.42, weight: 0.06, padding: 0.11, curve: 0 };
+// Ivory stand-in: no ivory product photo exists yet, so model 9 stands in for an ivory cross and
+// the admin picks a photo "from the device". The test uses the shop's own watermarked photo of a
+// light wooden cross (already public on the site); no unwatermarked original is used anywhere.
+const IVORY_TEST_PHOTO = process.env.IVORY_TEST_PHOTO || path.join(__dirname, "..", "assets/products/gallery/iota-plain-cross-20cm-model-1.webp");
+const MULTI_ZONE = { x: 0.4995, y: 0.585, len: 0.383, thick: 0.062, angle: 90, fontMax: 0.55, fontMin: 0.4, weight: 0.04, padding: 0.08, curve: 0 };
 const NAMES = { arLong: "القمص بيشوي يوحنا مرقس", arSecond: "أبونا مينا", cop: "Ⲁ̀ⲃⲃⲁ Ⲙⲏⲛⲁ", regAr: "أبونا داود", regEn: "Fr. Mark" };
 let MAX_AR = 24; // replaced by the limit measured in admin
 const LEGIBILITY = ["أبونا مينا", "القمص يوحنا مرقس", "الأنبا أنطونيوس", "القمص بيشوي يوحنا مرقس", "القس أنطونيوس عبد المسيح", "القمص بيشوي يوحنا مرقس عبد المسيح"];
@@ -215,7 +215,7 @@ async function addName(p, name, lang = "ar", qty = 1) {
   check("admin: only those two products have engraving (not all crosses)", st.engravingProducts.length === 2);
   check("storage: only the two watermarked copies were uploaded (no clean original)", st.uploadedFiles.length === 2 && st.uploadedFiles.every((f) => /\/engraving-[^/]*protected-preview[^/]*\.webp$/.test(f)) && multi?.previewSource === "local", JSON.stringify({ files: st.uploadedFiles, source: multi?.previewSource }));
   {
-    const audit = await auditWatermark(`data:image/png;base64,${fs.readFileSync(IVORY_TEST_PHOTO).toString("base64")}`, "/" + multi.previewImage, multi.zone);
+    const audit = await auditWatermark(`data:image/${IVORY_TEST_PHOTO.endsWith(".webp") ? "webp" : "png"};base64,${fs.readFileSync(IVORY_TEST_PHOTO).toString("base64")}`, "/" + multi.previewImage, multi.zone);
     check("watermark (device photo): writing area untouched, line beside it, marks over the photo", audit.zoneDiff < 3 && audit.bandA > 25 && audit.bandB > 25 && audit.markedShare > 3 && audit.bandInsideThumb, JSON.stringify(audit));
   }
 
