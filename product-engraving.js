@@ -16,9 +16,9 @@
   function mount(slot, product, { assetUrl = (v) => v } = {}) {
     if (!slot) return false;
     settings = E.normalizeSettings(product?.engraving);
-    const images = [...new Set([...(product?.images || []), product?.image].filter(Boolean))];
-    const chosen = settings.previewImage && images.includes(settings.previewImage) ? settings.previewImage : (settings.previewImage || images[0] || "");
-    if (!settings.enabled || !chosen) { slot.remove(); return false; }
+    // Only the watermarked copy made in admin is ever loaded for the preview (never a clean photo).
+    const chosen = settings.previewImage;
+    if (!settings.enabled || !E.isProtectedPreview(chosen)) { slot.remove(); return false; }
     imageSrc = assetUrl(chosen);
     host = slot;
     const uid = `pe${++idSeq}`;
@@ -94,7 +94,7 @@
   }
   function unconfirm() { const c = $("[data-pe-confirm]"); if (c) c.checked = false; }
   function clearError() { const n = $("[data-pe-err]"); if (n && n.dataset.kind === "submit") { n.textContent = ""; n.dataset.kind = ""; } }
-  function validation() { return E.validateName($("[data-pe-input]").value, state.lang, settings.zone); }
+  function validation() { return E.validateName($("[data-pe-input]").value, state.lang, settings.zone, fontOpts()); }
   function onName() {
     unconfirm();
     const v = validation();

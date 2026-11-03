@@ -1953,10 +1953,34 @@ function orderItemEngraving(value) {
 
 // Customers see engraving only after the admin enabled it AND set the preview photo (and confirmed
 // it suits), the writing colour and checked the writing area (same rule as CrossEngraving.normalizeSettings).
+// Same rule as CrossEngraving.normalizeSettings: the preview must be the watermarked copy made
+// for the current writing area (engraving-….webp), never a product photo.
+function engravingZoneKey(zone) {
+  return ["x", "y", "len", "thick", "angle"].map((k) => (Math.round(Number(zone?.[k]) * 10000) / 10000).toString()).join(",");
+}
 function engravingReady(settings) {
-  return Boolean(settings && settings.enabled === true && typeof settings.previewImage === "string" && settings.previewImage
+  return Boolean(settings && settings.enabled === true && typeof settings.previewImage === "string"
+    && /(^|\/)engraving-[^/]*\.webp$/i.test(settings.previewImage)
+    && settings.previewWatermark?.zone === engravingZoneKey(settings.zone)
     && settings.photoConfirmed === true
     && /^#[0-9a-f]{6}$/i.test(String(settings.zone?.color || "")) && settings.zone?.confirmed === true);
+}
+
+// CS New Athanasius cannot draw capital Ⲋ, an overline on most letters, or marks other than
+// jinkim/overline. The product page refuses such names; this keeps tampered orders out too, so
+// the order never holds a name the customer did not see in the preview.
+const ATHANASIUS_OVERLINE_OK = new Set([..."ⲁⲃⲅⲇⲉϣⲏⲯⲀⲂⲄⲆⲈϢⲎⲮ"]);
+function athanasiusCanDraw(name) {
+  const chars = [...String(name).normalize("NFD").replace(/\u2CEF/g, "\u0300")];
+  let base = "";
+  for (const c of chars) {
+    if (c === "Ⲋ") return false;
+    if (!/\p{M}/u.test(c)) { base = c; continue; }
+    if (c === "\u0300") continue;
+    if (c === "\u0305" && ATHANASIUS_OVERLINE_OK.has(base)) continue;
+    return false;
+  }
+  return true;
 }
 
 function engravingNote(engraving) {
@@ -1976,6 +2000,7 @@ function engravingCatalogErrors(items, catalog) {
     if (!engravingReady(settings)) errors.push({ index, code: "engraving_not_available" });
     else if (!languages.includes(item.engraving.lang)) errors.push({ index, code: "engraving_language" });
     else if (engravingGraphemes(item.engraving.name) > max) errors.push({ index, code: "engraving_too_long" });
+    else if (item.engraving.lang === "cop" && settings.copticFont === "athanasius" && !athanasiusCanDraw(item.engraving.name)) errors.push({ index, code: "engraving_font" });
   });
   return errors;
 }

@@ -15,8 +15,10 @@ const { CrossEngraving: E, CopticLegacy } = require("../cross-engraving.js");
 const checkoutSource = fs.readFileSync(new URL("../checkout-flow.js", import.meta.url), "utf8");
 const origin = "https://popekyrillos.store";
 
-const engraving = { enabled: true, previewImage: "assets/products/gallery/cross-unboxed.webp", photoConfirmed: true, languages: ["ar", "en", "cop"], fee: 0, version: 3,
-  zone: { x: 0.64, y: 0.6, len: 0.33, thick: 0.05, angle: 90, surface: "flat", finish: "ink", color: "#18130e", confirmed: true, maxChars: { ar: 24, en: 24, cop: 20 } } };
+const zone0 = { x: 0.64, y: 0.6, len: 0.33, thick: 0.05, angle: 90, surface: "flat", finish: "ink", color: "#18130e", confirmed: true, maxChars: { ar: 24, en: 24, cop: 20 } };
+const engraving = { enabled: true, previewSource: "assets/products/gallery/cross-unboxed.webp",
+  previewImage: "assets/optimized/products/gallery/engraving-cross-2-protected-preview-20261103-abc123.webp", previewWatermark: { zone: E.zoneKey(zone0) },
+  photoConfirmed: true, languages: ["ar", "en", "cop"], fee: 0, version: 3, zone: zone0 };
 const catalog = [
   { id: "cross-2", name: "طقم صلبان يد وصدر كوريان - موديل 2", price: 770, stock: "متاح", variants: [], engraving },
   { id: "book-1", sku: "BOOK-1", name: "كتاب", price: 120, stock: "متاح", variants: [] }
@@ -72,8 +74,15 @@ test("engraving stays off for customers until the photo, the colour and the writ
   assert.equal(badColor.enabled, false);
   const unchecked = E.normalizeSettings({ ...engraving, zone: { ...engraving.zone, confirmed: false } });
   assert.deepEqual(unchecked.missing, ["zone"]);
-  const noPhoto = E.normalizeSettings({ ...engraving, previewImage: "" });
+  const noPhoto = E.normalizeSettings({ ...engraving, previewImage: "", previewSource: "" });
   assert.deepEqual(noPhoto.missing, ["previewImage"]);
+  // customers only ever get the watermarked copy, made for the current writing area
+  const clean = E.normalizeSettings({ ...engraving, previewImage: "assets/products/gallery/cross-unboxed.webp" });
+  assert.deepEqual(clean.missing, ["watermark"], "a product photo is never used directly");
+  const noCopy = E.normalizeSettings({ ...engraving, previewImage: "" });
+  assert.deepEqual(noCopy.missing, ["watermark"]);
+  const moved = E.normalizeSettings({ ...engraving, zone: { ...engraving.zone, y: 0.62 } });
+  assert.deepEqual(moved.missing, ["watermark"], "moving the writing area needs a new protected copy");
   const photoNotChecked = E.normalizeSettings({ ...engraving, photoConfirmed: false });
   assert.equal(photoNotChecked.enabled, false);
   assert.deepEqual(photoNotChecked.missing, ["photo"], "the admin must confirm the preview photo suits");
@@ -86,6 +95,18 @@ test("CS New Athanasius display encoding round-trips and never shows a wrong let
     assert.equal(CopticLegacy.fromNewAthanasius(enc.text), name.normalize("NFC"));
   }
   assert.equal(CopticLegacy.toNewAthanasius("ⲙ̅").ok, false, "no overlined glyph: fall back to the Unicode font");
+});
+
+test("with CS New Athanasius, letters the font cannot draw are refused by name, never swapped", () => {
+  const z = engraving.zone;
+  for (const name of ["ⲒⲰⲀⲚⲚⲎⲤ ⲘⲀⲢⲔⲞⲤ", "ⲡ̀ⲓⲱⲧ", "ⲁ̅ⲃ̅", "ⲋ"]) assert.equal(E.validateName(name, "cop", z, { legacy: true }).ok, true, name);
+  for (const name of ["ⲘⲎⲚⲀ Ⲋ", "ⲙ̅ⲏⲛⲁ", "ⲙ́ⲏⲛⲁ"]) {
+    const v = E.validateName(name, "cop", z, { legacy: true });
+    assert.equal(v.ok, false, name);
+    assert.equal(v.code, "font");
+    assert.match(v.message, /مش موجود في خط الكتابة القبطي/);
+  }
+  assert.equal(E.validateName("ⲘⲎⲚⲀ Ⲋ", "cop", z).ok, true, "the Unicode font (Noto) can draw it");
 });
 
 test("the cart keeps the name and language, and two names stay two lines", () => {
@@ -170,6 +191,13 @@ test("a name on a product without engraving, a closed language or a too-long nam
   assert.equal((await f.order([line("أبونا مينا")])).status, 409, "writing area not checked yet");
   f.catalog = [{ ...catalog[0], engraving: { ...engraving, photoConfirmed: false } }];
   assert.equal((await f.order([line("أبونا مينا")])).status, 409, "preview photo not confirmed yet");
+  f.catalog = [{ ...catalog[0], engraving: { ...engraving, previewImage: engraving.previewSource } }];
+  assert.equal((await f.order([line("أبونا مينا")])).status, 409, "preview is a clean product photo, not the watermarked copy");
+  f.catalog = [{ ...catalog[0], engraving: { ...engraving, zone: { ...engraving.zone, x: 0.6 } } }];
+  assert.equal((await f.order([line("أبونا مينا")])).status, 409, "writing area moved after the watermarked copy was made");
+  f.catalog = [{ ...catalog[0], engraving: { ...engraving, copticFont: "athanasius" } }];
+  assert.equal((await f.order([line("ⲘⲎⲚⲀ Ⲋ", "cop")])).status, 409, "a letter CS New Athanasius cannot draw");
+  assert.equal((await f.order([line("ⲙ̅ⲏⲛⲁ", "cop")])).status, 409, "an overline the font has no glyph for");
   assert.equal(f.creates, 0);
   assert.equal(f.writes.length, 0);
 });

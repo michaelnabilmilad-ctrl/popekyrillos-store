@@ -101,7 +101,7 @@
     if (global.Intl && Intl.Segmenter) return [...new Intl.Segmenter(undefined, { granularity: "grapheme" }).segment(value)].length;
     return [...value].length;
   }
-  function validateName(raw, lang, zone) {
+  function validateName(raw, lang, zone, { legacy = false } = {}) {
     const name = cleanName(raw);
     const max = Number(zone?.maxChars?.[lang]) || 24;
     if (!name) return { ok: false, name, code: "empty", message: "اكتب اسم الكاهن." };
@@ -109,6 +109,15 @@
     if (!ALLOWED[lang].test(name)) {
       const hint = lang === "ar" ? "استخدم حروفًا عربية فقط." : lang === "en" ? "Use English letters only." : "استخدم الحروف القبطية من لوحة الحروف.";
       return { ok: false, name, code: "chars", message: `توجد حروف غير مناسبة للغة المختارة. ${hint}` };
+    }
+    // CS New Athanasius has no glyph for a few Coptic forms (capital Ⲋ, some overlines/marks).
+    // Such a name is refused with the exact letters named: never drawn in another font or letter.
+    if (lang === "cop" && legacy && global.CopticLegacy) {
+      const enc = global.CopticLegacy.toNewAthanasius(name);
+      if (!enc.ok) {
+        const letters = [...new Set(enc.unsupported)].map((u) => `«${u}»`).join(" ");
+        return { ok: false, name, code: "font", unsupported: enc.unsupported, message: `الحرف ${letters} مش موجود في خط الكتابة القبطي للصليب ده، فمش هنقدر نكتبه زي ما هو. اكتب الاسم من غيره أو اختار لغة تانية.` };
+      }
     }
     const count = graphemes(name);
     if (count > max) return { ok: false, name, count, max, code: "length", message: `الاسم أطول من مساحة الكتابة (${count} من ${max} حرفًا).` };
@@ -396,10 +405,94 @@
   }
 
 
+  // ---- shop watermark, baked into the customer preview photo (never CSS, never on top) ----
+  // The admin makes a protected copy of the chosen photo: tiled «popekyrillos.store» marks over
+  // the whole photo, plus a line «مكتبة البابا كيرلس · popekyrillos.store» on both sides of the
+  // writing area, inside the smallest close-up customers see (the cart thumbnail). The writing
+  // area itself (+ a small margin) stays untouched, so the name is never covered. Customers'
+  // browsers only ever load that copy.
+  const WATERMARK = { site: "popekyrillos.store", name: "مكتبة البابا كيرلس" };
+  const THUMB_MARGIN = 0.12, THUMB_ASPECT = 3;
+  function zoneKey(zone) {
+    return ["x", "y", "len", "thick", "angle"].map((k) => (Math.round(Number(zone?.[k]) * 10000) / 10000).toString()).join(",");
+  }
+  function watermarkGeometry(zone, W, H) {
+    const z = { cx: zone.x * W, cy: zone.y * H, L: zone.len * W, S: zone.thick * W, rot: (zone.angle || 0) * Math.PI / 180 };
+    const clear = Math.max(3, z.S * 0.1); // kept free around the writing area
+    const halfCrop = Math.max(z.S * (1 + THUMB_MARGIN * 2.2), z.L * (1 + THUMB_MARGIN) / THUMB_ASPECT) / 2;
+    let room = halfCrop - z.S / 2 - clear;
+    // very thick writing areas leave no room in the thumbnail: use the larger close-up instead
+    if (room < z.S * 0.18) room = Math.max(z.S * (1 + 0.3 * 2.2), z.L * 1.3 / THUMB_ASPECT) / 2 - z.S / 2 - clear;
+    const band = Math.max(6, Math.min(room * 0.8, z.S * 0.55, z.L * 0.07));
+    return { z, clear, band, offset: z.S / 2 + clear + band / 2 };
+  }
+  function markText(g, text, x, y, alpha) {
+    g.globalAlpha = alpha;
+    g.strokeText(text, x, y);
+    g.fillText(text, x, y);
+  }
+  async function watermarkPreview({ imageSrc, zone, maxSide = 1600 }) {
+    const img = await loadImage(imageSrc);
+    await loadFont("ar").catch(() => {});
+    const k = Math.min(1, maxSide / Math.max(img.naturalWidth, img.naturalHeight));
+    const W = Math.round(img.naturalWidth * k), H = Math.round(img.naturalHeight * k);
+    const canvas = makeCanvas(W, H), g = canvas.getContext("2d");
+    g.imageSmoothingQuality = "high";
+    g.drawImage(img, 0, 0, W, H);
+    const { z, clear, band, offset } = watermarkGeometry(zone, W, H);
+    const cos = Math.cos(z.rot), sin = Math.sin(z.rot);
+    const at = (a, b) => [z.cx + a * cos - b * sin, z.cy + a * sin + b * cos];
+    g.lineJoin = "round"; g.textAlign = "center"; g.textBaseline = "middle";
+    g.fillStyle = "#ffffff"; g.strokeStyle = "rgba(0,0,0,0.85)";
+    // 1) tiled marks everywhere except the writing area
+    g.save();
+    g.beginPath(); g.rect(0, 0, W, H);
+    const hw = z.L / 2 + clear, hh = z.S / 2 + clear;
+    const pts = [at(-hw, -hh), at(-hw, hh), at(hw, hh), at(hw, -hh)];
+    g.moveTo(...pts[0]); pts.slice(1).forEach((p) => g.lineTo(...p)); g.closePath();
+    g.clip("evenodd");
+    const fs = Math.max(14, Math.round(Math.max(W, H) / 26));
+    g.font = `700 ${fs}px "Segoe UI", Arial, sans-serif`;
+    g.lineWidth = Math.max(1.5, fs * 0.09);
+    g.translate(W / 2, H / 2); g.rotate(-Math.PI / 7);
+    const stepX = fs * 11, stepY = fs * 4.2, R = Math.hypot(W, H) / 2 + stepX;
+    for (let y = -R, row = 0; y <= R; y += stepY, row++) {
+      for (let x = -R + (row % 2) * stepX / 2; x <= R; x += stepX) markText(g, WATERMARK.site, x, y, 0.3);
+    }
+    g.restore();
+    // 2) a line on both sides of the writing area, readable in every close-up
+    const flip = Math.cos(z.rot) < -1e-6 ? Math.PI : 0; // never upside down
+    const bfs = band * 0.78;
+    g.save();
+    g.lineWidth = Math.max(1.2, bfs * 0.1);
+    for (const side of [-1, 1]) {
+      const [x, y] = at(0, side * offset);
+      g.save();
+      g.translate(x, y); g.rotate(z.rot + flip);
+      g.beginPath(); g.rect(-z.L * 0.56, -band / 2, z.L * 1.12, band); g.clip();
+      g.font = `800 ${bfs}px EngraveArabic, "Segoe UI", Arial, sans-serif`;
+      const nameW = g.measureText(WATERMARK.name).width;
+      g.font = `700 ${bfs}px "Segoe UI", Arial, sans-serif`;
+      const siteW = g.measureText(WATERMARK.site).width;
+      const gap = bfs * 1.2, unit = nameW + siteW + gap * 2;
+      for (let x0 = -Math.ceil(z.L / unit + 1) * unit; x0 < z.L; x0 += unit) {
+        g.font = `800 ${bfs}px EngraveArabic, "Segoe UI", Arial, sans-serif`;
+        markText(g, WATERMARK.name, x0 + nameW / 2, 0, 0.62);
+        g.font = `700 ${bfs}px "Segoe UI", Arial, sans-serif`;
+        markText(g, WATERMARK.site, x0 + nameW + gap + siteW / 2, 0, 0.62);
+      }
+      g.restore();
+    }
+    g.restore();
+    return { canvas, zoneKey: zoneKey(zone), band, clear };
+  }
+
   // ---- shared settings helpers (product page, admin editor, admin order view) ----
   const ZONE_DEFAULTS = { x: 0.5, y: 0.65, len: 0.3, thick: 0.06, angle: 90, surface: "flat", curve: 0, fontMax: 0.52, fontMin: 0.38, weight: 0.03, padding: 0.08, tracking: undefined, offset: 0, finish: "ink", color: "", confirmed: false, maxChars: { ar: 24, en: 24, cop: 20 } };
   const LIMITS = { x: [0, 1], y: [0, 1], len: [0.02, 0.95], thick: [0.005, 0.4], angle: [-180, 180], curve: [0, 1.3], fontMax: [0.2, 0.95], fontMin: [0.15, 0.9], weight: [0, 0.12], padding: [0, 0.3], tracking: [0, 0.2], offset: [-0.4, 0.4] };
   const clampNum = (v, [lo, hi], d) => { const n = Number(v); return Number.isFinite(n) ? Math.min(hi, Math.max(lo, n)) : d; };
+  // The protected copy is a separate upload named engraving-<product>-… (product photos never are).
+  function isProtectedPreview(path) { return /(^|\/)engraving-[^/]*\.webp$/i.test(String(path || "")); }
   function normalizeSettings(raw) {
     const src = raw && typeof raw === "object" ? raw : {};
     const z = src.zone && typeof src.zone === "object" ? src.zone : {};
@@ -418,10 +511,14 @@
     for (const l of ["ar", "en", "cop"]) zone.maxChars[l] = Math.round(clampNum(z.maxChars?.[l], [1, 60], ZONE_DEFAULTS.maxChars[l]));
     const languages = (Array.isArray(src.languages) ? src.languages : ["ar", "en", "cop"]).filter((l) => LANGS[l]);
     const previewImage = typeof src.previewImage === "string" ? src.previewImage : "";
-    // Customers only see engraving once the shop set the photo, the writing colour and
-    // checked the writing area (missing = what is still needed, shown in admin).
+    const previewSource = typeof src.previewSource === "string" ? src.previewSource : "";
+    const previewWatermark = src.previewWatermark && typeof src.previewWatermark.zone === "string" ? { zone: src.previewWatermark.zone } : null;
+    // Customers only see engraving once the shop chose the photo, made its watermarked copy for
+    // the current writing area, set the writing colour and checked everything
+    // (missing = what is still needed, shown in admin).
     const missing = [];
-    if (!previewImage) missing.push("previewImage");
+    if (!previewImage && !previewSource) missing.push("previewImage");
+    else if (!isProtectedPreview(previewImage) || previewWatermark?.zone !== zoneKey(zone)) missing.push("watermark");
     if (!zone.color) missing.push("color");
     if (!photoConfirmed) missing.push("photo");
     if (!zone.confirmed) missing.push("zone");
@@ -430,6 +527,8 @@
       requested: src.enabled === true,
       missing,
       previewImage,
+      previewSource,
+      previewWatermark,
       zone,
       languages: languages.length ? [...new Set(languages)] : ["ar"],
       fee: 0, // engraving is free (owner's decision 2026-11-03); no fee field is used
@@ -470,6 +569,6 @@
     return `eng-${h1.toString(36)}${h2.toString(36)}`;
   }
 
-  global.CrossEngraving = { LANGS, FINISHES, cleanName, validateName, loadFont, drawSpec, legacyReady, render, drawZoom, drawFull, thumbnail, normalizeSettings, lineKey, ZONE_DEFAULTS, COLOR_PRESETS, isHexColor, measureMaxChars };
+  global.CrossEngraving = { LANGS, FINISHES, cleanName, validateName, loadFont, drawSpec, legacyReady, render, drawZoom, drawFull, thumbnail, normalizeSettings, lineKey, ZONE_DEFAULTS, COLOR_PRESETS, isHexColor, measureMaxChars, watermarkPreview, watermarkGeometry, zoneKey, isProtectedPreview, WATERMARK };
   if (typeof module !== "undefined" && module.exports) module.exports.CrossEngraving = global.CrossEngraving;
 })(typeof window !== "undefined" ? window : globalThis);

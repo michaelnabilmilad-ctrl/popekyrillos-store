@@ -90,6 +90,34 @@ async function addName(p, name, lang = "ar", qty = 1) {
     await a.click('[data-editor-tab="engraving"]');
     await a.waitForSelector("[data-ae-body] [data-ae='enabled']");
   };
+  const protect = async () => {
+    await a.click('[data-ae-act="protect"]');
+    await a.waitForFunction(() => /اتجهزت|تعذر/.test(document.querySelector("[data-ae-protect-status]")?.textContent || ""), null, { timeout: 60000 });
+    return a.textContent("[data-ae-protect-status]");
+  };
+  // Compares the protected copy with its source photo: the writing area must be untouched, the
+  // line beside it and the tiled marks must be there.
+  const auditWatermark = (source, protectedPath, zone) => a.evaluate(async ({ source, protectedPath, zone }) => {
+    const E = window.CrossEngraving;
+    const load = (src) => new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = () => rej(new Error(src)); i.src = src; });
+    const [s, w] = await Promise.all([load(source), load(protectedPath)]);
+    const W = w.naturalWidth, H = w.naturalHeight;
+    const px = (img) => { const c = document.createElement("canvas"); c.width = W; c.height = H; const g = c.getContext("2d"); g.drawImage(img, 0, 0, W, H); return g.getImageData(0, 0, W, H).data; };
+    const A = px(s), B = px(w);
+    const { z, band, offset, clear } = E.watermarkGeometry(zone, W, H);
+    const cos = Math.cos(z.rot), sin = Math.sin(z.rot);
+    const diff = (a, b) => { const x = Math.round(z.cx + a * cos - b * sin), y = Math.round(z.cy + a * sin + b * cos); if (x < 0 || y < 0 || x >= W || y >= H) return null; const k = (y * W + x) * 4; return (Math.abs(A[k] - B[k]) + Math.abs(A[k + 1] - B[k + 1]) + Math.abs(A[k + 2] - B[k + 2])) / 3; };
+    const avg = (pts) => { const v = pts.map(([a, b]) => diff(a, b)).filter((d) => d !== null); return v.reduce((t, d) => t + d, 0) / Math.max(1, v.length); };
+    const grid = (a0, a1, b0, b1, n = 40) => { const out = []; for (let i = 0; i <= n; i++) for (let j = 0; j <= 8; j++) out.push([a0 + (a1 - a0) * i / n, b0 + (b1 - b0) * j / 8]); return out; };
+    const zoneDiff = avg(grid(-z.L / 2, z.L / 2, -z.S / 2, z.S / 2));
+    const bandA = avg(grid(-z.L / 2, z.L / 2, offset - band * 0.35, offset + band * 0.35));
+    const bandB = avg(grid(-z.L / 2, z.L / 2, -offset - band * 0.35, -offset + band * 0.35));
+    let marked = 0, total = 0;
+    for (let y = 0; y < H; y += 7) for (let x = 0; x < W; x += 7) { const k = (y * W + x) * 4; total++; if ((Math.abs(A[k] - B[k]) + Math.abs(A[k + 1] - B[k + 1]) + Math.abs(A[k + 2] - B[k + 2])) / 3 > 30) marked++; }
+    // smallest close-up customers see (cart thumbnail) must contain the line beside the name
+    const halfThumb = Math.max(z.S * 1.264, z.L * 1.12 / 3) / 2;
+    return { zoneDiff: Math.round(zoneDiff * 10) / 10, bandA: Math.round(bandA), bandB: Math.round(bandB), markedShare: Math.round(marked / total * 1000) / 10, bandInsideThumb: offset + band / 2 <= halfThumb + 0.5, sameSize: s.naturalWidth / s.naturalHeight === W / H, band: Math.round(band), clear: Math.round(clear) };
+  }, { source, protectedPath, zone });
   const langsChecked = () => a.evaluate(() => ["ar", "en", "cop"].filter((l) => document.querySelector(`[data-ae-lang="${l}"]`).checked));
   const publish = async (count) => {
     await a.click('[data-action="publish-products"]');
@@ -112,10 +140,18 @@ async function addName(p, name, lang = "ar", qty = 1) {
   const noZone = await a.textContent("[data-ae-status]");
   check("admin: cannot enable before checking the writing area", /مراجعة مكان الكتابة/.test(noZone) && !/لون الكتابة/.test(noZone), noZone);
   check("admin: cannot enable before confirming the preview photo suits", /تأكيد إن صورة المعاينة مناسبة/.test(noZone), noZone);
+  check("admin: cannot enable before the watermarked customer photo is made", /العلامة المائية/.test(noZone), noZone);
+  check("admin: product page photo itself is never offered as the customer preview", !(await a.isVisible("[data-ae-cust]")));
+  const protectMsg = await protect();
+  check("admin: watermarked customer copy made and shown before enabling", /اتجهزت/.test(protectMsg) && await a.isVisible("[data-ae-cust]"), protectMsg);
+  await a.waitForTimeout(1500);
+  await a.locator("[data-ae-cust]").screenshot({ path: shot("00-admin-customer-view-watermarked.png") });
   await a.check('[data-ae="photoConfirmed"]');
   await a.check('[data-ae="confirmed"]');
-  await a.evaluate(() => { const s = document.querySelector('[data-ae-z="x"]'); s.value = "0.6386"; s.dispatchEvent(new Event("input", { bubbles: true })); });
+  await a.evaluate(() => { const s = document.querySelector('[data-ae-z="x"]'); s.value = "0.645"; s.dispatchEvent(new Event("input", { bubbles: true })); });
   check("admin: moving the writing area asks to check it again", !(await a.isChecked('[data-ae="confirmed"]')));
+  const askedAgain = await a.waitForFunction(() => /جهّزها تاني/.test(document.querySelector("[data-ae-protect-status]")?.textContent || "") && document.querySelector("[data-ae-cust]").hidden, null, { timeout: 15000 }).then(() => true, () => false);
+  check("admin: moving the writing area asks for a new watermarked copy", askedAgain, await a.textContent("[data-ae-protect-status]"));
   await a.evaluate(() => { const s = document.querySelector('[data-ae-z="x"]'); s.value = "0.6385"; s.dispatchEvent(new Event("input", { bubbles: true })); });
   await a.check('[data-ae="confirmed"]');
   await a.click('[data-ae-act="measure"]');
@@ -131,21 +167,27 @@ async function addName(p, name, lang = "ar", qty = 1) {
   const black = st.engravingProducts.find((x) => x.id === PRODUCT)?.engraving;
   check("admin: black cross saved as white, Arabic only, free, measured limit", black?.zone?.color === "#ffffff" && JSON.stringify(black?.languages) === '["ar"]' && black?.freeNote === true && black?.zone?.confirmed === true && black?.photoConfirmed === true && black?.enabled === true && black?.zone?.maxChars?.ar === measuredBlack.ar, JSON.stringify({ color: black?.zone?.color, languages: black?.languages, freeNote: black?.freeNote, maxAr: black?.zone?.maxChars?.ar }));
   MAX_AR = black?.zone?.maxChars?.ar || 24;
+  {
+    const audit = await auditWatermark("/" + black.previewSource, "/" + black.previewImage, black.zone);
+    check("watermark (black cross): writing area untouched, line beside it on both sides, marks over the photo, inside the smallest close-up", audit.zoneDiff < 3 && audit.bandA > 25 && audit.bandB > 25 && audit.markedShare > 3 && audit.bandInsideThumb && audit.sameSize, JSON.stringify(audit));
+  }
 
   // Model 9: an engraving-only preview photo uploaded in admin (a copy of the shop's own photo of
   // this cross), «بديل عاج» template, then the colour edited (no ivory photo exists yet)
   await openProduct(MULTI);
   await a.check("[data-ae-body] [data-ae='enabled']");
   await a.setInputFiles("[data-ae-upload]", path.join(__dirname, "..", "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-9-unboxed.webp"));
-  await a.waitForFunction(() => /اترفعت|تعذر/.test(document.querySelector("[data-ae-upload-status]")?.textContent || ""), null, { timeout: 30000 });
+  await a.waitForFunction(() => /جهازك|تعذر/.test(document.querySelector("[data-ae-upload-status]")?.textContent || ""), null, { timeout: 30000 });
   const uploadMsg = await a.textContent("[data-ae-upload-status]");
   const uploadedPick = await a.$eval('[data-ae-image][aria-pressed="true"]', (b) => b.dataset.aeImage).catch(() => "");
-  check("admin: engraving-only preview photo uploaded and selected", /اترفعت/.test(uploadMsg) && /engraving-/.test(uploadedPick), `${uploadMsg} ${uploadedPick}`);
+  const uploadsBefore = (await state()).uploadedFiles.length;
+  check("admin: a photo from the device is used locally and not uploaded as it is", /جهازك/.test(uploadMsg) && uploadedPick === "local" && uploadsBefore === 1, `${uploadMsg} ${uploadedPick} uploads=${uploadsBefore}`);
   await setZone(MULTI_ZONE);
   await a.click('[data-ae-template="ivory"]');
   const ivoryOk = (await a.inputValue("[data-ae-color]")) === "#18130e" && JSON.stringify(await langsChecked()) === '["ar","en","cop"]' && (await a.inputValue("[data-ae-coptic]")) === "athanasius";
   check("admin: «بديل عاج» template = black, 3 languages, CS New Athanasius", ivoryOk);
   await a.selectOption("[data-ae-color]", "#ffffff");
+  check("admin: watermarked copy made from the device photo", /اتجهزت/.test(await protect()));
   await a.check('[data-ae="photoConfirmed"]');
   await a.check('[data-ae="confirmed"]');
   await a.click('[data-ae-act="measure"]');
@@ -163,6 +205,11 @@ async function addName(p, name, lang = "ar", qty = 1) {
   const multiEntry = st.engravingProducts.find((x) => x.id === MULTI);
   check("admin: the uploaded preview photo is not added to the product's photos", /engraving-/.test(multi?.previewImage || "") && !(multiEntry?.images || []).some((i) => /engraving-/.test(i)) && (multiEntry?.images || []).length === 2, JSON.stringify({ preview: multi?.previewImage, images: multiEntry?.images }));
   check("admin: only those two products have engraving (not all crosses)", st.engravingProducts.length === 2);
+  check("storage: only the two watermarked copies were uploaded (no clean original)", st.uploadedFiles.length === 2 && st.uploadedFiles.every((f) => /\/engraving-[^/]*protected-preview[^/]*\.webp$/.test(f)) && multi?.previewSource === "local", JSON.stringify({ files: st.uploadedFiles, source: multi?.previewSource }));
+  {
+    const audit = await auditWatermark("/assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-9-unboxed.webp", "/" + multi.previewImage, multi.zone);
+    check("watermark (device photo): writing area untouched, line beside it, marks over the photo", audit.zoneDiff < 3 && audit.bandA > 25 && audit.bandB > 25 && audit.markedShare > 3 && audit.bandInsideThumb, JSON.stringify(audit));
+  }
 
   // ---------- 1b. White on black: legibility on a phone
   {
@@ -170,7 +217,25 @@ async function addName(p, name, lang = "ar", qty = 1) {
     await guard(ctx);
     const p = await ctx.newPage();
     p.on("pageerror", (e) => errors.push(`legibility: ${e.message}`));
-    await openEngraving(p);
+    const imgRequests = [];
+    p.on("request", (r) => { if (r.resourceType() === "image" || /\.webp/.test(r.url())) imgRequests.push(new URL(r.url()).pathname); });
+    await p.goto(`${base}/products/${PRODUCT}`);
+    await p.waitForSelector(".pe .pe-choice");
+    await p.waitForTimeout(800);
+    const beforeName = imgRequests.length;
+    await p.click('.pe-choice input[value="name"]', { force: true });
+    await p.waitForSelector("[data-pe-body]:not([hidden])");
+    await p.fill("[data-pe-input]", "أبونا مينا");
+    await p.waitForTimeout(1500);
+    const previewLoads = imgRequests.slice(beforeName);
+    const settings = await p.evaluate(() => JSON.parse(document.getElementById("product-data").textContent).engraving);
+    check("customer page: the preview loads only the watermarked copy, never the clean photo", previewLoads.some((u) => u.includes(settings.previewImage.split("/").pop())) && !previewLoads.some((u) => /model-2-unboxed/.test(u)), JSON.stringify(previewLoads));
+    await p.click('[data-pe-view="full"]');
+    await p.waitForTimeout(900);
+    await p.locator('[data-pe-figure="full"]').screenshot({ path: shot("wm-1-phone-full-cross.png") });
+    await p.click('[data-pe-view="zoom"]');
+    await p.waitForTimeout(600);
+    await p.locator('[data-pe-figure="zoom"]').screenshot({ path: shot("wm-2-phone-zoom.png") });
     const head = await p.textContent(".pe-head");
     check("black cross page: «الكتابة مجانية» shown, Arabic only (no language choice)", /الكتابة مجانية/.test(head) && !(await p.$(".pe-pills")));
     const rows = [];
@@ -302,6 +367,11 @@ async function addName(p, name, lang = "ar", qty = 1) {
       return { legacyReady: E.legacyReady.cop, spec: E.drawSpec("ⲘⲎⲚⲀ", "cop", { legacy: true }), loaded: document.fonts.check('40px "CSNewAthanasius"'), unsupportedLetters: allLetters, roundTrip: L.fromNewAthanasius(L.toNewAthanasius("Ⲁ̀ⲃⲃⲁ Ⲙⲏⲛⲁ").text) === "Ⲁ̀ⲃⲃⲁ Ⲙⲏⲛⲁ".normalize("NFC"), summary: document.querySelector("[data-pe-summary]").textContent };
     });
     await p.locator(".pe-figure[data-pe-figure=zoom]").screenshot({ path: shot(`c-${label}-coptic-athanasius.png`) });
+    await p.fill("[data-pe-input]", "ⲘⲎⲚⲀ Ⲋ");
+    await p.waitForTimeout(900);
+    const sou = await p.evaluate(() => ({ err: document.querySelector("[data-pe-err]").textContent, summary: document.querySelector("[data-pe-summary]").textContent, onKeypad: [...document.querySelectorAll("[data-pe-key]")].some((b) => b.dataset.peKey === "Ⲋ") }));
+    check(`Coptic on ${label}: a letter the font lacks (Ⲋ) is named in a warning, not swapped or drawn in another font`, /«Ⲋ»/.test(sou.err) && /مش موجود في خط/.test(sou.err) && !sou.summary && !sou.onKeypad, JSON.stringify(sou));
+    if (label === "phone") await p.locator(".pe").screenshot({ path: shot("c-phone-unsupported-letter-warning.png") });
     check(`Coptic on ${label}: CS New Athanasius loaded from the site (not a local file), all letters supported, canvas uses it, order keeps Unicode`, c.legacyReady && c.loaded && c.spec.legacy === true && !c.unsupportedLetters.length && c.roundTrip && fontResponses.some((r) => /^200 \/assets\/fonts\/engraving\/cs-new-athanasius\.ttf$/.test(r)) && /ⲠⲒⲀ̀ⲄⲒⲞⲤ/.test(c.summary), JSON.stringify({ ...c, fontResponses }));
     await ctx.close();
   }

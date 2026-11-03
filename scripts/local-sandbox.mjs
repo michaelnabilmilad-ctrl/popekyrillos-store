@@ -92,6 +92,7 @@ function sandboxState() {
     orderLines: airtable.details.map((row) => ({ order: row.fields["رقم الأوردر"]?.[0], quantity: row.fields["الكمية"], unitPrice: row.fields["سعر القطعة"], notes: row.fields["ملاحظات"] || "" })),
     engravingProducts: products.filter((p) => p.engraving).map((p) => ({ id: p.id, images: p.images, image: p.image, engraving: p.engraving })),
     dataCommits: github.commitCount(),
+    uploadedFiles: [...uploads.keys()],
     blockedRequests: blocked
   };
 }

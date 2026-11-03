@@ -73,6 +73,7 @@
 .ae .ae-strips{display:grid;gap:8px;margin-top:10px}.ae .ae-strips figure{margin:0;border:1px solid #ded8cb;border-radius:8px;overflow:hidden;background:#f4efe4}
 .ae .ae-strips canvas{display:block;width:100%;height:auto}.ae .ae-strips figcaption{font-size:12px;padding:4px 8px;background:#fff;display:flex;gap:6px;align-items:center}
 .ae .ae-strips figcaption input{flex:1;min-width:0;font:inherit;font-size:13px;padding:3px 6px;border:1px solid #ded8cb;border-radius:6px}
+.ae .ae-cust{display:grid;gap:6px;margin:8px 0;padding:8px;border:1px solid #0c6b68;border-radius:8px;background:#f2f8f7}.ae .ae-cust canvas{display:block;width:100%;height:auto;border-radius:6px}
 .ae .ae-ok{color:#0c6b68}.ae .ae-bad{color:#85243c;font-weight:700}
 .ae .ae-status{margin:8px 0 0;font-size:13px;font-weight:700}.ae .ae-status.is-dirty{color:#85243c}.ae .ae-status.is-clean{color:#0c6b68}
 .ae .ae-toggle{display:flex;gap:8px;align-items:center;font-weight:800;font-size:15px}
@@ -81,15 +82,32 @@
     document.head.append(st);
   }
 
-  // Photos to choose from: the product's own photos plus any engraving-only preview photo
-  // uploaded here (kept apart from the product photos, which are never changed).
-  function images(product, extra = []) { return [...new Set([...(product.images || []), product.image, product.engraving?.previewImage, ...extra].filter(Boolean))]; }
+  // Source photos to choose from: the product's own photos (never changed). A photo from the
+  // admin's device is only read here in the browser and is never uploaded as it is: customers
+  // get a separate watermarked copy made from it (see makeProtected).
+  function images(product) {
+    const src = product.engraving?.previewSource;
+    return [...new Set([...(product.images || []), product.image, src && src !== "local" ? src : ""].filter((p) => p && !E.isProtectedPreview(p)))];
+  }
 
   function defaultsFor(product) {
     const s = E.normalizeSettings({ ...(product.engraving || {}) });
     s.enabled = s.requested; delete s.requested; delete s.missing;
-    // No photo is picked for the admin: the shop chooses (or uploads) the one that suits.
+    // Settings saved before the protected copy existed: their photo becomes the source.
+    if (!s.previewSource && s.previewImage && !E.isProtectedPreview(s.previewImage)) { s.previewSource = s.previewImage; s.previewImage = ""; s.previewWatermark = null; }
+    // No photo is picked for the admin: the shop chooses the one that suits.
     return s;
+  }
+  // The photo the admin works on (never shown to customers).
+  function sourceUrl() {
+    const d = ctx.draft;
+    if (d.previewSource === "local") return ctx.local?.url || "";
+    if (d.previewSource) return ctx.assetUrl(d.previewSource);
+    return d.previewImage ? ctx.assetUrl(d.previewImage) : "";
+  }
+  function protectedFresh() {
+    const d = ctx.draft;
+    return Boolean(d.previewImage && E.isProtectedPreview(d.previewImage) && d.previewWatermark?.zone === E.zoneKey(d.zone));
   }
 
   function onRender(event) {
@@ -106,19 +124,24 @@
     const { draft, product } = ctx;
     const z = draft.zone;
     const body = ctx.section.querySelector("[data-ae-body]");
-    const imgs = images(product, ctx.uploaded || []);
+    const imgs = images(product);
     body.innerHTML = `
       <label class="ae-toggle"><input type="checkbox" data-ae="enabled" ${draft.enabled ? "checked" : ""}> السماح بالكتابة على هذا المنتج</label>
       <p class="hint">لما يتفعّل، صفحة المنتج تعرض للعميل اختيار «أضف اسم الكاهن» مع معاينة على الصورة اللي تختارها هنا. التعديلات هنا مسودة لحد ما تضغط «اعتماد».</p>
       <div class="ae-row"><strong>قالب جاهز:</strong>${Object.entries(TEMPLATES).map(([k, t]) => `<button class="button ghost" type="button" data-ae-template="${k}">${esc(t.label)}</button>`).join("")}<small class="hint">بيملأ اللون واللغات والخط بس؛ كل حاجة تفضل قابلة للتعديل.</small></div>
-      <div class="ae-row"><strong>صورة المعاينة:</strong><div class="ae-thumbs">${imgs.map((src) => `<button type="button" data-ae-image="${esc(src)}" aria-pressed="${src === draft.previewImage}" title="${esc(src)}"><img src="${esc(ctx.assetUrl(src))}" alt=""></button>`).join("")}</div>
-        <label class="button ghost ae-upload">رفع صورة معاينة خاصة<input type="file" accept="image/*" data-ae-upload hidden></label><small class="hint" data-ae-upload-status></small></div>
-      <p class="hint">ممكن تكون مختلفة عن صور المنتج، ومش بتتضاف لصور المنتج ولا بتغيّرها. الأفضل صورة للصليب من فوق، على خلفية فاتحة، ومن غير علامة مائية على اليد.</p>
-      <label class="ae-row"><input type="checkbox" data-ae="photoConfirmed" ${draft.photoConfirmed ? "checked" : ""}> <b>الصورة حقيقية لنفس المنتج، ومكان الكتابة واضح، ومفيش علامة مائية فوق مكان الاسم</b></label>
+      <div class="ae-row"><strong>صورة المعاينة:</strong><div class="ae-thumbs">${imgs.map((src) => `<button type="button" data-ae-image="${esc(src)}" aria-pressed="${src === draft.previewSource}" title="${esc(src)}"><img src="${esc(ctx.assetUrl(src))}" alt=""></button>`).join("")}${ctx.local ? `<button type="button" data-ae-image="local" aria-pressed="${draft.previewSource === "local"}" title="${esc(ctx.local.name)}"><img src="${esc(ctx.local.url)}" alt=""></button>` : ""}</div>
+        <label class="button ghost ae-upload">صورة خاصة من الجهاز<input type="file" accept="image/*" data-ae-upload hidden></label><small class="hint" data-ae-upload-status>${draft.previewSource === "local" && !ctx.local ? "الصورة الخاصة اتاخدت من جهازك ومش محفوظة على الموقع. لو عاوز تغيّر مكان الكتابة، اختارها من الجهاز تاني." : ""}</small></div>
+      <p class="hint">ممكن تكون مختلفة عن صور المنتج، ومش بتتضاف لصور المنتج ولا بتغيّرها. الصورة الخاصة من الجهاز مش بتترفع زي ما هي: بيترفع منها بس نسخة عليها العلامة المائية.</p>
       <div class="ae-grid">
         <div>
           <div class="ae-canvas"><canvas data-ae-full width="900" height="900" aria-label="اسحب لتحريك منطقة الكتابة"></canvas></div>
           <p class="hint">اسحب المستطيل المنقط لتحريك مكان الكتابة.</p>
+          <div class="ae-protect">
+            <div class="ae-row"><button class="button" type="button" data-ae-act="protect">تجهيز صورة العملاء بالعلامة المائية</button><small class="hint" data-ae-protect-status></small></div>
+            <p class="hint">بعد ما تحدد مكان الكتابة: بيتعمل نسخة من الصورة عليها «popekyrillos.store» على كل الصورة، وسطر «مكتبة البابا كيرلس» جنب مكان الاسم عشان يظهر في التكبير، ومن غير ما يغطي الاسم. العملاء بيشوفوا النسخة دي بس. أي تحريك لمكان الكتابة بعدها محتاج تجهيز تاني.</p>
+            <div class="ae-cust" data-ae-cust hidden><b>كده العميل هيشوفها:</b><canvas data-ae-cust-full width="900" height="900"></canvas><canvas data-ae-cust-zoom width="900" height="300"></canvas></div>
+          </div>
+          <label class="ae-row"><input type="checkbox" data-ae="photoConfirmed" ${draft.photoConfirmed ? "checked" : ""}> <b>الصورة حقيقية لنفس المنتج، ومكان الكتابة واضح، والعلامة المائية ظاهرة ومش فوق مكان الاسم</b></label>
           <div class="ae-strips" data-ae-strips>${["ar", "en", "cop"].map((l) => `<figure><canvas width="900" height="300" data-ae-strip="${l}"></canvas><figcaption><b>${LANG_LABEL[l]}</b><input data-ae-test="${l}" value="${esc(ctx.tests[l])}" dir="${l === "ar" ? "rtl" : "ltr"}" aria-label="اسم تجربة ${LANG_LABEL[l]}"><span data-ae-fit="${l}"></span></figcaption></figure>`).join("")}</div>
         </div>
         <div>
@@ -169,7 +192,7 @@
     if (t.dataset.ae === "enabled") ctx.draft.enabled = t.checked;
     else if (t.dataset.ae === "freeNote") ctx.draft.freeNote = t.checked;
     else if (t.dataset.ae === "photoConfirmed") ctx.draft.photoConfirmed = t.checked;
-    else if (t.matches("[data-ae-upload]")) { uploadPreview(t.files?.[0]); t.value = ""; return; }
+    else if (t.matches("[data-ae-upload]")) { chooseLocal(t.files?.[0]); t.value = ""; return; }
     else if (t.matches("[data-ae-coptic]")) ctx.draft.copticFont = t.value;
     else if (t.dataset.ae === "confirmed") z.confirmed = t.checked;
     else if (t.matches("[data-ae-color]")) {
@@ -193,7 +216,8 @@
     if (!ctx) return;
     const img = e.target.closest("[data-ae-image]");
     if (img) {
-      ctx.draft.previewImage = img.dataset.aeImage;
+      ctx.draft.previewSource = img.dataset.aeImage;
+      ctx.draft.previewImage = ""; ctx.draft.previewWatermark = null; // a new photo needs a new protected copy
       ctx.draft.zone.confirmed = false; syncConfirm();
       ctx.draft.photoConfirmed = false;
       const pc = ctx.section.querySelector('[data-ae="photoConfirmed"]'); if (pc) pc.checked = false;
@@ -216,22 +240,17 @@
     if (act.dataset.aeAct === "reset") { ctx.draft = defaultsFor(ctx.product); build(); return; }
     if (act.dataset.aeAct === "apply") apply();
     if (act.dataset.aeAct === "measure") measure();
+    if (act.dataset.aeAct === "protect") makeProtected();
   }
 
   function syncConfirm() { const c = ctx.section.querySelector('[data-ae="confirmed"]'); if (c) c.checked = ctx.draft.zone.confirmed === true; }
-  const MISSING_LABEL = { previewImage: "صورة المعاينة", photo: "تأكيد إن صورة المعاينة مناسبة", color: "لون الكتابة", zone: "مراجعة مكان الكتابة" };
-  function missingOf(s) {
-    const m = [];
-    if (!s.previewImage) m.push("previewImage");
-    if (!s.photoConfirmed) m.push("photo");
-    if (!s.zone.color) m.push("color");
-    if (!s.zone.confirmed) m.push("zone");
-    return m;
-  }
+  const MISSING_LABEL = { previewImage: "صورة المعاينة", watermark: "تجهيز صورة العملاء بالعلامة المائية (بعد تحديد مكان الكتابة)", photo: "تأكيد إن صورة المعاينة مناسبة", color: "لون الكتابة", zone: "مراجعة مكان الكتابة" };
+  function missingOf(s) { return E.normalizeSettings({ ...s, enabled: true }).missing; }
   function cleanDraft() {
     const s = E.normalizeSettings(ctx.draft);
     s.enabled = ctx.draft.enabled === true; delete s.requested; delete s.missing;
     s.previewImage = ctx.draft.previewImage;
+    s.previewSource = ctx.draft.previewSource || "";
     if (!s.languages.length) s.languages = ["ar"];
     return s;
   }
@@ -261,14 +280,14 @@
   }
   async function measure() {
     const note = ctx.section.querySelector("[data-ae-measure]");
-    if (!ctx.draft.previewImage) { note.textContent = "اختار صورة المعاينة الأول."; return; }
+    if (!sourceUrl()) { note.textContent = "اختار صورة المعاينة الأول."; return; }
     note.textContent = "جاري القياس…";
     const zone = cleanDraft().zone;
     const legacy = ctx.draft.copticFont === "athanasius";
     const found = {};
     for (const lang of ctx.draft.languages) {
       await E.loadFont(lang, { legacy }).catch(() => {});
-      try { found[lang] = await E.measureMaxChars({ imageSrc: ctx.assetUrl(ctx.draft.previewImage), zone, lang, legacy }); }
+      try { found[lang] = await E.measureMaxChars({ imageSrc: sourceUrl(), zone, lang, legacy }); }
       catch (error) { note.textContent = `تعذر القياس: ${error?.message || error}`; return; }
       if (found[lang] > 0) {
         ctx.draft.zone.maxChars[lang] = found[lang];
@@ -280,43 +299,66 @@
     changed();
   }
 
-  // Engraving-only preview photo: converted to WebP in the browser and stored through the same
-  // upload the product photos use, as a new file. It is not added to the product's photos.
-  async function uploadPreview(file) {
+  // A photo from the admin's device: read in this browser only (nothing is uploaded here).
+  async function chooseLocal(file) {
     const note = ctx.section.querySelector("[data-ae-upload-status]");
     if (!file || !file.type.startsWith("image/")) { note.textContent = "اختار ملف صورة."; return; }
     try {
-      note.textContent = "جاري تجهيز الصورة…";
       const bitmap = await createImageBitmap(file);
-      let base64 = "";
-      for (const [side, quality] of [[1600, 0.9], [1400, 0.85], [1200, 0.8]]) {
-        const k = Math.min(1, side / Math.max(bitmap.width, bitmap.height));
-        const c = document.createElement("canvas"); c.width = Math.round(bitmap.width * k); c.height = Math.round(bitmap.height * k);
-        c.getContext("2d").drawImage(bitmap, 0, 0, c.width, c.height);
-        base64 = c.toDataURL("image/webp", quality).split(",")[1] || "";
-        if (base64.length * 0.75 < 1.9 * 1024 * 1024) break;
-      }
-      note.textContent = "جاري الرفع…";
-      const res = await fetch("/admin/api/upload-product-image", { method: "POST", credentials: "same-origin", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ filename: `engraving-preview-${file.name}`, productId: `engraving-${ctx.product.id}`, imageBase64: base64 }) });
-      const out = await res.json().catch(() => ({}));
-      if (!res.ok || !out.path) throw new Error(out.error || `HTTP ${res.status}`);
-      ctx.uploaded = [...(ctx.uploaded || []), out.path];
-      ctx.draft.previewImage = out.path;
+      const k = Math.min(1, 1600 / Math.max(bitmap.width, bitmap.height));
+      const c = document.createElement("canvas"); c.width = Math.round(bitmap.width * k); c.height = Math.round(bitmap.height * k);
+      c.getContext("2d").drawImage(bitmap, 0, 0, c.width, c.height);
+      const blob = await new Promise((r) => c.toBlob(r, "image/png"));
+      if (ctx.local?.url) URL.revokeObjectURL(ctx.local.url);
+      ctx.local = { url: URL.createObjectURL(blob), name: file.name };
+      ctx.draft.previewSource = "local";
+      ctx.draft.previewImage = ""; ctx.draft.previewWatermark = null;
       ctx.draft.photoConfirmed = false;
       ctx.draft.zone.confirmed = false;
       build();
-      ctx.section.querySelector("[data-ae-upload-status]").textContent = "اترفعت. حدد مكان الكتابة عليها، وأكّد إنها مناسبة.";
+      ctx.section.querySelector("[data-ae-upload-status]").textContent = "الصورة على جهازك بس ومش مرفوعة. حدد مكان الكتابة، وبعدين جهّز صورة العملاء بالعلامة المائية.";
     } catch (error) {
-      note.textContent = `تعذر رفع الصورة: ${error.message}`;
+      note.textContent = `تعذر فتح الصورة: ${error.message}`;
+    }
+  }
+
+  // The only preview file customers ever get: the watermarked copy, stored as a new file through
+  // the existing product-image upload (not added to the product's photos).
+  async function makeProtected() {
+    const note = ctx.section.querySelector("[data-ae-protect-status]");
+    const src = sourceUrl();
+    if (!src || (ctx.draft.previewSource === "local" && !ctx.local)) { note.textContent = "اختار صورة المعاينة الأول (الصورة الخاصة لازم تتختار من الجهاز تاني)."; return; }
+    if (ctx.draft.previewSource === "" && E.isProtectedPreview(ctx.draft.previewImage)) { note.textContent = "اختار الصورة الأصلية تاني (مش النسخة المحمية)."; return; }
+    try {
+      note.textContent = "جاري التجهيز…";
+      const zone = cleanDraft().zone;
+      const { canvas, zoneKey } = await E.watermarkPreview({ imageSrc: src, zone });
+      let base64 = "";
+      for (const quality of [0.9, 0.84, 0.78]) {
+        base64 = canvas.toDataURL("image/webp", quality).split(",")[1] || "";
+        if (base64.length * 0.75 < 1.9 * 1024 * 1024) break;
+      }
+      note.textContent = "جاري الرفع…";
+      const res = await fetch("/admin/api/upload-product-image", { method: "POST", credentials: "same-origin", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ filename: "protected-preview", productId: `engraving-${ctx.product.id}`, imageBase64: base64 }) });
+      const out = await res.json().catch(() => ({}));
+      if (!res.ok || !out.path) throw new Error(out.error || `HTTP ${res.status}`);
+      ctx.draft.previewImage = out.path;
+      ctx.draft.previewWatermark = { zone: zoneKey };
+      ctx.draft.photoConfirmed = false;
+      const pc = ctx.section.querySelector('[data-ae="photoConfirmed"]'); if (pc) pc.checked = false;
+      note.textContent = "اتجهزت. راجع الصورتين تحت، وبعدين أكّد إن الصورة مناسبة.";
+      changed();
+    } catch (error) {
+      note.textContent = `تعذر التجهيز: ${error.message}`;
     }
   }
 
   function alertStatus(msg) { const node = ctx.section.querySelector("[data-ae-status]"); node.className = "ae-status is-dirty"; node.textContent = msg; }
 
   async function draw() {
-    if (!ctx || !ctx.section.open || !ctx.draft.previewImage) return;
+    if (!ctx || !ctx.section.open || !sourceUrl()) return;
     const my = ++ticket;
-    const src = ctx.assetUrl(ctx.draft.previewImage);
+    const src = sourceUrl();
     const zone = cleanDraft().zone;
     try {
       const legacy = ctx.draft.copticFont === "athanasius";
@@ -328,7 +370,7 @@
       for (const l of ["ar", "en", "cop"]) {
         await E.loadFont(l, { legacy }).catch(() => {});
         const text = ctx.tests[l] || "";
-        const v = E.validateName(text, l, zone);
+        const v = E.validateName(text, l, zone, { legacy });
         const r = await E.render({ imageSrc: src, zone, text: v.ok || v.code === "length" ? v.name : "", lang: l, legacy });
         if (l === "cop") {
           const note = ctx.section.querySelector("[data-ae-coptic-note]");
@@ -341,6 +383,22 @@
         else if (!v.ok) { cap.className = "ae-bad"; cap.textContent = v.message; }
         else if (r.fit && !r.fit.fits) { cap.className = "ae-bad"; cap.textContent = "أطول من المساحة"; }
         else { cap.className = "ae-ok"; cap.textContent = `مناسب · حجم الخط ${Math.round((r.fit?.ratio || 0) * 100)}%`; }
+      }
+      // What customers will see: the watermarked copy only.
+      const cust = ctx.section.querySelector("[data-ae-cust]");
+      const fresh = protectedFresh();
+      cust.hidden = !fresh;
+      const pnote = ctx.section.querySelector("[data-ae-protect-status]");
+      if (!fresh && ctx.draft.previewImage && pnote && !/جاري/.test(pnote.textContent)) pnote.textContent = "مكان الكتابة اتغيّر بعد تجهيز صورة العملاء: جهّزها تاني.";
+      if (fresh) {
+        const lang = ctx.draft.languages[0] || "ar";
+        const v = E.validateName(ctx.tests[lang] || "", lang, zone, { legacy });
+        const r = await E.render({ imageSrc: ctx.assetUrl(ctx.draft.previewImage), zone, text: v.ok ? v.name : "", lang, legacy });
+        if (my !== ticket) return;
+        const cf = ctx.section.querySelector("[data-ae-cust-full]");
+        cf.getContext("2d").clearRect(0, 0, cf.width, cf.height);
+        E.drawFull(cf, r);
+        E.drawZoom(ctx.section.querySelector("[data-ae-cust-zoom]"), r);
       }
     } catch (error) {
       const node = ctx.section.querySelector("[data-ae-status]");
