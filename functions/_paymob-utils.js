@@ -1,3 +1,4 @@
+import { isMadeToOrderLine } from "./_made-to-order.js";
 export const currency = "EGP";
 
 const hmacFields = [
@@ -221,13 +222,15 @@ export async function validateCartItems(context, items = [], options = {}) {
 
     const variant = findVariant(product, item.variantId || "default");
     if (!variant) throw publicError(400, "اختيار المنتج غير موجود.");
-    if (!variantAvailable(product, variant)) throw publicError(400, "أحد المنتجات أو الاختيارات غير متاح حاليا.");
+    // A cross with a priest name is made at the factory for this order: no stock check.
+    const madeToOrder = isMadeToOrderLine(product, item.engraving);
+    if (!madeToOrder && !variantAvailable(product, variant)) throw publicError(400, "أحد المنتجات أو الاختيارات غير متاح حاليا.");
 
     const quantity = Math.floor(Number(item.qty || item.quantity));
     if (!Number.isInteger(quantity) || quantity < 1 || quantity > 99) throw publicError(400, "كمية غير صحيحة في السلة.");
 
     const availableQuantity = variantQuantity(variant);
-    if (availableQuantity !== null && quantity > availableQuantity) {
+    if (!madeToOrder && availableQuantity !== null && quantity > availableQuantity) {
       throw publicError(400, "الكمية المطلوبة أكبر من المتاح حاليا.");
     }
 

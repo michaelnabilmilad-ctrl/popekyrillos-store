@@ -27,6 +27,7 @@
     host.className = "pe";
     host.innerHTML = `
       <div class="pe-head"><h2 id="${uid}-t">✍️ اكتب اسم أبونا على الصليب</h2>${settings.freeNote ? `<span class="pe-free">الكتابة مجانية</span>` : ""}</div>
+      <p class="pe-made"><span aria-hidden="true">🛠️</span> يُصنع خصيصًا حسب طلبك</p>
       <p class="pe-lead">نكتب الاسم على يد صليب اليد، وتشوف شكله على صورة نفس الصليب قبل ما تطلب.</p>
       <div class="pe-choice" role="radiogroup" aria-labelledby="${uid}-t">
         <label><input type="radio" name="${uid}-mode" value="none" checked><b>بدون كتابة</b><small>الصليب كما في الصور</small></label>
@@ -54,7 +55,26 @@
     host.addEventListener("input", (e) => { if (e.target.matches("[data-pe-input]")) onName(); });
     host.addEventListener("click", onClick);
     syncLang();
+    prefillFromLink(langs);
     return true;
+  }
+
+  // "#engrave=ar:<name>" (the admin's "show preview" link for an order) opens the preview
+  // with that name filled in. The customer still has to confirm before anything is added.
+  function prefillFromLink(langs) {
+    let raw = "";
+    try { raw = new URLSearchParams(String(location.hash || "").slice(1)).get("engrave") || ""; } catch { return; }
+    const sep = raw.indexOf(":");
+    if (sep < 0) return;
+    const lang = raw.slice(0, sep), name = raw.slice(sep + 1);
+    if (!name) return;
+    if (langs.includes(lang)) { state.lang = lang; host.querySelectorAll('input[name$="-lang"]').forEach((i) => { i.checked = i.value === lang; }); syncLang(); }
+    const radio = host.querySelector('input[name$="-mode"][value="name"]');
+    radio.checked = true;
+    state.mode = "name";
+    $("[data-pe-body]").hidden = false;
+    $("[data-pe-input]").value = name;
+    E.loadFont(state.lang, fontOpts()).then(onName, onName);
   }
 
   const $ = (s) => host.querySelector(s);

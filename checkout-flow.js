@@ -151,7 +151,7 @@ function cartPayloadFromMap(map = cart) {
 const engravingLangLabels = { ar: "العربية", en: "English", cop: "القبطية" };
 function engravingLineHtml(item) {
   if (!item.engraving) return "";
-  return `<p class="cart-engraving"><span>✍️ الاسم على الصليب:</span> <bdi>«${escapeHtml(item.engraving.name)}»</bdi> <small>(${escapeHtml(engravingLangLabels[item.engraving.lang] || "")})</small></p>`;
+  return `<p class="cart-engraving"><span>✍️ الاسم على الصليب:</span> <bdi>«${escapeHtml(item.engraving.name)}»</bdi> <small>(${escapeHtml(engravingLangLabels[item.engraving.lang] || "")})</small>${item.madeToOrder ? ` <small class="cart-made-to-order">· يُصنع خصيصًا حسب طلبك</small>` : ""}</p>`;
 }
 
 function cartMapFromPayload(items = []) {
@@ -699,6 +699,23 @@ function productImage(product) {
   return product?.image || "";
 }
 
+// Made-to-order crosses: a line with a priest name is made at the factory for this order, so it
+// never depends on stock. Same rule as functions/_made-to-order.js; the server re-checks it.
+function engravingZoneKey(zone) {
+  return ["x", "y", "len", "thick", "angle"].map((k) => (Math.round(Number(zone?.[k]) * 10000) / 10000).toString()).join(",");
+}
+function isMadeToOrderProduct(product) {
+  const settings = product?.engraving;
+  return Boolean(settings && settings.enabled === true && typeof settings.previewImage === "string"
+    && /(^|\/)engraving-[^/]*\.webp$/i.test(settings.previewImage)
+    && settings.previewWatermark?.zone === engravingZoneKey(settings.zone)
+    && settings.photoConfirmed === true
+    && /^#[0-9a-f]{6}$/i.test(String(settings.zone?.color || "")) && settings.zone?.confirmed === true);
+}
+function isMadeToOrderLine(product, engraving) {
+  return Boolean(engraving && typeof engraving === "object" && isMadeToOrderProduct(product));
+}
+
 // Mirrors the storefront rule (script.js isVariantAvailable); the server re-checks at order time.
 function isCartLineUnavailable(product, variant) {
   if (product?.stock === "غير متاح حاليا" || product?.stock === "Currently unavailable" || product?.available === false) return true;
@@ -727,7 +744,8 @@ function cartEntries() {
         discount: safeBasePrice !== null && price !== null ? safeBasePrice - price : 0,
         optionText: variantOptionText(variant),
         ...metadata,
-        unavailable: isCartLineUnavailable(product, variant)
+        madeToOrder: isMadeToOrderLine(product, metadata.engraving),
+        unavailable: !isMadeToOrderLine(product, metadata.engraving) && isCartLineUnavailable(product, variant)
       };
     })
     .filter(Boolean);

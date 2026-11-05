@@ -40,3 +40,4 @@
 .pe-confirm{display:flex;gap:8px;align-items:flex-start;font-size:14px;font-weight:700}
 .pe-confirm input{margin-top:4px;width:18px;height:18px;accent-color:#0c6b68;flex:0 0 auto}
 @media (max-width:760px){.pe{padding:12px}.pe-keys button{min-height:42px}}
+.pe-made{margin:6px 0 0;font-size:13px;font-weight:800;color:#7a4d10}

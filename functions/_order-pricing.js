@@ -3,6 +3,8 @@
 // variantPrice / isCartLineUnavailable), so an honest order gets exactly the price the
 // customer saw, and an edited request cannot lower a price or the total.
 
+import { isMadeToOrderLine, isMadeToOrderProduct } from "./_made-to-order.js";
+
 const MEDAL_PATTERN = /(?:مادلي|ميدالي|medal)/i;
 const MEDAL_VARIANTS = [
   { id: "medal-wood-plywood", title: "خشب كونتر", price: 18, compareAtPrice: 20, discountRate: 0.1, options: { "نوع الخشب": "كونتر" }, available: true },
@@ -41,7 +43,8 @@ export function purchasableOffers(product) {
   return productVariants(product).map((variant) => ({
     id: String(variant?.id || "default"),
     price: positivePrice(variant?.price ?? product?.price),
-    available: !lineUnavailable(product, variant),
+    // Made-to-order crosses (engraving on) can always be ordered with a name.
+    available: !lineUnavailable(product, variant) || isMadeToOrderProduct(product),
     options: variant?.options && typeof variant.options === "object" ? variant.options : {},
     sku: String(variant?.sku || "").trim(),
     image: String(variant?.image || (Array.isArray(variant?.images) ? variant.images[0] || "" : "")).trim()
@@ -73,12 +76,14 @@ export function priceOrderItems(items, catalog) {
       return null;
     }
     const variant = findVariant(product, item.variantId);
-    if (lineUnavailable(product, variant)) {
+    // A line with a name is made at the factory for this order: no stock check at all.
+    const madeToOrder = isMadeToOrderLine(product, item.engraving);
+    if (!madeToOrder && lineUnavailable(product, variant)) {
       errors.push({ index, code: "unavailable" });
       return null;
     }
     const stock = variant?.quantity === null || variant?.quantity === undefined || variant?.quantity === "" ? null : Number(variant.quantity);
-    if (Number.isFinite(stock) && quantity > stock) {
+    if (!madeToOrder && Number.isFinite(stock) && quantity > stock) {
       errors.push({ index, code: "not_enough_stock" });
       return null;
     }
