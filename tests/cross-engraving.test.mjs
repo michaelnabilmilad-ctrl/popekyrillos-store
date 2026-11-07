@@ -205,7 +205,7 @@ test("a name on a product without engraving, a closed language or a too-long nam
 test("product pages load the engraving files only when the admin enabled it", () => {
   const worker = fs.readFileSync(new URL("../cloudflare-worker.js", import.meta.url), "utf8");
   assert.match(worker, /const engravingOn = engravingReady\(product\?\.engraving\);/);
-  assert.match(worker, /\$\{engravingScripts\}<script src="\/product-page\.js\?v=26" defer><\/script>/);
+  assert.match(worker, /\$\{engravingScripts\}<script src="\/product-page\.js\?v=27" defer><\/script>/);
   const build = fs.readFileSync(new URL("../scripts/build-cloudflare.js", import.meta.url), "utf8");
   for (const file of ["cross-engraving.js", "product-engraving.js", "product-engraving.css", "admin-engraving.js"]) assert.match(build, new RegExp(`"${file.replace(".", "\\.")}"`));
   // CS New Athanasius ships only with its licence note (owner's confirmation) and as the exact file checked.

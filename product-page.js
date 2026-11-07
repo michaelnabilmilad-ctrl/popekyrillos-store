@@ -81,6 +81,19 @@ const images = [...new Set([...(product.images || []), product.image].filter(Boo
 const isMedalProduct = /(?:مادلي|ميدالي|medal)/i.test(text(product.name));
 // Set per product from /admin (product.engraving); the module is loaded only for those products.
 const engravingEnabled = product.engraving?.enabled === true && Boolean(window.ProductEngraving);
+// Made-to-order crosses (engraving fully set up): made at the factory for each order, so they can
+// always be ordered, with or without a name, whatever the stock says.
+// Same rule as functions/_made-to-order.js (the server re-checks every order).
+function engravingZoneKey(zone) {
+  return ["x", "y", "len", "thick", "angle"].map((k) => (Math.round(Number(zone?.[k]) * 10000) / 10000).toString()).join(",");
+}
+const madeToOrder = engravingEnabled && (() => {
+  const settings = product.engraving;
+  return typeof settings.previewImage === "string" && /(^|\/)engraving-[^/]*\.webp$/i.test(settings.previewImage)
+    && settings.previewWatermark?.zone === engravingZoneKey(settings.zone)
+    && settings.photoConfirmed === true
+    && /^#[0-9a-f]{6}$/i.test(String(settings.zone?.color || "")) && settings.zone?.confirmed === true;
+})();
 const medalWoodOptionName = "نوع الخشب";
 const medalWoodVariants = [
   { id: "medal-wood-plywood", title: "خشب كونتر", price: 18, compareAtPrice: 20, discountRate: 0.1, available: true, options: { [medalWoodOptionName]: "كونتر" } },
@@ -348,6 +361,10 @@ function openRouteLightbox(source = activeImage) {
 function available(variant) {
   const qty = Number(variant?.quantity);
   return Number.isInteger(qty) && qty >= 0 ? qty > 0 : variant?.available !== false;
+}
+// The add button stays on for made-to-order crosses; addToCart() then asks for a name if needed.
+function canAdd(variant) {
+  return Boolean(variant) && (available(variant) || madeToOrder);
 }
 
 function coloringMarkup() {
@@ -1656,7 +1673,7 @@ function render() {
     const values = option.values || [];
     return `<label>${escapeHtml(name)}<select data-option="${escapeHtml(name)}">${values.map((value)=>`<option value="${escapeHtml(text(value))}" ${selected?.options?.[name]===text(value)?"selected":""}>${escapeHtml(text(value))}</option>`).join("")}</select></label>`;
   }).join("");
-  root.innerHTML = `<div class="product-route-grid"><div class="product-route-gallery"><button class="product-route-main-image" type="button" data-main data-route-zoom aria-label="تكبير صورة ${escapeHtml(text(product.name))}">${images[0]?imageMarkup(images[0],0,"","main"):""}</button>${images.length>1?`<div class="product-route-thumbs">${images.map((image,index)=>`<button class="product-route-thumb" type="button" data-image="${escapeHtml(image)}" aria-pressed="${index===0}">${imageMarkup(image,index,"","thumbnail")}</button>`).join("")}</div>`:""}</div><article class="product-route-copy"><p class="product-route-category">${escapeHtml(text(product.label||product.badge||product.subcategory||"منتج"))}</p><h1>${escapeHtml(text(product.name))}</h1><div class="product-route-price" data-price>${isMedalProduct ? "اختر نوع الخشب لعرض السعر" : money(selected?.price ?? product.price)}</div>${coloringMarkup()}${engravingEnabled ? `<section data-engraving-slot aria-label="الكتابة على الصليب"></section>` : ""}<div class="product-route-options">${optionControls}</div><div class="product-route-actions"><input class="product-route-quantity" type="number" min="1" value="1" data-quantity aria-label="الكمية"><button class="button primary" type="button" data-add ${isMedalProduct || !available(selected)?"disabled":""}>${isMedalProduct ? "اختر نوع الخشب أولًا" : available(selected)?"أضف إلى السلة":"غير متاح حاليا"}</button><a class="button secondary" href="/cart">عرض السلة</a></div><p class="product-route-message" data-message></p>${productTrustHtml}${text(product.description).trim() ? `<h2 class="product-route-details-title">تفاصيل المنتج</h2><p class="product-route-description">${escapeHtml(text(product.description))}</p>` : ""}</article></div>`;
+  root.innerHTML = `<div class="product-route-grid"><div class="product-route-gallery"><button class="product-route-main-image" type="button" data-main data-route-zoom aria-label="تكبير صورة ${escapeHtml(text(product.name))}">${images[0]?imageMarkup(images[0],0,"","main"):""}</button>${images.length>1?`<div class="product-route-thumbs">${images.map((image,index)=>`<button class="product-route-thumb" type="button" data-image="${escapeHtml(image)}" aria-pressed="${index===0}">${imageMarkup(image,index,"","thumbnail")}</button>`).join("")}</div>`:""}</div><article class="product-route-copy"><p class="product-route-category">${escapeHtml(text(product.label||product.badge||product.subcategory||"منتج"))}</p><h1>${escapeHtml(text(product.name))}</h1><div class="product-route-price" data-price>${isMedalProduct ? "اختر نوع الخشب لعرض السعر" : money(selected?.price ?? product.price)}</div>${coloringMarkup()}${engravingEnabled ? `<section data-engraving-slot aria-label="الكتابة على الصليب"></section>` : ""}<div class="product-route-options">${optionControls}</div><div class="product-route-actions"><input class="product-route-quantity" type="number" min="1" value="1" data-quantity aria-label="الكمية"><button class="button primary" type="button" data-add ${isMedalProduct || !canAdd(selected)?"disabled":""}>${isMedalProduct ? "اختر نوع الخشب أولًا" : canAdd(selected)?"أضف إلى السلة":"غير متاح حاليا"}</button><a class="button secondary" href="/cart">عرض السلة</a></div><p class="product-route-message" data-message></p>${productTrustHtml}${text(product.description).trim() ? `<h2 class="product-route-details-title">تفاصيل المنتج</h2><p class="product-route-description">${escapeHtml(text(product.description))}</p>` : ""}</article></div>`;
   if (engravingEnabled) window.ProductEngraving.mount(root.querySelector("[data-engraving-slot]"), product, { assetUrl });
   mountBuyBar();
 }
@@ -1669,8 +1686,8 @@ function chooseVariant() {
     ? `<span class="medal-price-row"><del>${money(selected.compareAtPrice)}</del><strong>${money(selected.price)}</strong></span><small>خصم الخدمات 10% · الإجمالي: ${money(selected.price * qty)}</small>`
     : money(selected?.price ?? product.price);
   const button = root.querySelector("[data-add]");
-  button.disabled = !selected || !available(selected);
-  button.textContent = selected && available(selected) ? "أضف إلى السلة" : isMedalProduct ? "اختر نوع الخشب أولًا" : "غير متاح حاليا";
+  button.disabled = !canAdd(selected);
+  button.textContent = canAdd(selected) ? "أضف إلى السلة" : isMedalProduct ? "اختر نوع الخشب أولًا" : "غير متاح حاليا";
   root.querySelector("[data-wood-error]")?.classList.toggle("is-visible", isMedalProduct && !selected);
   if (isMedalProduct && selected) updateMedalPhotoPreview();
 }
@@ -1728,6 +1745,11 @@ function addToCart() {
   if (engravingLine?.error) {
     root.querySelector("[data-message]").textContent = "";
     root.querySelector("[data-engraving-slot]")?.scrollIntoView({ behavior: "smooth", block: "center" });
+    return;
+  }
+  // Made-to-order crosses are made at the factory for each order, so stock never blocks them.
+  if (!canAdd(selected)) {
+    root.querySelector("[data-message]").textContent = "غير متاح حاليا";
     return;
   }
   const lineId = selectionKey(variantId, coloringDesign) + (engravingLine ? `~${engravingLine.lineKey}` : "");

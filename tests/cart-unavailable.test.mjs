@@ -20,7 +20,7 @@ function checkoutCart(lines) {
     variantOptionText: () => ""
   };
   vm.createContext(context);
-  vm.runInContext(["parseCartKey", "isCartLineUnavailable", "cartEntries", "cartHasUnavailableLines", "cartTotal"]
+  vm.runInContext(["parseCartKey", "isCartLineUnavailable", "engravingZoneKey", "isMadeToOrderProduct", "isMadeToOrderLine", "cartEntries", "cartHasUnavailableLines", "cartTotal"]
     .map((name) => extractFunction(checkoutSource, name)).join("\n\n"), context);
   return context;
 }

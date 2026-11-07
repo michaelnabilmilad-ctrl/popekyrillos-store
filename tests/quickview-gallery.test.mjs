@@ -14,7 +14,7 @@ const fullProduct = (id) => structuredClone(fullProducts.find((product) => produ
 const FUNCTIONS = [
   "getProduct", "hasFreshProductDetails", "hasProductDetails", "loadProductDetails",
   "getProductImages", "uniqueImages", "getVariantImages", "modalGalleryImages",
-  "openProductModal", "closeProductModal"
+  "isMadeToOrderProduct", "openProductModal", "closeProductModal"
 ];
 
 // Same shape as cloudflare-worker.js catalogDto() after the client mapping in loadCatalogPage().
