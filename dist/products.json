@@ -159,18 +159,20 @@
         "confirmed": true,
         "maxChars": {
           "ar": 34,
-          "en": 24,
-          "cop": 20
+          "en": 23,
+          "cop": 23
         }
       },
       "languages": [
-        "ar"
+        "ar",
+        "en",
+        "cop"
       ],
       "fee": 0,
       "photoConfirmed": true,
-      "copticFont": "noto",
+      "copticFont": "athanasius",
       "freeNote": true,
-      "version": 1
+      "version": 2
     }
   },
   {
