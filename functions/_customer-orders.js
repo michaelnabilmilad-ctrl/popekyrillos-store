@@ -63,7 +63,8 @@ export function purchaseSnapshot(order, items) {
     discount: items.reduce((sum, item) => sum + (Number(item.discountValue) || 0) * item.quantity, 0),
     items: items.map(item => ({ productName: item.productName, sku: item.sku || "", productImage: item.imageUrl || item.image || "", quantity: item.quantity, unitPrice: item.unitPrice, lineTotal: item.unitPrice * item.quantity, option: item.option || "",
       // Made-to-order cross: the name, language and settings version the preview was drawn with.
-      ...(item.engraving ? { madeToOrder: true, engraving: { name: item.engraving.name, lang: item.engraving.lang, langLabel: item.engraving.langLabel, zoneVersion: item.engraving.zoneVersion, productId: item.websiteProductId || "" } } : {}) }))
+      ...(item.madeToOrder ? { madeToOrder: true } : {}),
+      ...(item.engraving ? { engraving: { name: item.engraving.name, lang: item.engraving.lang, langLabel: item.engraving.langLabel, zoneVersion: item.engraving.zoneVersion, productId: item.websiteProductId || "" } } : {}) }))
   };
 }
 export async function checkoutReceipt(env, id, submittedPhone) {

@@ -1,4 +1,4 @@
-// End-to-end check of made-to-order crosses against scripts/local-sandbox.mjs, with a LOCAL
+// End-to-end check of made-to-order crosses (with and without a name) against scripts/local-sandbox.mjs, with a LOCAL
 // copy of the catalog where model 2 (engraving on) is out of stock with quantity 0, and model 5
 // (no engraving) is out of stock.
 //   node scripts/e2e-made-to-order.cjs http://localhost:8790 <screenshots folder>
@@ -47,7 +47,7 @@ const cartItems = (page) => page.evaluate(() => {
   await p.screenshot({ path: shot("01-product-page.png") });
   await p.click("[data-add]");
   await p.waitForTimeout(300);
-  check("product page: without a name an out-of-stock cross is not added", (await cartItems(p)).length === 0, await p.textContent("[data-message]"));
+  check("product page: without a name the out-of-stock cross is added too (made to order)", (await cartItems(p)).length === 1 && !(await cartItems(p))[0].engraving, await p.textContent("[data-message]"));
   await p.click('.pe-choice input[value="name"]', { force: true });
   await p.waitForSelector("[data-pe-body]:not([hidden])");
   await p.fill("[data-pe-input]", NAME);
@@ -57,7 +57,7 @@ const cartItems = (page) => page.evaluate(() => {
   await p.click("[data-add]");
   await p.waitForTimeout(400);
   const afterAdd = await cartItems(p);
-  check("product page: with a name it goes to the cart (zero stock)", afterAdd.length === 1 && afterAdd[0].engraving?.name === NAME);
+  check("product page: with a name it goes to the cart as its own line (zero stock)", afterAdd.length === 2 && afterAdd[1].engraving?.name === NAME);
   await p.locator(".pe").screenshot({ path: shot("02-preview-before-order.png") });
 
   // 2. Shop listing: the card links to the product page instead of "unavailable"
@@ -68,7 +68,7 @@ const cartItems = (page) => page.evaluate(() => {
   await p.waitForSelector("[data-add]");
   await p.click("[data-add]");
   await p.waitForTimeout(300);
-  check("regular in-stock product added", (await cartItems(p)).length === 2);
+  check("regular in-stock product added", (await cartItems(p)).length === 3);
 
   // 3. Cart + checkout (cash on pickup, local sandbox only)
   await p.goto(`${base}/cart`);
@@ -88,9 +88,9 @@ const cartItems = (page) => page.evaluate(() => {
   await p.waitForTimeout(800);
   await p.screenshot({ path: shot("04-after-order.png"), fullPage: true });
   const order = s.orders[0];
-  check("order: created with the out-of-stock named cross + regular product, total 795", s.orders.length === 1 && order.Total === 795, String(order?.Total));
+  check("order: created with the out-of-stock cross (plain + named) + regular product, total 1565", s.orders.length === 1 && order.Total === 1565, String(order?.Total));
   check("order: line says «تصنيع مخصوص» with the name and language", /تصنيع مخصوص \| الاسم على الصليب: «القمص يوحنا مرقس» \| لغة الكتابة: العربية/.test(order?.Products || ""));
-  check("order lines (ملاحظات): flagged only on the cross", /^تصنيع مخصوص/.test(s.orderLines[0]?.notes || "") && !/تصنيع مخصوص/.test(s.orderLines[1]?.notes || ""), s.orderLines.map((l) => l.notes).join(" || "));
+  check("order lines (ملاحظات): each cross line flagged, the regular line not", /^تصنيع مخصوص \| بدون كتابة اسم/.test(s.orderLines[0]?.notes || "") && /^تصنيع مخصوص \| الاسم على الصليب/.test(s.orderLines[1]?.notes || "") && !/تصنيع مخصوص/.test(s.orderLines[2]?.notes || ""), s.orderLines.map((l) => l.notes).join(" || "));
 
   // 4. The API refuses a plain (no name) out-of-stock cross and an out-of-stock regular product
   const refused = await p.evaluate(async ({ cross, soldOut }) => {
@@ -101,7 +101,7 @@ const cartItems = (page) => page.evaluate(() => {
     };
     return { plainCross: await send([{ productId: cross, quantity: 1, price: 770, lineTotal: 770 }]), soldOut: await send([{ productId: soldOut, quantity: 1, price: 770, lineTotal: 770 }]) };
   }, { cross: CROSS, soldOut: SOLD_OUT });
-  check("server: out-of-stock cross without a name and out-of-stock regular product refused", refused.plainCross === 409 && refused.soldOut === 409, JSON.stringify(refused));
+  check("server: out-of-stock regular product refused (eligible cross without a name accepted)", refused.plainCross === 200 && refused.soldOut === 409, JSON.stringify(refused));
 
   // 5. Admin orders page
   const admin = await browser.newContext({ viewport: { width: 1366, height: 1000 }, httpCredentials: { username: "local", password: "local" } });
@@ -111,12 +111,12 @@ const cartItems = (page) => page.evaluate(() => {
   await o.goto(`${base}/admin/orders`);
   await o.waitForSelector("[data-order-id]", { timeout: 20000 });
   const listText = await o.textContent("body");
-  await o.locator("[data-order-id]").first().click();
-  await o.waitForFunction(() => /الأسماء المطلوب كتابتها/.test(document.body.innerText), null, { timeout: 20000 }).catch(() => {});
+  await o.locator("[data-order-id]").nth(1).click(); // newest first: #2 is the API check above
+  await o.waitForFunction(() => /الصلبان المطلوب تصنيعها/.test(document.body.innerText), null, { timeout: 20000 }).catch(() => {});
   const detailText = await o.textContent("body");
   await o.screenshot({ path: shot("05-admin-order.png"), fullPage: true });
   check("admin: list badge «تصنيع مخصوص»", listText.includes("تصنيع مخصوص"));
-  check("admin: name, language, model and SKU shown", detailText.includes(NAME) && detailText.includes("العربية") && detailText.includes("موديل 2") && detailText.includes("POPEK-CORIAN-CROSS-02"));
+  check("admin: name, language, model, SKU and the unnamed cross shown", detailText.includes("بدون كتابة اسم") && detailText.includes(NAME) && detailText.includes("العربية") && detailText.includes("موديل 2") && detailText.includes("POPEK-CORIAN-CROSS-02"));
   const previewHref = await o.$eval("a[href*='#engrave=']", (a) => a.getAttribute("href")).catch(() => "");
   check("admin: «عرض المعاينة بالاسم ده» link present", previewHref.startsWith(`/products/${CROSS}#engrave=`), previewHref);
 

@@ -43,7 +43,7 @@ export function purchasableOffers(product) {
   return productVariants(product).map((variant) => ({
     id: String(variant?.id || "default"),
     price: positivePrice(variant?.price ?? product?.price),
-    // Made-to-order crosses (engraving on) can always be ordered with a name.
+    // Made-to-order crosses can always be ordered.
     available: !lineUnavailable(product, variant) || isMadeToOrderProduct(product),
     options: variant?.options && typeof variant.options === "object" ? variant.options : {},
     sku: String(variant?.sku || "").trim(),
@@ -76,8 +76,8 @@ export function priceOrderItems(items, catalog) {
       return null;
     }
     const variant = findVariant(product, item.variantId);
-    // A line with a name is made at the factory for this order: no stock check at all.
-    const madeToOrder = isMadeToOrderLine(product, item.engraving);
+    // An eligible cross is made at the factory for this order: no stock check at all.
+    const madeToOrder = isMadeToOrderLine(product);
     if (!madeToOrder && lineUnavailable(product, variant)) {
       errors.push({ index, code: "unavailable" });
       return null;
@@ -98,6 +98,7 @@ export function priceOrderItems(items, catalog) {
       productId: String(product.id),
       variantId: String(variant?.id || "default"),
       quantity,
+      madeToOrder,
       unitPrice,
       basePrice,
       discountValue: basePrice - unitPrice,

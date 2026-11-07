@@ -1,7 +1,8 @@
 // Made-to-order hand crosses (priest-name engraving).
-// The factory makes and engraves these crosses for each order, so a line that carries a
-// validated name never depends on stock: not on the site's stock text, not on a variant
-// quantity, and not on Airtable. A line WITHOUT a name follows the normal stock rules.
+// The factory makes these crosses for each order (with or without a priest name), so every
+// line of an eligible cross is made to order and never depends on stock: not on the site's
+// stock text, not on a variant quantity, and not on Airtable. Every other product keeps the
+// normal stock rules.
 // The same rules are mirrored in the browser (checkout-flow.js, product-page.js, script.js).
 
 // Same rule as CrossEngraving.zoneKey in cross-engraving.js.
@@ -25,10 +26,10 @@ export function isMadeToOrderProduct(product) {
   return engravingReady(product?.engraving);
 }
 
-// A cart/order line made for this customer: it carries engraving details AND the product has
-// engraving switched on. The details themselves are validated separately (language, length, font).
-export function isMadeToOrderLine(product, engraving) {
-  return Boolean(engraving && typeof engraving === "object" && isMadeToOrderProduct(product));
+// A cart/order line made at the factory for this order: any line of an eligible cross, named or
+// not, decided per line from the product (a name, if any, is validated separately).
+export function isMadeToOrderLine(product) {
+  return isMadeToOrderProduct(product);
 }
 
 export const MADE_TO_ORDER_LABEL = "تصنيع مخصوص";

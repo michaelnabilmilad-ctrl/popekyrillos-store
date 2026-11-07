@@ -1,6 +1,6 @@
-// Made-to-order hand crosses: a cross with a priest name is made at the factory for the order,
-// so it never depends on stock (site stock text, variant quantity or Airtable). Everything else
-// keeps the normal stock rules. Fake catalog and fake Airtable only.
+// Made-to-order hand crosses: an eligible cross (engraving set up) is made at the factory for the
+// order, with or without a priest name, so it never depends on stock (site stock text, variant
+// quantity or Airtable). Everything else keeps the normal stock rules. Fake catalog and fake Airtable only.
 import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
@@ -76,7 +76,7 @@ async function setup(t, { airtableProducts = true, detailFieldExists = true } = 
   return f;
 }
 
-test("1. a cross with a name orders even with zero stock on the site; without a name it is refused", async (t) => {
+test("1. an eligible cross orders with zero stock, with a name or without one, each line flagged", async (t) => {
   const f = await setup(t);
   const ok = await f.order([named()]);
   assert.equal(ok.status, 200, await ok.clone().text());
@@ -86,8 +86,11 @@ test("1. a cross with a name orders even with zero stock on the site; without a 
   assert.equal(f.details.length, 1);
   assert.equal(f.details[0].fields["تصنيع مخصوص"], true);
   const plain = await f.order([plainCross]);
-  assert.equal(plain.status, 409, "the same cross without a name follows the normal stock rule");
-  assert.equal(f.orders.size, 1);
+  assert.equal(plain.status, 200, "the same cross without a name is made to order too");
+  assert.equal(f.orders.size, 2);
+  assert.match([...f.orders.values()][1].fields.Products, /تصنيع مخصوص \| بدون كتابة اسم/);
+  assert.equal(f.details[1].fields["تصنيع مخصوص"], true);
+  assert.match(f.details[1].fields["ملاحظات"], /^تصنيع مخصوص \| بدون كتابة اسم/);
 });
 
 test("2. a model that is not in Airtable is saved unlinked, and no product is added to Airtable", async (t) => {
@@ -115,18 +118,21 @@ test("3. a mixed order: the named cross skips stock checks, the regular product 
   assert.equal(f.orders.size, 1);
 });
 
-test("4. processing then cancelling: the named cross is never deducted or returned; the regular line nets to zero", async (t) => {
+test("4. processing then cancelling a mixed order: made-to-order lines never touch stock; the regular line nets to zero", async (t) => {
   const f = await setup(t);
-  assert.equal((await f.order([named(), bookLine])).status, 200);
+  assert.equal((await f.order([named(), plainCross, bookLine])).status, 200);
   const start = f.stock;
-  const [cross, regular] = f.details;
-  assert.deepEqual([f.runDeductAutomation(cross), f.runDeductAutomation(regular)], ["not-eligible", "deducted"]);
+  const [cross, plain, regular] = f.details;
+  assert.deepEqual([cross, plain, regular].map((row) => row.fields["تصنيع مخصوص"] === true), [true, true, false], "flag is per line, not per order");
+  assert.deepEqual([f.runDeductAutomation(cross), f.runDeductAutomation(plain), f.runDeductAutomation(regular)], ["not-eligible", "not-eligible", "deducted"]);
   assert.equal(f.stock, start - 1);
   const order = [...f.orders.values()][0];
   await f.fetch(`https://api.airtable.com/v0/appTest/Orders/${order.id}`, { method: "PATCH", body: JSON.stringify({ fields: { "Order Status": "ملغي" } }) });
   assert.equal(f.stock, start, "only the regular line came back");
-  assert.equal(cross.fields["تم خصم المخزون؟"], undefined);
-  assert.equal(cross.fields["تم إرجاع المخزون؟"], undefined);
+  for (const row of [cross, plain]) {
+    assert.equal(row.fields["تم خصم المخزون؟"], undefined);
+    assert.equal(row.fields["تم إرجاع المخزون؟"], undefined);
+  }
   assert.equal(f.movements.length, 1);
   assert.equal(f.movements[0].product, "recProduct00000001");
 });
@@ -161,13 +167,13 @@ test("6. regular products cannot be ordered when out of stock (server, online pa
   const response = await f.order([{ productId: "book-0", sku: "BOOK-0", name: "كتاب نفد", quantity: 1, price: 90, lineTotal: 90 }]);
   assert.equal(response.status, 409);
   assert.equal(f.creates, 0);
-  const priced = priceOrderItems([{ websiteProductId: "book-0", quantity: 1 }, { websiteProductId: "cross-2", quantity: 1 }, { websiteProductId: "cross-2", quantity: 1, engraving: { name: "x" } }], catalog);
-  assert.deepEqual(priced.errors.map((e) => [e.index, e.code]), [[0, "unavailable"], [1, "unavailable"]]);
-  assert.equal(priced.lines[2].unitPrice, 770);
+  const priced = priceOrderItems([{ websiteProductId: "book-0", quantity: 1 }, { websiteProductId: "cross-2", quantity: 1 }, { websiteProductId: "cross-2", quantity: 1, engraving: { name: "x" } }, { websiteProductId: "book-1", quantity: 1 }], catalog);
+  assert.deepEqual(priced.errors.map((e) => [e.index, e.code]), [[0, "unavailable"]]);
+  assert.deepEqual(priced.lines.slice(1).map((l) => [l.unitPrice, l.madeToOrder]), [[770, true], [770, true], [120, false]]);
   // Paymob / Bosta use the same rule.
   const context = { loadFreshCatalog: async () => catalog };
   await assert.rejects(validateCartItems(context, [{ productId: "book-0", qty: 1 }]), /غير متاح/);
-  await assert.rejects(validateCartItems(context, [{ productId: "cross-2", qty: 1 }]), /غير متاح/);
+  assert.equal((await validateCartItems(context, [{ productId: "cross-2", qty: 1 }])).items[0].quantity, 1, "eligible cross without a name");
   const secure = await validateCartItems(context, [{ productId: "cross-2", qty: 3, engraving: { name: "أبونا مينا", lang: "ar" } }]);
   assert.equal(secure.items?.[0]?.quantity ?? secure[0]?.quantity, 3);
 });
@@ -175,7 +181,8 @@ test("6. regular products cannot be ordered when out of stock (server, online pa
 test("the made-to-order rule is the same on the server and in the cart, and needs a fully set-up engraving", () => {
   assert.equal(isMadeToOrderProduct(crossOutOfStock), true);
   assert.equal(isMadeToOrderProduct(book), false);
-  assert.equal(isMadeToOrderLine(crossOutOfStock, null), false);
+  assert.equal(isMadeToOrderLine(crossOutOfStock), true, "with or without a name");
+  assert.equal(isMadeToOrderLine(book), false);
   for (const broken of [{ enabled: false }, { photoConfirmed: false }, { zone: { ...zone, color: "" } }, { zone: { ...zone, confirmed: false } }, { previewImage: "assets/products/gallery/cross.webp" }, { zone: { ...zone, x: 0.6 } }]) {
     assert.equal(isMadeToOrderProduct({ ...crossOutOfStock, engraving: { ...engraving, ...broken } }), false, JSON.stringify(broken));
   }
@@ -186,6 +193,6 @@ test("the made-to-order rule is the same on the server and in the cart, and need
   vm.createContext(ctx);
   vm.runInContext(["engravingZoneKey", "isMadeToOrderProduct", "isMadeToOrderLine"].map((n) => extractFunction(checkout, n)).join("\n"), ctx);
   for (const product of [crossOutOfStock, book, { ...crossOutOfStock, engraving: { ...engraving, photoConfirmed: false } }]) {
-    assert.equal(ctx.isMadeToOrderLine(product, { name: "x" }), isMadeToOrderLine(product, { name: "x" }));
+    assert.equal(ctx.isMadeToOrderLine(product), isMadeToOrderLine(product));
   }
 });

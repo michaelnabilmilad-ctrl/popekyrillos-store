@@ -150,7 +150,7 @@ function cartPayloadFromMap(map = cart) {
 // Priest-name engraving labels for cart lines (product-engraving.js).
 const engravingLangLabels = { ar: "العربية", en: "English", cop: "القبطية" };
 function engravingLineHtml(item) {
-  if (!item.engraving) return "";
+  if (!item.engraving) return item.madeToOrder ? `<p class="cart-engraving cart-made-to-order">🛠️ يُصنع خصيصًا حسب طلبك</p>` : "";
   return `<p class="cart-engraving"><span>✍️ الاسم على الصليب:</span> <bdi>«${escapeHtml(item.engraving.name)}»</bdi> <small>(${escapeHtml(engravingLangLabels[item.engraving.lang] || "")})</small>${item.madeToOrder ? ` <small class="cart-made-to-order">· يُصنع خصيصًا حسب طلبك</small>` : ""}</p>`;
 }
 
@@ -699,8 +699,8 @@ function productImage(product) {
   return product?.image || "";
 }
 
-// Made-to-order crosses: a line with a priest name is made at the factory for this order, so it
-// never depends on stock. Same rule as functions/_made-to-order.js; the server re-checks it.
+// Made-to-order crosses: every line of an eligible cross (with or without a name) is made at the
+// factory for this order, so it never depends on stock. Same rule as functions/_made-to-order.js; the server re-checks it.
 function engravingZoneKey(zone) {
   return ["x", "y", "len", "thick", "angle"].map((k) => (Math.round(Number(zone?.[k]) * 10000) / 10000).toString()).join(",");
 }
@@ -712,8 +712,8 @@ function isMadeToOrderProduct(product) {
     && settings.photoConfirmed === true
     && /^#[0-9a-f]{6}$/i.test(String(settings.zone?.color || "")) && settings.zone?.confirmed === true);
 }
-function isMadeToOrderLine(product, engraving) {
-  return Boolean(engraving && typeof engraving === "object" && isMadeToOrderProduct(product));
+function isMadeToOrderLine(product) {
+  return isMadeToOrderProduct(product);
 }
 
 // Mirrors the storefront rule (script.js isVariantAvailable); the server re-checks at order time.
@@ -744,8 +744,8 @@ function cartEntries() {
         discount: safeBasePrice !== null && price !== null ? safeBasePrice - price : 0,
         optionText: variantOptionText(variant),
         ...metadata,
-        madeToOrder: isMadeToOrderLine(product, metadata.engraving),
-        unavailable: !isMadeToOrderLine(product, metadata.engraving) && isCartLineUnavailable(product, variant)
+        madeToOrder: isMadeToOrderLine(product),
+        unavailable: !isMadeToOrderLine(product) && isCartLineUnavailable(product, variant)
       };
     })
     .filter(Boolean);

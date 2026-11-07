@@ -1984,8 +1984,9 @@ function athanasiusCanDraw(name) {
 // Lines with a name are made at the factory for this order («تصنيع مخصوص»). Only lines whose
 // engraving passed engravingCatalogErrors() reach this point, so the label follows the real
 // customization data, never free text the customer typed in a note.
-function engravingNote(engraving) {
-  return engraving ? `${MADE_TO_ORDER_LABEL} | الاسم على الصليب: «${engraving.name}» | لغة الكتابة: ${engraving.langLabel}` : "";
+function engravingNote(engraving, madeToOrder = Boolean(engraving)) {
+  if (engraving) return `${MADE_TO_ORDER_LABEL} | الاسم على الصليب: «${engraving.name}» | لغة الكتابة: ${engraving.langLabel}`;
+  return madeToOrder ? `${MADE_TO_ORDER_LABEL} | بدون كتابة اسم` : "";
 }
 
 // A line may carry a name only for a product the admin enabled it for, in an allowed
@@ -2123,7 +2124,7 @@ async function resolveAirtableProducts(env, items, context) {
       let productId = data.records?.[0]?.id || "";
       // A cross made to order with a name needs no stock record: when its model is not in
       // Airtable yet, the line stays unlinked instead of adding a product automatically.
-      const onlyMadeToOrder = items.every((other) => (other.sku || other.websiteProductId) !== identity || other.engraving);
+      const onlyMadeToOrder = items.every((other) => (other.sku || other.websiteProductId) !== identity || other.madeToOrder);
       if (!productId && item.websiteProductId && !onlyMadeToOrder) {
         const created = await airtableRequest(env, airtableTableUrl(env, AIRTABLE_PRODUCTS_TABLE), {
           method: "POST",
@@ -2167,7 +2168,7 @@ async function resolveAirtableProducts(env, items, context) {
         reason: identity ? (match?.reason || "not_found") : "missing"
       });
     }
-    const fallbackNote = unresolved && item.engraving
+    const fallbackNote = unresolved && item.madeToOrder
       ? `موديل غير مسجل في منتجات Airtable: ${item.productName} | SKU: ${skuLabel} | تصنيع مخصوص، مش محتاج رصيد`
       : unresolved
       ? `منتج غير مربوط: ${item.productName}${item.option ? ` | الاختيار: ${item.option}` : ""} | SKU: ${skuLabel} | يحتاج ربط يدوي بالمنتج`
@@ -2188,7 +2189,7 @@ async function resolveAirtableProducts(env, items, context) {
       ...item,
       productId,
       unresolved,
-      detailNote: [engravingNote(item.engraving), variantNote, pricingNote, designNote, colorsNote, imageNote, fallbackNote, item.notes].filter(Boolean).join(" | ")
+      detailNote: [engravingNote(item.engraving, item.madeToOrder), variantNote, pricingNote, designNote, colorsNote, imageNote, fallbackNote, item.notes].filter(Boolean).join(" | ")
     };
   });
 }
@@ -2210,7 +2211,7 @@ async function createAirtableOrderDetails(env, orderRecordId, items, context) {
     };
     if (item.imageUrl) fields[AIRTABLE_ORDER_DETAIL_IMAGE_FIELD] = [{ url: item.imageUrl }];
     if (item.detailNote) fields["ملاحظات"] = item.detailNote;
-    if (item.engraving) fields[AIRTABLE_MADE_TO_ORDER_FIELD] = true;
+    if (item.madeToOrder) fields[AIRTABLE_MADE_TO_ORDER_FIELD] = true;
     return { fields };
   });
   // Until the checkbox exists in Airtable, an order must still be saved: drop it and retry once.
@@ -2895,6 +2896,8 @@ async function createOrderResponse(context) {
   }
   normalizedItems.items.forEach((item, index) => {
     item.unitPrice = pricing.lines[index].unitPrice;
+    // Decided per line from the live catalog (an eligible cross, named or not), never from text.
+    item.madeToOrder = pricing.lines[index].madeToOrder === true;
   });
   order.total = normalizedItems.items.reduce((sum, item) => sum + item.unitPrice * item.quantity, 0);
   order.products = normalizedItems.items.map((item) => [
@@ -2902,7 +2905,7 @@ async function createOrderResponse(context) {
     item.sku ? `SKU: ${item.sku}` : "",
     item.websiteProductId ? `Product ID: ${item.websiteProductId}` : "",
     item.option,
-    engravingNote(item.engraving),
+    engravingNote(item.engraving, item.madeToOrder),
     Object.entries(parseSelectedColors(item.selectedColors)).length
       ? `\u0627\u0644\u0623\u0644\u0648\u0627\u0646: ${Object.entries(parseSelectedColors(item.selectedColors)).map(([region, hex]) => `${region}: ${hex}`).join("\u060c ")}`
       : "",
@@ -3003,7 +3006,7 @@ async function createOrderResponse(context) {
     }
     const resolvedItems = await resolveAirtableProducts(env, normalizedItems.items, { requestId });
     // A made-to-order cross whose model is not in Airtable is saved unlinked (no stock record needed).
-    const unresolvedIndex = resolvedItems.findIndex((item) => !item.productId && !item.engraving);
+    const unresolvedIndex = resolvedItems.findIndex((item) => !item.productId && !item.madeToOrder);
     if (unresolvedIndex !== -1) {
       const unresolvedError = new Error(`Order item ${unresolvedIndex + 1} has no Airtable product record`);
       unresolvedError.code = "airtable_product_unresolved";

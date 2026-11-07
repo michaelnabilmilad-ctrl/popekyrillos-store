@@ -222,8 +222,8 @@ export async function validateCartItems(context, items = [], options = {}) {
 
     const variant = findVariant(product, item.variantId || "default");
     if (!variant) throw publicError(400, "اختيار المنتج غير موجود.");
-    // A cross with a priest name is made at the factory for this order: no stock check.
-    const madeToOrder = isMadeToOrderLine(product, item.engraving);
+    // An eligible cross is made at the factory for this order: no stock check.
+    const madeToOrder = isMadeToOrderLine(product);
     if (!madeToOrder && !variantAvailable(product, variant)) throw publicError(400, "أحد المنتجات أو الاختيارات غير متاح حاليا.");
 
     const quantity = Math.floor(Number(item.qty || item.quantity));

@@ -81,8 +81,8 @@ const images = [...new Set([...(product.images || []), product.image].filter(Boo
 const isMedalProduct = /(?:مادلي|ميدالي|medal)/i.test(text(product.name));
 // Set per product from /admin (product.engraving); the module is loaded only for those products.
 const engravingEnabled = product.engraving?.enabled === true && Boolean(window.ProductEngraving);
-// Made-to-order crosses (engraving fully set up): made at the factory for each order, so a cross
-// WITH a name can always be ordered, whatever the stock says. Without a name, stock rules apply.
+// Made-to-order crosses (engraving fully set up): made at the factory for each order, so they can
+// always be ordered, with or without a name, whatever the stock says.
 // Same rule as functions/_made-to-order.js (the server re-checks every order).
 function engravingZoneKey(zone) {
   return ["x", "y", "len", "thick", "angle"].map((k) => (Math.round(Number(zone?.[k]) * 10000) / 10000).toString()).join(",");
@@ -1747,10 +1747,9 @@ function addToCart() {
     root.querySelector("[data-engraving-slot]")?.scrollIntoView({ behavior: "smooth", block: "center" });
     return;
   }
-  // Out of stock: this cross can only be ordered made to order, with a name written on it.
-  if (!engravingLine && !available(selected)) {
-    root.querySelector("[data-message]").textContent = madeToOrder ? "الموديل ده بيتصنع خصيصًا حسب طلبك مع كتابة الاسم. اختار «أضف اسم الكاهن» واكتب الاسم." : "غير متاح حاليا";
-    if (madeToOrder) root.querySelector("[data-engraving-slot]")?.scrollIntoView({ behavior: "smooth", block: "center" });
+  // Made-to-order crosses are made at the factory for each order, so stock never blocks them.
+  if (!canAdd(selected)) {
+    root.querySelector("[data-message]").textContent = "غير متاح حاليا";
     return;
   }
   const lineId = selectionKey(variantId, coloringDesign) + (engravingLine ? `~${engravingLine.lineKey}` : "");
