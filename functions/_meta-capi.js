@@ -197,7 +197,15 @@ async function sendToMeta(env, metaEvent) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body)
   });
-  if (!response.ok) throw new Error(`Meta CAPI responded ${response.status}`);
+  if (!response.ok) {
+    // Meta's error fields only (type/code/subcode/message); never the request body or token.
+    let detail = "";
+    try {
+      const error = (await response.json())?.error || {};
+      detail = ` ${error.type || ""} code=${error.code ?? ""} subcode=${error.error_subcode ?? ""}: ${error.error_user_msg || error.message || ""}`;
+    } catch {}
+    throw new Error(`Meta CAPI responded ${response.status}${detail}`);
+  }
   return response;
 }
 

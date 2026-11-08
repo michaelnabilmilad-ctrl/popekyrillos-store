@@ -71,7 +71,9 @@ function noteFailure(ip, nowMs) {
 
 function loginPage(status = 200, message = "") {
   const html = `<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>نسخة اختبار مقفولة</title></head><body style="font-family:sans-serif;max-width:420px;margin:15vh auto;padding:0 16px"><h1 style="font-size:20px">نسخة اختبار مقفولة</h1>${message ? `<p>${message}</p>` : ""}<form method="post" action="${LOGIN_PATH}"><label>مفتاح الدخول<br><input name="key" type="password" autocomplete="off" required style="width:100%;padding:8px;margin:8px 0"></label><button type="submit" style="padding:8px 16px">دخول</button></form></body></html>`;
-  return new Response(html, { status, headers: { ...baseHeaders, "Content-Type": "text/html; charset=utf-8" } });
+  // "same-origin" (not "no-referrer") so the browser sends the real Origin on the form POST;
+  // with "no-referrer" it sends "Origin: null" and the cross-site check below refuses the login.
+  return new Response(html, { status, headers: { ...baseHeaders, "Referrer-Policy": "same-origin", "Content-Type": "text/html; charset=utf-8" } });
 }
 
 // Returns a Response to send instead of the page, or null when the request may continue.

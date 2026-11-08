@@ -20,12 +20,14 @@
     body: "Only with your consent, we use marketing cookies to measure our Facebook and Instagram ads. We never send your name, phone, email, product names or search words.",
     accept: "Accept",
     reject: "Reject",
-    more: "Details in our privacy policy"
+    more: "Details in our privacy policy",
+    current: { granted: "Your current choice: Accepted", denied: "Your current choice: Rejected" }
   } : {
     body: "بعد موافقتك فقط، نستخدم كوكيز التسويق لقياس نتائج إعلاناتنا على فيسبوك وإنستجرام. لا نرسل اسمك أو هاتفك أو بريدك أو أسماء المنتجات أو كلمات البحث.",
     accept: "موافق",
     reject: "رفض",
-    more: "التفاصيل في سياسة الخصوصية"
+    more: "التفاصيل في سياسة الخصوصية",
+    current: { granted: "اختيارك الحالي: موافق", denied: "اختيارك الحالي: رفض" }
   };
 
   function readCookie(name) {
@@ -217,7 +219,7 @@
     if (!document.getElementById("pk-consent-style")) {
       const style = document.createElement("style");
       style.id = "pk-consent-style";
-      style.textContent = ".pk-consent{position:fixed;inset:auto 12px 12px 12px;z-index:2147483000;max-width:640px;margin:0 auto;background:#fff;color:#222;border:1px solid #d9cfc0;border-radius:12px;box-shadow:0 6px 24px rgba(0,0,0,.18);padding:14px 16px;font:14px/1.6 inherit}.pk-consent p{margin:0 0 10px}.pk-consent-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.pk-consent button{flex:1 1 120px;min-height:42px;border-radius:8px;border:1px solid #7a5a2b;font:inherit;font-weight:700;cursor:pointer;background:#fff;color:#5a3f17}.pk-consent button[data-consent=granted]{background:#7a5a2b;color:#fff}.pk-consent a{color:#5a3f17;flex:1 1 100%;text-align:center}";
+      style.textContent = ".pk-consent{position:fixed;inset:auto 12px 12px 12px;z-index:2147483000;max-width:640px;margin:0 auto;background:#fff;color:#222;border:1px solid #d9cfc0;border-radius:12px;box-shadow:0 6px 24px rgba(0,0,0,.18);padding:14px 16px;font:14px/1.6 inherit}.pk-consent p{margin:0 0 10px}.pk-consent-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.pk-consent button{flex:1 1 120px;min-height:42px;border-radius:8px;border:1px solid #7a5a2b;font:inherit;font-weight:700;cursor:pointer;background:#fff;color:#5a3f17}.pk-consent button[data-consent=granted]{background:#7a5a2b;color:#fff}.pk-consent a{color:#5a3f17;flex:1 1 100%;text-align:center}.pk-consent .pk-consent-status{font-weight:700;color:#5a3f17}.pk-consent button[aria-pressed=true]{outline:3px solid #c9a96a;outline-offset:2px}";
       document.head.appendChild(style);
     }
     banner = document.createElement("div");
@@ -228,13 +230,19 @@
     banner.dir = isEnglish ? "ltr" : "rtl";
     const text = document.createElement("p");
     text.textContent = TEXT.body;
+    // Reopened from «إعدادات الكوكيز»: say which choice is saved and mark its button.
+    const state = consentState();
+    const status = document.createElement("p");
+    status.className = "pk-consent-status";
+    if (state) status.textContent = TEXT.current[state];
     const actions = document.createElement("div");
     actions.className = "pk-consent-actions";
     [["granted", TEXT.accept], ["denied", TEXT.reject]].forEach(([choice, label]) => {
       const button = document.createElement("button");
       button.type = "button";
       button.dataset.consent = choice;
-      button.textContent = label;
+      button.textContent = state === choice ? `✓ ${label}` : label;
+      if (state) button.setAttribute("aria-pressed", String(state === choice));
       button.addEventListener("click", () => decide(choice));
       actions.appendChild(button);
     });
@@ -242,7 +250,7 @@
     link.href = "/policies.html#analytics-policy";
     link.textContent = TEXT.more;
     actions.appendChild(link);
-    banner.append(text, actions);
+    banner.append(text, ...(state ? [status] : []), actions);
     document.body.appendChild(banner);
   }
 
