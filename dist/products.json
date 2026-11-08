@@ -65,7 +65,47 @@
     "slug": "طقم-صلبان-يد-وصدر-كوريان-موديل-1",
     "thumbnail": "/assets/thumbnails/320/popek-corian-cross-set-1-cafe92f68c.webp",
     "url": "https://popekyrillos.store/?product=popek-corian-cross-set-1",
-    "hasVariants": false
+    "hasVariants": false,
+    "engraving": {
+      "enabled": true,
+      "previewImage": "assets/optimized/products/gallery/engraving-popek-corian-cross-set-1-protected-preview-20261108071441-f272a6.webp",
+      "previewSource": "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-1-unboxed.webp",
+      "previewWatermark": {
+        "zone": "0.6188,0.6881,0.3,0.038,90.1"
+      },
+      "zone": {
+        "x": 0.6188,
+        "y": 0.6881,
+        "len": 0.3,
+        "thick": 0.038,
+        "angle": 90.1,
+        "surface": "round",
+        "curve": 0.9,
+        "fontMax": 0.52,
+        "fontMin": 0.38,
+        "weight": 0.03,
+        "padding": 0.08,
+        "offset": 0,
+        "finish": "ink",
+        "color": "#ffffff",
+        "confirmed": true,
+        "maxChars": {
+          "ar": 34,
+          "en": 23,
+          "cop": 23
+        }
+      },
+      "languages": [
+        "ar",
+        "en",
+        "cop"
+      ],
+      "fee": 0,
+      "photoConfirmed": true,
+      "copticFont": "athanasius",
+      "freeNote": true,
+      "version": 1
+    }
   },
   {
     "id": "popek-corian-cross-set-2",
@@ -241,7 +281,47 @@
     "slug": "طقم-صلبان-يد-وصدر-كوريان-موديل-3",
     "thumbnail": "/assets/thumbnails/320/popek-corian-cross-set-3-53daddef5e.webp",
     "url": "https://popekyrillos.store/?product=popek-corian-cross-set-3",
-    "hasVariants": false
+    "hasVariants": false,
+    "engraving": {
+      "enabled": true,
+      "previewImage": "assets/optimized/products/gallery/engraving-popek-corian-cross-set-3-protected-preview-20261108071441-78167b.webp",
+      "previewSource": "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-3-unboxed.webp",
+      "previewWatermark": {
+        "zone": "0.644,0.61,0.33,0.055,90"
+      },
+      "zone": {
+        "x": 0.644,
+        "y": 0.61,
+        "len": 0.33,
+        "thick": 0.055,
+        "angle": 90,
+        "surface": "flat",
+        "curve": 0,
+        "fontMax": 0.52,
+        "fontMin": 0.38,
+        "weight": 0.03,
+        "padding": 0.08,
+        "offset": 0,
+        "finish": "ink",
+        "color": "#ffffff",
+        "confirmed": true,
+        "maxChars": {
+          "ar": 33,
+          "en": 21,
+          "cop": 21
+        }
+      },
+      "languages": [
+        "ar",
+        "en",
+        "cop"
+      ],
+      "fee": 0,
+      "photoConfirmed": true,
+      "copticFont": "athanasius",
+      "freeNote": true,
+      "version": 1
+    }
   },
   {
     "id": "popek-corian-cross-set-4",
@@ -309,7 +389,47 @@
     "slug": "طقم-صلبان-يد-وصدر-كوريان-موديل-4",
     "thumbnail": "/assets/thumbnails/320/popek-corian-cross-set-4-42cc3a3281.webp",
     "url": "https://popekyrillos.store/?product=popek-corian-cross-set-4",
-    "hasVariants": false
+    "hasVariants": false,
+    "engraving": {
+      "enabled": true,
+      "previewImage": "assets/optimized/products/gallery/engraving-popek-corian-cross-set-4-protected-preview-20261108071441-f2ce2e.webp",
+      "previewSource": "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-4-unboxed.webp",
+      "previewWatermark": {
+        "zone": "0.6598,0.66,0.192,0.029,91.4"
+      },
+      "zone": {
+        "x": 0.6598,
+        "y": 0.66,
+        "len": 0.192,
+        "thick": 0.029,
+        "angle": 91.4,
+        "surface": "flat",
+        "curve": 0,
+        "fontMax": 0.52,
+        "fontMin": 0.38,
+        "weight": 0.03,
+        "padding": 0.08,
+        "offset": 0,
+        "finish": "ink",
+        "color": "#ffffff",
+        "confirmed": true,
+        "maxChars": {
+          "ar": 34,
+          "en": 23,
+          "cop": 23
+        }
+      },
+      "languages": [
+        "ar",
+        "en",
+        "cop"
+      ],
+      "fee": 0,
+      "photoConfirmed": true,
+      "copticFont": "athanasius",
+      "freeNote": true,
+      "version": 1
+    }
   },
   {
     "id": "popek-corian-cross-set-5",
@@ -377,7 +497,47 @@
     "slug": "طقم-صلبان-يد-وصدر-كوريان-موديل-5",
     "thumbnail": "/assets/thumbnails/320/popek-corian-cross-set-5-77d2509e76.webp",
     "url": "https://popekyrillos.store/?product=popek-corian-cross-set-5",
-    "hasVariants": false
+    "hasVariants": false,
+    "engraving": {
+      "enabled": true,
+      "previewImage": "assets/optimized/products/gallery/engraving-popek-corian-cross-set-5-protected-preview-20261108071441-3ca91e.webp",
+      "previewSource": "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-5-unboxed.webp",
+      "previewWatermark": {
+        "zone": "0.637,0.535,0.27,0.056,90"
+      },
+      "zone": {
+        "x": 0.637,
+        "y": 0.535,
+        "len": 0.27,
+        "thick": 0.056,
+        "angle": 90,
+        "surface": "flat",
+        "curve": 0,
+        "fontMax": 0.52,
+        "fontMin": 0.38,
+        "weight": 0.03,
+        "padding": 0.08,
+        "offset": 0,
+        "finish": "ink",
+        "color": "#ffffff",
+        "confirmed": true,
+        "maxChars": {
+          "ar": 26,
+          "en": 17,
+          "cop": 17
+        }
+      },
+      "languages": [
+        "ar",
+        "en",
+        "cop"
+      ],
+      "fee": 0,
+      "photoConfirmed": true,
+      "copticFont": "athanasius",
+      "freeNote": true,
+      "version": 1
+    }
   },
   {
     "id": "popek-corian-cross-set-6",
@@ -445,7 +605,47 @@
     "slug": "طقم-صلبان-يد-وصدر-كوريان-موديل-6",
     "thumbnail": "/assets/thumbnails/320/popek-corian-cross-set-6-4a6132c53e.webp",
     "url": "https://popekyrillos.store/?product=popek-corian-cross-set-6",
-    "hasVariants": false
+    "hasVariants": false,
+    "engraving": {
+      "enabled": true,
+      "previewImage": "assets/optimized/products/gallery/engraving-popek-corian-cross-set-6-protected-preview-20261108071441-51f5da.webp",
+      "previewSource": "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-6-unboxed.webp",
+      "previewWatermark": {
+        "zone": "0.669,0.625,0.29,0.05,90"
+      },
+      "zone": {
+        "x": 0.669,
+        "y": 0.625,
+        "len": 0.29,
+        "thick": 0.05,
+        "angle": 90,
+        "surface": "flat",
+        "curve": 0,
+        "fontMax": 0.52,
+        "fontMin": 0.38,
+        "weight": 0.03,
+        "padding": 0.08,
+        "offset": 0,
+        "finish": "ink",
+        "color": "#ffffff",
+        "confirmed": true,
+        "maxChars": {
+          "ar": 31,
+          "en": 21,
+          "cop": 21
+        }
+      },
+      "languages": [
+        "ar",
+        "en",
+        "cop"
+      ],
+      "fee": 0,
+      "photoConfirmed": true,
+      "copticFont": "athanasius",
+      "freeNote": true,
+      "version": 1
+    }
   },
   {
     "id": "popek-corian-cross-set-7",
@@ -513,7 +713,47 @@
     "slug": "طقم-صلبان-يد-وصدر-كوريان-موديل-7",
     "thumbnail": "/assets/thumbnails/320/popek-corian-cross-set-7-3cb5752873.webp",
     "url": "https://popekyrillos.store/?product=popek-corian-cross-set-7",
-    "hasVariants": false
+    "hasVariants": false,
+    "engraving": {
+      "enabled": true,
+      "previewImage": "assets/optimized/products/gallery/engraving-popek-corian-cross-set-7-protected-preview-20261108071441-55a45f.webp",
+      "previewSource": "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-7-unboxed.webp",
+      "previewWatermark": {
+        "zone": "0.6365,0.6,0.3,0.047,90"
+      },
+      "zone": {
+        "x": 0.6365,
+        "y": 0.6,
+        "len": 0.3,
+        "thick": 0.047,
+        "angle": 90,
+        "surface": "flat",
+        "curve": 0,
+        "fontMax": 0.52,
+        "fontMin": 0.38,
+        "weight": 0.03,
+        "padding": 0.08,
+        "offset": 0,
+        "finish": "ink",
+        "color": "#ffffff",
+        "confirmed": true,
+        "maxChars": {
+          "ar": 34,
+          "en": 22,
+          "cop": 22
+        }
+      },
+      "languages": [
+        "ar",
+        "en",
+        "cop"
+      ],
+      "fee": 0,
+      "photoConfirmed": true,
+      "copticFont": "athanasius",
+      "freeNote": true,
+      "version": 1
+    }
   },
   {
     "id": "popek-corian-cross-set-8",
@@ -581,7 +821,47 @@
     "slug": "طقم-صلبان-يد-وصدر-كوريان-موديل-8",
     "thumbnail": "/assets/thumbnails/320/popek-corian-cross-set-8-940e6c0c27.webp",
     "url": "https://popekyrillos.store/?product=popek-corian-cross-set-8",
-    "hasVariants": false
+    "hasVariants": false,
+    "engraving": {
+      "enabled": true,
+      "previewImage": "assets/optimized/products/gallery/engraving-popek-corian-cross-set-8-protected-preview-20261108071441-cf64c3.webp",
+      "previewSource": "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-8-unboxed.webp",
+      "previewWatermark": {
+        "zone": "0.6431,0.6347,0.353,0.043,90.2"
+      },
+      "zone": {
+        "x": 0.6431,
+        "y": 0.6347,
+        "len": 0.353,
+        "thick": 0.043,
+        "angle": 90.2,
+        "surface": "flat",
+        "curve": 0,
+        "fontMax": 0.52,
+        "fontMin": 0.38,
+        "weight": 0.03,
+        "padding": 0.08,
+        "offset": 0,
+        "finish": "ink",
+        "color": "#ffffff",
+        "confirmed": true,
+        "maxChars": {
+          "ar": 34,
+          "en": 23,
+          "cop": 23
+        }
+      },
+      "languages": [
+        "ar",
+        "en",
+        "cop"
+      ],
+      "fee": 0,
+      "photoConfirmed": true,
+      "copticFont": "athanasius",
+      "freeNote": true,
+      "version": 1
+    }
   },
   {
     "id": "popek-corian-cross-set-9",
@@ -649,7 +929,47 @@
     "slug": "طقم-صلبان-يد-وصدر-كوريان-موديل-9",
     "thumbnail": "/assets/thumbnails/320/popek-corian-cross-set-9-225dc7d283.webp",
     "url": "https://popekyrillos.store/?product=popek-corian-cross-set-9",
-    "hasVariants": false
+    "hasVariants": false,
+    "engraving": {
+      "enabled": true,
+      "previewImage": "assets/optimized/products/gallery/engraving-popek-corian-cross-set-9-protected-preview-20261108071441-691c53.webp",
+      "previewSource": "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-9-unboxed.webp",
+      "previewWatermark": {
+        "zone": "0.637,0.61,0.26,0.052,90"
+      },
+      "zone": {
+        "x": 0.637,
+        "y": 0.61,
+        "len": 0.26,
+        "thick": 0.052,
+        "angle": 90,
+        "surface": "flat",
+        "curve": 0,
+        "fontMax": 0.52,
+        "fontMin": 0.38,
+        "weight": 0.03,
+        "padding": 0.08,
+        "offset": 0,
+        "finish": "ink",
+        "color": "#ffffff",
+        "confirmed": true,
+        "maxChars": {
+          "ar": 26,
+          "en": 18,
+          "cop": 18
+        }
+      },
+      "languages": [
+        "ar",
+        "en",
+        "cop"
+      ],
+      "fee": 0,
+      "photoConfirmed": true,
+      "copticFont": "athanasius",
+      "freeNote": true,
+      "version": 1
+    }
   },
   {
     "id": "popek-corian-cross-set-10",
@@ -717,7 +1037,47 @@
     "slug": "طقم-صلبان-يد-وصدر-كوريان-موديل-10",
     "thumbnail": "/assets/thumbnails/320/popek-corian-cross-set-10-a8dffaf49c.webp",
     "url": "https://popekyrillos.store/?product=popek-corian-cross-set-10",
-    "hasVariants": false
+    "hasVariants": false,
+    "engraving": {
+      "enabled": true,
+      "previewImage": "assets/optimized/products/gallery/engraving-popek-corian-cross-set-10-protected-preview-20261108071441-d688ec.webp",
+      "previewSource": "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-10-unboxed.webp",
+      "previewWatermark": {
+        "zone": "0.6526,0.6862,0.27,0.041,89.8"
+      },
+      "zone": {
+        "x": 0.6526,
+        "y": 0.6862,
+        "len": 0.27,
+        "thick": 0.041,
+        "angle": 89.8,
+        "surface": "round",
+        "curve": 0.9,
+        "fontMax": 0.52,
+        "fontMin": 0.38,
+        "weight": 0.03,
+        "padding": 0.08,
+        "offset": 0,
+        "finish": "ink",
+        "color": "#ffffff",
+        "confirmed": true,
+        "maxChars": {
+          "ar": 34,
+          "en": 23,
+          "cop": 23
+        }
+      },
+      "languages": [
+        "ar",
+        "en",
+        "cop"
+      ],
+      "fee": 0,
+      "photoConfirmed": true,
+      "copticFont": "athanasius",
+      "freeNote": true,
+      "version": 1
+    }
   },
   {
     "id": "popek-corian-cross-set-11",
@@ -785,7 +1145,47 @@
     "slug": "طقم-صلبان-يد-وصدر-كوريان-موديل-11",
     "thumbnail": "/assets/thumbnails/320/popek-corian-cross-set-11-1c305c21fe.webp",
     "url": "https://popekyrillos.store/?product=popek-corian-cross-set-11",
-    "hasVariants": false
+    "hasVariants": false,
+    "engraving": {
+      "enabled": true,
+      "previewImage": "assets/optimized/products/gallery/engraving-popek-corian-cross-set-11-protected-preview-20261108071441-f78820.webp",
+      "previewSource": "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-11-unboxed.webp",
+      "previewWatermark": {
+        "zone": "0.6959,0.6741,0.255,0.042,90.4"
+      },
+      "zone": {
+        "x": 0.6959,
+        "y": 0.6741,
+        "len": 0.255,
+        "thick": 0.042,
+        "angle": 90.4,
+        "surface": "round",
+        "curve": 0.9,
+        "fontMax": 0.52,
+        "fontMin": 0.38,
+        "weight": 0.03,
+        "padding": 0.08,
+        "offset": 0,
+        "finish": "ink",
+        "color": "#ffffff",
+        "confirmed": true,
+        "maxChars": {
+          "ar": 33,
+          "en": 22,
+          "cop": 21
+        }
+      },
+      "languages": [
+        "ar",
+        "en",
+        "cop"
+      ],
+      "fee": 0,
+      "photoConfirmed": true,
+      "copticFont": "athanasius",
+      "freeNote": true,
+      "version": 1
+    }
   },
   {
     "id": "popek-corian-cross-set-12",
@@ -853,7 +1253,47 @@
     "slug": "طقم-صلبان-يد-وصدر-كوريان-موديل-12",
     "thumbnail": "/assets/thumbnails/320/popek-corian-cross-set-12-38100522d9.webp",
     "url": "https://popekyrillos.store/?product=popek-corian-cross-set-12",
-    "hasVariants": false
+    "hasVariants": false,
+    "engraving": {
+      "enabled": true,
+      "previewImage": "assets/optimized/products/gallery/engraving-popek-corian-cross-set-12-protected-preview-20261108071441-b444fc.webp",
+      "previewSource": "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-12-unboxed.webp",
+      "previewWatermark": {
+        "zone": "0.6437,0.6769,0.277,0.051,90.3"
+      },
+      "zone": {
+        "x": 0.6437,
+        "y": 0.6769,
+        "len": 0.277,
+        "thick": 0.051,
+        "angle": 90.3,
+        "surface": "round",
+        "curve": 0.9,
+        "fontMax": 0.52,
+        "fontMin": 0.38,
+        "weight": 0.03,
+        "padding": 0.08,
+        "offset": 0,
+        "finish": "ink",
+        "color": "#ffffff",
+        "confirmed": true,
+        "maxChars": {
+          "ar": 29,
+          "en": 20,
+          "cop": 19
+        }
+      },
+      "languages": [
+        "ar",
+        "en",
+        "cop"
+      ],
+      "fee": 0,
+      "photoConfirmed": true,
+      "copticFont": "athanasius",
+      "freeNote": true,
+      "version": 1
+    }
   },
   {
     "id": "popek-corian-cross-set-13",
@@ -921,7 +1361,47 @@
     "slug": "طقم-صلبان-يد-وصدر-كوريان-موديل-13",
     "thumbnail": "/assets/thumbnails/320/popek-corian-cross-set-13-670b7b82e1.webp",
     "url": "https://popekyrillos.store/?product=popek-corian-cross-set-13",
-    "hasVariants": false
+    "hasVariants": false,
+    "engraving": {
+      "enabled": true,
+      "previewImage": "assets/optimized/products/gallery/engraving-popek-corian-cross-set-13-protected-preview-20261108071441-e946e6.webp",
+      "previewSource": "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-13-unboxed.webp",
+      "previewWatermark": {
+        "zone": "0.6618,0.6909,0.275,0.05,90.3"
+      },
+      "zone": {
+        "x": 0.6618,
+        "y": 0.6909,
+        "len": 0.275,
+        "thick": 0.05,
+        "angle": 90.3,
+        "surface": "round",
+        "curve": 0.9,
+        "fontMax": 0.52,
+        "fontMin": 0.38,
+        "weight": 0.03,
+        "padding": 0.08,
+        "offset": 0,
+        "finish": "ink",
+        "color": "#ffffff",
+        "confirmed": true,
+        "maxChars": {
+          "ar": 29,
+          "en": 20,
+          "cop": 19
+        }
+      },
+      "languages": [
+        "ar",
+        "en",
+        "cop"
+      ],
+      "fee": 0,
+      "photoConfirmed": true,
+      "copticFont": "athanasius",
+      "freeNote": true,
+      "version": 1
+    }
   },
   {
     "id": "popek-corian-cross-set-14",
@@ -989,7 +1469,47 @@
     "slug": "طقم-صلبان-يد-وصدر-كوريان-موديل-14",
     "thumbnail": "/assets/thumbnails/320/popek-corian-cross-set-14-96c18295fd.webp",
     "url": "https://popekyrillos.store/?product=popek-corian-cross-set-14",
-    "hasVariants": false
+    "hasVariants": false,
+    "engraving": {
+      "enabled": true,
+      "previewImage": "assets/optimized/products/gallery/engraving-popek-corian-cross-set-14-protected-preview-20261108071441-e57d88.webp",
+      "previewSource": "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-14-unboxed.webp",
+      "previewWatermark": {
+        "zone": "0.6767,0.7331,0.324,0.055,90"
+      },
+      "zone": {
+        "x": 0.6767,
+        "y": 0.7331,
+        "len": 0.324,
+        "thick": 0.055,
+        "angle": 90,
+        "surface": "round",
+        "curve": 0.9,
+        "fontMax": 0.52,
+        "fontMin": 0.38,
+        "weight": 0.03,
+        "padding": 0.08,
+        "offset": 0,
+        "finish": "ink",
+        "color": "#ffffff",
+        "confirmed": true,
+        "maxChars": {
+          "ar": 32,
+          "en": 21,
+          "cop": 21
+        }
+      },
+      "languages": [
+        "ar",
+        "en",
+        "cop"
+      ],
+      "fee": 0,
+      "photoConfirmed": true,
+      "copticFont": "athanasius",
+      "freeNote": true,
+      "version": 1
+    }
   },
   {
     "id": "popek-corian-cross-set-15",
@@ -1057,7 +1577,47 @@
     "slug": "طقم-صلبان-يد-وصدر-كوريان-موديل-15",
     "thumbnail": "/assets/thumbnails/320/popek-corian-cross-set-15-6833d1b2d9.webp",
     "url": "https://popekyrillos.store/?product=popek-corian-cross-set-15",
-    "hasVariants": false
+    "hasVariants": false,
+    "engraving": {
+      "enabled": true,
+      "previewImage": "assets/optimized/products/gallery/engraving-popek-corian-cross-set-15-protected-preview-20261108071441-4722fe.webp",
+      "previewSource": "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-15-unboxed.webp",
+      "previewWatermark": {
+        "zone": "0.6884,0.6994,0.267,0.048,90.1"
+      },
+      "zone": {
+        "x": 0.6884,
+        "y": 0.6994,
+        "len": 0.267,
+        "thick": 0.048,
+        "angle": 90.1,
+        "surface": "round",
+        "curve": 0.9,
+        "fontMax": 0.52,
+        "fontMin": 0.38,
+        "weight": 0.03,
+        "padding": 0.08,
+        "offset": 0,
+        "finish": "ink",
+        "color": "#ffffff",
+        "confirmed": true,
+        "maxChars": {
+          "ar": 31,
+          "en": 20,
+          "cop": 20
+        }
+      },
+      "languages": [
+        "ar",
+        "en",
+        "cop"
+      ],
+      "fee": 0,
+      "photoConfirmed": true,
+      "copticFont": "athanasius",
+      "freeNote": true,
+      "version": 1
+    }
   },
   {
     "id": "popek-corian-cross-set-16",
@@ -1125,7 +1685,47 @@
     "slug": "طقم-صلبان-يد-وصدر-كوريان-موديل-16",
     "thumbnail": "/assets/thumbnails/320/popek-corian-cross-set-16-f3710b5b1f.webp",
     "url": "https://popekyrillos.store/?product=popek-corian-cross-set-16",
-    "hasVariants": false
+    "hasVariants": false,
+    "engraving": {
+      "enabled": true,
+      "previewImage": "assets/optimized/products/gallery/engraving-popek-corian-cross-set-16-protected-preview-20261108071441-05e53e.webp",
+      "previewSource": "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-16-unboxed.webp",
+      "previewWatermark": {
+        "zone": "0.6752,0.7406,0.348,0.037,90.1"
+      },
+      "zone": {
+        "x": 0.6752,
+        "y": 0.7406,
+        "len": 0.348,
+        "thick": 0.037,
+        "angle": 90.1,
+        "surface": "round",
+        "curve": 0.9,
+        "fontMax": 0.52,
+        "fontMin": 0.38,
+        "weight": 0.03,
+        "padding": 0.08,
+        "offset": 0,
+        "finish": "ink",
+        "color": "#ffffff",
+        "confirmed": true,
+        "maxChars": {
+          "ar": 34,
+          "en": 23,
+          "cop": 23
+        }
+      },
+      "languages": [
+        "ar",
+        "en",
+        "cop"
+      ],
+      "fee": 0,
+      "photoConfirmed": true,
+      "copticFont": "athanasius",
+      "freeNote": true,
+      "version": 1
+    }
   },
   {
     "id": "popek-corian-cross-set-17",
@@ -1193,7 +1793,47 @@
     "slug": "طقم-صلبان-يد-وصدر-كوريان-موديل-17",
     "thumbnail": "/assets/thumbnails/320/popek-corian-cross-set-17-d55a322cba.webp",
     "url": "https://popekyrillos.store/?product=popek-corian-cross-set-17",
-    "hasVariants": false
+    "hasVariants": false,
+    "engraving": {
+      "enabled": true,
+      "previewImage": "assets/optimized/products/gallery/engraving-popek-corian-cross-set-17-protected-preview-20261108071441-261767.webp",
+      "previewSource": "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-17-unboxed.webp",
+      "previewWatermark": {
+        "zone": "0.6118,0.7247,0.363,0.038,90.1"
+      },
+      "zone": {
+        "x": 0.6118,
+        "y": 0.7247,
+        "len": 0.363,
+        "thick": 0.038,
+        "angle": 90.1,
+        "surface": "round",
+        "curve": 0.9,
+        "fontMax": 0.52,
+        "fontMin": 0.38,
+        "weight": 0.03,
+        "padding": 0.08,
+        "offset": 0,
+        "finish": "ink",
+        "color": "#ffffff",
+        "confirmed": true,
+        "maxChars": {
+          "ar": 34,
+          "en": 23,
+          "cop": 23
+        }
+      },
+      "languages": [
+        "ar",
+        "en",
+        "cop"
+      ],
+      "fee": 0,
+      "photoConfirmed": true,
+      "copticFont": "athanasius",
+      "freeNote": true,
+      "version": 1
+    }
   },
   {
     "id": "popek-corian-cross-set-18",
@@ -1261,7 +1901,47 @@
     "slug": "طقم-صلبان-يد-وصدر-كوريان-موديل-18",
     "thumbnail": "/assets/thumbnails/320/popek-corian-cross-set-18-5b8288dee5.webp",
     "url": "https://popekyrillos.store/?product=popek-corian-cross-set-18",
-    "hasVariants": false
+    "hasVariants": false,
+    "engraving": {
+      "enabled": true,
+      "previewImage": "assets/optimized/products/gallery/engraving-popek-corian-cross-set-18-protected-preview-20261108071441-a45b51.webp",
+      "previewSource": "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-18-unboxed.webp",
+      "previewWatermark": {
+        "zone": "0.6634,0.7209,0.265,0.049,90"
+      },
+      "zone": {
+        "x": 0.6634,
+        "y": 0.7209,
+        "len": 0.265,
+        "thick": 0.049,
+        "angle": 90,
+        "surface": "round",
+        "curve": 0.9,
+        "fontMax": 0.52,
+        "fontMin": 0.38,
+        "weight": 0.03,
+        "padding": 0.08,
+        "offset": 0,
+        "finish": "ink",
+        "color": "#ffffff",
+        "confirmed": true,
+        "maxChars": {
+          "ar": 29,
+          "en": 20,
+          "cop": 19
+        }
+      },
+      "languages": [
+        "ar",
+        "en",
+        "cop"
+      ],
+      "fee": 0,
+      "photoConfirmed": true,
+      "copticFont": "athanasius",
+      "freeNote": true,
+      "version": 1
+    }
   },
   {
     "id": "popek-corian-cross-set-19",
@@ -1329,7 +2009,47 @@
     "slug": "طقم-صلبان-يد-وصدر-كوريان-موديل-19",
     "thumbnail": "/assets/thumbnails/320/popek-corian-cross-set-19-f2b0f79e39.webp",
     "url": "https://popekyrillos.store/?product=popek-corian-cross-set-19",
-    "hasVariants": false
+    "hasVariants": false,
+    "engraving": {
+      "enabled": true,
+      "previewImage": "assets/optimized/products/gallery/engraving-popek-corian-cross-set-19-protected-preview-20261108071441-db3338.webp",
+      "previewSource": "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-19-unboxed.webp",
+      "previewWatermark": {
+        "zone": "0.6205,0.59,0.3,0.036,90.4"
+      },
+      "zone": {
+        "x": 0.6205,
+        "y": 0.59,
+        "len": 0.3,
+        "thick": 0.036,
+        "angle": 90.4,
+        "surface": "flat",
+        "curve": 0,
+        "fontMax": 0.52,
+        "fontMin": 0.38,
+        "weight": 0.03,
+        "padding": 0.08,
+        "offset": 0,
+        "finish": "ink",
+        "color": "#ffffff",
+        "confirmed": true,
+        "maxChars": {
+          "ar": 34,
+          "en": 23,
+          "cop": 23
+        }
+      },
+      "languages": [
+        "ar",
+        "en",
+        "cop"
+      ],
+      "fee": 0,
+      "photoConfirmed": true,
+      "copticFont": "athanasius",
+      "freeNote": true,
+      "version": 1
+    }
   },
   {
     "id": "popek-corian-cross-set-20",
@@ -1397,7 +2117,47 @@
     "slug": "طقم-صلبان-يد-وصدر-كوريان-موديل-20",
     "thumbnail": "/assets/thumbnails/320/popek-corian-cross-set-20-e46f121154.webp",
     "url": "https://popekyrillos.store/?product=popek-corian-cross-set-20",
-    "hasVariants": false
+    "hasVariants": false,
+    "engraving": {
+      "enabled": true,
+      "previewImage": "assets/optimized/products/gallery/engraving-popek-corian-cross-set-20-protected-preview-20261108071441-e779ae.webp",
+      "previewSource": "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-20-unboxed.webp",
+      "previewWatermark": {
+        "zone": "0.6287,0.6516,0.268,0.054,90.1"
+      },
+      "zone": {
+        "x": 0.6287,
+        "y": 0.6516,
+        "len": 0.268,
+        "thick": 0.054,
+        "angle": 90.1,
+        "surface": "flat",
+        "curve": 0,
+        "fontMax": 0.52,
+        "fontMin": 0.38,
+        "weight": 0.03,
+        "padding": 0.08,
+        "offset": 0,
+        "finish": "ink",
+        "color": "#ffffff",
+        "confirmed": true,
+        "maxChars": {
+          "ar": 26,
+          "en": 18,
+          "cop": 18
+        }
+      },
+      "languages": [
+        "ar",
+        "en",
+        "cop"
+      ],
+      "fee": 0,
+      "photoConfirmed": true,
+      "copticFont": "athanasius",
+      "freeNote": true,
+      "version": 1
+    }
   },
   {
     "id": "popek-corian-cross-set-21",
@@ -1465,7 +2225,47 @@
     "slug": "طقم-صلبان-يد-وصدر-كوريان-موديل-21",
     "thumbnail": "/assets/thumbnails/320/popek-corian-cross-set-21-443e28d4b2.webp",
     "url": "https://popekyrillos.store/?product=popek-corian-cross-set-21",
-    "hasVariants": false
+    "hasVariants": false,
+    "engraving": {
+      "enabled": true,
+      "previewImage": "assets/optimized/products/gallery/engraving-popek-corian-cross-set-21-protected-preview-20261108071441-d376ef.webp",
+      "previewSource": "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-21-unboxed.webp",
+      "previewWatermark": {
+        "zone": "0.6679,0.75,0.334,0.039,90.7"
+      },
+      "zone": {
+        "x": 0.6679,
+        "y": 0.75,
+        "len": 0.334,
+        "thick": 0.039,
+        "angle": 90.7,
+        "surface": "round",
+        "curve": 0.9,
+        "fontMax": 0.52,
+        "fontMin": 0.38,
+        "weight": 0.03,
+        "padding": 0.08,
+        "offset": 0,
+        "finish": "ink",
+        "color": "#ffffff",
+        "confirmed": true,
+        "maxChars": {
+          "ar": 34,
+          "en": 23,
+          "cop": 23
+        }
+      },
+      "languages": [
+        "ar",
+        "en",
+        "cop"
+      ],
+      "fee": 0,
+      "photoConfirmed": true,
+      "copticFont": "athanasius",
+      "freeNote": true,
+      "version": 1
+    }
   },
   {
     "id": "popek-corian-cross-set-22",
@@ -1533,7 +2333,47 @@
     "slug": "طقم-صلبان-يد-وصدر-كوريان-موديل-22",
     "thumbnail": "/assets/thumbnails/320/popek-corian-cross-set-22-8921686861.webp",
     "url": "https://popekyrillos.store/?product=popek-corian-cross-set-22",
-    "hasVariants": false
+    "hasVariants": false,
+    "engraving": {
+      "enabled": true,
+      "previewImage": "assets/optimized/products/gallery/engraving-popek-corian-cross-set-22-protected-preview-20261108071441-adf24d.webp",
+      "previewSource": "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-22-unboxed.webp",
+      "previewWatermark": {
+        "zone": "0.6456,0.6506,0.284,0.046,90.2"
+      },
+      "zone": {
+        "x": 0.6456,
+        "y": 0.6506,
+        "len": 0.284,
+        "thick": 0.046,
+        "angle": 90.2,
+        "surface": "round",
+        "curve": 0.9,
+        "fontMax": 0.52,
+        "fontMin": 0.38,
+        "weight": 0.03,
+        "padding": 0.08,
+        "offset": 0,
+        "finish": "ink",
+        "color": "#ffffff",
+        "confirmed": true,
+        "maxChars": {
+          "ar": 33,
+          "en": 22,
+          "cop": 21
+        }
+      },
+      "languages": [
+        "ar",
+        "en",
+        "cop"
+      ],
+      "fee": 0,
+      "photoConfirmed": true,
+      "copticFont": "athanasius",
+      "freeNote": true,
+      "version": 1
+    }
   },
   {
     "id": "custom-1789302819968",
