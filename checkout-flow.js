@@ -147,7 +147,29 @@ function cartPayloadFromMap(map = cart) {
     .filter((item) => item.productId && item.qty > 0);
 }
 
+// Priest-name engraving labels for cart lines (product-engraving.js).
+const engravingLangLabels = { ar: "العربية", en: "English", cop: "القبطية" };
+function engravingLineHtml(item) {
+  if (!item.engraving) return item.madeToOrder ? `<p class="cart-engraving cart-made-to-order">🛠️ يُصنع خصيصًا حسب طلبك</p>` : "";
+  return `<p class="cart-engraving"><span>✍️ الاسم على الصليب:</span> <bdi>«${escapeHtml(item.engraving.name)}»</bdi> <small>(${escapeHtml(engravingLangLabels[item.engraving.lang] || "")})</small>${item.madeToOrder ? ` <small class="cart-made-to-order">· يُصنع خصيصًا حسب طلبك</small>` : ""}</p>`;
+}
+
 function cartMapFromPayload(items = []) {
+  // Priest-name engraving saved with a cart line (product-engraving.js). Only known fields survive.
+  const cartEngraving = (value) => {
+    if (!value || typeof value !== "object" || value.enabled !== true) return null;
+    const name = String(value.name || "").normalize("NFC").replace(/\s+/g, " ").trim().slice(0, 80);
+    const lang = ["ar", "en", "cop"].includes(value.lang) ? value.lang : "";
+    if (!name || !lang) return null;
+    return {
+      enabled: true,
+      name,
+      lang,
+      finish: String(value.finish || "").slice(0, 20),
+      zoneVersion: Math.max(1, Math.floor(Number(value.zoneVersion) || 1)),
+      customizationId: String(value.customizationId || "").slice(0, 40)
+    };
+  };
   const map = new Map();
   if (!Array.isArray(items)) return map;
   items.forEach((item) => {
@@ -164,9 +186,10 @@ function cartMapFromPayload(items = []) {
       selectedColors: Array.isArray(item.selectedColors) ? item.selectedColors : [],
       coloringDesign: item.coloringDesign || null,
       woodType: item.woodType || "",
-      finalPrice: Number(item.finalPrice) || 0
+      finalPrice: Number(item.finalPrice) || 0,
+      engraving: cartEngraving(item.engraving)
     };
-    if (metadata.previewImage || metadata.coloringDesign || metadata.woodType) cartItemMetadata.set(key, metadata);
+    if (metadata.previewImage || metadata.coloringDesign || metadata.woodType || metadata.engraving) cartItemMetadata.set(key, metadata);
   });
   return map;
 }
@@ -676,6 +699,23 @@ function productImage(product) {
   return product?.image || "";
 }
 
+// Made-to-order crosses: every line of an eligible cross (with or without a name) is made at the
+// factory for this order, so it never depends on stock. Same rule as functions/_made-to-order.js; the server re-checks it.
+function engravingZoneKey(zone) {
+  return ["x", "y", "len", "thick", "angle"].map((k) => (Math.round(Number(zone?.[k]) * 10000) / 10000).toString()).join(",");
+}
+function isMadeToOrderProduct(product) {
+  const settings = product?.engraving;
+  return Boolean(settings && settings.enabled === true && typeof settings.previewImage === "string"
+    && /(^|\/)engraving-[^/]*\.webp$/i.test(settings.previewImage)
+    && settings.previewWatermark?.zone === engravingZoneKey(settings.zone)
+    && settings.photoConfirmed === true
+    && /^#[0-9a-f]{6}$/i.test(String(settings.zone?.color || "")) && settings.zone?.confirmed === true);
+}
+function isMadeToOrderLine(product) {
+  return isMadeToOrderProduct(product);
+}
+
 // Mirrors the storefront rule (script.js isVariantAvailable); the server re-checks at order time.
 function isCartLineUnavailable(product, variant) {
   if (product?.stock === "غير متاح حاليا" || product?.stock === "Currently unavailable" || product?.available === false) return true;
@@ -704,7 +744,8 @@ function cartEntries() {
         discount: safeBasePrice !== null && price !== null ? safeBasePrice - price : 0,
         optionText: variantOptionText(variant),
         ...metadata,
-        unavailable: isCartLineUnavailable(product, variant)
+        madeToOrder: isMadeToOrderLine(product),
+        unavailable: !isMadeToOrderLine(product) && isCartLineUnavailable(product, variant)
       };
     })
     .filter(Boolean);
@@ -762,6 +803,7 @@ function renderOrderSummary(targetSelector = "[data-order-summary]") {
               <div>
                 <h3>${escapeHtml(item.product.name)}</h3>
                 ${item.optionText ? `<p>${escapeHtml(item.optionText)}</p>` : ""}
+                ${engravingLineHtml(item)}
                 <span>${t("quantity")}: ${formatter.format(item.qty)}</span>
                 ${isMedalProduct(item.product) ? `<small>السعر الأساسي: <del>${money(item.basePrice)}</del> · الخصم: ${money(item.discount)} · السعر النهائي: ${money(item.price)}</small>` : ""}
               </div>
@@ -809,6 +851,7 @@ function renderCartPage() {
           <div>
             <h2>${escapeHtml(item.product.name)}</h2>
             ${item.optionText ? `<p>${escapeHtml(item.optionText)}</p>` : ""}
+            ${engravingLineHtml(item)}
             ${item.unavailable ? `<p class="cart-unavailable" role="status">${t("unavailableLine")}</p>` : ""}
             ${isMedalProduct(item.product) ? `<p class="cart-medal-pricing"><span>السعر الأساسي: <del>${money(item.basePrice)}</del></span><span>خصم الخدمات 10%: -${money(item.discount)}</span><strong>السعر النهائي: ${unitPrice}</strong><strong>الإجمالي: ${money(item.price * item.qty)}</strong></p>` : `<span>${unitPrice}</span>`}
           </div>
@@ -1001,7 +1044,8 @@ function orderLines() {
   return cartEntries()
     .map((item) => {
       const price = item.price === null ? t("askPrice") : money(item.price);
-      return `- ${item.product.name}${item.optionText ? ` (${item.optionText})` : ""}: ${formatter.format(item.qty)} × ${price}`;
+      const engraving = item.engraving ? ` [الاسم على الصليب: «${item.engraving.name}» - ${engravingLangLabels[item.engraving.lang] || ""}]` : "";
+      return `- ${item.product.name}${item.optionText ? ` (${item.optionText})` : ""}${engraving}: ${formatter.format(item.qty)} × ${price}`;
     })
     .join("\n");
 }
@@ -1035,11 +1079,13 @@ function orderProductsPayload() {
     cartEntries().map((item) => {
       const productId = item.product.id || item.id || "";
       const coloringDesign = item.coloringDesign || savedColoringDesign(productId);
+      // Engraving previews are local images (data:) the server cannot keep; send the product photo.
+      const engraving = item.engraving || null;
       return {
         productId,
         name: item.product.name || "",
-        image: item.previewImage || productImage(item.product),
-        previewImage: item.previewImage || "",
+        image: engraving ? productImage(item.product) : (item.previewImage || productImage(item.product)),
+        previewImage: engraving ? "" : (item.previewImage || ""),
         woodType: item.woodType || String(item.variant?.options?.["نوع الخشب"] || ""),
         designId: item.designId || productId,
         designName: item.designName || item.product.name || "",
@@ -1053,6 +1099,7 @@ function orderProductsPayload() {
         discountRate: Number(item.variant?.discountRate) || 0,
         discountValue: item.discount,
         lineTotal: item.price === null ? null : (item.price || 0) * item.qty,
+        ...(engraving ? { engraving, lineId: parseCartKey(item.key).lineId || "" } : {}),
         ...(coloringDesign ? {
           coloringDesign,
           notes: `تصميم تلوين اليوطا: ${JSON.stringify(coloringDesign)}`

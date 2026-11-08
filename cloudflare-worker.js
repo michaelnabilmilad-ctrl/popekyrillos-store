@@ -13,6 +13,7 @@ import { testAccessGate } from "./functions/_test-access.js";
 import { coloringDesignForProduct } from "./coloringDesigns.js";
 import { backfillAirtableOrderProducts } from "./functions/_airtable-order-backfill.js";
 import { checkoutReceipt, customerOrdersResponse, ensureOrderAccess, purchaseSnapshot } from "./functions/_customer-orders.js";
+import { MADE_TO_ORDER_LABEL, engravingReady, isMadeToOrderProduct } from "./functions/_made-to-order.js";
 import { ALLOWED_PAYMENT_METHODS, NEW_ORDER_STATUS, TOTAL_TOLERANCE, paymentStatusForMethod, priceOrderItems, purchasableOffers } from "./functions/_order-pricing.js";
 import { readLiveFile, recordPublishedFile } from "./functions/_live-data.js";
 import {
@@ -46,6 +47,9 @@ const canonicalOrigin = "https://popekyrillos.store";
 const canonicalHostname = "popekyrillos.store";
 const allowedOrdersOrigin = "https://popekyrillos.store";
 const AIRTABLE_ORDER_DETAIL_IMAGE_FIELD = "صورة المنتج المختارة";
+// Checkbox on «تفاصيل الطلبات»: ticked for lines made at the factory for this order (a validated
+// priest name). The stock automations skip ticked lines, so nothing is deducted or returned.
+const AIRTABLE_MADE_TO_ORDER_FIELD = "تصنيع مخصوص";
 const staticRewrites = {
   "/cart": "/cart.html",
   "/coloring-game": "/coloring-game.html",
@@ -303,9 +307,14 @@ function hasAvailableVariant(product) {
   return product?.stock !== "غير متاح حاليا" && product?.available !== false;
 }
 
+// Orderable = in stock, or a made-to-order cross (engraving on): those are made for each order.
+function isProductOrderable(product) {
+  return hasAvailableVariant(product) || isMadeToOrderProduct(product);
+}
+
 function isCatalogProductVisible(product) {
   return product?.active !== false && product?.hidden !== true && product?.deleted !== true
-    && product?.published !== false && hasAvailableVariant(product);
+    && product?.published !== false && isProductOrderable(product);
 }
 
 function productDescription(product) {
@@ -318,7 +327,7 @@ function productSsrHtml(product) {
   const image = absoluteAssetUrl(productImages(product)[0] || "assets/optimized/hero-papa-kyrillos-products.webp");
   const price = productPriceText(product);
   const canonical = canonicalProductUrl(product);
-  const availability = hasAvailableVariant(product) ? "متاح" : "غير متاح حاليا";
+  const availability = hasAvailableVariant(product) ? "متاح" : isMadeToOrderProduct(product) ? "يُصنع خصيصًا حسب طلبك" : "غير متاح حاليا";
   return `
     <section class="ssr-product-page" aria-labelledby="ssr-product-title" dir="rtl">
       <div class="ssr-product-shell">
@@ -431,7 +440,8 @@ function catalogDto(product, thumbnailManifest) {
     price: productPrice(product),
     variants: product.variants,
     thumbnail: catalogThumbnail(product, thumbnailManifest),
-    availability: hasAvailableVariant(product) ? "available" : "unavailable",
+    availability: isProductOrderable(product) ? "available" : "unavailable",
+    ...(isMadeToOrderProduct(product) ? { madeToOrder: true } : {}),
     category: catalogMainCategoryId(product),
     subcategory: product?.subcategory || product?.subCategory || "",
     collections: catalogCollectionIds(product)
@@ -1179,7 +1189,7 @@ function metaCsvRow(product) {
 
   return {
     row: [id, title, csvDescription(product?.description, title),
-      hasAvailableVariant(product) ? "in stock" : "out of stock", "new",
+      isProductOrderable(product) ? "in stock" : "out of stock", "new",
       feedMoney(pricing.salePrice ?? pricing.price), canonicalProductUrl(product), images[0],
       "مكتبة البابا كيرلس", feedProductType(product)].map(csvCell).join(","),
     excludedReasons: []
@@ -1241,7 +1251,7 @@ function catalogFeedItem(product, { includePrice = true } = {}) {
   if (excludedReasons.length) return { item: "", excludedReasons };
 
   const description = feedText(product.description, title);
-  const availability = hasAvailableVariant(product) ? "in stock" : "out of stock";
+  const availability = isProductOrderable(product) ? "in stock" : "out of stock";
   const productType = feedProductType(product);
   const additionalImages = images.slice(1, 11);
   const lines = [
@@ -1384,7 +1394,8 @@ const seoHelpers = {
   productPrice,
   purchasableOffers,
   productImages,
-  hasAvailableVariant,
+  // A made-to-order cross is orderable even with no stock, so search results may say so.
+  hasAvailableVariant: isProductOrderable,
   canonicalProductUrl,
   mainCategoryId: (product) => catalogMainCategoryId(product)
 };
@@ -1427,7 +1438,7 @@ function seoListItem(product, thumbnailManifest = {}) {
     path: canonicalProductPath(product),
     name,
     price: productPrice(product),
-    inStock: hasAvailableVariant(product),
+    inStock: isProductOrderable(product),
     thumbnail: catalogThumbnail(product, thumbnailManifest),
     alt: localized(product.imageAlt).trim() || name
   };
@@ -1446,7 +1457,7 @@ function productFacts(product) {
     version,
     visible: isCatalogProductVisible(product),
     published: product?.active !== false && product?.hidden !== true && product?.deleted !== true && product?.published !== false,
-    inStock: hasAvailableVariant(product),
+    inStock: isProductOrderable(product),
     inSitemap: productIndexState(product, seoHelpers).inSitemap,
     category: catalogMainCategoryId(product),
     subcategory: String(product?.subcategory || product?.subCategory || ""),
@@ -1700,6 +1711,10 @@ async function productPageResponse(request, env, product, products = []) {
   const tags = productMetaTags(seo);
   const safeProduct = JSON.stringify({ ...product, seoImageAlt: seo.alt }).replace(/</g, "\\u003c");
   const name = escapeHtml(seo.name);
+  // Priest-name engraving assets load only on products the admin enabled it for.
+  const engravingOn = engravingReady(product?.engraving);
+  const engravingHead = engravingOn ? `<link rel="stylesheet" href="/product-engraving.css?v=2">` : "";
+  const engravingScripts = engravingOn ? `<script src="/cross-engraving.js?v=1" defer></script><script src="/product-engraving.js?v=2" defer></script>` : "";
   const thumbnailManifest = await loadThumbnailManifest(env, request);
   const mainId = catalogMainCategoryId(product);
   const subcategoryId = String(product.subcategory || "");
@@ -1714,14 +1729,14 @@ async function productPageResponse(request, env, product, products = []) {
 <html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 ${tags.title}${tags.description}${tags.extra}
 <link rel="preload" href="/assets/fonts/ge-ss-two-bold.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/styles.min.css"><link rel="stylesheet" href="/product-page.css?v=15">
+<link rel="stylesheet" href="/styles.min.css"><link rel="stylesheet" href="/product-page.css?v=15">${engravingHead}
 <style>.product-route-breadcrumb{margin:-12px 0 18px;color:#65747a;font-size:13px;font-weight:700}.product-route-breadcrumb a{color:#073d42;text-decoration:none}</style>
 <script src="/assistant.js?v=1" defer></script>
 </head><body class="standalone-product-page">
 <header class="site-header" data-elevated="false"><div class="brand-cluster"><a class="brand" href="/" aria-label="مكتبة البابا كيرلس"><span class="brand-logo-wrap"><img src="/assets/optimized/logo-papa-kyrillos-64.webp" srcset="/assets/optimized/logo-papa-kyrillos-64.webp 64w, /assets/optimized/logo-papa-kyrillos-128.webp 128w" sizes="50px" alt="" width="160" height="160" decoding="async"></span><span><strong>مكتبة البابا كيرلس</strong><small>مستلزمات الكنائس والخدمة</small></span></a></div><nav class="main-nav" aria-label="التنقل الرئيسي"><a href="/#categories">الأقسام</a><a href="/#catalog">المنتجات</a></nav><div class="header-actions"><a class="cart-toggle" href="/cart" aria-label="فتح السلة"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6h15l-2 8H8L6 3H3"/><circle cx="9" cy="20" r="1.6"/><circle cx="18" cy="20" r="1.6"/></svg><span>السلة</span><span class="cart-count" data-cart-count></span></a></div></header>
 <main class="product-route-main"><a class="product-route-back" href="/#catalog">العودة إلى المنتجات</a>${seo.crumbs.length > 2 ? breadcrumbNavHtml(seo.crumbs, "product-route-breadcrumb") : ""}<div id="product-detail" aria-label="${name}">${productDetailSsrHtml(seo)}</div><section class="product-route-related" aria-labelledby="related-title"><h2 id="related-title">منتجات مشابهة</h2><div class="product-grid" data-related-products>${related}</div></section></main>
 <footer class="product-route-footer"><strong>مكتبة البابا كيرلس</strong><span>مستلزمات الكنائس والخدمة</span><a href="/policies">السياسات</a><a href="https://wa.me/201016125589">تواصل معنا</a></footer>
-<div class="toast" data-toast role="status" aria-live="polite"></div><script id="product-data" type="application/json">${safeProduct}</script><script src="/yota-colors.js?v=3" defer></script><script src="/meta-consent.js?v=1" defer></script><script src="/product-page.js?v=24" defer></script></body></html>`;
+<div class="toast" data-toast role="status" aria-live="polite"></div><script id="product-data" type="application/json">${safeProduct}</script><script src="/yota-colors.js?v=3" defer></script><script src="/meta-consent.js?v=2" defer></script>${engravingScripts}<script src="/product-page.js?v=28" defer></script></body></html>`;
   return new Response(html, {
     status: 200,
     headers: {
@@ -1915,6 +1930,85 @@ function absoluteOrderImageUrl(value) {
   }
 }
 
+// Priest-name engraving on a hand cross (product.engraving set in /admin). The name and
+// language travel with the cart line; the server re-checks them and writes them into the
+// order text and the line's «ملاحظات» so the team sees exactly what to write.
+const ENGRAVING_LANG_LABELS = { ar: "العربية", en: "English", cop: "القبطية" };
+const ENGRAVING_ALLOWED = {
+  ar: /^[\u0621-\u063A\u0641-\u064A\u064B-\u0652\u0670\u0640\u0660-\u0669 .\-()]+$/u,
+  en: /^[A-Za-z .'\-()]+$/u,
+  cop: /^[\u2C80-\u2CB1\u03E2-\u03EF\u0300\u0301\u0304\u0305\u0307\u0308\u033F\u2CEF-\u2CF1 .\-]+$/u
+};
+const ENGRAVING_INVISIBLE = /[\u0000-\u001F\u007F-\u009F\u200B-\u200F\u202A-\u202E\u2060-\u2069\uFEFF]/gu;
+
+function engravingGraphemes(value) {
+  if (typeof Intl !== "undefined" && Intl.Segmenter) return [...new Intl.Segmenter(undefined, { granularity: "grapheme" }).segment(value)].length;
+  return [...value].length;
+}
+
+function orderItemEngraving(value) {
+  if (!value || typeof value !== "object" || value.enabled !== true) return { engraving: null, error: false };
+  const name = String(value.name || "").normalize("NFC").replace(ENGRAVING_INVISIBLE, "").replace(/\s+/g, " ").trim();
+  const lang = Object.prototype.hasOwnProperty.call(ENGRAVING_LANG_LABELS, value.lang) ? value.lang : "";
+  if (!name || !lang || engravingGraphemes(name) > 60 || !ENGRAVING_ALLOWED[lang].test(name)) return { engraving: null, error: true };
+  return {
+    engraving: {
+      name,
+      lang,
+      langLabel: ENGRAVING_LANG_LABELS[lang],
+      finish: cleanOrderString(value.finish).slice(0, 20),
+      zoneVersion: Math.max(1, Math.floor(Number(value.zoneVersion) || 1)),
+      customizationId: cleanOrderString(value.customizationId).slice(0, 40)
+    },
+    error: false
+  };
+}
+
+// engravingReady / engravingZoneKey live in functions/_made-to-order.js (shared with the order pricing).
+
+// CS New Athanasius cannot draw capital Ⲋ, an overline on most letters, or marks other than
+// jinkim/overline. The product page refuses such names; this keeps tampered orders out too, so
+// the order never holds a name the customer did not see in the preview.
+const ATHANASIUS_OVERLINE_OK = new Set([..."ⲁⲃⲅⲇⲉϣⲏⲯⲀⲂⲄⲆⲈϢⲎⲮ"]);
+function athanasiusCanDraw(name) {
+  const chars = [...String(name).normalize("NFD").replace(/\u2CEF/g, "\u0300")];
+  let base = "";
+  for (const c of chars) {
+    if (c === "Ⲋ") return false;
+    if (!/\p{M}/u.test(c)) { base = c; continue; }
+    if (c === "\u0300") continue;
+    if (c === "\u0305" && ATHANASIUS_OVERLINE_OK.has(base)) continue;
+    return false;
+  }
+  return true;
+}
+
+// Lines with a name are made at the factory for this order («تصنيع مخصوص»). Only lines whose
+// engraving passed engravingCatalogErrors() reach this point, so the label follows the real
+// customization data, never free text the customer typed in a note.
+function engravingNote(engraving, madeToOrder = Boolean(engraving)) {
+  if (engraving) return `${MADE_TO_ORDER_LABEL} | الاسم على الصليب: «${engraving.name}» | لغة الكتابة: ${engraving.langLabel}`;
+  return madeToOrder ? `${MADE_TO_ORDER_LABEL} | بدون كتابة اسم` : "";
+}
+
+// A line may carry a name only for a product the admin enabled it for, in an allowed
+// language and within that product's letter limit.
+function engravingCatalogErrors(items, catalog) {
+  const byId = new Map((Array.isArray(catalog) ? catalog : []).map((product) => [String(product?.id ?? ""), product]));
+  const errors = [];
+  items.forEach((item, index) => {
+    if (!item.engraving) return;
+    const settings = byId.get(String(item.websiteProductId || ""))?.engraving;
+    const languages = Array.isArray(settings?.languages) && settings.languages.length ? settings.languages : ["ar", "en", "cop"];
+    const max = Number(settings?.zone?.maxChars?.[item.engraving.lang]) || 24;
+    if (!engravingReady(settings)) errors.push({ index, code: "engraving_not_available" });
+    else if (!languages.includes(item.engraving.lang)) errors.push({ index, code: "engraving_language" });
+    else if (engravingGraphemes(item.engraving.name) > max) errors.push({ index, code: "engraving_too_long" });
+    else if (item.engraving.lang === "cop" && settings.copticFont === "athanasius" && !athanasiusCanDraw(item.engraving.name)) errors.push({ index, code: "engraving_font" });
+  });
+  return errors;
+}
+
 function normalizeOrderItems(value) {
   const products = parseOrderProducts(value);
   if (!products || !products.length) return { items: [], errors: ["products"] };
@@ -1931,6 +2025,9 @@ function normalizeOrderItems(value) {
     const designName = cleanOrderString(product?.designName);
     const customizationId = cleanOrderString(product?.customizationId || product?.coloringDesign?.customizationId);
     const selectedColors = orderItemSelectedColors(product);
+    const engravingResult = orderItemEngraving(product?.engraving);
+    if (engravingResult.error) errors.push(`products[${index}].engraving`);
+    const engraving = engravingResult.engraving;
     const option = cleanOrderString(product?.option);
     const variantName = cleanOrderString(product?.variantName) || option;
     const notes = cleanOrderString(product?.notes ?? product?.note);
@@ -1959,9 +2056,10 @@ function normalizeOrderItems(value) {
       unitPrice,
       designId,
       designName,
-      customizationId,
+      customizationId: customizationId || engraving?.customizationId || "",
       customization: { selectedColors },
       selectedColors,
+      ...(engraving ? { engraving } : {}),
       ...(medalPricing ? { basePrice, discountValue, discountRate, woodType } : {})
     };
   });
@@ -2026,7 +2124,10 @@ async function resolveAirtableProducts(env, items, context) {
         headers: { Authorization: `Bearer ${env.AIRTABLE_TOKEN}` }
       }, { ...context, operation: "find_product", sku: identity });
       let productId = data.records?.[0]?.id || "";
-      if (!productId && item.websiteProductId) {
+      // A cross made to order with a name needs no stock record: when its model is not in
+      // Airtable yet, the line stays unlinked instead of adding a product automatically.
+      const onlyMadeToOrder = items.every((other) => (other.sku || other.websiteProductId) !== identity || other.madeToOrder);
+      if (!productId && item.websiteProductId && !onlyMadeToOrder) {
         const created = await airtableRequest(env, airtableTableUrl(env, AIRTABLE_PRODUCTS_TABLE), {
           method: "POST",
           headers: { Authorization: `Bearer ${env.AIRTABLE_TOKEN}`, "Content-Type": "application/json" },
@@ -2069,7 +2170,9 @@ async function resolveAirtableProducts(env, items, context) {
         reason: identity ? (match?.reason || "not_found") : "missing"
       });
     }
-    const fallbackNote = unresolved
+    const fallbackNote = unresolved && item.madeToOrder
+      ? `موديل غير مسجل في منتجات Airtable: ${item.productName} | SKU: ${skuLabel} | تصنيع مخصوص، مش محتاج رصيد`
+      : unresolved
       ? `منتج غير مربوط: ${item.productName}${item.option ? ` | الاختيار: ${item.option}` : ""} | SKU: ${skuLabel} | يحتاج ربط يدوي بالمنتج`
       : "";
     const pricingNote = item.woodType
@@ -2088,7 +2191,7 @@ async function resolveAirtableProducts(env, items, context) {
       ...item,
       productId,
       unresolved,
-      detailNote: [variantNote, pricingNote, designNote, colorsNote, imageNote, fallbackNote, item.notes].filter(Boolean).join(" | ")
+      detailNote: [engravingNote(item.engraving, item.madeToOrder), variantNote, pricingNote, designNote, colorsNote, imageNote, fallbackNote, item.notes].filter(Boolean).join(" | ")
     };
   });
 }
@@ -2104,25 +2207,47 @@ async function createAirtableOrderDetails(env, orderRecordId, items, context) {
   const records = items.map((item) => {
     const fields = {
       "رقم الأوردر": [orderRecordId],
-      "المنتج": [item.productId],
+      ...(item.productId ? { "المنتج": [item.productId] } : {}),
       "الكمية": item.quantity,
       "سعر القطعة": item.unitPrice
     };
     if (item.imageUrl) fields[AIRTABLE_ORDER_DETAIL_IMAGE_FIELD] = [{ url: item.imageUrl }];
     if (item.detailNote) fields["ملاحظات"] = item.detailNote;
+    if (item.madeToOrder) fields[AIRTABLE_MADE_TO_ORDER_FIELD] = true;
     return { fields };
   });
+  // Until the checkbox exists in Airtable, an order must still be saved: drop it and retry once.
+  // The line keeps «تصنيع مخصوص» in its notes either way.
+  let madeToOrderFieldMissing = false;
+  const withoutMissingField = (fields) => {
+    if (!madeToOrderFieldMissing) return fields;
+    const copy = { ...fields };
+    delete copy[AIRTABLE_MADE_TO_ORDER_FIELD];
+    return copy;
+  };
+  const postDetails = async (batch, logContext) => {
+    const send = () => airtableRequest(env, airtableTableUrl(env, detailTable), {
+      method: "POST",
+      headers: { Authorization: `Bearer ${env.AIRTABLE_TOKEN}`, "Content-Type": "application/json" },
+      body: JSON.stringify({ records: batch.map((record) => ({ fields: withoutMissingField(record.fields) })), typecast: false })
+    }, logContext);
+    try {
+      return await send();
+    } catch (error) {
+      const hasField = batch.some((record) => record.fields[AIRTABLE_MADE_TO_ORDER_FIELD]);
+      if (!hasField || madeToOrderFieldMissing || error?.airtableType !== "UNKNOWN_FIELD_NAME") throw error;
+      madeToOrderFieldMissing = true;
+      console.warn("Airtable «تصنيع مخصوص» field is missing; saving the line without it", logContext);
+      return send();
+    }
+  };
   const createdIds = [];
   try {
     for (let index = 0; index < records.length; index += 10) {
       const batchRecords = records.slice(index, index + 10);
       const batchItems = items.slice(index, index + 10);
       try {
-        const data = await airtableRequest(env, airtableTableUrl(env, detailTable), {
-          method: "POST",
-          headers: { Authorization: `Bearer ${env.AIRTABLE_TOKEN}`, "Content-Type": "application/json" },
-          body: JSON.stringify({ records: batchRecords, typecast: false })
-        }, {
+        const data = await postDetails(batchRecords, {
           ...context,
           operation: "create_details",
           batch: Math.floor(index / 10) + 1,
@@ -2135,11 +2260,7 @@ async function createAirtableOrderDetails(env, orderRecordId, items, context) {
           const record = batchRecords[offset];
           const item = batchItems[offset];
           try {
-            const data = await airtableRequest(env, airtableTableUrl(env, detailTable), {
-              method: "POST",
-              headers: { Authorization: `Bearer ${env.AIRTABLE_TOKEN}`, "Content-Type": "application/json" },
-              body: JSON.stringify({ records: [record], typecast: false })
-            }, { ...context, operation: "create_detail_with_image", productName: item.productName });
+            const data = await postDetails([record], { ...context, operation: "create_detail_with_image", productName: item.productName });
             createdIds.push(...(data.records || []).map((created) => created.id).filter(Boolean));
           } catch (imageError) {
             console.warn("Airtable order detail image was skipped", {
@@ -2152,11 +2273,7 @@ async function createAirtableOrderDetails(env, orderRecordId, items, context) {
             });
             const fieldsWithoutImage = { ...record.fields };
             delete fieldsWithoutImage[AIRTABLE_ORDER_DETAIL_IMAGE_FIELD];
-            const data = await airtableRequest(env, airtableTableUrl(env, detailTable), {
-              method: "POST",
-              headers: { Authorization: `Bearer ${env.AIRTABLE_TOKEN}`, "Content-Type": "application/json" },
-              body: JSON.stringify({ records: [{ fields: fieldsWithoutImage }], typecast: false })
-            }, { ...context, operation: "create_detail_without_image", productName: item.productName });
+            const data = await postDetails([{ fields: fieldsWithoutImage }], { ...context, operation: "create_detail_without_image", productName: item.productName });
             createdIds.push(...(data.records || []).map((created) => created.id).filter(Boolean));
           }
         }
@@ -2757,6 +2874,14 @@ async function createOrderResponse(context) {
       message: "\u0628\u0639\u0636 \u0645\u0646\u062a\u062c\u0627\u062a \u0627\u0644\u0633\u0644\u0629 \u062a\u063a\u064a\u0651\u0631\u062a \u0623\u0648 \u0644\u0645 \u062a\u0639\u062f \u0645\u062a\u0627\u062d\u0629. \u0631\u0627\u062c\u0639 \u0627\u0644\u0633\u0644\u0629 \u062b\u0645 \u0623\u0643\u062f \u0627\u0644\u0637\u0644\u0628 \u0645\u0631\u0629 \u0623\u062e\u0631\u0649."
     }, { status: 409 });
   }
+  const engravingErrors = engravingCatalogErrors(normalizedItems.items, catalog);
+  if (engravingErrors.length) {
+    console.warn("Order engraving does not match the product settings", { requestId, lines: engravingErrors });
+    return orderJsonResponse(request, {
+      error: "engraving_invalid",
+      message: "الاسم المطلوب كتابته على الصليب محتاج مراجعة (اللغة أو الطول أو المنتج). ارجع للسلة وعدّله ثم أكد الطلب."
+    }, { status: 409 });
+  }
   const requestedTotal = Number(payload.total);
   if (!Number.isFinite(requestedTotal) || Math.abs(requestedTotal - pricing.total) > TOTAL_TOLERANCE) {
     console.warn("Order total differs from the catalog total", {
@@ -2773,6 +2898,8 @@ async function createOrderResponse(context) {
   }
   normalizedItems.items.forEach((item, index) => {
     item.unitPrice = pricing.lines[index].unitPrice;
+    // Decided per line from the live catalog (an eligible cross, named or not), never from text.
+    item.madeToOrder = pricing.lines[index].madeToOrder === true;
   });
   order.total = normalizedItems.items.reduce((sum, item) => sum + item.unitPrice * item.quantity, 0);
   order.products = normalizedItems.items.map((item) => [
@@ -2780,6 +2907,7 @@ async function createOrderResponse(context) {
     item.sku ? `SKU: ${item.sku}` : "",
     item.websiteProductId ? `Product ID: ${item.websiteProductId}` : "",
     item.option,
+    engravingNote(item.engraving, item.madeToOrder),
     Object.entries(parseSelectedColors(item.selectedColors)).length
       ? `\u0627\u0644\u0623\u0644\u0648\u0627\u0646: ${Object.entries(parseSelectedColors(item.selectedColors)).map(([region, hex]) => `${region}: ${hex}`).join("\u060c ")}`
       : "",
@@ -2879,7 +3007,8 @@ async function createOrderResponse(context) {
       }, { status: 409 });
     }
     const resolvedItems = await resolveAirtableProducts(env, normalizedItems.items, { requestId });
-    const unresolvedIndex = resolvedItems.findIndex((item) => !item.productId);
+    // A made-to-order cross whose model is not in Airtable is saved unlinked (no stock record needed).
+    const unresolvedIndex = resolvedItems.findIndex((item) => !item.productId && !item.madeToOrder);
     if (unresolvedIndex !== -1) {
       const unresolvedError = new Error(`Order item ${unresolvedIndex + 1} has no Airtable product record`);
       unresolvedError.code = "airtable_product_unresolved";

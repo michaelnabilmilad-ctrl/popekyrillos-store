@@ -81,6 +81,21 @@
 
   function countBy(field, value) { return state.orders.filter((order) => order[field] === value).length; }
 
+  // Made-to-order lines written by /api/orders: "… | تصنيع مخصوص | الاسم على الصليب: «…» | لغة الكتابة: … | الكمية: n | …"
+  // or "… | تصنيع مخصوص | بدون كتابة اسم | …". Older orders have the name without the label.
+  function engravingLines(order) {
+    return String(order.products || "").split("\n").map((line) => {
+      const name = line.match(/الاسم على الصليب: «([^»]+)»/)?.[1] || "";
+      if (!name && !/\| تصنيع مخصوص \|/.test(line)) return null;
+      const lang = line.match(/لغة الكتابة: ([^|]+)/)?.[1]?.trim() || "";
+      const productId = line.match(/Product ID: ([^|]+)/)?.[1]?.trim() || "";
+      const langCode = { "العربية": "ar", "English": "en", "القبطية": "cop" }[lang] || "";
+      // Opens the same live preview the customer saw, filled with this name (nothing is saved).
+      const previewUrl = productId && name ? `/products/${encodeURIComponent(productId)}#engrave=${encodeURIComponent(`${langCode}:${name}`)}` : "";
+      return { product: line.split(" | ")[0], name, lang, qty: line.match(/الكمية: (\d+)/)?.[1] || "1", sku: line.match(/SKU: ([^|]+)/)?.[1]?.trim() || "", previewUrl };
+    }).filter(Boolean);
+  }
+
   function renderList() {
     const orders = filteredOrders();
     els.count.textContent = `${formatNumber(orders.length)} أوردر`;
@@ -92,7 +107,7 @@
       <button type="button" class="order-card ${order.id === state.selectedId ? "is-selected" : ""}" data-order-id="${escapeAttr(order.id)}">
         <span class="order-card-head"><strong>#${escapeHtml(order.orderId || "—")} · ${escapeHtml(order.customerName || "بدون اسم")}</strong><span>${formatMoney(order.total)}</span></span>
         <span class="order-card-meta"><span>${escapeHtml(order.phone || "بدون موبايل")}</span><span>${escapeHtml(order.deliveryType || "غير محدد")}</span></span>
-        <span class="order-card-statuses"><span class="status-pill">${escapeHtml(order.paymentStatus || "غير محدد")}</span><span class="status-pill">${escapeHtml(order.orderStatus || "غير محدد")}</span></span>
+        <span class="order-card-statuses"><span class="status-pill">${escapeHtml(order.paymentStatus || "غير محدد")}</span><span class="status-pill">${escapeHtml(order.orderStatus || "غير محدد")}</span>${engravingLines(order).length ? `<span class="status-pill" style="background:#fbf0d9;color:#7a4d10">🛠️ تصنيع مخصوص${engravingLines(order).some((item) => item.name) ? " · ✍️ كتابة اسم" : ""}</span>` : ""}</span>
         <span class="order-card-date">${order.pickupDate ? `الاستلام: ${formatDate(order.pickupDate)}` : "ميعاد الاستلام غير محدد"}</span>
       </button>`).join("");
   }
@@ -109,6 +124,7 @@
           <div><dt>طريقة الدفع</dt><dd>${escapeHtml(order.paymentMethod || "—")}</dd></div>
           <div><dt>طريقة الاستلام</dt><dd>${escapeHtml(order.deliveryType || "—")}</dd></div>
         </dl>
+        ${engravingLines(order).length ? `<section class="order-products" style="border:1px solid #e6d3ad;background:#fffaf0;border-radius:8px;padding:10px 12px"><h4>🛠️ تصنيع مخصوص: الصلبان المطلوب تصنيعها</h4><p style="margin:0 0 6px;font-size:13px">بتتصنع في المصنع حسب الطلب، وما بتتخصمش من المخزون.</p><ol style="margin:0;padding-inline-start:20px">${engravingLines(order).map((item) => `<li>${item.name ? `<strong><bdi>«${escapeHtml(item.name)}»</bdi></strong> · ${escapeHtml(item.lang)}` : "<strong>بدون كتابة اسم</strong>"} · الكمية ${escapeHtml(item.qty)}<br><small>الموديل: ${escapeHtml(item.product)}${item.sku ? ` · <bdi>${escapeHtml(item.sku)}</bdi>` : ""}</small>${item.previewUrl ? `<br><a href="${escapeHtml(item.previewUrl)}" target="_blank" rel="noopener">عرض المعاينة بالاسم ده</a>` : ""}</li>`).join("")}</ol></section>` : ""}
         <section class="order-products"><h4>المنتجات</h4><p>${escapeHtml(order.products || "لا توجد تفاصيل").replaceAll("\n", "<br>")}</p></section>
         <div class="order-edit-grid">
           <label><span>حالة الدفع</span><select name="paymentStatus">${options(paymentStatuses, order.paymentStatus)}</select></label>

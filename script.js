@@ -3154,7 +3154,31 @@ function catalogColoringDesignId(product) {
   return product?.coloringModelId || "";
 }
 
+// Made-to-order crosses (priest-name engraving set up): the catalog API marks them; the static
+// products.json fallback carries the full settings. Same rule as functions/_made-to-order.js.
+function isMadeToOrderProduct(product) {
+  if (product?.madeToOrder === true) return true;
+  const settings = product?.engraving;
+  const key = (zone) => ["x", "y", "len", "thick", "angle"].map((k) => (Math.round(Number(zone?.[k]) * 10000) / 10000).toString()).join(",");
+  return Boolean(settings && settings.enabled === true && typeof settings.previewImage === "string"
+    && /(^|\/)engraving-[^/]*\.webp$/i.test(settings.previewImage)
+    && settings.previewWatermark?.zone === key(settings.zone)
+    && settings.photoConfirmed === true
+    && /^#[0-9a-f]{6}$/i.test(String(settings.zone?.color || "")) && settings.zone?.confirmed === true);
+}
+
 function productCardPurchaseHtml(product, { popular = false } = {}) {
+  // The name is written on the product page (preview + confirmation), so these cards link there.
+  if (isMadeToOrderProduct(product)) {
+    return `
+    <div class="product-card-purchase ${popular ? "is-popular" : ""}">
+      <div class="product-card-live-price" data-card-price>${productPriceHtml(product)}</div>
+      <div class="product-card-purchase-actions">
+        <a class="button primary add-button" href="${escapeHtml(canonicalProductPath(product))}" data-made-to-order-link>${escapeHtml(isEnglish() ? "Add the priest's name" : "✍️ اكتب اسم أبونا واطلب")}</a>
+      </div>
+      <small class="product-card-validation">${escapeHtml(isEnglish() ? "Made to order" : "يُصنع خصيصًا حسب طلبك")}</small>
+    </div>`;
+  }
   const variants = getProductVariants(product).filter((variant) => isVariantAvailable(variant, product));
   const requiresChoice = hasProductChoices(product) || variants.length > 1;
   const selectedVariant = requiresChoice ? null : variants[0];
@@ -4202,6 +4226,11 @@ function renderProductModal() {
 async function openProductModal(productId, { updateUrl = true, variantId = "" } = {}) {
   let product = getProduct(productId);
   if (!product) return;
+  // Made-to-order crosses open their own page, where the name and preview are.
+  if (isMadeToOrderProduct(product)) {
+    window.location.assign(canonicalProductPath(product));
+    return;
+  }
   const openSequence = ++productModalOpenSequence;
   if (!hasProductDetails(product)) {
     const loadingCards = document.querySelectorAll(`[data-card-product="${CSS.escape(product.id)}"]`);
