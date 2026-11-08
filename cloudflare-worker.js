@@ -8,6 +8,8 @@ import { onRequest as uploadProductImage } from "./functions/api/upload-product-
 import { onRequest as updateProducts } from "./functions/api/update-products.js";
 import { onRequest as updateTaxonomy } from "./functions/api/update-taxonomy.js";
 import { bestSellersResponse } from "./functions/api/best-sellers.js";
+import { metaEventsResponse } from "./functions/_meta-capi.js";
+import { testAccessGate } from "./functions/_test-access.js";
 import { coloringDesignForProduct } from "./coloringDesigns.js";
 import { backfillAirtableOrderProducts } from "./functions/_airtable-order-backfill.js";
 import { checkoutReceipt, customerOrdersResponse, ensureOrderAccess, purchaseSnapshot } from "./functions/_customer-orders.js";
@@ -1734,7 +1736,7 @@ ${tags.title}${tags.description}${tags.extra}
 <header class="site-header" data-elevated="false"><div class="brand-cluster"><a class="brand" href="/" aria-label="مكتبة البابا كيرلس"><span class="brand-logo-wrap"><img src="/assets/optimized/logo-papa-kyrillos-64.webp" srcset="/assets/optimized/logo-papa-kyrillos-64.webp 64w, /assets/optimized/logo-papa-kyrillos-128.webp 128w" sizes="50px" alt="" width="160" height="160" decoding="async"></span><span><strong>مكتبة البابا كيرلس</strong><small>مستلزمات الكنائس والخدمة</small></span></a></div><nav class="main-nav" aria-label="التنقل الرئيسي"><a href="/#categories">الأقسام</a><a href="/#catalog">المنتجات</a></nav><div class="header-actions"><a class="cart-toggle" href="/cart" aria-label="فتح السلة"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6h15l-2 8H8L6 3H3"/><circle cx="9" cy="20" r="1.6"/><circle cx="18" cy="20" r="1.6"/></svg><span>السلة</span><span class="cart-count" data-cart-count></span></a></div></header>
 <main class="product-route-main"><a class="product-route-back" href="/#catalog">العودة إلى المنتجات</a>${seo.crumbs.length > 2 ? breadcrumbNavHtml(seo.crumbs, "product-route-breadcrumb") : ""}<div id="product-detail" aria-label="${name}">${productDetailSsrHtml(seo)}</div><section class="product-route-related" aria-labelledby="related-title"><h2 id="related-title">منتجات مشابهة</h2><div class="product-grid" data-related-products>${related}</div></section></main>
 <footer class="product-route-footer"><strong>مكتبة البابا كيرلس</strong><span>مستلزمات الكنائس والخدمة</span><a href="/policies">السياسات</a><a href="https://wa.me/201016125589">تواصل معنا</a></footer>
-<div class="toast" data-toast role="status" aria-live="polite"></div><script id="product-data" type="application/json">${safeProduct}</script><script src="/yota-colors.js?v=3" defer></script>${engravingScripts}<script src="/product-page.js?v=27" defer></script></body></html>`;
+<div class="toast" data-toast role="status" aria-live="polite"></div><script id="product-data" type="application/json">${safeProduct}</script><script src="/yota-colors.js?v=3" defer></script><script src="/meta-consent.js?v=2" defer></script>${engravingScripts}<script src="/product-page.js?v=28" defer></script></body></html>`;
   return new Response(html, {
     status: 200,
     headers: {
@@ -3331,6 +3333,7 @@ async function handleRequest(request, env, ctx) {
       return bestSellersResponse(context, products, { catalogVersion: productsVersion(products) });
     }
     if (url.pathname === "/api/analytics/events") return analyticsIngestResponse(request, env);
+    if (url.pathname === "/api/meta-events") return metaEventsResponse(request, env, ctx);
     if (url.pathname === "/products.json") return productsJsonResponse(request, env);
     if (url.pathname === "/category-taxonomy.js") return taxonomyJsResponse(request, env);
 
@@ -3412,10 +3415,16 @@ export {
 async function previewModeResponse(request, env, ctx) {
   const { pathname } = new URL(request.url);
   const headers = { "Cache-Control": "no-store", "X-Robots-Tag": "noindex, nofollow" };
+  // The Meta test Worker is locked behind a typed access key (not just a secret link).
+  const locked = await testAccessGate(request, env);
+  if (locked) return locked;
   if (pathname === "/robots.txt") {
     return new Response("User-agent: *\nDisallow: /\n", { headers: { ...headers, "Content-Type": "text/plain; charset=utf-8" } });
   }
-  if (!["GET", "HEAD", "OPTIONS"].includes(request.method)) {
+  // The separate Meta test Worker (wrangler.meta-test.toml) may post only to /api/meta-events,
+  // which in preview sends nothing unless a Meta Test Events code is set.
+  const metaTestPost = env.META_CAPI_PREVIEW === "1" && pathname === "/api/meta-events" && request.method === "POST";
+  if (!["GET", "HEAD", "OPTIONS"].includes(request.method) && !metaTestPost) {
     return new Response(JSON.stringify({ error: "preview_read_only", message: "هذه نسخة معاينة للقراءة فقط؛ لا يتم حفظ أو إرسال أي طلب." }), {
       status: 403,
       headers: { ...headers, "Content-Type": "application/json; charset=utf-8" }
