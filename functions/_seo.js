@@ -281,16 +281,26 @@ function optionsSummary(offers = []) {
 
 // Description for the Product / ProductGroup structured data. It is the
 // product's real description, cleaned the same way as the page text, plus:
-// a leading «وصف المنتج» heading is dropped, and sentences that quote a price
-// are left out (the Offer carries the live price; a price written in the text
-// can go stale and contradict it). With no description of its own, the admin's
-// SEO description is used, then a factual sentence without a price.
+// a leading «وصف المنتج» heading is dropped, and written prices are taken out
+// (the Offer carries the live price; a price written in the text can go stale
+// and contradict it). Only the price itself goes: a short sentence that is just
+// a price is dropped, while in a longer sentence only the price phrase is
+// removed and the rest (sizes, materials, use) stays. With no description of
+// its own, the admin's SEO description is used, then a factual sentence
+// without a price.
+const PRICE_PHRASE = /(?:\s*(?:السعر|بسعر|سعره|سعرها)\s*[:：]?)?\s*[0-9٠-٩][0-9٠-٩٬,.]*\s*(?:ج\.م\.?|جنيه(?:ًا|ا)?)(?:\s*(?:لل|في\s+ال)[^\s.،,]+)?/gu;
 export function schemaDescription(description = "", seoDescription = "", fallback = "") {
   const quotesPrice = (sentence) => /[0-9٠-٩]/u.test(sentence) && /ج\.م|جنيه/u.test(sentence);
   const text = oneLine(description)
     .replace(/^وصف المنتج\s*[:：-]?\s*/u, "")
     .split(/(?<=[.!؟])\s+/u)
-    .filter((sentence) => !quotesPrice(sentence))
+    .map((sentence) => {
+      if (!quotesPrice(sentence)) return sentence;
+      const rest = sentence.replace(PRICE_PHRASE, "").replace(/\s*[،,:：-]\s*([.!؟]?)$/u, "$1").replace(/\s{2,}/g, " ").trim();
+      // Nothing meaningful left once the price is gone: drop the sentence.
+      return rest.replace(/[\s.!؟،,:：-]/gu, "").length < 12 ? "" : rest;
+    })
+    .filter(Boolean)
     .join(" ")
     .trim();
   return truncateText(text || oneLine(seoDescription) || fallback, 5000);

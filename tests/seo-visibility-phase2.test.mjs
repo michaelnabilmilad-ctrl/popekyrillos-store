@@ -152,6 +152,17 @@ test("schema description drops formatting, a «وصف المنتج» heading and
   assert.equal(schemaDescription("وصف المنتج 30 مللي من ألوان اليوتا."), "30 مللي من ألوان اليوتا.");
   assert.equal(schemaDescription("صليب يوتا سادة من خشب الزان، بطول 20 سم."), "صليب يوتا سادة من خشب الزان، بطول 20 سم.");
   assert.equal(schemaDescription("وصف\nالاختيارات والأسعار: صغير: ٧٠ ج.م"), "وصف");
+  // A price inside a longer sentence: only the price goes, the specifications stay.
+  assert.equal(
+    schemaDescription("شورية نحاس مقاس 20 سم بسلاسل قوية وغطاء متحرك بسعر 2700 ج.م فقط."),
+    "شورية نحاس مقاس 20 سم بسلاسل قوية وغطاء متحرك فقط."
+  );
+  assert.equal(
+    schemaDescription("بخور فاخر متاح بأوزان من 125 جرام حتى كيلو، السعر: ١٬٥٠٠ ج.م للكيلو. مناسب للكنائس."),
+    "بخور فاخر متاح بأوزان من 125 جرام حتى كيلو. مناسب للكنائس."
+  );
+  // Sizes and quantities that are not prices are kept.
+  assert.equal(schemaDescription("علبة بخور مقاس 11×8 سم، تكفي 30 قطعة."), "علبة بخور مقاس 11×8 سم، تكفي 30 قطعة.");
   // No description of its own: the SEO description, then the factual fallback without a price.
   assert.equal(schemaDescription("", "وصف SEO للمنتج.", "fallback"), "وصف SEO للمنتج.");
   assert.equal(schemaDescription("", "", "شمعة من مكتبة البابا كيرلس."), "شمعة من مكتبة البابا كيرلس.");
