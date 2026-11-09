@@ -41,3 +41,5 @@
 .pe-confirm input{margin-top:4px;width:18px;height:18px;accent-color:#0c6b68;flex:0 0 auto}
 @media (max-width:760px){.pe{padding:12px}.pe-keys button{min-height:42px}}
 .pe-made{margin:6px 0 0;font-size:13px;font-weight:800;color:#7a4d10}
+.pe-returns{margin:10px 0 0;font-size:13px;line-height:1.7;color:#40545a;background:#f7f3ea;border-radius:8px;padding:8px 10px}
+.pe-returns a{color:#7a4d10;font-weight:700}

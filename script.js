@@ -3176,7 +3176,7 @@ function productCardPurchaseHtml(product, { popular = false } = {}) {
       <div class="product-card-purchase-actions">
         <a class="button primary add-button" href="${escapeHtml(canonicalProductPath(product))}" data-made-to-order-link>${escapeHtml(isEnglish() ? "Add the priest's name" : "✍️ اكتب اسم أبونا واطلب")}</a>
       </div>
-      <small class="product-card-validation">${escapeHtml(isEnglish() ? "Made to order" : "يُصنع خصيصًا حسب طلبك")}</small>
+      <small class="product-card-validation">${escapeHtml(isEnglish() ? "Made to order" : "يُصنع عند الطلب")}</small>
     </div>`;
   }
   const variants = getProductVariants(product).filter((variant) => isVariantAvailable(variant, product));

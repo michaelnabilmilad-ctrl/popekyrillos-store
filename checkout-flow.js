@@ -149,9 +149,13 @@ function cartPayloadFromMap(map = cart) {
 
 // Priest-name engraving labels for cart lines (product-engraving.js).
 const engravingLangLabels = { ar: "العربية", en: "English", cop: "القبطية" };
+// Made to order is not the same as personalised: a cross without a name keeps the normal
+// 14-day returns; a cross with the customer's name cannot be returned for a change of mind
+// (defects, a writing mistake or a wrong item are always covered). Shown on the cart and
+// checkout lines so the customer reads it before confirming the order.
 function engravingLineHtml(item) {
-  if (!item.engraving) return item.madeToOrder ? `<p class="cart-engraving cart-made-to-order">🛠️ يُصنع خصيصًا حسب طلبك</p>` : "";
-  return `<p class="cart-engraving"><span>✍️ الاسم على الصليب:</span> <bdi>«${escapeHtml(item.engraving.name)}»</bdi> <small>(${escapeHtml(engravingLangLabels[item.engraving.lang] || "")})</small>${item.madeToOrder ? ` <small class="cart-made-to-order">· يُصنع خصيصًا حسب طلبك</small>` : ""}</p>`;
+  if (!item.engraving) return item.madeToOrder ? `<p class="cart-engraving cart-made-to-order">🛠️ يُصنع عند الطلب · استرجاع خلال 14 يوم</p>` : "";
+  return `<p class="cart-engraving"><span>✍️ الاسم على الصليب:</span> <bdi>«${escapeHtml(item.engraving.name)}»</bdi> <small>(${escapeHtml(engravingLangLabels[item.engraving.lang] || "")})</small>${item.madeToOrder ? ` <small class="cart-made-to-order">· يُصنع عند الطلب</small>` : ""}</p><p class="cart-engraving cart-return-note">↩️ مكتوب عليه اسم: مش بيترجع لتغيير الرأي، والعيوب وأخطاء الكتابة مضمونة. <a href="/policies#returns" target="_blank" rel="noopener">سياسة الاسترجاع</a></p>`;
 }
 
 function cartMapFromPayload(items = []) {

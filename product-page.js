@@ -1573,7 +1573,7 @@ function initializeColoringGame(panel) {
 const productTrustHtml = `<ul class="product-route-trust">
   <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h18v10H3z"/><circle cx="12" cy="12" r="3"/></svg>الدفع أونلاين أو كاش عند الاستلام من الفرع</li>
   <li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>تجهيز الطلب خلال 48 ساعة</li>
-  <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 1 0 3-6.2"/><path d="M4 4v5h5"/></svg>استرجاع واستبدال خلال 14 يوم</li>
+  <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 1 0 3-6.2"/><path d="M4 4v5h5"/></svg>${engravingEnabled ? "استرجاع واستبدال خلال 14 يوم للصليب بدون كتابة" : "استرجاع واستبدال خلال 14 يوم"}</li>
 </ul>`;
 
 // Phone-only bar that keeps the price and the add button in reach while the

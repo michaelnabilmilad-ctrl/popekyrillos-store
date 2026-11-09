@@ -9,6 +9,15 @@
   const esc = (v) => String(v ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   const LANG_LABEL = { ar: "العربية", en: "English", cop: "القبطية" };
   const PLACEHOLDER = { ar: "مثال: القمص يوحنا مرقس", en: "e.g. Fr. John Mark", cop: "ⲒⲰⲀⲚⲚⲎⲤ" };
+  // Return terms follow the customer's choice (policies page, "الاسترجاع والاستبدال"):
+  // made to order but not personalised = the normal 14 days; a written name = made to the
+  // customer's own specification, so no change-of-mind return, while defects, a writing
+  // mistake or a wrong item keep the customer's full rights.
+  const RETURNS_LINK = `<a href="/policies#returns" target="_blank" rel="noopener">سياسة الاسترجاع</a>`;
+  const RETURNS_NOTE = {
+    none: `↩️ <b>بدون كتابة:</b> استرجاع أو استبدال خلال 14 يوم من الاستلام حسب ${RETURNS_LINK}.`,
+    name: `↩️ <b>مع كتابة الاسم:</b> الصليب بيتعمل بالاسم اللي انت حددته، فمش بيترجع أو يتبدل لتغيير الرأي. لو فيه عيب تصنيع أو غلط في الكتابة أو وصلك مختلف عن طلبك، من حقك الاستبدال أو الاسترجاع. ${RETURNS_LINK}.`
+  };
   const COPTIC_KEYS = ["Ⲁ","Ⲃ","Ⲅ","Ⲇ","Ⲉ","Ⲍ","Ⲏ","Ⲑ","Ⲓ","Ⲕ","Ⲗ","Ⲙ","Ⲛ","Ⲝ","Ⲟ","Ⲡ","Ⲣ","Ⲥ","Ⲧ","Ⲩ","Ⲫ","Ⲭ","Ⲯ","Ⲱ","Ϣ","Ϥ","Ϧ","Ϩ","Ϫ","Ϭ","Ϯ"];
 
   let host = null, settings = null, imageSrc = "", state = null, last = null, ticket = 0, idSeq = 0;
@@ -27,12 +36,13 @@
     host.className = "pe";
     host.innerHTML = `
       <div class="pe-head"><h2 id="${uid}-t">✍️ اكتب اسم أبونا على الصليب</h2>${settings.freeNote ? `<span class="pe-free">الكتابة مجانية</span>` : ""}</div>
-      <p class="pe-made"><span aria-hidden="true">🛠️</span> يُصنع خصيصًا حسب طلبك</p>
+      <p class="pe-made"><span aria-hidden="true">🛠️</span> يُصنع عند الطلب</p>
       <p class="pe-lead">نكتب الاسم على يد صليب اليد، وتشوف شكله على صورة نفس الصليب قبل ما تطلب.</p>
       <div class="pe-choice" role="radiogroup" aria-labelledby="${uid}-t">
         <label><input type="radio" name="${uid}-mode" value="none" checked><b>بدون كتابة</b><small>الصليب كما في الصور</small></label>
         <label><input type="radio" name="${uid}-mode" value="name"><b>أضف اسم الكاهن</b><small>مع معاينة مباشرة</small></label>
       </div>
+      <p class="pe-returns" data-pe-returns aria-live="polite">${RETURNS_NOTE.none}</p>
       <div class="pe-body" data-pe-body hidden>
         ${langs.length > 1 ? `<fieldset class="pe-langs"><legend>لغة الكتابة</legend><div class="pe-pills">${langs.map((l, i) => `<label><input type="radio" name="${uid}-lang" value="${l}" ${i === 0 ? "checked" : ""}>${LANG_LABEL[l]}</label>`).join("")}</div></fieldset>` : ""}
         <div>
@@ -49,7 +59,7 @@
         <figure class="pe-figure" data-pe-figure="full" hidden><canvas data-pe-full width="900" height="900" aria-label="معاينة الاسم على الصليب كاملًا"></canvas></figure>
         <p class="pe-note">المعاينة تقريبية لتوضيح شكل الاسم ومكانه. الكتابة بتتنفذ يدويًا في المكتبة، وممكن يختلف حجم الخط ومكانه قليلًا حسب الصليب.</p>
         <p class="pe-summary" data-pe-summary></p>
-        <label class="pe-confirm"><input type="checkbox" data-pe-confirm> راجعت الاسم وتهجئته، وموافق إنه يتكتب كما هو بالظبط.</label>
+        <label class="pe-confirm"><input type="checkbox" data-pe-confirm> راجعت الاسم وتهجئته، وموافق إنه يتكتب كما هو بالظبط، وعارف إن الصليب المكتوب عليه اسم مش بيترجع لتغيير الرأي.</label>
       </div>`;
     host.addEventListener("change", onChange);
     host.addEventListener("input", (e) => { if (e.target.matches("[data-pe-input]")) onName(); });
@@ -73,6 +83,7 @@
     radio.checked = true;
     state.mode = "name";
     $("[data-pe-body]").hidden = false;
+    $("[data-pe-returns]").innerHTML = RETURNS_NOTE.name;
     $("[data-pe-input]").value = name;
     E.loadFont(state.lang, fontOpts()).then(onName, onName);
   }
@@ -81,7 +92,7 @@
   const fontOpts = () => ({ legacy: settings.copticFont === "athanasius" });
   function onChange(e) {
     const t = e.target;
-    if (t.name?.endsWith("-mode")) { state.mode = t.value; $("[data-pe-body]").hidden = state.mode !== "name"; if (state.mode === "name") { E.loadFont(state.lang, fontOpts()).then(draw, draw); setTimeout(() => $("[data-pe-input]").focus({ preventScroll: true }), 30); } }
+    if (t.name?.endsWith("-mode")) { state.mode = t.value; $("[data-pe-body]").hidden = state.mode !== "name"; $("[data-pe-returns]").innerHTML = RETURNS_NOTE[state.mode === "name" ? "name" : "none"]; if (state.mode === "name") { E.loadFont(state.lang, fontOpts()).then(draw, draw); setTimeout(() => $("[data-pe-input]").focus({ preventScroll: true }), 30); } }
     if (t.name?.endsWith("-lang")) { state.lang = t.value; syncLang(); unconfirm(); onName(); }
     if (t.matches("[data-pe-confirm]")) clearError();
   }

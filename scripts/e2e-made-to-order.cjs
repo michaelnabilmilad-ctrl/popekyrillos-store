@@ -42,7 +42,7 @@ const cartItems = (page) => page.evaluate(() => {
   await p.goto(`${base}/products/${CROSS}`);
   await p.waitForSelector(".pe .pe-choice");
   const pageText = await p.textContent("body");
-  check("product page: «يُصنع خصيصًا حسب طلبك» shown", pageText.includes("يُصنع خصيصًا حسب طلبك"));
+  check("product page: «يُصنع عند الطلب» shown", pageText.includes("يُصنع عند الطلب"));
   check("product page: not shown as unavailable, add button enabled", !(await p.$eval("[data-add]", (b) => b.disabled)) && !/غير متاح حاليا/.test(await p.textContent("main").catch(() => pageText)));
   await p.screenshot({ path: shot("01-product-page.png") });
   await p.click("[data-add]");
@@ -74,7 +74,7 @@ const cartItems = (page) => page.evaluate(() => {
   await p.goto(`${base}/cart`);
   await p.waitForSelector(".cart-engraving");
   const cartText = await p.textContent("[data-cart-page-items]");
-  check("cart: name, «يُصنع خصيصًا حسب طلبك», and no unavailable warning", cartText.includes(NAME) && cartText.includes("يُصنع خصيصًا حسب طلبك") && !/غير متاح/.test(cartText));
+  check("cart: name, «يُصنع عند الطلب», return note, and no unavailable warning", cartText.includes(NAME) && cartText.includes("يُصنع عند الطلب") && cartText.includes("مش بيترجع لتغيير الرأي") && !/غير متاح/.test(cartText));
   await p.screenshot({ path: shot("03-cart.png"), fullPage: true });
   await p.goto(`${base}/checkout`);
   await p.check('input[name="deliveryMethod"][value="pickup"]', { force: true });
