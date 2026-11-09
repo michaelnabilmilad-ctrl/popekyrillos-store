@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-09T19:36:51.404Z",
+  "updatedAt": "2026-11-09T19:36:55.803Z",
   "categories": {
     "altar-vessels/censers": {
       "seoTitle": "شوريات كنسية نحاس وستانلس | مكتبة البابا كيرلس",
@@ -31,6 +31,17 @@
         "occasions-service/cards-bookmarks"
       ],
       "updatedAt": "2026-11-09T19:36:51.404Z"
+    },
+    "greek-collection": {
+      "seoTitle": "أواني وصلبان صدر يونانية للكنيسة | مكتبة البابا كيرلس",
+      "seoDescription": "المجموعة اليونانية في مكتبة البابا كيرلس: صلبان صدر يونانية بعدة موديلات، وطقم أواني مذبح وبشارة وشوريات بتشطيب ذهبي، وطقم تيجان إكليل يوناني.",
+      "seoIntro": "تضم المجموعة اليونانية منتجات كنسية بالطابع اليوناني: [صلبان صدر يونانية](/category/greek-collection/greek-clergy-crosses) بعدة موديلات، و[الأواني اليونانية](/category/greek-collection/greek-vessels) مثل طقم أواني المذبح والبشارة والشوريات بتشطيب ذهبي، بالإضافة إلى [طقم تيجان إكليل يوناني](/category/church-equipment/custom-subcategory-1792789093403) من النحاس لصلوات سر الزيجة.",
+      "seoRelated": [
+        "altar-vessels/censers",
+        "crosses/pectoral-crosses",
+        "church-equipment/custom-subcategory-1792789093403"
+      ],
+      "updatedAt": "2026-11-09T19:36:55.803Z"
     }
   },
   "history": {
@@ -49,6 +60,12 @@
     "books-rituals": [
       {
         "replacedAt": "2026-11-09T19:36:51.404Z",
+        "entry": null
+      }
+    ],
+    "greek-collection": [
+      {
+        "replacedAt": "2026-11-09T19:36:55.803Z",
         "entry": null
       }
     ]
