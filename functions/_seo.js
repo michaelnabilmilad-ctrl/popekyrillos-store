@@ -230,7 +230,12 @@ export function googleProductCategory(mainId, subcategoryId, product = null) {
 // delivery, returned by shipping, free for defective or wrong items. Fees for
 // other returns "may vary" on the policy page, so returnFees is left out
 // rather than guessed. Personalised products cannot be returned unless
-// defective.
+// defective. Crosses that offer an optional priest-name engraving are sold as
+// the plain cross (the Offer's price and image are the cross without a name),
+// so their Offer keeps the 14-day policy; the no-return rule for a cross
+// with a name is an optional add-on's term and is shown on the product page,
+// cart and checkout. Google has no way to attach a second policy to an
+// optional add-on of the same Offer, and inventing variants would mislead.
 const NON_RETURNABLE_SUBCATEGORIES = new Set(["personalized", "personalized-crosses", "custom-icons", "custom-embroidery"]);
 
 export function merchantReturnPolicy(origin, subcategoryId = "") {
