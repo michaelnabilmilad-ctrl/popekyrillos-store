@@ -134,3 +134,36 @@ test("old collections resolve to today's subcategory by reviewed map or exact na
   assert.equal(collectionPath("حاجة-مش-موجودة", categories), "");
   assert.equal(normalizeArabicHandle("علبة-بخور"), normalizeArabicHandle("علبه بخور"));
 });
+
+import { schemaDescription } from "../functions/_seo.js";
+
+test("structured data keeps the real product description; the SEO description only feeds the meta tag", () => {
+  const full = "كتاب الإبصلمودية المقدسة السنوية لمتابعة وصلوات التسبحة السنوية، ويحتوي على النصوص باللغتين القبطية والعربية. مناسب للشمامسة والخدام.";
+  const book = { ...candle, id: "b1", slug: "ابصلمودية", name: "الإبصلمودية", mainCategory: "candles-lamps", subcategory: "church-candles", description: full, seoDescription: "كتاب الإبصلمودية قبطي وعربي، إصدار مطرانية الجيزة." };
+  const seo = productSeo(book, helpers, taxonomy, origin);
+  assert.equal(seo.metaDescription, "كتاب الإبصلمودية قبطي وعربي، إصدار مطرانية الجيزة.");
+  assert.equal(seo.productLd.description, full);
+  // The visible description is unchanged.
+  assert.equal(seo.description, full);
+});
+
+test("schema description drops formatting, a «وصف المنتج» heading and price sentences, nothing else", () => {
+  assert.equal(schemaDescription("### وصف المنتج\n\n**بخور كنسي فاخر** للكنائس والبيوت. السعر: ١٬٥٠٠ ج.م للكيلو"), "بخور كنسي فاخر للكنائس والبيوت.");
+  assert.equal(schemaDescription("وصف المنتج 30 مللي من ألوان اليوتا."), "30 مللي من ألوان اليوتا.");
+  assert.equal(schemaDescription("صليب يوتا سادة من خشب الزان، بطول 20 سم."), "صليب يوتا سادة من خشب الزان، بطول 20 سم.");
+  assert.equal(schemaDescription("وصف\nالاختيارات والأسعار: صغير: ٧٠ ج.م"), "وصف");
+  // No description of its own: the SEO description, then the factual fallback without a price.
+  assert.equal(schemaDescription("", "وصف SEO للمنتج.", "fallback"), "وصف SEO للمنتج.");
+  assert.equal(schemaDescription("", "", "شمعة من مكتبة البابا كيرلس."), "شمعة من مكتبة البابا كيرلس.");
+});
+
+test("variant offers of a product group keep the full description too", () => {
+  const stole = {
+    ...candle, id: "s2", slug: "بطرشيل2", name: "بطرشيل", hasVariants: true, seoDescription: "وصف قصير.",
+    description: "بطرشيل كنسي أحمر ذهبي مطرز للخدمة والشمامسة. متاح بأطوال من 3.5 متر حتى 5 متر.",
+    variants: [{ id: "v1", price: 650, available: true, options: { "الطول": "3.5 متر" } }, { id: "v2", price: 650, available: true, options: { "الطول": "4 متر" } }]
+  };
+  const ld = productSeo(stole, { ...helpers, purchasableOffers: (p) => p.variants.map((v) => ({ id: v.id, price: v.price, available: true, options: v.options })) }, taxonomy, origin).productLd;
+  assert.equal(ld.description, stole.description);
+  assert.ok(ld.hasVariant.every((variant) => variant.description === stole.description && variant.offers.price === 650));
+});

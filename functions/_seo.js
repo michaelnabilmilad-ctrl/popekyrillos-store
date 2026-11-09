@@ -279,6 +279,23 @@ function optionsSummary(offers = []) {
     .join(" – ");
 }
 
+// Description for the Product / ProductGroup structured data. It is the
+// product's real description, cleaned the same way as the page text, plus:
+// a leading «وصف المنتج» heading is dropped, and sentences that quote a price
+// are left out (the Offer carries the live price; a price written in the text
+// can go stale and contradict it). With no description of its own, the admin's
+// SEO description is used, then a factual sentence without a price.
+export function schemaDescription(description = "", seoDescription = "", fallback = "") {
+  const quotesPrice = (sentence) => /[0-9٠-٩]/u.test(sentence) && /ج\.م|جنيه/u.test(sentence);
+  const text = oneLine(description)
+    .replace(/^وصف المنتج\s*[:：-]?\s*/u, "")
+    .split(/(?<=[.!؟])\s+/u)
+    .filter((sentence) => !quotesPrice(sentence))
+    .join(" ")
+    .trim();
+  return truncateText(text || oneLine(seoDescription) || fallback, 5000);
+}
+
 export function productSeo(product, helpers, taxonomy, origin) {
   const name = textOf(product.name).trim();
   const images = helpers.productImages(product).map((image) => absoluteUrl(origin, image)).filter(Boolean);
@@ -326,7 +343,9 @@ export function productSeo(product, helpers, taxonomy, origin) {
 
   const shared = {
     name,
-    description: truncateText(seoDescription || description || generated, 5000),
+    // The product's own description (formatting removed), not the short SEO
+    // snippet, so Google keeps sizes, materials and use. See schemaDescription.
+    description: schemaDescription(description, seoDescription, `${name} من ${STORE_NAME} لمستلزمات الكنائس${kind ? ` – ${kind}` : ""}.`),
     image: images.length ? images.slice(0, 10) : undefined,
     category: googleProductCategory(mainId, subcategoryName ? subcategory.id : "", product),
     brand: { "@type": "Brand", name: STORE_NAME },
