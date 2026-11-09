@@ -178,6 +178,62 @@ const OFFER_BASE = {
   seller: { "@type": "Organization", name: STORE_NAME }
 };
 
+// Google product category (https://www.google.com/basepages/producttype/taxonomy-with-ids.en-US.txt).
+// Merchant listings reject an Arabic plain-text category ("Invalid value in
+// field category", seen in Search Console and reproduced in the Rich Results
+// Test), while a CategoryCode with the numeric ID is accepted. The Arabic
+// category path stays in the BreadcrumbList.
+const GOOGLE_CATEGORY_SET = "https://www.google.com/basepages/producttype/taxonomy-with-ids.en-US.txt";
+const GOOGLE_CATEGORY_BY_SUBCATEGORY = {
+  "church-candles": "588", "altar-candles": "588", "wedding-candles": "588", "baptism-candles": "588",
+  "holy-week-candles": "588", "resurrection-candles": "588", "beeswax-candles": "588", // Home Fragrances > Candles
+  candlesticks: "2784", "candle-holders": "2784", "altar-candlesticks": "2784", // Candle Holders
+  "church-incense": "3686", "greek-incense": "3686", "natural-incense": "3686", // Home Fragrances > Incense
+  "incense-boxes": "4741", // Incense Holders
+  "book-accessories": "6174", // Office Supplies > Book Accessories
+  "book-stands": "6175", // Book Stands & Rests
+  "cards-bookmarks": "93", // Bookmarks
+  "notebooks-planners": "961", // Notebooks & Notepads
+  "christian-games": "3793", // Toys & Games > Games
+  frames: "597" // Picture Frames
+};
+const GOOGLE_CATEGORY_BY_MAIN = {
+  "books-rituals": "543543", // Media > Books > Print Books
+  "church-vestments": "5483" // Religious Ceremonial Clothing
+};
+const GOOGLE_CATEGORY_DEFAULT = "97"; // Religious & Ceremonial > Religious Items
+
+export function googleProductCategory(mainId, subcategoryId) {
+  const code = GOOGLE_CATEGORY_BY_SUBCATEGORY[subcategoryId] || GOOGLE_CATEGORY_BY_MAIN[mainId] || GOOGLE_CATEGORY_DEFAULT;
+  return { "@type": "CategoryCode", inCodeSet: GOOGLE_CATEGORY_SET, codeValue: code };
+}
+
+// The store's published return policy (/policies#returns): 14 days from
+// delivery, returned by shipping, free for defective or wrong items. Fees for
+// other returns "may vary" on the policy page, so returnFees is left out
+// rather than guessed. Personalised products cannot be returned unless
+// defective.
+const NON_RETURNABLE_SUBCATEGORIES = new Set(["personalized", "personalized-crosses", "custom-icons", "custom-embroidery"]);
+
+export function merchantReturnPolicy(origin, subcategoryId = "") {
+  const base = {
+    "@type": "MerchantReturnPolicy",
+    applicableCountry: "EG",
+    returnPolicyCountry: "EG",
+    merchantReturnLink: `${origin}/policies#returns`
+  };
+  if (NON_RETURNABLE_SUBCATEGORIES.has(subcategoryId)) {
+    return { ...base, returnPolicyCategory: "https://schema.org/MerchantReturnNotPermitted" };
+  }
+  return {
+    ...base,
+    returnPolicyCategory: "https://schema.org/MerchantReturnFiniteReturnWindow",
+    merchantReturnDays: 14,
+    returnMethod: "https://schema.org/ReturnByMail",
+    itemDefectReturnFees: "https://schema.org/FreeReturn"
+  };
+}
+
 export function productSeo(product, helpers, taxonomy, origin) {
   const name = textOf(product.name).trim();
   const images = helpers.productImages(product).map((image) => absoluteUrl(origin, image)).filter(Boolean);
@@ -203,7 +259,14 @@ export function productSeo(product, helpers, taxonomy, origin) {
   const seoTitle = oneLine(textOf(product.seoTitle));
   const seoDescription = oneLine(textOf(product.seoDescription));
   const generated = `${name} من ${STORE_NAME} لمستلزمات الكنائس${kind ? ` – ${kind}` : ""}.${priceText ? ` السعر ${priceText}.` : ""}`;
-  const metaDescription = truncateText(seoDescription || (description.length >= 50 ? description : `${description ? `${description} ` : ""}${generated}`));
+  // Several products (models of one design) share a description word for
+  // word. Their snippets then lead with the product's own name and price so
+  // each page has a distinct description; the visible text is unchanged.
+  const sharedDescription = Boolean(helpers.isSharedDescription?.(product));
+  const distinctLead = `${name}${priceText ? ` – ${priceText}` : ""}. `;
+  const metaDescription = truncateText(seoDescription || (description.length >= 50
+    ? `${sharedDescription ? distinctLead : ""}${description}`
+    : `${description ? `${description} ` : ""}${generated}`));
   const title = seoTitle || `${name} | ${STORE_NAME}`;
   const alt = oneLine(textOf(product.imageAlt)) || (kind && !name.includes(kind) ? `${name} – ${kind}` : name);
   const state = productIndexState(product, helpers);
@@ -217,11 +280,13 @@ export function productSeo(product, helpers, taxonomy, origin) {
     name,
     description: truncateText(seoDescription || description || generated, 5000),
     image: images.length ? images.slice(0, 10) : undefined,
-    category: [categoryName, subcategoryName].filter(Boolean).join(" > ") || undefined,
+    category: googleProductCategory(mainId, subcategoryName ? subcategory.id : ""),
     brand: { "@type": "Brand", name: STORE_NAME },
     url: canonical
   };
   const availability = (offer) => (offer.available ? "https://schema.org/InStock" : "https://schema.org/OutOfStock");
+  const returnPolicy = merchantReturnPolicy(origin, subcategoryName ? subcategory.id : "");
+  const offerBase = { ...OFFER_BASE, hasMerchantReturnPolicy: returnPolicy };
   let productLd;
   if (offers.length > 1) {
     // One product page with selectable options: a ProductGroup whose variants
@@ -248,7 +313,7 @@ export function productSeo(product, helpers, taxonomy, origin) {
           sku: offer.sku || undefined,
           image: offer.image ? [absoluteUrl(origin, offer.image)] : shared.image,
           url: variantUrl,
-          offers: { "@type": "Offer", url: variantUrl, price: offer.price, availability: availability(offer), ...OFFER_BASE }
+          offers: { "@type": "Offer", url: variantUrl, price: offer.price, availability: availability(offer), ...offerBase }
         };
         for (const optionName of optionNames) {
           const attribute = attributes[optionName];
@@ -260,7 +325,7 @@ export function productSeo(product, helpers, taxonomy, origin) {
     };
   } else {
     productLd = { "@context": "https://schema.org", "@type": "Product", ...shared, sku: product.sku || product.id };
-    if (offers.length) productLd.offers = { "@type": "Offer", url: canonical, price: offers[0].price, availability: availability({ available: offers[0].available && inStock }), ...OFFER_BASE };
+    if (offers.length) productLd.offers = { "@type": "Offer", url: canonical, price: offers[0].price, availability: availability({ available: offers[0].available && inStock }), ...offerBase };
   }
 
   return {

@@ -24,6 +24,7 @@ import {
   insertBeforeServices,
   isPublicCategory,
   jsonLdScript,
+  oneLine,
   productCardHtml,
   productDetailSsrHtml,
   productIndexState,
@@ -34,6 +35,7 @@ import {
   taxonomyView,
   truncateText
 } from "./functions/_seo.js";
+import { LEGACY_PRODUCT_IDS, collectionPath, legacyRoute, mayBeLegacyPath } from "./functions/_legacy-redirects.js";
 import {
   AIRTABLE_PRODUCT_SKU_FIELD,
   AIRTABLE_PRODUCT_NAME_FIELD,
@@ -1400,6 +1402,26 @@ const seoHelpers = {
   mainCategoryId: (product) => catalogMainCategoryId(product)
 };
 
+// Descriptions used word for word by more than one product of the catalog
+// (models of one design). Built once per catalog array.
+const sharedDescriptionsCache = new WeakMap();
+function sharedDescriptions(products = []) {
+  if (sharedDescriptionsCache.has(products)) return sharedDescriptionsCache.get(products);
+  const counts = new Map();
+  for (const product of products) {
+    const key = oneLine(localized(product?.description));
+    if (key.length >= 50) counts.set(key, (counts.get(key) || 0) + 1);
+  }
+  const shared = new Set([...counts].filter(([, count]) => count > 1).map(([key]) => key));
+  sharedDescriptionsCache.set(products, shared);
+  return shared;
+}
+
+function seoHelpersFor(products = []) {
+  const shared = sharedDescriptions(products);
+  return { ...seoHelpers, isSharedDescription: (product) => shared.has(oneLine(localized(product?.description))) };
+}
+
 const categorySeoNames = {
   "altar-vessels": "المذبح والأواني المقدسة",
   "candles-lamps": "الشمع والقناديل",
@@ -1707,7 +1729,7 @@ async function productPageResponse(request, env, product, products = []) {
     });
   }
   const taxonomy = await loadSeoTaxonomy(env, request);
-  const seo = productSeo(product, seoHelpers, taxonomy, canonicalOrigin);
+  const seo = productSeo(product, seoHelpersFor(products), taxonomy, canonicalOrigin);
   const tags = productMetaTags(seo);
   const safeProduct = JSON.stringify({ ...product, seoImageAlt: seo.alt }).replace(/</g, "\\u003c");
   const name = escapeHtml(seo.name);
@@ -1774,6 +1796,59 @@ async function sitemapResponse(request, env) {
       "X-Content-Type-Options": "nosniff"
     }
   });
+}
+
+function safeDecodePath(pathname = "") {
+  try {
+    return decodeURIComponent(pathname).normalize("NFC");
+  } catch {
+    return String(pathname).normalize("NFC");
+  }
+}
+
+function productCanonicalRedirect(url, product, products) {
+  const canonicalPath = canonicalProductPath(product);
+  const requested = safeDecodePath(url.pathname.replace(/\/+$/, ""));
+  if (requested === safeDecodePath(canonicalPath)) return null;
+  // Only when the canonical address opens this same product (never a loop).
+  if (productFromUrl(products, new URL(canonicalPath, url)) !== product) return null;
+  const target = new URL(`${canonicalOrigin}${canonicalPath}`);
+  target.search = url.search;
+  return Response.redirect(target.toString(), 301);
+}
+
+function legacyGoneResponse() {
+  return new Response("<!doctype html><html lang=\"ar\" dir=\"rtl\"><head><meta charset=\"utf-8\"><meta name=\"robots\" content=\"noindex\"><title>الصفحة لم تعد موجودة | مكتبة البابا كيرلس</title></head><body><p>هذه الصفحة كانت في نسخة قديمة من المتجر ولم تعد موجودة. <a href=\"/\">الرئيسية</a> · <a href=\"/products\">كل المنتجات</a></p></body></html>", {
+    status: 410,
+    headers: { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "public, max-age=3600", "X-Robots-Tag": "noindex" }
+  });
+}
+
+// Old links (Shopify era, earlier category ids). Returns null for anything
+// else, so the normal routes and real 404s are unchanged.
+async function legacyResponse(request, env, url) {
+  if (!["GET", "HEAD"].includes(request.method) || !mayBeLegacyPath(url.pathname)) return null;
+  const route = legacyRoute(url.pathname, url.search);
+  if (!route) return null;
+  const redirectTo = (path) => Response.redirect(`${canonicalOrigin}${path}`, 301);
+  if (route.gone) return legacyGoneResponse();
+  if (route.redirect) return redirectTo(route.redirect);
+  if (route.categoryId) return redirectTo(`/category/${encodeURIComponent(route.categoryId)}`);
+  if (route.productId || route.productHandle) {
+    const products = await loadProducts(env, request);
+    const handle = String(route.productHandle || "").normalize("NFC");
+    const product = route.productId
+      ? products.find((item) => item?.id === route.productId)
+      : products.find((item) => item?.id === LEGACY_PRODUCT_IDS[handle]) || productByIdOrSlug(products, handle);
+    if (product) return redirectTo(canonicalProductPath(product));
+    if (route.productId) return null;
+  }
+  if (route.collection !== undefined) {
+    const taxonomy = await loadSeoTaxonomy(env, request);
+    const path = route.collection ? collectionPath(route.collection, taxonomy.categories, localized) : "";
+    return redirectTo(path || "/products");
+  }
+  return null;
 }
 
 function notFoundResponse(kind = "product") {
@@ -3254,6 +3329,9 @@ async function handleRequest(request, env, ctx) {
       return Response.redirect(url.toString(), 301);
     }
 
+    const legacy = await legacyResponse(request, env, url);
+    if (legacy) return legacy;
+
     if (isProtectedAdminPath(url.pathname)) {
       if (!isAdminAuthorized(request, env)) return unauthorizedAdminResponse();
       if (url.pathname.startsWith("/admin/api/") && !isSameOriginAdminWrite(request)) {
@@ -3347,6 +3425,11 @@ async function handleRequest(request, env, ctx) {
       if (legacyProductUrl(url) && product) return redirectToProduct(product, url);
       if (url.pathname.startsWith("/products/")) {
         if (!product) return notFoundResponse();
+        // Spelling variants of a product link (ة/ه, أ/ا, old Shopify handles)
+        // answer with a permanent redirect to the one canonical address, so
+        // Google merges them; query strings (variant, campaign tags) are kept.
+        const canonicalRedirect = productCanonicalRedirect(url, matchedProduct, products);
+        if (canonicalRedirect) return canonicalRedirect;
         return productPageResponse(request, env, product, products);
       }
     }
