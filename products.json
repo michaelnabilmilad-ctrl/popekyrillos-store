@@ -392,17 +392,17 @@
     "hasVariants": false,
     "engraving": {
       "enabled": true,
-      "previewImage": "assets/optimized/products/gallery/engraving-popek-corian-cross-set-4-protected-preview-20261108071441-f2ce2e.webp",
+      "previewImage": "assets/optimized/products/gallery/engraving-popek-corian-cross-set-4-protected-preview-20261109190500-bf845b.webp",
       "previewSource": "assets/products/gallery/popek-corian-hand-pectoral-cross-set-model-4-unboxed.webp",
       "previewWatermark": {
-        "zone": "0.6598,0.66,0.192,0.029,91.4"
+        "zone": "0.6758,0.63,0.3,0.045,90"
       },
       "zone": {
-        "x": 0.6598,
-        "y": 0.66,
-        "len": 0.192,
-        "thick": 0.029,
-        "angle": 91.4,
+        "x": 0.6758,
+        "y": 0.63,
+        "len": 0.3,
+        "thick": 0.045,
+        "angle": 90,
         "surface": "flat",
         "curve": 0,
         "fontMax": 0.52,
@@ -428,7 +428,7 @@
       "photoConfirmed": true,
       "copticFont": "athanasius",
       "freeNote": true,
-      "version": 1
+      "version": 2
     }
   },
   {
