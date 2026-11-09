@@ -24,7 +24,6 @@ import {
   insertBeforeServices,
   isPublicCategory,
   jsonLdScript,
-  oneLine,
   productCardHtml,
   productDetailSsrHtml,
   productIndexState,
@@ -1407,19 +1406,27 @@ const seoHelpers = {
 const sharedDescriptionsCache = new WeakMap();
 function sharedDescriptions(products = []) {
   if (sharedDescriptionsCache.has(products)) return sharedDescriptionsCache.get(products);
+  // Raw text, not the cleaned snippet: copied models share it character for
+  // character, and this keeps the first product page of a new isolate cheap
+  // (about 0.05 ms for the catalog instead of ~3 ms of text cleanup).
   const counts = new Map();
   for (const product of products) {
-    const key = oneLine(localized(product?.description));
-    if (key.length >= 50) counts.set(key, (counts.get(key) || 0) + 1);
+    const key = descriptionKey(product);
+    if (key) counts.set(key, (counts.get(key) || 0) + 1);
   }
   const shared = new Set([...counts].filter(([, count]) => count > 1).map(([key]) => key));
   sharedDescriptionsCache.set(products, shared);
   return shared;
 }
 
+function descriptionKey(product) {
+  const text = String(localized(product?.description) || "").trim();
+  return text.length >= 50 ? text : "";
+}
+
 function seoHelpersFor(products = []) {
   const shared = sharedDescriptions(products);
-  return { ...seoHelpers, isSharedDescription: (product) => shared.has(oneLine(localized(product?.description))) };
+  return { ...seoHelpers, isSharedDescription: (product) => shared.has(descriptionKey(product)) };
 }
 
 const categorySeoNames = {
