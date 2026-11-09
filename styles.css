@@ -295,7 +295,7 @@ body[data-lang="en"] .hero-media {
 }
 
 body[data-lang="en"] .hero-copy,
-body[data-lang="en"] .hero h1,
+body[data-lang="en"] .hero h1, body[data-lang="en"] .hero .hero-title,
 body[data-lang="en"] .hero-lead,
 body[data-lang="en"] .section-head,
 body[data-lang="en"] .services-copy,
@@ -311,7 +311,7 @@ body[data-lang="en"] .hero-copy {
 }
 
 body[data-lang="en"] .hero-lead,
-body[data-lang="en"] .hero h1 {
+body[data-lang="en"] .hero h1, body[data-lang="en"] .hero .hero-title {
   margin-inline-start: 0;
   margin-inline-end: auto;
 }
@@ -642,7 +642,11 @@ body[data-lang="en"] .hero h1 {
   color: #f6cc83;
 }
 
-.hero h1 {
+.hero .hero-title {
+  font-weight: 700;
+}
+
+.hero h1, .hero .hero-title {
   max-width: 920px;
   margin: 0;
   font-size: clamp(42px, 5.8vw, 82px);
@@ -4765,7 +4769,7 @@ body.account-open .scrim {
     justify-self: start;
   }
 
-  body[data-lang="en"] .hero h1,
+  body[data-lang="en"] .hero h1, body[data-lang="en"] .hero .hero-title,
   body[data-lang="en"] .hero-lead,
   body[data-lang="en"] .hero-actions {
     margin-inline-start: 0;
@@ -4792,7 +4796,7 @@ body.account-open .scrim {
       url("assets/optimized/hero-papa-kyrillos-products.webp") 35% center / cover no-repeat;
   }
 
-  .hero h1 {
+  .hero h1, .hero .hero-title {
     max-width: 330px;
     margin-inline-start: 0;
     margin-inline-end: auto;
@@ -5340,6 +5344,19 @@ body.account-open .scrim {
 /* Mobile storefront shell: isolated from admin and desktop layouts. */
 .mobile-bottom-nav,.mobile-filter-toggle,.mobile-filter-head,.mobile-filter-apply,.mobile-drawer-links,.mobile-catalog-heading{display:none}
 
+/* Category page heading: the category name (H1) and a short intro above the
+   products, on every screen size. The intro is Arabic, so English hides it. */
+.is-category-route .catalog{padding-top:48px}
+.is-category-route .mobile-catalog-heading{display:block;margin-bottom:20px}
+.mobile-catalog-heading a,.mobile-catalog-heading small,.mobile-catalog-heading span{color:var(--muted);font-size:13px;font-weight:800;text-decoration:none}
+.mobile-catalog-heading span{margin-inline:6px}
+.mobile-catalog-heading h1{margin:8px 0 0;color:var(--ink);font-size:clamp(28px,3vw,36px);line-height:1.25}
+.category-intro{max-width:1060px;margin:8px 0 0;color:var(--muted);font-size:15px;line-height:1.8}
+.mobile-catalog-heading .category-intro a{color:var(--teal-dark);font-size:inherit;font-weight:800;text-decoration:underline;text-underline-offset:3px}
+body[data-lang="en"] .category-intro-wrap{display:none}
+.category-intro-more,.category-intro-toggle{display:none}
+@media (max-width:680px){.category-intro{display:-webkit-box;margin-top:6px;overflow:hidden;font-size:13.5px;line-height:1.6;-webkit-box-orient:vertical;-webkit-line-clamp:2}.category-intro-more{display:block;position:absolute;width:1px;height:1px;margin:0;opacity:0;pointer-events:none}.category-intro-more:checked+.category-intro{display:block;overflow:visible;-webkit-line-clamp:unset}.category-intro-toggle{display:inline-block;margin-top:2px;color:var(--teal-dark);font-size:13px;font-weight:800;cursor:pointer}.category-intro-toggle::after{content:"اقرأ المزيد"}.category-intro-more:checked~.category-intro-toggle::after{content:"عرض أقل"}.category-intro-more:focus-visible~.category-intro-toggle{outline:2px solid var(--teal-dark);outline-offset:2px}}
+
 @media (max-width:680px){
   html{scroll-padding-top:64px}
   body{max-width:100%;padding-bottom:calc(68px + env(safe-area-inset-bottom));overflow-x:clip}
@@ -5351,7 +5368,7 @@ body.account-open .scrim {
   .header-search.is-open{position:fixed;inset:60px 0 auto;z-index:55;width:100%;padding:12px 14px;background:#fffdf7;border-bottom:1px solid var(--line);box-shadow:0 12px 26px rgba(14,32,39,.16)}
   .header-search.is-open .header-search-input{width:100%;height:48px;padding-inline:46px 14px;border-radius:12px}
   .header-search.is-open .search-toggle{position:absolute;z-index:2;inset:14px auto auto 16px}.mini-cart{display:none}
-  .hero{min-height:360px;height:min(54vh,430px);padding:78px 18px 28px;overflow:hidden}.hero-copy{width:100%;max-width:100%;min-width:0}.hero .eyebrow{max-width:100%;font-size:11px}.hero h1{max-width:100%;font-size:28px}.hero-lead{display:-webkit-box;max-width:100%;overflow:hidden;font-size:14px;line-height:1.65;-webkit-line-clamp:2;-webkit-box-orient:vertical}.hero-actions{width:150px}.hero-actions .button{min-height:44px;padding:10px 14px}.hero-metrics,.trust-strip{display:none}
+  .hero{min-height:360px;height:min(54vh,430px);padding:78px 18px 28px;overflow:hidden}.hero-copy{width:100%;max-width:100%;min-width:0}.hero .eyebrow{max-width:100%;font-size:11px}.hero h1, .hero .hero-title{max-width:100%;font-size:28px}.hero-lead{display:-webkit-box;max-width:100%;overflow:hidden;font-size:14px;line-height:1.65;-webkit-line-clamp:2;-webkit-box-orient:vertical}.hero-actions{width:150px}.hero-actions .button{min-height:44px;padding:10px 14px}.hero-metrics,.trust-strip{display:none}
   .section,.services{padding:34px 14px}.section-head{margin-bottom:18px}.section-head h2,.services-copy h2{font-size:25px}
   .categories{padding-top:26px}.category-grid{display:flex;gap:10px;margin-inline:-14px;padding:2px 14px 10px;overflow-x:auto;scroll-snap-type:x proximity;scroll-padding-inline:14px;scrollbar-width:none}.category-grid::-webkit-scrollbar{display:none}.category-loading{display:flex;gap:10px}.category-skeleton,.category-tile{flex:0 0 112px;min-height:124px;scroll-snap-align:start}.category-art{width:72px;height:62px;margin:0 auto 8px}.category-tile small{display:none}
   .subcategory-card-grid,.subcategory-card-grid[data-collapsible="true"][data-expanded="false"]{display:flex;grid-template-columns:none;gap:10px;margin-inline:-14px;padding:0 14px 10px;overflow-x:auto;scroll-snap-type:x proximity;scroll-padding-inline:14px;scrollbar-width:none}.subcategory-card{flex:0 0 118px;scroll-snap-align:start}

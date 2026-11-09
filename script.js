@@ -4509,6 +4509,15 @@ function syncMobileCatalogHeading() {
   title.textContent = titleText;
   breadcrumb.textContent = subcategory ? `${categoryName} / ${titleText}` : categoryName;
   heading.hidden = !document.documentElement.classList.contains("is-category-route");
+  // The server writes the intro of the page's own category. It follows the
+  // address, not the filter state, so it never flickers while the catalog loads;
+  // a filter change to another category (a new address) hides it.
+  const intro = heading.querySelector("[data-category-intro]");
+  if (intro) {
+    let path = location.pathname;
+    try { path = decodeURIComponent(path); } catch {}
+    intro.hidden = path.replace(/\/+$/, "") !== `/category/${intro.dataset.categoryIntro}`;
+  }
 }
 
 function selectedPayment() {

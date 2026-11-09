@@ -34,6 +34,7 @@ import {
   taxonomyView,
   truncateText
 } from "./functions/_seo.js";
+import { categorySeoContent, demoteHeroHeading, setCategoryHeading } from "./functions/_category-seo.js";
 import { LEGACY_PRODUCT_IDS, collectionPath, legacyRoute, mayBeLegacyPath } from "./functions/_legacy-redirects.js";
 import {
   AIRTABLE_PRODUCT_SKU_FIELD,
@@ -1587,6 +1588,7 @@ function resolveCategoryRoute(url, taxonomy, products) {
     subcategoryName,
     pageName: subcategoryName || categoryName,
     canonical: `${canonicalOrigin}${canonicalPath}`,
+    seo: categorySeoContent({ categoryId, subcategoryId, category, subcategory }),
     matched,
     listed,
     isPublic: categoryId === "all" || isPublicCategory(category)
@@ -1596,8 +1598,8 @@ function resolveCategoryRoute(url, taxonomy, products) {
 function categoryPageMetaTags(route) {
   const listed = route.listed;
   const examples = listed.slice(0, 3).map((product) => localized(product.name)).join("، ");
-  const title = `${route.pageName} | ${STORE_NAME}`;
-  const description = truncateText(route.matched.length
+  const title = route.seo.seoTitle || `${route.pageName} | ${STORE_NAME}`;
+  const description = route.seo.seoDescription || truncateText(route.matched.length
     ? `تسوق ${route.pageName} من ${STORE_NAME} لمستلزمات الكنائس: ${route.matched.length} منتج بصور وأسعار محدثة${examples ? `، منها ${examples}` : ""}.`
     : `قسم ${route.pageName} في ${STORE_NAME}. ستظهر المنتجات هنا عند توفرها.`);
   const crumbs = [{ name: "الرئيسية", url: `${canonicalOrigin}/` }];
@@ -1632,6 +1634,33 @@ function categoryDirectory(taxonomy, products) {
   return items;
 }
 
+// Links from a category page with SEO content to its parent category and to
+// the related categories it names; only public ones with listed products.
+function relatedCategoryLinks(route, taxonomy, products) {
+  // Only categories with their own SEO content link out; the rest keep their index as is.
+  if (!route.seo.seoRelated.length) return [];
+  const listed = sitemapProducts(products);
+  const keys = [...(route.subcategoryId ? [route.categoryId] : []), ...route.seo.seoRelated];
+  const seen = new Set([route.seo.key]);
+  const items = [];
+  for (const key of keys) {
+    const [categoryId, subcategoryId = ""] = String(key).split("/");
+    if (seen.has(key) || !categoryId) continue;
+    seen.add(key);
+    const category = taxonomy.byId.get(categoryId);
+    const subcategory = subcategoryId ? category?.subcategories.find((item) => item.id === subcategoryId) : null;
+    if (!isPublicCategory(category) || (subcategoryId && (!subcategory || subcategory.visible === false))) continue;
+    const count = categoryProducts(listed, categoryId, subcategoryId, { withOutOfStock: true }).length;
+    if (!count) continue;
+    items.push({
+      path: `/category/${encodeURIComponent(categoryId)}${subcategoryId ? `/${encodeURIComponent(subcategoryId)}` : ""}`,
+      name: subcategory ? `${category.name} / ${localized(subcategory.name)}` : category.name,
+      count
+    });
+  }
+  return items;
+}
+
 async function categoryPageResponse(request, env, products) {
   const taxonomy = await loadSeoTaxonomy(env, request);
   const route = resolveCategoryRoute(new URL(request.url), taxonomy, products);
@@ -1651,8 +1680,15 @@ async function categoryPageResponse(request, env, products) {
       .map(({ subcategory, count }) => ({ path: `/category/${encodeURIComponent(route.categoryId)}/${encodeURIComponent(subcategory.id)}`, name: localized(subcategory.name), count }))
     : [];
   let html = injectHead(await response.text(), categoryPageMetaTags(route));
-  html = setCatalogHeading(html, route.pageName, route.subcategoryId ? `${route.categoryName} / ${route.subcategoryName}` : route.categoryName);
-  html = insertBeforeServices(html, catalogIndexHtml({ heading: `كل منتجات ${route.pageName}`, categories: subcategories, products: listed }));
+  html = demoteHeroHeading(html);
+  html = setCategoryHeading(html, {
+    title: route.pageName,
+    breadcrumb: route.subcategoryId ? `${route.categoryName} / ${route.subcategoryName}` : route.categoryName,
+    intro: route.isPublic && route.listed.length ? route.seo.seoIntro : "",
+    key: route.seo.key
+  });
+  const related = relatedCategoryLinks(route, taxonomy, products);
+  html = insertBeforeServices(html, catalogIndexHtml({ heading: `كل منتجات ${route.pageName}`, categories: [...subcategories, ...related], products: listed }));
   return new Response(html, { status: response.status, headers });
 }
 
