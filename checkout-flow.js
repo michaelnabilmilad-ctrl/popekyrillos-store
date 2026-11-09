@@ -153,7 +153,15 @@ const engravingLangLabels = { ar: "العربية", en: "English", cop: "الق�
 // 14-day returns; a cross with the customer's name cannot be returned for a change of mind
 // (defects, a writing mistake or a wrong item are always covered). Shown on the cart and
 // checkout lines so the customer reads it before confirming the order.
+// Products sold already personalised (printed with the customer's name or design): same
+// subcategories the structured data marks MerchantReturnNotPermitted (functions/_seo.js).
+const PERSONALIZED_SUBCATEGORIES = new Set(["personalized", "personalized-crosses", "custom-icons", "custom-embroidery"]);
+function isPersonalizedProduct(product) {
+  return PERSONALIZED_SUBCATEGORIES.has(String(product?.subcategory || ""));
+}
+const personalizedReturnNote = `<p class="cart-engraving cart-return-note">↩️ منتج بمواصفاتك (مطبوع أو مكتوب عليه اسم): مش بيترجع لتغيير الرأي، والعيوب وعدم المطابقة مضمونة. <a href="/policies#returns" target="_blank" rel="noopener">سياسة الاسترجاع</a></p>`;
 function engravingLineHtml(item) {
+  if (!item.engraving && isPersonalizedProduct(item.product)) return personalizedReturnNote;
   if (!item.engraving) return item.madeToOrder ? `<p class="cart-engraving cart-made-to-order">🛠️ يُصنع عند الطلب · استرجاع خلال 14 يوم</p>` : "";
   return `<p class="cart-engraving"><span>✍️ الاسم على الصليب:</span> <bdi>«${escapeHtml(item.engraving.name)}»</bdi> <small>(${escapeHtml(engravingLangLabels[item.engraving.lang] || "")})</small>${item.madeToOrder ? ` <small class="cart-made-to-order">· يُصنع عند الطلب</small>` : ""}</p><p class="cart-engraving cart-return-note">↩️ مكتوب عليه اسم: مش بيترجع لتغيير الرأي، والعيوب وأخطاء الكتابة مضمونة. <a href="/policies#returns" target="_blank" rel="noopener">سياسة الاسترجاع</a></p>`;
 }

@@ -1570,10 +1570,16 @@ function initializeColoringGame(panel) {
 
 // Store facts shown under the buy button (same wording as the home page and
 // the returns policy), so the answer is there before the customer asks.
+// Products sold already personalised (same subcategories as the structured data's
+// MerchantReturnNotPermitted in functions/_seo.js) cannot be returned for a change of mind.
+const personalizedProduct = ["personalized", "personalized-crosses", "custom-icons", "custom-embroidery"].includes(String(product.subcategory || ""));
+const returnsTrustText = personalizedProduct
+  ? "منتج بمواصفاتك: لا يُسترجع لتغيير الرأي، والعيوب وعدم المطابقة مضمونة"
+  : engravingEnabled ? "استرجاع واستبدال خلال 14 يوم للصليب بدون كتابة" : "استرجاع واستبدال خلال 14 يوم";
 const productTrustHtml = `<ul class="product-route-trust">
   <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h18v10H3z"/><circle cx="12" cy="12" r="3"/></svg>الدفع أونلاين أو كاش عند الاستلام من الفرع</li>
   <li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>تجهيز الطلب خلال 48 ساعة</li>
-  <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 1 0 3-6.2"/><path d="M4 4v5h5"/></svg>${engravingEnabled ? "استرجاع واستبدال خلال 14 يوم للصليب بدون كتابة" : "استرجاع واستبدال خلال 14 يوم"}</li>
+  <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 1 0 3-6.2"/><path d="M4 4v5h5"/></svg>${returnsTrustText}</li>
 </ul>`;
 
 // Phone-only bar that keeps the price and the add button in reach while the
