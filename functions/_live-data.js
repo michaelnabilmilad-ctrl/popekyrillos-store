@@ -34,7 +34,10 @@ export function liveDataConfig(env = {}) {
     token: String(env.GITHUB_TOKEN || "").trim(),
     owner: String(env.GITHUB_OWNER || "michaelnabilmilad-ctrl").trim(),
     repo: String(env.GITHUB_REPO || "popekyrillos-store").trim(),
-    branch: String(env.GITHUB_PRODUCTS_BRANCH || env.GITHUB_DATA_BRANCH || "products-data").trim()
+    branch: String(env.GITHUB_PRODUCTS_BRANCH || env.GITHUB_DATA_BRANCH || "products-data").trim(),
+    // Overridable only so local tests can point at a stand-in GitHub server.
+    apiBase: String(env.GITHUB_API_BASE || "https://api.github.com").replace(/\/+$/, ""),
+    rawBase: String(env.GITHUB_RAW_BASE || "https://raw.githubusercontent.com").replace(/\/+$/, "")
   };
 }
 
@@ -120,7 +123,7 @@ async function currentEntry(origin, file) {
 async function checkGitHub({ env, origin, file, entry, signal }) {
   const config = liveDataConfig(env);
   if (!config.token) throw Object.assign(new Error("GitHub token is not configured"), { code: "no_token" });
-  const url = `https://api.github.com/repos/${config.owner}/${config.repo}/contents/${file}?ref=${encodeURIComponent(config.branch)}&v=${Date.now()}`;
+  const url = `${config.apiBase}/repos/${config.owner}/${config.repo}/contents/${file}?ref=${encodeURIComponent(config.branch)}&v=${Date.now()}`;
   const headers = {
     Accept: "application/vnd.github.raw",
     Authorization: `Bearer ${config.token}`,
@@ -174,7 +177,7 @@ function withTimeout(promise, ms) {
 // Unauthenticated last resort for pages when no copy exists yet and the API failed.
 async function fetchRawFallback({ env, origin, file, signal }) {
   const config = liveDataConfig(env);
-  const response = await fetch(`https://raw.githubusercontent.com/${config.owner}/${config.repo}/${encodeURIComponent(config.branch)}/${file}`, {
+  const response = await fetch(`${config.rawBase}/${config.owner}/${config.repo}/${encodeURIComponent(config.branch)}/${file}`, {
     headers: { "User-Agent": "popekyrillos-store" }, signal
   });
   if (!response.ok) throw new Error(`GitHub raw ${file} failed with ${response.status}`);

@@ -12,6 +12,9 @@ preview_urls = false
 
 [vars]
 PREVIEW_MODE = "1"
+# Category SEO is read from a bundled copy (dist/__preview/category-seo.json), since
+# the preview has no GitHub token; production reads category-seo.json from products-data.
+CATEGORY_SEO_ASSET = "/__preview/category-seo.json"
 SITE_URL = "https://popekyrillos.store"
 
 [assets]

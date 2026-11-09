@@ -34,7 +34,8 @@ import {
   taxonomyView,
   truncateText
 } from "./functions/_seo.js";
-import { categorySeoContent, demoteHeroHeading, setCategoryHeading } from "./functions/_category-seo.js";
+import { CATEGORY_SEO_FILE, categorySeoContent, categorySeoKey, demoteHeroHeading, emptyCategorySeoFile, introHtml, parseCategorySeoFile, setCategoryHeading } from "./functions/_category-seo.js";
+import { readCategorySeoFromGitHub, updateCategorySeo } from "./functions/api/update-category-seo.js";
 import { LEGACY_PRODUCT_IDS, collectionPath, legacyRoute, mayBeLegacyPath } from "./functions/_legacy-redirects.js";
 import {
   AIRTABLE_PRODUCT_SKU_FIELD,
@@ -1555,7 +1556,7 @@ function productMetaTags(seo) {
 
 // Resolves /category/<id>[/<subcategory>] against the live taxonomy. Returns
 // null for a category the store does not have, so the route can answer 404.
-function resolveCategoryRoute(url, taxonomy, products) {
+function resolveCategoryRoute(url, taxonomy, products, seoEntries = {}) {
   let segments;
   try {
     segments = url.pathname.split("/").filter(Boolean).map(decodeURIComponent);
@@ -1588,20 +1589,33 @@ function resolveCategoryRoute(url, taxonomy, products) {
     subcategoryName,
     pageName: subcategoryName || categoryName,
     canonical: `${canonicalOrigin}${canonicalPath}`,
-    seo: categorySeoContent({ categoryId, subcategoryId, category, subcategory }),
+    seo: categorySeoContent({ categoryId, subcategoryId, entries: seoEntries }),
     matched,
     listed,
     isPublic: categoryId === "all" || isPublicCategory(category)
   };
 }
 
+// The title and description a category gets when it has no SEO content of its own.
+function automaticCategoryMeta(route) {
+  const examples = route.listed.slice(0, 3).map((product) => localized(product.name)).join("، ");
+  return {
+    title: `${route.pageName} | ${STORE_NAME}`,
+    description: truncateText(route.matched.length
+      ? `تسوق ${route.pageName} من ${STORE_NAME} لمستلزمات الكنائس: ${route.matched.length} منتج بصور وأسعار محدثة${examples ? `، منها ${examples}` : ""}.`
+      : `قسم ${route.pageName} في ${STORE_NAME}. ستظهر المنتجات هنا عند توفرها.`)
+  };
+}
+
+function categoryIsIndexable(route) {
+  return Boolean(route.listed.length && route.isPublic);
+}
+
 function categoryPageMetaTags(route) {
   const listed = route.listed;
-  const examples = listed.slice(0, 3).map((product) => localized(product.name)).join("، ");
-  const title = route.seo.seoTitle || `${route.pageName} | ${STORE_NAME}`;
-  const description = route.seo.seoDescription || truncateText(route.matched.length
-    ? `تسوق ${route.pageName} من ${STORE_NAME} لمستلزمات الكنائس: ${route.matched.length} منتج بصور وأسعار محدثة${examples ? `، منها ${examples}` : ""}.`
-    : `قسم ${route.pageName} في ${STORE_NAME}. ستظهر المنتجات هنا عند توفرها.`);
+  const automatic = automaticCategoryMeta(route);
+  const title = route.seo.seoTitle || automatic.title;
+  const description = route.seo.seoDescription || automatic.description;
   const crumbs = [{ name: "الرئيسية", url: `${canonicalOrigin}/` }];
   if (route.categoryId !== "all") crumbs.push({ name: route.categoryName, url: `${canonicalOrigin}/category/${encodeURIComponent(route.categoryId)}` });
   if (route.subcategoryId) crumbs.push({ name: route.subcategoryName, url: route.canonical });
@@ -1634,6 +1648,157 @@ function categoryDirectory(taxonomy, products) {
   return items;
 }
 
+// A category page worth linking to: public, visible, with at least one listed product.
+function categoryKeyIsLive(taxonomy, products, key) {
+  const [categoryId, subcategoryId = ""] = String(key || "").split("/");
+  const category = taxonomy.byId.get(categoryId);
+  if (!isPublicCategory(category)) return false;
+  if (subcategoryId) {
+    const subcategory = category.subcategories.find((item) => item.id === subcategoryId);
+    if (!subcategory || subcategory.visible === false) return false;
+  }
+  return categoryProducts(sitemapProducts(products), categoryId, subcategoryId, { withOutOfStock: true }).length > 0;
+}
+
+function productSlugIsLive(products, slug) {
+  const product = productByIdOrSlug(products, slug);
+  return Boolean(product && productFacts(product).inSitemap);
+}
+
+function introLinkIsLive(taxonomy, products) {
+  return (target) => target.type === "category" ? categoryKeyIsLive(taxonomy, products, target.key) : productSlugIsLive(products, target.slug);
+}
+
+// category-seo.json from the data branch (cached like products and categories).
+// Missing or unreadable: pages keep their automatic titles and show no intro.
+let parsedCategorySeo = { version: "", file: null };
+let categorySeoMissingUntil = 0;
+const CATEGORY_SEO_MISSING_RETRY_MS = 60_000;
+
+async function loadCategorySeo(env, request) {
+  try {
+    let text;
+    let version;
+    if (env.CATEGORY_SEO_ASSET) {
+      // Preview only: a bundled copy, since the preview Worker cannot reach the data branch's API.
+      const response = await env.ASSETS.fetch(rewriteGetRequest(request, env.CATEGORY_SEO_ASSET));
+      if (!response.ok) return parsedCategorySeo.file || emptyCategorySeoFile();
+      text = await response.text();
+      version = `asset-${text.length}-${text.slice(-64)}`;
+    } else {
+      if (Date.now() < categorySeoMissingUntil) return parsedCategorySeo.file || emptyCategorySeoFile();
+      const live = await readLiveFile({ env, origin: new URL(request.url).origin, file: CATEGORY_SEO_FILE, waitUntil: requestWaitUntil.get(request) });
+      text = live?.text;
+      version = live?.version;
+    }
+    if (!text) return emptyCategorySeoFile();
+    if (parsedCategorySeo.version !== version) parsedCategorySeo = { version, file: parseCategorySeoFile(text) };
+    return parsedCategorySeo.file;
+  } catch (error) {
+    if (/404/.test(String(error?.message || "")) || error?.status === 404) categorySeoMissingUntil = Date.now() + CATEGORY_SEO_MISSING_RETRY_MS;
+    else console.warn("Category SEO unavailable; using automatic titles.", error?.message || error);
+    return parsedCategorySeo.file || emptyCategorySeoFile();
+  }
+}
+
+function adminJson(status, body) {
+  return new Response(JSON.stringify(body), { status, headers: { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" } });
+}
+
+function taxonomyHasKey(taxonomy, key) {
+  const [categoryId, subcategoryId = ""] = String(key || "").split("/");
+  const category = taxonomy.byId.get(categoryId);
+  return Boolean(category && (!subcategoryId || category.subcategories.some((item) => item.id === subcategoryId)));
+}
+
+// Admin: every category with its saved SEO entry (read straight from GitHub, so the
+// admin edits the current version) and its status. The automatic title/description
+// and the saved history are included for the category being edited (?key=) only.
+async function adminCategorySeoResponse(request, env) {
+  if (request.method !== "GET") return adminJson(405, { error: "method_not_allowed" });
+  const [products, taxonomy] = await Promise.all([loadProducts(env, request), loadSeoTaxonomy(env, request)]);
+  let stored;
+  try {
+    stored = await readCategorySeoFromGitHub(env);
+  } catch (error) {
+    console.warn("Admin category SEO read failed", error?.message || error);
+    return adminJson(502, { error: "category_seo_unavailable", message: "تعذّرت قراءة بيانات SEO الآن. لم يتغير أي شيء؛ حاول مرة أخرى." });
+  }
+  const taxonomyKeys = new Set(taxonomy.categories.flatMap((category) => [category.id, ...category.subcategories.map((item) => categorySeoKey(category.id, item.id))]));
+  // SEO entries whose category no longer exists (its ID changed or it was removed):
+  // kept in the file, listed so the admin can copy them to the category's new ID.
+  const orphans = Object.entries(stored.file.categories)
+    .filter(([key]) => !taxonomyKeys.has(key))
+    .map(([key, entry]) => ({ key, entry }));
+  // Light mode for the taxonomy editor's pre-publish check: which categories have SEO.
+  if (new URL(request.url).searchParams.has("keys")) {
+    return adminJson(200, { fileExists: stored.exists, keys: Object.keys(stored.file.categories), orphans: orphans.map((item) => item.key) });
+  }
+  const origin = new URL(request.url).origin;
+  const focus = new URL(request.url).searchParams.get("key") || "";
+  // A category's products all share its main category (the Greek collection also
+  // takes products by collection), so each route only scans that group.
+  const groups = new Map();
+  const collected = [];
+  for (const product of products) {
+    const facts = productFacts(product);
+    if (!groups.has(facts.category)) groups.set(facts.category, []);
+    groups.get(facts.category).push(product);
+    if (facts.collections.length) collected.push(product);
+  }
+  const candidates = (categoryId) => {
+    const own = groups.get(globalThis.POPE_KYRILLOS_CATEGORY_MIGRATION.route(categoryId, "").category || categoryId) || [];
+    return categoryId === "greek-collection" ? [...new Set([...own, ...collected])] : own;
+  };
+  const seen = new Set();
+  const categories = [];
+  for (const category of taxonomy.categories) {
+    const pool = candidates(category.id);
+    for (const subcategory of [null, ...category.subcategories]) {
+      const key = categorySeoKey(category.id, subcategory?.id || "");
+      const route = resolveCategoryRoute(new URL(`/category/${key}`, origin), taxonomy, pool, stored.file.categories);
+      if (!route || seen.has(route.seo.key)) continue;
+      seen.add(route.seo.key);
+      categories.push({
+        key: route.seo.key,
+        name: route.pageName,
+        parentName: route.subcategoryId ? route.categoryName : "",
+        path: new URL(route.canonical).pathname,
+        canonical: route.canonical,
+        indexable: categoryIsIndexable(route),
+        // Same rule as categoryKeyIsLive(), reusing the products this route already listed.
+        linkable: Boolean(route.listed.length && isPublicCategory(route.category) && (!route.subcategoryId || route.category.subcategories.find((item) => item.id === route.subcategoryId)?.visible !== false)),
+        listedCount: route.listed.length,
+        ...(!focus || route.seo.key === focus ? { automatic: automaticCategoryMeta(route), history: stored.file.history[route.seo.key] || [] } : {}),
+        entry: stored.file.categories[route.seo.key] || null
+      });
+    }
+  }
+  return adminJson(200, { fileExists: stored.exists, fileUpdatedAt: stored.file.updatedAt, storeName: STORE_NAME, siteOrigin: canonicalOrigin, categories, orphans });
+}
+
+async function adminUpdateCategorySeoResponse(request, env) {
+  if (request.method !== "POST") return adminJson(405, { error: "method_not_allowed" });
+  const [products, taxonomy] = await Promise.all([loadProducts(env, request), loadSeoTaxonomy(env, request)]);
+  const result = await updateCategorySeo({
+    request,
+    env,
+    keyExists: (key) => taxonomyHasKey(taxonomy, key),
+    categoryExists: (key) => categoryKeyIsLive(taxonomy, products, key),
+    productExists: (slug) => productSlugIsLive(products, slug)
+  });
+  if (result.text) {
+    // This data center shows the saved text at once; others pick it up on their next check (≤ 3 min).
+    try {
+      await recordPublishedFile({ origin: new URL(request.url).origin, file: CATEGORY_SEO_FILE, text: result.text });
+    } catch (error) {
+      console.warn("Could not cache the saved category SEO", error?.message || error);
+    }
+    categorySeoMissingUntil = 0;
+  }
+  return adminJson(result.status, result.body);
+}
+
 // Links from a category page with SEO content to its parent category and to
 // the related categories it names; only public ones with listed products.
 function relatedCategoryLinks(route, taxonomy, products) {
@@ -1662,8 +1827,8 @@ function relatedCategoryLinks(route, taxonomy, products) {
 }
 
 async function categoryPageResponse(request, env, products) {
-  const taxonomy = await loadSeoTaxonomy(env, request);
-  const route = resolveCategoryRoute(new URL(request.url), taxonomy, products);
+  const [taxonomy, seoFile] = await Promise.all([loadSeoTaxonomy(env, request), loadCategorySeo(env, request)]);
+  const route = resolveCategoryRoute(new URL(request.url), taxonomy, products, seoFile.categories);
   if (!route) return notFoundResponse("page");
   const response = await env.ASSETS.fetch(rewriteGetRequest(request, "/"));
   const headers = new Headers(response.headers);
@@ -1684,7 +1849,7 @@ async function categoryPageResponse(request, env, products) {
   html = setCategoryHeading(html, {
     title: route.pageName,
     breadcrumb: route.subcategoryId ? `${route.categoryName} / ${route.subcategoryName}` : route.categoryName,
-    intro: route.isPublic && route.listed.length ? route.seo.seoIntro : "",
+    introHtml: categoryIsIndexable(route) && route.seo.seoIntro ? introHtml(route.seo.seoIntro, introLinkIsLive(taxonomy, products)) : "",
     key: route.seo.key
   });
   const related = relatedCategoryLinks(route, taxonomy, products);
@@ -3412,6 +3577,8 @@ async function handleRequest(request, env, ctx) {
         if (response.ok) await recordPublishedTaxonomy(request, published);
         return response;
       }
+      if (url.pathname === "/admin/api/category-seo") return adminCategorySeoResponse(request, env);
+      if (url.pathname === "/admin/api/update-category-seo") return adminUpdateCategorySeoResponse(request, env);
       if (url.pathname === "/admin/api/upload-product-image") return uploadProductImage(context);
       if (url.pathname === "/admin/api/sync-airtable-product-media") return adminAirtableProductMediaSyncResponse(context);
       if (url.pathname === "/admin/api/backfill-airtable-order-products") return adminAirtableOrderBackfillResponse(context);

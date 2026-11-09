@@ -6,7 +6,7 @@
     <meta name="robots" content="noindex, nofollow">
     <title>إدارة منتجات مكتبة البابا كيرلس</title>
     <link rel="icon" href="data:,">
-    <link rel="stylesheet" href="/admin.css?v=asset-ccd52fa576c9">  </head>
+    <link rel="stylesheet" href="/admin.css?v=asset-31aca5b30d93">  </head>
   <body>
     <header class="admin-topbar">
       <div>
@@ -191,6 +191,7 @@
             <label><span>القسم الرئيسي</span><select data-taxonomy-main></select></label>
             <div class="taxonomy-actions"><button class="button small" type="button" data-action="add-main-category">إضافة قسم رئيسي</button><button class="button small" type="button" data-action="add-subcategory">إضافة قسم فرعي</button><button class="button small ghost" type="button" data-action="move-main-before">القسم لأعلى</button><button class="button small ghost" type="button" data-action="move-main-after">القسم لأسفل</button><button class="button small danger" type="button" data-action="remove-main-category">حذف القسم</button></div>
             <div class="field-grid taxonomy-main-fields"><label><span>اسم القسم</span><input data-taxonomy-main-field="name"></label><label><span>الوصف</span><input data-taxonomy-main-field="description"></label><label><span>صورة القسم على الموقع</span><input dir="ltr" data-taxonomy-main-field="customImage" placeholder="اتركه فارغًا لاستخدام الرسمة الافتراضية"></label><label class="check-row"><input type="checkbox" data-taxonomy-main-field="visible"><span>ظاهر للعملاء</span></label><label class="check-row"><input type="checkbox" data-taxonomy-main-field="homeVisible"><span>ظاهر في الرئيسية</span></label></div>
+            <div class="taxonomy-seo-main"><button class="button small secondary" type="button" data-action="open-category-seo">تحسين الظهور في جوجل (SEO) للقسم الرئيسي</button><small>العنوان والوصف والنص التعريفي يُحفظون منفصلين عن «نشر الأقسام».</small></div>
             <div class="taxonomy-list" data-taxonomy-list></div>
             <p class="hint">بعد تعديل الصور أو ترتيب الأقسام، اضغط <b>حفظ ونشر الأقسام</b> حتى تظهر على الموقع.</p>
           </section>
@@ -258,14 +259,47 @@
       </form>
     </dialog>
 
+    <dialog class="seo-dialog" data-category-seo-dialog aria-labelledby="category-seo-title">
+      <form method="dialog" data-category-seo-form>
+        <header>
+          <div><p class="eyebrow">تحسين الظهور في جوجل (SEO)</p><h2 id="category-seo-title" data-seo-name>القسم</h2><small dir="ltr" data-seo-path></small><p class="seo-state" data-seo-state></p></div>
+          <button class="icon-button" value="cancel" aria-label="إغلاق">×</button>
+        </header>
+        <p class="seo-message" data-seo-message role="status" aria-live="polite" hidden></p>
+        <button class="button small secondary" type="button" data-seo-load-latest hidden>تحميل النسخة الأحدث</button>
+        <div class="seo-body" data-seo-body hidden>
+          <div class="seo-fields">
+            <div class="seo-orphans" data-seo-orphans hidden><strong>بيانات SEO محفوظة لقسم قديم (تغيّر الـID أو حُذف القسم):</strong><div class="seo-link-tool"><select aria-label="القسم القديم"></select><button class="button small secondary" type="button" data-seo-copy-orphan>نسخ SEO من قسم قديم</button></div></div>
+            <p class="hint">كل الحقول اختيارية. الحقل الفارغ يستخدم القيمة التلقائية الحالية (تظهر باهتة داخل الحقل). جوجل قد يختار عنوانًا أو وصفًا مختلفًا في نتائج البحث عن الذي تكتبه هنا.</p>
+            <label><span>عنوان SEO <small class="seo-count" data-seo-count="seoTitle"></small></span><input name="seoTitle" maxlength="70" autocomplete="off"></label>
+            <label><span>وصف Meta <small class="seo-count" data-seo-count="seoDescription"></small></span><textarea name="seoDescription" rows="3" maxlength="160"></textarea></label>
+            <label><span>النص التعريفي (يظهر تحت اسم القسم) <small class="seo-count" data-seo-count="seoIntro"></small></span><textarea name="seoIntro" rows="5" maxlength="700"></textarea></label>
+            <div class="seo-link-tool"><select data-seo-link-target aria-label="قسم لإدراج رابطه"></select><button class="button small ghost" type="button" data-seo-insert-link>إدراج رابط القسم في النص</button></div>
+            <fieldset class="seo-related"><legend>الأقسام المرتبطة <small data-seo-related-count></small></legend><p class="hint">تظهر كروابط في «فهرس القسم» أسفل الصفحة. تظهر هنا الأقسام التي بها منتجات فقط.</p><input type="search" data-seo-related-filter placeholder="ابحث عن قسم"><div class="seo-related-list" data-seo-related></div></fieldset>
+            <ul class="seo-issues" data-seo-issues hidden></ul>
+          </div>
+          <div class="seo-previews">
+            <section class="seo-google" aria-label="معاينة نتيجة البحث في جوجل"><small class="seo-preview-label">معاينة نتيجة جوجل · <span data-seo-google-source></span></small><div class="seo-google-site">مكتبة البابا كيرلس</div><div class="seo-google-url" dir="ltr" data-seo-google-url></div><div class="seo-google-title" data-seo-google-title></div><div class="seo-google-desc" data-seo-google-desc></div></section>
+            <section class="seo-page-preview" aria-label="معاينة شكل القسم"><div class="seo-preview-head"><small class="seo-preview-label">معاينة أعلى صفحة القسم</small><div class="seo-view-toggle"><button type="button" data-seo-view="desktop" aria-pressed="true">كمبيوتر</button><button type="button" data-seo-view="mobile" aria-pressed="false">موبايل</button></div></div><div class="seo-page" data-seo-page><small data-seo-page-crumb></small><h3 data-seo-page-h1></h3><div class="seo-page-intro" data-seo-page-intro></div><p class="seo-page-note" data-seo-page-note></p></div></section>
+          </div>
+        </div>
+        <footer>
+          <button class="button" type="button" data-seo-save>حفظ SEO لهذا القسم</button>
+          <button class="button ghost" type="button" data-seo-restore hidden>استرجاع النسخة السابقة</button>
+          <button class="button ghost" type="button" data-seo-reset>إرجاع للوضع التلقائي</button>
+          <button class="button ghost" value="cancel">إغلاق</button>
+        </footer>
+      </form>
+    </dialog>
+
     <input type="file" data-import-fallback accept=".json,application/json" hidden>
     <input type="file" data-image-upload accept="image/*" multiple hidden>
     <div class="toast" data-toast hidden></div>
 
-    <script src="/subcategory-image-policy.js?v=asset-ccd52fa576c9" defer></script>
-    <script src="/category-migration.js?v=asset-ccd52fa576c9" defer></script>
-    <script src="/category-taxonomy.js?v=asset-ccd52fa576c9" defer></script>
-    <script src="/admin.js?v=asset-ccd52fa576c9" defer></script>
+    <script src="/subcategory-image-policy.js?v=asset-31aca5b30d93" defer></script>
+    <script src="/category-migration.js?v=asset-31aca5b30d93" defer></script>
+    <script src="/category-taxonomy.js?v=asset-31aca5b30d93" defer></script>
+    <script src="/admin.js?v=asset-31aca5b30d93" defer></script>
     <script src="/cross-engraving.js?v=1" defer></script>
     <script src="/admin-engraving.js?v=1" defer></script>  </body>
 </html>

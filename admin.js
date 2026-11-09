@@ -148,6 +148,7 @@
     renderImagePreview(currentProduct()?.images || []);
   });
 
+  setupCategorySeoDialog();
   renderTaxonomyManager();
   Promise.all([loadCategoryTaxonomy(), loadProductsFromSite()]).catch((error) => {
     console.error("Failed to initialize admin data:", error);
@@ -444,6 +445,10 @@
       }
     }
 
+    if (action === "open-category-seo") {
+      await openCategorySeo(categorySeoKeyForButton(button));
+    }
+
     if (action === "remove-subcategory") {
       removeSubcategory(Number(button.closest("[data-taxonomy-sub-index]")?.dataset.taxonomySubIndex));
     }
@@ -689,6 +694,7 @@
       showToast(summarizeIssues("تعذر نشر الأقسام:", validation.errors), { error: true });
       return;
     }
+    if (!(await confirmCategorySeoKeysKept(state.originalTaxonomy, categoriesList))) return;
 
     const confirmed = window.confirm("سيتم حفظ صور وترتيب الأقسام على الموقع مباشرة. هل تريد المتابعة؟");
     if (!confirmed) return;
@@ -1493,6 +1499,7 @@
         <div class="taxonomy-card-actions">
           <button class="button small ghost" type="button" data-action="move-subcategory-before" ${index === 0 ? "disabled" : ""}>فوق</button>
           <button class="button small ghost" type="button" data-action="move-subcategory-after" ${index === allSubcategories.length - 1 ? "disabled" : ""}>تحت</button>
+          <button class="button small secondary" type="button" data-action="open-category-seo">تحسين الظهور في جوجل (SEO)</button>
           <button class="button small danger" type="button" data-action="remove-subcategory">حذف</button>
         </div>
       </article>
@@ -3019,6 +3026,389 @@ function updateProductField(product, element) {
 
   function escapeAttribute(value) {
     return escapeHtml(value).replaceAll("\n", " ");
+  }
+
+  // ---------------------------------------------------------------------------
+  // Category SEO (category-seo.json): one category at a time, saved on its own,
+  // separate from «نشر الأقسام». Every field is optional; empty = automatic.
+
+  const CATEGORY_SEO_LIMITS = { seoTitle: 70, seoDescription: 160, seoIntro: 700 };
+  const CATEGORY_SEO_RECOMMENDED = { seoTitle: 60, seoDescription: 155 };
+  const CATEGORY_SEO_LINK = /\[([^\[\]\n]{1,80})\]\(([^()\s]{1,300})\)/g;
+  const categorySeo = { data: null, item: null, baseUpdatedAt: "", saved: null, busy: false, view: "desktop" };
+
+  function categorySeoKeyForButton(button) {
+    const category = selectedTaxonomyCategory();
+    if (!category) return "";
+    const index = Number(button.closest("[data-taxonomy-sub-index]")?.dataset.taxonomySubIndex);
+    if (Number.isNaN(index)) return category.id;
+    const subcategory = category.subcategories?.[index];
+    return subcategory ? `${category.id}/${subcategory.id}` : "";
+  }
+
+  function categorySeoDialog() {
+    return document.querySelector("[data-category-seo-dialog]");
+  }
+
+  function categorySeoForm() {
+    const form = categorySeoDialog()?.querySelector("[data-category-seo-form]");
+    return form ? {
+      form,
+      seoTitle: form.elements.seoTitle,
+      seoDescription: form.elements.seoDescription,
+      seoIntro: form.elements.seoIntro
+    } : null;
+  }
+
+  function categorySeoValues() {
+    const fields = categorySeoForm();
+    if (!fields) return null;
+    const clean = (value) => String(value || "").replace(/\s+/g, " ").trim();
+    return {
+      seoTitle: clean(fields.seoTitle.value),
+      seoDescription: clean(fields.seoDescription.value),
+      seoIntro: clean(fields.seoIntro.value),
+      seoRelated: [...fields.form.querySelectorAll("[data-seo-related] input:checked")].map((input) => input.value)
+    };
+  }
+
+  function categorySeoSnapshot(entry) {
+    return JSON.stringify([entry?.seoTitle || "", entry?.seoDescription || "", entry?.seoIntro || "", [...(entry?.seoRelated || [])].sort()]);
+  }
+
+  function categorySeoDirty() {
+    const values = categorySeoValues();
+    return Boolean(values && categorySeo.item && categorySeoSnapshot(values) !== categorySeoSnapshot(categorySeo.saved));
+  }
+
+  function categorySeoMessage(text, kind = "info") {
+    const box = categorySeoDialog()?.querySelector("[data-seo-message]");
+    if (!box) return;
+    box.className = `seo-message is-${kind}`;
+    box.textContent = text;
+    box.hidden = !text;
+  }
+
+  function categorySeoTarget(path) {
+    let decoded = "";
+    try { decoded = decodeURIComponent(path); } catch { return null; }
+    const match = /^\/category\/([a-z0-9][a-z0-9-]*)(?:\/([a-z0-9][a-z0-9-]*))?\/?$/.exec(decoded);
+    if (match) {
+      const key = match[2] ? `${match[1]}/${match[2]}` : match[1];
+      return { key, item: categorySeo.data?.categories.find((entry) => entry.key === key) || null };
+    }
+    if (/^\/products\/[^/?#\s"'<>]+\/?$/u.test(decoded)) return { product: true };
+    return null;
+  }
+
+  // The intro as the page will show it: escaped text, links only to live categories.
+  function categorySeoIntroPreview(intro) {
+    let html = "";
+    let last = 0;
+    const problems = [];
+    for (const match of intro.matchAll(CATEGORY_SEO_LINK)) {
+      html += escapeHtml(intro.slice(last, match.index));
+      const [, label, path] = match;
+      const target = categorySeoTarget(path);
+      const ok = target && (target.product || (target.item?.linkable && target.key !== categorySeo.item.key));
+      html += ok ? `<a href="${escapeAttribute(path)}" tabindex="-1">${escapeHtml(label)}</a>` : `<span class="seo-bad-link">${escapeHtml(label)}</span>`;
+      if (!ok) problems.push(label);
+      last = match.index + match[0].length;
+    }
+    return { html: html + escapeHtml(intro.slice(last)), problems };
+  }
+
+  function clip(text, max) {
+    return text.length > max ? `${text.slice(0, max - 1).trim()}…` : text;
+  }
+
+  function renderCategorySeoPreview() {
+    const dialog = categorySeoDialog();
+    const item = categorySeo.item;
+    const values = categorySeoValues();
+    if (!dialog || !item || !values) return;
+    for (const field of Object.keys(CATEGORY_SEO_LIMITS)) {
+      const counter = dialog.querySelector(`[data-seo-count="${field}"]`);
+      if (!counter) continue;
+      const length = values[field].length;
+      const recommended = CATEGORY_SEO_RECOMMENDED[field];
+      counter.textContent = recommended ? `${length} / ${recommended} مقترح (حد أقصى ${CATEGORY_SEO_LIMITS[field]})` : `${length} / ${CATEGORY_SEO_LIMITS[field]}`;
+      counter.classList.toggle("is-warning", Boolean(recommended && length > recommended));
+      counter.classList.toggle("is-error", length > CATEGORY_SEO_LIMITS[field]);
+    }
+    const title = values.seoTitle || item.automatic.title;
+    const description = values.seoDescription || item.automatic.description;
+    dialog.querySelector("[data-seo-google-title]").textContent = clip(title, 62);
+    dialog.querySelector("[data-seo-google-desc]").textContent = clip(description, 158);
+    dialog.querySelector("[data-seo-google-url]").textContent = `popekyrillos.store › ${item.path.split("/").filter(Boolean).join(" › ")}`;
+    dialog.querySelector("[data-seo-google-source]").textContent = values.seoTitle || values.seoDescription ? "العنوان/الوصف: مخصص" : "العنوان والوصف: تلقائي";
+    const intro = categorySeoIntroPreview(values.seoIntro);
+    const page = dialog.querySelector("[data-seo-page]");
+    page.classList.toggle("is-mobile", categorySeo.view === "mobile");
+    dialog.querySelectorAll("[data-seo-view]").forEach((button) => button.setAttribute("aria-pressed", String(button.dataset.seoView === categorySeo.view)));
+    page.querySelector("[data-seo-page-crumb]").textContent = `الرئيسية / ${item.parentName ? `${item.parentName} / ` : ""}${item.name}`;
+    page.querySelector("[data-seo-page-h1]").textContent = item.name;
+    const introBox = page.querySelector("[data-seo-page-intro]");
+    introBox.innerHTML = values.seoIntro && item.indexable ? `<p>${intro.html}</p>${categorySeo.view === "mobile" ? '<span class="seo-more">اقرأ المزيد</span>' : ""}` : "";
+    page.querySelector("[data-seo-page-note]").textContent = !item.indexable
+      ? "القسم غير مفهرس حاليًا (بدون منتجات أو مخفي)، لذلك لن يظهر النص التعريفي على الموقع حتى تتوفر فيه منتجات."
+      : values.seoIntro ? "" : "بدون نص تعريفي: يظهر اسم القسم فقط كما هو الآن.";
+    const issues = [];
+    for (const field of ["seoTitle", "seoDescription", "seoIntro"]) {
+      if (/[<>]/.test(values[field])) issues.push("غير مسموح باستخدام الرمزين < و > (أكواد HTML).");
+      if (values[field].length > CATEGORY_SEO_LIMITS[field]) issues.push(`تجاوزت الحد الأقصى للحروف (${CATEGORY_SEO_LIMITS[field]}).`);
+    }
+    if (intro.problems.length) issues.push(`روابط غير صالحة في النص التعريفي: ${intro.problems.join("، ")} (القسم غير موجود أو فارغ أو هو نفس القسم).`);
+    if (values.seoRelated.length > 6) issues.push("الحد الأقصى 6 أقسام مرتبطة.");
+    const list = dialog.querySelector("[data-seo-issues]");
+    list.innerHTML = [...new Set(issues)].map((issue) => `<li>${escapeHtml(issue)}</li>`).join("");
+    list.hidden = !issues.length;
+    dialog.querySelector("[data-seo-save]").disabled = categorySeo.busy || issues.length > 0 || !categorySeoDirty();
+    dialog.querySelector("[data-seo-reset]").disabled = categorySeo.busy || !categorySeo.saved;
+    const restore = dialog.querySelector("[data-seo-restore]");
+    const previous = (item.history || []).find((entry) => categorySeoSnapshot(entry.entry) !== categorySeoSnapshot(categorySeo.saved));
+    restore.hidden = !previous;
+    restore.disabled = categorySeo.busy;
+    dialog.querySelector("[data-seo-related-count]").textContent = `${values.seoRelated.length} / 6`;
+  }
+
+  function renderCategorySeoRelated(filter = "") {
+    const dialog = categorySeoDialog();
+    const item = categorySeo.item;
+    if (!dialog || !item) return;
+    const selected = new Set(categorySeoValues()?.seoRelated || categorySeo.saved?.seoRelated || []);
+    const query = filter.trim();
+    const options = categorySeo.data.categories
+      .filter((entry) => entry.key !== item.key && (entry.linkable || selected.has(entry.key)))
+      .filter((entry) => !query || `${entry.parentName} ${entry.name}`.includes(query) || selected.has(entry.key));
+    dialog.querySelector("[data-seo-related]").innerHTML = options.map((entry) => `
+      <label class="check-row"><input type="checkbox" value="${escapeAttribute(entry.key)}" ${selected.has(entry.key) ? "checked" : ""}>
+      <span>${escapeHtml(entry.parentName ? `${entry.parentName} / ${entry.name}` : entry.name)} <small>${entry.listedCount} منتج</small></span></label>`).join("")
+      || '<p class="hint">لا توجد أقسام مطابقة.</p>';
+  }
+
+  function fillCategorySeoForm(entry) {
+    const fields = categorySeoForm();
+    fields.seoTitle.value = entry?.seoTitle || "";
+    fields.seoDescription.value = entry?.seoDescription || "";
+    fields.seoIntro.value = entry?.seoIntro || "";
+    fields.seoTitle.placeholder = categorySeo.item.automatic.title;
+    fields.seoDescription.placeholder = categorySeo.item.automatic.description;
+    const dialog = categorySeoDialog();
+    // Related checkboxes come from the entry, not the current form.
+    const relatedBox = dialog.querySelector("[data-seo-related]");
+    const filter = dialog.querySelector("[data-seo-related-filter]");
+    filter.value = "";
+    const selected = new Set(entry?.seoRelated || []);
+    relatedBox.innerHTML = categorySeo.data.categories
+      .filter((item) => item.key !== categorySeo.item.key && (item.linkable || selected.has(item.key)))
+      .sort((a, b) => Number(selected.has(b.key)) - Number(selected.has(a.key)))
+      .map((item) => `<label class="check-row"><input type="checkbox" value="${escapeAttribute(item.key)}" ${selected.has(item.key) ? "checked" : ""}><span>${escapeHtml(item.parentName ? `${item.parentName} / ${item.name}` : item.name)} <small>${item.listedCount} منتج</small></span></label>`)
+      .join("");
+    const linkSelect = dialog.querySelector("[data-seo-link-target]");
+    linkSelect.innerHTML = `<option value="">اختر قسمًا لإدراج رابطه في النص</option>${categorySeo.data.categories
+      .filter((item) => item.linkable && item.key !== categorySeo.item.key)
+      .map((item) => `<option value="${escapeAttribute(item.key)}">${escapeHtml(item.parentName ? `${item.parentName} / ${item.name}` : item.name)}</option>`).join("")}`;
+    renderCategorySeoPreview();
+  }
+
+  // SEO saved under a category ID that no longer exists (renamed or removed): offered
+  // here so it can be copied to this category instead of being lost.
+  function renderCategorySeoOrphans() {
+    const box = categorySeoDialog()?.querySelector("[data-seo-orphans]");
+    if (!box) return;
+    const orphans = categorySeo.data?.orphans || [];
+    box.hidden = !orphans.length || Boolean(categorySeo.saved);
+    box.querySelector("select").innerHTML = orphans.map((item) => `<option value="${escapeAttribute(item.key)}">${escapeHtml(item.key)} — ${escapeHtml(item.entry?.seoTitle || "بدون عنوان")}</option>`).join("");
+  }
+
+  // Before publishing categories: warn when a category that has SEO content would
+  // disappear (its ID changed, it moved to another main category, or it was deleted).
+  // The SEO content is kept in category-seo.json and can be copied to the new ID.
+  async function confirmCategorySeoKeysKept(before, after) {
+    const keysOf = (list) => new Set((list || []).flatMap((category) => [category.id, ...(category.subcategories || []).map((item) => `${category.id}/${item.id}`)]));
+    const next = keysOf(after);
+    const removed = [...keysOf(before)].filter((key) => !next.has(key));
+    if (!removed.length) return true;
+    let withSeo;
+    try {
+      const response = await fetch("/admin/api/category-seo?keys=1", { credentials: "same-origin", cache: "no-store" });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.message || `HTTP ${response.status}`);
+      withSeo = removed.filter((key) => result.keys.includes(key));
+    } catch (error) {
+      return window.confirm(`تعذّر التحقق من بيانات SEO للأقسام قبل النشر (${error.message}).\nبعض الأقسام سيتغير رابطها أو تُحذف: ${removed.join("، ")}.\nلو كان لها SEO مخصص سيتوقف ظهوره حتى تنسخه للقسم الجديد. هل تريد المتابعة؟`);
+    }
+    if (!withSeo.length) return true;
+    return window.confirm(`تنبيه SEO: الأقسام التالية لها عنوان/وصف/نص تعريفي مخصص، وسيتغير رابطها أو تُحذف بهذا النشر:\n${withSeo.join("\n")}\n\nبيانات SEO لن تُحذف، لكنها ستتوقف عن الظهور. بعد النشر افتح «تحسين الظهور في جوجل (SEO)» للقسم الجديد واختر «نسخ SEO من قسم قديم».\nتغيير الـID يغيّر رابط القسم في جوجل أيضًا. هل تريد المتابعة؟`);
+  }
+
+  function renderCategorySeoHeader() {
+    const dialog = categorySeoDialog();
+    const item = categorySeo.item;
+    dialog.querySelector("[data-seo-name]").textContent = item.parentName ? `${item.parentName} / ${item.name}` : item.name;
+    dialog.querySelector("[data-seo-path]").textContent = item.path;
+    const state = dialog.querySelector("[data-seo-state]");
+    const updated = categorySeo.saved?.updatedAt ? ` — آخر حفظ: ${new Date(categorySeo.saved.updatedAt).toLocaleString("ar-EG")}` : "";
+    state.textContent = `${categorySeo.saved ? "SEO مخصص" : "تلقائي (لا يوجد SEO مخصص)"} · ${item.indexable ? `مفهرس · ${item.listedCount} منتج` : "غير مفهرس (noindex)"}${updated}`;
+  }
+
+  async function openCategorySeo(key) {
+    const dialog = categorySeoDialog();
+    if (!dialog || !key) return;
+    categorySeo.item = null;
+    categorySeo.saved = null;
+    categorySeo.view = "desktop";
+    dialog.querySelector("[data-seo-body]").hidden = true;
+    dialog.querySelector("[data-seo-name]").textContent = "جاري التحميل…";
+    dialog.querySelector("[data-seo-path]").textContent = "";
+    dialog.querySelector("[data-seo-state]").textContent = "";
+    categorySeoMessage("");
+    if (!dialog.open) dialog.showModal();
+    try {
+      const response = await fetch(`/admin/api/category-seo?key=${encodeURIComponent(key)}`, { credentials: "same-origin", cache: "no-store" });
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(result.message || `HTTP ${response.status}`);
+      categorySeo.data = result;
+      categorySeo.item = result.categories.find((item) => item.key === key) || null;
+      if (!categorySeo.item) {
+        dialog.querySelector("[data-seo-name]").textContent = "القسم غير منشور بعد";
+        categorySeoMessage("هذا القسم غير موجود في الأقسام المنشورة على الموقع. اضغط «حفظ ونشر الأقسام» أولًا ثم افتح SEO مرة أخرى.", "error");
+        return;
+      }
+      categorySeo.saved = categorySeo.item.entry || null;
+      categorySeo.baseUpdatedAt = categorySeo.saved?.updatedAt || "";
+      renderCategorySeoHeader();
+      dialog.querySelector("[data-seo-body]").hidden = false;
+      fillCategorySeoForm(categorySeo.saved);
+      renderCategorySeoOrphans();
+    } catch (error) {
+      dialog.querySelector("[data-seo-name]").textContent = "تعذّر التحميل";
+      categorySeoMessage(`تعذّر تحميل بيانات SEO: ${error.message}. لم يتغير أي شيء.`, "error");
+    }
+  }
+
+  async function saveCategorySeo(entry, { reset = false } = {}) {
+    if (!categorySeo.item || categorySeo.busy) return;
+    categorySeo.busy = true;
+    renderCategorySeoPreview();
+    categorySeoMessage(reset ? "جاري الإرجاع للوضع التلقائي…" : "جاري الحفظ…");
+    try {
+      const response = await fetch("/admin/api/update-category-seo", {
+        method: "POST",
+        credentials: "same-origin",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ key: categorySeo.item.key, baseUpdatedAt: categorySeo.baseUpdatedAt, entry })
+      });
+      const result = await response.json().catch(() => ({}));
+      if (response.status === 409 && result.error === "category_seo_changed") {
+        categorySeo.conflict = result;
+        categorySeoMessage(`${result.message} اضغط «تحميل النسخة الأحدث» لعرضها (سيستبدل ما كتبته في النافذة).`, "error");
+        categorySeoDialog().querySelector("[data-seo-load-latest]").hidden = false;
+        return;
+      }
+      if (!response.ok) {
+        const details = (result.errors || []).map((item) => item.message).join(" · ");
+        throw new Error(details || result.message || `HTTP ${response.status}`);
+      }
+      categorySeo.saved = result.entry || null;
+      categorySeo.baseUpdatedAt = categorySeo.saved?.updatedAt || "";
+      categorySeo.item.entry = categorySeo.saved;
+      categorySeo.item.history = result.history || categorySeo.item.history;
+      renderCategorySeoHeader();
+      fillCategorySeoForm(categorySeo.saved);
+      const warnings = (result.warnings || []).map((item) => item.message).join(" ");
+      categorySeoMessage(`${result.unchanged ? "لا توجد تغييرات للحفظ." : reset ? "تم الإرجاع للوضع التلقائي." : "تم الحفظ."} يظهر على الموقع خلال دقائق قليلة (فورًا في معظم الأحيان).${warnings ? ` ملاحظة: ${warnings}` : ""}`, "success");
+    } catch (error) {
+      categorySeoMessage(`لم يتم الحفظ: ${error.message}`, "error");
+    } finally {
+      categorySeo.busy = false;
+      renderCategorySeoPreview();
+    }
+  }
+
+  function setupCategorySeoDialog() {
+    const dialog = categorySeoDialog();
+    if (!dialog) return;
+    const form = dialog.querySelector("[data-category-seo-form]");
+    form.addEventListener("input", (event) => {
+      if (event.target.matches("[data-seo-related-filter]")) {
+        const checked = new Set(categorySeoValues().seoRelated);
+        renderCategorySeoRelated(event.target.value);
+        dialog.querySelectorAll("[data-seo-related] input").forEach((input) => { input.checked = checked.has(input.value); });
+      }
+      renderCategorySeoPreview();
+    });
+    form.addEventListener("change", (event) => {
+      if (event.target.closest("[data-seo-related]") && categorySeoValues().seoRelated.length > 6) {
+        event.target.checked = false;
+        categorySeoMessage("الحد الأقصى 6 أقسام مرتبطة.", "error");
+      }
+      renderCategorySeoPreview();
+    });
+    form.addEventListener("click", async (event) => {
+      const button = event.target.closest("button");
+      if (!button) return;
+      if (button.dataset.seoView) {
+        event.preventDefault();
+        categorySeo.view = button.dataset.seoView;
+        renderCategorySeoPreview();
+      }
+      if (button.matches("[data-seo-insert-link]")) {
+        event.preventDefault();
+        const key = dialog.querySelector("[data-seo-link-target]").value;
+        const item = categorySeo.data?.categories.find((entry) => entry.key === key);
+        if (!item) return;
+        const textarea = form.elements.seoIntro;
+        const insert = `[${item.name}](/category/${item.key})`;
+        const start = textarea.selectionStart ?? textarea.value.length;
+        textarea.value = `${textarea.value.slice(0, start)}${insert}${textarea.value.slice(textarea.selectionEnd ?? start)}`;
+        textarea.focus();
+        renderCategorySeoPreview();
+      }
+      if (button.matches("[data-seo-save]")) {
+        event.preventDefault();
+        await saveCategorySeo(categorySeoValues());
+      }
+      if (button.matches("[data-seo-reset]")) {
+        event.preventDefault();
+        if (window.confirm("سيتم حذف SEO المخصص لهذا القسم والرجوع للعنوان والوصف التلقائيين، وإخفاء النص التعريفي. تُحفظ النسخة الحالية في السجل ويمكن استرجاعها. هل تريد المتابعة؟")) {
+          await saveCategorySeo(null, { reset: true });
+        }
+      }
+      if (button.matches("[data-seo-restore]")) {
+        event.preventDefault();
+        const previous = (categorySeo.item.history || []).find((entry) => categorySeoSnapshot(entry.entry) !== categorySeoSnapshot(categorySeo.saved));
+        if (!previous) return;
+        const saved = categorySeo.saved;
+        fillCategorySeoForm(previous.entry);
+        categorySeo.saved = saved;
+        renderCategorySeoPreview();
+        categorySeoMessage(`تم تحميل النسخة السابقة (${previous.replacedAt ? new Date(previous.replacedAt).toLocaleString("ar-EG") : ""}) في الحقول. راجعها ثم اضغط «حفظ» لاعتمادها.`, "info");
+      }
+      if (button.matches("[data-seo-copy-orphan]")) {
+        event.preventDefault();
+        const key = dialog.querySelector("[data-seo-orphans] select").value;
+        const orphan = (categorySeo.data?.orphans || []).find((item) => item.key === key);
+        if (!orphan) return;
+        const saved = categorySeo.saved;
+        fillCategorySeoForm(orphan.entry);
+        categorySeo.saved = saved;
+        renderCategorySeoPreview();
+        categorySeoMessage(`تم نسخ بيانات SEO من «${key}» إلى الحقول. راجع النص والروابط ثم اضغط «حفظ».`, "info");
+      }
+      if (button.matches("[data-seo-load-latest]")) {
+        event.preventDefault();
+        button.hidden = true;
+        await openCategorySeo(categorySeo.item.key);
+      }
+    });
+    dialog.addEventListener("cancel", (event) => {
+      if (categorySeoDirty() && !window.confirm("لديك تعديلات SEO غير محفوظة. هل تريد الإغلاق بدون حفظ؟")) event.preventDefault();
+    });
+    form.addEventListener("submit", (event) => {
+      if (event.submitter?.value === "cancel" && categorySeoDirty() && !window.confirm("لديك تعديلات SEO غير محفوظة. هل تريد الإغلاق بدون حفظ؟")) event.preventDefault();
+    });
   }
 
   function showToast(message, { error = false } = {}) {
