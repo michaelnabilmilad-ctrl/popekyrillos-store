@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-09T18:37:36.434Z",
+  "updatedAt": "2026-11-09T19:35:28.855Z",
   "categories": {
     "altar-vessels/censers": {
       "seoTitle": "شوريات كنسية نحاس وستانلس | مكتبة البابا كيرلس",
@@ -11,12 +11,29 @@
         "candles-lamps/church-incense"
       ],
       "updatedAt": "2026-11-09T18:37:36.434Z"
+    },
+    "altar-vessels": {
+      "seoTitle": "أواني المذبح وأدوات الخدمة الكنسية | مكتبة البابا كيرلس",
+      "seoDescription": "أواني المذبح من مكتبة البابا كيرلس: شوريات وعلب بخور، كراسي كأس، بشارات وحوامل للإنجيل، قناديل، وحافظات رفات القديسين، بتصميمات قبطية ويونانية.",
+      "seoIntro": "يضم قسم المذبح والأواني المقدسة أدوات الخدمة على المذبح وفي الكنيسة: [الشوريات](/category/altar-vessels/censers) و[علب البخور](/category/altar-vessels/custom-subcategory-1793199421562) من النحاس، و[كراسي الكأس](/category/altar-vessels/custom-subcategory-1792784523638) من الخشب والأكريليك، و[حوامل الإنجيل والبشارة](/category/altar-vessels/gospel-stands)، والقناديل النحاس، و[حافظات رفات القديسين](/category/altar-vessels/relic-boxes) وأنابيبها، بالإضافة إلى طقم أواني مذبح ذهبي يوناني.",
+      "seoRelated": [
+        "candles-lamps/church-incense",
+        "church-equipment",
+        "greek-collection"
+      ],
+      "updatedAt": "2026-11-09T19:35:28.855Z"
     }
   },
   "history": {
     "altar-vessels/censers": [
       {
         "replacedAt": "2026-11-09T18:37:36.434Z",
+        "entry": null
+      }
+    ],
+    "altar-vessels": [
+      {
+        "replacedAt": "2026-11-09T19:35:28.855Z",
         "entry": null
       }
     ]
