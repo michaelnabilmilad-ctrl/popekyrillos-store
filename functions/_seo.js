@@ -192,9 +192,10 @@ const GOOGLE_CATEGORY_BY_SUBCATEGORY = {
   "incense-boxes": "4741", // Incense Holders
   "book-accessories": "6174", // Office Supplies > Book Accessories
   "book-stands": "6175", // Book Stands & Rests
-  "cards-bookmarks": "93", // Bookmarks
   "notebooks-planners": "961", // Notebooks & Notepads
   "christian-games": "3793", // Toys & Games > Games
+  "meeting-gifts": "5608", // Luggage & Bags > Shopping Totes (توتي باج وشنط)
+  "custom-subcategory-1792791598240": "97", // شنط شمامسة: a service bag, not clothing
   frames: "597" // Picture Frames
 };
 const GOOGLE_CATEGORY_BY_MAIN = {
@@ -202,9 +203,26 @@ const GOOGLE_CATEGORY_BY_MAIN = {
   "church-vestments": "5483" // Religious Ceremonial Clothing
 };
 const GOOGLE_CATEGORY_DEFAULT = "97"; // Religious & Ceremonial > Religious Items
+const CANDLE_CODES = new Set(["588"]);
 
-export function googleProductCategory(mainId, subcategoryId) {
-  const code = GOOGLE_CATEGORY_BY_SUBCATEGORY[subcategoryId] || GOOGLE_CATEGORY_BY_MAIN[mainId] || GOOGLE_CATEGORY_DEFAULT;
+// What the product itself is, when its subcategory is broader than it.
+function productCategoryOverride(product, subcategoryCode) {
+  const name = textOf(product?.name);
+  const text = `${name} ${textOf(product?.description)}`;
+  if (/بوك\s*مارك/.test(name)) return "93"; // Bookmarks, plain or personalised
+  if (/تريانتو/.test(name)) return "7290"; // Musical Triangles
+  if (/^\s*(?:لون|ألوان|الوان)\s/.test(name)) return "505417"; // Art & Craft Paint
+  if (/^\s*(?:قلم|أقلام|اقلام)\s/.test(name)) return "977"; // Writing & Drawing Instruments
+  if (/جراب|كافر|غلاف/.test(name) && subcategoryCode === "6174") return "6176"; // Book Covers
+  if (CANDLE_CODES.has(subcategoryCode) && /شحن|بطاري|كهرباء|ليد|\bled\b/i.test(text)) return "4770"; // Flameless Candles
+  if (subcategoryCode === "3793" && /كروت|كوتشين|تحدي/.test(text) && !/باكدج|باكج/.test(name)) return "1247"; // Card Games
+  if (subcategoryCode === "3793" && /باكدج|باكج/.test(name)) return GOOGLE_CATEGORY_DEFAULT; // mixed bundle
+  return "";
+}
+
+export function googleProductCategory(mainId, subcategoryId, product = null) {
+  const broad = GOOGLE_CATEGORY_BY_SUBCATEGORY[subcategoryId] || GOOGLE_CATEGORY_BY_MAIN[mainId] || GOOGLE_CATEGORY_DEFAULT;
+  const code = (product && productCategoryOverride(product, broad)) || broad;
   return { "@type": "CategoryCode", inCodeSet: GOOGLE_CATEGORY_SET, codeValue: code };
 }
 
@@ -234,6 +252,28 @@ export function merchantReturnPolicy(origin, subcategoryId = "") {
   };
 }
 
+function normalizedWords(value = "") {
+  return String(value).replace(/[أإآ]/g, "ا").replace(/ة/g, "ه").replace(/\s+/g, " ").trim();
+}
+
+// "المقاس: صغير، وسط، كبير" from the options a customer can actually pick.
+function optionsSummary(offers = []) {
+  const byName = new Map();
+  for (const offer of offers) {
+    for (const [optionName, value] of Object.entries(offer.options || {})) {
+      const text = textOf(value).trim();
+      if (!text) continue;
+      if (!byName.has(optionName)) byName.set(optionName, []);
+      const values = byName.get(optionName);
+      if (!values.includes(text)) values.push(text);
+    }
+  }
+  return [...byName]
+    .filter(([, values]) => values.length > 1)
+    .map(([optionName, values]) => `${optionName}: ${values.slice(0, 4).join("، ")}${values.length > 4 ? "…" : ""}`)
+    .join(" – ");
+}
+
 export function productSeo(product, helpers, taxonomy, origin) {
   const name = textOf(product.name).trim();
   const images = helpers.productImages(product).map((image) => absoluteUrl(origin, image)).filter(Boolean);
@@ -260,10 +300,13 @@ export function productSeo(product, helpers, taxonomy, origin) {
   const seoDescription = oneLine(textOf(product.seoDescription));
   const generated = `${name} من ${STORE_NAME} لمستلزمات الكنائس${kind ? ` – ${kind}` : ""}.${priceText ? ` السعر ${priceText}.` : ""}`;
   // Several products (models of one design) share a description word for
-  // word. Their snippets then lead with the product's own name and price so
-  // each page has a distinct description; the visible text is unchanged.
+  // word. Their snippets then lead with the product's own name, its category
+  // (the words shoppers search) and its real options, so each page has a
+  // distinct description. Prices stay in the structured data only; the
+  // visible text is unchanged.
   const sharedDescription = Boolean(helpers.isSharedDescription?.(product));
-  const distinctLead = `${name}${priceText ? ` – ${priceText}` : ""}. `;
+  const optionSummary = optionsSummary(offers);
+  const distinctLead = `${name}${kind && !normalizedWords(name).includes(normalizedWords(kind)) ? ` – ${kind}` : ""}${optionSummary ? ` (${optionSummary})` : ""}. `;
   const metaDescription = truncateText(seoDescription || (description.length >= 50
     ? `${sharedDescription ? distinctLead : ""}${description}`
     : `${description ? `${description} ` : ""}${generated}`));
@@ -280,7 +323,7 @@ export function productSeo(product, helpers, taxonomy, origin) {
     name,
     description: truncateText(seoDescription || description || generated, 5000),
     image: images.length ? images.slice(0, 10) : undefined,
-    category: googleProductCategory(mainId, subcategoryName ? subcategory.id : ""),
+    category: googleProductCategory(mainId, subcategoryName ? subcategory.id : "", product),
     brand: { "@type": "Brand", name: STORE_NAME },
     url: canonical
   };

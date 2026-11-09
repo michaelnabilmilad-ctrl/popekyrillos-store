@@ -65,8 +65,8 @@ export function legacyRoute(pathname, search = "") {
   if (path === "/en") return { redirect: "/" };
   if (/^\/(?:en\/)?policies\/[^/]+$/.test(path)) return { redirect: "/policies" };
   if (/^\/(?:en\/)?pages\/(?:contact|contact-us)$/.test(path)) return { redirect: "/contact" };
-  // The home page carries the store's story (founded 2001, Shubra).
-  if (/^\/(?:en\/)?pages\/(?:about|about-us)$/.test(path)) return { redirect: "/" };
+  // /pages/about-us has no matching page on the new site yet, so it keeps
+  // its 404 rather than redirecting somewhere unrelated.
 
   if (/^\/(?:en\/)?search$/.test(path)) {
     const query = new URLSearchParams(search).get("q") || "";

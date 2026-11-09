@@ -26,8 +26,14 @@ test("category is a Google product category code, never Arabic text", () => {
   assert.deepEqual(seo.productLd.category, {
     "@type": "CategoryCode",
     inCodeSet: "https://www.google.com/basepages/producttype/taxonomy-with-ids.en-US.txt",
-    codeValue: "588"
+    codeValue: "4770" // rechargeable, so a flameless candle
   });
+  assert.equal(googleProductCategory("candles-lamps", "church-candles", { name: "شمع أيقونات" }).codeValue, "588");
+  assert.equal(googleProductCategory("occasions-service", "personalized", { name: "بوك مارك (بالإسم)" }).codeValue, "93");
+  assert.equal(googleProductCategory("altar-vessels", "church-service-tools", { name: "تريانتو ستانلس" }).codeValue, "7290");
+  assert.equal(googleProductCategory("books-rituals", "book-accessories", { name: "جراب للكتاب المقدس" }).codeValue, "6176");
+  assert.equal(googleProductCategory("church-vestments", "custom-subcategory-1792791598240", { name: "شنطة شمامسة قطيفة" }).codeValue, "97");
+  assert.equal(googleProductCategory("occasions-service", "christian-games", { name: "لون تلوين اليوتا" }).codeValue, "505417");
   assert.equal(googleProductCategory("crosses", "hand-crosses").codeValue, "97");
   assert.equal(googleProductCategory("books-rituals", "katameros").codeValue, "543543");
   assert.equal(googleProductCategory("books-rituals", "book-accessories").codeValue, "6174");
@@ -74,7 +80,10 @@ test("products sharing one description get a snippet that starts with their own 
   const plain = productSeo(model2, helpers, taxonomy, origin).metaDescription;
   const distinct = productSeo(model2, { ...helpers, isSharedDescription: () => true }, taxonomy, origin);
   assert.ok(plain.startsWith("صليب شمعة"));
-  assert.ok(distinct.metaDescription.startsWith("شمعة شماس شكل صليب موديل 2 – 300 ج.م. صليب شمعة"));
+  assert.ok(distinct.metaDescription.startsWith("شمعة شماس شكل صليب موديل 2 – شمع الكنيسة. صليب شمعة"), distinct.metaDescription);
+  assert.ok(!/ج\.م/.test(distinct.metaDescription), "no price in the snippet");
+  // The real price stays in the structured data.
+  assert.equal(distinct.productLd.offers.price, 300);
   // The page text itself is unchanged.
   assert.equal(distinct.description, productSeo(model2, helpers, taxonomy, origin).description);
   // An admin SEO description always wins.
@@ -88,7 +97,8 @@ test("old Shopify links map to the right destination", () => {
   assert.deepEqual(legacyRoute("/en/policies/privacy-policy"), { redirect: "/policies" });
   assert.deepEqual(legacyRoute("/policies/refund-policy"), { redirect: "/policies" });
   assert.deepEqual(legacyRoute("/pages/contact"), { redirect: "/contact" });
-  assert.deepEqual(legacyRoute("/pages/about-us"), { redirect: "/" });
+  // No About page exists yet: no redirect to an unrelated page.
+  assert.equal(legacyRoute("/pages/about-us"), null);
   assert.deepEqual(legacyRoute("/search", "?q=%D8%B5%D9%84%D9%8A%D8%A8"), { redirect: "/products?q=%D8%B5%D9%84%D9%8A%D8%A8" });
   assert.deepEqual(legacyRoute("/search"), { redirect: "/products" });
   assert.deepEqual(legacyRoute("/collections/all"), { redirect: "/products" });
