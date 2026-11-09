@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-09T19:35:28.855Z",
+  "updatedAt": "2026-11-09T19:36:51.404Z",
   "categories": {
     "altar-vessels/censers": {
       "seoTitle": "شوريات كنسية نحاس وستانلس | مكتبة البابا كيرلس",
@@ -22,6 +22,15 @@
         "greek-collection"
       ],
       "updatedAt": "2026-11-09T19:35:28.855Z"
+    },
+    "books-rituals": {
+      "seoTitle": "كتب طقسية: القطمارس والإبصلمودية | مكتبة البابا كيرلس",
+      "seoDescription": "كتب طقسية من مكتبة البابا كيرلس: قطمارس الأيام والآحاد والصوم الكبير والخمسين والبصخة من دير مارمينا بمريوط، والإبصلمودية السنوية، وجرابات للكتاب المقدس.",
+      "seoIntro": "في قسم الكتب والطقوس تجد [القطمارس](/category/books-rituals/katameros) إصدار دير الشهيد مارمينا العجائبي بمريوط: قطمارس الأيام السنوي والآحاد والخمسين بنسختين منفصلتين عربي وقبطي، وقطمارس الصوم الكبير والبصخة بالعربي، و[كتب التسبحة](/category/books-rituals/tasbeha-books) مثل الإبصلمودية المقدسة السنوية وتسبحة نصف الليل، بالإضافة إلى [جرابات وأغطية الكتاب المقدس](/category/books-rituals/book-accessories).",
+      "seoRelated": [
+        "occasions-service/cards-bookmarks"
+      ],
+      "updatedAt": "2026-11-09T19:36:51.404Z"
     }
   },
   "history": {
@@ -34,6 +43,12 @@
     "altar-vessels": [
       {
         "replacedAt": "2026-11-09T19:35:28.855Z",
+        "entry": null
+      }
+    ],
+    "books-rituals": [
+      {
+        "replacedAt": "2026-11-09T19:36:51.404Z",
         "entry": null
       }
     ]
