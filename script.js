@@ -3060,6 +3060,8 @@ function getProductVariants(product) {
 
 function isVariantAvailable(variant, product = null) {
   if (product && isProductUnavailable(product)) return false;
+  // No real price (missing or 0): never sold, so never shown as available.
+  if (product && variantPrice(variant, product) === null) return false;
   const quantity = variantQuantity(variant);
   if (quantity !== null) return quantity > 0;
   return variant?.available !== false;

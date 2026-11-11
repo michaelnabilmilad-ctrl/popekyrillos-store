@@ -60,7 +60,9 @@ function parseObject(value, fallback = {}) {
 }
 
 const text = (value) => typeof value === "object" && value ? value.ar || value.en || Object.values(value)[0] || "" : String(value || "");
-const money = (value) => Number.isFinite(Number(value)) ? `${new Intl.NumberFormat("ar-EG").format(Number(value))} ج.م` : "";
+// Only a real price (> 0) is ever shown; null, "" and 0 show nothing instead of "0 ج.م".
+const realPrice = (value) => value !== null && value !== undefined && value !== "" && Number.isFinite(Number(value)) && Number(value) > 0 ? Number(value) : null;
+const money = (value) => realPrice(value) === null ? "" : `${new Intl.NumberFormat("ar-EG").format(Number(value))} ج.م`;
 const escapeHtml = (value) => String(value || "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
 const assetUrl = (value) => {
   const source = String(value || "").trim();
@@ -363,8 +365,9 @@ function available(variant) {
   return Number.isInteger(qty) && qty >= 0 ? qty > 0 : variant?.available !== false;
 }
 // The add button stays on for made-to-order crosses; addToCart() then asks for a name if needed.
+// No real price, no buying: the server refuses such a line anyway.
 function canAdd(variant) {
-  return Boolean(variant) && (available(variant) || madeToOrder);
+  return Boolean(variant) && realPrice(variant?.price ?? product.price) !== null && (available(variant) || madeToOrder);
 }
 
 function coloringMarkup() {
