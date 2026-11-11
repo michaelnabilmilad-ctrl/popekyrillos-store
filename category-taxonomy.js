@@ -735,6 +735,15 @@
                   "subcategoryImage": "assets/optimized/featured-service-bundle.webp"
               },
               {
+                  "id": "christmas-gifts-decor",
+                  "name": "هدايا وزينة الكريسماس",
+                  "description": "مجسمات مكعبات تركيب Christmas Micro Blocks وهدايا وزينة لموسم الكريسماس",
+                  "subcategoryImage": "assets/optimized/products/gallery/christmas-tree-micro-blocks-w3051-06.webp",
+                  "representativeProductId": "christmas-micro-blocks-w3051-06",
+                  "visible": true,
+                  "homeVisible": true
+              },
+              {
                   "id": "personalized",
                   "name": "منتجات مطبوعة ومخصصة",
                   "subcategoryImage": "assets/optimized/featured-service-bundle.webp"
@@ -903,7 +912,7 @@
   ];
   const TAXONOMY_STORAGE_KEY = "pope-kyrillos-taxonomy";
   const TAXONOMY_VERSION_STORAGE_KEY = "pope-kyrillos-taxonomy-version";
-  const CURRENT_TAXONOMY_VERSION = 1793199523121;
+  const CURRENT_TAXONOMY_VERSION = 1794388705512;
   const categories = (() => {
     try {
       const storedVersion = Number(localStorage.getItem(TAXONOMY_VERSION_STORAGE_KEY) || 0);

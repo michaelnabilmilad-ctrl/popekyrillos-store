@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-09T19:36:55.803Z",
+  "updatedAt": "2026-11-11T09:00:00.000Z",
   "categories": {
     "altar-vessels/censers": {
       "seoTitle": "شوريات كنسية نحاس وستانلس | مكتبة البابا كيرلس",
@@ -42,6 +42,16 @@
         "church-equipment/custom-subcategory-1792789093403"
       ],
       "updatedAt": "2026-11-09T19:36:55.803Z"
+    },
+    "occasions-service/christmas-gifts-decor": {
+      "seoTitle": "هدايا وزينة الكريسماس ومجسمات مكعبات التركيب | مكتبة البابا كيرلس",
+      "seoDescription": "هدايا الكريسماس ومجسمات مكعبات تركيب Christmas Micro Blocks: بابا نويل، شجرة الكريسماس، غزالة الكريسماس ورجل الثلج. زينة وهدايا للعيد من مكتبة البابا كيرلس.",
+      "seoIntro": "اختار هدية الكريسماس أو زينة العيد من مجموعة مجسمات مكعبات التركيب Christmas Micro Blocks: [بابا نويل](/products/بابا-نويل-مكعبات-تركيب) و[بابا نويل بالهدية](/products/بابا-نويل-بالهديه-مكعبات-تركيب) و[شجرة الكريسماس](/products/شجره-الكريسماس-مكعبات-تركيب) و[غزالة الكريسماس](/products/غزاله-الكريسماس-مكعبات-تركيب) و[رجل الثلج](/products/رجل-الثلج-مكعبات-تركيب). كل مجسم بيتركب قطعة قطعة، ومناسب للأعمار من 14 سنة فأكثر طبقًا للعبوة.",
+      "seoRelated": [
+        "occasions-service/sunday-school-gifts",
+        "occasions-service/christian-games"
+      ],
+      "updatedAt": "2026-11-11T09:00:00.000Z"
     }
   },
   "history": {
