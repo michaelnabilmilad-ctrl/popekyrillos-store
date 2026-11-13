@@ -731,6 +731,9 @@ function isMadeToOrderLine(product) {
 // Mirrors the storefront rule (script.js isVariantAvailable); the server re-checks at order time.
 function isCartLineUnavailable(product, variant) {
   if (product?.stock === "غير متاح حاليا" || product?.stock === "Currently unavailable" || product?.available === false) return true;
+  // A line without a real price (missing or 0) cannot be ordered; the server refuses it too.
+  const price = variant?.price ?? product?.price;
+  if (price === null || price === undefined || price === "" || !(Number(price) > 0)) return true;
   if (variant?.quantity !== null && variant?.quantity !== undefined && variant?.quantity !== "" && Number(variant.quantity) <= 0) return true;
   return variant?.available === false;
 }

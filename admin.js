@@ -590,6 +590,12 @@
       return;
     }
 
+    const unpriced = productsOnSaleWithoutPrice();
+    if (unpriced.length) {
+      showToast(summarizeIssues("في منتجات حالتها «متاح» من غير سعر حقيقي. اكتب السعر أو خلّي الحالة «غير متاح حاليا» قبل النشر:", unpriced), { error: true });
+      return;
+    }
+
     const confirmed = window.confirm("سيتم حفظ products.json على فرع المنتجات وتحديث الموقع مباشرة بدون تشغيل Cloudflare build. هل تريد المتابعة؟");
     if (!confirmed) return;
 
@@ -1853,6 +1859,19 @@
   }
 
   // Long validation lists are summarised so the message never covers the page.
+  // A product offered for sale must have a real price (> 0) on the product or on each option.
+  function productsOnSaleWithoutPrice() {
+    const realPrice = (value) => value !== null && value !== undefined && value !== "" && Number(value) > 0;
+    return state.products
+      .filter((product) => product?.active !== false && product?.hidden !== true && product?.deleted !== true && product?.published !== false)
+      .filter((product) => product?.stock !== "غير متاح حاليا" && product?.stock !== "Currently unavailable" && product?.available !== false)
+      .filter((product) => {
+        const variants = Array.isArray(product.variants) && product.variants.length ? product.variants : [{}];
+        return variants.some((variant) => variant?.available !== false && !realPrice(variant?.price ?? product.price));
+      })
+      .map((product) => `${product.name || product.id} (${product.sku || product.id})`);
+  }
+
   function summarizeIssues(title, issues, limit = 5) {
     const shown = issues.slice(0, limit).map((issue) => `• ${issue}`);
     if (issues.length > limit) shown.push(`• و${issues.length - limit} غيرهم.`);
