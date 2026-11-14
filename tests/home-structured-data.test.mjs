@@ -50,6 +50,7 @@ test("Store matches the verified Google Business Profile data", () => {
     streetAddress: "5 شارع البعثة",
     addressLocality: "روض الفرج",
     addressRegion: "القاهرة",
+    postalCode: "11631",
     addressCountry: "EG"
   });
   assert.deepEqual(store.geo, { "@type": "GeoCoordinates", latitude: 30.0683562, longitude: 31.2442065 });
