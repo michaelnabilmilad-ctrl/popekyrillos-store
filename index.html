@@ -14,15 +14,50 @@
     <link rel="apple-touch-icon" href="/favicon.png">
     <meta name="robots" content="index, follow" />
     <script type="application/ld+json">
-      [
+      {
+        "@context": "https://schema.org",
+        "@graph": [
         {
-          "@context": "https://schema.org",
-          "@type": "OnlineStore",
-          "name": "مكتبة البابا كيرلس",
+          "@type": ["Store", "OnlineStore"],
+          "@id": "https://popekyrillos.store/#store",
+          "name": "مكتبة البابا كيرلس بولس ملاك",
+          "alternateName": ["Pope Kyrillos Library", "Pope Kyrillos Store", "مكتبة البابا كيرلس"],
           "url": "https://popekyrillos.store/",
-          "logo": "https://popekyrillos.store/favicon.png",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://popekyrillos.store/assets/optimized/logo-papa-kyrillos-320.webp",
+            "width": 320,
+            "height": 320
+          },
           "image": "https://popekyrillos.store/assets/optimized/hero-papa-kyrillos-products.webp",
           "telephone": "+201016125589",
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "5 شارع البعثة",
+            "addressLocality": "روض الفرج",
+            "addressRegion": "القاهرة",
+            "postalCode": "11631",
+            "addressCountry": "EG"
+          },
+          "geo": {
+            "@type": "GeoCoordinates",
+            "latitude": 30.0683562,
+            "longitude": 31.2442065
+          },
+          "hasMap": "https://www.google.com/maps?cid=6002321056437834014",
+          "openingHoursSpecification": [
+            {
+              "@type": "OpeningHoursSpecification",
+              "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+              "opens": "10:00",
+              "closes": "22:00"
+            }
+          ],
+          "sameAs": [
+            "https://www.facebook.com/PapaKirillosBookshop/",
+            "https://www.instagram.com/pope.kyrillos.bookshop/",
+            "https://www.tiktok.com/@popekyrillosshop"
+          ],
           "hasMerchantReturnPolicy": {
             "@type": "MerchantReturnPolicy",
             "applicableCountry": "EG",
@@ -35,15 +70,20 @@
           }
         },
         {
-          "@context": "https://schema.org",
           "@type": "WebSite",
+          "@id": "https://popekyrillos.store/#website",
           "name": "مكتبة البابا كيرلس",
+          "alternateName": ["مكتبة البابا كيرلس بولس ملاك", "Pope Kyrillos Library", "Pope Kyrillos Store"],
           "url": "https://popekyrillos.store/",
-          "inLanguage": "ar"
+          "inLanguage": "ar",
+          "publisher": { "@id": "https://popekyrillos.store/#store" }
         }
-      ]
+        ]
+      }
     </script>
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="مكتبة البابا كيرلس" />
+    <meta property="og:locale" content="ar_EG" />
     <meta property="og:title" content="مكتبة البابا كيرلس | مستلزمات الكنائس" />
     <meta property="og:description" content="مكتبة مسيحية متخصصة في مستلزمات الكنائس، الكتب الطقسية، الشموع، البخور، الأيقونات، والأقمشة الكنسية." />
     <meta property="og:url" content="https://popekyrillos.store/" />
